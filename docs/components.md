@@ -14,7 +14,7 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
     -   [Input](./components/Input.md)
     -   Popovers
     -   Tooltips
-    -   Flat List
+    -   [Flat List](./components/FlatList.md)
     -   Modals/ Dialogs
     -   Button
     -   IconButton
@@ -34,7 +34,7 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
 
 - Medium Priority
     -   List
-    -   Section List
+    -   [Section List](./components/SectionList.md)
     -   [Range Picker](./components/RangePickers.md)
     -   [Date Time Picker](./components/DateTimePicker.md)
     -   Stack
