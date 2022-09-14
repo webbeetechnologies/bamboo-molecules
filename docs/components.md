@@ -7,10 +7,11 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
 
 ## Molecules created using Atoms:
     -   Forms
-    -   Inputs
-    -   Select
-    -   Typeahead (Search and select)
-    -   Radio
+    -   [Input](./components/Input.md)
+    -   [Select](./components/Select.md)
+    -   [Typeahead (Search and select)](./components/Typeahead.md)
+    -   Radio(./components/Radio.md)
+    -   Checkbox(./components/Checkbox.md)
     -   Date Picker
     -   Time Picker
     -   Range Picker
@@ -42,17 +43,6 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
     -   Accordion
     -   Chips
     -   Drawer
-    -   Stack
     -   Graphs (Phase 2)
 
 ... and more as we identify ..
-
-
-# User stories
-- As a user, I expect to see less than 5 options for in the platform style;
-- As a user, I expect to see more than 5 options in a full screen dialog;
-- As a user, I expect to only see popovers in desktop for select options.
-- As a user, I expect to see search and select components open a full screen modal in mobile with a field to search, button to clear the search and necessary guides when no data is options are available
-- As a user, I expect to see search and select components open a a popover in desktop with a field to search, button to clear the search and necessary guides when no data is options are available
-- As a developer, I want to provide left/right icons/buttons to inputs and pickers.
-- As a develpoer, I want to create chips with left/right icons/buttons.
