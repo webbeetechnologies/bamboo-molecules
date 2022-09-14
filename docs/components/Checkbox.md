@@ -4,7 +4,7 @@
 - As a developer, I want to be able to set a `defaultValue`, `defaultChecked`, `value` and `checked` status.
 
 
-## Radio Group
+## Checkbox Group
 - As a developer, I want to be able to configure the Checkbox options.
 - As a developer, I want to be able to listen to the change events.
 - As a developer, I want to be able to set a `defaultValue`, `defaultChecked`, `value` and `checked` status.

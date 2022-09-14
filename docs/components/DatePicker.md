@@ -13,6 +13,9 @@
 - As a developer, I want that the selected date is displayed a specific format.
 - As a developer, I want that the date picker is displayed in a popover always; with the ability to be made inline.
 
-# Also see
+## Reference
+- https://www.learnui.design/blog/ios-vs-android-app-ui-design-complete-guide.html#date-pickers
+
+## Also see
 - [DateTimePicker](./DateTimePicker.md)
 - [RangePicker](./RangePicker.md)

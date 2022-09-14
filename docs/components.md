@@ -14,12 +14,12 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
     -   [Input](./components/Input.md)
     -   Popovers
     -   Tooltips
+    -   Actionsheet
     -   [Flat List](./components/FlatList.md)
     -   Modals/ Dialogs
     -   Button
     -   IconButton
     -   [Select](./components/Select.md)
-
     -   [Radio](./components/Radio.md)
     -   [Checkbox](./components/Checkbox.md)
     -   [Date Picker](./components/DatePicker.md)
@@ -33,7 +33,6 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
 
 
 - Medium Priority
-    -   List
     -   [Section List](./components/SectionList.md)
     -   [Range Picker](./components/RangePickers.md)
     -   [Date Time Picker](./components/DateTimePicker.md)
