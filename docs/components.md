@@ -6,43 +6,43 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
 
 
 ## Molecules created using Atoms:
-    -   Forms
-    -   [Input](./components/Input.md)
-    -   [Select](./components/Select.md)
-    -   [Typeahead (Search and select)](./components/Typeahead.md)
-    -   Radio(./components/Radio.md)
-    -   Checkbox(./components/Checkbox.md)
-    -   Date Picker
-    -   Time Picker
-    -   Range Picker
-    -   Color Picker
-    -   File
-    -   Button
-    -   IconButton
-    -   ToggleButton
-    -   Search
-    -   List
-    -   Section List
-    -   Flat List
-    -   Badges
-    -   Modals/ Dialogs
-    -   Popovers
-    -   Tooltips
-    -   Icons
-    -   Menu and Menu Items
-    -   Stack
-    -   Divider
-    -   Alert
-    -   Toast
-    -   Fab/ Fab Group
-    -   Avatar
-    -   Tabs
-        -   Pills
-        -   Bottom Tabs
-    -   Cards
-    -   Accordion
-    -   Chips
-    -   Drawer
-    -   Graphs (Phase 2)
+-   Forms
+-   [Input](./components/Input.md)
+-   [Select](./components/Select.md)
+-   [Typeahead (Search and select)](./components/Typeahead.md)
+-   Radio(./components/Radio.md)
+-   Checkbox(./components/Checkbox.md)
+-   Date Picker
+-   Time Picker
+-   Range Picker
+-   Color Picker
+-   File
+-   Button
+-   IconButton
+-   ToggleButton
+-   Search
+-   List
+-   Section List
+-   Flat List
+-   Badges
+-   Modals/ Dialogs
+-   Popovers
+-   Tooltips
+-   Icons
+-   Menu and Menu Items
+-   Stack
+-   Divider
+-   Alert
+-   Toast
+-   Fab/ Fab Group
+-   Avatar
+-   Tabs
+    -   Pills
+    -   Bottom Tabs
+-   Cards
+-   Accordion
+-   Chips
+-   Drawer
+-   Graphs (Phase 2)
 
 ... and more as we identify ..
