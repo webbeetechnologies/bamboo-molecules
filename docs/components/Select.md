@@ -12,7 +12,7 @@
 - As a user, I want to see a performant scrollable list of options as:
     * on desktop; popovers dropdowns for options.
     * on mobile/tab; if less than less than 5 options are available, display in bottom and centered action-sheets on mobile and tablet platforms when options count <= 5
-    * on mobile/tab; else display a scrollable list in modal with a back button.
+    * on mobile/tab; else display a scrollable list in modal with a back button.\
     **Reference:** https://www.learnui.design/blog/ios-vs-android-app-ui-design-complete-guide.html#selection
 - As a developer, I want to mark a field as required.
 - As a user, I want to be notified that a field is required field.
