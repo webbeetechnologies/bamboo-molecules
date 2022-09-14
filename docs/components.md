@@ -12,10 +12,11 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
 -   [Typeahead (Search and select)](./components/Typeahead.md)
 -   [Radio](./components/Radio.md)
 -   [Checkbox](./components/Checkbox.md)
--   Date Picker
--   Time Picker
--   Range Picker
--   Color Picker
+-   [Date Picker](./components/DatePicker.md)
+-   [Date Time Picker](./components/DateTimePicker.md)
+-   [Time Picker](./components/TimePicker.md)
+-   [Range Picker](./components/RangePickers.md)
+-   [Color Picker](./components/ColorPicker.md)
 -   File
 -   Button
 -   IconButton
