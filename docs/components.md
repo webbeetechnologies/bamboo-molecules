@@ -45,7 +45,7 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
 
 - Low Priority
     -   [Color Picker](./components/ColorPicker.md)
-    -   FilePicker
+    -   [FilePicker](./components/FilePicker.md)
     -   Badges
     -   Search
     -   Forms
