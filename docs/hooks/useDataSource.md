@@ -16,9 +16,8 @@
 
 Potential consumers of data source:
 1. [Select](../components/Select.md)
-2. [Typeahead](../components/Typeahead.md)
-3. [CheckboxGroup](../components/Checkbox.md)
-4. [RadioGroup](../components/Radio.md)
-5. Graphs
-6. Dashboards
-7. DataTables
+2. [CheckboxGroup](../components/Checkbox.md)
+3. [RadioGroup](../components/Radio.md)
+4. Graphs
+5. Dashboards
+6. DataTables

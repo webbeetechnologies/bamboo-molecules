@@ -4,6 +4,9 @@ Bamboo Molecules components are built on top of BambooAtoms; thus, at it's core;
 
 Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; however, Molecules allow you to customize or entirely change the theme of a specific component. It is possible to use custom components/styles at a module level.
 
+# References:
+- https://www.learnui.design/blog/ios-vs-android-app-ui-design-complete-guide.html
+
 
 ## Molecules created using Atoms:
 - High Priority
@@ -16,7 +19,7 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
     -   Button
     -   IconButton
     -   [Select](./components/Select.md)
-    -   [Typeahead (Search and select)](./components/Typeahead.md)
+
     -   [Radio](./components/Radio.md)
     -   [Checkbox](./components/Checkbox.md)
     -   [Date Picker](./components/DatePicker.md)
