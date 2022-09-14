@@ -6,44 +6,53 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
 
 
 ## Molecules created using Atoms:
--   Forms
--   [Input](./components/Input.md)
--   [Select](./components/Select.md)
--   [Typeahead (Search and select)](./components/Typeahead.md)
--   [Radio](./components/Radio.md)
--   [Checkbox](./components/Checkbox.md)
--   [Date Picker](./components/DatePicker.md)
--   [Date Time Picker](./components/DateTimePicker.md)
--   [Time Picker](./components/TimePicker.md)
--   [Range Picker](./components/RangePickers.md)
--   [Color Picker](./components/ColorPicker.md)
--   File
--   Button
--   IconButton
--   ToggleButton
--   Search
--   List
--   Section List
--   Flat List
--   Badges
--   Modals/ Dialogs
--   Popovers
--   Tooltips
--   Icons
--   Menu and Menu Items
--   Stack
--   Divider
--   Alert
--   Toast
--   Fab/ Fab Group
--   Avatar
--   Tabs
-    -   Pills
-    -   Bottom Tabs
--   Cards
--   Accordion
--   Chips
--   Drawer
--   Graphs (Phase 2)
+- High Priority
+    -   Icons
+    -   [Input](./components/Input.md)
+    -   Popovers
+    -   Tooltips
+    -   Flat List
+    -   Modals/ Dialogs
+    -   Button
+    -   IconButton
+    -   [Select](./components/Select.md)
+    -   [Typeahead (Search and select)](./components/Typeahead.md)
+    -   [Radio](./components/Radio.md)
+    -   [Checkbox](./components/Checkbox.md)
+    -   [Date Picker](./components/DatePicker.md)
+    -   [Time Picker](./components/TimePicker.md)
+    -   Menu and Menu Items
+    -   Alert
+    -   Cards
+    -   Accordion
+    -   [Chips](./components/Chips.md)
+    -   Drawer
+
+
+- Medium Priority
+    -   List
+    -   Section List
+    -   [Range Picker](./components/RangePickers.md)
+    -   [Date Time Picker](./components/DateTimePicker.md)
+    -   Stack
+    -   Divider
+    -   Toast
+    -   Fab/ Fab Group (Android/Web Only)
+    -   Tabs
+        -   Pills
+        -   Bottom Tabs
+
+
+- Low Priority
+    -   [Color Picker](./components/ColorPicker.md)
+    -   FilePicker
+    -   Badges
+    -   Search
+    -   Forms
+    -   Avatar
+    -   Graphs
+
+
+
 
 ... and more as we identify ..
