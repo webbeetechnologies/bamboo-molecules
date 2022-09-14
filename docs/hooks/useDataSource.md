@@ -6,6 +6,13 @@
 - As a developer, I want to filter the list of options using the DataSource.
 - As a developer, I want to have infinite scrolling in my option lists.
 
+# Possible sources of Data
+- Local
+    Records
+- Remote
+    URL
+    Store Actions
+    Records
 
 Potential consumers of data source:
 1. [Select](../components/Select.md)
