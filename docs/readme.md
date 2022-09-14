@@ -11,7 +11,7 @@ Molecules is a set of composed components, a level higher than the un-opinionate
 Like Bamboo Atoms [:plug Bamboo Atoms]; the library is a highly performant, and well tested set of components. Components have been specifically designed to meet the design guidelines of each platform iOS or Android. Components that are composed/created in this level are opinionated for the platform they cater to; 
 
 
-However, for the web, the user gets the option to toggle between Material UI and iOS Cupertino style. Molecules components are designed and optimized for the best user experience on the web in both the design styles. and are built upon bamboo atoms which in-turn are built on react-native components. Offcourse, you can overwrite the styles for any of the platforms using the platform specific extensions. :)
+However, for the web, the user gets the option to toggle between Material UI and iOS Cupertino style. [Molecules components](./components.md) are designed and optimized for the best user experience on the web in both the design styles. and are built upon bamboo atoms which in-turn are built on react-native components. Offcourse, you can overwrite the styles for any of the platforms using the platform specific extensions. :)
 
 Molecules also exposes a larger set of hooks otherwise not available from bamboo-atoms.
 
