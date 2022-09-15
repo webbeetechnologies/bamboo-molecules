@@ -11,9 +11,14 @@
 3. Solid
 
 ## Implementation Details
-1. [WithElements HOC](./HOC/WithElements.md)
+1. Implements [WithElements HOC](./HOC/WithElements.md)
 
+## References
+- [Material 3 Chips](https://m3.material.io/components/chips/overview)
 
+## Screenshots
+#### M3: Types of chips updated to assist, filter, input, and suggestion chips.
+![M3: Types of chips updated to assist, filter, input, and suggestion chips](./assets/m3.chips.png)
 
 # Chips List
 - As a developer, I want to be able to display a scrollable list of chips.
