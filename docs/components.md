@@ -19,7 +19,7 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
 
 ## Molecules created using Atoms:
 - High Priority
-    -   Icons
+    -   [Icons](./components/Icons.md)
     -   [Input](./components/Input.md)
     -   Popovers
     -   Tooltips
