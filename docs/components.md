@@ -7,6 +7,13 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
 # References:
 - https://www.learnui.design/blog/ios-vs-android-app-ui-design-complete-guide.html
 
+## Molecules HOC:
+- [WithAddons](./components/HOC/WithAddons.md)
+- [WithAddonAfter](./components/HOC/WithAddons.md#withaddonafter)
+- [WithAddonBefore](./components/HOC/WithAddons.md#withaddonbefore)
+- [WithElements](./components/HOC/WithElements.md)
+- [WithActionIconButton](./components/HOC/WithActionIconButton.md)
+
 
 ## Molecules created using Atoms:
 - High Priority

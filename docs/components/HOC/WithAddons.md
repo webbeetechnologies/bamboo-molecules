@@ -19,13 +19,13 @@
 - [ButtonGroups](../Button.md#button-group)
 
 
-#WithAddonBefore
+# WithAddonBefore
 - As a developer, I want to add a element or an array of elements before the wrapped element
 - As a developer, I want to add an element to the before of the wrapped element.
 - As a developer, I want to be able to have a default style for the left addon.
 
 
-#WithAddonAfter
+# WithAddonAfter
 - As a developer, I want to add a element or an array of elements after the wrapped element.
 - As a developer, I want to add an element to the after of the wrapped element.
 - As a developer, I want to be able to have a default style for the right addon.
