@@ -5,7 +5,9 @@ Bamboo Molecules components are built on top of BambooAtoms; thus, at it's core;
 Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; however, Molecules allow you to customize or entirely change the theme of a specific component. It is possible to use custom components/styles at a module level.
 
 # References:
-- https://www.learnui.design/blog/ios-vs-android-app-ui-design-complete-guide.html
+- [Comparing iOS and Android UI](https://www.learnui.design/blog/ios-vs-android-app-ui-design-complete-guide.html)
+- [Material 3 Figma Design](https://www.figma.com/file/hGlWM0wnP1UN5VtPGiaOJ2/Material-3-Design-Kit-(Community)?node-id=50716%3A11360)
+- [Material 3 Design Guidelines](https://m3.material.io/components)
 
 ## Molecules HOC:
 - [WithAddons](./components/HOC/WithAddons.md)
@@ -24,8 +26,8 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
     -   Actionsheet
     -   [Flat List](./components/FlatList.md)
     -   Modals/ Dialogs
-    -   Button
-    -   IconButton
+    -   [Button](./components/Button.md)
+    -   [IconButton](./components/IconButton.md)
     -   [Select](./components/Select.md)
     -   [Radio](./components/Radio.md)
     -   [Checkbox](./components/Checkbox.md)

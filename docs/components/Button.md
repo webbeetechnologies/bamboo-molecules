@@ -7,8 +7,23 @@
 ## Implementation Details
 - Implements [WithElements HOC](./HOC/WithElements.md)
 
+## References
+- [Material 3 Figma Design](https://www.figma.com/file/hGlWM0wnP1UN5VtPGiaOJ2/Material-3-Design-Kit-(Community)?node-id=50716%3A11360)
+- [Material 3 Design Guidelines](https://m3.material.io/components/buttons/overview)
+
+## Screenshots
+#### Material 3 Button
+![Material 3 Buttons](./assets/m3.buttons.png)
+
 # Button Group
 - As a developer, I want the ability to group buttons;
 
 ## Implementation Details
 - Implements [WithAddons HOC](./HOC/WithAddons.md)
+
+## References
+- [Material 3 Segmented Buttons](https://m3.material.io/components/segmented-buttons/overview)
+
+## Screenshots
+#### Material 3 Segmented Button
+![Material 3 Segmented Buttons](./assets/m3.button-groups.png)
