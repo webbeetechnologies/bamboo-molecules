@@ -1,4 +1,4 @@
-#WithAddons
+# WithAddons
 - As a developer, I want the ability to attach elements before or after my wrapped element.
 - As a developer, I want to be able to add icons, buttons, text, inputs, selects, checkboxes, radio, dropdowns, menus as addons.
 - As a developer, I want that grouped elements have a default style, such as a border-radius.
