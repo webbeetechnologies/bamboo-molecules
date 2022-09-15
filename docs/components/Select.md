@@ -23,6 +23,7 @@
 [Video explaining Select Component in Bamboo Molecules](https://loom.com/share/4aa07b34c5464c7a9c9c317d995f0721)
 
 
+
 ## Screenshots
 #### Select in Desktop without a value selected
 ![Select in Desktop without a value selected](./assets/select-desktop.png)
@@ -44,6 +45,7 @@
 
 ## Implementation Details
 - Render selections/options - Make use of Pure Function or Injected Components; use one of the approaches not both.
+- Implements [WithElements HOC](./HOC/WithElements.md)
 - Make a clean abstraction for logical and presentation components.
 - Use the logical abstraction layer to build
     - [Checkbox Group](./Checkbox.md#checkbox-group)
