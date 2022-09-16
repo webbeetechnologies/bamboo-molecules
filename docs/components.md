@@ -15,14 +15,14 @@ Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; 
 - [WithAddonBefore](./components/HOC/WithAddons.md#withaddonbefore)
 - [WithElements](./components/HOC/WithElements.md)
 - [WithActionIconButton](./components/HOC/WithActionIconButton.md)
+- [WithPopover](./components/HOC/WithPopover.md)
 
 
 ## Molecules created using Atoms:
 - High Priority
     -   [Icons](./components/Icons.md)
     -   [Input](./components/Input.md)
-    -   Popovers
-    -   Tooltips
+    -   [Tooltips](./components/Tooltips.md)
     -   Actionsheet
     -   [Flat List](./components/FlatList.md)
     -   Modals/ Dialogs
