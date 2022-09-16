@@ -15613,7 +15613,7 @@ react-native-vector-icons@^9.2.0:
     prop-types "^15.7.2"
     yargs "^16.1.1"
 
-react-native-web@^0.18.9:
+react-native-web@^0.18.9, react-native-web@~0.18.7:
   version "0.18.9"
   resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.18.9.tgz#f5032e0b32ebe99c0ab22d13dbd8ca2944b08f12"
   integrity sha512-BaV5Mpe7u9pN5vTRDW2g+MLh6PbPBJZpXRQM3Jr2cNv7hNa3sxCGh9T+NcW6wOFzf/+USrdrEPI1M9wNyr7vyA==
@@ -15626,7 +15626,7 @@ react-native-web@^0.18.9:
     postcss-value-parser "^4.2.0"
     styleq "^0.1.2"
 
-react-native@^0.69.5:
+react-native@0.69.5:
   version "0.69.5"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.69.5.tgz#959142bfef21beed837160b54aa17313f5e1898f"
   integrity sha512-4Psrj1nDMLQjBXVH8n3UikzOHQc8+sa6NbxZQR0XKtpx8uC3HiJBgX+/FIum/RWxfi5J/Dt/+A2gLGmq2Hps8g==

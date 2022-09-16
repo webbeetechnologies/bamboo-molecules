@@ -26,8 +26,7 @@
     "run:storybook": "yarn --cwd ./example storybook"
   },
   "dependencies": {
-    "@webbee/bamboo-atoms": "^0.0.8",
-    "react-native-vector-icons": "^9.2.0"
+    "@webbee/bamboo-atoms": "^0.0.8"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.1.0",
@@ -43,15 +42,17 @@
     "react-dom": "^18.2.0",
     "react-native": "^0.70.1",
     "react-native-builder-bob": "^0.18.3",
+    "react-native-vector-icons": "^9.2.0",
     "react-native-web": "^0.18.9",
     "typescript": "~4.3.5"
   },
   "peerDependencies": {
-    "@types/react": "*",
-    "@types/react-native": "*",
-    "react": "*",
-    "react-dom": "*",
-    "react-native": "*"
+    "@types/react": "^16.8.0",
+    "@types/react-native": "^0.60.0",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "react-native": "^0.60.0",
+    "react-native-vector-icons": ">9.2.0"
   },
   "react-native-builder-bob": {
     "source": "src",
