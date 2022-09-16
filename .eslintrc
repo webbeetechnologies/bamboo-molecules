@@ -1,0 +1,9 @@
+{
+  "extends": ["@react-native-community", "prettier"],
+  "rules": {
+    "prettier/prettier": ["error"],
+    "prefer-const": "warn", // to avoid using let for variables that aren't reassigned
+    "no-console": ["error", { "allow": ["warn", "error"] }]
+  },
+  "plugins": ["@typescript-eslint", "prettier"]
+}
