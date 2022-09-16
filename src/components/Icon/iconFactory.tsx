@@ -1,4 +1,6 @@
-import type { IconType } from './types';
+import { textFactory } from '@webbee/bamboo-atoms';
+import memoize from 'lodash.memoize';
+import { IconPacks, IconType } from './types';
 
 const customIcons: any = {};
 
@@ -6,41 +8,48 @@ export const registerCustomIconType = (id: string, customIcon: any) => {
     customIcons[id] = customIcon;
 };
 
-export default (type: IconType): any => {
-    switch (type) {
-        case 'zocial':
-            return require('react-native-vector-icons/Zocial').default;
-        case 'octicon':
-            return require('react-native-vector-icons/Octicons').default;
-        case 'material':
-            return require('react-native-vector-icons/MaterialIcons').default;
-        case 'material-community':
-            return require('react-native-vector-icons/MaterialCommunityIcons').default;
-        case 'ionicon':
-            return require('react-native-vector-icons/Ionicons').default;
-        case 'foundation':
-            return require('react-native-vector-icons/Foundation').default;
-        case 'evilicon':
-            return require('react-native-vector-icons/EvilIcons').default;
-        case 'entypo':
-            return require('react-native-vector-icons/Entypo').default;
-        case 'font-awesome':
-            return require('react-native-vector-icons/FontAwesome').default;
-        case 'font-awesome-5':
-            return require('react-native-vector-icons/FontAwesome5').default;
-        case 'simple-line-icon':
-            return require('react-native-vector-icons/SimpleLineIcons').default;
-        case 'feather':
-            return require('react-native-vector-icons/Feather').default;
-        case 'antdesign':
-        case 'ant-design':
-            return require('react-native-vector-icons/AntDesign').default;
-        case 'fontisto':
-            return require('react-native-vector-icons/Fontisto').default;
-        default:
-            if (Object.prototype.hasOwnProperty.call(customIcons, type)) {
-                return customIcons[type];
+export default memoize((type: IconType): any =>
+    textFactory(
+        'Icon',
+        {},
+        false,
+        (() => {
+            switch (type) {
+                case IconPacks.Zocial:
+                    return require('react-native-vector-icons/Zocial').default;
+                case IconPacks.Octicon:
+                    return require('react-native-vector-icons/Octicons').default;
+                case IconPacks.Material:
+                    return require('react-native-vector-icons/MaterialIcons').default;
+                case IconPacks.MaterialCommunity:
+                    return require('react-native-vector-icons/MaterialCommunityIcons').default;
+                case IconPacks.Ionicon:
+                    return require('react-native-vector-icons/Ionicons').default;
+                case IconPacks.Foundation:
+                    return require('react-native-vector-icons/Foundation').default;
+                case IconPacks.EvilIcons:
+                    return require('react-native-vector-icons/EvilIcons').default;
+                case IconPacks.Entypo:
+                    return require('react-native-vector-icons/Entypo').default;
+                case IconPacks.FontAwesome:
+                    return require('react-native-vector-icons/FontAwesome').default;
+                case IconPacks.FontAwesome5:
+                    return require('react-native-vector-icons/FontAwesome5').default;
+                case IconPacks.SimpleLineIcon:
+                    return require('react-native-vector-icons/SimpleLineIcons').default;
+                case IconPacks.Feather:
+                    return require('react-native-vector-icons/Feather').default;
+                case IconPacks.AntDesign:
+                case 'ant-design':
+                    return require('react-native-vector-icons/AntDesign').default;
+                case IconPacks.Fontisto:
+                    return require('react-native-vector-icons/Fontisto').default;
+                default:
+                    if (Object.prototype.hasOwnProperty.call(customIcons, type)) {
+                        return customIcons[type];
+                    }
+                    return require('react-native-vector-icons/MaterialIcons').default;
             }
-            return require('react-native-vector-icons/MaterialIcons').default;
-    }
-};
+        })(),
+    ),
+);

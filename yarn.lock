@@ -4391,7 +4391,14 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
   integrity sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==
 
-"@types/lodash@^4.14.167":
+"@types/lodash.memoize@^4.1.7":
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/@types/lodash.memoize/-/lodash.memoize-4.1.7.tgz#aff94ab32813c557cbc1104e127030e3d60a3b27"
+  integrity sha512-lGN7WeO4vO6sICVpf041Q7BX/9k1Y24Zo3FY0aUezr1QlKznpjzsDk3T3wvH8ofYzoK0QupN9TWcFAFZlyPwQQ==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*", "@types/lodash@^4.14.167":
   version "4.14.185"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.185.tgz#c9843f5a40703a8f5edfd53358a58ae729816908"
   integrity sha512-evMDG1bC4rgQg4ku9tKpuMh5iBNEwNa3tf9zRHdP1qlv+1WUg44xat4IxCE14gIpZRGUUWAx2VhItCZc25NfMA==
@@ -4990,10 +4997,10 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
-"@webbee/bamboo-atoms@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@webbee/bamboo-atoms/-/bamboo-atoms-0.0.8.tgz#be8d4eaaf34dd901cd40ca424de30e4bb19ad704"
-  integrity sha512-AxbwC1PkHq1LY3AZzbcMhHpa+ykd45josMKHW8DEXAb9d2B+oNpW5M6LxzalQ4sTtM4nDqqcwit6QENtArcqrw==
+"@webbee/bamboo-atoms@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@webbee/bamboo-atoms/-/bamboo-atoms-0.0.9.tgz#6ff10b652c46d2e8800b876b65f36f280df44b0a"
+  integrity sha512-lm9BwaHLcIMpYpsEqP3aj4xsxVvn0Xa4QyuLWH1UYLyuMhdHKAiCWZHPHyGBPzaEGoLZU6nuM2q4lY7JWI4+tA==
   dependencies:
     lodash.isnil "^4.0.0"
     ts-deepmerge "^3.0.0"
