@@ -1,11 +1,14 @@
 export { Icon, registerCustomIconType, IconProps } from './components';
 
 export {
+    ProvideMolecules,
     ProvideComponents,
     ConsumeComponents,
-    configurePlatformType,
+    PlatformTypeContext,
+    ProvidePlatformType,
+    PlatformType,
     IComponentsProviderContext,
     IExtendComponentsTypes,
 } from './core';
 
-export { useMolecules } from './hooks';
+export { useMolecules, usePlatformType } from './hooks';
