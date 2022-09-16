@@ -1,9 +1,14 @@
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import type { IComponentsProviderContext as IAtomsComponentsProviderContext } from '@webbee/bamboo-atoms';
 import type { IconProps } from '../../components';
 import type { NoInfer } from '../../types';
 
 export type IExtendComponentsTypes<T> = Omit<DefaultComponents, keyof NoInfer<T>> & NoInfer<T>;
+
+export type ProvideComponentsProps = {
+    components?: Partial<IComponentsProviderContext>;
+    children: ReactNode;
+};
 
 export interface DefaultComponents {
     Icon: ComponentType<IconProps>;

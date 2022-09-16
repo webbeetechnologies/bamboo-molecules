@@ -1,7 +1,10 @@
 export {
     ProvideComponents,
     ConsumeComponents,
-    configurePlatformType,
     IComponentsProviderContext,
     IExtendComponentsTypes,
 } from './components';
+
+export { PlatformTypeContext, ProvidePlatformType, PlatformType } from './platform';
+
+export { ProvideMolecules } from './ProvideMolecules';

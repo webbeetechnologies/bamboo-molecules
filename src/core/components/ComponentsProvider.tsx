@@ -5,8 +5,7 @@ import {
     ConsumeComponents as AtomsConsumeComponents,
 } from '@webbee/bamboo-atoms';
 import { Icon } from '../../components';
-import type { IComponentsProviderContext, DefaultComponents } from './types';
-import { Platform } from 'react-native';
+import type { DefaultComponents, ProvideComponentsProps } from './types';
 
 /**
  * All component platform-specific themes will be exported in the same file
@@ -20,13 +19,7 @@ const defaultComponents = {
     Icon: Icon,
 };
 
-export const ProvideComponents = ({
-    components = {},
-    children,
-}: {
-    components?: Partial<IComponentsProviderContext>;
-    children: ReactNode;
-}) => {
+export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
     const memoizedValue = useMemo(
         () => ({
             ...defaultComponents,
@@ -45,24 +38,4 @@ export const ConsumeComponents = <T extends DefaultComponents>({
     children: (comp: IExtendComponentsTypes<T>) => ReactNode;
 }) => {
     return <AtomsConsumeComponents>{children}</AtomsConsumeComponents>;
-};
-
-let userInputPlatform: 'android' | 'ios' = 'android';
-
-export const configurePlatformType = (platformType: 'android' | 'ios') => {
-    userInputPlatform = platformType;
-};
-
-export const getPlatformType = () => {
-    switch (Platform.OS) {
-        case 'web':
-        case 'macos':
-        case 'windows':
-            return userInputPlatform;
-        case 'android':
-        case 'ios':
-            return Platform.OS;
-        default:
-            return userInputPlatform;
-    }
 };
