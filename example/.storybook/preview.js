@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { ProvideComponents } from 'bamboo-molecules';
+import { ProvideMolecules } from 'bamboo-molecules';
 
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
@@ -13,10 +13,10 @@ export const parameters = {
 
 export const decorators = [
     Story => (
-        <ProvideComponents>
+        <ProvideMolecules>
             <View style={{ flex: 1, alignItems: 'center' }}>
                 <Story />
             </View>
-        </ProvideComponents>
+        </ProvideMolecules>
     ),
 ];
