@@ -1,24 +1,36 @@
 const path = require('path');
+const blacklist = require('metro-config/src/defaults/exclusionList');
+const escape = require('escape-string-regexp');
+const pak = require('../package.json');
 
-// Learn more https://docs.expo.io/guides/customizing-metro
-const { getDefaultConfig } = require('expo/metro-config');
+const root = path.resolve(__dirname, '..');
 
-// Find the workspace root, this can be replaced with `find-yarn-workspace-root`
-const workspaceRoot = path.resolve(__dirname, '..');
-const projectRoot = __dirname;
+const modules = Object.keys({
+    ...pak.peerDependencies,
+});
 
-const config = getDefaultConfig(projectRoot);
+module.exports = {
+    projectRoot: __dirname,
+    watchFolders: [root],
 
-// 1. Watch all files within the monorepo
-config.watchFolders = [workspaceRoot];
-// 2. Let Metro know where to resolve packages, and in what order
-config.resolver.nodeModulesPaths = [path.resolve(projectRoot, 'node_modules')];
+    // We need to make sure that only one version is loaded for peerDependencies
+    // So we blacklist them at the root, and alias them to the versions in example's node_modules
+    resolver: {
+        blacklistRE: blacklist(
+            modules.map(m => new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`)),
+        ),
+        extraNodeModules: modules.reduce((acc, name) => {
+            acc[name] = path.join(__dirname, 'node_modules', name);
+            return acc;
+        }, {}),
+    },
 
-config.projectRoot = projectRoot;
-
-config.resolver.blacklistRE = [
-    /docs\/.*/,
-    // /packages\/.*\/node_modules\/.*/,
-];
-
-module.exports = config;
+    transformer: {
+        getTransformOptions: async () => ({
+            transform: {
+                experimentalImportSupport: false,
+                inlineRequires: false,
+            },
+        }),
+    },
+};

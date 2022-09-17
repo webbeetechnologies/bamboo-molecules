@@ -9,7 +9,8 @@
   "workspaces": {
     "packages": [
       "example"
-    ]
+    ],
+    "nohoist": ["**/react-native-web", "**/react-native-web/**"]
   },
   "files": [
     "src",
