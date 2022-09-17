@@ -2,7 +2,13 @@
 
 Bamboo Molecules components are built on top of BambooAtoms; thus, at it's core; Bamboo allows for all the components to be composed by default. That means; you can replace an underlying view by a Styled View of your choice; and that is only the beginning.
 
+
 Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; however, Molecules allow you to customize or entirely change the theme of a specific component. It is possible to use custom components/styles at a module level.
+
+
+Molecules is heavily inspired by Material and Cupertino components and thus tries to mimic them to provide a native experience as closely as possible on the react native platform.
+
+
 
 # References:
 - [Comparing iOS and Android UI](https://www.learnui.design/blog/ios-vs-android-app-ui-design-complete-guide.html)
