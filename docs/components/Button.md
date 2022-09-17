@@ -20,6 +20,7 @@
 
 ## Implementation Details
 - Implements [WithAddons HOC](./HOC/WithAddons.md)
+- Implements [WithRipple HOC](./HOC/WithRipple.md)
 
 ## References
 - [Material 3 Segmented Buttons](https://m3.material.io/components/segmented-buttons/overview)

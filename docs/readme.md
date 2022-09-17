@@ -3,6 +3,8 @@
 ## What is it?
 A one place library for React Native Material UI and iOS Cupertino components. It aims to provide a solid set of components that can used to create complex platform specific layouts like screens, modals, drawers and navigation.
 
+Read the [architecture decision](./architecture.md) and [design decision](./design.md) documents.
+
 
 ## What does it provide?
 Molecules is a set of composed components, a level higher than the un-opinionated Atoms. Following the design pattern, Molecules 

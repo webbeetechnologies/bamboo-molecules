@@ -3,6 +3,10 @@
 - As a user, I want to see feedback from button on hover and focus.
 - As a user, I want to know that the button is disabled.
 
+
+## Implementation Details
+- Implements [WithRipple HOC](./HOC/WithRipple.md)
+
 ## References
 - [Material 3 Figma Design](https://www.figma.com/file/hGlWM0wnP1UN5VtPGiaOJ2/Material-3-Design-Kit-(Community)?node-id=50716%3A11360)
 - [Material 3 Design Guidelines](https://m3.material.io/components/icon-buttons/overview)
