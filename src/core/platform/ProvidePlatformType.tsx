@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import { createContext } from 'react';
 import type { PlatformType, ProvidePlatformTypeProps } from './types';
 
 export const PlatformTypeContext = createContext<PlatformType>('android');
