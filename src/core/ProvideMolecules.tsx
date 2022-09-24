@@ -1,22 +1,28 @@
 import type { ReactNode } from 'react';
 import { IComponentsProviderContext, ProvideComponents } from './components';
 import { ProvidePlatformType, PlatformType } from './platform';
+import { extendTheme, ITheme, ProvideTheme } from './theme';
 
 export type ProvideMoleculesProps = {
     platformType?: PlatformType;
     components?: Partial<IComponentsProviderContext>;
-    // theme: ITheme
+    theme?: ITheme;
     children: ReactNode;
 };
 
+const defaultTheme = extendTheme({});
+
 export const ProvideMolecules = ({
     platformType = 'android',
+    theme = defaultTheme,
     components = {},
     children,
 }: ProvideMoleculesProps) => {
     return (
         <ProvidePlatformType platformType={platformType}>
-            <ProvideComponents components={components}>{children}</ProvideComponents>
+            <ProvideTheme theme={theme}>
+                <ProvideComponents components={components}>{children}</ProvideComponents>
+            </ProvideTheme>
         </ProvidePlatformType>
     );
 };
