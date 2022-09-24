@@ -2,57 +2,74 @@
 
 Bamboo Molecules components are built on top of BambooAtoms; thus, at it's core; Bamboo allows for all the components to be composed by default. That means; you can replace an underlying view by a Styled View of your choice; and that is only the beginning.
 
+
 Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; however, Molecules allow you to customize or entirely change the theme of a specific component. It is possible to use custom components/styles at a module level.
 
 
+Molecules is heavily inspired by Material and Cupertino components and thus tries to mimic them to provide a native experience as closely as possible on the react native platform.
+
+
+
+# References:
+- [Comparing iOS and Android UI](https://www.learnui.design/blog/ios-vs-android-app-ui-design-complete-guide.html)
+- [Material 3 Figma Design](https://www.figma.com/file/hGlWM0wnP1UN5VtPGiaOJ2/Material-3-Design-Kit-(Community)?node-id=50716%3A11360)
+- [Material 3 Design Guidelines](https://m3.material.io/components)
+
+## Molecules HOC:
+- [WithAddons](./components/HOC/WithAddons.md)
+- [WithAddonAfter](./components/HOC/WithAddons.md#withaddonafter)
+- [WithAddonBefore](./components/HOC/WithAddons.md#withaddonbefore)
+- [WithElements](./components/HOC/WithElements.md)
+- [WithActionIconButton](./components/HOC/WithActionIconButton.md)
+- [WithPopover](./components/HOC/WithPopover.md)
+
+
 ## Molecules created using Atoms:
-    -   Forms
-    -   Inputs
-    -   Select
-    -   Typeahead (Search and select)
-    -   Radio
-    -   Date Picker
-    -   Time Picker
-    -   Range Picker
-    -   Color Picker
-    -   File
-    -   Button
-    -   IconButton
-    -   ToggleButton
-    -   Search
-    -   List
-    -   Section List
-    -   Flat List
-    -   Badges
+- High Priority
+    -   [Icons](./components/Icons.md)
+    -   [Input](./components/Input.md)
+    -   [Tooltips](./components/Tooltips.md)
+    -   [Actionsheet](./components/Actionsheet.md)
+    -   [Flat List](./components/FlatList.md)
     -   Modals/ Dialogs
-    -   Popovers
-    -   Tooltips
-    -   Icons
+    -   [Button](./components/Button.md)
+    -   [IconButton](./components/IconButton.md)
+    -   [Select](./components/Select.md)
+    -   [Radio](./components/Radio.md)
+    -   [Checkbox](./components/Checkbox.md)
+    -   [Date Picker](./components/DatePicker.md)
+    -   [Time Picker](./components/TimePicker.md)
     -   Menu and Menu Items
+    -   Alert
+    -   Cards
+    -   Accordion
+    -   [Chips](./components/Chips.md)
+    -   Drawer
+
+
+- Medium Priority
+    -   [Section List](./components/SectionList.md)
+    -   [Range Picker](./components/RangePickers.md)
+    -   [Date Time Picker](./components/DateTimePicker.md)
     -   Stack
     -   Divider
-    -   Alert
     -   Toast
-    -   Fab/ Fab Group
-    -   Avatar
+    -   Fab/ Fab Group (Android/Web Only)
     -   Tabs
         -   Pills
         -   Bottom Tabs
-    -   Cards
-    -   Accordion
-    -   Chips
-    -   Drawer
-    -   Stack
-    -   Graphs (Phase 2)
+
+
+- Low Priority
+    -   [Color Picker](./components/ColorPicker.md)
+    -   [FilePicker](./components/FilePicker.md)
+    -   Badges
+    -   Search
+    -   Forms
+    -   Avatar
+    -   Graphs
+
+
+
 
 ... and more as we identify ..
-
-
-# User stories
-- As a user, I expect to see less than 5 options for in the platform style;
-- As a user, I expect to see more than 5 options in a full screen dialog;
-- As a user, I expect to only see popovers in desktop for select options.
-- As a user, I expect to see search and select components open a full screen modal in mobile with a field to search, button to clear the search and necessary guides when no data is options are available
-- As a user, I expect to see search and select components open a a popover in desktop with a field to search, button to clear the search and necessary guides when no data is options are available
-- As a developer, I want to provide left/right icons/buttons to inputs and pickers.
-- As a develpoer, I want to create chips with left/right icons/buttons.
