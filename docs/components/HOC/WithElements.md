@@ -9,6 +9,9 @@
 ![Left and right addons](../assets/addons.png)
 
 
+## References
+- [Native Base Input Elements](https://docs.nativebase.io/next/input#h3-input-elements)
+
 ## Usage in
 - [Input](../Input.md)
 - [Button](../Button.md)
