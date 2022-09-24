@@ -1,6 +1,5 @@
 import { View } from 'react-native';
 import { ProvideMolecules } from 'bamboo-molecules';
-
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
@@ -13,10 +12,8 @@ export const parameters = {
 
 export const decorators = [
     Story => (
-        <ProvideMolecules>
-            <View style={{ flex: 1, alignItems: 'center' }}>
-                <Story />
-            </View>
-        </ProvideMolecules>
+        <View style={{ flex: 1, alignItems: 'center' }}>
+            <Story />
+        </View>
     ),
 ];

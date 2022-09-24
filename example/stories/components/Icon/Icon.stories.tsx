@@ -1,11 +1,18 @@
-import React from 'react';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Example } from './Icon';
+import { ProvideMolecules } from 'bamboo-molecules';
 
 export default {
     title: 'components/Icon',
     component: Example,
+    decorators: [
+        Story => (
+            <ProvideMolecules>
+                <Story />
+            </ProvideMolecules>
+        ),
+    ],
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;

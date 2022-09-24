@@ -1,4 +1,3 @@
-import React from 'react';
 import { useMolecules, IconProps } from 'bamboo-molecules';
 
 export type Props = IconProps & {};
