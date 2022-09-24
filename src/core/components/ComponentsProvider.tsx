@@ -3,6 +3,7 @@ import {
     IExtendComponentsTypes,
     ProvideComponents as AtomsProvideComponents,
     ConsumeComponents as AtomsConsumeComponents,
+    extractComponents as extractComponentsAtoms,
 } from '@webbee/bamboo-atoms';
 import { Icon } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
@@ -39,3 +40,7 @@ export const ConsumeComponents = <T extends DefaultComponents>({
 }) => {
     return <AtomsConsumeComponents>{children}</AtomsConsumeComponents>;
 };
+
+export const extractComponents: <T>(
+    children: (comp: IExtendComponentsTypes<T & DefaultComponents>) => ReactNode,
+) => (props: IExtendComponentsTypes<T & DefaultComponents>) => ReactNode = extractComponentsAtoms;
