@@ -8,9 +8,13 @@
   "packageManager": "yarn@3.1.1",
   "workspaces": {
     "packages": [
-      "example"
+      "example",
+      "test-cases"
     ],
-    "nohoist": ["**/react-native-web", "**/react-native-web/**"]
+    "nohoist": [
+      "**/react-native-web",
+      "**/react-native-web/**"
+    ]
   },
   "files": [
     "src",
@@ -28,10 +32,15 @@
   },
   "dependencies": {
     "@webbee/bamboo-atoms": "^0.0.9",
-    "lodash.memoize": "^4.1.2"
+    "color": "^4.2.3",
+    "lodash.get": "^4.4.2",
+    "lodash.memoize": "^4.1.2",
+    "ts-deepmerge": "^4.0.0"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.1.0",
+    "@types/color": "^3.0.3",
+    "@types/lodash.get": "^4.4.7",
     "@types/lodash.memoize": "^4.1.7",
     "@types/react": "^18.0.20",
     "@types/react-native": "^0.70.0",

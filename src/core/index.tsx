@@ -2,8 +2,10 @@ export {
     ProvideComponents,
     ConsumeComponents,
     IComponentsProviderContext,
-    IExtendComponentsTypes,
+    extractComponents,
 } from './components';
+
+export { ProvideTheme, extendTheme, ITheme } from './theme';
 
 export { PlatformTypeContext, ProvidePlatformType, PlatformType } from './platform';
 

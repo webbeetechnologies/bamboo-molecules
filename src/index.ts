@@ -4,11 +4,16 @@ export {
     ProvideMolecules,
     ProvideComponents,
     ConsumeComponents,
+    extractComponents,
     PlatformTypeContext,
     ProvidePlatformType,
+    ProvideTheme,
+    extendTheme,
+    ITheme,
     PlatformType,
     IComponentsProviderContext,
-    IExtendComponentsTypes,
 } from './core';
 
-export { useMolecules, usePlatformType } from './hooks';
+export { useMolecules, usePlatformType, useComponentTheme, useTheme } from './hooks';
+
+export { normalizeStyles } from './utils';
