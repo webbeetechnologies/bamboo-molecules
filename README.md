@@ -36,6 +36,12 @@ Bamboo molecules do not provide a for complex screens and layouts; you can creat
 ``` bash
 # install dependencies for the library and examples
 yarn
+
+# install a new package to a workspace
+yarn workspace <workspace-name> add <package-name>
+
+# install a new package to root
+yarn add <package-name> -W
 ```
 
 ## Demo
