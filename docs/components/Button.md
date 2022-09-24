@@ -4,6 +4,13 @@
 - As a user, I want to know that the button is disabled.
 - As a developer, I want to have Icons on left and/or right of the button.
 
+### Variants
+- Filled
+- Outlined
+- Text
+- Elevated
+- Tonal
+
 ## Implementation Details
 - Implements [WithElements HOC](./HOC/WithElements.md)
 

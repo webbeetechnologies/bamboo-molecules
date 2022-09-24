@@ -9,9 +9,9 @@
 - As a developer, I want to have predefined styled inputs with different variant options matching with specific platforms ios/android
 
 ## Variants
-1. Outlined
-2. Ghost
-3. Underlined
+1. Filled
+2. Outlined
+3. Ghost
 
 ## Implementation Details
 - Create a higher order component that allows to add left and/or right elements.
