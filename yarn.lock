@@ -4859,10 +4859,10 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
-"@webbee/bamboo-atoms@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@webbee/bamboo-atoms/-/bamboo-atoms-0.0.9.tgz#6ff10b652c46d2e8800b876b65f36f280df44b0a"
-  integrity sha512-lm9BwaHLcIMpYpsEqP3aj4xsxVvn0Xa4QyuLWH1UYLyuMhdHKAiCWZHPHyGBPzaEGoLZU6nuM2q4lY7JWI4+tA==
+"@webbee/bamboo-atoms@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@webbee/bamboo-atoms/-/bamboo-atoms-0.0.11.tgz#f2f6df208a2073a3a9b555fbaded7f57aea8b4bd"
+  integrity sha512-T1wVqnskeZEraZGd9JkCtdaDk15Fo7kDWVKZmDTXrh+KTpHyZPNDCUkOVhdxdr8ok0IjedRkao481yYog+b7Rw==
   dependencies:
     lodash.isnil "^4.0.0"
     ts-deepmerge "^3.0.0"

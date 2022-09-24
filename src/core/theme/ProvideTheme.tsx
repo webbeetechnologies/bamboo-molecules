@@ -1,7 +1,7 @@
 import {
     ProvideTheme as AtomProvideTheme,
     extendTheme as extendThemeAtoms,
-    IExtractStylesFuncArgs,
+    IExtractThemeFuncArgs,
 } from '@webbee/bamboo-atoms';
 import merge from 'ts-deepmerge';
 import memoize from 'lodash.memoize';
@@ -17,13 +17,13 @@ const defaultThemeValue: Partial<ITheme> = {
     dark: MD3DarkTheme,
 };
 
-const extractTheme = memoize(({ theme, componentName, colorMode }: IExtractStylesFuncArgs) => {
+const extractTheme = memoize(({ theme, componentName, colorMode }: IExtractThemeFuncArgs) => {
     return normalizeStyles(theme[componentName], theme[colorMode]);
 });
 
 export const ProvideTheme = ({ theme, children }: ProvideThemeArgs) => {
     return (
-        <AtomProvideTheme theme={theme} extractStyles={extractTheme}>
+        <AtomProvideTheme theme={theme} extractTheme={extractTheme}>
             {children}
         </AtomProvideTheme>
     );

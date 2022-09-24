@@ -1,13 +1,12 @@
 import { useMemo } from 'react';
-import { Appearance } from 'react-native';
+import { useColorMode } from '@webbee/bamboo-atoms';
 import { useTheme } from './';
 import type { ITheme } from '../core';
 import normalizeStyles from '../utils/normalizeStyles';
 
 const useComponentTheme = (componentName: string) => {
     const theme = useTheme<ITheme>();
-    const colorMode =
-        theme.colorMode === 'auto' ? Appearance.getColorScheme() || 'light' : theme.colorMode;
+    const colorMode = useColorMode();
 
     return useMemo(
         () => normalizeStyles(theme[componentName], theme[colorMode]),
