@@ -1,3 +1,20 @@
+# Examples
+
+[Video explaining Select Component in Bamboo Molecules](https://loom.com/share/4aa07b34c5464c7a9c9c317d995f0721)
+
+
+## Screenshots
+#### Select in Desktop without a value selected
+![Select in Desktop without a value selected](./assets/select-desktop.png)
+#### Select in Desktop is lazy loading
+![Select in Desktop is lazy loading](./assets/select-desktop-loading.png)
+#### Select in Desktop with the options loaded
+![Select in Desktop with the options loaded](./assets/select-desktop-list.png)
+#### Select in mobile Modal View
+![Select in mobile Modal View](./assets/select-moble-modal-view.png)
+#### Select in mobile IOS and Android
+![Select in mobile IOS and Android](./assets/select-mobile.png)
+
 # Selects
 - As a developer, I want to show a list of options for user input.
 - As a developer, I want the to consume `useDataSource` to manage the records.
@@ -19,22 +36,6 @@
 - As a developer, I want to have predefined styled inputs with different variant options matching with specific platforms ios/android
 - As a user, I want to see know when there are no options to be displayed.
 
-## Explanation
-[Video explaining Select Component in Bamboo Molecules](https://loom.com/share/4aa07b34c5464c7a9c9c317d995f0721)
-
-
-
-## Screenshots
-#### Select in Desktop without a value selected
-![Select in Desktop without a value selected](./assets/select-desktop.png)
-#### Select in Desktop is lazy loading
-![Select in Desktop is lazy loading](./assets/select-desktop-loading.png)
-#### Select in Desktop with the options loaded
-![Select in Desktop with the options loaded](./assets/select-desktop-list.png)
-#### Select in mobile Modal View
-![Select in mobile Modal View](./assets/select-moble-modal-view.png)
-#### Select in mobile IOS and Android
-![Select in mobile IOS and Android](./assets/select-mobile.png)
 
 ## Searchable Dropdown
 - As a developer, I want to be able to see a filter
