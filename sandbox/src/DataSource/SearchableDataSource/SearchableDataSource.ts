@@ -15,8 +15,8 @@ class SearchableDataSource<RecordType> extends DataSource<RecordType> implements
 }
 
 
-const createSearchableDataSource = <RecordType>(props: SearchableDataSourceProps<RecordType>) =>
-      createDataSource<RecordType>(props, SearchableDataSource) as SearchableDataSource<RecordType>;
+export const createSearchableDataSource = <RecordType>(props: SearchableDataSourceProps<RecordType>) =>
+    createDataSource<RecordType>(props, SearchableDataSource) as SearchableDataSource<RecordType>;
 
 
 

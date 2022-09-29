@@ -22,7 +22,8 @@ class SortableDataSource<RecordType> extends DataSource<RecordType> implements I
   }
 }
 
-const createSortableDataSource = <RecordType>(props: SortableDataSourceProps<RecordType>) => createDataSource<RecordType>(props, SortableDataSource) as SortableDataSource<RecordType>;
+export const createSortableDataSource = <RecordType>(props: SortableDataSourceProps<RecordType>) =>
+      createDataSource<RecordType>(props, SortableDataSource) as SortableDataSource<RecordType>;
 
 
 type ChainableDSFunc = <RecordType>(props: SortableDataSourceProps<RecordType>) => SortableDataSource<RecordType>;
