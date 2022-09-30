@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { Card, Headline } from 'react-native-paper';
 import DesignTokens from './DesignTokens';
+import ComponentsDemo from './ComponentsDemo';
 
 const style = StyleSheet.create({
     wrap: { gap: 15, padding: 15 } as any,
@@ -23,6 +24,12 @@ export default () => {
                 <CardHeader children="Design Tokens" />
                 <Card.Content>
                     <DesignTokens />
+                </Card.Content>
+            </Card>
+            <Card>
+                <CardHeader children="Components Demo" />
+                <Card.Content>
+                    <ComponentsDemo />
                 </Card.Content>
             </Card>
         </View>
