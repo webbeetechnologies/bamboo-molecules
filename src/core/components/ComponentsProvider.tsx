@@ -1,11 +1,20 @@
-import { ReactNode, useMemo } from 'react';
+import { ComponentType, ReactNode, useMemo } from 'react';
 import {
     IExtendComponentsTypes,
     ProvideComponents as AtomsProvideComponents,
     ConsumeComponents as AtomsConsumeComponents,
     extractComponents as extractComponentsAtoms,
 } from '@webbee/bamboo-atoms';
-import { Icon } from '../../components';
+import {
+    ActivityIndicator,
+    Icon,
+    Divider,
+    TouchableRipple,
+    TouchableRippleProps,
+    // Button,
+    // Surface,
+    // Switch,
+} from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
 /**
@@ -16,8 +25,14 @@ import type { DefaultComponents, ProvideComponentsProps } from './types';
  * Components like Icons are neutral, they don't have platform specific styles.
  * Example implementation below
  */
-const defaultComponents = {
-    Icon: Icon,
+const defaultComponents: DefaultComponents = {
+    Icon,
+    TouchableRipple: TouchableRipple as ComponentType<TouchableRippleProps>, // ts-error
+    ActivityIndicator,
+    Divider,
+    // Button,
+    // Surface,
+    // Switch,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
