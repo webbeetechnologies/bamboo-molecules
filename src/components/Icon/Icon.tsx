@@ -1,4 +1,5 @@
 import { memo, forwardRef } from 'react';
+import { withNormalizedStyleProp } from '../../hocs';
 import iconFactory from './iconFactory';
 import type { IconProps } from './types';
 
@@ -11,4 +12,4 @@ const Icon = ({ type = 'material', ...rest }: IconProps, ref: any) => {
     return <IconComponent ref={ref} {...rest} />;
 };
 
-export default memo(forwardRef(Icon));
+export default memo(forwardRef(withNormalizedStyleProp(Icon)));
