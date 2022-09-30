@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import type { ITheme as AtomsTheme } from '@webbee/bamboo-atoms';
+import type { IExtractThemeFuncArgs, ITheme as AtomsTheme } from '@webbee/bamboo-atoms';
+import type { StyleProp } from 'react-native';
 
 export type ITheme = AtomsTheme & {
     light: MD3Theme;
@@ -7,11 +8,11 @@ export type ITheme = AtomsTheme & {
 };
 
 export type MD3Theme = {
+    dark: boolean;
     animation: {
         scale: number;
     };
     colors: MD3Colors;
-    elevation: MD3ElevationColors;
     typescale: MD3Typescale;
     roundness: number[];
     spacing: (number | string)[];
@@ -19,6 +20,7 @@ export type MD3Theme = {
 
 export interface ProvideThemeArgs {
     theme: ITheme;
+    extractTheme?: (args: IExtractThemeFuncArgs) => StyleProp<any>;
     children: ReactNode;
 }
 
@@ -68,6 +70,7 @@ export type MD3Colors = {
     inverseOnSurface: string;
     inversePrimary: string;
     backdrop: string;
+    elevation: MD3ElevationColors;
 };
 
 export enum MD3TypescaleKey {

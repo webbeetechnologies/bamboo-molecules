@@ -6,22 +6,31 @@ import {
 import merge from 'ts-deepmerge';
 import memoize from 'lodash.memoize';
 
+import { dividerStyles, touchableRippleStyles, activityIndicatorStyles } from '../../components';
+import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
 import normalizeStyles from '../../utils/normalizeStyles';
 import type { ITheme, ProvideThemeArgs } from './types';
-import { MD3LightTheme } from './LightTheme';
-import { MD3DarkTheme } from './DarkTheme';
 
 const defaultThemeValue: Partial<ITheme> = {
     light: MD3LightTheme,
     dark: MD3DarkTheme,
+    Divider: dividerStyles,
+    TouchableRipple: touchableRippleStyles,
+    ActivityIndicator: activityIndicatorStyles,
 };
 
-const extractTheme = memoize(({ theme, componentName, colorMode }: IExtractThemeFuncArgs) => {
-    return normalizeStyles(theme[componentName], theme[colorMode]);
-});
+const defaultExtractTheme = memoize(
+    ({ theme, componentName, colorMode }: IExtractThemeFuncArgs) => {
+        return normalizeStyles(theme[componentName], theme[colorMode]);
+    },
+);
 
-export const ProvideTheme = ({ theme, children }: ProvideThemeArgs) => {
+export const ProvideTheme = ({
+    theme,
+    extractTheme = defaultExtractTheme,
+    children,
+}: ProvideThemeArgs) => {
     return (
         <AtomProvideTheme theme={theme} extractTheme={extractTheme}>
             {children}
