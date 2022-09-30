@@ -6,6 +6,17 @@ Material components deeply follow M3 design philosophy and Cupertino heavily rel
 Molecules aims to closely mimic not just the ui of the components, but also interactions and transitions. It tries to be create a pixel perfect interface with a chance to enhance and extend the design externally at a granualar level.
 
 
+
+## Variants
+Elements can have different styles, and we support the most common ones out of the box.
+Some examples of elements that have a more than one variant.
+- Inputs
+- Select
+- Buttons
+- Icon Buttons
+- Chips
+
+
 ## Design Tokens
 Molecules implements takes inspiration from Material You design tokens. However, this does however have it's own limitations.\
 Molecules extends Material You design tokens to enable spacing (margins, paddings) and roundness; here is the exhaustive list of available design tokens.
@@ -16,14 +27,15 @@ Molecules extends Material You design tokens to enable spacing (margins, padding
 - Elevation
 
 
-## Component Developer Stories
+### Component Developer Stories
 - As a component developer, I want a common interface to get constant/shared properties from.
 - As a component developer, I want that my component themes with design tokens are resolved into final values before render.
 - As a component developer, I want the ability to add design tokens to the style prop.
-- As a component developer, I want to be able to 
+- As a component developer, I want to be able to use design tokens in styles for margins, paddings, border radius, all properties that accept colors and elevation.
+- As a component developer, I want to use design tokens to develop variants.
 
 
-## Product Developer Stories
+### Product Developer Stories
 - As a product developer, I want to be able to configure the color palette.
 - As a product developer, I want to replace the entire color palette with a new one.
 - As a product developer, I want to extend the color palette.
