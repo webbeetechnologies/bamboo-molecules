@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import type { Font } from './types';
+import type { Font } from '../../core/theme/types';
 
 const ref = {
     palette: {

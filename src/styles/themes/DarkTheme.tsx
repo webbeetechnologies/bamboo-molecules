@@ -1,13 +1,15 @@
 import color from 'color';
-import type { MD3Theme } from './types';
+import type { MD3Theme } from '../../core/theme/types';
 import { MD3LightTheme } from './LightTheme';
-import { MD3Colors, tokens } from './tokens';
+import { tokens } from './tokens';
 
-const { palette, opacity } = tokens.md.ref;
+const ref = tokens.md.ref;
 
-export const MD3DarkTheme: MD3Theme = {
-    ...MD3LightTheme,
-    colors: {
+export const generateDarkThemeColors = (
+    palette: typeof ref.palette,
+    opacity: typeof ref.opacity,
+) => {
+    return {
         primary: palette.primary80,
         primaryContainer: palette.primary30,
         secondary: palette.secondary80,
@@ -36,17 +38,23 @@ export const MD3DarkTheme: MD3Theme = {
         inverseSurface: palette.neutral90,
         inverseOnSurface: palette.neutral20,
         inversePrimary: palette.primary40,
-        backdrop: color(MD3Colors.neutralVariant20).alpha(0.4).rgb().string(),
-    },
-    elevation: {
-        level0: 'transparent',
-        // Note: Color values with transparency cause RN to transfer shadows to children nodes
-        // instead of View component in Surface. Providing solid background fixes the issue.
-        // Opaque color values generated with `palette.primary80` used as background
-        level1: 'rgb(37, 35, 42)', // palette.primary80, alpha 0.05
-        level2: 'rgb(44, 40, 49)', // palette.primary80, alpha 0.08
-        level3: 'rgb(49, 44, 56)', // palette.primary80, alpha 0.11
-        level4: 'rgb(51, 46, 58)', // palette.primary80, alpha 0.12
-        level5: 'rgb(52, 49, 63)', // palette.primary80, alpha 0.14
-    },
+        backdrop: color(palette.neutralVariant20).alpha(0.4).rgb().string(),
+        elevation: {
+            level0: 'transparent',
+            // Note: Color values with transparency cause RN to transfer shadows to children nodes
+            // instead of View component in Surface. Providing solid background fixes the issue.
+            // Opaque color values generated with `palette.primary80` used as background
+            level1: color(palette.primary80).alpha(0.05).rgb().string(), // palette.primary80, alpha 0.05
+            level2: color(palette.primary80).alpha(0.08).rgb().string(), // palette.primary80, alpha 0.08
+            level3: color(palette.primary80).alpha(0.11).rgb().string(), // palette.primary80, alpha 0.11
+            level4: color(palette.primary80).alpha(0.12).rgb().string(), // palette.primary80, alpha 0.12
+            level5: color(palette.primary80).alpha(0.14).rgb().string(), // palette.primary80, alpha 0.14
+        },
+    };
+};
+
+export const MD3DarkTheme: MD3Theme = {
+    ...MD3LightTheme,
+    dark: true,
+    colors: generateDarkThemeColors(ref.palette, ref.opacity),
 };
