@@ -8,6 +8,10 @@ class SearchableDataSource<RecordType> extends DataSource<RecordType> implements
   declare search: Function;
 
   applySearch() {
+    const [s, setFilters] = useState();
+    return setFilters;
+
+
     // TODO: Implement setRecords
     // this.setRecords();
     throw new Error("Apply Search Method is not implemented");
