@@ -1,15 +1,11 @@
 import DataSource from "../DataSource";
-import type { DataSourceResultProps, ISortProps, ESortDirection } from "../types";
+import type { DataSourceResultProps, ISortProps } from "../types";
 
 
-export type SortableDataSourceProps<T> = ISortProps & DataSourceResultProps<T>;
+export type OrderableDataSourceProps<T> = ISortProps & DataSourceResultProps<T>;
 
 
 
-export interface ISortableDataSource<RecordType> extends DataSource<RecordType> {
-    applySort(args: { column: string, direction: ESortDirection }): void;
-
+export interface IOrderableDataSource<RecordType> extends DataSource<RecordType> {
     move(args: { oldIndex: number, newIndex: number }): void;
-
-    remove(args: { index: number }): void;
 }

@@ -1,28 +1,36 @@
-import { IDataSource } from "./types";
+import { DataSourceResultProps } from "./types";
 import {createDataSource} from "./DataSource";
-import {createSortableDataSource} from "./SortableDataSource";
-import {createSearchableDataSource} from "./SearchableDataSource";
-import {createAsyncDataSource} from "./AyncDataSource";
-import { createPaginatedDataSource } from "./PaginatedDataSource";
+import {createSortableDataSource, TSortableDataSource} from "./SortableDataSource";
+import {createFilterableDataSource, TFilterableDataSource} from "./FilterableDataSource";
+import {createAsyncDataSource, TAsyncDataSource} from "./AyncDataSource";
+import { createPaginatedDataSource, TPaginatedDataSource } from "./PaginatedDataSource";
 
-export const useDataSource = <T>(props: IDataSource<T>) => {
+export const useDataSource = <ResultType>(props: DataSourceResultProps<ResultType>) => {
     let dataSource = createDataSource(props);
 
     if (dataSource.isPaginated()) {
-        dataSource = createPaginatedDataSource<T>(dataSource);
+        dataSource = createPaginatedDataSource<ResultType>(dataSource as TPaginatedDataSource<ResultType>);
     }
 
-    if (dataSource.isSearchable()) {
-        dataSource = createSearchableDataSource<T>(dataSource);
+    if (dataSource.isFilterable()) {
+        dataSource = createFilterableDataSource<ResultType>(dataSource as TFilterableDataSource<ResultType>);
     }
 
     if (dataSource.isSortable()) {
-        dataSource = createSortableDataSource<T>(dataSource);
+        dataSource = createSortableDataSource<ResultType>(dataSource as TSortableDataSource<ResultType>);
     }
 
     if (dataSource.isLoadable()) {
-        dataSource = createAsyncDataSource<T>(dataSource);
+        dataSource = createAsyncDataSource<ResultType>(dataSource as TAsyncDataSource<ResultType>);
     }
 
     return dataSource;
 }
+
+// useDataSource({ records: [],  })
+//
+// const createDataStoreHook = <T>(func: Promise<T>) => (props) => func(useDataSource(props));
+//
+// const source  = createDataStoreHook(async (props) => {
+//     return axios.get('https://' + queryparams.serialize(filters) );
+// })

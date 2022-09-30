@@ -21,14 +21,14 @@ export enum ESortDirection {
     DESC,
 }
 
-export type SearchableProps = { search: Function } | { searchKey: string };
+export type TSort = { direction: ESortDirection; order: number }
 
-export type TSort = {
-  [key: string]: { direction: ESortDirection; order: number }
+export interface ISort {
+  [key: string]: TSort
 }
 
 export interface ISortProps {
-  sort: TSort;
+  sort: ISort;
 }
 
 
@@ -42,48 +42,72 @@ export interface LoadingState {
   errored_at: Date;
 }
 
+export type Records<ResultType> = ResultType[];
+
+export type TSetRecordArg<ResultType> = Records<ResultType> | ((records: Records<ResultType>) => Records<ResultType>)
+export type TSetRecords<ResultType> = (records: TSetRecordArg<ResultType>) => void;
 
 
-export type SetRecords = <T>(records: T[]) => void;
 
-
-export type MaybeSearchable = SearchableProps | {};
-
-export type Records<T> = T[];
-
-export type TFetchRecords = <T>(...args : any[]) => Promise<T[]>
+export type TFetchRecords = <ResultType>(...args : any[]) => Promise<ResultType[]>
 export interface IAsyncProps {
   fetchRecords: TFetchRecords
 }
 
-export type DataSourceResultProps<T> = { setRecords: SetRecords }
+export type DataSourceResultProps<ResultType> = { setRecords: TSetRecords<ResultType> }
       & Partial<IFilterProps>
-      & Partial<MaybeSearchable>
       & Partial<ISortProps>
       & Partial<IPaginationProps>
       & Partial<IAsyncProps>
       & { loading?: LoadingState }
-      & { records: Records<T> }
+      & { records: Records<ResultType>
+}
 
 
-
-export interface IDataSource<T> {
-  records: Records<T>;
+export interface IDataSource<ResultType> {
+  records: Records<ResultType>;
 
   filters?: TFilters;
-  search?: Function;
-  searchKey?: string;
-  sort?: TSort;
+  sort?: ISort;
   pagination?: TPagination;
   loading?: LoadingState;
-  fetchRecords?: TFetchRecords;
+}
+
+
+
+
+export interface IDataSourceClass<ResultType> extends IDataSource<ResultType> {
 
   isPaginated(): boolean;
-  isSearchable(): boolean;
+  isFilterable(): boolean;
   isSortable(): boolean;
   isLoadable(): boolean;
-
-  setRecords: SetRecords
+  fetchRecords?: TFetchRecords;
+  setRecords: TSetRecords<ResultType>
 
   // loadResults(props: DataSourceResultProps): any[];
+}
+
+
+
+export enum EStoreActions {
+  SET_RECORDS,
+  LOAD_RESULTS_START,
+  LOAD_RESULTS_DONE,
+  LOAD_RESULTS_ERROR,
+  FILTER,
+  SORT,
+  REMOVE_SORT,
+  PAGINATE,
+  MOVE,
+}
+
+
+export enum EStoreSupport {
+  LOADING,
+  FILTER,
+  SORT,
+  REMOVE_SORT,
+  PAGINATE,
+  MOVE,
 }

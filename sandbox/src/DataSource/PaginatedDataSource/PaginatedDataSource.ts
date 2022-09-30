@@ -17,9 +17,11 @@ class PaginatedDataSource<RecordType> extends DataSource<RecordType> implements 
   }
 }
 
+export type TPaginatedDataSource<ResultType> = PaginatedDataSource<ResultType>
 
 
-const createPaginatedDataSource = <RecordType>(props: PaginatedDataSourceProps<RecordType>) => createDataSource<RecordType>(props, PaginatedDataSource) as PaginatedDataSource<RecordType>;
+export const createPaginatedDataSource = <RecordType>(props: PaginatedDataSourceProps<RecordType>) =>
+    createDataSource<RecordType>(props, PaginatedDataSource) as PaginatedDataSource<RecordType>;
 
 
 type ChainableDSFunc = <RecordType>(props: PaginatedDataSourceProps<RecordType>) => PaginatedDataSource<RecordType>;

@@ -1,8 +1,17 @@
 import DataSource from "../DataSource";
-import type { DataSourceResultProps, SearchableProps } from "../types";
+import type { DataSourceResultProps, IFilterProps } from "../types";
 
-export type SearchableDataSourceProps<RecordType> =  SearchableProps & DataSourceResultProps<RecordType>;
+export type FilterableDataSourceProps<RecordType> =  IFilterProps & DataSourceResultProps<RecordType>;
 
-export interface ISearchableDataSource<RecordType> extends DataSource<RecordType> {
-    applySearch(searchTerm: string): void;
+export type TApplyFilterFunc = (args: {filterName: string, value: any, operator: EFilterOperator }) => void;
+export interface IFilterableDataSource<RecordType> extends DataSource<RecordType> {
+    applyFilter: TApplyFilterFunc;
+}
+
+export enum EFilterOperator {
+    CONTAINS,
+    MATCHES,
+    EXCLUDES,
+    STARTS_WITH,
+    ENDS_WITH,
 }

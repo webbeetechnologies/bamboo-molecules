@@ -1,30 +1,23 @@
 import {
-  IDataSource,
+  IDataSourceClass,
   DataSourceResultProps,
   LoadingState,
   TFilters,
   TSort,
-  SetRecords,
+  TSetRecords,
   Records,
   TPagination, TFetchRecords
 } from "./types";
 
-export default class DataSource<RecordType> implements IDataSource<RecordType> {
+export default class DataSource<RecordType> implements IDataSourceClass<RecordType> {
   constructor({setRecords, ...props}: DataSourceResultProps<RecordType>) {
       Object.assign(this, props);
       this._setRecords = setRecords;
   }
 
   records: Records<any> = [];
-  filters!: TFilters;
-  search!: Function;
-  searchKey!: string;
-  sort!: TSort;
-  pagination!: TPagination;
-  loading!: LoadingState;
-  fetchRecords!: TFetchRecords;
 
-  _setRecords!: SetRecords;
+  _setRecords!: TSetRecords<RecordType>;
   setRecords(records: any) {
     this._setRecords(records);
   };
@@ -34,15 +27,15 @@ export default class DataSource<RecordType> implements IDataSource<RecordType> {
   }
   
   isLoadable(): boolean {
-    return this.#supports("fetchRecords");
+    return this.#supports("loadingState");
   }
   
   isPaginated(): boolean {
     return this.#supports("pagination");
   }
 
-  isSearchable(): boolean {
-    return this.#supports("searchKey") || this.#supports("search");
+  isFilterable(): boolean {
+    return this.#supports("filters");
   }
 
   isSortable(): boolean {

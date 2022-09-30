@@ -1,33 +1,39 @@
 import DataSource, { createDataSource } from "../DataSource";
-import { ISearchableDataSource, SearchableDataSourceProps } from "./types";
+import type { IFilterableDataSource, FilterableDataSourceProps } from "./types";
+import type { TFilters } from "../types";
 
 
 
-class SearchableDataSource<RecordType> extends DataSource<RecordType> implements ISearchableDataSource<RecordType> {
-  declare searchKey: string;
-  declare search: Function;
+class FilterableDataSource<RecordType> extends DataSource<RecordType> implements IFilterableDataSource<RecordType> {
+  declare filters: TFilters
 
-  applySearch() {
-    const [s, setFilters] = useState();
-    return setFilters;
+  declare applyFilter: IFilterableDataSource<RecordType>["applyFilter"]
+
+  // applyFilter = () => {
+  //   // const [s, setFilters] = useState();
+  //   // return setFilters;
 
 
-    // TODO: Implement setRecords
-    // this.setRecords();
-    throw new Error("Apply Search Method is not implemented");
-  }
+  //   // TODO: Implement setRecords
+  //   // this.setRecords();
+  //   // @ts-ignore
+  //   console.log("applyFilter", super.applyFilter);
+  //   throw new Error("Apply Filter Method is not implemented");
+  // }
 }
 
-
-export const createSearchableDataSource = <RecordType>(props: SearchableDataSourceProps<RecordType>) =>
-    createDataSource<RecordType>(props, SearchableDataSource) as SearchableDataSource<RecordType>;
+export type TFilterableDataSource<ResultType> = FilterableDataSource<ResultType>
 
 
-
-type ChainableDSFunc = <RecordType>(props: SearchableDataSourceProps<RecordType>) => SearchableDataSource<RecordType>;
-export const createSearchableDataSourceHook = <RecordType>(useDataSource:ChainableDSFunc = createSearchableDataSource) =>
-    (props: SearchableDataSourceProps<RecordType>) => useDataSource(createSearchableDataSource(props))
+export const createFilterableDataSource = <RecordType>(props: FilterableDataSourceProps<RecordType>) =>
+    createDataSource<RecordType>(props, FilterableDataSource) as FilterableDataSource<RecordType>;
 
 
 
-export const useSearchableDataSource = createSearchableDataSourceHook();
+type ChainableDSFunc = <RecordType>(props: FilterableDataSourceProps<RecordType>) => FilterableDataSource<RecordType>;
+export const createSearchableDataSourceHook = <RecordType>(useDataSource:ChainableDSFunc = createFilterableDataSource) =>
+    (props: FilterableDataSourceProps<RecordType>) => useDataSource(createFilterableDataSource(props))
+
+
+
+export const useFilterableDataSource = createSearchableDataSourceHook();

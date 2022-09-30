@@ -1,5 +1,5 @@
 import DataSource from "../DataSource";
-import type { DataSourceResultProps, IPaginationProps, SearchableProps } from "../types";
+import type { DataSourceResultProps, IPaginationProps } from "../types";
 
 export type PaginatedDataSourceProps<T> = DataSourceResultProps<T> & Required<IPaginationProps> ;
 

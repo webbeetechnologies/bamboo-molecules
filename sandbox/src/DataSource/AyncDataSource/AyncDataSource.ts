@@ -16,7 +16,10 @@ class AsyncDataSource<RecordType> extends DataSource<RecordType> implements IAsy
   }
 }
 
-const createAsyncDataSource = <RecordType>(props: AsyncDataSourceProps<RecordType>) => createDataSource<RecordType>(props, AsyncDataSource) as AsyncDataSource<RecordType>;
+export type TAsyncDataSource<RecordType> = AsyncDataSource<RecordType>;
+
+export const createAsyncDataSource = <RecordType>(props: AsyncDataSourceProps<RecordType>) =>
+    createDataSource<RecordType>(props, AsyncDataSource) as AsyncDataSource<RecordType>;
 
 
 type ChainableDSFunc = <RecordType>(props: AsyncDataSourceProps<RecordType>) => AsyncDataSource<RecordType>;
