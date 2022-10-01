@@ -10,7 +10,7 @@ const Example = () => {
     return (
         <>
             <TouchableRipple rippleColor="#333" onPress={() => {}}>
-                <View style={[styles.cardContainer, { backgroundColor: 'rgba(255, 255, 255, 1)' }]}>
+                <View style={[styles.cardContainer]}>
                     <Text>Test text</Text>
                     <ActivityIndicator animating={true} />
                 </View>
