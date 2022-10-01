@@ -1,11 +1,11 @@
 import DataSource, { createDataSource } from "../DataSource";
-import { ISort } from "../types";
+import { TSort } from "../types";
 import { ISortableDataSource, SortableDataSourceProps } from "./types";
 
 
 
 class SortableDataSource<RecordType> extends DataSource<RecordType> implements ISortableDataSource<RecordType> {
-  declare sort: ISort;
+  declare sort: TSort[];
 
   remove(args: { index: number; }): void {
     throw new Error("Remove Method not implemented.");

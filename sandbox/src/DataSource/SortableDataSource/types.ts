@@ -6,7 +6,7 @@ export type SortableDataSourceProps<T> = ISortProps & DataSourceResultProps<T>;
 
 
 
-export type TApplySortFunc = (args: { column: string, direction: ESortDirection }) => void;
+export type TApplySortFunc = (args: ESortDirection | { column: string, direction: ESortDirection }) => void;
 
 export interface ISortableDataSource<RecordType> extends DataSource<RecordType> {
     applySort: TApplySortFunc;

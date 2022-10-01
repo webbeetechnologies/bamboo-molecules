@@ -1,7 +1,7 @@
 export type TPagination = {
     page: number;
     pageSize: number;
-  }
+}
 
 export interface IPaginationProps {
   pagination: TPagination
@@ -21,14 +21,11 @@ export enum ESortDirection {
     DESC,
 }
 
-export type TSort = { direction: ESortDirection; order: number }
+export type TSort = { column: "", direction: ESortDirection; }
 
-export interface ISort {
-  [key: string]: TSort
-}
 
 export interface ISortProps {
-  sort: ISort;
+  sort: TSort[];
 }
 
 
@@ -44,8 +41,7 @@ export interface LoadingState {
 
 export type Records<ResultType> = ResultType[];
 
-export type TSetRecordArg<ResultType> = Records<ResultType> | ((records: Records<ResultType>) => Records<ResultType>)
-export type TSetRecords<ResultType> = (records: TSetRecordArg<ResultType>) => void;
+export type TSetRecords<ResultType> = (records:  Records<ResultType>) => void;
 
 
 
@@ -68,7 +64,7 @@ export interface IDataSource<ResultType> {
   records: Records<ResultType>;
 
   filters?: TFilters;
-  sort?: ISort;
+  sort?: TSort[];
   pagination?: TPagination;
   loading?: LoadingState;
 }
@@ -98,7 +94,11 @@ export enum EStoreActions {
   FILTER,
   SORT,
   REMOVE_SORT,
-  PAGINATE,
+  GO_TO,
+  GO_TO_START,
+  GO_TO_END,
+  GO_TO_NEXT,
+  GO_TO_PREV,
   MOVE,
 }
 

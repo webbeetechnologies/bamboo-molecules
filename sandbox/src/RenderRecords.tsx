@@ -4,7 +4,6 @@ import { useSortableDataSource } from './DataSource/SortableDataSource';
 import { useFilterableDataSource } from './DataSource/FilterableDataSource/FilterableDataSource';
 import { useArrayDataSource } from './DataSource/useArrayDataSource/useArrayDataSource';
 import {ESortDirection} from "./DataSource";
-import UsingArraySource from "./UsingArraySource";
 
 function findAllCustomerData() {
   const baseURL = 'https://ktwjky3ybe.execute-api.us-east-1.amazonaws.com';
@@ -35,9 +34,11 @@ function findAllCustomerData() {
   });
 }
 
-export default function App({ coworkers = [] as string[] }) {
-  // const [workers, setWorkers] = React.useState(coworkers);
+export default function RenderRecords(props: any) {
 
+
+  // @ts-ignore
+  const {records, applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest } = props;
 
   // const sortSource = useSortableDataSource({ records: workers as string[], setRecords: () => {}, sort: { }, searchKey: "test" });
   // const searchSource = useFilterableDataSource({ ...sortSource, searchKey: "test", setRecords: () => {}, sort: { },  });
@@ -59,18 +60,48 @@ export default function App({ coworkers = [] as string[] }) {
   //   };
   // });
 
-  // React.useEffect(() => {
-  //   (async () => {
-  //     const customers = await findAllCustomerData();
-  //     setWorkers(customers as any[]);
-  //   })();
-  // }, []);
 
 
+    const sortFirstName = React.useCallback(() => {applySort({ column: "first_name", direction: Number(window.prompt("Enter direction: 1|0")) })}, []);
+    const sortLastName = React.useCallback(() => {applySort({ column: "last_name", direction: Number(window.prompt("Enter direction: 1|0")) })}, []);
+    const removeSortHandled = React.useCallback(() => {removeSort({column: Number(window.prompt("Enter a column: 0 for first_name and 1 for last name")) === 0 ? "first_name" : "last_name"})}, []);
 
   return (
     <>
-        <UsingArraySource />
+        <ul>
+            {records.map((worker: any) => (
+              <Coworker worker={worker} key={worker.id} />
+            ))}
+        </ul>
+
+        <h1>Sorting</h1>
+        {
+            applySort &&
+            <>
+                <button onClick={ sortFirstName }>Sort By first name</button>
+                <button onClick={ sortLastName }>Sort By last name </button>
+                {/*<button onClick={ sortAsc }>sortAsc</button>*/}
+                {/*<button onClick={ sortDesc }>sortDesc</button>*/}
+                <button onClick={ removeSortHandled }>Remove Sort</button>
+            </>
+        }
+
+        <h1>Filters</h1>
+        {
+            applyFilter &&
+            <button onClick={ applyFilter }>Filter</button>
+        }
+
+        <h1>Paginate</h1>
+        {
+            goToStart &&
+            <>
+                <button onClick={goToStart}>Start</button>
+                <button onClick={goToEnd}>End</button>
+                <button onClick={goToNext}>Next</button>
+                <button onClick={goToPrev}>Prev</button>
+            </>
+        }
     </>
   );
 }

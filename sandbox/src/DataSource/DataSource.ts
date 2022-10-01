@@ -1,12 +1,8 @@
 import {
   IDataSourceClass,
   DataSourceResultProps,
-  LoadingState,
-  TFilters,
-  TSort,
   TSetRecords,
   Records,
-  TPagination, TFetchRecords
 } from "./types";
 
 export default class DataSource<RecordType> implements IDataSourceClass<RecordType> {

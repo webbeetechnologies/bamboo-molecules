@@ -1,11 +1,11 @@
 import DataSource, { createDataSource } from "../DataSource";
-import { ISort } from "../types";
+import { TSort } from "../types";
 import { IOrderableDataSource, OrderableDataSourceProps } from "./types";
 
 
 
 class OrderableDataSource<RecordType> extends DataSource<RecordType> implements IOrderableDataSource<RecordType> {
-  sort!: ISort;
+  sort!: TSort[];
 
   move(args: { oldIndex: number; newIndex: number; }): void {
     throw new Error("Move Method not implemented.");

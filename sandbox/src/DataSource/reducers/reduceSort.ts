@@ -1,0 +1,52 @@
+import {DataSourceState, RemoveSortAction, SortAction} from "../actions.type";
+import {ESortDirection, TSort} from "../types";
+import {prepareRecords} from "./prepareRecords";
+
+export type TReduceSort<T> = typeof reduceSort<T>;
+
+export function reduceSort<T>(state: DataSourceState<T>, action: SortAction) {
+    let sort = state.sort,
+        {column, direction} = action.payload as TSort;
+
+    // Allow sort on flat arrays.
+    if ([ESortDirection.ASC, ESortDirection.DESC].includes(action.payload as ESortDirection)) {
+        sort = [{
+            direction: action.payload as ESortDirection,
+            column: "",
+        }]
+    } else {
+        if (!sort) throw new Error("Data Source is not sortable");
+
+        const sortItemIndex = sort.findIndex((sort: any) => sort.column === column),
+            newSortItem = {column, direction};
+
+
+        if (sortItemIndex < 0) sort = [...sort, newSortItem];
+        else sort[sortItemIndex] = newSortItem;
+    }
+
+
+    return prepareRecords({
+        ...state,
+        action: action.type,
+        sort,
+    })
+}
+
+export type TReduceRemoveSort<T> = typeof reduceRemoveSort<T>;
+
+
+export function reduceRemoveSort<T>(state: DataSourceState<T>, action: RemoveSortAction) {
+    let sort = state.sort;
+    if (!sort) throw new Error("Data Source is not sortable");
+
+    if (sort.length === 1 && !sort[0].column) {
+        sort = [];
+    }
+
+    return prepareRecords({
+        ...state,
+        action: action.type,
+        sort: sort.filter(({column}: any) => column !== action.payload.column),
+    })
+}
