@@ -17,6 +17,12 @@ Some examples of elements that have a more than one variant.
 - Chips
 
 
+### Component Developer User Stories
+- As a component developer, I want to define my own variants.
+- As a component developer, I want to extend/replace existing variants of a component.
+
+
+
 ## Design Tokens
 Molecules implements takes inspiration from Material You design tokens. However, this does however have it's own limitations.\
 Molecules extends Material You design tokens to enable spacing (margins, paddings) and roundness; here is the exhaustive list of available design tokens.
