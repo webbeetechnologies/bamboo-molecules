@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import type { TextProps } from '@webbee/bamboo-atoms';
 import { extendTheme, ProvideMolecules, useMolecules, withRipple } from 'bamboo-molecules';
@@ -5,16 +6,32 @@ import { extendTheme, ProvideMolecules, useMolecules, withRipple } from 'bamboo-
 const theme = extendTheme({});
 
 const Example = () => {
-    const { View, Text, TouchableRipple, ActivityIndicator, Divider } = useMolecules();
+    const {
+        Button,
+        Surface,
+        View,
+        Text,
+        TouchableRipple,
+        ActivityIndicator,
+        Divider,
+        Icon,
+        Switch,
+    } = useMolecules();
+    const [isSwitchOn, setIsSwitchOn] = useState(false);
+    const onSwitchToggle = () => setIsSwitchOn(!isSwitchOn);
 
     return (
         <>
-            <TouchableRipple rippleColor="#333" onPress={() => {}}>
-                <View style={[styles.cardContainer]}>
-                    <Text>Test text</Text>
-                    <ActivityIndicator animating={true} />
-                </View>
-            </TouchableRipple>
+            <Surface elevation={2}>
+                <TouchableRipple rippleColor="#333" onPress={() => {}}>
+                    <View style={[styles.cardContainer]}>
+                        <Text>Test text</Text>
+                        <ActivityIndicator animating={true} />
+                    </View>
+                </TouchableRipple>
+            </Surface>
+            <Icon type="material-community" name="robot-angry-outline" />
+
             <Text>Text</Text>
             <Divider
                 bold
@@ -28,6 +45,21 @@ const Example = () => {
             <CustomButton onPress={() => {}} rippleContainerStyles={{ width: 200, padding: 20 }}>
                 Custom Button
             </CustomButton>
+
+            <Button
+                mode="contained"
+                onPress={() => {}}
+                iconType="material-community"
+                contentStyle={{ flexDirection: 'row-reverse' }}
+                iconName="robot-angry-outline">
+                Primary Button
+            </Button>
+
+            <Switch
+                value={isSwitchOn}
+                onValueChange={onSwitchToggle}
+                color="rgba(125, 82, 96, 1)"
+            />
         </>
     );
 };
