@@ -54,7 +54,6 @@ export const generateLightThemeColors = (
 
 export const MD3LightTheme: MD3Theme = {
     dark: false,
-    // TODO
     colors: generateLightThemeColors(ref.palette, ref.opacity),
     typescale,
     animation: {
