@@ -4,9 +4,9 @@ export {
     ActivityIndicatorProps,
     DividerProps,
     TouchableRippleProps,
-    // ButtonProps,
-    // SurfaceProps,
-    // SwitchProps,
+    ButtonProps,
+    SurfaceProps,
+    SwitchProps,
 } from './components';
 
 export {

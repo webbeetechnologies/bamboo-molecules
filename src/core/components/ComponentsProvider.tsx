@@ -11,9 +11,9 @@ import {
     Divider,
     TouchableRipple,
     TouchableRippleProps,
-    // Button,
-    // Surface,
-    // Switch,
+    Button,
+    Surface,
+    Switch,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -30,9 +30,9 @@ const defaultComponents: DefaultComponents = {
     TouchableRipple: TouchableRipple as ComponentType<TouchableRippleProps>, // ts-error
     ActivityIndicator,
     Divider,
-    // Button,
-    // Surface,
-    // Switch,
+    Button,
+    Surface,
+    Switch,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

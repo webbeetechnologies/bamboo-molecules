@@ -5,9 +5,9 @@ import type {
     ActivityIndicatorProps,
     TouchableRippleProps,
     DividerProps,
-    // SurfaceProps,
-    // ButtonProps,
-    // SwitchProps,
+    SurfaceProps,
+    ButtonProps,
+    SwitchProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -20,9 +20,9 @@ export interface DefaultComponents {
     TouchableRipple: ComponentType<TouchableRippleProps>;
     ActivityIndicator: ComponentType<ActivityIndicatorProps>;
     Divider: ComponentType<DividerProps>;
-    // Button: ComponentType<ButtonProps>;
-    // Surface: ComponentType<SurfaceProps>;
-    // Switch: ComponentType<SwitchProps>;
+    Button: ComponentType<ButtonProps>;
+    Surface: ComponentType<SurfaceProps>;
+    Switch: ComponentType<SwitchProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

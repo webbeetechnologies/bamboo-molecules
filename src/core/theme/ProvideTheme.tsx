@@ -6,7 +6,12 @@ import {
 import merge from 'ts-deepmerge';
 import memoize from 'lodash.memoize';
 
-import { dividerStyles, touchableRippleStyles, activityIndicatorStyles } from '../../components';
+import {
+    dividerStyles,
+    touchableRippleStyles,
+    activityIndicatorStyles,
+    switchStyles,
+} from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
 import normalizeStyles from '../../utils/normalizeStyles';
@@ -18,6 +23,7 @@ const defaultThemeValue: Partial<ITheme> = {
     Divider: dividerStyles,
     TouchableRipple: touchableRippleStyles,
     ActivityIndicator: activityIndicatorStyles,
+    Switch: switchStyles,
 };
 
 const defaultExtractTheme = memoize(

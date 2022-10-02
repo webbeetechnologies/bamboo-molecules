@@ -5,7 +5,7 @@ export {
     ActivityIndicatorProps,
     activityIndicatorStyles,
 } from './ActivityIndicator';
-// export { Surface, SurfaceProps } from './Surface';
-// export { Button, ButtonProps } from './Button';
+export { Surface, SurfaceProps } from './Surface';
+export { Button, ButtonProps } from './Button';
 export { Divider, dividerStyles, DividerProps } from './Divider';
-// export { Switch, SwitchProps } from './Switch';
+export { Switch, switchStyles, SwitchProps } from './Switch';
