@@ -13,7 +13,7 @@ export type UseAsyncDataSource = <ResultType>(data: IDataSourceState, func: Call
 
 
 
-export function useArrayDataSource <T>(data: IDataSourceState, func: CallBackFuncType,  storeConfig: Omit<TStoreConfig, "loadable">) {
+export function useArrayDataSource <T>(data: IDataSourceState, func: CallBackFuncType,  storeConfig?: Omit<TStoreConfig, "loadable">) {
     const handledFunc: CallBackFuncType = useCallback(<ResultType>(state: IDataSourceState) => func(state), [func]);
     
     return useDataSource(data, handledFunc, storeConfig);

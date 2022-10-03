@@ -20,7 +20,9 @@ export function reduceCompleteLoadResults<T>(state: IDataSourceState, action: Co
     return {
         ...state,
         ...prepareRecords({
+            ...state,
             action: action.type,
+            originalRecords: [...action.payload],
             records: action.payload,
             loading: {
                 ...state.loading,

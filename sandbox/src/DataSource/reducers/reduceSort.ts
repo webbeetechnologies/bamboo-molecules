@@ -4,8 +4,7 @@ import {prepareRecords} from "./prepareRecords";
 
 
 export function reduceSort<T>(state: IDataSourceState, action: SortAction) {
-    let sort = state.sort,
-        {column, direction} = action.payload as TSort;
+    let sort = state.sort;
 
     // Allow sort on flat arrays.
     if ([ESortDirection.ASC, ESortDirection.DESC].includes(action.payload as ESortDirection)) {
@@ -15,6 +14,8 @@ export function reduceSort<T>(state: IDataSourceState, action: SortAction) {
         }]
     } else {
         if (!sort) throw new Error("Data Source is not sortable");
+
+        const {column, direction = ESortDirection.ASC } = action.payload as TSort;
 
         const sortItemIndex = sort.findIndex((sort: any) => sort.column === column),
             newSortItem = {column, direction};

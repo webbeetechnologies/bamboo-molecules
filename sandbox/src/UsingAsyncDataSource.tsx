@@ -9,7 +9,7 @@ function findAllCustomerData<T>() {
     axios
       .post('customers', {}, { baseURL: baseURL })
       .then(function (result: any) {
-        var dataPromises = result.data.customerIds.map(function (customerId: any) {
+        var dataPromises = result.data.customerIds./*splice(0, Math.floor(Math.random() * 10)).*/map(function (customerId: any) {
           return axios.get('customers/' + customerId, { baseURL: baseURL });
         });
 
@@ -36,17 +36,20 @@ export default function UsingAsyncSource({ coworkers = [] as string[] }) {
   const [workers, setWorkers] = React.useState([] as string[]);
 
   // @ts-ignore
-  const {records, loadResults, applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest } = useAsyncDataSource({ records: workers, sort: [] }, async ({ records, ...args }) => {
-    if (records.length === 0)  {
-        // @ts-ignore
-        records = await findAllCustomerData<T>();
-    }
+  const {records, isLoading, loadResults, applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest } = useAsyncDataSource({ records: workers, sort: [], pagination: {page: 1, pageSize: 3} }, async ({ records, ...args }) => {
+    // @ts-ignore
+    records = (await findAllCustomerData<any>()) as any[];
+
     
     return records;
   });
 
   React.useEffect(() => loadResults(), []);
 
+
+  if(records.length === 0 && isLoading()) {
+    return <h1>Loading Results...</h1>
+  }
 
   return (
     <RenderRecords {...{

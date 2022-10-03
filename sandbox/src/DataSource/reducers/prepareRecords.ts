@@ -7,7 +7,7 @@ import omitBy from "lodash/omitBy";
 
 
 
-export const prepareRecords = <T>({ records,  action,  pagination, ...rest }: IDataSourceState) => {
+export const prepareRecords = <T>({ records,  action,  pagination, ...rest }: IDataSourceState, updatePagination = false) => {
     const orderRecords = <T>(records: Records<T>, sort?: TSort[]) => {
         let predicate = sort && zip(...sort?.map(({
             column,
@@ -33,13 +33,14 @@ export const prepareRecords = <T>({ records,  action,  pagination, ...rest }: ID
         return sorted
     };
 
+    records = orderRecords(rest.originalRecords as Records<T> ?? records, rest.sort)
 
     return {
         ...rest,
         action: action ?? EStoreActions.UN_INITIALIZED,
-        records: orderRecords(rest.originalRecords as Records<T> ?? records, rest.sort),
+        records: records,
         pages: pagination && chunk(records, pagination?.pageSize),
-        pagination: pagination && {
+        pagination: !updatePagination ? pagination : pagination && {
             ...pagination,
             totalCount: records.length,
             page: 1,

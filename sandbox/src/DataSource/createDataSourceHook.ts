@@ -13,7 +13,7 @@ export type CreateDataSourceHookArgs = {
 
 export type CallBackFuncType = <T>(state: IDataSourceState) => MaybePromise<Records<T>>
 
-type UseDataSource = (data: IDataSourceState, func: CallBackFuncType, storeSupport: TStoreConfig) => IDataSource;
+type UseDataSource = (data: IDataSourceState, func: CallBackFuncType, storeSupport?: TStoreConfig) => IDataSource;
 
 
 
@@ -39,16 +39,14 @@ export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs): Us
         const {records, ...store} = data,
 
 
-
             initialState = useMemo(() => prepareRecords({
                 records, ...store,
             }), []),
 
-            action = initialState.action,
-
 
             [ state, dispatch ] = useDispatcher(reducer, initialState as IDataSourceState),
 
+            action = state.action,
 
 
             stateRef = useRef(state),
@@ -132,8 +130,6 @@ export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs): Us
 
 
         stateRef.current = state;
-
-        console.log([...state.records])
 
 
         return {

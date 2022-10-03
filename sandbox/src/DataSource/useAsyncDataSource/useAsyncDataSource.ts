@@ -25,7 +25,7 @@ const isLoadingAction = (action: EStoreActions) => [EStoreActions.LOAD_RESULTS_S
 
 export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSourceState, func: CallBackFuncType, storeSupports?: TStoreConfig) => {
     const callAsyncFunc: CallBackFuncType = useCallback(async (state: IDataSourceState) => {
-            if (isLoadingAction(state.action as EStoreActions)) {
+            if (isLoading() || isLoadingAction(state.action as EStoreActions)) {
                 return state.records;
             }
 
