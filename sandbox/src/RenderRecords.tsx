@@ -1,38 +1,5 @@
 import * as React from 'react';
-import axios from 'axios';
-import { useSortableDataSource } from './DataSource/SortableDataSource';
-import { useFilterableDataSource } from './DataSource/FilterableDataSource/FilterableDataSource';
-import { useArrayDataSource } from './DataSource/useArrayDataSource/useArrayDataSource';
-import {ESortDirection} from "./DataSource";
 
-function findAllCustomerData() {
-  const baseURL = 'https://ktwjky3ybe.execute-api.us-east-1.amazonaws.com';
-  return new Promise(function (resolve, reject) {
-    axios
-      .post('customers', {}, { baseURL: baseURL })
-      .then(function (result: any) {
-        var dataPromises = result.data.customerIds.map(function (customerId: any) {
-          return axios.get('customers/' + customerId, { baseURL: baseURL });
-        });
-
-        Promise.all(dataPromises)
-          .then(function (res) {
-            resolve(
-              res.map(function (result) {
-                return result.data;
-              })
-            );
-          })
-          .catch(function (err) {
-            reject(err);
-          });
-      })
-      .catch(function (err: any) {
-        console.log('fails', err.toString());
-        reject(err);
-      });
-  });
-}
 
 export default function RenderRecords(props: any) {
 

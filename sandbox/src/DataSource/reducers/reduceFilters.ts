@@ -1,8 +1,7 @@
-import {DataSourceState, FilterAction} from "../actions.type";
+import {FilterAction} from "./types";
+import {IDataSourceState} from "../types";
 
-export type TReduceFilters<T> = typeof reduceFilters<T>;
-
-export function reduceFilters<T>(state: DataSourceState<T>, action: FilterAction) {
+export function reduceFilters<T>(state: IDataSourceState, action: FilterAction) {
     if (!state.filters) throw new Error("Data Source is not filterable");
 
     return {

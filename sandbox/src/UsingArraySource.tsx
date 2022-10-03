@@ -1,9 +1,6 @@
 import * as React from 'react';
-import axios from 'axios';
-import { useSortableDataSource } from './DataSource/SortableDataSource';
-import { useFilterableDataSource } from './DataSource/FilterableDataSource/FilterableDataSource';
 import { useArrayDataSource } from './DataSource/useArrayDataSource/useArrayDataSource';
-import {ESortDirection} from "./DataSource";
+import {IDataSourceState} from "./DataSource";
 import RenderRecords from "./RenderRecords";
 
 function findAllCustomerData() {
@@ -70,13 +67,12 @@ function findAllCustomerData() {
 export default function UsingArraySource({ coworkers = [] as string[] }) {
   const [workers, setWorkers] = React.useState(findAllCustomerData);
 
-  // @ts-ignore
-  const {records, applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest } = useArrayDataSource({ records: workers, sort: [] }, (...args) => {
-    // @ts-ignore
-    console.log(args[0].action, args);
-
-    return args[0].records;
+  const state = useArrayDataSource({ records: workers, sort: [] }, (state: IDataSourceState) => {
+    return state.records;
   });
+
+
+  const {records, applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest } = state;
 
 
   return (

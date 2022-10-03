@@ -1,8 +1,7 @@
-import {DataSourceState, GoTo, GoToEnd, GoToNext, GoToPrev, GoToStart} from "../actions.type";
+import {GoTo, GoToEnd, GoToNext, GoToPrev, GoToStart} from "./types";
+import {IDataSourceState} from "../types";
 
-export type TReduceGoTo<T> = typeof reduceGoTo;
-
-export function reduceGoTo<T>(state: DataSourceState<T>, action: GoTo) {
+export function reduceGoTo<T>(state: IDataSourceState, action: GoTo) {
     if (!state.pagination) throw new Error("Data Source is not paginated");
 
     return {
@@ -16,9 +15,7 @@ export function reduceGoTo<T>(state: DataSourceState<T>, action: GoTo) {
 }
 
 
-export type TReduceGoToEnd<T> = typeof reduceGoToEnd;
-
-export function reduceGoToEnd<T>(state: DataSourceState<T>, action: GoToEnd) {
+export function reduceGoToEnd<T>(state: IDataSourceState, action: GoToEnd) {
     if (!state.pagination) throw new Error("Data Source is not paginated");
 
     return {
@@ -31,9 +28,8 @@ export function reduceGoToEnd<T>(state: DataSourceState<T>, action: GoToEnd) {
     }
 }
 
-export type TReduceGoToStart<T> = typeof reduceGoToStart;
 
-export function reduceGoToStart<T>(state: DataSourceState<T>, action: GoToStart) {
+export function reduceGoToStart<T>(state: IDataSourceState, action: GoToStart) {
     if (!state.pagination) throw new Error("Data Source is not paginated");
 
     return {
@@ -46,9 +42,8 @@ export function reduceGoToStart<T>(state: DataSourceState<T>, action: GoToStart)
     }
 }
 
-export type TReduceGoToPrev<T> = typeof reduceGoToPrev;
 
-export function reduceGoToPrev<T>(state: DataSourceState<T>, action: GoToPrev) {
+export function reduceGoToPrev<T>(state: IDataSourceState, action: GoToPrev) {
     if (!state.pagination) throw new Error("Data Source is not paginated");
 
     return {
@@ -61,9 +56,8 @@ export function reduceGoToPrev<T>(state: DataSourceState<T>, action: GoToPrev) {
     }
 }
 
-export type TReduceGoToNext<T> = typeof reduceGoToNext;
 
-export function reduceGoToNext<T>(state: DataSourceState<T>, action: GoToNext) {
+export function reduceGoToNext<T>(state: IDataSourceState, action: GoToNext) {
     if (!state.pagination) throw new Error("Data Source is not paginated");
 
     return {

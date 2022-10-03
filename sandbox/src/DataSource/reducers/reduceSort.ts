@@ -1,10 +1,9 @@
-import {DataSourceState, RemoveSortAction, SortAction} from "../actions.type";
-import {ESortDirection, TSort} from "../types";
+import {RemoveSortAction, SortAction} from "./types";
+import {ESortDirection, IDataSourceState, TSort} from "../types";
 import {prepareRecords} from "./prepareRecords";
 
-export type TReduceSort<T> = typeof reduceSort<T>;
 
-export function reduceSort<T>(state: DataSourceState<T>, action: SortAction) {
+export function reduceSort<T>(state: IDataSourceState, action: SortAction) {
     let sort = state.sort,
         {column, direction} = action.payload as TSort;
 
@@ -33,10 +32,9 @@ export function reduceSort<T>(state: DataSourceState<T>, action: SortAction) {
     })
 }
 
-export type TReduceRemoveSort<T> = typeof reduceRemoveSort<T>;
 
 
-export function reduceRemoveSort<T>(state: DataSourceState<T>, action: RemoveSortAction) {
+export function reduceRemoveSort<T>(state: IDataSourceState, action: RemoveSortAction) {
     let sort = state.sort;
     if (!sort) throw new Error("Data Source is not sortable");
 

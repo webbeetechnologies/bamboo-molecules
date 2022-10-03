@@ -1,58 +1,76 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useReducer, useRef,} from "react";
 
-import {useDataSource} from "./useDataSource";
-import {EStoreActions, IDataSource, Records, TSetRecords} from "./types";
+import {IDataSource, IDataSourceState, Records, TSetRecords, TStoreConfig} from "./types";
 import {TApplyFilterFunc} from "./FilterableDataSource";
 import {TApplySortFunc} from "./SortableDataSource";
-import {ActionInterface, DataSourceState} from "./actions.type";
-import {prepareRecords as OgPrepareRecords} from "./reducers/prepareRecords";
+import {ActionInterface, EStoreActions} from "./reducers/types";
+import {prepareRecords as PrepareRecords} from "./reducers/prepareRecords";
 
-type CreateDataSourceHookArgs<T> = {
-    prepareRecords?: typeof OgPrepareRecords,
-    reducer: (state: DataSourceState<T>, action: ActionInterface<T>) => DataSourceState<T>
+export type CreateDataSourceHookArgs = {
+    prepareRecords?: typeof PrepareRecords,
+    reducer: (state: IDataSourceState, action: ActionInterface) => IDataSourceState
 }
 
-type MaybePromise<T> = T | Promise<T>
-type CallBackFuncType = <T>(arg: DataSourceState<T>) => MaybePromise<Records<T>>
+export type CallBackFuncType = <T>(state: IDataSourceState) => MaybePromise<Records<T>>
 
-export const createDataSourceHook = <ResultType>({ prepareRecords = OgPrepareRecords as typeof OgPrepareRecords<ResultType>, reducer } = {} as CreateDataSourceHookArgs<ResultType>) =>  {
-    return ({records, ...data}: IDataSource<ResultType>, func: CallBackFuncType,) => {
-        
-        const [ state, setState ] = useState(() => prepareRecords({ records: records as Records<ResultType>, ...data, }) as DataSourceState<ResultType>),
-
-            hasRendered = useRef(false),
-
-            updateAction = useCallback( (action: ActionInterface<ResultType>["type"], payload?: any) => {
-                (async () => {
-                    try {
-                        let newState = reducer(state, { type: action, payload } as  ActionInterface<ResultType>)
-                        newState = action === EStoreActions.SET_RECORDS ? newState : {
-                            ...newState,
-                            records: await func({...newState }),
-                        };
-
-                        setState(newState as DataSourceState<ResultType>);
-                    } catch (e) {
-                        console.error(e);
-                        return state;
-                    }
-                })()
-            }, [state]),
+export type UseDataSource = (data: IDataSourceState, func: CallBackFuncType) => IDataSource
 
 
-            updateRecords: TSetRecords<ResultType> = useCallback((records: Records<ResultType>) => {
-                    updateAction(EStoreActions.SET_RECORDS, records);  
-            }, [ updateAction ]),
+const STORE_SUPPORT: TStoreConfig = {
+    loadable: false,
+    filterable: false,
+    sortable: false,
+    pageable: false,
+    orderable: false,
+}
 
 
-            setResults: TSetRecords<ResultType> = useCallback((records: Records<ResultType>) => {
-                setState({
-                    ...state,
-                    action: EStoreActions.SET_RECORDS,
-                    records,
-                    originalRecords: records,
+const useDispatcher = (reducer: CreateDataSourceHookArgs["reducer"], initialState: IDataSourceState) => {
+    return useReducer(reducer, initialState as IDataSourceState);
+}
+
+
+
+export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs): UseDataSource =>  {
+    const { prepareRecords = PrepareRecords, reducer } = props;
+
+    return <ResultType>(data: IDataSourceState, func: CallBackFuncType, storeSupports = STORE_SUPPORT) => {
+        const {records, ...store} = data,
+
+
+
+            initialState = useMemo(() => prepareRecords({
+                records, ...store,
+            }), []),
+
+            action = initialState.action,
+
+
+            [ state, dispatch ] = useDispatcher(reducer, initialState as IDataSourceState),
+
+
+
+            stateRef = useRef(state),
+
+
+
+            getState = useCallback(() => stateRef.current, []),
+
+
+
+            updateAction = useCallback( (action: ActionInterface["type"], payload?: any) => {
+                dispatch({ type: action, payload })
+            }, [state, dispatch]),
+
+
+
+            setRecords: TSetRecords = useCallback(<ResultType>(records: Records<ResultType>) => {
+                dispatch({
+                    type: EStoreActions.SET_RECORDS,
+                    payload: records,
                 });
             }, [ state, updateAction ]),
+
 
 
             applyFilter: TApplyFilterFunc = useCallback((filter) => {
@@ -96,27 +114,40 @@ export const createDataSourceHook = <ResultType>({ prepareRecords = OgPrepareRec
         ;
 
 
-
         useEffect(() => {
-            if (!hasRendered.current) {
-                hasRendered.current = true;
-                return;
-            }
+            if (action === EStoreActions.SET_RECORDS) { return; }
+            (async () => {
+                try {
+                    const newRecords = await func(state);
 
-            setResults(records)
-        }, [records, hasRendered]);
+                    if (state.records === newRecords) { return; }
+                    dispatch({ type: EStoreActions.UPDATE_RECORDS, payload: newRecords });
+                } catch (e) {
+                    console.error(e);
+                    // stateGetter();
+                }
+            })()
+        }, [action])
 
-        return useDataSource<ResultType>({
+
+        stateRef.current = state;
+
+        console.log([...state.records])
+
+
+        return {
             ...state,
+            dispatch,
             applySort,
             applyFilter,
             removeSort,
+            getState,
             goTo,
             goToStart,
             goToEnd,
             goToNext,
             goToPrev,
-            setRecords: updateRecords as TSetRecords<ResultType>
-        });
+            setRecords
+        };
     }
 }

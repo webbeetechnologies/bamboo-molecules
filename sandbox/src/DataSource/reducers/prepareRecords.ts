@@ -1,15 +1,12 @@
-import {ESortDirection, EStoreActions, Records, TSort} from "../types";
-import {DataSourceState} from "../actions.type";
+import {ESortDirection, IDataSourceState, Records, TSort} from "../types";
+import {EStoreActions} from "./types";
 import zip from "lodash/zip";
 import orderBy from "lodash/orderBy";
 import chunk from "lodash/chunk";
 
 
-type PrepareRecordsArg<T> = DataSourceState<T>;
 
-export type PrepareRecords = typeof prepareRecords;
-
-export const prepareRecords = <T>({ records,  action,  pagination, ...rest }: PrepareRecordsArg<T>) => {
+export const prepareRecords = <T>({ records,  action,  pagination, ...rest }: IDataSourceState) => {
     const orderRecords = <T>(records: Records<T>, sort?: TSort[]) => {
         let predicate = sort && zip(...sort?.map(({
             column,
@@ -40,7 +37,7 @@ export const prepareRecords = <T>({ records,  action,  pagination, ...rest }: Pr
     return {
         originalRecords,
         ...rest,
-        action: action ?? EStoreActions.SET_RECORDS,
+        action: action ?? EStoreActions.UN_INITIALIZED,
         records: orderRecords(originalRecords, rest.sort),
         pages: pagination && chunk(records, pagination?.pageSize),
         pagination: pagination && {

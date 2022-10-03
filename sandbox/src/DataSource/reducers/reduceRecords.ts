@@ -1,9 +1,20 @@
-import {DataSourceState, SetRecordsAction} from "../actions.type";
+import {SetRecordsAction, UpdateRecordsAction} from "./types";
 import {prepareRecords} from "./prepareRecords";
+import {IDataSourceState} from "../types";
 
-export type TReduceRecords<T> = typeof reduceRecords;
 
-export function reduceRecords<T>(state: DataSourceState<T>, action: SetRecordsAction<T>) {
+export function reduceRecords<T>(state: IDataSourceState, action: SetRecordsAction) {
+    return {
+        ...state,
+        ...prepareRecords({
+            ...state,
+            action: action.type,
+            records: action.payload,
+        }),
+    };
+}
+
+export function reduceUpdateRecords<T>(state: IDataSourceState, action: UpdateRecordsAction) {
     return {
         ...state,
         ...prepareRecords({

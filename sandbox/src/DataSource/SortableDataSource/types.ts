@@ -1,15 +1,4 @@
-import DataSource from "../DataSource";
-import type { DataSourceResultProps, ISortProps, ESortDirection } from "../types";
-
-
-export type SortableDataSourceProps<T> = ISortProps & DataSourceResultProps<T>;
-
-
+import {ESortDirection} from "../types";
 
 export type TApplySortFunc = (args: ESortDirection | { column: string, direction: ESortDirection }) => void;
-
-export interface ISortableDataSource<RecordType> extends DataSource<RecordType> {
-    applySort: TApplySortFunc;
-
-    remove(args: { index: number }): void;
-}
+export type TRemoveSortFunc = (args: { index: number }) => void;
