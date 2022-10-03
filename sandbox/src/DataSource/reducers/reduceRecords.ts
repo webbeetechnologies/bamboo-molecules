@@ -9,6 +9,7 @@ export function reduceRecords<T>(state: IDataSourceState, action: SetRecordsActi
         ...prepareRecords({
             ...state,
             action: action.type,
+            originalRecords: [ ...action.payload ],
             records: action.payload,
         }),
     };

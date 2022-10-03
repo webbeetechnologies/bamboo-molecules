@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useReducer, useRef,} from "react";
 
-import {IDataSource, IDataSourceState, Records, TSetRecords, TStoreConfig} from "./types";
+import {IDataSource, IDataSourceState, IFilterableDataSource, IOrderableDataSource, IPaginatedDataSource, ISortableDataSource, Records, TSetRecords, TStoreConfig} from "./types";
 import {TApplyFilterFunc} from "./FilterableDataSource";
 import {TApplySortFunc} from "./SortableDataSource";
 import {ActionInterface, EStoreActions} from "./reducers/types";
@@ -13,10 +13,11 @@ export type CreateDataSourceHookArgs = {
 
 export type CallBackFuncType = <T>(state: IDataSourceState) => MaybePromise<Records<T>>
 
-export type UseDataSource = (data: IDataSourceState, func: CallBackFuncType) => IDataSource
+type UseDataSource = (data: IDataSourceState, func: CallBackFuncType, storeSupport: TStoreConfig) => IDataSource;
 
 
-const STORE_SUPPORT: TStoreConfig = {
+
+export const STORE_SUPPORT: TStoreConfig = {
     loadable: false,
     filterable: false,
     sortable: false,
@@ -34,7 +35,7 @@ const useDispatcher = (reducer: CreateDataSourceHookArgs["reducer"], initialStat
 export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs): UseDataSource =>  {
     const { prepareRecords = PrepareRecords, reducer } = props;
 
-    return <ResultType>(data: IDataSourceState, func: CallBackFuncType, storeSupports = STORE_SUPPORT) => {
+    return (data: IDataSourceState, func: CallBackFuncType, storeSupports = STORE_SUPPORT) => {
         const {records, ...store} = data,
 
 
@@ -67,7 +68,7 @@ export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs): Us
             setRecords: TSetRecords = useCallback(<ResultType>(records: Records<ResultType>) => {
                 dispatch({
                     type: EStoreActions.SET_RECORDS,
-                    payload: records,
+                    payload: records
                 });
             }, [ state, updateAction ]),
 

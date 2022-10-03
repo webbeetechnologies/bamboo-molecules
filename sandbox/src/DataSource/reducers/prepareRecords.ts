@@ -3,6 +3,7 @@ import {EStoreActions} from "./types";
 import zip from "lodash/zip";
 import orderBy from "lodash/orderBy";
 import chunk from "lodash/chunk";
+import omitBy from "lodash/omitBy";
 
 
 
@@ -32,13 +33,11 @@ export const prepareRecords = <T>({ records,  action,  pagination, ...rest }: ID
         return sorted
     };
 
-    const originalRecords = rest.originalRecords as Records<T> ?? records;
 
     return {
-        originalRecords,
         ...rest,
         action: action ?? EStoreActions.UN_INITIALIZED,
-        records: orderRecords(originalRecords, rest.sort),
+        records: orderRecords(rest.originalRecords as Records<T> ?? records, rest.sort),
         pages: pagination && chunk(records, pagination?.pageSize),
         pagination: pagination && {
             ...pagination,

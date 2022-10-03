@@ -1,12 +1,18 @@
 
 import {useCallback} from "react";
 import {CallBackFuncType, createDataSourceHook} from "../createDataSourceHook";
-import {IDataSource, IDataSourceState, Records} from "../types";
+import {IDataSourceState, ILoadableDataSource, Records, TStoreConfig} from "../types";
 import {reducer} from "./reducer";
 import {EStoreActions} from "../reducers/types";
 
 
-export const useDataSource = createDataSourceHook({ reducer })
+const useDataSource = createDataSourceHook({ reducer })
+
+
+export type UseAsyncDataSource = (data: IDataSourceState, func: CallBackFuncType, storeSupports?: Omit<TStoreConfig, "loadable">) => Omit<ILoadableDataSource, "dispatch">
+
+
+
 
 const loading = {
     started_at: null,
@@ -14,13 +20,10 @@ const loading = {
     finished_at: null
 };
 
+
 const isLoadingAction = (action: EStoreActions) => [EStoreActions.LOAD_RESULTS_START, EStoreActions.LOAD_RESULTS_DONE, EStoreActions.LOAD_RESULTS_ERROR].includes(action)
 
-
-export type UseAsyncDataSource = <ResultType>(data: IDataSourceState, func: CallBackFuncType) => Omit<IDataSource, "dispatch"> & { loadResults: Function }
-
-
-export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSourceState, func: CallBackFuncType) => {
+export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSourceState, func: CallBackFuncType, storeSupports?: TStoreConfig) => {
     const callAsyncFunc: CallBackFuncType = useCallback(async (state: IDataSourceState) => {
             if (isLoadingAction(state.action as EStoreActions)) {
                 return state.records;
@@ -46,7 +49,7 @@ export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSo
             return state.records;
         }, []),
 
-        { dispatch, getState, ...dataStore} = useDataSource({...data, loading }, callAsyncFunc),
+        { dispatch, getState, ...dataStore} = useDataSource({...data, loading }, callAsyncFunc, {...storeSupports, loadable: true }),
 
 
 
@@ -98,24 +101,13 @@ export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSo
 
 
 
-    console.log("isLoading", isLoading())
-
-
-    // console.log({
-    //     isLoading: isLoading(),
-    //     hasErrored: hasErrored(),
-    //     hasLoaded: hasLoaded(),
-    //     hasInitialized: hasInitialized(),
-    //     ...getState(),
-    // })
-
-
     return {
         ...dataStore,
         getState,
         loadResults,
         hasInitialized,
         hasLoaded,
-        hasErrored
+        hasErrored,
+        isLoading
     }
 }

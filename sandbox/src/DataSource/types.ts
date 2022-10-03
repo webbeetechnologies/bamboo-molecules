@@ -100,15 +100,13 @@ export interface ISortableDataSource extends IDataSource {
 }
 
 
-export interface ISortableDataSource extends IDataSource {
-  applySort: TApplySortFunc,
-  removeSort: TApplySortFunc,
+export interface IOrderableDataSource extends IDataSource {
+  move: TApplySortFunc,
 }
 
 
 export interface IFilterableDataSource extends IDataSource {
   applyFilter: TApplyFilterFunc,
-  removeSort: TApplySortFunc,
 }
 
 
@@ -118,6 +116,14 @@ export interface IPaginatedDataSource extends IDataSource {
   goToEnd: Function,
   goToNext: Function,
   goToPrev: Function,
+}
+
+export interface ILoadableDataSource extends IDataSource {
+  loadResults: () => void,
+  hasInitialized: () => Boolean,
+  hasLoaded: () => Boolean,
+  hasErrored: () => Boolean,
+  isLoading: () => Boolean,
 }
 
 
