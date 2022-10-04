@@ -1,5 +1,6 @@
 import type { Animated } from 'react-native';
 import { isAnimatedValue } from '../../styles/overlay';
+import { inputRange } from '../../styles/shadow';
 
 const _shadowColor = '#000';
 
@@ -21,7 +22,6 @@ export const getStyleForAnimatedShadowLayer = (
     elevation: Animated.Value,
     shadowColor = _shadowColor,
 ) => {
-    const inputRange = [0, 1, 2, 3, 4, 5];
     return {
         shadowColor,
         shadowOpacity: elevation.interpolate({
@@ -61,12 +61,12 @@ export const getStyleForShadowLayer = (
 
 export const getElevationAndroid = (
     elevation: number | Animated.Value,
-    inputRange: number[],
+    _inputRange: number[],
     elevationLevel: number[],
 ) => {
     if (isAnimatedValue(elevation)) {
         return elevation.interpolate({
-            inputRange,
+            inputRange: _inputRange,
             outputRange: elevationLevel,
         });
     }

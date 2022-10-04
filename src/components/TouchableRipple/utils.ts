@@ -1,21 +1,11 @@
 import color from 'color';
-import { Platform, StyleProp } from 'react-native';
 
 export interface TouchableRippleStyles {
     rippleColor: string;
-    touchable: StyleProp<any>;
-    borderless: StyleProp<any>;
 }
 
 export const touchableRippleStyles: TouchableRippleStyles = {
     rippleColor: 'colors.onSurface',
-    touchable: {
-        position: 'relative',
-        ...(Platform.OS === 'web' && { cursor: 'pointer' }),
-    },
-    borderless: {
-        overflow: 'hidden',
-    },
 };
 
 const getUnderlayColor = ({

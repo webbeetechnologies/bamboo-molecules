@@ -1,15 +1,120 @@
 import color from 'color';
-import type { MD3Theme } from '../../core/theme/types';
 
 export const black = '#000000';
 export const white = '#ffffff';
 
-export type ButtonMode = 'text' | 'outlined' | 'contained' | 'elevated' | 'contained-tonal';
+export type ButtonVariant = 'text' | 'outlined' | 'contained' | 'elevated' | 'contained-tonal';
 
 type BaseProps = {
-    isMode: (mode: ButtonMode) => boolean;
-    theme: MD3Theme;
+    isVariant: (variant: ButtonVariant) => boolean;
+    variant: ButtonVariant;
+    buttonStyles: typeof stateBasedStyles;
     disabled?: boolean;
+};
+
+const stateBasedStyles = {
+    disabled: {
+        backgroundColor: {
+            outlined: 'transparent',
+            text: 'transparent',
+            default: 'colors.surfaceDisabled',
+        },
+        textColor: {
+            default: 'colors.onSurfaceDisabled',
+        },
+        borderColor: {
+            outlined: 'colors.surfaceDisabled',
+            default: 'transparent',
+        },
+    },
+    default: {
+        backgroundColor: {
+            elevated: 'colors.elevation.level1',
+            contained: 'colors.primary',
+            'contained-tonal': 'colors.secondaryContainer',
+            outlined: 'transparent',
+            text: 'transparent',
+        },
+        textColor: {
+            contained: 'colors.onPrimary',
+            'contained-tonal': 'colors.onSecondaryContainer',
+            outlined: 'colors.primary',
+            elevated: 'colors.primary',
+            text: 'colors.primary',
+        },
+        borderColor: {
+            outlined: 'colors.outline',
+            default: 'transparent',
+        },
+        borderWidth: {
+            outlined: 1,
+            default: 0,
+        },
+    },
+};
+
+export const styles = {
+    ...stateBasedStyles,
+    button: {
+        minWidth: 64,
+        borderStyle: 'solid',
+    },
+    compact: {
+        minWidth: 'auto',
+    },
+    content: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    icon: {
+        marginLeft: 12,
+        marginRight: -4,
+    },
+    iconReverse: {
+        marginRight: 12,
+        marginLeft: -4,
+    },
+    md3Icon: {
+        marginLeft: 16,
+        marginRight: -16,
+    },
+    md3IconReverse: {
+        marginLeft: -16,
+        marginRight: 16,
+    },
+    md3IconTextMode: {
+        marginLeft: 12,
+        marginRight: -8,
+    },
+    md3IconReverseTextMode: {
+        marginLeft: -8,
+        marginRight: 12,
+    },
+    label: {
+        textAlign: 'center',
+        marginVertical: 9,
+        marginHorizontal: 16,
+    },
+    md2Label: {
+        letterSpacing: 1,
+    },
+    compactLabel: {
+        marginHorizontal: 8,
+    },
+    uppercaseLabel: {
+        textTransform: 'uppercase',
+    },
+    md3Label: {
+        marginVertical: 10,
+        marginHorizontal: 24,
+    },
+    md3LabelText: {
+        marginHorizontal: 12,
+    },
+    md3LabelTextAddons: {
+        marginHorizontal: 16,
+    },
 };
 
 const isDark = ({ dark, backgroundColor }: { dark?: boolean; backgroundColor?: string }) => {
@@ -29,54 +134,31 @@ const isDark = ({ dark, backgroundColor }: { dark?: boolean; backgroundColor?: s
 };
 
 const getButtonBackgroundColor = ({
-    isMode,
-    theme,
+    variant,
+    buttonStyles,
     disabled,
     customButtonColor,
 }: BaseProps & {
     customButtonColor?: string;
+    colorMode: 'light' | 'dark';
 }) => {
     if (customButtonColor && !disabled) {
         return customButtonColor;
     }
 
     if (disabled) {
-        if (isMode('outlined') || isMode('text')) {
-            return 'transparent';
-        }
-
-        return theme.colors.surfaceDisabled;
+        return buttonStyles.disabled.backgroundColor[
+            variant === 'outlined' || variant === 'text' ? variant : 'default'
+        ];
     }
 
-    if (isMode('elevated')) {
-        return theme.colors.elevation.level1;
-    }
-
-    if (isMode('contained')) {
-        return theme.colors.primary;
-    }
-
-    if (isMode('contained-tonal')) {
-        return theme.colors.secondaryContainer;
-    }
-
-    if (isMode('contained')) {
-        if (disabled) {
-            return color(theme.dark ? white : black)
-                .alpha(0.12)
-                .rgb()
-                .string();
-        }
-
-        return theme.colors.primary;
-    }
-
-    return 'transparent';
+    return buttonStyles.default.backgroundColor[variant];
 };
 
 const getButtonTextColor = ({
-    isMode,
-    theme,
+    isVariant,
+    variant,
+    buttonStyles,
     disabled,
     customTextColor,
     backgroundColor,
@@ -91,88 +173,78 @@ const getButtonTextColor = ({
     }
 
     if (disabled) {
-        return theme.colors.onSurfaceDisabled;
+        return buttonStyles.disabled.textColor.default;
     }
 
     if (typeof dark === 'boolean') {
-        if (isMode('contained') || isMode('contained-tonal') || isMode('elevated')) {
+        if (isVariant('contained') || isVariant('contained-tonal') || isVariant('elevated')) {
             return isDark({ dark, backgroundColor }) ? white : black;
         }
     }
 
-    if (isMode('outlined') || isMode('text') || isMode('elevated')) {
-        return theme.colors.primary;
-    }
-
-    if (isMode('contained')) {
-        return theme.colors.onPrimary;
-    }
-
-    if (isMode('contained-tonal')) {
-        return theme.colors.onSecondaryContainer;
-    }
-
-    return theme.colors.primary;
+    return buttonStyles.default.textColor[variant];
 };
 
-const getButtonBorderColor = ({ isMode, disabled, theme }: BaseProps) => {
-    if (disabled && isMode('outlined')) {
-        return theme.colors.surfaceDisabled;
-    }
-
-    if (isMode('outlined')) {
-        return theme.colors.outline;
-    }
-
-    return 'transparent';
+const getButtonBorderColor = ({
+    isVariant,
+    disabled,
+    buttonStyles,
+}: Omit<BaseProps, 'variant'>) => {
+    return buttonStyles[disabled ? 'disabled' : 'default'].borderColor[
+        isVariant('outlined') ? 'outlined' : 'default'
+    ];
 };
 
-const getButtonBorderWidth = ({ isMode }: Omit<BaseProps, 'disabled' | 'theme'>) => {
-    if (isMode('outlined')) {
-        return 1;
-    }
-
-    return 0;
+const getButtonBorderWidth = ({
+    isVariant,
+    buttonStyles,
+}: Omit<BaseProps, 'disabled' | 'variant'>) => {
+    return buttonStyles.default.borderWidth[isVariant('outlined') ? 'outlined' : 'default'];
 };
 
 export const getButtonColors = ({
-    theme,
-    mode,
+    buttonStyles,
+    variant,
     customButtonColor,
     customTextColor,
     disabled,
     dark,
+    colorMode,
 }: {
-    theme: MD3Theme;
-    mode: ButtonMode;
+    buttonStyles: typeof stateBasedStyles;
+    variant: ButtonVariant;
     customButtonColor?: string;
     customTextColor?: string;
     disabled?: boolean;
     dark?: boolean;
+    colorMode: 'light' | 'dark';
 }) => {
-    const isMode = (modeToCompare: ButtonMode) => {
-        return mode === modeToCompare;
+    const isVariant = (variantToCompare: ButtonVariant) => {
+        return variant === variantToCompare;
     };
 
     const backgroundColor = getButtonBackgroundColor({
-        isMode,
-        theme,
+        isVariant,
+        variant,
+        buttonStyles,
         disabled,
         customButtonColor,
+        colorMode,
     });
 
     const textColor = getButtonTextColor({
-        isMode,
-        theme,
+        isVariant,
+        variant,
+        buttonStyles,
         disabled,
         customTextColor,
         backgroundColor,
         dark,
     });
 
-    const borderColor = getButtonBorderColor({ isMode, theme, disabled });
+    const borderColor = getButtonBorderColor({ isVariant, buttonStyles, disabled });
 
-    const borderWidth = getButtonBorderWidth({ isMode });
+    const borderWidth = getButtonBorderWidth({ isVariant, buttonStyles });
 
     return {
         backgroundColor,

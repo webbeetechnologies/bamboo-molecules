@@ -4,10 +4,13 @@ import {
     ViewStyle,
     StyleProp,
     GestureResponderEvent,
+    StyleSheet,
+    Platform,
 } from 'react-native';
 
-import { useComponentTheme, useMolecules } from '../../hooks';
+import { useComponentTheme, useCurrentTheme, useMolecules } from '../../hooks';
 import { withNormalizedStyleProp } from '../../hocs';
+import { normalizeStyles } from '../../utils';
 import { getTouchableRippleColors } from './utils';
 
 export type Props = React.ComponentPropsWithRef<typeof TouchableWithoutFeedback> & {
@@ -94,7 +97,9 @@ const TouchableRipple = ({
     ...rest
 }: Props) => {
     const { View } = useMolecules();
+    const currentTheme = useCurrentTheme();
     const rippleStyles = useComponentTheme('TouchableRipple');
+    const normalizedColors = normalizeStyles({ rippleColor }, currentTheme);
 
     const handlePressIn = useCallback(
         (e: any) => {
@@ -103,7 +108,7 @@ const TouchableRipple = ({
             onPressIn?.(e);
 
             const { calculatedRippleColor } = getTouchableRippleColors({
-                rippleColor,
+                rippleColor: normalizedColors.rippleColor,
                 rippleStyles,
             });
 
@@ -194,7 +199,7 @@ const TouchableRipple = ({
                 });
             });
         },
-        [rippleStyles, rest, rippleColor],
+        [rippleStyles, rest, normalizedColors],
     );
 
     const handlePressOut = useCallback(
@@ -239,7 +244,7 @@ const TouchableRipple = ({
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
             disabled={disabled}>
-            <View style={[rippleStyles?.touchable, borderless && rippleStyles?.borderless, style]}>
+            <View style={[styles.touchable, borderless && styles.borderless, style]}>
                 {React.Children.only(children)}
             </View>
         </TouchableWithoutFeedback>
@@ -250,5 +255,15 @@ const TouchableRipple = ({
  * Whether ripple effect is supported.
  */
 TouchableRipple.supported = true;
+
+const styles = StyleSheet.create({
+    touchable: {
+        position: 'relative',
+        ...(Platform.OS === 'web' && { cursor: 'pointer' }),
+    },
+    borderless: {
+        overflow: 'hidden',
+    },
+});
 
 export default memo(withNormalizedStyleProp(TouchableRipple));

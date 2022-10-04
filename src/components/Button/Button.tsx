@@ -1,11 +1,11 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, ReactNode } from 'react';
 import { Animated, View, ViewStyle, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import color from 'color';
 
-import { useMolecules, useCurrentTheme } from '../../hooks';
+import { useMolecules, useCurrentTheme, useComponentTheme, useColorMode } from '../../hooks';
 import type { IconType } from '../Icon/types';
 import type { SurfaceProps } from '../Surface';
-import { ButtonMode, getButtonColors } from './utils';
+import { ButtonVariant, getButtonColors } from './utils';
 
 export type Props = SurfaceProps & {
     /**
@@ -16,10 +16,9 @@ export type Props = SurfaceProps & {
      * - `elevated` - button with a background color and elevation, used when absolutely necessary e.g. button requires visual separation from a patterned background. @supported Available in v5.x with theme version 3
      * - `contained-tonal` - button with a secondary background color, an alternative middle ground between contained and outlined buttons. @supported Available in v5.x with theme version 3
      */
-    mode?: 'text' | 'outlined' | 'contained' | 'elevated' | 'contained-tonal';
+    variant?: ButtonVariant;
     /**
      * Whether the color is a dark color. A dark button will render light text and vice-versa. Only applicable for:
-     *  * `contained` mode for theme version 2
      *  * `contained`, `contained-tonal` and `elevated` modes for theme version 3.
      */
     dark?: boolean;
@@ -59,7 +58,7 @@ export type Props = SurfaceProps & {
     /**
      * Label text of the button.
      */
-    children: React.ReactNode;
+    children: ReactNode;
     /**
      * Make the label text uppercased. Note that this won't work if you pass React elements as children.
      */
@@ -100,6 +99,10 @@ export type Props = SurfaceProps & {
      * Style for the button text.
      */
     labelStyle?: StyleProp<TextStyle>;
+    /**
+     * Style for the Icon
+     */
+    iconContainerStyle?: StyleProp<ViewStyle>;
     /**
      * testID to be used on tests.
      */
@@ -149,7 +152,7 @@ export type Props = SurfaceProps & {
 const Button = ({
     disabled: disabledProp,
     compact,
-    mode = 'text',
+    variant = 'text',
     dark,
     loading,
     iconType,
@@ -168,23 +171,27 @@ const Button = ({
     uppercase = false,
     contentStyle,
     labelStyle,
+    iconContainerStyle,
     testID,
     accessible,
     ...rest
 }: Props) => {
-    const theme = useCurrentTheme();
     const { ActivityIndicator, TouchableRipple, Text, Icon, Surface } = useMolecules();
+    const theme = useCurrentTheme();
+    const styles = useComponentTheme('Button');
+    const stateBasedStyles = { disabled: styles.disabled, default: styles.default };
+    const colorMode = useColorMode();
     const disabled = disabledProp || !onPress;
 
-    const isMode = useCallback(
-        (modeToCompare: ButtonMode) => {
-            return mode === modeToCompare;
+    const isVariant = useCallback(
+        (variantComponent: ButtonVariant) => {
+            return variant === variantComponent;
         },
-        [mode],
+        [variant],
     );
     const { roundness, animation } = theme;
 
-    const isElevationEntitled = !disabled && isMode('elevated');
+    const isElevationEntitled = !disabled && isVariant('elevated');
     const initialElevation = 1;
     const activeElevation = 2;
 
@@ -198,7 +205,7 @@ const Button = ({
 
     const handlePressIn = () => {
         onPressIn?.();
-        if (isMode('elevated')) {
+        if (isVariant('elevated')) {
             const { scale } = animation;
             Animated.timing(elevation, {
                 toValue: activeElevation,
@@ -210,7 +217,7 @@ const Button = ({
 
     const handlePressOut = () => {
         onPressOut?.();
-        if (isMode('elevated')) {
+        if (isVariant('elevated')) {
             const { scale } = animation;
             Animated.timing(elevation, {
                 toValue: initialElevation,
@@ -226,10 +233,11 @@ const Button = ({
     const { backgroundColor, borderColor, textColor, borderWidth } = getButtonColors({
         customButtonColor,
         customTextColor,
-        theme,
-        mode,
+        buttonStyles: stateBasedStyles,
+        variant,
         disabled,
         dark,
+        colorMode,
     });
 
     const rippleColor = color(textColor).alpha(0.12).rgb().string();
@@ -259,9 +267,9 @@ const Button = ({
             ? [
                   styles.iconReverse,
                   styles.md3IconReverse,
-                  isMode('text') && styles.md3IconReverseTextMode,
+                  isVariant('text') && styles.md3IconReverseTextMode,
               ]
-            : [styles.icon, styles.md3Icon, isMode('text') && styles.md3IconTextMode];
+            : [styles.icon, styles.md3Icon, isVariant('text') && styles.md3IconTextMode];
 
     return (
         <Surface
@@ -291,7 +299,7 @@ const Button = ({
                         contentStyle,
                     ]}>
                     {iconName && loading !== true ? (
-                        <View style={iconStyle}>
+                        <View style={[iconStyle, iconContainerStyle]}>
                             <Icon
                                 type={iconType}
                                 name={iconName}
@@ -319,7 +327,7 @@ const Button = ({
                         numberOfLines={1}
                         style={[
                             styles.label,
-                            isMode('text')
+                            isVariant('text')
                                 ? iconName || loading
                                     ? styles.md3LabelTextAddons
                                     : styles.md3LabelText
@@ -336,68 +344,5 @@ const Button = ({
         </Surface>
     );
 };
-
-const styles = StyleSheet.create({
-    button: {
-        minWidth: 64,
-        borderStyle: 'solid',
-    },
-    compact: {
-        minWidth: 'auto',
-    },
-    content: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    icon: {
-        marginLeft: 12,
-        marginRight: -4,
-    },
-    iconReverse: {
-        marginRight: 12,
-        marginLeft: -4,
-    },
-    md3Icon: {
-        marginLeft: 16,
-        marginRight: -16,
-    },
-    md3IconReverse: {
-        marginLeft: -16,
-        marginRight: 16,
-    },
-    md3IconTextMode: {
-        marginLeft: 12,
-        marginRight: -8,
-    },
-    md3IconReverseTextMode: {
-        marginLeft: -8,
-        marginRight: 12,
-    },
-    label: {
-        textAlign: 'center',
-        marginVertical: 9,
-        marginHorizontal: 16,
-    },
-    md2Label: {
-        letterSpacing: 1,
-    },
-    compactLabel: {
-        marginHorizontal: 8,
-    },
-    uppercaseLabel: {
-        textTransform: 'uppercase',
-    },
-    md3Label: {
-        marginVertical: 10,
-        marginHorizontal: 24,
-    },
-    md3LabelText: {
-        marginHorizontal: 12,
-    },
-    md3LabelTextAddons: {
-        marginHorizontal: 16,
-    },
-});
 
 export default Button;

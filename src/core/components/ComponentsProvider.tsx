@@ -8,7 +8,8 @@ import {
 import {
     ActivityIndicator,
     Icon,
-    Divider,
+    HorizontalDivider,
+    VerticalDivider,
     TouchableRipple,
     TouchableRippleProps,
     Button,
@@ -29,7 +30,8 @@ const defaultComponents: DefaultComponents = {
     Icon,
     TouchableRipple: TouchableRipple as ComponentType<TouchableRippleProps>, // ts-error
     ActivityIndicator,
-    Divider,
+    HorizontalDivider,
+    VerticalDivider,
     Button,
     Surface,
     Switch,

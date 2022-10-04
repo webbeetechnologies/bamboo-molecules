@@ -6,6 +6,11 @@ export {
     activityIndicatorStyles,
 } from './ActivityIndicator';
 export { Surface, SurfaceProps } from './Surface';
-export { Button, ButtonProps } from './Button';
-export { Divider, dividerStyles, DividerProps } from './Divider';
+export { Button, ButtonProps, buttonStyles } from './Button';
+export {
+    HorizontalDivider,
+    horizontalDividerStyles,
+    HorizontalDividerProps,
+} from './HorizontalDivider';
+export { VerticalDivider, verticalDividerStyles, VerticalDividerProps } from './VerticalDivider';
 export { Switch, switchStyles, SwitchProps } from './Switch';

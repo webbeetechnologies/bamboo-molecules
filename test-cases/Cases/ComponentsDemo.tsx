@@ -13,9 +13,10 @@ const Example = () => {
         Text,
         TouchableRipple,
         ActivityIndicator,
-        Divider,
+        HorizontalDivider,
         Icon,
         Switch,
+        VerticalDivider,
     } = useMolecules();
     const [isSwitchOn, setIsSwitchOn] = useState(false);
     const onSwitchToggle = () => setIsSwitchOn(!isSwitchOn);
@@ -23,7 +24,7 @@ const Example = () => {
     return (
         <>
             <Surface elevation={2}>
-                <TouchableRipple rippleColor="#333" onPress={() => {}}>
+                <TouchableRipple rippleColor="colors.primary" onPress={() => {}}>
                     <View style={[styles.cardContainer]}>
                         <Text>Test text</Text>
                         <ActivityIndicator animating={true} />
@@ -33,12 +34,12 @@ const Example = () => {
             <Icon type="material-community" name="robot-angry-outline" />
 
             <Text>Text</Text>
-            <Divider
+            <HorizontalDivider
+                leftInset={28}
+                rightInset={28}
                 bold
-                style={StyleSheet.flatten([
-                    { background: 'colors.primary' },
-                    { marginVertical: 10 },
-                ])}
+                spacing={10}
+                style={{ backgroundColor: 'colors.primary' }}
             />
             <Text>Divided</Text>
 
@@ -46,8 +47,14 @@ const Example = () => {
                 Custom Button
             </CustomButton>
 
+            <View style={{ flexDirection: 'row' }}>
+                <Text>Boy</Text>
+                <VerticalDivider spacing={10} />
+                <Text>Girl</Text>
+            </View>
+
             <Button
-                mode="contained"
+                variant="contained"
                 onPress={() => {}}
                 iconType="material-community"
                 contentStyle={{ flexDirection: 'row-reverse' }}

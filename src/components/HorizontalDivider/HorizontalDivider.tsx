@@ -6,20 +6,21 @@ import { withNormalizedStyleProp } from '../../hocs';
 
 export type Props = Omit<ViewProps, 'children'> & {
     /**
-     * @renamed Renamed from 'inset' to 'leftInset` in v5.x
-     * Whether divider has a left inset.
+     * left inset of the divider.
      */
-    leftInset?: boolean;
+    leftInset?: number;
     /**
-     * @supported Available in v5.x with theme version 3
-     *  Whether divider has a horizontal inset on both sides.
+     * right inset of the divider.
      */
-    horizontalInset?: boolean;
+    rightInset?: number;
     /**
-     * @supported Available in v5.x with theme version 3
      *  Whether divider should be bolded.
      */
     bold?: boolean;
+    /**
+     *  Vertical spacing of the Divider
+     */
+    spacing?: number;
     style?: StyleProp<ViewStyle>;
 };
 
@@ -51,43 +52,38 @@ export type Props = Omit<ViewProps, 'children'> & {
  * ```
  */
 
-const Divider = ({ leftInset, horizontalInset = false, style, bold = false, ...rest }: Props) => {
+const HorizontalDivider = ({
+    leftInset = 0,
+    rightInset = 0,
+    style,
+    bold = false,
+    spacing = 0,
+    ...rest
+}: Props) => {
     const { View } = useMolecules();
-    const {
-        leftInset: leftInsetStyles,
-        horizontalInset: horizontalInsetStyles,
-        bold: boldStyles,
-        ...defaultStyles
-    } = useComponentTheme('Divider');
+    const { bold: boldStyles, ...defaultStyles } = useComponentTheme('HorizontalDivider');
 
     return (
         <View
             {...rest}
             style={[
                 defaultStyles,
-                leftInset && leftInsetStyles,
-                horizontalInset && horizontalInsetStyles,
+                leftInset && { marginLeft: leftInset },
+                rightInset && { marginRight: rightInset },
                 bold && boldStyles,
+                spacing && { marginVertical: spacing },
                 style,
             ]}
         />
     );
 };
 
-export const dividerStyles = {
+export const horizontalDividerStyles = {
     height: StyleSheet.hairlineWidth,
     background: 'colors.surfaceVariant',
-
-    leftInset: {
-        marginLeft: 72,
-    },
-    horizontalInset: {
-        marginLeft: 28,
-        marginRight: 28,
-    },
     bold: {
         height: 1,
     },
 };
 
-export default memo(withNormalizedStyleProp(Divider));
+export default memo(withNormalizedStyleProp(HorizontalDivider));

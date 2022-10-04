@@ -4,10 +4,11 @@ import type {
     IconProps,
     ActivityIndicatorProps,
     TouchableRippleProps,
-    DividerProps,
+    HorizontalDividerProps,
     SurfaceProps,
     ButtonProps,
     SwitchProps,
+    VerticalDividerProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -19,7 +20,8 @@ export interface DefaultComponents {
     Icon: ComponentType<IconProps>;
     TouchableRipple: ComponentType<TouchableRippleProps>;
     ActivityIndicator: ComponentType<ActivityIndicatorProps>;
-    Divider: ComponentType<DividerProps>;
+    HorizontalDivider: ComponentType<HorizontalDividerProps>;
+    VerticalDivider: ComponentType<VerticalDividerProps>;
     Button: ComponentType<ButtonProps>;
     Surface: ComponentType<SurfaceProps>;
     Switch: ComponentType<SwitchProps>;

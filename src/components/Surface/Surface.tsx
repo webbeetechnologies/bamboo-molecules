@@ -1,9 +1,11 @@
 import { ComponentPropsWithRef, ReactNode, memo } from 'react';
 import { Animated, StyleSheet, View, StyleProp, ViewStyle, Platform } from 'react-native';
 
+import { withNormalizedStyleProp } from '../../hocs';
+import { useCurrentTheme } from '../../hooks';
 import shadow from '../../styles/shadow';
 import { isAnimatedValue } from '../../styles/overlay';
-import { useCurrentTheme } from '../../hooks';
+import { inputRange } from '../../styles/shadow';
 import type { MD3Elevation } from '../../core/theme/types';
 import {
     getElevationAndroid,
@@ -25,7 +27,7 @@ export type Props = ComponentPropsWithRef<typeof View> & {
      * Note: In version 2 the `elevation` prop was accepted via `style` prop i.e. `style={{ elevation: 4 }}`.
      * It's no longer supported with theme version 3 and you should use `elevation` property instead.
      */
-    elevation?: 0 | 1 | 2 | 3 | 4 | 5 | Animated.Value;
+    elevation?: MD3Elevation | Animated.Value;
     /**
      * TestID used for testing purposes
      */
@@ -76,8 +78,6 @@ export type Props = ComponentPropsWithRef<typeof View> & {
  */
 const Surface = ({ elevation = 1, children, style, testID, ...props }: Props) => {
     const theme = useCurrentTheme();
-
-    const inputRange = [0, 1, 2, 3, 4, 5];
 
     const backgroundColor = (() => {
         if (isAnimatedValue(elevation)) {
@@ -164,4 +164,4 @@ const Surface = ({ elevation = 1, children, style, testID, ...props }: Props) =>
     );
 };
 
-export default memo(Surface);
+export default memo(withNormalizedStyleProp(Surface));

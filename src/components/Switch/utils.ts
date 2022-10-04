@@ -1,53 +1,26 @@
 import { Platform } from 'react-native';
 import setColor from 'color';
 
-import { grey400, grey800, grey50, grey700, white, black } from '../../styles/colors';
-
 type BaseProps = {
     switchStyles: SwitchStyles;
     disabled?: boolean;
     value?: boolean;
-    colorMode: 'light' | 'dark';
 };
 
 type SwitchStyles = {
     checkedColor: string;
-    thumbTintColor: {
-        disabled: {
-            dark: string;
-            light: string;
-        };
-        dark: string;
-        light: string;
-    };
-    onTintColor: {
-        disabled: {
-            dark: string;
-            light: string;
-        };
-        dark: string;
-        light: string;
-    };
+    thumbTintColor: string;
+    onTintColor: string;
+    onTintColorDisabled: string;
+    thumbTintColorDisabled: string;
 };
 
 export const styles: SwitchStyles = {
     checkedColor: 'colors.primary',
-    thumbTintColor: {
-        disabled: {
-            dark: grey800,
-            light: grey400,
-        },
-        dark: grey400,
-        light: grey50,
-    },
-    onTintColor: {
-        disabled: {
-            dark: setColor(white).alpha(0.06).rgb().string(),
-            light: setColor(black).alpha(0.12).rgb().string(),
-        },
-        dark: grey700,
-        light: 'rgb(178, 175, 177)',
-    },
+    thumbTintColorDisabled: 'colors.disabled',
+    thumbTintColor: 'color.tintColor',
+    onTintColor: 'color.onTintColor',
+    onTintColorDisabled: 'colors.disabledOnBackground',
 };
 
 const getCheckedColor = ({
@@ -69,7 +42,6 @@ const getThumbTintColor = ({
     disabled,
     value,
     checkedColor,
-    colorMode,
 }: BaseProps & { checkedColor: string }) => {
     const isIOS = Platform.OS === 'ios';
 
@@ -78,20 +50,14 @@ const getThumbTintColor = ({
     }
 
     if (disabled) {
-        if (colorMode === 'dark') {
-            return switchStyles?.thumbTintColor?.dark;
-        }
-        return switchStyles?.thumbTintColor?.light;
+        return switchStyles.thumbTintColorDisabled;
     }
 
     if (value) {
         return checkedColor;
     }
 
-    if (colorMode === 'dark') {
-        return switchStyles?.thumbTintColor?.dark;
-    }
-    return switchStyles?.thumbTintColor?.light;
+    return switchStyles.thumbTintColor;
 };
 
 const getOnTintColor = ({
@@ -99,7 +65,6 @@ const getOnTintColor = ({
     disabled,
     value,
     checkedColor,
-    colorMode,
 }: BaseProps & { checkedColor: string }) => {
     const isIOS = Platform.OS === 'ios';
 
@@ -108,20 +73,14 @@ const getOnTintColor = ({
     }
 
     if (disabled) {
-        if (colorMode === 'dark') {
-            return switchStyles?.onTintColor?.disabled?.dark;
-        }
-        return switchStyles?.onTintColor?.disabled?.light;
+        return switchStyles.onTintColorDisabled;
     }
 
     if (value) {
         return setColor(checkedColor).alpha(0.5).rgb().string();
     }
 
-    if (colorMode === 'dark') {
-        return switchStyles?.onTintColor?.dark;
-    }
-    return switchStyles?.onTintColor?.light;
+    return switchStyles.onTintColor;
 };
 
 export const getSwitchColor = ({
@@ -129,18 +88,16 @@ export const getSwitchColor = ({
     disabled,
     value,
     color,
-    colorMode,
 }: BaseProps & { color?: string }) => {
     const checkedColor = getCheckedColor({ switchStyles, color });
 
     return {
-        onTintColor: getOnTintColor({ switchStyles, disabled, value, checkedColor, colorMode }),
+        onTintColor: getOnTintColor({ switchStyles, disabled, value, checkedColor }),
         thumbTintColor: getThumbTintColor({
             switchStyles,
             disabled,
             value,
             checkedColor,
-            colorMode,
         }),
         checkedColor,
     };
