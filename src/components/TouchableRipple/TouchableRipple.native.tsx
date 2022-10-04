@@ -8,8 +8,9 @@ import {
     TouchableWithoutFeedback,
     ViewStyle,
 } from 'react-native';
-import { useComponentTheme, useMolecules } from '../../hooks';
+import { useComponentTheme, useCurrentTheme, useMolecules } from '../../hooks';
 import { withNormalizedStyleProp } from '../../hocs';
+import { normalizeStyles } from '../../utils';
 import { getTouchableRippleColors } from './utils';
 
 const ANDROID_VERSION_LOLLIPOP = 21;
@@ -38,11 +39,13 @@ const TouchableRipple = ({
 }: Props) => {
     const disabled = disabledProp || !rest.onPress;
     const { View } = useMolecules();
+    const currentTheme = useCurrentTheme();
     const rippleStyles = useComponentTheme('TouchableRipple');
+    const normalizedColors = normalizeStyles({ rippleColor, underlayColor }, currentTheme);
 
     const { calculatedRippleColor, calculatedUnderlayColor } = getTouchableRippleColors({
-        rippleColor,
-        underlayColor,
+        rippleColor: normalizedColors.rippleColor,
+        underlayColor: normalizedColors.underlayColor,
         rippleStyles,
     });
 
