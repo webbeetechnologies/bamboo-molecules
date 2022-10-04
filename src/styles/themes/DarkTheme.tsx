@@ -39,6 +39,9 @@ export const generateDarkThemeColors = (
         inverseOnSurface: palette.neutral20,
         inversePrimary: palette.primary40,
         backdrop: color(palette.neutralVariant20).alpha(0.4).rgb().string(),
+        disabledOnBackground: color(palette.neutral0).alpha(0.12).rgb().string(),
+        tintColor: palette.neutral70,
+        onTintColor: palette.neutral40,
         elevation: {
             level0: 'transparent',
             // Note: Color values with transparency cause RN to transfer shadows to children nodes
