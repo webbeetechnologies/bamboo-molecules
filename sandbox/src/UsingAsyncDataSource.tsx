@@ -33,27 +33,23 @@ function findAllCustomerData<T>() {
 }
 
 export default function UsingAsyncSource({ coworkers = [] as string[] }) {
-  const [workers, setWorkers] = React.useState([] as string[]);
-
   // @ts-ignore
-  const {records, isLoading, loadResults, applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest } = useAsyncDataSource({ records: workers, sort: [], pagination: {page: 1, pageSize: 3} }, async ({ records, ...args }) => {
-    // @ts-ignore
-    records = (await findAllCustomerData<any>()) as any[];
+  const {isLoading,  ...rest } = useAsyncDataSource({
+      records: [], 
+      sort: [], 
+      pagination: {page: 1, pageSize: 3},
+    },
+    async ({ records, action, ...args }) => {
+      // @ts-ignore
+      return (await findAllCustomerData<any>()) as any[];
 
-    
-    return records;
-  });
-
-  React.useEffect(() => loadResults(), []);
-
-
-  if(records.length === 0 && isLoading()) {
-    return <h1>Loading Results...</h1>
-  }
+      
+      return records;
+    });
 
   return (
     <RenderRecords {...{
-        records, applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest
+        ...rest
     }} />
   );
 }

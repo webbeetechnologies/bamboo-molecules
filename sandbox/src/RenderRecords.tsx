@@ -1,11 +1,12 @@
 import * as React from 'react';
+import { ESortDirection } from './DataSource';
 
 
-export default function RenderRecords(props: any) {
+export default function   RenderRecords(props: any) {
 
 
   // @ts-ignore
-  const {records, applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest } = props;
+  const {pages, pagination, records, sort = [], applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest } = props;
 
   // const sortSource = useSortableDataSource({ records: workers as string[], setRecords: () => {}, sort: { }, searchKey: "test" });
   // const searchSource = useFilterableDataSource({ ...sortSource, searchKey: "test", setRecords: () => {}, sort: { },  });
@@ -27,16 +28,27 @@ export default function RenderRecords(props: any) {
   //   };
   // });
 
+  
 
+  const [column, selectColumn] = React.useState("");
 
-    const sortFirstName = React.useCallback(() => {applySort({ column: "first_name", direction: Number(window.prompt("Enter direction: 1|0")) })}, []);
-    const sortLastName = React.useCallback(() => {applySort({ column: "last_name", direction: Number(window.prompt("Enter direction: 1|0")) })}, []);
-    const removeSortHandled = React.useCallback(() => {removeSort({column: Number(window.prompt("Enter a column: 0 for first_name and 1 for last name")) === 0 ? "first_name" : "last_name"})}, []);
+  const changeColumn = (column: any, direction?: any ) => {
+    applySort({ column, direction})
+    selectColumn("");
+  }
+
+  const changeSort = (column: any, direction?: any ) => {
+    if (direction === "") {
+      removeSort({ column })
+    } else {
+      changeColumn(column, Number(direction))
+    }
+  }
 
   return (
     <>
         <ul>
-            {records.map((worker: any) => (
+            {pages[pagination?.page - 1]?.map((worker: any) => (
               <Coworker worker={worker} key={worker.id} />
             ))}
         </ul>
@@ -45,11 +57,25 @@ export default function RenderRecords(props: any) {
         {
             applySort &&
             <>
-                <button onClick={ sortFirstName }>Sort By first name</button>
-                <button onClick={ sortLastName }>Sort By last name </button>
-                {/*<button onClick={ sortAsc }>sortAsc</button>*/}
-                {/*<button onClick={ sortDesc }>sortDesc</button>*/}
-                <button onClick={ removeSortHandled }>Remove Sort</button>
+                {
+                  sort.map(({ column, ...rest }: any) => {
+                    return [
+                      column,
+                      " ",
+                      <select key={ column + "sort"} value={rest.direction + ""} onChange={(e) => changeSort(column, e.target.value)}>
+                        <option value="">not Set</option>
+                        <option value={ESortDirection.ASC}>asc</option>
+                        <option value={ESortDirection.DESC}>desc</option>
+                      </select>,
+                      <br key="break" />
+                    ]
+                  })
+                }
+                <br/>
+                <select onChange={(e) => changeColumn(e.target.value)} value={column}>
+                  <option>Select a column to Filter on</option>
+                  {["id", "first_name", "last_name"].map((val) => <option key={val} value={val}>{val}</option>)}
+                </select>
             </>
         }
 
@@ -63,10 +89,12 @@ export default function RenderRecords(props: any) {
         {
             goToStart &&
             <>
-                <button onClick={goToStart}>Start</button>
-                <button onClick={goToEnd}>End</button>
-                <button onClick={goToNext}>Next</button>
-                <button onClick={goToPrev}>Prev</button>
+                <button onClick={goToStart}>&lt;&lt; Start</button>
+                <br />
+                <button onClick={goToPrev}>&lt;Prev</button>
+                <button onClick={goToNext}>Next &gt;</button>
+                <br />
+                <button onClick={goToEnd}>End &gt;&gt;</button>
             </>
         }
     </>
@@ -81,7 +109,7 @@ const Coworker = (props: any) => {
   const worker = props.worker;
   return (
     <li>
-      {worker.first_name} {worker.last_name}
+      {worker.id} {worker.first_name} {worker.last_name}
     </li>
   );
 };
