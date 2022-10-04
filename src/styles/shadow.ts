@@ -1,10 +1,11 @@
 import { Animated } from 'react-native';
+import type { MD3Elevation } from '../core/theme/types';
 import { MD3Colors } from './themes/tokens';
 
 const MD3_SHADOW_OPACITY = 0.3;
 const MD3_SHADOW_COLOR = MD3Colors.primary0;
 
-export const inputRange = [0, 1, 2, 3, 4, 5];
+export const inputRange: MD3Elevation[] = [0, 1, 2, 3, 4, 5];
 export const shadowHeight = [0, 1, 2, 4, 6, 8];
 export const shadowRadius = [0, 3, 6, 8, 10, 12];
 
