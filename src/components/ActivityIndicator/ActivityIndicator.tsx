@@ -3,6 +3,7 @@ import { Animated, Easing, Platform, StyleProp, StyleSheet, ViewStyle } from 're
 import type { ActivityIndicatorProps } from '@webbee/bamboo-atoms';
 import { useComponentTheme, useCurrentTheme, useMolecules } from '../../hooks';
 import { withNormalizedStyleProp } from '../../hocs';
+import AnimatedSpinner from './AnimatedSpinner';
 
 export type Props = ActivityIndicatorProps & {
     /**
@@ -25,6 +26,13 @@ export type Props = ActivityIndicatorProps & {
 };
 
 const DURATION = 2400;
+
+const mapIndicatorSize = (indicatorSize: 'small' | 'large' | number | undefined) => {
+    if (typeof indicatorSize === 'string') {
+        return indicatorSize === 'small' ? 24 : 48;
+    }
+    return indicatorSize ? indicatorSize : 24;
+};
 
 /**
  * Activity indicator is used to present progress of some activity in the app.
@@ -69,15 +77,8 @@ const ActivityIndicator = ({
         animation: { scale },
     } = theme;
 
-    const color = indicatorColor || theme.colors?.primary;
-    const size =
-        typeof indicatorSize === 'string'
-            ? indicatorSize === 'small'
-                ? 24
-                : 48
-            : indicatorSize
-            ? indicatorSize
-            : 24;
+    const color = indicatorColor || theme.colors.primary;
+    const size = mapIndicatorSize(indicatorSize);
 
     const startRotation = useCallback(() => {
         // Show indicator
@@ -128,6 +129,10 @@ const ActivityIndicator = ({
         } else {
             stopRotation();
         }
+
+        return () => {
+            if (animating) stopRotation();
+        };
     }, [animating, fade, hidesWhenStopped, startRotation, scale, timer]);
 
     return (
@@ -140,95 +145,23 @@ const ActivityIndicator = ({
             <Animated.View
                 style={[{ width: size, height: size, opacity: fade }]}
                 collapsable={false}>
-                {renderAnimatedSpinner(size, timer, color, styles)}
+                {[0, 1].map(index => {
+                    // Thanks to https://github.com/n4kz/react-native-indicators for the great work
+                    return (
+                        <AnimatedSpinner
+                            key={index}
+                            index={index}
+                            size={size}
+                            color={color}
+                            timer={timer}
+                            styles={styles}
+                            duration={DURATION}
+                        />
+                    );
+                })}
             </Animated.View>
         </View>
     );
-};
-
-const renderAnimatedSpinner = (
-    size: number,
-    timer: Animated.Value,
-    color: string,
-    styles: StyleProp<any>,
-) => {
-    const frames = (60 * DURATION) / 1000;
-    const easing = Easing.bezier(0.4, 0.0, 0.7, 1.0);
-    const containerStyle = {
-        width: size,
-        height: size / 2,
-        overflow: 'hidden' as const,
-    };
-
-    return [0, 1].map(index => {
-        // Thanks to https://github.com/n4kz/react-native-indicators for the great work
-        const inputRange = Array.from(
-            new Array(frames),
-            (_, frameIndex) => frameIndex / (frames - 1),
-        );
-        const outputRange = Array.from(new Array(frames), (_, frameIndex) => {
-            let progress = (2 * frameIndex) / (frames - 1);
-            const rotation = index ? +(360 - 15) : -(180 - 15);
-
-            if (progress > 1.0) {
-                progress = 2.0 - progress;
-            }
-
-            const direction = index ? -1 : +1;
-
-            return `${direction * (180 - 30) * easing(progress) + rotation}deg`;
-        });
-
-        const layerStyle = {
-            width: size,
-            height: size,
-            transform: [
-                {
-                    rotate: timer.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [`${0 + 30 + 15}deg`, `${2 * 360 + 30 + 15}deg`],
-                    }),
-                },
-            ],
-        };
-
-        const viewportStyle = {
-            width: size,
-            height: size,
-            transform: [
-                {
-                    translateY: index ? -size / 2 : 0,
-                },
-                {
-                    rotate: timer.interpolate({ inputRange, outputRange }),
-                },
-            ],
-        };
-
-        const offsetStyle = index ? { top: size / 2 } : null;
-
-        const lineStyle = {
-            width: size,
-            height: size,
-            borderColor: color,
-            borderWidth: size / 10,
-            borderRadius: size / 2,
-        };
-
-        return (
-            <Animated.View key={index} style={[styles.layer]}>
-                <Animated.View style={layerStyle}>
-                    <Animated.View style={[containerStyle, offsetStyle]} collapsable={false}>
-                        <Animated.View style={viewportStyle}>
-                            <Animated.View style={containerStyle} collapsable={false}>
-                                <Animated.View style={lineStyle} />
-                            </Animated.View>
-                        </Animated.View>
-                    </Animated.View>
-                </Animated.View>
-            </Animated.View>
-        );
-    });
 };
 
 export const activityIndicatorStyles = {
