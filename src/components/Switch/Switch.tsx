@@ -1,16 +1,18 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import type { ComponentPropsWithRef } from 'react';
 import {
     NativeModules,
     Platform,
     StyleProp,
+    StyleSheet,
     Switch as NativeSwitch,
     ViewStyle,
 } from 'react-native';
+import setColor from 'color';
 
+import type { ComponentStyles } from '../../types';
 import { useComponentTheme } from '../../hooks';
 import { withNormalizedStyleProp } from '../../hocs';
-import { getSwitchColor } from './utils';
 
 const version = NativeModules.PlatformConstants
     ? NativeModules.PlatformConstants.reactNativeVersion
@@ -74,19 +76,24 @@ export type Props = ComponentPropsWithRef<typeof NativeSwitch> & {
  * export default MyComponent;
  * ```
  */
-const Switch = ({ value, disabled, onValueChange, color, ...rest }: Props) => {
-    const switchStyles = useComponentTheme('Switch');
-
-    const { checkedColor, onTintColor, thumbTintColor } = useMemo(
-        () =>
-            getSwitchColor({
-                switchStyles,
-                disabled,
-                value,
-                color,
-            }),
-        [switchStyles, disabled, value, color],
-    );
+const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props) => {
+    const {
+        checkedColor: _checkedColor,
+        onTintColor: _onTintColor,
+        thumbTintColor: _thumbTintColor,
+        ...switchStyles
+    } = useComponentTheme('Switch', {
+        variant: 'default',
+        states: {
+            active: !!value,
+            disabled: !!disabled,
+            default: !value,
+        },
+    });
+    const checkedColor = color ? color : _checkedColor;
+    const thumbTintColor = value && !disabled ? checkedColor : _thumbTintColor;
+    const onTintColor =
+        value && !disabled ? setColor(checkedColor).alpha(0.5).rgb().string() : _onTintColor;
 
     const props =
         version && version.major === 0 && version.minor <= 56
@@ -113,10 +120,34 @@ const Switch = ({ value, disabled, onValueChange, color, ...rest }: Props) => {
             value={value}
             disabled={disabled}
             onValueChange={disabled ? undefined : onValueChange}
+            style={StyleSheet.flatten([switchStyles, style])}
             {...props}
             {...rest}
         />
     );
+};
+
+export const defaultStyles: ComponentStyles<ViewStyle> = {
+    variants: {
+        default: {
+            checkedColor: 'colors.primary',
+
+            states: {
+                active: {
+                    thumbTintColor: 'colors.neutral1',
+                    onTintColor: 'colors.onNeutral1',
+                },
+                disabled: {
+                    thumbTintColor: 'colors.disabled',
+                    onTintColor: 'colors.disabledOnBackground',
+                },
+                default: {
+                    thumbTintColor: 'colors.neutral1',
+                    onTintColor: 'colors.onNeutral1',
+                },
+            },
+        },
+    },
 };
 
 export default memo(withNormalizedStyleProp(Switch));
