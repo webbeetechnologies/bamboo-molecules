@@ -33,6 +33,7 @@ export {
     useTheme,
     useColorMode,
     useCurrentTheme,
+    useToggle,
 } from './hooks';
 
 export {

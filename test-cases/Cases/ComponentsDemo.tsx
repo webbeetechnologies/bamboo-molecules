@@ -1,7 +1,12 @@
-import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import type { TextProps } from '@webbee/bamboo-atoms';
-import { extendTheme, ProvideMolecules, useMolecules, withRipple } from 'bamboo-molecules';
+import {
+    extendTheme,
+    ProvideMolecules,
+    useMolecules,
+    useToggle,
+    withRipple,
+} from 'bamboo-molecules';
 
 const theme = extendTheme({});
 
@@ -18,8 +23,7 @@ const Example = () => {
         Switch,
         VerticalDivider,
     } = useMolecules();
-    const [isSwitchOn, setIsSwitchOn] = useState(true);
-    const onSwitchToggle = () => setIsSwitchOn(!isSwitchOn);
+    const [isSwitchOn, toggleSwitch] = useToggle(true);
 
     return (
         <>
@@ -65,7 +69,7 @@ const Example = () => {
             <Switch
                 value={isSwitchOn}
                 disabled
-                onValueChange={onSwitchToggle}
+                onValueChange={toggleSwitch}
                 color="rgba(125, 82, 96, 1)"
             />
         </>
