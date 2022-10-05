@@ -1,6 +1,8 @@
 import * as React from 'react';
-import UsingArraySource from "./UsingArraySource";
-import UsingAsyncSource from './UsingAsyncDataSource';
+import { SafeAreaView } from 'react-native';
+import { Popover } from './Popover';
+// import UsingArraySource from "./UsingArraySource";
+// import UsingAsyncSource from './UsingAsyncDataSource';
 
 
 export default function App({ coworkers = [] as string[] }) {
@@ -39,20 +41,10 @@ export default function App({ coworkers = [] as string[] }) {
   return (
     <>
         {/* <UsingArraySource /> */}
-        <UsingAsyncSource />
+        <SafeAreaView>
+          <Popover />
+        </SafeAreaView>
+        {/* <UsingAsyncSource /> */}
     </>
   );
 }
-
-
-
-
-
-const Coworker = (props: any) => {
-  const worker = props.worker;
-  return (
-    <li>
-      {worker.first_name} {worker.last_name}
-    </li>
-  );
-};

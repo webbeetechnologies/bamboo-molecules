@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useArrayDataSource } from './DataSource/useArrayDataSource/useArrayDataSource';
-import {IDataSourceState} from "./DataSource";
+import type {IDataSourceState} from "./DataSource";
 import RenderRecords from "./RenderRecords";
 
 function findAllCustomerData() {
