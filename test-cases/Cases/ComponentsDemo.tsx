@@ -18,7 +18,7 @@ const Example = () => {
         Switch,
         VerticalDivider,
     } = useMolecules();
-    const [isSwitchOn, setIsSwitchOn] = useState(false);
+    const [isSwitchOn, setIsSwitchOn] = useState(true);
     const onSwitchToggle = () => setIsSwitchOn(!isSwitchOn);
 
     return (
@@ -54,7 +54,7 @@ const Example = () => {
             </View>
 
             <Button
-                variant="contained"
+                variant="outlined"
                 onPress={() => {}}
                 iconType="material-community"
                 contentStyle={{ flexDirection: 'row-reverse' }}
@@ -64,6 +64,7 @@ const Example = () => {
 
             <Switch
                 value={isSwitchOn}
+                disabled
                 onValueChange={onSwitchToggle}
                 color="rgba(125, 82, 96, 1)"
             />
