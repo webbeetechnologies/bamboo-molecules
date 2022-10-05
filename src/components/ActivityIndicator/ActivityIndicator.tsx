@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { Animated, Easing, Platform, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import type { ActivityIndicatorProps } from '@webbee/bamboo-atoms';
-import { useComponentTheme, useCurrentTheme, useMolecules } from '../../hooks';
+import { useCurrentTheme, useMolecules } from '../../hooks';
 import { withNormalizedStyleProp } from '../../hocs';
 import AnimatedSpinner from './AnimatedSpinner';
 
@@ -64,7 +64,6 @@ const ActivityIndicator = ({
 }: Props) => {
     const { View } = useMolecules();
     const theme = useCurrentTheme();
-    const styles = useComponentTheme('ActivityIndicator');
 
     const { current: timer } = useRef<Animated.Value>(new Animated.Value(0));
     const { current: fade } = useRef<Animated.Value>(
@@ -164,7 +163,7 @@ const ActivityIndicator = ({
     );
 };
 
-export const activityIndicatorStyles = {
+const styles = {
     container: {
         justifyContent: 'center',
         alignItems: 'center',
