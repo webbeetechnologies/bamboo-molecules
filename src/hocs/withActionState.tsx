@@ -1,7 +1,8 @@
 import type { ComponentType } from 'react';
-import { Pressable, PressableStateCallbackType } from 'react-native';
+import { Pressable } from 'react-native';
 
-export type CallbackActionState = PressableStateCallbackType & {
+export type CallbackActionState = {
+    pressed?: boolean;
     hovered?: boolean;
     focused?: boolean;
 };
@@ -15,7 +16,7 @@ const withActionState =
             <Pressable>
                 {state => (
                     // @ts-ignore
-                    <Component actionState={state} {...props} />
+                    <Component {...state} {...props} />
                 )}
             </Pressable>
         );
