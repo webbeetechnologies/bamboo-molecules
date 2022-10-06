@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import setColor from 'color';
 
-import type { ComponentStyles } from '../../types';
+import type { ComponentStylePropWithVariants } from '../../types';
 import { useComponentTheme } from '../../hooks';
 import { withNormalizedStyleProp } from '../../hocs';
 
@@ -83,11 +83,10 @@ const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props
         thumbTintColor: _thumbTintColor,
         ...switchStyles
     } = useComponentTheme('Switch', {
-        variant: 'default',
         states: {
+            selected_disabled: !!value && !!disabled,
             active: !!value,
             disabled: !!disabled,
-            default: !value,
         },
     });
     const checkedColor = color ? color : _checkedColor;
@@ -127,25 +126,31 @@ const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props
     );
 };
 
-export const defaultStyles: ComponentStyles<ViewStyle> = {
-    variants: {
-        default: {
-            checkedColor: 'colors.primary',
+type CustomProp = { checkedColor: string; thumbTintColor: string; onTintColor: string } | undefined;
 
-            states: {
-                active: {
-                    thumbTintColor: 'colors.neutral1',
-                    onTintColor: 'colors.onNeutral1',
-                },
-                disabled: {
-                    thumbTintColor: 'colors.disabled',
-                    onTintColor: 'colors.disabledOnBackground',
-                },
-                default: {
-                    thumbTintColor: 'colors.neutral1',
-                    onTintColor: 'colors.onNeutral1',
-                },
-            },
+export const defaultStyles: ComponentStylePropWithVariants<
+    ViewStyle,
+    'selected_disabled' | 'active' | 'disabled',
+    CustomProp
+> = {
+    thumbTintColor: 'colors.neutral1',
+    onTintColor: 'colors.onNeutral1',
+
+    states: {
+        // @ts-ignore
+        active: {
+            thumbTintColor: 'colors.neutral1',
+            onTintColor: 'colors.onNeutral1',
+        },
+        // @ts-ignore
+        disabled: {
+            thumbTintColor: 'colors.disabled',
+            onTintColor: 'colors.disabledOnBackground',
+        },
+        // @ts-ignore
+        selected_disabled: {
+            thumbTintColor: 'colors.neutral1',
+            onTintColor: 'colors.disabledOnBackground',
         },
     },
 };
