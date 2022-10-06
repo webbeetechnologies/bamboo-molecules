@@ -126,7 +126,7 @@ const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props
     );
 };
 
-type CustomProp = { checkedColor: string; thumbTintColor: string; onTintColor: string } | undefined;
+type CustomProp = { checkedColor?: string; thumbTintColor?: string; onTintColor?: string };
 
 export const defaultStyles: ComponentStylePropWithVariants<
     ViewStyle,
@@ -137,17 +137,14 @@ export const defaultStyles: ComponentStylePropWithVariants<
     onTintColor: 'colors.onNeutral1',
 
     states: {
-        // @ts-ignore
         active: {
             thumbTintColor: 'colors.neutral1',
             onTintColor: 'colors.onNeutral1',
         },
-        // @ts-ignore
         disabled: {
             thumbTintColor: 'colors.disabled',
             onTintColor: 'colors.disabledOnBackground',
         },
-        // @ts-ignore
         selected_disabled: {
             thumbTintColor: 'colors.neutral1',
             onTintColor: 'colors.disabledOnBackground',
