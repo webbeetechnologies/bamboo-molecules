@@ -1,2 +1,2 @@
 export { ProvideTheme, extendTheme } from './ProvideTheme';
-export { ITheme } from './types';
+export { ITheme, ResolveComponentStylesArgs } from './types';

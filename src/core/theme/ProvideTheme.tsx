@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
     ProvideTheme as AtomProvideTheme,
     extendTheme as extendThemeAtoms,
@@ -15,7 +16,10 @@ import {
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
-import normalizeStyles from '../../utils/normalizeStyles';
+import {
+    normalizeStyles,
+    resolveComponentStyles as defaultResolveComponentStyles,
+} from '../../utils';
 import type { ITheme, ProvideThemeArgs } from './types';
 
 const defaultThemeValue: Partial<ITheme> = {
@@ -36,11 +40,20 @@ const defaultExtractTheme = memoize(
 
 export const ProvideTheme = ({
     theme,
+    resolveComponentStyles = defaultResolveComponentStyles,
     extractTheme = defaultExtractTheme,
     children,
 }: ProvideThemeArgs) => {
+    const memoizedTheme = useMemo(
+        () => ({
+            ...theme,
+            resolveComponentStyles,
+        }),
+        [resolveComponentStyles, theme],
+    );
+
     return (
-        <AtomProvideTheme theme={theme} extractTheme={extractTheme}>
+        <AtomProvideTheme theme={memoizedTheme} extractTheme={extractTheme}>
             {children}
         </AtomProvideTheme>
     );

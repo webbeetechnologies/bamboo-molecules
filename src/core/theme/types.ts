@@ -5,6 +5,7 @@ import type { StyleProp } from 'react-native';
 export type ITheme = AtomsTheme & {
     light: MD3Theme;
     dark: MD3Theme;
+    resolveComponentStyles: (args: ResolveComponentStylesArgs) => StyleProp<any>;
 };
 
 export type MD3Theme = {
@@ -18,8 +19,15 @@ export type MD3Theme = {
     spacing: (number | string)[];
 };
 
+export type ResolveComponentStylesArgs = {
+    componentTheme: StyleProp<any>;
+    variant?: string;
+    states?: { [key: string]: boolean };
+};
+
 export interface ProvideThemeArgs {
     theme: ITheme;
+    resolveComponentStyles?: (args: ResolveComponentStylesArgs) => StyleProp<any>;
     extractTheme?: (args: IExtractThemeFuncArgs) => StyleProp<any>;
     children: ReactNode;
 }

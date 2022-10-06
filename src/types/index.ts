@@ -16,19 +16,37 @@ export type $RemoveChildren<T extends ComponentType<any>> = $Omit<
     'children'
 >;
 
-export type ComponentStateStyles<T> = StyleProp<T> & {
-    [key: string]: any; // to be able to define custom props
+/*
+ *  T stands for ComponentStyle type eg. ViewStyl
+ *  C stands for Customer Properties
+ *  S stands for ComponentStates
+ * */
+export type ComponentStyleProp<T, C = {}> = StyleProp<T> & C;
+
+export type ComponentStylePropWithStates<T, S extends ComponentState, C = {}> = ComponentStyleProp<
+    T,
+    C
+> & {
+    states?: {
+        [key in S]?: ComponentStyleProp<T, C>;
+    };
 };
 
-export type VariantStyles<T> = StyleProp<T> & {
-    states: {
-        [key: string]: ComponentStateStyles<T>;
+export type ComponentStylePropWithVariants<
+    T,
+    S extends ComponentState = ComponentState,
+    C = {},
+> = ComponentStylePropWithStates<T, S, C> & {
+    variants?: {
+        [key: string]: ComponentStylePropWithStates<T, S, C>;
     };
-    [key: string]: any; // to be able to define custom props
 };
 
-export type ComponentStyles<T> = StyleProp<T> & {
-    variants: {
-        [key: string]: VariantStyles<T>;
-    };
-};
+export type ComponentState =
+    | 'selected_disabled'
+    | 'selected'
+    | 'disabled'
+    | 'hovered'
+    | 'focused'
+    | 'pressed'
+    | string;

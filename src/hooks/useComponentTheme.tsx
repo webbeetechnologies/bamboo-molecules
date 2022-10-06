@@ -1,10 +1,15 @@
 import { useMemo } from 'react';
 import { useColorMode } from '@webbee/bamboo-atoms';
-import { useTheme } from './';
 import type { ITheme } from '../core';
-import normalizeStyles from '../utils/normalizeStyles';
-import type { StyleProp } from 'react-native';
+import { normalizeStyles } from '../utils';
+import { useTheme } from './';
 
+/*
+ * resolvers help resolve the component styles
+ * if the variant is defined, the hook will look for the styles of the variant under the variants property
+ * if the states is defined, the hook will look for state styles in highest level of the component theme or inside the individual variants
+ * only one state can be active and the first one in the states object gets the highest priority
+ * */
 const useComponentTheme = (
     componentName: string,
     resolvers?: {
@@ -15,39 +20,16 @@ const useComponentTheme = (
     const { variant, states } = resolvers || {};
     const theme = useTheme<ITheme>();
     const colorMode = useColorMode();
+
     const componentTheme = useMemo(
         () => normalizeStyles(theme[componentName], theme[colorMode]),
         [theme, componentName, colorMode],
     );
 
     return useMemo(
-        () => resolveComponentStyles(componentTheme, variant, states),
-        [componentTheme, states, variant],
+        () => theme.resolveComponentStyles({ componentTheme, variant, states }),
+        [componentTheme, states, theme, variant],
     );
-};
-
-const resolveComponentStyles = (
-    componentTheme: StyleProp<any>,
-    variant?: string,
-    states?: { [key: string]: boolean },
-) => {
-    const { variants, ...styles } = componentTheme;
-
-    const variantStyles = variant ? variants[variant] || {} : {};
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { states: _states, ...nonStateStyles } = variantStyles; // filtering the unused state styles
-
-    let componentStyles = { ...styles, ...nonStateStyles };
-
-    if (states) {
-        Object.keys(states).forEach(key => {
-            if (states[key]) {
-                componentStyles = { ...componentStyles, ...variantStyles[key] };
-            }
-        });
-    }
-
-    return componentStyles;
 };
 
 export default useComponentTheme;
