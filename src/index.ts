@@ -24,7 +24,7 @@ export {
     IComponentsProviderContext,
 } from './core';
 
-export { withNormalizedStyleProp, withRipple } from './hocs';
+export { withNormalizedStyleProp, withRipple, withActionState, CallbackActionState } from './hocs';
 
 export {
     useMolecules,
@@ -33,6 +33,7 @@ export {
     useTheme,
     useColorMode,
     useCurrentTheme,
+    useToggle,
 } from './hooks';
 
 export {

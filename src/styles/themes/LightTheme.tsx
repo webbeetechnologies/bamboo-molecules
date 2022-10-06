@@ -38,9 +38,10 @@ export const generateLightThemeColors = (
         inverseOnSurface: palette.neutral95,
         inversePrimary: palette.primary80,
         backdrop: color(MD3Colors.neutralVariant20).alpha(0.4).rgb().string(),
-        disabledOnBackground: color(palette.neutral100).alpha(0.06).rgb().string(),
-        tintColor: palette.neutral100,
-        onTintColor: palette.neutral70,
+        disabled: palette.neutral70,
+        disabledOnBackground: color(palette.neutral0).alpha(0.12).rgb().string(),
+        neutral1: palette.neutral100,
+        onNeutral1: palette.neutral70,
         elevation: {
             level0: 'transparent',
             // Note: Color values with transparency cause RN to transfer shadows to children nodes
