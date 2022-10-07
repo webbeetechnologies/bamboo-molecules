@@ -10,16 +10,8 @@ export type CallbackActionState = {
 // P is for type-assertion of the wrapped component props
 const withActionState =
     <P,>(Component: ComponentType<P>) =>
-    // @ts-ignore
     (props: P) => {
-        return (
-            <Pressable>
-                {state => (
-                    // @ts-ignore
-                    <Component {...state} {...props} />
-                )}
-            </Pressable>
-        );
+        return <Pressable>{state => <Component {...state} {...props} />}</Pressable>;
     };
 
 export default withActionState;
