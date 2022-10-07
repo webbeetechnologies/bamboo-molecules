@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useColorMode } from '@webbee/bamboo-atoms';
 import type { ITheme } from '../core';
 import { normalizeStyles } from '../utils';
@@ -21,14 +20,12 @@ const useComponentTheme = (
     const theme = useTheme<ITheme>();
     const colorMode = useColorMode();
 
-    const componentTheme = useMemo(
-        () => normalizeStyles(theme[componentName], theme[colorMode]),
-        [theme, componentName, colorMode],
-    );
+    const componentTheme = theme[componentName];
+    const currentTheme = theme[colorMode];
 
-    return useMemo(
-        () => theme.resolveComponentStyles({ componentTheme, variant, states }),
-        [componentTheme, states, theme, variant],
+    return normalizeStyles(
+        theme.resolveComponentStyles({ componentTheme, variant, states }),
+        currentTheme,
     );
 };
 
