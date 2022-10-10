@@ -1,12 +1,11 @@
-import type { ComponentType } from 'react';
+import { ComponentType, useMemo } from 'react';
+import type { ViewProps } from 'react-native';
 import { normalizeStyles } from '../utils';
 import { useCurrentTheme } from '../hooks';
-import { useMemo } from 'react';
 
 // P is for type-assertion of the wrapped component props
 const withNormalizedStyleProp =
-    <P,>(Component: ComponentType<P>) =>
-    // @ts-ignore
+    <P extends ViewProps>(Component: ComponentType<P>) =>
     ({ style, ...rest }: P) => {
         const currentTheme = useCurrentTheme();
         const normalizedStyles = useMemo(
@@ -14,7 +13,7 @@ const withNormalizedStyleProp =
             [currentTheme, style],
         );
 
-        // @ts-ignore
+        // @ts-ignore TODO fix TS error
         return <Component style={normalizedStyles} {...rest} />;
     };
 
