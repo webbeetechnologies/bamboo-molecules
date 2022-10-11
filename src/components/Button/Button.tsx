@@ -374,7 +374,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
                     borderColor: 'colors.surfaceDisabled',
                 },
                 hovered: {
-                    backgroundColor: 'colors.onNeutral1',
+                    backgroundColor: 'colors.primaryContainerOnHover',
                 },
             },
         },
@@ -384,8 +384,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
 
             states: {
                 disabled: {},
-                hovered: {},
-                default: {},
+                hovered: {
+                    backgroundColor: 'colors.primaryContainerOnHover',
+                },
             },
         },
         contained: {
@@ -396,7 +397,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
                 disabled: {
                     backgroundColor: 'transparent',
                 },
-                hovered: {},
+                hovered: {
+                    backgroundColor: 'colors.primaryOnHover',
+                },
             },
         },
         elevated: {
@@ -407,7 +410,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
                 disabled: {
                     backgroundColor: 'colors.surfaceDisabled',
                 },
-                hovered: {},
+                hovered: {
+                    backgroundColor: 'colors.primaryContainerOnHover',
+                },
             },
         },
         'contained-tonal': {
@@ -418,7 +423,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
                 disabled: {
                     backgroundColor: 'colors.surfaceDisabled',
                 },
-                hovered: {},
+                hovered: {
+                    backgroundColor: 'colors.secondaryContainerOnHover',
+                },
             },
         },
     },

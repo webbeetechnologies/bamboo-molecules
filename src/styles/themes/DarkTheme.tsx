@@ -12,8 +12,11 @@ export const generateDarkThemeColors = (
     return {
         primary: palette.primary80,
         primaryContainer: palette.primary30,
+        primaryOnHover: color(palette.primary80).lighten(0.03).rgb().string(),
+        primaryContainerOnHover: color(palette.primary80).darken(0.9).rgb().string(),
         secondary: palette.secondary80,
         secondaryContainer: palette.secondary30,
+        secondaryContainerOnHover: color(palette.secondary30).darken(0.25).rgb().string(),
         tertiary: palette.tertiary80,
         tertiaryContainer: palette.tertiary30,
         surface: palette.neutral10,
