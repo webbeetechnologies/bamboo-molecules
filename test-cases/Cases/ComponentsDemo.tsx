@@ -8,7 +8,25 @@ import {
     withRipple,
 } from 'bamboo-molecules';
 
-const theme = extendTheme({});
+const themeDark = extendTheme({
+    colorMode: 'dark',
+    Text: {
+        color: '#fff',
+    },
+    Icon: {
+        color: '#fff',
+    },
+    Button: {
+        marginBottom: 10,
+    },
+});
+
+const themeLight = extendTheme({
+    colorMode: 'light',
+    Button: {
+        marginBottom: 10,
+    },
+});
 
 const Example = () => {
     const {
@@ -26,7 +44,7 @@ const Example = () => {
     const [isSwitchOn, toggleSwitch] = useToggle(true);
 
     return (
-        <>
+        <View>
             <Surface elevation={2}>
                 <TouchableRipple rippleColor="colors.primary" onPress={() => {}}>
                     <View style={[styles.cardContainer]}>
@@ -58,12 +76,48 @@ const Example = () => {
             </View>
 
             <Button
+                variant="contained"
+                onPress={() => {}}
+                iconType="material-community"
+                contentStyle={{ flexDirection: 'row-reverse' }}
+                iconName="robot-angry-outline">
+                Contained Button
+            </Button>
+
+            <Button
                 variant="outlined"
                 onPress={() => {}}
                 iconType="material-community"
                 contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
-                Primary Button
+                Outlined Button
+            </Button>
+
+            <Button
+                variant="text"
+                onPress={() => {}}
+                iconType="material-community"
+                contentStyle={{ flexDirection: 'row-reverse' }}
+                iconName="robot-angry-outline">
+                Text Button
+            </Button>
+
+            <Button
+                variant="elevated"
+                onPress={() => {}}
+                iconType="material-community"
+                contentStyle={{ flexDirection: 'row-reverse' }}
+                iconName="robot-angry-outline">
+                Elevated Button
+            </Button>
+
+            <Button
+                variant="contained-tonal"
+                onPress={() => {}}
+                iconType="material-community"
+                contentStyle={{ flexDirection: 'row-reverse' }}
+                iconName="robot-angry-outline">
+                Contained-tonal Button
             </Button>
 
             <Switch
@@ -72,7 +126,7 @@ const Example = () => {
                 onValueChange={toggleSwitch}
                 color="rgba(125, 82, 96, 1)"
             />
-        </>
+        </View>
     );
 };
 
@@ -86,9 +140,17 @@ const CustomButton = withRipple<TextProps>(({ children }) => {
     );
 });
 
-export default () => {
+export const ComponentsDemoLightMode = () => {
     return (
-        <ProvideMolecules theme={theme}>
+        <ProvideMolecules theme={themeLight}>
+            <Example />
+        </ProvideMolecules>
+    );
+};
+
+export const ComponentsDemoDarkMode = () => {
+    return (
+        <ProvideMolecules theme={themeDark}>
             <Example />
         </ProvideMolecules>
     );
