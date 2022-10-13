@@ -1,9 +1,8 @@
-import type { ViewProps } from '@webbee/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
+import type { TemplateComponentProps } from './types';
 
-export type Props = ViewProps & {};
 
-const ComponentTemplate = ({ style, ...rest }: Props) => {
+const TemplateComponent = ({ style, ...rest }: TemplateComponentProps) => {
     const { View, Text } = useMolecules();
     const componentStyles = useComponentStyles('View', style); // all the styling logics goes here
 
@@ -14,4 +13,4 @@ const ComponentTemplate = ({ style, ...rest }: Props) => {
     );
 };
 
-export default ComponentTemplate;
+export default TemplateComponent;
