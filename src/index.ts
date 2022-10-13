@@ -29,7 +29,7 @@ export { withNormalizedStyleProp, withRipple, withActionState, CallbackActionSta
 export {
     useMolecules,
     usePlatformType,
-    useComponentTheme,
+    useComponentStyles,
     useTheme,
     useColorMode,
     useCurrentTheme,

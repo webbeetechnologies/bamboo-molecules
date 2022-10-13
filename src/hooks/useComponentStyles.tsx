@@ -1,7 +1,10 @@
+import type { StyleProp } from 'react-native';
 import { useColorMode } from '@webbee/bamboo-atoms';
 import type { ITheme } from '../core';
 import { normalizeStyles } from '../utils';
 import { useTheme } from './';
+
+const defaultStyleObject = {};
 
 /*
  * resolvers help resolve the component styles
@@ -9,8 +12,9 @@ import { useTheme } from './';
  * if the states is defined, the hook will look for state styles in highest level of the component theme or inside the individual variants
  * only one state can be active and the first one in the states object gets the highest priority
  * */
-const useComponentTheme = (
+const useComponentStyles = (
     componentName: string,
+    style: StyleProp<any> | StyleProp<any>[] = defaultStyleObject,
     resolvers?: {
         variant?: string;
         states?: { [key: string]: boolean };
@@ -24,9 +28,9 @@ const useComponentTheme = (
     const currentTheme = theme[colorMode];
 
     return normalizeStyles(
-        theme.resolveComponentStyles({ componentTheme, variant, states }),
+        theme.resolveComponentStyles({ componentTheme, variant, states, style }),
         currentTheme,
     );
 };
 
-export default useComponentTheme;
+export default useComponentStyles;
