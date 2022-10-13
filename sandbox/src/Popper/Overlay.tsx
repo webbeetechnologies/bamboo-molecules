@@ -1,0 +1,71 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { OverlayContainer } from '@react-native-aria/overlays';
+import React from 'react';
+import { Platform, ViewStyle } from 'react-native';
+import { Modal } from 'react-native';
+import { useKeyboardDismissable } from './useKeyboardDismissable';
+import { ExitAnimationContext } from './ExitAnimationContext';
+
+interface IOverlayProps {
+  isOpen?: boolean;
+  children?: any;
+  // We use RN modal on android if needed as it supports shifting accessiblity focus to the opened view. IOS automatically shifts focus if an absolutely placed view appears in front.
+  useRNModalOnAndroid?: boolean;
+  onRequestClose?: (() => any) | undefined;
+  isKeyboardDismissable?: boolean;
+  animationPreset?: 'fade' | 'slide' | 'none';
+  style?: ViewStyle;
+}
+
+export function Overlay({
+  children,
+  isOpen,
+  useRNModalOnAndroid = false,
+  isKeyboardDismissable = true,
+  //@ts-ignore
+  animationPreset = 'fade',
+  onRequestClose,
+  style,
+}: IOverlayProps) {
+  const [exited, setExited] = React.useState(!isOpen);
+
+  useKeyboardDismissable({
+    enabled: isOpen && isKeyboardDismissable,
+    callback: onRequestClose ? onRequestClose : () => {},
+  });
+  const styleObj = { ...style };
+  if (animationPreset === 'slide') {
+    styleObj.overflow = 'hidden';
+    styleObj.display = 'flex';
+  } else {
+    styleObj.display = exited && !isOpen ? 'none' : 'flex';
+  }
+
+  if (Platform.OS === 'android' && useRNModalOnAndroid) {
+    return (
+      <ExitAnimationContext.Provider value={{ exited, setExited }}>
+        <Modal
+          transparent
+          visible={isOpen}
+          onRequestClose={onRequestClose}
+          animationType={animationPreset}
+        >
+          {children}
+        </Modal>
+      </ExitAnimationContext.Provider>
+    );
+  }
+
+  console.log({
+    styleObj,
+  })
+
+  return (
+    //@ts-ignore
+      <ExitAnimationContext.Provider value={{ exited, setExited }}>
+        <OverlayContainer style={{ ...styleObj }}>
+            {children}
+        </OverlayContainer>
+      </ExitAnimationContext.Provider>
+  );
+}
