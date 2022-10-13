@@ -1,4 +1,14 @@
-export { Icon, registerCustomIconType, IconProps } from './components';
+export {
+    registerCustomIconType,
+    IconProps,
+    ActivityIndicatorProps,
+    HorizontalDividerProps,
+    VerticalDividerProps,
+    TouchableRippleProps,
+    ButtonProps,
+    SurfaceProps,
+    SwitchProps,
+} from './components';
 
 export {
     ProvideMolecules,
@@ -14,6 +24,24 @@ export {
     IComponentsProviderContext,
 } from './core';
 
-export { useMolecules, usePlatformType, useComponentTheme, useTheme } from './hooks';
+export { withNormalizedStyleProp, withRipple, withActionState, CallbackActionState } from './hocs';
+
+export {
+    useMolecules,
+    usePlatformType,
+    useComponentStyles,
+    useTheme,
+    useColorMode,
+    useCurrentTheme,
+    useToggle,
+} from './hooks';
+
+export {
+    MD3LightTheme,
+    MD3DarkTheme,
+    tokens,
+    generateLightThemeColors,
+    generateDarkThemeColors,
+} from './styles';
 
 export { normalizeStyles } from './utils';
