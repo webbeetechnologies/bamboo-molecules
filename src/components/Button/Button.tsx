@@ -4,10 +4,10 @@ import color from 'color';
 
 import { withNormalizedStyleProp, withActionState, CallbackActionState } from '../../hocs';
 import { useMolecules, useCurrentTheme, useComponentTheme } from '../../hooks';
-import type { ComponentStylePropWithVariants } from '../../types';
 import type { IconType } from '../Icon/types';
 import type { SurfaceProps } from '../Surface';
 import { normalizeStyles } from '../../utils';
+import { styles } from './utils';
 
 export type ButtonVariant = 'text' | 'outlined' | 'contained' | 'elevated' | 'contained-tonal';
 
@@ -22,10 +22,6 @@ export type Props = SurfaceProps &
          * - `contained-tonal` - button with a secondary background color, an alternative middle ground between contained and outlined buttons. @supported Available in v5.x with theme version 3
          */
         variant?: ButtonVariant;
-        /**
-         * Use a compact look, useful for `text` buttons in a row.
-         */
-        compact?: boolean;
         /**
          * @supported Available in v5.x
          * Custom button's background color.
@@ -150,7 +146,6 @@ export type Props = SurfaceProps &
  */
 const Button = ({
     disabled: disabledProp,
-    compact,
     variant = 'text',
     loading,
     iconType,
@@ -271,17 +266,13 @@ const Button = ({
     const iconStyle =
         StyleSheet.flatten(contentStyle)?.flexDirection === 'row-reverse' ||
         iconPosition === 'right'
-            ? [
-                  styles.iconReverse,
-                  styles.md3IconReverse,
-                  isVariant('text') && styles.md3IconReverseTextMode,
-              ]
-            : [styles.icon, styles.md3Icon, isVariant('text') && styles.md3IconTextMode];
+            ? [styles.iconReverse, isVariant('text') && styles.iconReverseTextMode]
+            : [styles.icon, isVariant('text') && styles.iconTextMode];
 
     return (
         <Surface
             {...rest}
-            style={[styles.button, compact && styles.compact, buttonStyle, style] as ViewStyle}
+            style={[styles.button, buttonStyle, style] as ViewStyle}
             {...{ elevation: elevation }}>
             <TouchableRipple
                 borderless
@@ -336,10 +327,9 @@ const Button = ({
                             styles.label,
                             isVariant('text')
                                 ? iconName || loading
-                                    ? styles.md3LabelTextAddons
-                                    : styles.md3LabelText
-                                : styles.md3Label,
-                            compact && styles.compactLabel,
+                                    ? styles.labelTextAddons
+                                    : styles.labelText
+                                : styles.label,
                             uppercase && styles.uppercaseLabel,
                             textStyle,
                             labelStyle,
@@ -351,137 +341,5 @@ const Button = ({
         </Surface>
     );
 };
-
-export const defaultStyles: ComponentStylePropWithVariants<
-    TextStyle,
-    'disabled' | 'hovered' | 'default'
-> = {
-    states: {
-        disabled: {
-            color: 'colors.onSurfaceDisabled',
-        },
-    },
-    variants: {
-        outlined: {
-            backgroundColor: 'transparent',
-            color: 'colors.primary',
-            borderColor: 'colors.outline',
-            borderWidth: 1,
-
-            states: {
-                disabled: {
-                    color: 'colors.onSurfaceDisabled',
-                    borderColor: 'colors.surfaceDisabled',
-                },
-                hovered: {
-                    backgroundColor: 'colors.onNeutral1',
-                },
-            },
-        },
-        text: {
-            backgroundColor: 'transparent',
-            color: 'colors.primary',
-
-            states: {
-                disabled: {},
-                hovered: {},
-                default: {},
-            },
-        },
-        contained: {
-            backgroundColor: 'colors.primary',
-            color: 'colors.onPrimary',
-
-            states: {
-                disabled: {
-                    backgroundColor: 'transparent',
-                },
-                hovered: {},
-            },
-        },
-        elevated: {
-            backgroundColor: 'colors.elevation.level1',
-            color: 'colors.primary',
-
-            states: {
-                disabled: {
-                    backgroundColor: 'colors.surfaceDisabled',
-                },
-                hovered: {},
-            },
-        },
-        'contained-tonal': {
-            backgroundColor: 'colors.secondaryContainer',
-            color: 'colors.onSecondaryContainer',
-
-            states: {
-                disabled: {
-                    backgroundColor: 'colors.surfaceDisabled',
-                },
-                hovered: {},
-            },
-        },
-    },
-};
-
-const styles = StyleSheet.create({
-    button: {
-        minWidth: 64,
-        borderStyle: 'solid',
-    },
-    compact: {
-        minWidth: 'auto',
-    },
-    content: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    icon: {
-        marginLeft: 12,
-        marginRight: -4,
-    },
-    iconReverse: {
-        marginRight: 12,
-        marginLeft: -4,
-    },
-    md3Icon: {
-        marginLeft: 16,
-        marginRight: -16,
-    },
-    md3IconReverse: {
-        marginLeft: -16,
-        marginRight: 16,
-    },
-    md3IconTextMode: {
-        marginLeft: 12,
-        marginRight: -8,
-    },
-    md3IconReverseTextMode: {
-        marginLeft: -8,
-        marginRight: 12,
-    },
-    label: {
-        textAlign: 'center',
-        marginVertical: 9,
-        marginHorizontal: 16,
-    },
-    compactLabel: {
-        marginHorizontal: 8,
-    },
-    uppercaseLabel: {
-        textTransform: 'uppercase',
-    },
-    md3Label: {
-        marginVertical: 10,
-        marginHorizontal: 24,
-    },
-    md3LabelText: {
-        marginHorizontal: 12,
-    },
-    md3LabelTextAddons: {
-        marginHorizontal: 16,
-    },
-});
 
 export default memo(withNormalizedStyleProp(withActionState(Button)));

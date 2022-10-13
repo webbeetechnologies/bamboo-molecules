@@ -11,8 +11,11 @@ export const generateLightThemeColors = (
     return {
         primary: palette.primary40,
         primaryContainer: palette.primary90,
+        primaryOnHover: color(palette.primary40).darken(0.05).rgb().string(),
+        primaryContainerOnHover: color(palette.primary40).lighten(0.99).rgb().string(),
         secondary: palette.secondary40,
         secondaryContainer: palette.secondary90,
+        secondaryContainerOnHover: color(palette.secondary40).lighten(0.99).rgb().string(),
         tertiary: palette.tertiary40,
         tertiaryContainer: palette.tertiary90,
         surface: palette.neutral99,

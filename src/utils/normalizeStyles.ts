@@ -29,6 +29,7 @@ const normalizeStyles: StyleProp<any> | StyleProp<any>[] = memoize(
 
         return newStyles;
     },
+    (...args) => JSON.stringify(args), // creating a key combining all the args to memoize them
 );
 
 export default normalizeStyles;
