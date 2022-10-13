@@ -8,7 +8,7 @@ import {
     Platform,
 } from 'react-native';
 
-import { useComponentTheme, useCurrentTheme, useMolecules } from '../../hooks';
+import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
 import { withNormalizedStyleProp } from '../../hocs';
 import { normalizeStyles } from '../../utils';
 import { getTouchableRippleColors } from './utils';
@@ -98,7 +98,7 @@ const TouchableRipple = ({
 }: Props) => {
     const { View } = useMolecules();
     const currentTheme = useCurrentTheme();
-    const rippleStyles = useComponentTheme('TouchableRipple');
+    const rippleStyles = useComponentStyles('TouchableRipple');
     const normalizedColors = normalizeStyles({ rippleColor }, currentTheme);
 
     const handlePressIn = useCallback(

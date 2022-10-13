@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import type { ViewProps } from '@webbee/bamboo-atoms';
-import { useComponentTheme, useMolecules } from '../../hooks';
+import { useComponentStyles, useMolecules } from '../../hooks';
 import { withNormalizedStyleProp } from '../../hocs';
 
 export type Props = Omit<ViewProps, 'children'> & {
@@ -61,7 +61,7 @@ const VerticalDivider = ({
     ...rest
 }: Props) => {
     const { View } = useMolecules();
-    const { bold: boldStyles, ...defaultStyles } = useComponentTheme('VerticalDivider');
+    const { bold: boldStyles, ...defaultStyles } = useComponentStyles('VerticalDivider', style);
 
     return (
         <View
@@ -72,7 +72,6 @@ const VerticalDivider = ({
                 bottomInset && { marginBottom: bottomInset },
                 bold && boldStyles,
                 spacing && { marginHorizontal: spacing },
-                style,
             ]}
         />
     );

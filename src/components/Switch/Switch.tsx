@@ -4,15 +4,13 @@ import {
     NativeModules,
     Platform,
     StyleProp,
-    StyleSheet,
     Switch as NativeSwitch,
     ViewStyle,
 } from 'react-native';
 import setColor from 'color';
 
 import type { ComponentStylePropWithVariants } from '../../types';
-import { useComponentTheme } from '../../hooks';
-import { withNormalizedStyleProp } from '../../hocs';
+import { useComponentStyles } from '../../hooks';
 
 const version = NativeModules.PlatformConstants
     ? NativeModules.PlatformConstants.reactNativeVersion
@@ -82,7 +80,7 @@ const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props
         onTintColor: _onTintColor,
         thumbTintColor: _thumbTintColor,
         ...switchStyles
-    } = useComponentTheme('Switch', {
+    } = useComponentStyles('Switch', style, {
         states: {
             selected_disabled: !!value && !!disabled,
             active: !!value,
@@ -119,7 +117,7 @@ const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props
             value={value}
             disabled={disabled}
             onValueChange={disabled ? undefined : onValueChange}
-            style={StyleSheet.flatten([switchStyles, style])}
+            style={switchStyles}
             {...props}
             {...rest}
         />
@@ -152,4 +150,4 @@ export const defaultStyles: ComponentStylePropWithVariants<
     },
 };
 
-export default memo(withNormalizedStyleProp(Switch));
+export default memo(Switch);

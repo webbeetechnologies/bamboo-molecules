@@ -1,10 +1,7 @@
 import { StyleSheet, TextStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
-export const defaultStyles: ComponentStylePropWithVariants<
-    TextStyle,
-    'disabled' | 'hovered' | 'default'
-> = {
+export const defaultStyles: ComponentStylePropWithVariants<TextStyle, 'disabled' | 'hovered'> = {
     states: {
         disabled: {
             color: 'colors.onSurfaceDisabled',

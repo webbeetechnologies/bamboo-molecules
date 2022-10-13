@@ -2,8 +2,8 @@ import { useEffect, useCallback, useRef, ReactNode, memo } from 'react';
 import { Animated, View, ViewStyle, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import color from 'color';
 
-import { withNormalizedStyleProp, withActionState, CallbackActionState } from '../../hocs';
-import { useMolecules, useCurrentTheme, useComponentTheme } from '../../hooks';
+import { withActionState, CallbackActionState } from '../../hocs';
+import { useMolecules, useCurrentTheme, useComponentStyles } from '../../hooks';
 import type { IconType } from '../Icon/types';
 import type { SurfaceProps } from '../Surface';
 import { normalizeStyles } from '../../utils';
@@ -160,7 +160,7 @@ const Button = ({
     onPressIn,
     onPressOut,
     onLongPress,
-    style,
+    style: styleProp,
     uppercase = false,
     contentStyle,
     labelStyle,
@@ -182,7 +182,7 @@ const Button = ({
         color: _textColor,
         borderWidth,
         ...buttonStyles
-    } = useComponentTheme('Button', {
+    } = useComponentStyles('Button', styleProp, {
         variant,
         states: {
             hovered: !disabled && !!hovered,
@@ -251,8 +251,8 @@ const Button = ({
         ...buttonStyles,
     };
     const touchableStyle = {
-        borderRadius: style
-            ? ((StyleSheet.flatten(style) || {}) as ViewStyle).borderRadius || borderRadius
+        borderRadius: buttonStyles
+            ? ((StyleSheet.flatten(buttonStyles) || {}) as ViewStyle).borderRadius || borderRadius
             : borderRadius,
     };
 
@@ -272,7 +272,7 @@ const Button = ({
     return (
         <Surface
             {...rest}
-            style={[styles.button, buttonStyle, style] as ViewStyle}
+            style={[styles.button, buttonStyle] as ViewStyle}
             {...{ elevation: elevation }}>
             <TouchableRipple
                 borderless
@@ -342,4 +342,4 @@ const Button = ({
     );
 };
 
-export default memo(withNormalizedStyleProp(withActionState(Button)));
+export default memo(withActionState(Button));

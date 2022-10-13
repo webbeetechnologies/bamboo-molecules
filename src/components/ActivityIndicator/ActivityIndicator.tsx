@@ -1,8 +1,9 @@
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { Animated, Easing, Platform, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import type { ActivityIndicatorProps } from '@webbee/bamboo-atoms';
-import { useCurrentTheme, useMolecules } from '../../hooks';
-import { withNormalizedStyleProp } from '../../hocs';
+
+import type { ComponentStylePropWithVariants } from '../../types';
+import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
 import AnimatedSpinner from './AnimatedSpinner';
 
 export type Props = ActivityIndicatorProps & {
@@ -56,14 +57,15 @@ const mapIndicatorSize = (indicatorSize: 'small' | 'large' | number | undefined)
  */
 const ActivityIndicator = ({
     animating = true,
-    color: indicatorColor,
+    color: indicatorColorProp,
     hidesWhenStopped = true,
     size: indicatorSize = 'small',
-    style,
+    style: styleProp,
     ...rest
 }: Props) => {
     const { View } = useMolecules();
     const theme = useCurrentTheme();
+    const { indicatorColor, ...style } = useComponentStyles('ActivityIndicator', styleProp);
 
     const { current: timer } = useRef<Animated.Value>(new Animated.Value(0));
     const { current: fade } = useRef<Animated.Value>(
@@ -76,7 +78,7 @@ const ActivityIndicator = ({
         animation: { scale },
     } = theme;
 
-    const color = indicatorColor || theme.colors.primary;
+    const color = indicatorColorProp || indicatorColor;
     const size = mapIndicatorSize(indicatorSize);
 
     const startRotation = useCallback(() => {
@@ -177,4 +179,12 @@ const styles = {
     },
 };
 
-export default memo(withNormalizedStyleProp(ActivityIndicator));
+export const defaultStyles: ComponentStylePropWithVariants<
+    ViewStyle,
+    '',
+    { indicatorColor: string }
+> = {
+    indicatorColor: 'colors.primary',
+};
+
+export default memo(ActivityIndicator);
