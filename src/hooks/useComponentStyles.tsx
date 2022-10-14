@@ -3,6 +3,7 @@ import { useColorMode } from '@webbee/bamboo-atoms';
 import type { ITheme } from '../core';
 import { normalizeStyles } from '../utils';
 import { useTheme } from './';
+import { StyleSheet } from 'react-native';
 
 const defaultStyleObject = {};
 
@@ -28,7 +29,12 @@ const useComponentStyles = (
     const currentTheme = theme[colorMode];
 
     return normalizeStyles(
-        theme.resolveComponentStyles({ componentTheme, variant, states, style }),
+        theme.resolveComponentStyles({
+            componentTheme,
+            variant,
+            states,
+            style: StyleSheet.flatten(style),
+        }),
         currentTheme,
     );
 };
