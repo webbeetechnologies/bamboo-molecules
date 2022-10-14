@@ -11,7 +11,6 @@ import {
 import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
 import { withNormalizedStyleProp } from '../../hocs';
 import { normalizeStyles } from '../../utils';
-import { getTouchableRippleColors } from './utils';
 
 export type Props = React.ComponentPropsWithRef<typeof TouchableWithoutFeedback> & {
     /**
@@ -100,17 +99,13 @@ const TouchableRipple = ({
     const currentTheme = useCurrentTheme();
     const rippleStyles = useComponentStyles('TouchableRipple');
     const normalizedColors = normalizeStyles({ rippleColor }, currentTheme);
+    const calculatedRippleColor = normalizedColors.rippleColor || rippleStyles.rippleColor;
 
     const handlePressIn = useCallback(
         (e: any) => {
             const { centered, onPressIn } = rest;
 
             onPressIn?.(e);
-
-            const { calculatedRippleColor } = getTouchableRippleColors({
-                rippleColor: normalizedColors.rippleColor,
-                rippleStyles,
-            });
 
             const button = e.currentTarget;
             const computedStyle = window.getComputedStyle(button);
@@ -199,7 +194,7 @@ const TouchableRipple = ({
                 });
             });
         },
-        [rippleStyles, rest, normalizedColors],
+        [rest, calculatedRippleColor],
     );
 
     const handlePressOut = useCallback(
