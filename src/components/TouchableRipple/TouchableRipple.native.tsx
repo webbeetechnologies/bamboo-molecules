@@ -42,7 +42,7 @@ const TouchableRipple = ({
     const rippleStyles = useComponentStyles('TouchableRipple');
     const normalizedColors = normalizeStyles({ rippleColor, underlayColor }, currentTheme);
     const calculatedRippleColor = normalizedColors.rippleColor || rippleStyles.rippleColor;
-    const calculatedUnderlayColor = normalizedColors.underlayColor || rippleStyles.rippleColor;
+    const calculatedUnderlayColor = normalizedColors.underlayColor || calculatedRippleColor;
 
     // A workaround for ripple on Android P is to use useForeground + overflow: 'hidden'
     // https://github.com/facebook/react-native/issues/6480
