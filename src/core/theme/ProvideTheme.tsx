@@ -11,7 +11,9 @@ import {
     activityIndicatorStyles,
     buttonStyles,
     horizontalDividerStyles,
+    iconStyles,
     touchableRippleStyles,
+    surfaceStyles,
     switchStyles,
     verticalDividerStyles,
 } from '../../components';
@@ -29,8 +31,10 @@ const defaultThemeValue: Partial<ITheme> = {
     ActivityIndicator: activityIndicatorStyles,
     Button: buttonStyles,
     HorizontalDivider: horizontalDividerStyles,
+    Icon: iconStyles,
     VerticalDivider: verticalDividerStyles,
     TouchableRipple: touchableRippleStyles,
+    Surface: surfaceStyles,
     Switch: switchStyles,
 };
 
