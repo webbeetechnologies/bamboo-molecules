@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef, ReactNode, memo } from 'react';
+import { useEffect, useCallback, useRef, ReactNode, memo, useMemo } from 'react';
 import { Animated, View, ViewStyle, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import color from 'color';
 
@@ -243,13 +243,16 @@ const Button = ({
 
     const rippleColor = color(textColor).alpha(0.12).rgb().string();
 
-    const buttonStyle = {
-        backgroundColor,
-        borderColor,
-        borderWidth,
-        borderRadius,
-        ...buttonStyles,
-    };
+    const buttonStyle = useMemo(
+        () => ({
+            backgroundColor,
+            borderColor,
+            borderWidth,
+            borderRadius,
+            ...buttonStyles,
+        }),
+        [backgroundColor, borderColor, borderRadius, borderWidth, buttonStyles],
+    );
     const touchableStyle = {
         borderRadius: buttonStyles
             ? ((StyleSheet.flatten(buttonStyles) || {}) as ViewStyle).borderRadius || borderRadius
@@ -259,21 +262,56 @@ const Button = ({
     const { color: customLabelColor, fontSize: customLabelSize } =
         StyleSheet.flatten(labelStyle) || {};
 
-    const textStyle = {
-        color: textColor,
-        ...theme.typescale.labelLarge,
-    };
-    const iconStyle =
-        StyleSheet.flatten(contentStyle)?.flexDirection === 'row-reverse' ||
-        iconPosition === 'right'
-            ? [styles.iconReverse, isVariant('text') && styles.iconReverseTextMode]
-            : [styles.icon, isVariant('text') && styles.iconTextMode];
+    const textStyle = useMemo(
+        () => ({
+            color: textColor,
+            ...theme.typescale.labelLarge,
+        }),
+        [textColor, theme.typescale.labelLarge],
+    );
+    const iconStyle = useMemo(
+        () =>
+            StyleSheet.flatten(contentStyle)?.flexDirection === 'row-reverse' ||
+            iconPosition === 'right'
+                ? [styles.iconReverse, isVariant('text') && styles.iconReverseTextMode]
+                : [styles.icon, isVariant('text') && styles.iconTextMode],
+        [contentStyle, iconPosition, isVariant],
+    );
+
+    const memoizedSurfaceStyles = useMemo(
+        () => [styles.button, buttonStyle] as ViewStyle,
+        [buttonStyle],
+    );
+    const memoizedViewStyles = useMemo(
+        () =>
+            [
+                styles.content,
+                iconPosition === 'right' ? { flexDirection: 'row-reverse' } : {},
+                contentStyle,
+            ] as ViewStyle,
+        [contentStyle, iconPosition],
+    );
+    const memoizedIconContainerStyles = useMemo(
+        () => [iconStyle, iconContainerStyle],
+        [iconContainerStyle, iconStyle],
+    );
+    const memoizedTextStyles = useMemo(
+        () => [
+            styles.label,
+            isVariant('text')
+                ? iconName || loading
+                    ? styles.labelTextAddons
+                    : styles.labelText
+                : styles.label,
+            uppercase && styles.uppercaseLabel,
+            textStyle,
+            labelStyle,
+        ],
+        [iconName, isVariant, labelStyle, loading, textStyle, uppercase],
+    );
 
     return (
-        <Surface
-            {...rest}
-            style={[styles.button, buttonStyle] as ViewStyle}
-            {...{ elevation: elevation }}>
+        <Surface {...rest} style={memoizedSurfaceStyles} {...{ elevation: elevation }}>
             <TouchableRipple
                 borderless
                 delayPressIn={0}
@@ -290,14 +328,9 @@ const Button = ({
                 rippleColor={rippleColor}
                 style={touchableStyle}
                 testID={testID}>
-                <View
-                    style={[
-                        styles.content,
-                        iconPosition === 'right' ? { flexDirection: 'row-reverse' } : {},
-                        contentStyle,
-                    ]}>
+                <View style={memoizedViewStyles}>
                     {iconName && loading !== true ? (
-                        <View style={[iconStyle, iconContainerStyle]}>
+                        <View style={memoizedIconContainerStyles}>
                             <Icon
                                 type={iconType}
                                 name={iconName}
@@ -323,17 +356,7 @@ const Button = ({
                         variant="labelLarge"
                         selectable={false}
                         numberOfLines={1}
-                        style={[
-                            styles.label,
-                            isVariant('text')
-                                ? iconName || loading
-                                    ? styles.labelTextAddons
-                                    : styles.labelText
-                                : styles.label,
-                            uppercase && styles.uppercaseLabel,
-                            textStyle,
-                            labelStyle,
-                        ]}>
+                        style={memoizedTextStyles}>
                         {children}
                     </Text>
                 </View>

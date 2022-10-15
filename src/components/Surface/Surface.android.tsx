@@ -2,10 +2,10 @@ import { ComponentPropsWithRef, ReactNode, memo, useMemo } from 'react';
 import { Animated, View, StyleProp, ViewStyle } from 'react-native';
 
 import { useComponentStyles, useCurrentTheme } from '../../hooks';
-import shadow from '../../styles/shadow';
 import { isAnimatedValue } from '../../styles/overlay';
 import { inputRange } from '../../styles/shadow';
 import type { MD3Elevation } from '../../core/theme/types';
+import { getElevationAndroid } from './utils';
 
 export type Props = ComponentPropsWithRef<typeof View> & {
     /**
@@ -70,8 +70,8 @@ export type Props = ComponentPropsWithRef<typeof View> & {
  * });
  * ```
  */
+const elevationLevel = [0, 3, 6, 9, 12, 15];
 
-// for Web
 const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) => {
     const theme = useCurrentTheme();
     const surfaceStyles = useComponentStyles('Surface', style);
@@ -89,10 +89,24 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
         // @ts-ignore
         return theme.colors.elevation?.[`level${elevation}`];
     })();
-    const memoizedStyles = useMemo(
-        () => [{ backgroundColor }, elevation ? shadow(elevation) : null, surfaceStyles],
-        [backgroundColor, elevation, surfaceStyles],
-    );
+
+    const memoizedStyles = useMemo(() => {
+        const { margin, padding, transform, borderRadius } = (surfaceStyles || {}) as ViewStyle;
+        const outerLayerStyles = { margin, padding, transform, borderRadius };
+        const sharedStyle = [{ backgroundColor }, surfaceStyles];
+
+        return [
+            {
+                backgroundColor,
+                transform,
+            },
+            outerLayerStyles,
+            sharedStyle,
+            {
+                elevation: getElevationAndroid(elevation, inputRange, elevationLevel),
+            },
+        ];
+    }, [backgroundColor, elevation, surfaceStyles]);
 
     return (
         <Animated.View {...props} testID={testID} style={memoizedStyles}>

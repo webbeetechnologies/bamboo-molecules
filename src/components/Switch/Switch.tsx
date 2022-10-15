@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { forwardRef, memo } from 'react';
 import type { ComponentPropsWithRef } from 'react';
 import {
     NativeModules,
@@ -74,7 +74,7 @@ export type Props = ComponentPropsWithRef<typeof NativeSwitch> & {
  * export default MyComponent;
  * ```
  */
-const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props) => {
+const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props, ref: any) => {
     const {
         checkedColor: _checkedColor,
         onTintColor: _onTintColor,
@@ -114,6 +114,7 @@ const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props
 
     return (
         <NativeSwitch
+            ref={ref}
             value={value}
             disabled={disabled}
             onValueChange={disabled ? undefined : onValueChange}
@@ -150,4 +151,4 @@ export const defaultStyles: ComponentStylePropWithVariants<
     },
 };
 
-export default memo(Switch);
+export default memo(forwardRef(Switch));

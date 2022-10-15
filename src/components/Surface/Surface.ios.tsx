@@ -2,10 +2,10 @@ import { ComponentPropsWithRef, ReactNode, memo, useMemo } from 'react';
 import { Animated, View, StyleProp, ViewStyle } from 'react-native';
 
 import { useComponentStyles, useCurrentTheme } from '../../hooks';
-import shadow from '../../styles/shadow';
 import { isAnimatedValue } from '../../styles/overlay';
 import { inputRange } from '../../styles/shadow';
 import type { MD3Elevation } from '../../core/theme/types';
+import { getStyleForAnimatedShadowLayer, getStyleForShadowLayer } from './utils';
 
 export type Props = ComponentPropsWithRef<typeof View> & {
     /**
@@ -70,8 +70,6 @@ export type Props = ComponentPropsWithRef<typeof View> & {
  * });
  * ```
  */
-
-// for Web
 const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) => {
     const theme = useCurrentTheme();
     const surfaceStyles = useComponentStyles('Surface', style);
@@ -89,14 +87,52 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
         // @ts-ignore
         return theme.colors.elevation?.[`level${elevation}`];
     })();
-    const memoizedStyles = useMemo(
-        () => [{ backgroundColor }, elevation ? shadow(elevation) : null, surfaceStyles],
-        [backgroundColor, elevation, surfaceStyles],
+    const { position, alignSelf, top, left, right, bottom, ...restStyle } = (surfaceStyles ||
+        {}) as ViewStyle;
+
+    const absoluteStyles = useMemo(
+        () => ({ position, alignSelf, top, right, bottom, left }),
+        [alignSelf, bottom, left, position, right, top],
+    );
+    const sharedStyle = useMemo(
+        () => [{ backgroundColor }, restStyle],
+        [backgroundColor, restStyle],
     );
 
+    const memoizedStylesLayer0 = useMemo(
+        () =>
+            isAnimatedValue(elevation)
+                ? [getStyleForAnimatedShadowLayer(0, elevation), absoluteStyles]
+                : [getStyleForShadowLayer(0, elevation), absoluteStyles],
+        [absoluteStyles, elevation],
+    );
+    const memoizedStylesLayer1 = useMemo(
+        () =>
+            isAnimatedValue(elevation)
+                ? getStyleForAnimatedShadowLayer(1, elevation)
+                : getStyleForShadowLayer(1, elevation),
+        [elevation],
+    );
+
+    if (isAnimatedValue(elevation)) {
+        return (
+            <Animated.View style={memoizedStylesLayer0}>
+                <Animated.View style={memoizedStylesLayer1}>
+                    <Animated.View {...props} testID={testID} style={sharedStyle}>
+                        {children}
+                    </Animated.View>
+                </Animated.View>
+            </Animated.View>
+        );
+    }
+
     return (
-        <Animated.View {...props} testID={testID} style={memoizedStyles}>
-            {children}
+        <Animated.View style={memoizedStylesLayer0}>
+            <Animated.View style={memoizedStylesLayer1}>
+                <Animated.View {...props} testID={testID} style={sharedStyle}>
+                    {children}
+                </Animated.View>
+            </Animated.View>
         </Animated.View>
     );
 };

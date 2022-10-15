@@ -1,8 +1,7 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import type { ViewProps } from '@webbee/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
-import { withNormalizedStyleProp } from '../../hocs';
 
 export type Props = Omit<ViewProps, 'children'> & {
     /**
@@ -62,23 +61,21 @@ const VerticalDivider = ({
 }: Props) => {
     const { View } = useMolecules();
     const { bold: boldStyles, ...defaultStyles } = useComponentStyles('VerticalDivider', style);
-
-    return (
-        <View
-            {...rest}
-            style={[
-                defaultStyles,
-                topInset && { marginTop: topInset },
-                bottomInset && { marginBottom: bottomInset },
-                bold && boldStyles,
-                spacing && { marginHorizontal: spacing },
-            ]}
-        />
+    const memoizedStyles = useMemo(
+        () => [
+            defaultStyles,
+            topInset && { marginTop: topInset },
+            bottomInset && { marginBottom: bottomInset },
+            bold && boldStyles,
+            spacing && { marginHorizontal: spacing },
+        ],
+        [bold, boldStyles, bottomInset, defaultStyles, spacing, topInset],
     );
+
+    return <View {...rest} style={memoizedStyles} />;
 };
 
 export const verticalDividerStyles = {
-    height: '100%',
     width: StyleSheet.hairlineWidth,
     background: 'colors.surfaceVariant',
     bold: {
@@ -86,4 +83,4 @@ export const verticalDividerStyles = {
     },
 };
 
-export default memo(withNormalizedStyleProp(VerticalDivider));
+export default memo(VerticalDivider);
