@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { ViewProps } from '@webbee/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
@@ -14,4 +15,4 @@ const ComponentTemplate = ({ style, ...rest }: Props) => {
     );
 };
 
-export default ComponentTemplate;
+export default memo(ComponentTemplate);
