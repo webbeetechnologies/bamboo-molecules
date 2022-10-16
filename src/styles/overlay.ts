@@ -3,13 +3,13 @@ import { Animated } from 'react-native';
 import { MD3DarkTheme } from './themes/DarkTheme';
 
 export const isAnimatedValue = (
-    it: number | string | Animated.AnimatedInterpolation,
+    it: number | string | Animated.AnimatedInterpolation<any>,
 ): it is Animated.Value => it instanceof Animated.Value;
 
 export default function overlay<T extends Animated.Value | number>(
     elevation: T,
     surfaceColor: string = MD3DarkTheme.colors.surface,
-): T extends number ? string : Animated.AnimatedInterpolation {
+): T extends number ? string : Animated.AnimatedInterpolation<any> {
     if (isAnimatedValue(elevation)) {
         const inputRange = [0, 1, 2, 3, 8, 24];
 

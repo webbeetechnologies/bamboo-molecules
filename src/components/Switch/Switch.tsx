@@ -10,7 +10,8 @@ import {
 import setColor from 'color';
 
 import type { ComponentStylePropWithVariants } from '../../types';
-import { useComponentStyles } from '../../hooks';
+import { useComponentStyles, useCurrentTheme } from '../../hooks';
+import { normalizeStyles } from '../../utils';
 
 const version = NativeModules.PlatformConstants
     ? NativeModules.PlatformConstants.reactNativeVersion
@@ -75,10 +76,11 @@ export type Props = ComponentPropsWithRef<typeof NativeSwitch> & {
  * ```
  */
 const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props, ref: any) => {
+    const theme = useCurrentTheme();
     const {
-        checkedColor: _checkedColor,
-        onTintColor: _onTintColor,
-        thumbTintColor: _thumbTintColor,
+        checkedColor: checkedColorProp,
+        onTintColor: onTintColorProp,
+        thumbTintColor: thumbTintColorProp,
         ...switchStyles
     } = useComponentStyles('Switch', style, {
         states: {
@@ -87,10 +89,25 @@ const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props
             disabled: !!disabled,
         },
     });
-    const checkedColor = color ? color : _checkedColor;
-    const thumbTintColor = value && !disabled ? checkedColor : _thumbTintColor;
+
+    const resolvedCheckColor = color ? color : checkedColorProp;
+
+    const { normalizedCheckColor, normalizedThumbTintColor, normalizedOnTintColor } =
+        normalizeStyles(
+            {
+                normalizedCheckColor: resolvedCheckColor,
+                normalizedThumbTintColor: thumbTintColorProp,
+                normalizedOnTintColor: onTintColorProp,
+            },
+            theme,
+        );
+
+    const thumbTintColor = value && !disabled ? normalizedCheckColor : normalizedThumbTintColor;
+
     const onTintColor =
-        value && !disabled ? setColor(checkedColor).alpha(0.5).rgb().string() : _onTintColor;
+        value && !disabled
+            ? setColor(normalizedCheckColor).alpha(0.5).rgb().string()
+            : normalizedOnTintColor;
 
     const props =
         version && version.major === 0 && version.minor <= 56
@@ -102,7 +119,7 @@ const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props
             ? {
                   activeTrackColor: onTintColor,
                   thumbColor: thumbTintColor,
-                  activeThumbColor: checkedColor,
+                  activeThumbColor: normalizedCheckColor,
               }
             : {
                   thumbColor: thumbTintColor,
