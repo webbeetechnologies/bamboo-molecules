@@ -1,9 +1,9 @@
-import { useEffect, useCallback, useRef, ReactNode, memo } from 'react';
+import { useEffect, useCallback, useRef, ReactNode, memo, useMemo } from 'react';
 import { Animated, View, ViewStyle, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import color from 'color';
 
-import { withNormalizedStyleProp, withActionState, CallbackActionState } from '../../hocs';
-import { useMolecules, useCurrentTheme, useComponentTheme } from '../../hooks';
+import { withActionState, CallbackActionState } from '../../hocs';
+import { useMolecules, useCurrentTheme, useComponentStyles } from '../../hooks';
 import type { IconType } from '../Icon/types';
 import type { SurfaceProps } from '../Surface';
 import { normalizeStyles } from '../../utils';
@@ -160,7 +160,7 @@ const Button = ({
     onPressIn,
     onPressOut,
     onLongPress,
-    style,
+    style: styleProp,
     uppercase = false,
     contentStyle,
     labelStyle,
@@ -182,7 +182,7 @@ const Button = ({
         color: _textColor,
         borderWidth,
         ...buttonStyles
-    } = useComponentTheme('Button', {
+    } = useComponentStyles('Button', styleProp, {
         variant,
         states: {
             hovered: !disabled && !!hovered,
@@ -243,37 +243,75 @@ const Button = ({
 
     const rippleColor = color(textColor).alpha(0.12).rgb().string();
 
-    const buttonStyle = {
-        backgroundColor,
-        borderColor,
-        borderWidth,
-        borderRadius,
-        ...buttonStyles,
-    };
+    const buttonStyle = useMemo(
+        () => ({
+            backgroundColor,
+            borderColor,
+            borderWidth,
+            borderRadius,
+            ...buttonStyles,
+        }),
+        [backgroundColor, borderColor, borderRadius, borderWidth, buttonStyles],
+    );
     const touchableStyle = {
-        borderRadius: style
-            ? ((StyleSheet.flatten(style) || {}) as ViewStyle).borderRadius || borderRadius
+        borderRadius: buttonStyles
+            ? ((StyleSheet.flatten(buttonStyles) || {}) as ViewStyle).borderRadius || borderRadius
             : borderRadius,
     };
 
     const { color: customLabelColor, fontSize: customLabelSize } =
         StyleSheet.flatten(labelStyle) || {};
 
-    const textStyle = {
-        color: textColor,
-        ...theme.typescale.labelLarge,
-    };
-    const iconStyle =
-        StyleSheet.flatten(contentStyle)?.flexDirection === 'row-reverse' ||
-        iconPosition === 'right'
-            ? [styles.iconReverse, isVariant('text') && styles.iconReverseTextMode]
-            : [styles.icon, isVariant('text') && styles.iconTextMode];
+    const textStyle = useMemo(
+        () => ({
+            color: textColor,
+            ...theme.typescale.labelLarge,
+        }),
+        [textColor, theme.typescale.labelLarge],
+    );
+    const iconStyle = useMemo(
+        () =>
+            StyleSheet.flatten(contentStyle)?.flexDirection === 'row-reverse' ||
+            iconPosition === 'right'
+                ? [styles.iconReverse, isVariant('text') && styles.iconReverseTextMode]
+                : [styles.icon, isVariant('text') && styles.iconTextMode],
+        [contentStyle, iconPosition, isVariant],
+    );
+
+    const memoizedSurfaceStyles = useMemo(
+        () => [styles.button, buttonStyle] as ViewStyle,
+        [buttonStyle],
+    );
+    const memoizedViewStyles = useMemo(
+        () =>
+            [
+                styles.content,
+                iconPosition === 'right' ? { flexDirection: 'row-reverse' } : {},
+                contentStyle,
+            ] as ViewStyle,
+        [contentStyle, iconPosition],
+    );
+    const memoizedIconContainerStyles = useMemo(
+        () => [iconStyle, iconContainerStyle],
+        [iconContainerStyle, iconStyle],
+    );
+    const memoizedTextStyles = useMemo(
+        () => [
+            styles.label,
+            isVariant('text')
+                ? iconName || loading
+                    ? styles.labelTextAddons
+                    : styles.labelText
+                : styles.label,
+            uppercase && styles.uppercaseLabel,
+            textStyle,
+            labelStyle,
+        ],
+        [iconName, isVariant, labelStyle, loading, textStyle, uppercase],
+    );
 
     return (
-        <Surface
-            {...rest}
-            style={[styles.button, buttonStyle, style] as ViewStyle}
-            {...{ elevation: elevation }}>
+        <Surface {...rest} style={memoizedSurfaceStyles} {...{ elevation: elevation }}>
             <TouchableRipple
                 borderless
                 delayPressIn={0}
@@ -290,14 +328,9 @@ const Button = ({
                 rippleColor={rippleColor}
                 style={touchableStyle}
                 testID={testID}>
-                <View
-                    style={[
-                        styles.content,
-                        iconPosition === 'right' ? { flexDirection: 'row-reverse' } : {},
-                        contentStyle,
-                    ]}>
+                <View style={memoizedViewStyles}>
                     {iconName && loading !== true ? (
-                        <View style={[iconStyle, iconContainerStyle]}>
+                        <View style={memoizedIconContainerStyles}>
                             <Icon
                                 type={iconType}
                                 name={iconName}
@@ -323,17 +356,7 @@ const Button = ({
                         variant="labelLarge"
                         selectable={false}
                         numberOfLines={1}
-                        style={[
-                            styles.label,
-                            isVariant('text')
-                                ? iconName || loading
-                                    ? styles.labelTextAddons
-                                    : styles.labelText
-                                : styles.label,
-                            uppercase && styles.uppercaseLabel,
-                            textStyle,
-                            labelStyle,
-                        ]}>
+                        style={memoizedTextStyles}>
                         {children}
                     </Text>
                 </View>
@@ -342,4 +365,4 @@ const Button = ({
     );
 };
 
-export default memo(withNormalizedStyleProp(withActionState(Button)));
+export default memo(withActionState(Button));

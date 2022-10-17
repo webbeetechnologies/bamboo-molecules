@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import {
     TouchableWithoutFeedback,
     ViewStyle,
@@ -8,10 +8,8 @@ import {
     Platform,
 } from 'react-native';
 
-import { useComponentTheme, useCurrentTheme, useMolecules } from '../../hooks';
-import { withNormalizedStyleProp } from '../../hocs';
+import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
 import { normalizeStyles } from '../../utils';
-import { getTouchableRippleColors } from './utils';
 
 export type Props = React.ComponentPropsWithRef<typeof TouchableWithoutFeedback> & {
     /**
@@ -98,19 +96,22 @@ const TouchableRipple = ({
 }: Props) => {
     const { View } = useMolecules();
     const currentTheme = useCurrentTheme();
-    const rippleStyles = useComponentTheme('TouchableRipple');
+    const { rippleColor: defaultRippleColor, ...componentStyles } = useComponentStyles(
+        'TouchableRipple',
+        style,
+    );
     const normalizedColors = normalizeStyles({ rippleColor }, currentTheme);
+    const calculatedRippleColor = normalizedColors.rippleColor || defaultRippleColor;
+    const memoizedStyles = useMemo(
+        () => [styles.touchable, borderless && styles.borderless, componentStyles],
+        [borderless, componentStyles],
+    );
 
     const handlePressIn = useCallback(
         (e: any) => {
             const { centered, onPressIn } = rest;
 
             onPressIn?.(e);
-
-            const { calculatedRippleColor } = getTouchableRippleColors({
-                rippleColor: normalizedColors.rippleColor,
-                rippleStyles,
-            });
 
             const button = e.currentTarget;
             const computedStyle = window.getComputedStyle(button);
@@ -199,7 +200,7 @@ const TouchableRipple = ({
                 });
             });
         },
-        [rippleStyles, rest, normalizedColors],
+        [rest, calculatedRippleColor],
     );
 
     const handlePressOut = useCallback(
@@ -244,9 +245,7 @@ const TouchableRipple = ({
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
             disabled={disabled}>
-            <View style={[styles.touchable, borderless && styles.borderless, style]}>
-                {React.Children.only(children)}
-            </View>
+            <View style={memoizedStyles}>{React.Children.only(children)}</View>
         </TouchableWithoutFeedback>
     );
 };
@@ -266,4 +265,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(withNormalizedStyleProp(TouchableRipple));
+export default memo(TouchableRipple);

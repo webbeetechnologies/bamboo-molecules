@@ -33,6 +33,7 @@ export const generateLightThemeColors = (
         onSurface: palette.neutral10,
         onSurfaceVariant: palette.neutralVariant30,
         onSurfaceDisabled: color(palette.neutral10).alpha(opacity.level4).rgb().string(),
+        onSurfaceRipple: color(palette.neutral10).alpha(0.12).rgb().string(),
         onError: palette.error100,
         onErrorContainer: palette.error10,
         onBackground: palette.neutral10,

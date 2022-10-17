@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import {
     BackgroundPropType,
     StyleProp,
@@ -7,11 +7,10 @@ import {
     TouchableNativeFeedback,
     TouchableWithoutFeedback,
     ViewStyle,
+    StyleSheet,
 } from 'react-native';
-import { useComponentTheme, useCurrentTheme, useMolecules } from '../../hooks';
-import { withNormalizedStyleProp } from '../../hocs';
+import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
 import { normalizeStyles } from '../../utils';
-import { getTouchableRippleColors } from './utils';
 
 const ANDROID_VERSION_LOLLIPOP = 21;
 const ANDROID_VERSION_PIE = 28;
@@ -40,14 +39,17 @@ const TouchableRipple = ({
     const disabled = disabledProp || !rest.onPress;
     const { View } = useMolecules();
     const currentTheme = useCurrentTheme();
-    const rippleStyles = useComponentTheme('TouchableRipple');
+    const { rippleColor: defaultRippleColor, ...componentStyles } = useComponentStyles(
+        'TouchableRipple',
+        style,
+    );
     const normalizedColors = normalizeStyles({ rippleColor, underlayColor }, currentTheme);
-
-    const { calculatedRippleColor, calculatedUnderlayColor } = getTouchableRippleColors({
-        rippleColor: normalizedColors.rippleColor,
-        underlayColor: normalizedColors.underlayColor,
-        rippleStyles,
-    });
+    const calculatedRippleColor = normalizedColors.rippleColor || defaultRippleColor;
+    const calculatedUnderlayColor = normalizedColors.underlayColor || calculatedRippleColor;
+    const memoizedStyles = useMemo(
+        () => [borderless && styles.borderless, componentStyles],
+        [borderless, componentStyles],
+    );
 
     // A workaround for ripple on Android P is to use useForeground + overflow: 'hidden'
     // https://github.com/facebook/react-native/issues/6480
@@ -65,9 +67,7 @@ const TouchableRipple = ({
                         ? background
                         : TouchableNativeFeedback.Ripple(calculatedRippleColor, borderless)
                 }>
-                <View style={[borderless && rippleStyles?.borderless, style]}>
-                    {React.Children.only(children)}
-                </View>
+                <View style={memoizedStyles}>{React.Children.only(children)}</View>
             </TouchableNativeFeedback>
         );
     }
@@ -76,14 +76,20 @@ const TouchableRipple = ({
         <TouchableHighlight
             {...rest}
             disabled={disabled}
-            style={[borderless && rippleStyles?.borderless, style]}
+            style={memoizedStyles}
             underlayColor={calculatedUnderlayColor}>
             {React.Children.only(children)}
         </TouchableHighlight>
     );
 };
 
+const styles = StyleSheet.create({
+    borderless: {
+        overflow: 'hidden',
+    },
+});
+
 TouchableRipple.supported =
     Platform.OS === 'android' && Platform.Version >= ANDROID_VERSION_LOLLIPOP;
 
-export default memo(withNormalizedStyleProp(TouchableRipple));
+export default memo(TouchableRipple);

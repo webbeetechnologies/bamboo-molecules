@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { IExtractThemeFuncArgs, ITheme as AtomsTheme } from '@webbee/bamboo-atoms';
+import type { IExtractStylesFuncArgs, ITheme as AtomsTheme } from '@webbee/bamboo-atoms';
 import type { StyleProp } from 'react-native';
 
 export type ITheme = AtomsTheme & {
@@ -21,6 +21,7 @@ export type MD3Theme = {
 
 export type ResolveComponentStylesArgs = {
     componentTheme: StyleProp<any>;
+    style: StyleProp<any>;
     variant?: string;
     states?: { [key: string]: boolean };
 };
@@ -28,7 +29,7 @@ export type ResolveComponentStylesArgs = {
 export interface ProvideThemeArgs {
     theme: ITheme;
     resolveComponentStyles?: (args: ResolveComponentStylesArgs) => StyleProp<any>;
-    extractTheme?: (args: IExtractThemeFuncArgs) => StyleProp<any>;
+    extractStyles?: (args: IExtractStylesFuncArgs) => StyleProp<any>;
     children: ReactNode;
 }
 

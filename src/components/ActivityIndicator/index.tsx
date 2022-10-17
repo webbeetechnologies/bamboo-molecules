@@ -1,1 +1,5 @@
-export { default as ActivityIndicator, Props as ActivityIndicatorProps } from './ActivityIndicator';
+export {
+    default as ActivityIndicator,
+    Props as ActivityIndicatorProps,
+    defaultStyles as activityIndicatorStyles,
+} from './ActivityIndicator';

@@ -1,8 +1,10 @@
-import { memo, useCallback, useEffect, useRef } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Animated, Easing, Platform, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import type { ActivityIndicatorProps } from '@webbee/bamboo-atoms';
-import { useCurrentTheme, useMolecules } from '../../hooks';
-import { withNormalizedStyleProp } from '../../hocs';
+
+import type { ComponentStylePropWithVariants } from '../../types';
+import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
+import { normalizeStyles } from '../../utils';
 import AnimatedSpinner from './AnimatedSpinner';
 
 export type Props = ActivityIndicatorProps & {
@@ -56,14 +58,19 @@ const mapIndicatorSize = (indicatorSize: 'small' | 'large' | number | undefined)
  */
 const ActivityIndicator = ({
     animating = true,
-    color: indicatorColor,
+    color: indicatorColorProp,
     hidesWhenStopped = true,
     size: indicatorSize = 'small',
-    style,
+    style: styleProp,
     ...rest
 }: Props) => {
     const { View } = useMolecules();
     const theme = useCurrentTheme();
+    const { color: indicatorColor, ...style } = useComponentStyles('ActivityIndicator', styleProp);
+    const { normalizedIndicatorColorProp } = normalizeStyles(
+        { normalizedIndicatorColorProp: indicatorColorProp },
+        theme,
+    );
 
     const { current: timer } = useRef<Animated.Value>(new Animated.Value(0));
     const { current: fade } = useRef<Animated.Value>(
@@ -76,8 +83,14 @@ const ActivityIndicator = ({
         animation: { scale },
     } = theme;
 
-    const color = indicatorColor || theme.colors.primary;
+    const color = normalizedIndicatorColorProp || indicatorColor;
     const size = mapIndicatorSize(indicatorSize);
+
+    const viewStyles = useMemo(() => [styles.container, style], [style]);
+    const animatedViewStyles = useMemo(
+        () => [{ width: size, height: size, opacity: fade }],
+        [fade, size],
+    );
 
     const startRotation = useCallback(() => {
         // Show indicator
@@ -136,14 +149,12 @@ const ActivityIndicator = ({
 
     return (
         <View
-            style={[styles.container, style]}
+            style={viewStyles}
             {...rest}
             accessible
             accessibilityRole="progressbar"
             accessibilityState={{ busy: animating }}>
-            <Animated.View
-                style={[{ width: size, height: size, opacity: fade }]}
-                collapsable={false}>
+            <Animated.View style={animatedViewStyles} collapsable={false}>
                 {[0, 1].map(index => {
                     // Thanks to https://github.com/n4kz/react-native-indicators for the great work
                     return (
@@ -177,4 +188,8 @@ const styles = {
     },
 };
 
-export default memo(withNormalizedStyleProp(ActivityIndicator));
+export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, '', { color: string }> = {
+    color: 'colors.primary',
+};
+
+export default memo(ActivityIndicator);

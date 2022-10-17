@@ -2,15 +2,18 @@ import { useMemo } from 'react';
 import {
     ProvideTheme as AtomProvideTheme,
     extendTheme as extendThemeAtoms,
-    IExtractThemeFuncArgs,
+    IExtractStylesFuncArgs,
 } from '@webbee/bamboo-atoms';
 import merge from 'ts-deepmerge';
 import memoize from 'lodash.memoize';
 
 import {
+    activityIndicatorStyles,
     buttonStyles,
     horizontalDividerStyles,
+    iconStyles,
     touchableRippleStyles,
+    surfaceStyles,
     switchStyles,
     verticalDividerStyles,
 } from '../../components';
@@ -25,23 +28,29 @@ import type { ITheme, ProvideThemeArgs } from './types';
 const defaultThemeValue: Partial<ITheme> = {
     light: MD3LightTheme,
     dark: MD3DarkTheme,
+    ActivityIndicator: activityIndicatorStyles,
     Button: buttonStyles,
     HorizontalDivider: horizontalDividerStyles,
+    Icon: iconStyles,
     VerticalDivider: verticalDividerStyles,
     TouchableRipple: touchableRippleStyles,
+    Surface: surfaceStyles,
     Switch: switchStyles,
 };
 
-const defaultExtractTheme = memoize(
-    ({ theme, componentName, colorMode }: IExtractThemeFuncArgs) => {
-        return normalizeStyles(theme[componentName], theme[colorMode]);
+const defaultExtractStyles = memoize(
+    ({ theme, componentName, colorMode, style }: IExtractStylesFuncArgs) => {
+        const normalizedComponentStyles = normalizeStyles(theme[componentName], theme[colorMode]);
+        const normalizedStyleProp = normalizeStyles(style, theme[colorMode]);
+
+        return { ...normalizedComponentStyles, ...normalizedStyleProp };
     },
 );
 
 export const ProvideTheme = ({
     theme,
     resolveComponentStyles = defaultResolveComponentStyles,
-    extractTheme = defaultExtractTheme,
+    extractStyles = defaultExtractStyles,
     children,
 }: ProvideThemeArgs) => {
     const memoizedTheme = useMemo(
@@ -53,7 +62,7 @@ export const ProvideTheme = ({
     );
 
     return (
-        <AtomProvideTheme theme={memoizedTheme} extractTheme={extractTheme}>
+        <AtomProvideTheme theme={memoizedTheme} extractStyles={extractStyles}>
             {children}
         </AtomProvideTheme>
     );

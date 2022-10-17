@@ -1,16 +1,22 @@
-import { ProvideMolecules, useMolecules, useComponentTheme, extendTheme } from 'bamboo-molecules';
-import type { ButtonProps } from '@webbee/bamboo-atoms';
 import { StyleSheet } from 'react-native';
+import {
+    ProvideMolecules,
+    useMolecules,
+    extendTheme,
+    useComponentStyles,
+    ButtonProps,
+} from 'bamboo-molecules';
 
 export type Props = ButtonProps & {
-    variants: 'primary' | 'secondary' | 'tertiary';
+    color: 'primary' | 'secondary' | 'tertiary';
 };
 
 const theme = extendTheme({
     CustomButton: {
-        paddingHorizontal: 10,
-        paddingVertical: 10,
+        paddingHorizontal: 2,
+        paddingVertical: 2,
         borderRadius: 'roundness.1',
+        color: '#fff',
 
         primary: {
             backgroundColor: 'colors.primary',
@@ -22,17 +28,14 @@ const theme = extendTheme({
             backgroundColor: 'colors.tertiary',
         },
     },
-    Text: {
-        color: 'colors.onSecondary',
-    },
 });
 
-export const Components = ({ style, variants, ...rest }: Props) => {
+export const Components = ({ style, color, ...rest }: Props) => {
     const { Button, Text } = useMolecules();
-    const buttonStyles = useComponentTheme('CustomButton');
+    const buttonStyles = useComponentStyles('CustomButton');
 
     return (
-        <Button style={StyleSheet.flatten([buttonStyles, buttonStyles[variants], style])} {...rest}>
+        <Button style={StyleSheet.flatten([buttonStyles, buttonStyles[color], style])} {...rest}>
             <Text>Custom Button</Text>
         </Button>
     );

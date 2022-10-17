@@ -4,6 +4,7 @@ export const resolveComponentStyles = ({
     componentTheme,
     variant,
     states,
+    style, // style prop from the component
 }: ResolveComponentStylesArgs) => {
     const { variants, states: componentStates, ...styles } = componentTheme;
 
@@ -15,6 +16,7 @@ export const resolveComponentStyles = ({
         ...nonStateStyles,
         ...flattenStateStyles(states, componentStates),
         ...flattenStateStyles(states, variantStates),
+        ...style, // style prop will always get the highest priority
     };
 };
 

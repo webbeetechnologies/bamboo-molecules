@@ -68,3 +68,5 @@ example/.ondevice/storybook.requires.js
 
 # release
 dist
+
+example/cache

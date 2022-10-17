@@ -1,17 +1,11 @@
-import { ComponentPropsWithRef, ReactNode, memo } from 'react';
-import { Animated, StyleSheet, View, StyleProp, ViewStyle, Platform } from 'react-native';
+import { ComponentPropsWithRef, ReactNode, memo, useMemo } from 'react';
+import { Animated, View, StyleProp, ViewStyle } from 'react-native';
 
-import { withNormalizedStyleProp } from '../../hocs';
-import { useCurrentTheme } from '../../hooks';
+import { useComponentStyles, useCurrentTheme } from '../../hooks';
 import shadow from '../../styles/shadow';
 import { isAnimatedValue } from '../../styles/overlay';
 import { inputRange } from '../../styles/shadow';
 import type { MD3Elevation } from '../../core/theme/types';
-import {
-    getElevationAndroid,
-    getStyleForAnimatedShadowLayer,
-    getStyleForShadowLayer,
-} from './utils';
 
 export type Props = ComponentPropsWithRef<typeof View> & {
     /**
@@ -76,9 +70,11 @@ export type Props = ComponentPropsWithRef<typeof View> & {
  * });
  * ```
  */
-const Surface = ({ elevation = 1, children, style, testID, ...props }: Props) => {
-    const theme = useCurrentTheme();
 
+// for Web
+const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) => {
+    const theme = useCurrentTheme();
+    const surfaceStyles = useComponentStyles('Surface', style);
     const backgroundColor = (() => {
         if (isAnimatedValue(elevation)) {
             return elevation.interpolate({
@@ -93,75 +89,16 @@ const Surface = ({ elevation = 1, children, style, testID, ...props }: Props) =>
         // @ts-ignore
         return theme.colors.elevation?.[`level${elevation}`];
     })();
-
-    if (Platform.OS === 'web') {
-        return (
-            <Animated.View
-                {...props}
-                testID={testID}
-                style={[{ backgroundColor }, elevation ? shadow(elevation) : null, style]}>
-                {children}
-            </Animated.View>
-        );
-    }
-
-    if (Platform.OS === 'android') {
-        const elevationLevel = [0, 3, 6, 9, 12, 15];
-
-        const { margin, padding, transform, borderRadius } = (StyleSheet.flatten(style) ||
-            {}) as ViewStyle;
-
-        const outerLayerStyles = { margin, padding, transform, borderRadius };
-        const sharedStyle = [{ backgroundColor }, style];
-
-        return (
-            <Animated.View
-                {...props}
-                testID={testID}
-                style={[
-                    {
-                        backgroundColor,
-                        transform,
-                    },
-                    outerLayerStyles,
-                    sharedStyle,
-                    {
-                        elevation: getElevationAndroid(elevation, inputRange, elevationLevel),
-                    },
-                ]}>
-                {children}
-            </Animated.View>
-        );
-    }
-
-    const { position, alignSelf, top, left, right, bottom, ...restStyle } = (StyleSheet.flatten(
-        style,
-    ) || {}) as ViewStyle;
-
-    const absoluteStyles = { position, alignSelf, top, right, bottom, left };
-    const sharedStyle = [{ backgroundColor }, restStyle];
-
-    if (isAnimatedValue(elevation)) {
-        return (
-            <Animated.View style={[getStyleForAnimatedShadowLayer(0, elevation), absoluteStyles]}>
-                <Animated.View style={getStyleForAnimatedShadowLayer(1, elevation)}>
-                    <Animated.View {...props} testID={testID} style={sharedStyle}>
-                        {children}
-                    </Animated.View>
-                </Animated.View>
-            </Animated.View>
-        );
-    }
+    const memoizedStyles = useMemo(
+        () => [{ backgroundColor }, elevation ? shadow(elevation) : null, surfaceStyles],
+        [backgroundColor, elevation, surfaceStyles],
+    );
 
     return (
-        <Animated.View style={[getStyleForShadowLayer(0, elevation), absoluteStyles]}>
-            <Animated.View style={[getStyleForShadowLayer(1, elevation)]}>
-                <Animated.View {...props} testID={testID} style={sharedStyle}>
-                    {children}
-                </Animated.View>
-            </Animated.View>
+        <Animated.View {...props} testID={testID} style={memoizedStyles}>
+            {children}
         </Animated.View>
     );
 };
 
-export default memo(withNormalizedStyleProp(Surface));
+export default memo(Surface);
