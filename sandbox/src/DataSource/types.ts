@@ -84,9 +84,6 @@ export interface ITypedDataSourceState<T> extends IDataSourceState{
   originalRecords?: Records<T>
 }
 
-
-
-
 export interface IDataSource extends IDataSourceState {
   dispatch: Function;
   getState: <T>() => ITypedDataSourceState<T>;

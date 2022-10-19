@@ -51,9 +51,6 @@ export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSo
 
         { dispatch, getState, ...dataStore} = useDataSource({...data, loading }, callAsyncFunc, {...storeSupports, loadable: true }),
 
-
-
-
         isLoading = useCallback(() => {
             const loading = getState().loading;
 
@@ -64,8 +61,6 @@ export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSo
             return (Number(loading.finished_at) < Number(loading.started_at) && Number(loading.errored_at) < Number(loading.started_at))
 
         }, []),
-
-
 
         hasErrored = useCallback(() => {
             const loading = getState().loading;

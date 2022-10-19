@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { ESortDirection } from './DataSource';
+import {DataSourceResultProps, ESortDirection} from './DataSource';
+import {TCustomerData} from "./types";
 
 
-export default function   RenderRecords(props: any) {
-
-
-  // @ts-ignore
+// TODO: make typesafe?
+export default function RenderRecords(props: DataSourceResultProps<TCustomerData>) {
   const {pages, pagination, records, sort = [], applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest } = props;
+
+
 
   // const sortSource = useSortableDataSource({ records: workers as string[], setRecords: () => {}, sort: { }, searchKey: "test" });
   // const searchSource = useFilterableDataSource({ ...sortSource, searchKey: "test", setRecords: () => {}, sort: { },  });
@@ -28,7 +29,7 @@ export default function   RenderRecords(props: any) {
   //   };
   // });
 
-  
+
 
   const [column, selectColumn] = React.useState("");
 

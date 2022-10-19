@@ -2,8 +2,9 @@ import * as React from 'react';
 import axios from 'axios';
 import { useAsyncDataSource } from './DataSource/useAsyncDataSource/useAsyncDataSource';
 import RenderRecords from "./RenderRecords";
+import {TCustomerData} from "./types";
 
-function findAllCustomerData<T>() {
+function findAllCustomerData(): Promise<TCustomerData> {
   const baseURL = 'https://ktwjky3ybe.execute-api.us-east-1.amazonaws.com';
   return new Promise(function (resolve, reject) {
     axios
@@ -17,7 +18,7 @@ function findAllCustomerData<T>() {
           .then(function (res) {
             resolve(
               res.map(function (result) {
-                return result.data as T[];
+                return result.data;
               })
             );
           })
@@ -41,10 +42,7 @@ export default function UsingAsyncSource({ coworkers = [] as string[] }) {
     },
     async ({ records, action, ...args }) => {
       // @ts-ignore
-      return (await findAllCustomerData<any>()) as any[];
-
-      
-      return records;
+      return (await findAllCustomerData()) as any[];
     });
 
   return (
