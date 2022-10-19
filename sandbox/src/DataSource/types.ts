@@ -71,6 +71,7 @@ export interface IDataSourceState {
   sort?: TSort[];
   pagination?: TPagination;
   loading?: LoadingState;
+  error?: Error;
 
   pages?: Records<any>[],
   action?: EStoreActions,

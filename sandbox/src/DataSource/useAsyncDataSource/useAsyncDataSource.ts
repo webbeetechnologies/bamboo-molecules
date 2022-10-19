@@ -44,7 +44,7 @@ export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSo
             }
         } catch (error) {
             console.error(error);
-            dispatch({ type: EStoreActions.LOAD_RESULTS_ERROR })
+            dispatch({ type: EStoreActions.LOAD_RESULTS_ERROR, payload: { error: error as Error } })
         }
 
         return state.records;

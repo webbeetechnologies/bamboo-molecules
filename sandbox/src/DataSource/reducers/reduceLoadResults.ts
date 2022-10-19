@@ -22,8 +22,8 @@ export function reduceCompleteLoadResults<T>(state: IDataSourceState, action: Co
         ...prepareRecords({
             ...state,
             action: action.type,
-            originalRecords: [...action.payload],
-            records: action.payload,
+            originalRecords: [...action.payload.records],
+            records: action.payload.records,
             loading: {
                 ...state.loading,
                 finished_at: new Date().getTime(),
@@ -38,6 +38,7 @@ export function reduceErrorLoadResults<T>(state: IDataSourceState, action: Error
     return {
         ...state,
         action: action.type,
+        error: action.payload.error,
         loading: {
             ...state.loading,
             errored_at: new Date().getTime(),

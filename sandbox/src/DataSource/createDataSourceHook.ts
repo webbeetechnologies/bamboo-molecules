@@ -44,8 +44,6 @@ export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs): Us
 
         const [ state, dispatch ] = useDispatcher(reducer, initialState as IDataSourceState);
 
-        const action = state.action;
-
         const updateAction = useCallback( (action: ActionInterface["type"], payload?: any) => {
             dispatch({ type: action, payload })
         }, [state, dispatch]);
@@ -53,7 +51,7 @@ export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs): Us
         const setRecords: TSetRecords = useCallback(<ResultType>(records: Records<ResultType>) => {
             dispatch({
                 type: EStoreActions.SET_RECORDS,
-                payload: records
+                payload: {records}
             });
         }, [ state, updateAction ]);
 
@@ -98,6 +96,7 @@ export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs): Us
         }, [ ]);
 
 
+        const action = state.action;
         useEffect(() => {
             if (action === EStoreActions.SET_RECORDS) { return; }
             (async () => {
@@ -105,9 +104,10 @@ export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs): Us
                     const newRecords = await func(state);
 
                     if (state.records === newRecords) { return; }
-                    dispatch({ type: EStoreActions.UPDATE_RECORDS, payload: newRecords });
-                } catch (e) {
-                    console.error(e);
+                    dispatch({ type: EStoreActions.UPDATE_RECORDS, payload: { records: newRecords } });
+                } catch (error) {
+                    console.error(error);
+                    dispatch({ type: EStoreActions.UPDATE_RECORDS_ERROR, payload: { error: error as Error } });
                     // stateGetter();
                 }
             })()
