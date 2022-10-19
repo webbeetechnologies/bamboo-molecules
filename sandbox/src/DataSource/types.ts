@@ -120,10 +120,10 @@ export interface IPaginatedDataSource extends IDataSource {
 
 export interface ILoadableDataSource extends IDataSource {
   loadResults: () => void,
-  hasInitialized: () => Boolean,
-  hasLoaded: () => Boolean,
-  hasErrored: () => Boolean,
-  isLoading: () => Boolean,
+  hasInitialized: Boolean,
+  hasLoaded: Boolean,
+  hasErrored: Boolean,
+  isLoading: Boolean,
 }
 
 

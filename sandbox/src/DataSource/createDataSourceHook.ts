@@ -36,81 +36,70 @@ export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs): Us
     const { prepareRecords = PrepareRecords, reducer } = props;
 
     return (data: IDataSourceState, func: CallBackFuncType, storeSupports = STORE_SUPPORT) => {
-        const {records, ...store} = data,
+        const {records, ...store} = data;
+
+        const initialState = useMemo(() => prepareRecords({
+            records, ...store,
+        }), []);
+
+        const [ state, dispatch ] = useDispatcher(reducer, initialState as IDataSourceState);
+
+        const action = state.action;
+
+        const stateRef = useRef(state);
+
+        const getState = useCallback(() => stateRef.current, []);
+
+        const updateAction = useCallback( (action: ActionInterface["type"], payload?: any) => {
+            dispatch({ type: action, payload })
+        }, [state, dispatch]);
+
+        const setRecords: TSetRecords = useCallback(<ResultType>(records: Records<ResultType>) => {
+            dispatch({
+                type: EStoreActions.SET_RECORDS,
+                payload: records
+            });
+        }, [ state, updateAction ]);
 
 
-            initialState = useMemo(() => prepareRecords({
-                records, ...store,
-            }), []),
+        const applyFilter: TApplyFilterFunc = useCallback((filter) => {
+            updateAction(EStoreActions.FILTER, filter);
+        }, [ updateAction ]);
 
 
-            [ state, dispatch ] = useDispatcher(reducer, initialState as IDataSourceState),
-
-            action = state.action,
-
-
-            stateRef = useRef(state),
+        const applySort: TApplySortFunc = useCallback((sort) => {
+            updateAction(EStoreActions.SORT, sort)
+        }, [ updateAction ]);
 
 
-
-            getState = useCallback(() => stateRef.current, []),
-
-
-
-            updateAction = useCallback( (action: ActionInterface["type"], payload?: any) => {
-                dispatch({ type: action, payload })
-            }, [state, dispatch]),
+        const removeSort: TApplySortFunc = useCallback((sort) => {
+            updateAction(EStoreActions.REMOVE_SORT, sort)
+        }, [ updateAction ]);
 
 
-
-            setRecords: TSetRecords = useCallback(<ResultType>(records: Records<ResultType>) => {
-                dispatch({
-                    type: EStoreActions.SET_RECORDS,
-                    payload: records
-                });
-            }, [ state, updateAction ]),
+        const goToNext: Function = useCallback(() => {
+            updateAction(EStoreActions.GO_TO_NEXT)
+        }, [ updateAction ]);
 
 
-
-            applyFilter: TApplyFilterFunc = useCallback((filter) => {
-                updateAction(EStoreActions.FILTER, filter);
-            }, [ updateAction ]),
-
-
-            applySort: TApplySortFunc = useCallback((sort) => {
-                updateAction(EStoreActions.SORT, sort)
-            }, [ updateAction ]),
+        const goToPrev: Function = useCallback(() => {
+            updateAction(EStoreActions.GO_TO_PREV)
+        }, [ updateAction ]);
 
 
-            removeSort: TApplySortFunc = useCallback((sort) => {
-                updateAction(EStoreActions.REMOVE_SORT, sort)
-            }, [ updateAction ]),
+        const goToStart: Function = useCallback(() => {
+            updateAction(EStoreActions.GO_TO_START)
+        }, [ updateAction ]);
 
 
-            goToNext: Function = useCallback(() => {
-                updateAction(EStoreActions.GO_TO_NEXT)
-            }, [ updateAction ]),
+        const goToEnd: Function = useCallback(() => {
+            updateAction(EStoreActions.GO_TO_END)
+        }, [ ]);
 
 
-            goToPrev: Function = useCallback(() => {
-                updateAction(EStoreActions.GO_TO_PREV)
-            }, [ updateAction ]),
-
-
-            goToStart: Function = useCallback(() => {
-                updateAction(EStoreActions.GO_TO_START)
-            }, [ updateAction ]),
-
-
-            goToEnd: Function = useCallback(() => {
-                updateAction(EStoreActions.GO_TO_END)
-            }, [ ]),
-
-
-            goTo: Function = useCallback((page: number) => {
-                updateAction(EStoreActions.GO_TO, { page })
-            }, [ ])
-        ;
+        const goTo: Function = useCallback((page: number) => {
+            updateAction(EStoreActions.GO_TO, { page })
+        }, [ ]);
 
 
         useEffect(() => {

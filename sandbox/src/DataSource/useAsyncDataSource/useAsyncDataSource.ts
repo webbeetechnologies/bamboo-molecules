@@ -1,7 +1,7 @@
 
 import {useCallback} from "react";
 import {CallBackFuncType, createDataSourceHook} from "../createDataSourceHook";
-import {IDataSourceState, ILoadableDataSource, Records, TStoreConfig} from "../types";
+import {IDataSourceState, ILoadableDataSource, LoadingState, Records, TStoreConfig} from "../types";
 import {reducer} from "./reducer";
 import {EStoreActions} from "../reducers/types";
 
@@ -23,81 +23,68 @@ const loading = {
 
 const isLoadingAction = (action: EStoreActions) => [EStoreActions.LOAD_RESULTS_START, EStoreActions.LOAD_RESULTS_DONE, EStoreActions.LOAD_RESULTS_ERROR].includes(action)
 
+
 export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSourceState, func: CallBackFuncType, storeSupports?: TStoreConfig) => {
     const callAsyncFunc: CallBackFuncType = useCallback(async (state: IDataSourceState) => {
-            if (isLoading() || isLoadingAction(state.action as EStoreActions)) {
-                return state.records;
-            }
-
-            try {
-                dispatch({type: EStoreActions.LOAD_RESULTS_START});
-                let records: MaybePromise<Records<any>> = func(state);
-
-                const markAsCompleted = (records: Records<any>) => dispatch({ type: EStoreActions.LOAD_RESULTS_DONE, payload: records })
-
-                if (records instanceof Promise) {
-                    records = await records;
-                    markAsCompleted(records)
-                } else {
-                    markAsCompleted(records);
-                }
-            } catch (error) {
-                console.error(error);
-                dispatch({ type: EStoreActions.LOAD_RESULTS_ERROR })
-            }
-
+        if (isLoading(state) || isLoadingAction(state.action as EStoreActions)) {
             return state.records;
-        }, []),
+        }
 
-        { dispatch, getState, ...dataStore} = useDataSource({...data, loading }, callAsyncFunc, {...storeSupports, loadable: true }),
+        try {
+            dispatch({type: EStoreActions.LOAD_RESULTS_START});
+            let records: MaybePromise<Records<any>> = func(state);
 
+            const markAsCompleted = (records: Records<any>) => dispatch({ type: EStoreActions.LOAD_RESULTS_DONE, payload: records })
 
+            if (records instanceof Promise) {
+                records = await records;
+                markAsCompleted(records)
+            } else {
+                markAsCompleted(records);
+            }
+        } catch (error) {
+            console.error(error);
+            dispatch({ type: EStoreActions.LOAD_RESULTS_ERROR })
+        }
 
+        return state.records;
+    }, []);
 
-        isLoading = useCallback(() => {
-            const loading = getState().loading;
+    const { dispatch, getState, ...dataStore} = useDataSource({...data, loading }, callAsyncFunc, {...storeSupports, loadable: true }),
 
-            if (!loading) { return false; }
-            if (!loading.started_at) { return false; }
+    const isLoading = (state: {loading?: LoadingState} = dataStore) => {
+        const loading = state.loading;
 
-
-            return (Number(loading.finished_at) < Number(loading.started_at) && Number(loading.errored_at) < Number(loading.started_at))
-
-        }, []),
-
-
-
-        hasErrored = useCallback(() => {
-            const loading = getState().loading;
-
-            if (!loading) { return false; }
-            if (!loading.errored_at) { return false; }
-
-            return (Number(loading.finished_at) < Number(loading.errored_at) && Number(loading.started_at) < Number(loading.errored_at))
-        }, []),
-
-
-
-        hasLoaded = useCallback(() => {
-            const loading = getState().loading;
-
-            if (!loading) { return false; }
-            if (!loading.finished_at) { return false; }
-
-            return (Number(loading.started_at) < Number(loading.finished_at) && Number(loading.errored_at) < Number(loading.finished_at))
-        }, []),
+        if (!loading) { return false; }
+        if (!loading.started_at) { return false; }
 
 
+        return (Number(loading.finished_at) < Number(loading.started_at) && Number(loading.errored_at) < Number(loading.started_at))
+    };
 
-        hasInitialized = useCallback(() => !!getState().loading?.started_at, []),
+    const hasErrored = () => {
+        const loading = dataStore.loading;
 
+        if (!loading) { return false; }
+        if (!loading.errored_at) { return false; }
 
+        return (Number(loading.finished_at) < Number(loading.errored_at) && Number(loading.started_at) < Number(loading.errored_at))
+    };
 
+    const hasLoaded = () => {
+        const loading = dataStore.loading;
 
-        loadResults = useCallback(() => {
-            dispatch({type: EStoreActions.LOAD_INITIAL_RESULTS});
-        }, [])
-    ;
+        if (!loading) { return false; }
+        if (!loading.finished_at) { return false; }
+
+        return (Number(loading.started_at) < Number(loading.finished_at) && Number(loading.errored_at) < Number(loading.finished_at))
+    };
+
+    const hasInitialized = () => !!dataStore.loading?.started_at;
+
+    const loadResults = () => {
+        dispatch({type: EStoreActions.LOAD_INITIAL_RESULTS});
+    };
 
 
 
@@ -105,9 +92,9 @@ export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSo
         ...dataStore,
         getState,
         loadResults,
-        hasInitialized,
-        hasLoaded,
-        hasErrored,
-        isLoading
+        hasInitialized: hasInitialized(),
+        hasLoaded: hasLoaded(),
+        hasErrored: hasErrored(),
+        isLoading: isLoading()
     }
 }
