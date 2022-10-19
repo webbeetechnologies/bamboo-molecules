@@ -1,7 +1,12 @@
 import React, { ComponentType } from 'react';
 import { StyleSheet } from 'react-native';
-import type { TextProps } from '@webbee/bamboo-atoms';
-import { extendTheme, ProvideMolecules, useMolecules, useComponentStyles } from 'bamboo-molecules';
+import {
+    extendTheme,
+    ProvideMolecules,
+    useMolecules,
+    useComponentStyles,
+    TextProps,
+} from 'bamboo-molecules';
 
 // creating theme styles similar to mdx
 export const theme = extendTheme({
