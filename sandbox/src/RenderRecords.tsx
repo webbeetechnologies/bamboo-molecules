@@ -1,12 +1,9 @@
 import * as React from 'react';
-import { ESortDirection, ITypedDataSourceState } from './DataSource';
+import { ESortDirection, DataSourceResult } from './DataSource';
 import { RecordType } from './types';
 
 
-export default function  RenderRecords(props: ITypedDataSourceState<RecordType>) {
-
-
-  // @ts-ignore
+const RenderRecords: React.FC<DataSourceResult<RecordType>> = (props) => {
   const {pages, pagination, records, sort = [], applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest } = props;
 
   // const sortSource = useSortableDataSource({ records: workers as string[], setRecords: () => {}, sort: { }, searchKey: "test" });
@@ -33,17 +30,39 @@ export default function  RenderRecords(props: ITypedDataSourceState<RecordType>)
 
   const [column, selectColumn] = React.useState("");
 
+
   const changeColumn = (column: string, direction?: ESortDirection ) => {
-    applySort({ column, direction})
+    applySort?.({ column, direction})
     selectColumn("");
   }
 
   const changeSort = (column: string, direction?: ESortDirection | "" ) => {
     if (direction === "") {
-      removeSort({ column })
+      removeSort?.({ column })
     } else {
       changeColumn(column, Number(direction))
     }
+  }
+
+  const handleApplyFilter = (_e: React.SyntheticEvent) => {
+    // {filterName: string, value: any, operator: EFilterOperator }
+    // applyFilter?.()
+  }
+
+  const handleGoToStart = (_e: React.SyntheticEvent) => {
+    goToStart?.()
+  }
+
+  const handleGoToPrev = (_e: React.SyntheticEvent) => {
+    goToPrev?.()
+  }
+
+  const handleGoToNext = (_e: React.SyntheticEvent) => {
+    goToNext?.()
+  }
+
+  const handleGoToEnd = (_e: React.SyntheticEvent) => {
+    goToEnd?.()
   }
 
   return (
@@ -88,7 +107,7 @@ export default function  RenderRecords(props: ITypedDataSourceState<RecordType>)
           applyFilter &&
             <>
               <h1>Filters</h1>
-              <button onClick={ applyFilter }>Filter</button>
+              <button onClick={ handleApplyFilter }>Filter</button>
             </>
         }
 
@@ -96,12 +115,12 @@ export default function  RenderRecords(props: ITypedDataSourceState<RecordType>)
           goToStart &&
             <>
               <h1>Paginate</h1>
-              <button onClick={goToStart}>&lt;&lt; Start</button>
+              <button onClick={handleGoToStart}>&lt;&lt; Start</button>
               <br />
-              <button onClick={goToPrev}>&lt;Prev</button>
-              <button onClick={goToNext}>Next &gt;</button>
+              <button onClick={handleGoToPrev}>&lt;Prev</button>
+              <button onClick={handleGoToNext}>Next &gt;</button>
               <br />
-              <button onClick={goToEnd}>End &gt;&gt;</button>
+              <button onClick={handleGoToEnd}>End &gt;&gt;</button>
             </>
         }
     </>
@@ -109,7 +128,7 @@ export default function  RenderRecords(props: ITypedDataSourceState<RecordType>)
 }
 
 
-
+export default RenderRecords;
 
 
 const Coworker = (props: { worker: RecordType }) => {

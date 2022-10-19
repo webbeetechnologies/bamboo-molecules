@@ -55,14 +55,14 @@ export interface IAsyncProps {
   fetchRecords: TFetchRecords
 }
 
-export type DataSourceResultProps<ResultType extends {} = {}> = { setRecords: TSetRecords }
-      & Partial<IFilterProps>
-      & Partial<ISortProps>
-      & Partial<IPaginationProps>
-      & Partial<IAsyncProps>
-      & { loading?: LoadingState }
-      & { records: Records<ResultType>
-}
+export type DataSourceResult<ResultType extends {} = {}> = Omit<{ setRecords: TSetRecords }
+      & ITypedDataSource<ResultType>
+      & Partial<ISortableDataSource>
+      & Partial<IOrderableDataSource>
+      & Partial<IFilterableDataSource>
+      & Partial<IPaginatedDataSource>
+      & Partial<ILoadableDataSource>, "dispatch">
+
 
 
 export interface IDataSourceState<ResultType extends {} = {}> {

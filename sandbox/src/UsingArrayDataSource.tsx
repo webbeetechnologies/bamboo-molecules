@@ -74,13 +74,9 @@ export default function UsingArraySource() {
   });
   
 
-  // @ts-ignore
-  const {records, applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, setRecords, ...rest } = state;
-
-
   return (
     <RenderRecords {...{
-        records, applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest
+        ...state
     }} />
   );
 }

@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useReducer, useRef,} from "react";
 
-import {IDataSourceState, ITypedDataSource, ITypedDataSourceState, Records, TStoreConfig} from "./types";
+import {IDataSourceState, DataSourceResult, ITypedDataSourceState, Records, TStoreConfig} from "./types";
 import {TApplyFilterFunc} from "./FilterableDataSource";
 import {TApplySortFunc} from "./SortableDataSource";
 import {ActionInterface, EStoreActions} from "./reducers/types";
@@ -124,7 +124,7 @@ export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs) => 
                 goToNext,
                 goToPrev,
                 setRecords
-            } as unknown as ITypedDataSource<ResultType> & { dispatch: React.Dispatch<ActionInterface> };
+            } as unknown as DataSourceResult<ResultType> & { dispatch: React.Dispatch<ActionInterface> };
         }
     )
 }
