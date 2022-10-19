@@ -26,7 +26,7 @@ const RenderRecords: React.FC<DataSourceResult<RecordType>> = (props) => {
   //   };
   // });
 
-  
+
 
   const [column, selectColumn] = React.useState("");
 
