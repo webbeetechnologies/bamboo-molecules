@@ -35,9 +35,10 @@ export {
     ITheme,
     PlatformType,
     IComponentsProviderContext,
+    ResolveComponentStylesArgs,
 } from './core';
 
-export { withNormalizedStyleProp, withRipple, withActionState, CallbackActionState } from './hocs';
+export { withRipple, withActionState, CallbackActionState } from './hocs';
 
 export {
     useMolecules,
@@ -47,6 +48,7 @@ export {
     useColorMode,
     useCurrentTheme,
     useToggle,
+    useMediaQuery,
 } from './hooks';
 
 export {
@@ -57,4 +59,6 @@ export {
     generateDarkThemeColors,
 } from './styles';
 
-export { normalizeStyles } from './utils';
+export { normalizeStyles, resolveComponentStyles } from './utils';
+
+export { ComponentStylePropWithVariants } from './types';
