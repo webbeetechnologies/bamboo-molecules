@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { Records } from './DataSource';
 import { useArrayDataSource } from './DataSource/useArrayDataSource/useArrayDataSource';
-import {IDataSourceState} from "./DataSource";
 import RenderRecords from "./RenderRecords";
+import { RecordType } from './types';
 
 function findAllCustomerData() {
     const records = [
@@ -61,19 +62,20 @@ function findAllCustomerData() {
         ...records.map((x) => ({ ...x, last_name: x.last_name + " DEF", id: x.id + 2000})),
         ...records.map((x) => ({ ...x, id: x.id + 1000})),
         ...records.map((x) => ({ ...x, first_name: x.first_name + " ABC", id: x.id + 3000})),
-    ]
+    ] as Records<RecordType>
 }
 
-export default function UsingArraySource({ coworkers = [] as string[] }) {
-  const [workers, setWorkers] = React.useState(findAllCustomerData);
 
-  const state = useArrayDataSource({ records: workers, sort: [] }, (state: IDataSourceState) => {
+export default function UsingArraySource() {
+  const [workers, ] = React.useState(findAllCustomerData);
+
+  const state = useArrayDataSource({ records: workers, sort: [] }, (state) => {
     return state.records;
   });
-
+  
 
   // @ts-ignore
-  const {records, applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest } = state;
+  const {records, applySort, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, setRecords, ...rest } = state;
 
 
   return (
@@ -82,16 +84,3 @@ export default function UsingArraySource({ coworkers = [] as string[] }) {
     }} />
   );
 }
-
-
-
-
-
-const Coworker = (props: any) => {
-  const worker = props.worker;
-  return (
-    <li>
-      {worker.first_name} {worker.last_name}
-    </li>
-  );
-};

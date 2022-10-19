@@ -17,7 +17,7 @@ export function reduceSort<T>(state: IDataSourceState, action: SortAction) {
 
         const {column, direction = ESortDirection.ASC } = action.payload as TSort;
 
-        const sortItemIndex = sort.findIndex((sort: any) => sort.column === column),
+        const sortItemIndex = sort.findIndex((sort: TSort) => sort.column === column),
             newSortItem = {column, direction};
 
 

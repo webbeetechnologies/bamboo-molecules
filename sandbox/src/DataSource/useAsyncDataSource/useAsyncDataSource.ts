@@ -1,7 +1,7 @@
 
 import {useCallback} from "react";
 import {CallBackFuncType, createDataSourceHook} from "../createDataSourceHook";
-import {IDataSourceState, ILoadableDataSource, LoadingState, Records, TStoreConfig} from "../types";
+import {IDataSourceState, ILoadableDataSource, ITypedDataSource, ITypedDataSourceState, LoadingState, Records, TStoreConfig} from "../types";
 import {reducer} from "./reducer";
 import {EStoreActions} from "../reducers/types";
 
@@ -24,17 +24,17 @@ const loading = {
 const isLoadingAction = (action: EStoreActions) => [EStoreActions.LOAD_RESULTS_START, EStoreActions.LOAD_RESULTS_DONE, EStoreActions.LOAD_RESULTS_ERROR].includes(action)
 
 
-export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSourceState, func: CallBackFuncType, storeSupports?: TStoreConfig) => {
-    const callAsyncFunc: CallBackFuncType = async (state: IDataSourceState) => {
+export const useAsyncDataSource = <ResultType extends {}>(data: ITypedDataSourceState<ResultType>, func: CallBackFuncType<ResultType>, storeSupports?: TStoreConfig) => {
+    const callAsyncFunc: CallBackFuncType<ResultType> = async (state: ITypedDataSourceState<ResultType>) => {
         if (isLoading(state) || isLoadingAction(state.action as EStoreActions)) {
             return state.records;
         }
 
         try {
             dispatch({type: EStoreActions.LOAD_RESULTS_START});
-            let records: MaybePromise<Records<any>> = func(state);
+            let records: MaybePromise<Records<ResultType>> = func(state);
 
-            const markAsCompleted = (records: Records<any>) => dispatch({ type: EStoreActions.LOAD_RESULTS_DONE, payload: records })
+            const markAsCompleted = (records: Records<ResultType>) => dispatch({ type: EStoreActions.LOAD_RESULTS_DONE, payload: {records} })
 
             if (records instanceof Promise) {
                 records = await records;
@@ -51,7 +51,6 @@ export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSo
     };
 
     const { dispatch, ...dataStore} = useDataSource({...data, loading }, callAsyncFunc, {...storeSupports, loadable: true });
-
     return {
         ...dataStore,
         loadResults: useCallback(() => {

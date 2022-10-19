@@ -1,20 +1,17 @@
 
 import { useCallback } from "react";
 import {CallBackFuncType, createDataSourceHook} from "../createDataSourceHook";
-import {IDataSource, IDataSourceState, IFilterableDataSource, TStoreConfig} from "../types";
+import {ITypedDataSource, ITypedDataSourceState, TStoreConfig} from "../types";
 import {reducer} from "./reducers";
 
 
 const useDataSource = createDataSourceHook({ reducer });
 
 
-export type UseAsyncDataSource = <ResultType>(data: IDataSourceState, func: CallBackFuncType) => IDataSource
 
 
-
-
-export function useArrayDataSource <T>(data: IDataSourceState, func: CallBackFuncType,  storeConfig?: Omit<TStoreConfig, "loadable">) {
-    const handledFunc: CallBackFuncType = useCallback(<ResultType>(state: IDataSourceState) => func(state), [func]);
+export function useArrayDataSource <ResultType extends {}>(data: ITypedDataSourceState<ResultType>, func: CallBackFuncType<ResultType>,  storeConfig?: Omit<TStoreConfig, "loadable">): ITypedDataSource<ResultType> {
+    const handledFunc = useCallback((state: ITypedDataSourceState<ResultType>) => func(state), [func]) as CallBackFuncType<ResultType>;
     
     return useDataSource(data, handledFunc, storeConfig);
 }

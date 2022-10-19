@@ -28,7 +28,7 @@ interface Action {
 // Async Actions
 export interface LoadInitialResults extends Action { type: EStoreActions.LOAD_INITIAL_RESULTS, };
 export interface StartLoadAction extends Action { type: EStoreActions.LOAD_RESULTS_START, };
-export interface CompleteLoadAction extends Action { type: EStoreActions.LOAD_RESULTS_DONE, payload:{ records: Records<any>} };
+export interface CompleteLoadAction<T extends {} = {}> extends Action { type: EStoreActions.LOAD_RESULTS_DONE, payload:{ records: Records<T>} };
 export interface ErrorLoadAction extends Action { type: EStoreActions.LOAD_RESULTS_ERROR, payload: {error: Error} };
 
 type AsyncActions = LoadInitialResults | StartLoadAction | CompleteLoadAction | ErrorLoadAction;
@@ -57,8 +57,8 @@ type SortActions = SortAction | RemoveSortAction;
 
 
 // SetRecords Action
-export interface SetRecordsAction extends Action { type: EStoreActions.SET_RECORDS, payload: { records: Records<any>} };
-export interface UpdateRecordsAction extends Action { type: EStoreActions.UPDATE_RECORDS, payload: { records: Records<any>} }
+export interface SetRecordsAction<T extends {} = {}> extends Action { type: EStoreActions.SET_RECORDS, payload: { records: Records<T>} };
+export interface UpdateRecordsAction<T extends {} = {}> extends Action { type: EStoreActions.UPDATE_RECORDS, payload: { records: Records<T>} }
 export interface UpdateRecordsErrorAction extends Action { type: EStoreActions.UPDATE_RECORDS_ERROR, payload: { error: Error } }
 
 type RecordActions = SetRecordsAction | UpdateRecordsAction | UpdateRecordsErrorAction;

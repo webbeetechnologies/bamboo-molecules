@@ -43,16 +43,3 @@ export default function App({ coworkers = [] as string[] }) {
     </>
   );
 }
-
-
-
-
-
-const Coworker = (props: any) => {
-  const worker = props.worker;
-  return (
-    <li>
-      {worker.first_name} {worker.last_name}
-    </li>
-  );
-};

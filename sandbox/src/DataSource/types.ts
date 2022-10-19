@@ -12,6 +12,7 @@ export interface IPaginationProps {
 }
 
 export type TFilters = {
+  // TODO: Define filter types
   [key: string]: any
 }
 
@@ -42,19 +43,19 @@ export interface LoadingState {
   errored_at: number | null;
 }
 
-export type Records<ResultType> = ResultType[];
+export type Records<ResultType extends {} = {}> = ResultType[];
 
 
-export type TSetRecords = <T extends any>(records:  Records<T>) => void;
+export type TSetRecords = <ResultType extends {} = {}>(records:  Records<ResultType>) => void;
 
 
+export type TFetchRecords = <ResultType extends {} = {}>(...args : ResultType[]) => Promise<ResultType[]>
 
-export type TFetchRecords = <ResultType>(...args : any[]) => Promise<ResultType[]>
 export interface IAsyncProps {
   fetchRecords: TFetchRecords
 }
 
-export type DataSourceResultProps<ResultType> = { setRecords: TSetRecords }
+export type DataSourceResultProps<ResultType extends {} = {}> = { setRecords: TSetRecords }
       & Partial<IFilterProps>
       & Partial<ISortProps>
       & Partial<IPaginationProps>
@@ -64,8 +65,8 @@ export type DataSourceResultProps<ResultType> = { setRecords: TSetRecords }
 }
 
 
-export interface IDataSourceState {
-  records: Records<any>;
+export interface IDataSourceState<ResultType extends {} = {}> {
+  records: Records<ResultType>;
 
   filters?: TFilters;
   sort?: TSort[];
@@ -73,26 +74,23 @@ export interface IDataSourceState {
   loading?: LoadingState;
   error?: Error;
 
-  pages?: Records<any>[],
+  pages?: Records<ResultType>[],
   action?: EStoreActions,
-  originalRecords?: Records<any>
+  originalRecords?: Records<ResultType>
+}
+
+export interface ITypedDataSourceState<ResultType extends {}> extends IDataSourceState<ResultType>{
 }
 
 
-export interface ITypedDataSourceState<T> extends IDataSourceState{
-  records: Records<T>
-  pages?: Records<T>[],
-  originalRecords?: Records<T>
-}
-
-
-
-
-export interface IDataSource extends IDataSourceState {
+export interface IDataSource<ResultType extends {} = {}> extends IDataSourceState<ResultType> {
   dispatch: Function;
   setRecords: TSetRecords,
 }
 
+
+export interface ITypedDataSource<ResultType extends {}> extends IDataSource<ResultType>{
+}
 
 export interface ISortableDataSource extends IDataSource {
   applySort: TApplySortFunc,
