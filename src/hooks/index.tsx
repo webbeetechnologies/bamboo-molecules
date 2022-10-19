@@ -8,4 +8,6 @@ export { default as useComponentStyles } from './useComponentStyles';
 export { default as useCurrentTheme } from './useCurrentTheme';
 export { default as useToggle } from './useToggle';
 
+export * from "./useKeyboardDismissable"
+
 export const useTheme: <T extends ITheme>() => T = useThemeAtoms;

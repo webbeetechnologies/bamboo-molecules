@@ -1,16 +1,10 @@
-import { useComponentStyles, useMolecules } from '../../hooks';
-import type { PopperProps } from './types';
+import { PopperContext } from "./PopperContext";
 
+import type { FC, PropsWithChildren} from "react";
+import type {TPopperContext} from "./types";
 
-const Popper = ({ style, ...rest }: PopperProps) => {
-    const { View, Text } = useMolecules();
-    const componentStyles = useComponentStyles('View', style); // all the styling logics goes here
+const Popper: FC<PropsWithChildren<TPopperContext>> = ({children, ...props}: any) => {
+    return <PopperContext.Provider value={props} children={children}/>
+}
 
-    return (
-        <View style={componentStyles} {...rest}>
-            <Text>Component Template</Text>
-        </View>
-    );
-};
-
-export default Popper;
+export default Popper

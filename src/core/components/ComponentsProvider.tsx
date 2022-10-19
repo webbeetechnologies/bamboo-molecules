@@ -15,6 +15,13 @@ import {
     Button,
     Surface,
     Switch,
+    Overlay,
+    Popper,
+    Popover,
+    PopperContent,
+    PresenceTransition,
+    Backdrop,
+    Transition,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -35,6 +42,13 @@ const defaultComponents: DefaultComponents = {
     Button,
     Surface,
     Switch,
+    Overlay,
+    Popper,
+    Popover,
+    PopperContent,
+    PresenceTransition,
+    Transition,
+    Backdrop,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

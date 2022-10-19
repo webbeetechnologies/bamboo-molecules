@@ -1,6 +1,7 @@
 export {
     registerCustomIconType,
     IconProps,
+    PopoverProps,
     ActivityIndicatorProps,
     HorizontalDividerProps,
     VerticalDividerProps,

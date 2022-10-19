@@ -31,6 +31,7 @@
     "run:storybook": "yarn --cwd ./example storybook"
   },
   "dependencies": {
+    "@react-native-aria/overlays": "^0.3.2",
     "@webbee/bamboo-atoms": "^0.0.12",
     "color": "^4.2.3",
     "lodash.get": "^4.4.2",

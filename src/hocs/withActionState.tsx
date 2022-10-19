@@ -1,5 +1,5 @@
-import type { ComponentType } from 'react';
-import { Pressable } from 'react-native';
+import { ComponentType, forwardRef } from 'react';
+import { Pressable, View } from 'react-native';
 
 export type CallbackActionState = {
     pressed?: boolean;
@@ -10,8 +10,15 @@ export type CallbackActionState = {
 // P is for type-assertion of the wrapped component props
 const withActionState =
     <P,>(Component: ComponentType<P>) =>
-    (props: P) => {
-        return <Pressable>{state => <Component {...state} {...props} />}</Pressable>;
-    };
+    forwardRef<View, P>((props: P, ref) => {
+
+            // @ts-ignore
+        const setRef = (node)=> {
+            // @ts-ignore
+            ref?.(node);
+        }
+        
+        return <Pressable ref={setRef}>{state => <Component {...state} {...props} />}</Pressable>;
+    });
 
 export default withActionState;

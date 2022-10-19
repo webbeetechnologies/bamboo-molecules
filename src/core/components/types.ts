@@ -9,7 +9,14 @@ import type {
     ButtonProps,
     SwitchProps,
     VerticalDividerProps,
+    PopperProps,
+    PresenceTransitionProps,
+    OverlayProps,
+    PopoverProps,
+    BackdropProps,
+    TransitionProps
 } from '../../components';
+import type { ViewProps } from 'react-native';
 
 export type ProvideComponentsProps = {
     components?: Partial<IComponentsProviderContext>;
@@ -25,6 +32,13 @@ export interface DefaultComponents {
     Button: ComponentType<ButtonProps>;
     Surface: ComponentType<SurfaceProps>;
     Switch: ComponentType<SwitchProps>;
+    Overlay: ComponentType<OverlayProps>,
+    PresenceTransition: ComponentType<PresenceTransitionProps>,
+    Transition: ComponentType<TransitionProps>,
+    Backdrop: ComponentType<BackdropProps>,
+    Popper: ComponentType<PopperProps>,
+    Popover: ComponentType<PopoverProps>,
+    PopperContent: ComponentType<ViewProps>,
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
