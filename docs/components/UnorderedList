@@ -1,0 +1,26 @@
+# UnorderedList - Phase 2
+
+Simply copy and improve on the functionality for ordered lists from 
+https://github.com/xiqi/react-native-unordered-list/blob/master/index.js
+
+## User Stories
+- As a user, I want to see list of unordered list items with bullets.
+
+## Developer user stories
+- As a component developer, I want to declare the characters to be displayed.
+
+
+## Example
+* Item 1
+* Item 2\
+    \> Item 2.1\
+    \> Item 2.1
+* Item 3
+
+
+
+
+
+## Implementation Details
+- Accepts an optional levels props with different unicode characters
+- Accepts a unicode character
