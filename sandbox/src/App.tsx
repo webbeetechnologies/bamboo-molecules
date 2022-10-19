@@ -1,5 +1,5 @@
 import * as React from 'react';
-import UsingArraySource from "./UsingArraySource";
+import UsingArraySource from "./UsingArrayDataSource";
 import UsingAsyncSource from './UsingAsyncDataSource';
 
 
