@@ -89,7 +89,6 @@ export interface ITypedDataSourceState<T> extends IDataSourceState{
 
 export interface IDataSource extends IDataSourceState {
   dispatch: Function;
-  getState: <T>() => ITypedDataSourceState<T>;
   setRecords: TSetRecords,
 }
 

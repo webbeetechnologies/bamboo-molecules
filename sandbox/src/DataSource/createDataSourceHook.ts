@@ -46,10 +46,6 @@ export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs): Us
 
         const action = state.action;
 
-        const stateRef = useRef(state);
-
-        const getState = useCallback(() => stateRef.current, []);
-
         const updateAction = useCallback( (action: ActionInterface["type"], payload?: any) => {
             dispatch({ type: action, payload })
         }, [state, dispatch]);
@@ -118,16 +114,12 @@ export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs): Us
         }, [action])
 
 
-        stateRef.current = state;
-
-
         return {
             ...state,
             dispatch,
             applySort,
             applyFilter,
             removeSort,
-            getState,
             goTo,
             goToStart,
             goToEnd,
