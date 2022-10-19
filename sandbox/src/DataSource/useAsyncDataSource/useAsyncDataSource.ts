@@ -50,7 +50,7 @@ export const useAsyncDataSource: UseAsyncDataSource = <ResultType>(data: IDataSo
         return state.records;
     }, []);
 
-    const { dispatch, getState, ...dataStore} = useDataSource({...data, loading }, callAsyncFunc, {...storeSupports, loadable: true }),
+    const { dispatch, getState, ...dataStore} = useDataSource({...data, loading }, callAsyncFunc, {...storeSupports, loadable: true });
 
     const isLoading = (state: {loading?: LoadingState} = dataStore) => {
         const loading = state.loading;
