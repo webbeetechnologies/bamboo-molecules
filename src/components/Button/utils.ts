@@ -1,7 +1,20 @@
 import { StyleSheet, TextStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
-export const defaultStyles: ComponentStylePropWithVariants<TextStyle, 'disabled' | 'hovered'> = {
+type CustomProps = {
+    typeScale?: string; // because it's a design token
+    animationScale?: string;
+    borderRoundness?: string;
+};
+
+export const defaultStyles: ComponentStylePropWithVariants<
+    TextStyle,
+    'disabled' | 'hovered',
+    CustomProps
+> = {
+    typeScale: 'typescale.labelLarge',
+    animationScale: 'animation.scale',
+    borderRoundness: 'roundness.1',
     states: {
         disabled: {
             color: 'colors.onSurfaceDisabled',
