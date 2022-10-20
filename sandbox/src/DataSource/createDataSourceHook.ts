@@ -36,7 +36,7 @@ export const createDataSourceHook = (props = {} as CreateDataSourceHookArgs) => 
         <ResultType extends {}>(data: ITypedDataSourceState<ResultType>, func: CallBackFuncType<ResultType>, storeSupports = STORE_SUPPORT) => {
             const {records, ...store} = data;
 
-            const initialState = useMemo(() => prepareRecords<RecordType>({
+            const initialState = useMemo(() => prepareRecords({
                 records, ...store,
             }), []);
 

@@ -1,14 +1,13 @@
-import {ESortDirection, IDataSourceState, Records, TSort} from "../types";
+import {ESortDirection, IDataSourceState, ITypedDataSourceState, Records, TSort} from "../types";
 import {EStoreActions} from "./types";
 import zip from "lodash/zip";
 import orderBy from "lodash/orderBy";
 import chunk from "lodash/chunk";
-import omitBy from "lodash/omitBy";
 
 
 
-export const prepareRecords = <T>({ records,  action,  pagination, ...rest }: IDataSourceState, updatePagination = false) => {
-    const orderRecords = <T>(records: Records<T>, sort?: TSort[]) => {
+export const prepareRecords = <ResultType extends {}>({ records,  action,  pagination, ...rest }: ITypedDataSourceState<ResultType>, updatePagination = false) => {
+    const orderRecords = (records: Records<ResultType>, sort?: TSort[]) => {
         let predicate = sort && zip(...sort?.map(({
             column,
             direction
@@ -24,7 +23,7 @@ export const prepareRecords = <T>({ records,  action,  pagination, ...rest }: ID
             predicate = [];
         }
 
-        let sorted = orderBy(records, ...predicate);
+        let sorted = orderBy(records, ...predicate) as Records<ResultType>;
 
         if (isFlatRecords && sortFirstItem.direction === ESortDirection.DESC) {
             sorted = sorted.reverse();
@@ -33,7 +32,7 @@ export const prepareRecords = <T>({ records,  action,  pagination, ...rest }: ID
         return sorted
     };
 
-    records = orderRecords(rest.originalRecords as Records<T> ?? records, rest.sort)
+    records = orderRecords(rest.originalRecords ?? records, rest.sort)
 
     return {
         ...rest,
