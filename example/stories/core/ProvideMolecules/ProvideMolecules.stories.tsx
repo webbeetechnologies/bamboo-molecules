@@ -1,17 +1,18 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Example } from './ThemeProvider';
-import DocsPage from './ThemeProvider.docs';
+import { Example } from './ProvideMolecules';
+import DocsPage from './ProvideMolecules.docs';
 
 export default {
-    title: 'core/ThemeProvider',
+    title: 'core/ProvideMolecules',
     component: Example,
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 Default.args = {
-    color: 'primary',
+    variant: 'contained',
+    onPress: () => {},
 };
 
 Default.parameters = {

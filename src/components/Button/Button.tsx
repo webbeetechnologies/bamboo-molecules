@@ -172,15 +172,18 @@ const Button = ({
 }: Props) => {
     const disabled = disabledProp || !onPress;
     const { ActivityIndicator, TouchableRipple, Text, Icon, Surface } = useMolecules();
-    const theme = useCurrentTheme();
+    const currentTheme = useCurrentTheme();
     const { customButtonColor: normalizedButtonColor, customTextColor: normalizedTextColor } =
-        normalizeStyles({ customButtonColor, customTextColor }, theme);
+        normalizeStyles({ customButtonColor, customTextColor }, currentTheme);
 
     const {
         backgroundColor: _backgroundColor,
         borderColor,
         color: _textColor,
         borderWidth,
+        typeScale,
+        animationScale,
+        borderRoundness,
         ...buttonStyles
     } = useComponentStyles('Button', styleProp, {
         variant,
@@ -200,7 +203,6 @@ const Button = ({
         },
         [variant],
     );
-    const { roundness, animation } = theme;
 
     const isElevationEntitled = !disabled && isVariant('elevated');
     const initialElevation = 1;
@@ -217,10 +219,9 @@ const Button = ({
     const handlePressIn = () => {
         onPressIn?.();
         if (isVariant('elevated')) {
-            const { scale } = animation;
             Animated.timing(elevation, {
                 toValue: activeElevation,
-                duration: 200 * scale,
+                duration: 200 * animationScale,
                 useNativeDriver: true,
             }).start();
         }
@@ -229,16 +230,15 @@ const Button = ({
     const handlePressOut = () => {
         onPressOut?.();
         if (isVariant('elevated')) {
-            const { scale } = animation;
             Animated.timing(elevation, {
                 toValue: initialElevation,
-                duration: 150 * scale,
+                duration: 150 * animationScale,
                 useNativeDriver: true,
             }).start();
         }
     };
 
-    const borderRadius = 5 * roundness[1];
+    const borderRadius = 5 * borderRoundness;
     const iconSize = 18;
 
     const rippleColor = color(textColor).alpha(0.12).rgb().string();
@@ -265,9 +265,9 @@ const Button = ({
     const textStyle = useMemo(
         () => ({
             color: textColor,
-            ...theme.typescale.labelLarge,
+            ...typeScale,
         }),
-        [textColor, theme.typescale.labelLarge],
+        [textColor, typeScale],
     );
     const iconStyle = useMemo(
         () =>

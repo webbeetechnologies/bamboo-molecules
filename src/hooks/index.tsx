@@ -1,5 +1,5 @@
 import { useTheme as useThemeAtoms } from '@webbee/bamboo-atoms';
-export { useColorMode } from '@webbee/bamboo-atoms';
+export { useColorMode, useMediaQuery } from '@webbee/bamboo-atoms';
 import type { ITheme } from '../core';
 
 export { default as useMolecules } from './useMolecules';
