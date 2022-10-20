@@ -1,10 +1,9 @@
 import React from 'react';
-import { useMolecules } from 'bamboo-molecules';
 import { Source } from '@storybook/addon-docs';
-import { InjectedComponentTypes, withDocsWrapper } from '../../common';
+import { withDocsWrapper, useMolecules } from '../../common';
 
 const DocsPage = () => {
-    const { View, H1, H3, Text, Code } = useMolecules<InjectedComponentTypes>();
+    const { View, H1, H3, Text, Code } = useMolecules();
 
     return (
         <View>
