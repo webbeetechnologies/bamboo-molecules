@@ -15,6 +15,7 @@
 
 ## Reference
 - https://www.learnui.design/blog/ios-vs-android-app-ui-design-complete-guide.html#date-pickers
+- https://www.npmjs.com/package/@react-native-community/datetimepicker
 
 ## Also see
 - [DateTimePicker](./DateTimePicker.md)
