@@ -4,7 +4,7 @@ import { Example } from './UseMolecules';
 import DocsPage from './UseMolecules.docs';
 
 export default {
-    title: 'hooks/UseMolecules',
+    title: 'hooks/useMolecules',
     component: Example,
 } as ComponentMeta<typeof Example>;
 

@@ -4,7 +4,7 @@ import { Example } from './UseToggle';
 import DocsPage from './UseToggle.docs';
 
 export default {
-    title: 'hooks/UseToggle',
+    title: 'hooks/useToggle',
     component: Example,
 } as ComponentMeta<typeof Example>;
 

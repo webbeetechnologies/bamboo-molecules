@@ -257,6 +257,7 @@ export const Button = ({
     );
 };
 
+// App.tsx
 export const App = () => {
     return (
         <ProvideMolecules theme={theme}>

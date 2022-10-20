@@ -72,6 +72,7 @@ export const Button = ({
     variant = 'text',
     disabled: disabledProp,
     onPress,
+    children,
     ...rest
 }: Props) => {
     const disabled = disabledProp || !onPress;
@@ -89,16 +90,18 @@ export const Button = ({
             accessibilityRole="button"
             {...rest}>
             <Text selectable={false} style={{ color }}>
-                Custom Button
+                {children}
             </Text>
         </TouchableRipple>
     );
 };
 
-export const Example = (props: Props) => {
+export const Example = () => {
     return (
         <ProvideMolecules theme={theme}>
-            <Button {...props} />
+            <Button variant="outlined" onPress={() => {}}>
+                Custom Button
+            </Button>
         </ProvideMolecules>
     );
 };

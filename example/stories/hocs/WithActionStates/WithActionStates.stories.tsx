@@ -4,7 +4,7 @@ import { Example } from './WithActionStates';
 import DocsPage from './WithActionStates.docs';
 
 export default {
-    title: 'hocs/WithActionStates',
+    title: 'hocs/withActionStates',
     component: Example,
 } as ComponentMeta<typeof Example>;
 

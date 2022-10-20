@@ -35,6 +35,7 @@ export const Example = () => {
     return <Text>PlatformType: {platformType}</Text>;
 };
 
+// App.tsx
 export const App = () => {
     return (
         <ProvideMolecules>

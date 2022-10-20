@@ -4,15 +4,11 @@ import { Example } from './UseCurrentTheme';
 import DocsPage from './UseCurrentTheme.docs';
 
 export default {
-    title: 'hooks/UseCurrentTheme',
+    title: 'hooks/useCurrentTheme',
     component: Example,
 } as ComponentMeta<typeof Example>;
 
-export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
-
-Default.args = {
-    color: 'primary',
-};
+export const Default: ComponentStory<typeof Example> = () => <Example />;
 
 Default.parameters = {
     docs: {

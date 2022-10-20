@@ -163,6 +163,7 @@ const myResolveComponentStyles = ({ // This will get all the 4 arguments that th
    // my calculation logics
 }
 
+// App.tsx
 export const App = (props: Props) => {
     return (
         <ProvideMolecules theme={theme} resolveComponentStyles={myResolveComponentStyles}>
@@ -196,6 +197,7 @@ const MyComponent = () => {
     );
 }
 
+// App.tsx
 export const App = () => {
     return (
         <ProvideMolecules>
@@ -275,6 +277,7 @@ export const Button = ({
     variant = 'text',
     disabled: disabledProp,
     onPress,
+    children,
     ...rest
 }: Props) => {
     const disabled = disabledProp || !onPress; // we want the button to be in a disabled state if onPress is not provided
@@ -292,16 +295,19 @@ export const Button = ({
             accessibilityRole="button"
             {...rest}>
             <Text selectable={false} style={{ color }}>
-                Custom Button
+                {children}
             </Text>
         </TouchableRipple>
     );
 };
 
+// App.tsx
 export const App = () => {
     return (
         <ProvideMolecules theme={theme}>
-            <Button />
+            <Button variant="outlined" onPress={() => {}}>
+                Custom Button
+            </Button>
         </ProvideMolecules>
     );
 };

@@ -57,6 +57,7 @@ export const Components = withActionState(({ hovered, pressed, focused }: Props)
     );
 });
 
+// App.tsx
 export const App = () => {
     return (
         <ProvideMolecules>

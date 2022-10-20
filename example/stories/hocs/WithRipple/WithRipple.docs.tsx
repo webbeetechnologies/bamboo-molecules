@@ -35,6 +35,7 @@ export const RippleView = withRipple((props: Props) => {
     );
 });
 
+// App.tsx
 export const App = () => {
     return (
         <ProvideMolecules>

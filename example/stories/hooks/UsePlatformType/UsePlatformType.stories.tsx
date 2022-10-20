@@ -4,7 +4,7 @@ import { Example } from './UsePlatformType';
 import DocsPage from './UsePlatformType.docs';
 
 export default {
-    title: 'hooks/UsePlatformType',
+    title: 'hooks/usePlatformType',
     component: Example,
 } as ComponentMeta<typeof Example>;
 

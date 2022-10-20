@@ -38,6 +38,7 @@ export const Components = () => {
     );
 };
 
+// App.tsx
 export const App = () => {
     return (
         <ProvideMolecules>

@@ -1,21 +1,32 @@
+import { Pressable, PressableProps, StyleSheet } from 'react-native';
 import { ProvideMolecules, useMolecules, withRipple, TouchableRippleProps } from 'bamboo-molecules';
 
-export type Props = Omit<TouchableRippleProps, 'children'> & {};
+export type Props = PressableProps & TouchableRippleProps;
 
-export const RippleView = withRipple((props: Props) => {
-    const { View, Text } = useMolecules();
+export const RippleView = withRipple(({ children, ...rest }: Props) => {
+    const { Text } = useMolecules();
 
     return (
-        <View {...props}>
-            <Text selectable={false}>Clickable View</Text>
-        </View>
+        <Pressable {...(rest as any)}>
+            <Text selectable={false}>{children}</Text>
+        </Pressable>
     );
 });
 
-export const Example = (props: Props) => {
+export const Example = () => {
     return (
         <ProvideMolecules>
-            <RippleView onPress={() => {}} {...props} />
+            <RippleView onPress={() => {}} style={styles.rippleView}>
+                Clickable View
+            </RippleView>
         </ProvideMolecules>
     );
 };
+
+const styles = StyleSheet.create({
+    rippleView: {
+        width: 200,
+        height: 100,
+        backgroundColor: '#f1f1f1',
+    },
+});

@@ -4,16 +4,11 @@ import { Example } from './UseComponentStyles';
 import DocsPage from './UseComponentStyles.docs';
 
 export default {
-    title: 'hooks/UseComponentStyles',
+    title: 'hooks/useComponentStyles',
     component: Example,
 } as ComponentMeta<typeof Example>;
 
-export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
-
-Default.args = {
-    variant: 'outlined',
-    onPress: () => {},
-};
+export const Default: ComponentStory<typeof Example> = () => <Example />;
 
 Default.parameters = {
     docs: {
