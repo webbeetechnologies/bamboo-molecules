@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import {
     extendTheme,
     ProvideMolecules,
-    useMolecules,
+    useMolecules as useAtomsMolecules,
     useComponentStyles,
     TextProps,
 } from 'bamboo-molecules';
@@ -56,6 +56,8 @@ export const theme = extendTheme({
 export interface InjectedComponentTypes {
     Code: ComponentType<TextProps>;
 }
+
+export const useMolecules = () => useAtomsMolecules<InjectedComponentTypes>();
 
 const Code = ({ style, ...rest }: TextProps) => {
     const { Text } = useMolecules();
