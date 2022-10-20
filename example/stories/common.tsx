@@ -52,6 +52,7 @@ export const theme = extendTheme({
     },
 });
 
+// TODO declare our own useMolecules with InjectedComponentTypes
 export interface InjectedComponentTypes {
     Code: ComponentType<TextProps>;
 }
