@@ -36,7 +36,7 @@ function findAllCustomerData() {
 
 
 export default function UsingAsyncSource({}) {
-  const {isLoading,  ...rest } = useAsyncDataSource({
+  const dataSource = useAsyncDataSource({
       records: [] as RecordType[], 
       sort: [], 
       pagination: {page: 1, pageSize: 3},
@@ -48,7 +48,7 @@ export default function UsingAsyncSource({}) {
 
   return (
     <RenderRecords {...{
-        ...rest
+        ...dataSource
     }} />
   );
 }
