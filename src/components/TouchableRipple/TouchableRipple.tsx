@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from 'react';
+import React, { forwardRef, memo, useCallback, useMemo } from 'react';
 import {
     TouchableWithoutFeedback,
     ViewStyle,
@@ -83,17 +83,20 @@ export type Props = React.ComponentPropsWithRef<typeof TouchableWithoutFeedback>
  *
  * @extends TouchableWithoutFeedback props https://reactnative.dev/docs/touchablewithoutfeedback#props
  */
-const TouchableRipple = ({
-    style,
-    background: _background,
-    borderless = false,
-    disabled: disabledProp,
-    rippleColor,
-    underlayColor: _underlayColor,
-    onPress,
-    children,
-    ...rest
-}: Props) => {
+const TouchableRipple = (
+    {
+        style,
+        background: _background,
+        borderless = false,
+        disabled: disabledProp,
+        rippleColor,
+        underlayColor: _underlayColor,
+        onPress,
+        children,
+        ...rest
+    }: Props,
+    ref: any,
+) => {
     const { View } = useMolecules();
     const currentTheme = useCurrentTheme();
     const { rippleColor: defaultRippleColor, ...componentStyles } = useComponentStyles(
@@ -241,6 +244,7 @@ const TouchableRipple = ({
     return (
         <TouchableWithoutFeedback
             {...rest}
+            ref={ref}
             onPress={onPress}
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
@@ -265,4 +269,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(TouchableRipple);
+export default memo(forwardRef(TouchableRipple));
