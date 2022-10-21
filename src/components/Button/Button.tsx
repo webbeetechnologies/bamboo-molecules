@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef, ReactNode, memo, useMemo } from 'react';
+import { useEffect, useCallback, useRef, ReactNode, memo, useMemo, forwardRef } from 'react';
 import { Animated, View, ViewStyle, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import color from 'color';
 
@@ -144,32 +144,35 @@ export type Props = SurfaceProps &
  * export default MyComponent;
  * ```
  */
-const Button = ({
-    disabled: disabledProp,
-    variant = 'text',
-    loading,
-    iconType,
-    iconName,
-    iconPosition,
-    buttonColor: customButtonColor,
-    textColor: customTextColor,
-    children,
-    accessibilityLabel,
-    accessibilityHint,
-    onPress,
-    onPressIn,
-    onPressOut,
-    onLongPress,
-    style: styleProp,
-    uppercase = false,
-    contentStyle,
-    labelStyle,
-    iconContainerStyle,
-    testID,
-    accessible,
-    hovered,
-    ...rest
-}: Props) => {
+const Button = (
+    {
+        disabled: disabledProp,
+        variant = 'text',
+        loading,
+        iconType,
+        iconName,
+        iconPosition,
+        buttonColor: customButtonColor,
+        textColor: customTextColor,
+        children,
+        accessibilityLabel,
+        accessibilityHint,
+        onPress,
+        onPressIn,
+        onPressOut,
+        onLongPress,
+        style: styleProp,
+        uppercase = false,
+        contentStyle,
+        labelStyle,
+        iconContainerStyle,
+        testID,
+        accessible,
+        hovered,
+        ...rest
+    }: Props,
+    ref: any,
+) => {
     const disabled = disabledProp || !onPress;
     const { ActivityIndicator, TouchableRipple, Text, Icon, Surface } = useMolecules();
     const currentTheme = useCurrentTheme();
@@ -327,6 +330,7 @@ const Button = ({
                 disabled={disabled}
                 rippleColor={rippleColor}
                 style={touchableStyle}
+                ref={ref}
                 testID={testID}>
                 <View style={memoizedViewStyles}>
                     {iconName && loading !== true ? (
@@ -365,4 +369,4 @@ const Button = ({
     );
 };
 
-export default memo(withActionState(Button));
+export default memo(withActionState(forwardRef(Button)));

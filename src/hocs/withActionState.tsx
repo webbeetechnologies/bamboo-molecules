@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import { ComponentType, forwardRef } from 'react';
 import { Pressable } from 'react-native';
 
 export type CallbackActionState = {
@@ -8,10 +8,9 @@ export type CallbackActionState = {
 };
 
 // P is for type-assertion of the wrapped component props
-const withActionState =
-    <P,>(Component: ComponentType<P>) =>
-    (props: P) => {
-        return <Pressable>{state => <Component {...state} {...props} />}</Pressable>;
-    };
+const withActionState = <P,>(Component: ComponentType<P>) =>
+    forwardRef((props: P, ref: any) => {
+        return <Pressable>{state => <Component {...state} {...props} ref={ref} />}</Pressable>;
+    });
 
 export default withActionState;
