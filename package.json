@@ -1,87 +1,88 @@
 {
-  "name": "@webbee/bamboo-molecules",
-  "version": "0.0.1",
-  "repository": "git@github.com:webbeetechnologies/bamboo-molecules.git",
-  "author": "Thet Aung <thetaung.dev@gmail.com>",
-  "license": "MIT",
-  "private": true,
-  "packageManager": "yarn@3.1.1",
-  "workspaces": {
-    "packages": [
-      "example",
-      "test-cases"
+    "name": "@webbee/bamboo-molecules",
+    "version": "0.0.1",
+    "repository": "git@github.com:webbeetechnologies/bamboo-molecules.git",
+    "author": "Thet Aung <thetaung.dev@gmail.com>",
+    "license": "MIT",
+    "private": true,
+    "packageManager": "yarn@3.1.1",
+    "workspaces": {
+        "packages": [
+            "example",
+            "test-cases",
+            "demo/*"
+        ],
+        "nohoist": [
+            "**/react-native-web",
+            "**/react-native-web/**"
+        ]
+    },
+    "files": [
+        "src",
+        "lib",
+        "!**/__tests__",
+        "!**/__fixtures__",
+        "!**/__mocks__"
     ],
-    "nohoist": [
-      "**/react-native-web",
-      "**/react-native-web/**"
+    "scripts": {
+        "lint": "eslint .",
+        "type-check": "tsc --noEmit",
+        "prepare:husky": "husky install",
+        "run:example": "yarn --cwd ./example start",
+        "run:storybook": "yarn --cwd ./example storybook"
+    },
+    "dependencies": {
+        "@webbee/bamboo-atoms": "^0.0.12",
+        "color": "^4.2.3",
+        "lodash.get": "^4.4.2",
+        "lodash.memoize": "^4.1.2",
+        "ts-deepmerge": "^4.0.0"
+    },
+    "devDependencies": {
+        "@react-native-community/eslint-config": "^3.1.0",
+        "@types/color": "^3.0.3",
+        "@types/lodash.get": "^4.4.7",
+        "@types/lodash.memoize": "^4.1.7",
+        "@types/react": "^18.0.20",
+        "@types/react-native": "^0.70.0",
+        "@types/react-native-vector-icons": "^6.4.12",
+        "eslint": "^8.23.1",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "husky": "^8.0.1",
+        "prettier": "^2.7.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-native": "^0.70.1",
+        "react-native-builder-bob": "^0.18.3",
+        "react-native-vector-icons": "^9.2.0",
+        "react-native-web": "^0.18.9",
+        "typescript": "~4.3.5"
+    },
+    "peerDependencies": {
+        "@types/react": "^16.8.0",
+        "@types/react-native": "^0.60.0",
+        "react": "^16.8.0",
+        "react-dom": "^16.8.0",
+        "react-native": "^0.60.0",
+        "react-native-vector-icons": ">9.2.0"
+    },
+    "react-native-builder-bob": {
+        "source": "src",
+        "output": "lib",
+        "targets": [
+            "commonjs",
+            "module",
+            [
+                "typescript",
+                {
+                    "project": "tsconfig.build.json"
+                }
+            ]
+        ]
+    },
+    "eslintIgnore": [
+        "node_modules/",
+        "lib/"
     ]
-  },
-  "files": [
-    "src",
-    "lib",
-    "!**/__tests__",
-    "!**/__fixtures__",
-    "!**/__mocks__"
-  ],
-  "scripts": {
-    "lint": "eslint .",
-    "type-check": "tsc --noEmit",
-    "prepare:husky": "husky install",
-    "run:example": "yarn --cwd ./example start",
-    "run:storybook": "yarn --cwd ./example storybook"
-  },
-  "dependencies": {
-    "@webbee/bamboo-atoms": "^0.0.12",
-    "color": "^4.2.3",
-    "lodash.get": "^4.4.2",
-    "lodash.memoize": "^4.1.2",
-    "ts-deepmerge": "^4.0.0"
-  },
-  "devDependencies": {
-    "@react-native-community/eslint-config": "^3.1.0",
-    "@types/color": "^3.0.3",
-    "@types/lodash.get": "^4.4.7",
-    "@types/lodash.memoize": "^4.1.7",
-    "@types/react": "^18.0.20",
-    "@types/react-native": "^0.70.0",
-    "@types/react-native-vector-icons": "^6.4.12",
-    "eslint": "^8.23.1",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^8.0.1",
-    "prettier": "^2.7.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-native": "^0.70.1",
-    "react-native-builder-bob": "^0.18.3",
-    "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "^0.18.9",
-    "typescript": "~4.3.5"
-  },
-  "peerDependencies": {
-    "@types/react": "^16.8.0",
-    "@types/react-native": "^0.60.0",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
-    "react-native": "^0.60.0",
-    "react-native-vector-icons": ">9.2.0"
-  },
-  "react-native-builder-bob": {
-    "source": "src",
-    "output": "lib",
-    "targets": [
-      "commonjs",
-      "module",
-      [
-        "typescript",
-        {
-          "project": "tsconfig.build.json"
-        }
-      ]
-    ]
-  },
-  "eslintIgnore": [
-    "node_modules/",
-    "lib/"
-  ]
 }
