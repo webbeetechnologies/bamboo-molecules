@@ -3,7 +3,7 @@ import { Source } from '@storybook/addon-docs';
 import { withDocsWrapper, useMolecules } from '../../common';
 
 const DocsPage = () => {
-    const { View, H1, Text } = useMolecules();
+    const { View, H1, Text, Link } = useMolecules();
 
     return (
         <View>
@@ -14,8 +14,8 @@ const DocsPage = () => {
             </Text>
             <Text>MD3 Theme is a place where all the design tokens point too.</Text>
             <Text>
-                To read more about MD3 Theme and the design tokens, please check the
-                ProvideMolecules docs.
+                To read more about MD3 Theme and the design tokens, please check the{' '}
+                <Link href={{ idOrTitle: 'core/ProvideMolecules' }}>ProvideMolecules docs.</Link>{' '}
             </Text>
 
             <Source language="tsx" code={firstCodeBlock} />
