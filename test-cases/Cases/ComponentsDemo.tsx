@@ -131,23 +131,22 @@ const Example = () => {
             <ListItem
                 title="This is my title"
                 description="This is my description"
+                titleStyle={{ fontWeight: '800' }}
                 left={leftProps => (
-                    <View
-                        style={[
-                            {
-                                margin: 8,
-                                height: 40,
-                                width: 40,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            },
-                            leftProps.style,
-                        ]}
-                        pointerEvents="box-none">
+                    <View style={[styles.listIcon, leftProps.style]} pointerEvents="box-none">
                         <Icon
                             style={{ color: leftProps.color }}
                             type="material-community"
                             name="account-plus-outline"
+                        />
+                    </View>
+                )}
+                right={rightProps => (
+                    <View style={[styles.listIcon, rightProps.style]} pointerEvents="box-none">
+                        <Icon
+                            style={{ color: rightProps.color }}
+                            type="material-community"
+                            name="robot-angry-outline"
                         />
                     </View>
                 )}
@@ -190,5 +189,12 @@ const styles = StyleSheet.create({
     cardContainer: {
         flexDirection: 'row',
         padding: 50,
+    },
+    listIcon: {
+        margin: 8,
+        height: 40,
+        width: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
