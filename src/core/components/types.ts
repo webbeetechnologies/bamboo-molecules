@@ -9,6 +9,7 @@ import type {
     ButtonProps,
     SwitchProps,
     VerticalDividerProps,
+    ListItemProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -25,6 +26,7 @@ export interface DefaultComponents {
     Button: ComponentType<ButtonProps>;
     Surface: ComponentType<SurfaceProps>;
     Switch: ComponentType<SwitchProps>;
+    ListItem: ComponentType<ListItemProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

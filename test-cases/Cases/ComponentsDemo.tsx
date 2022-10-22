@@ -40,6 +40,7 @@ const Example = () => {
         Icon,
         Switch,
         VerticalDivider,
+        ListItem,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
 
@@ -125,6 +126,31 @@ const Example = () => {
                 disabled
                 onValueChange={toggleSwitch}
                 color="rgba(125, 82, 96, 1)"
+            />
+
+            <ListItem
+                title="This is my title"
+                description="This is my description"
+                left={leftProps => (
+                    <View
+                        style={[
+                            {
+                                margin: 8,
+                                height: 40,
+                                width: 40,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            },
+                            leftProps.style,
+                        ]}
+                        pointerEvents="box-none">
+                        <Icon
+                            style={{ color: leftProps.color }}
+                            type="material-community"
+                            name="account-plus-outline"
+                        />
+                    </View>
+                )}
             />
         </View>
     );

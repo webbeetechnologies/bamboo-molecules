@@ -30,3 +30,4 @@ export {
 } from './HorizontalDivider';
 export { VerticalDivider, verticalDividerStyles, VerticalDividerProps } from './VerticalDivider';
 export { Switch, switchStyles, SwitchProps } from './Switch';
+export { ListItem, ListItemProps, ListItemStyles } from './List';
