@@ -2,6 +2,7 @@ import type { ComponentType, ReactNode } from 'react';
 import type { IComponentsProviderContext as IAtomsComponentsProviderContext } from '@webbee/bamboo-atoms';
 import type {
     IconProps,
+    IconButtonProps,
     ActivityIndicatorProps,
     TouchableRippleProps,
     HorizontalDividerProps,
@@ -18,6 +19,7 @@ export type ProvideComponentsProps = {
 
 export interface DefaultComponents {
     Icon: ComponentType<IconProps>;
+    IconButton: ComponentType<IconButtonProps>;
     TouchableRipple: ComponentType<TouchableRippleProps>;
     ActivityIndicator: ComponentType<ActivityIndicatorProps>;
     HorizontalDivider: ComponentType<HorizontalDividerProps>;
