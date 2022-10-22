@@ -74,9 +74,10 @@ export const theme = extendTheme({
         // flex: 1,
         // justifyContent: 'center',
         // alignItems: 'center',
-        backgroundColor: 'colors.secondary',
         // justifyContent: 'flex-end',
-        // marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        backgroundColor: 'colors.secondary',
+        marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        margin: '5px',
     },
     CalcWrapper: {
         borderColor: '#333333',
@@ -93,11 +94,28 @@ export const theme = extendTheme({
         marginBottom: 20,
         fontSize: 25,
         color: 'colors.secondary',
+
+        states: {
+            hovered: {
+                fontSize: 30,
+            },
+        },
     },
     CustomTitle: {
         marginBottom: 30,
         color: 'colors.primary',
         fontSize: 15,
+        states: {
+            hovered: {
+                fontSize: 25,
+            },
+            pressed: {
+                color: 'brown',
+            },
+            focused: {
+                borderBottomColor: 'black',
+            },
+        },
     },
     Row: {
         flexDirection: 'row',
