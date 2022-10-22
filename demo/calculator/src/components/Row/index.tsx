@@ -1,20 +1,13 @@
-import { StyleSheet } from 'react-native';
-import { useMolecules, ViewProps } from 'bamboo-molecules';
+import { useComponentStyles, useMolecules, ViewProps } from 'bamboo-molecules';
 
-const Row = ({ children, ...rest }: ViewProps) => {
+const Row = ({ style, children, ...rest }: ViewProps) => {
     const { View } = useMolecules();
+    const { ...rowStyles } = useComponentStyles('Row', style);
     return (
-        <View style={styles.container} {...rest}>
+        <View style={rowStyles} {...rest}>
             {children}
         </View>
     );
 };
-
-// create styles of Row
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-    },
-});
 
 export default Row;

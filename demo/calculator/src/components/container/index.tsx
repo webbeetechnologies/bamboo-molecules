@@ -2,9 +2,9 @@ import { useMolecules, useComponentStyles, ViewProps } from 'bamboo-molecules';
 
 export type Props = ViewProps & {};
 
-const Container = (props: Props) => {
+const Container = ({ style, ...props }: Props) => {
     const { View } = useMolecules();
-    const { ...containerStyles } = useComponentStyles('Container');
+    const { ...containerStyles } = useComponentStyles('Container', style);
 
     return <View style={containerStyles} {...props} />;
 };

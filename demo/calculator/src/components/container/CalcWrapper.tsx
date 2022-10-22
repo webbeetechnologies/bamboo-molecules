@@ -2,9 +2,9 @@ import { useMolecules, useComponentStyles, ViewProps } from 'bamboo-molecules';
 
 export type Props = ViewProps & {};
 
-const Container = (props: Props) => {
+const CalcWrapper = ({ style, ...props }: Props) => {
     const { View, Surface } = useMolecules();
-    const { ...containerStyles } = useComponentStyles('CalcWrapper');
+    const { ...containerStyles } = useComponentStyles('CalcWrapper', style);
 
     // console.log('con', containerStyles);
 
@@ -15,4 +15,4 @@ const Container = (props: Props) => {
     );
 };
 
-export default Container;
+export default CalcWrapper;

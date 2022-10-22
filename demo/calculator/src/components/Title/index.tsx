@@ -9,9 +9,9 @@ import {
 
 export type TitleProps = ViewProps & CallbackActionState & {};
 
-export const CustomTitle = withActionState(({ hovered, pressed, focused }: TitleProps) => {
+export const CustomTitle = withActionState(({ hovered, pressed, focused, style }: TitleProps) => {
     const { View, Text } = useMolecules();
-    const { fontSize, color, ...titleStyles } = useComponentStyles('CustomTitle');
+    const { fontSize, color, ...titleStyles } = useComponentStyles('CustomTitle', style);
     const { dark } = useCurrentTheme();
 
     return (

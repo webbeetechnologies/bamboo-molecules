@@ -71,12 +71,12 @@ export const theme = extendTheme({
         },
     },
     Container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        // flex: 1,
+        // justifyContent: 'center',
+        // alignItems: 'center',
         backgroundColor: 'colors.secondary',
         // justifyContent: 'flex-end',
-        marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        // marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
     CalcWrapper: {
         borderColor: '#333333',
@@ -98,6 +98,9 @@ export const theme = extendTheme({
         marginBottom: 30,
         color: 'colors.primary',
         fontSize: 15,
+    },
+    Row: {
+        flexDirection: 'row',
     },
 });
 

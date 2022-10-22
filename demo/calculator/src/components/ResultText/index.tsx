@@ -8,9 +8,9 @@ import {
 
 export type ResultTextProps = ViewProps & CallbackActionState & {};
 
-export const ResultText = withActionState(({ hovered }: ResultTextProps) => {
+export const ResultText = withActionState(({ style, hovered }: ResultTextProps) => {
     const { View, Text } = useMolecules();
-    const { color, fontSize, ...resultStyles } = useComponentStyles('ResultText');
+    const { color, fontSize, ...resultStyles } = useComponentStyles('ResultText', style);
 
     return (
         <View>
