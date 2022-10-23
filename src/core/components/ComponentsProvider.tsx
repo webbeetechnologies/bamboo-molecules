@@ -16,6 +16,7 @@ import {
     Button,
     Surface,
     Switch,
+    Checkbox,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -37,6 +38,7 @@ const defaultComponents: DefaultComponents = {
     Button,
     Surface,
     Switch,
+    Checkbox,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

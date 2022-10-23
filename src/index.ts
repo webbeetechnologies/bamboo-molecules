@@ -22,6 +22,7 @@ export {
     ButtonProps,
     SurfaceProps,
     SwitchProps,
+    CheckboxProps,
 } from './components';
 
 export {
