@@ -1,17 +1,25 @@
-import React, { forwardRef, memo, useCallback, useMemo } from 'react';
+import {
+    forwardRef,
+    memo,
+    useCallback,
+    useMemo,
+    Children,
+    ComponentPropsWithRef,
+    ReactNode,
+} from 'react';
 import {
     TouchableWithoutFeedback,
-    ViewStyle,
     StyleProp,
     GestureResponderEvent,
     StyleSheet,
     Platform,
+    ViewStyle,
 } from 'react-native';
 
 import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
 import { normalizeStyles } from '../../utils';
 
-export type Props = React.ComponentPropsWithRef<typeof TouchableWithoutFeedback> & {
+export type Props = ComponentPropsWithRef<typeof TouchableWithoutFeedback> & {
     /**
      * Whether to render the ripple outside the view bounds.
      */
@@ -48,7 +56,7 @@ export type Props = React.ComponentPropsWithRef<typeof TouchableWithoutFeedback>
     /**
      * Content of the `TouchableRipple`.
      */
-    children: React.ReactNode;
+    children: ReactNode;
     style?: StyleProp<ViewStyle>;
 };
 
@@ -249,7 +257,7 @@ const TouchableRipple = (
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
             disabled={disabled}>
-            <View style={memoizedStyles}>{React.Children.only(children)}</View>
+            <View style={memoizedStyles}>{Children.only(children)}</View>
         </TouchableWithoutFeedback>
     );
 };

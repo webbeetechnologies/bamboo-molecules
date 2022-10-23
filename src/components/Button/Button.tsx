@@ -186,7 +186,8 @@ const Button = (
         borderWidth,
         typeScale,
         animationScale,
-        borderRoundness,
+        borderRadius,
+        iconSize,
         ...buttonStyles
     } = useComponentStyles('Button', styleProp, {
         variant,
@@ -240,9 +241,6 @@ const Button = (
             }).start();
         }
     };
-
-    const borderRadius = 5 * borderRoundness;
-    const iconSize = 18;
 
     const rippleColor = color(textColor).alpha(0.12).rgb().string();
 

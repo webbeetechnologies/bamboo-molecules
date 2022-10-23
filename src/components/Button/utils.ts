@@ -4,7 +4,7 @@ import type { ComponentStylePropWithVariants } from '../../types';
 type CustomProps = {
     typeScale?: string; // because it's a design token
     animationScale?: string;
-    borderRoundness?: string;
+    iconSize?: string;
 };
 
 export const defaultStyles: ComponentStylePropWithVariants<
@@ -14,7 +14,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
 > = {
     typeScale: 'typescale.labelLarge',
     animationScale: 'animation.scale',
-    borderRoundness: 'roundness.1',
+    borderRadius: 'roundness.5' as unknown as number, // TODO better type definitions for design tokens
+    iconSize: 'sizes.4l',
+
     states: {
         disabled: {
             color: 'colors.onSurfaceDisabled',

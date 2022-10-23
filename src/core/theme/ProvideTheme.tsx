@@ -17,6 +17,7 @@ import {
     surfaceStyles,
     switchStyles,
     verticalDividerStyles,
+    checkboxStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -38,6 +39,7 @@ const defaultThemeValue: Partial<ITheme> = {
     TouchableRipple: touchableRippleStyles,
     Surface: surfaceStyles,
     Switch: switchStyles,
+    Checkbox: checkboxStyles,
 };
 
 const defaultExtractStyles = memoize(
