@@ -3,6 +3,7 @@ import type { ComponentStylePropWithVariants } from '../../types';
 
 type States = 'disabled' | 'selected'; // 'disabled' | 'hovered' | 'pressed';
 type CustomProps = {
+    buttonSize?: string;
     // labelColor: string
     // checkedColor: string;
 };
@@ -10,11 +11,13 @@ type CustomProps = {
 export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, CustomProps> = {
     borderColor: 'colors.outline',
     color: 'colors.onSurfaceVariant',
+    padding: 'spacings.1',
 
     states: {
         disabled: {
             borderColor: 'colors.surfaceDisabled',
             color: 'colors.onSurfaceDisabled',
+            opacity: 0.32,
         },
         selected: {
             color: 'colors.primary',

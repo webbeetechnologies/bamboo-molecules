@@ -1,13 +1,11 @@
 import { forwardRef, memo, useMemo } from 'react';
-import { ViewStyle, StyleSheet, StyleProp, GestureResponderEvent } from 'react-native';
+import { StyleSheet, StyleProp, GestureResponderEvent, TextStyle } from 'react-native';
 import color from 'color';
 
 import type { IconType } from '../Icon';
 import CrossFadeIcon from '../Icon/CrossFadeIcon';
 import { useMolecules, useComponentStyles } from '../../hooks';
 import type { TouchableRippleProps } from '../TouchableRipple';
-
-const PADDING = 8;
 
 type IconButtonVariant = 'outlined' | 'contained' | 'contained-tonal';
 
@@ -21,21 +19,14 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
      */
     variant?: IconButtonVariant;
     /**
-     * Color of the icon.
-     */
-    color?: string;
-    /**
-     * Background color of the icon container.
-     */
-    containerColor?: string;
-    /**
      * Whether icon button is selected. A selected button receives alternative combination of icon and container colors.
      */
     selected?: boolean;
     /**
      * Size of the icon.
+     * Should be a number or a Design Token
      */
-    size?: number;
+    size?: number | string;
     /**
      * Whether the button is disabled. A disabled button is greyed out and `onPress` is not called on touch.
      */
@@ -52,7 +43,10 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
      * Function to execute on press.
      */
     onPress?: (e: GestureResponderEvent) => void;
-    style?: StyleProp<ViewStyle>;
+    /**
+     * backgroundColor and color will be extracted from here and act as buttonBackgroundColor and iconColor
+     */
+    style?: StyleProp<TextStyle>;
 };
 
 /**
@@ -99,9 +93,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
 const IconButton = (
     {
         name,
-        color: customIconColor,
-        containerColor: customContainerColor,
-        size = 24,
+        size: sizeProp = 'sizes.6',
         accessibilityLabel,
         disabled = false,
         onPress,
@@ -116,13 +108,21 @@ const IconButton = (
     const { TouchableRipple, Surface, Icon } = useMolecules();
     const IconComponent = animated ? CrossFadeIcon : Icon;
 
+    const styleProp = useMemo(
+        () => ({ ...StyleSheet.flatten((style || {}) as TextStyle), size: sizeProp }),
+        [sizeProp, style],
+    );
+
     const {
-        color: _iconColor,
+        color: iconColor,
         borderColor,
-        backgroundColor: _backgroundColor,
+        backgroundColor,
         borderWidth,
+        size, // normalized size
+        padding,
+        borderRadius,
         ...iconButtonStyles
-    } = useComponentStyles('IconButton', style, {
+    } = useComponentStyles('IconButton', styleProp, {
         variant,
         states: {
             disabled,
@@ -130,16 +130,14 @@ const IconButton = (
         },
     });
 
-    const backgroundColor = customContainerColor || _backgroundColor;
-    const iconColor = customIconColor || _iconColor;
     const rippleColor = color(iconColor).alpha(0.12).rgb().string();
 
-    const buttonSize = size + 2 * PADDING;
+    const buttonSize = size + 2 * padding;
 
     const containerStyles = useMemo(() => {
         const borderStyles = {
             borderWidth,
-            borderRadius: buttonSize / 2,
+            borderRadius: borderRadius || buttonSize / 2, // if the default borderRadius is provided will use it, other borderRadius will be circle by default
             borderColor,
         };
         return [
@@ -150,10 +148,9 @@ const IconButton = (
             },
             styles.container,
             borderStyles,
-            disabled && styles.disabled,
             iconButtonStyles,
         ];
-    }, [backgroundColor, borderColor, borderWidth, buttonSize, disabled, iconButtonStyles]);
+    }, [backgroundColor, borderColor, borderRadius, borderWidth, buttonSize, iconButtonStyles]);
 
     return (
         <Surface style={containerStyles} {...{ elevation: 0 }}>
@@ -194,9 +191,6 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    disabled: {
-        opacity: 0.32,
     },
 });
 
