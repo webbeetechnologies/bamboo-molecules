@@ -1,16 +1,19 @@
-# Input
+# TextInput
 
-Input fields in bamboo, like other components, are super fast and extremely flexible.
-After researching all the other component libraries out there that serve a half baked Input field, Bamboo developing performant and customized applications.
+TextInput fields in bamboo, like other components, are super fast and extremely flexible.
 
-[**» Watch detailed explanation**](https://www.loom.com/share/fb960f3c21c34d18880b98d1b0b84f37)
+[**» Watch detailed explanation**](https://www.loom.com/share/9d674b33e65b46c09b6845da0cff884b)
 
 ## References
 
+-   [Material Textfield Specs](https://m3.material.io/components/text-fields/specs)\
+    Single most important resource to implement the default color schemes and pixel perfect design.
+-   [Material Textfield Specs](https://m3.material.io/components/text-fields/guidelines)\
+    Clear examples how a field should and should not behave.
 -   [React Native Paper](https://callstack.github.io/react-native-paper/text-input.html)\
     Paper elements implement the closest to the material design, and hence Bamboo takes inspiration from Paper.
 -   [Native Base](https://docs.nativebase.io/next/input#page-title)\
-    Native base has an elaborate implementation for Inputs with different variants, addons making it a good resource to take inspiration from. However, the implementation of Native base is optimal for a data heavy application.
+    Native base has an elaborate implementation for TextInputs with different variants, addons making it a good resource to take inspiration from. However, the implementation of Native base is not optimal for a data heavy application.
 
 ## Personas
 
@@ -19,51 +22,36 @@ After researching all the other component libraries out there that serve a half 
 
 ## End user
 
--   As a user, I want to type into a input field.
--   As a user, I want that the feedback from the input field is instant.
--   As a user, I want to paste into an input field.
--   As a user, I want to be able to distinguish a required field from an optional field.
--   As a user, I want to see feedback from inputs on hover and focus.
+-   As a user, I want to type into a TextInput field.
+-   As a user, I want that the feedback from the TextInput field is instant.
 -   As a user, I want to know if the field is disabled.
+-   As a user, I want to see [feedback](../features/states.md) from TextInputs on hover and focus.
+-   As a user, I want to be able to distinguish a [required](https://m3.material.io/components/text-fields/guidelines#6c36a812-273d-4f5d-9102-2f00386c9145) field from an optional field.
+-   As a user, where necessary I want to see extra description about the field.
 
 ## Component consumer
 
--   As a developer, I want to change the keyboard type for input field. ([TextInput:keyboardType](https://reactnative.dev/docs/textinput#keyboardtype)).\
+-   As a component consumer, I expect the TextInput component to follow the platform specific guidelines.
+-   As a component consumer, I want to change the keyboard type for TextInput field. ([TextInput:keyboardType](https://reactnative.dev/docs/textinput#keyboardtype)).\
     **NOTE:** this doesn't handle type=number on the web;
--   As a developer, I want to mark a field as required.
--   As a developer, I want to mark a field as disabled.
--   As a developer, I want to display a valid/ invalid state for the input field.
--   As a developer, I want to supplement my input component with icons for my inputs styles of which are updated on hover/ focus/ disabled/ invalid/ valid states.
--   As a developer, I want that the icons are wrapped within the borders of the input field.
--   As a developer, I want to have predefined styled inputs with different variant options matching with specific platforms ios/ android.
--   As a developer, I want to build an input field with custom styles and custom variants.
--   As a developer, I want to use inputs in different predefined sizes.
--   As a developer, I want to customize certain inputs with inline styles.
--   As a developer, I expect that inline styles overwrite variants and state styles.
--   As a developer, I want to use design tokens in my custom styles.
+-   As a component consumer, I want to mark a field as required.
+-   As a component consumer, I want to mark a field as disabled.
+-   As a component consumer, I want to define the various [states](../features/states.md) such as hover / focus / disabled.
+-   As a component consumer, I want to supplement my TextInput component with icons/text.
+-   As a component consumer, I want the supplementing components react to the state changes such as color change on disabled state etc.
+-   As a component consumer, I want the icons are wrapped within the borders of the TextInput field.
+-   As a component consumer, I want to have predefined styled TextInputs with different [variant options](../features/variants.md) matching with specific platforms ios and android.
+-   As a component consumer, I want to build an TextInput field with custom styles and custom variants.
+-   As a component consumer, I want to use TextInputs in different predefined [sizes](../features/sizes.md).
+-   As a component consumer, I want to customize certain TextInputs with inline styles.
+-   As a component consumer, I want to be able to design entirely redesign my input component.
+-   As a component consumer, I want to use [design tokens](../features/design-tokens.md) in my custom styles.
 
 ## Variants
 
 1. Outlined
-2. Ghost
-3. Underlined
+2. Underlined
 
 ## Implementation Details
 
--   Create a higher order component that allows to add left and/or right elements; [WithElements HOC](./HOC/WithElements.md)
--   A clean abstraction to derive `required` prop, add the required asterisk, and validate as necessary.
-
-# Input Groups
-
-Input groups allow you to attach different elements together to build a seamless contextful UI.
-
-## Product Developer Stories
-
--   As a developer, I want to extend my user input fields to display addon buttons/ icons/ texts/ dropdowns or other input fields etc.
--   As a developer, I expect that the addons take the height of the tallest element.
--   As a developer, I want that all the items of an input group are attached.
--   As a developer, I want that only the elements on the far ends get a border radius (if any).
-
-## Implementation Details
-
--   Create a higher order component that allows to add left and/or right addons; [WithAddons HOC](./HOC/WithAddons.md)
+-   Implements [WithElements Interface](../interfaces/WithElementsInterface.md)

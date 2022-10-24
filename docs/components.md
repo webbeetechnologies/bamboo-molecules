@@ -2,30 +2,32 @@
 
 Bamboo Molecules components are built on top of BambooAtoms; thus, at it's core; Bamboo allows for all the components to be composed by default. That means; you can replace an underlying view by a Styled View of your choice; and that is only the beginning.
 
-
 Bamboo atoms have minimal theming; and Bamboo Molecules are opinionated styles; however, Molecules allow you to customize or entirely change the theme of a specific component. It is possible to use custom components/styles at a module level.
-
 
 Molecules is heavily inspired by Material and Cupertino components and thus tries to mimic them to provide a native experience as closely as possible on the react native platform.
 
-
-
 # References:
-- [Comparing iOS and Android UI](https://www.learnui.design/blog/ios-vs-android-app-ui-design-complete-guide.html)
-- [Material 3 Figma Design](https://www.figma.com/file/hGlWM0wnP1UN5VtPGiaOJ2/Material-3-Design-Kit-(Community)?node-id=50716%3A11360)
-- [Material 3 Design Guidelines](https://m3.material.io/components)
+
+-   [Comparing iOS and Android UI](https://www.learnui.design/blog/ios-vs-android-app-ui-design-complete-guide.html)
+-   [Material 3 Figma Design](<https://www.figma.com/file/hGlWM0wnP1UN5VtPGiaOJ2/Material-3-Design-Kit-(Community)?node-id=50716%3A11360>)
+-   [Material 3 Design Guidelines](https://m3.material.io/components)
 
 ## Molecules HOC:
-- [WithAddons](./components/HOC/WithAddons.md)
-- [WithAddonAfter](./components/HOC/WithAddons.md#withaddonafter)
-- [WithAddonBefore](./components/HOC/WithAddons.md#withaddonbefore)
-- [WithElements](./components/HOC/WithElements.md)
-- [WithActionIconButton](./components/HOC/WithActionIconButton.md)
-- [WithPopover](./components/HOC/WithPopover.md)
 
+-   [WithAddons](./components/HOC/WithAddons.md)
+-   [WithAddonAfter](./components/HOC/WithAddons.md#withaddonafter)
+-   [WithAddonBefore](./components/HOC/WithAddons.md#withaddonbefore)
+-   [WithActionIconButton](./components/HOC/WithActionIconButton.md)
+-   [WithPopover](./components/HOC/WithPopover.md)
+
+## Molecules Interfaces:
+
+-   [WithElements](../interfaces/WithElementsInterface.md)
 
 ## Molecules created using Atoms:
-- High Priority
+
+-   High Priority
+
     -   [Icons](./components/Icons.md)
     -   [Input](./components/Input.md)
     -   [Tooltips](./components/Tooltips.md)
@@ -46,8 +48,8 @@ Molecules is heavily inspired by Material and Cupertino components and thus trie
     -   [Chips](./components/Chips.md)
     -   Drawer
 
+-   Medium Priority
 
-- Medium Priority
     -   [Section List](./components/SectionList.md)
     -   [Range Picker](./components/RangePickers.md)
     -   [Date Time Picker](./components/DateTimePicker.md)
@@ -59,8 +61,7 @@ Molecules is heavily inspired by Material and Cupertino components and thus trie
         -   Pills
         -   Bottom Tabs
 
-
-- Low Priority
+-   Low Priority
     -   [Color Picker](./components/ColorPicker.md)
     -   [FilePicker](./components/FilePicker.md)
     -   Badges
@@ -68,8 +69,5 @@ Molecules is heavily inspired by Material and Cupertino components and thus trie
     -   Forms
     -   Avatar
     -   Graphs
-
-
-
 
 ... and more as we identify ..

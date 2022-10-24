@@ -31,7 +31,7 @@ Menus, dropdowns, Drawers, Selects/Typeaheads are some of the simplest examples 
 -   As a developer I want add elements to the left and/or right of the List item.
 -   As a developer I want to be give the user ability to swipe left or right to reveal item actions.
 -   As a developer I want use different/mixed flavors of list items: with checkbox, drag, icons, avatars.
--   As a developer I want compose different flavors of list items using [WithElements HOC](./HOC/WithElements.md).
+-   As a developer I want compose different flavors of list items using [WithElements Interface](../interfaces/WithElementsInterface.md).
 
 ## Flavours
 
