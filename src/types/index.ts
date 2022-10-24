@@ -52,6 +52,6 @@ export type ComponentState =
     | string;
 
 export type WithElements<T> = {
-    left?: ComponentType<T>;
-    right?: ComponentType<T>;
+    left?: T;
+    right?: T;
 };
