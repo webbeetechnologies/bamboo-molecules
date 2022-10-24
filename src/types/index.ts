@@ -27,12 +27,13 @@ export type ComponentStylePropWithResolvers<
     T,
     S extends ComponentState,
     C = {},
+    Z = {},
 > = ComponentStyleProp<T, C> & {
     states?: {
         [key in S]?: ComponentStyleProp<T, C>;
     };
     sizes?: {
-        [key: string]: ComponentSize;
+        [key: string]: ComponentSize<Z>;
     };
 };
 
@@ -40,9 +41,10 @@ export type ComponentStylePropWithVariants<
     T,
     S extends ComponentState = ComponentState,
     C = {},
-> = ComponentStylePropWithResolvers<T, S, C> & {
+    Z = {},
+> = ComponentStylePropWithResolvers<T, S, C, Z> & {
     variants?: {
-        [key: string]: ComponentStylePropWithResolvers<T, S, C>;
+        [key: string]: ComponentStylePropWithResolvers<T, S, C, Z>;
     };
 };
 
@@ -55,7 +57,7 @@ export type ComponentState =
     | 'pressed'
     | string;
 
-export type ComponentSize = {
+export type ComponentSize<Z = {}> = Z & {
     margin?: number | string;
     marginBottom?: number | string;
     marginEnd?: number | string;
