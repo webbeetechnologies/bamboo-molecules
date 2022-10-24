@@ -50,3 +50,8 @@ export type ComponentState =
     | 'focused'
     | 'pressed'
     | string;
+
+export type WithElements<T> = {
+    left?: ComponentType<T>;
+    right?: ComponentType<T>;
+};
