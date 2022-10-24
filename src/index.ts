@@ -40,7 +40,13 @@ export {
     ResolveComponentStylesArgs,
 } from './core';
 
-export { withRipple, withActionState, CallbackActionState } from './hocs';
+export {
+    withRipple,
+    withActionState,
+    CallbackActionState,
+    withElements,
+    WithElementsProps,
+} from './hocs';
 
 export {
     useMolecules,
