@@ -1,44 +1,13 @@
-import { Platform, StyleProp, TextStyle } from 'react-native';
+import { useMemo } from 'react';
+
+import { useCurrentTheme, usePlatformType } from '../../hooks';
+import { normalizeStyles } from '../../utils';
+
 import CheckboxIOS from './CheckboxIOS';
 import CheckboxAndroid from './CheckboxAndroid';
+import type { CheckBoxBaseProps } from './types';
 
-export type Props = {
-    /**
-     * Status of checkbox.
-     */
-    status: 'checked' | 'unchecked' | 'indeterminate';
-    /**
-     * Whether checkbox is disabled.
-     */
-    disabled?: boolean;
-    /**
-     * Size of the icon.
-     * Should be a number or a Design Token
-     */
-    size?: number | string;
-    /**
-     * Function to execute on press.
-     */
-    onPress?: () => void;
-    /**
-     * Custom color for unchecked checkbox.
-     */
-    uncheckedColor?: string;
-    /**
-     * Custom color for checkbox.
-     */
-    color?: string;
-    /**
-     * Accessibility label for the touchable. This is read by the screen reader when the user taps the touchable.
-     */
-    accessibilityLabel?: string;
-    /**
-     * testID to be used on tests.
-     */
-    testID?: string;
-
-    style?: StyleProp<TextStyle>;
-};
+export type Props = CheckBoxBaseProps;
 
 /**
  * Checkboxes allow the selection of multiple options from a set.
@@ -83,7 +52,20 @@ export type Props = {
  * export default MyComponent;
  * ```
  */
-const Checkbox = (props: Props) =>
-    Platform.OS === 'ios' ? <CheckboxIOS {...props} /> : <CheckboxAndroid {...props} />;
+const Checkbox = ({ color, uncheckedColor, ...rest }: Props) => {
+    const platform = usePlatformType();
+    const currentTheme = useCurrentTheme();
+    const normalizedProps = normalizeStyles({ color, uncheckedColor }, currentTheme);
+
+    const props = useMemo(
+        () => ({
+            ...normalizedProps,
+            ...rest,
+        }),
+        [normalizedProps, rest],
+    );
+
+    return platform === 'ios' ? <CheckboxIOS {...props} /> : <CheckboxAndroid {...props} />;
+};
 
 export default Checkbox;

@@ -41,7 +41,6 @@ export type Props = SurfaceProps &
          */
         iconType?: IconType;
         iconName?: string;
-        iconPosition?: 'left' | 'right';
         /**
          * Whether the button is disabled. A disabled button is greyed out and `onPress` is not called on touch.
          */
@@ -97,7 +96,7 @@ export type Props = SurfaceProps &
         /*
          *    Size
          * */
-        size?: 'small' | 'medium' | 'large';
+        size?: 'sm' | 'md' | 'lg';
         /**
          * testID to be used on tests.
          */
@@ -148,10 +147,10 @@ const Button = (
     {
         disabled: disabledProp,
         variant = 'text',
+        size,
         loading,
         iconType,
         iconName,
-        iconPosition,
         buttonColor: customButtonColor,
         textColor: customTextColor,
         children,
@@ -185,6 +184,7 @@ const Button = (
         color: _textColor,
         borderWidth,
         typeScale,
+        fontSize,
         animationScale,
         borderRadius,
         iconSize,
@@ -195,6 +195,7 @@ const Button = (
             hovered: !disabled && !!hovered,
             disabled,
         },
+        size,
     });
 
     const textColor = normalizedTextColor && !disabled ? normalizedTextColor : _textColor;
@@ -267,16 +268,13 @@ const Button = (
         () => ({
             color: textColor,
             ...typeScale,
+            fontSize,
         }),
-        [textColor, typeScale],
+        [fontSize, textColor, typeScale],
     );
     const iconStyle = useMemo(
-        () =>
-            StyleSheet.flatten(contentStyle)?.flexDirection === 'row-reverse' ||
-            iconPosition === 'right'
-                ? [styles.iconReverse, isVariant('text') && styles.iconReverseTextMode]
-                : [styles.icon, isVariant('text') && styles.iconTextMode],
-        [contentStyle, iconPosition, isVariant],
+        () => [styles.icon, isVariant('text') && styles.iconTextMode],
+        [isVariant],
     );
 
     const memoizedSurfaceStyles = useMemo(
@@ -284,13 +282,8 @@ const Button = (
         [buttonStyle],
     );
     const memoizedViewStyles = useMemo(
-        () =>
-            [
-                styles.content,
-                iconPosition === 'right' ? { flexDirection: 'row-reverse' } : {},
-                contentStyle,
-            ] as ViewStyle,
-        [contentStyle, iconPosition],
+        () => [styles.content, contentStyle] as ViewStyle,
+        [contentStyle],
     );
     const memoizedIconContainerStyles = useMemo(
         () => [iconStyle, iconContainerStyle],

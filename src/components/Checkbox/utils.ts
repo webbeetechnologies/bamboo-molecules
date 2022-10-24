@@ -7,22 +7,43 @@ type CustomProps = {
     uncheckedColor?: string;
     animationScale?: string;
     animationDuration?: string;
-    size?: string;
     labelColor?: string;
     labelTypeScale?: string;
-    checkboxPadding?: string; // don't want to mix up with the padding from style prop
 };
 
-export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, CustomProps> = {
+type CustomSizeProps = {
+    iconSize?: number | string;
+    labelTypeScale?: number | string;
+};
+
+export const defaultStyles: ComponentStylePropWithVariants<
+    TextStyle,
+    States,
+    CustomProps,
+    CustomSizeProps
+> = {
     color: 'colors.onSurfaceVariant',
     uncheckedColor: 'colors.onSurfaceVariant',
     animationScale: 'animation.scale',
     animationDuration: 'animation.durations.1',
-    size: 'sizes.6',
-    labelColor: 'colors.onSurface',
-    labelTypeScale: 'typescale.bodyLarge',
 
-    checkboxPadding: 'spacings.1l',
+    sizes: {
+        sm: {
+            padding: 6,
+            borderRadius: 16,
+            iconSize: 20,
+        },
+        md: {
+            padding: 6,
+            borderRadius: 18,
+            iconSize: 24,
+        },
+        lg: {
+            padding: 6,
+            borderRadius: 20,
+            iconSize: 28,
+        },
+    },
 
     states: {
         checked: {
@@ -32,6 +53,51 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
             color: 'colors.onSurfaceDisabled',
             uncheckedColor: 'colors.onSurfaceDisabled',
             labelColor: 'colors.onSurfaceDisabled',
+        },
+    },
+
+    variants: {
+        ios: {
+            sizes: {},
+        },
+        android: {
+            // we only want to width and height in android
+            sizes: {
+                sm: {
+                    width: 32,
+                    height: 32,
+                },
+                md: {
+                    width: 36,
+                    height: 36,
+                },
+                lg: {
+                    width: 40,
+                    height: 40,
+                },
+            },
+        },
+        item: {
+            labelColor: 'colors.onSurface',
+
+            sizes: {
+                sm: {
+                    paddingVertical: 'spacings.1',
+                    paddingHorizontal: 'spacings.4',
+                    labelTypeScale: 'typescale.bodyMedium',
+                },
+                md: {
+                    paddingVertical: 'spacings.2',
+                    paddingHorizontal: 'spacings.4',
+                    labelTypeScale: 'typescale.bodyLarge',
+                },
+                lg: {
+                    paddingVertical: 'spacings.3',
+                    paddingHorizontal: 'spacings.4',
+                    labelTypeScale: 'typescale.bodyLarge',
+                    fontSize: 'fontSizes.lg',
+                },
+            },
         },
     },
 };

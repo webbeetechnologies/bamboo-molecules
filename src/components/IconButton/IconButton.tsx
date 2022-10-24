@@ -26,7 +26,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
      * Size of the icon.
      * Should be a number or a Design Token
      */
-    size?: number | string;
+    size?: 'sm' | 'md' | 'lg';
     /**
      * Whether the button is disabled. A disabled button is greyed out and `onPress` is not called on touch.
      */
@@ -93,7 +93,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
 const IconButton = (
     {
         name,
-        size: sizeProp = 'sizes.6',
+        size = 'md',
         accessibilityLabel,
         disabled = false,
         onPress,
@@ -108,49 +108,55 @@ const IconButton = (
     const { TouchableRipple, Surface, Icon } = useMolecules();
     const IconComponent = animated ? CrossFadeIcon : Icon;
 
-    const styleProp = useMemo(
-        () => ({ ...StyleSheet.flatten((style || {}) as TextStyle), size: sizeProp }),
-        [sizeProp, style],
-    );
-
     const {
         color: iconColor,
         borderColor,
         backgroundColor,
         borderWidth,
-        size, // normalized size
-        padding,
         borderRadius,
+        width,
+        height,
+        iconSize,
+        margin,
         ...iconButtonStyles
-    } = useComponentStyles('IconButton', styleProp, {
+    } = useComponentStyles('IconButton', style, {
         variant,
         states: {
             disabled,
             selected,
         },
+        size,
     });
 
     const rippleColor = color(iconColor).alpha(0.12).rgb().string();
 
-    const buttonSize = size + 2 * padding;
-
     const containerStyles = useMemo(() => {
         const borderStyles = {
             borderWidth,
-            borderRadius: borderRadius || buttonSize / 2, // if the default borderRadius is provided will use it, other borderRadius will be circle by default
+            borderRadius: borderRadius, // if the default borderRadius is provided will use it, other borderRadius will be circle by default
             borderColor,
         };
         return [
             {
                 backgroundColor,
-                width: buttonSize,
-                height: buttonSize,
+                width,
+                height,
+                margin,
             },
             styles.container,
             borderStyles,
             iconButtonStyles,
         ];
-    }, [backgroundColor, borderColor, borderRadius, borderWidth, buttonSize, iconButtonStyles]);
+    }, [
+        backgroundColor,
+        borderColor,
+        borderRadius,
+        borderWidth,
+        height,
+        iconButtonStyles,
+        margin,
+        width,
+    ]);
 
     return (
         <Surface style={containerStyles} {...{ elevation: 0 }}>
@@ -175,7 +181,7 @@ const IconButton = (
                 }
                 ref={ref}
                 {...rest}>
-                <IconComponent color={iconColor} name={name} size={size} />
+                <IconComponent color={iconColor} name={name} size={iconSize} />
             </TouchableRipple>
         </Surface>
     );
@@ -184,7 +190,6 @@ const IconButton = (
 const styles = StyleSheet.create({
     container: {
         overflow: 'hidden',
-        margin: 6,
         elevation: 0,
     },
     touchable: {
