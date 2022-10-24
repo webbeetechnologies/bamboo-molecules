@@ -40,13 +40,7 @@ export {
     ResolveComponentStylesArgs,
 } from './core';
 
-export {
-    withRipple,
-    withActionState,
-    CallbackActionState,
-    withElements,
-    WithElementsProps,
-} from './hocs';
+export { withRipple, withActionState, CallbackActionState } from './hocs';
 
 export {
     useMolecules,
@@ -69,4 +63,4 @@ export {
 
 export { normalizeStyles, resolveComponentStyles } from './utils';
 
-export { ComponentStylePropWithVariants } from './types';
+export { ComponentStylePropWithVariants, WithElements } from './types';
