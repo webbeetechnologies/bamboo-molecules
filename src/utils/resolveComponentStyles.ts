@@ -41,7 +41,7 @@ export const flattenStateStyles = (
 
 export const resolveSizeStyles = (
     size: string | undefined,
-    componentSizes: Record<string, ComponentSize>,
+    componentSizes: Record<string, ComponentSize> | undefined,
 ) => {
-    return size ? componentSizes[size] || {} : {};
+    return size && componentSizes ? componentSizes[size] || {} : {};
 };
