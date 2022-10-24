@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React, { forwardRef, memo, useMemo } from 'react';
 import {
     BackgroundPropType,
     StyleProp,
@@ -26,16 +26,19 @@ type Props = React.ComponentProps<typeof TouchableWithoutFeedback> & {
     style?: StyleProp<ViewStyle>;
 };
 
-const TouchableRipple = ({
-    style,
-    background,
-    borderless = false,
-    disabled: disabledProp,
-    rippleColor,
-    underlayColor,
-    children,
-    ...rest
-}: Props) => {
+const TouchableRipple = (
+    {
+        style,
+        background,
+        borderless = false,
+        disabled: disabledProp,
+        rippleColor,
+        underlayColor,
+        children,
+        ...rest
+    }: Props,
+    ref: any,
+) => {
     const disabled = disabledProp || !rest.onPress;
     const { View } = useMolecules();
     const currentTheme = useCurrentTheme();
@@ -60,6 +63,7 @@ const TouchableRipple = ({
         return (
             <TouchableNativeFeedback
                 {...rest}
+                ref={ref}
                 disabled={disabled}
                 useForeground={useForeground}
                 background={
@@ -75,6 +79,7 @@ const TouchableRipple = ({
     return (
         <TouchableHighlight
             {...rest}
+            ref={ref}
             disabled={disabled}
             style={memoizedStyles}
             underlayColor={calculatedUnderlayColor}>
@@ -92,4 +97,4 @@ const styles = StyleSheet.create({
 TouchableRipple.supported =
     Platform.OS === 'android' && Platform.Version >= ANDROID_VERSION_LOLLIPOP;
 
-export default memo(TouchableRipple);
+export default memo(forwardRef(TouchableRipple));

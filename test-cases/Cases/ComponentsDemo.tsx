@@ -1,12 +1,13 @@
 import { StyleSheet } from 'react-native';
-import type { TextProps } from '@webbee/bamboo-atoms';
 import {
     extendTheme,
     ProvideMolecules,
     useMolecules,
     useToggle,
     withRipple,
+    TextProps,
 } from 'bamboo-molecules';
+import { useRef } from 'react';
 
 const themeDark = extendTheme({
     colorMode: 'dark',
@@ -43,6 +44,7 @@ const Example = () => {
         ListItem,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
+    const buttonRef = useRef(null);
 
     return (
         <View>
@@ -79,6 +81,7 @@ const Example = () => {
             <Button
                 variant="contained"
                 onPress={() => {}}
+                ref={buttonRef}
                 iconType="material-community"
                 contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">

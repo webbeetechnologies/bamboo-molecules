@@ -1,10 +1,9 @@
 import React from 'react';
-import { useMolecules } from 'bamboo-molecules';
 import { Source } from '@storybook/addon-docs';
-import { InjectedComponentTypes, withDocsWrapper } from '../../common';
+import { withDocsWrapper, useMolecules } from '../../common';
 
 const DocsPage = () => {
-    const { View, H1, H3, Text, Code, Strong } = useMolecules<InjectedComponentTypes>();
+    const { View, H1, H3, Text, Code, Strong, Link } = useMolecules();
 
     return (
         <View>
@@ -90,7 +89,10 @@ const DocsPage = () => {
 
             <Text>
                 To read more about <Code>useComponentStyles</Code> hook, please read the{' '}
-                <Code>useComponentStyles</Code> story.
+                <Link href={{ idOrTitle: 'hooks/useComponentStyles' }}>
+                    useComponentStyles docs
+                </Link>
+                .
             </Text>
 
             <Source language="tsx" code={thirdCodeBlock} />

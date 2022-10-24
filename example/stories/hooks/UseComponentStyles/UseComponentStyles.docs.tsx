@@ -1,10 +1,9 @@
 import React from 'react';
-import { useMolecules } from 'bamboo-molecules';
 import { Source } from '@storybook/addon-docs';
-import { InjectedComponentTypes, withDocsWrapper } from '../../common';
+import { withDocsWrapper, useMolecules } from '../../common';
 
 const DocsPage = () => {
-    const { View, H1, H3, Text, Code } = useMolecules<InjectedComponentTypes>();
+    const { View, H1, H3, Text, Code, Link } = useMolecules();
 
     return (
         <View>
@@ -94,8 +93,9 @@ const DocsPage = () => {
                 is stored inside the ThemeContext. We can get it from <Code>useCurrentTheme</Code>{' '}
                 hook.
                 {'\n'}
-                Please checkout <Code>useCurrentTheme</Code> hook's story for more details about
-                this.
+                Please checkout{' '}
+                <Link href={{ idOrTitle: 'hooks/useCurrentTheme' }}>useCurrentTheme docs</Link> for
+                more details about this.
             </Text>
 
             <Source language="tsx" code={thirdCodeBlock} />
