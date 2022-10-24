@@ -63,4 +63,4 @@ export {
 
 export { normalizeStyles, resolveComponentStyles } from './utils';
 
-export { ComponentStylePropWithVariants } from './types';
+export { ComponentStylePropWithVariants, WithElements } from './types';
