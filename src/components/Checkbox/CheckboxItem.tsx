@@ -55,7 +55,7 @@ const CheckboxItem = (
         position = 'trailing',
         accessibilityLabel = label,
         disabled = false,
-        size,
+        size = 'md',
         ...props
     }: Props,
     ref: any,
@@ -89,8 +89,8 @@ const CheckboxItem = (
                 {
                     color: labelColor,
                     textAlign: isLeading ? 'right' : 'left',
-                    fontSize,
                 },
+                fontSize ? { fontSize } : {},
                 labelStyle,
             ],
         }),
