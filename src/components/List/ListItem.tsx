@@ -127,12 +127,12 @@ const ListItem = ({
 }: Props) => {
     const { Text, TouchableRipple } = useMolecules();
 
-    const { Title, titleColor, descriptionColor, ...itemStyles } = useComponentStyles(
-        'ListItem',
-        styleProp,
-    );
-
-    console.log('...', Title);
+    const {
+        Title: TitleStyle,
+        titleColor,
+        descriptionColor,
+        ...itemStyles
+    } = useComponentStyles('ListItem', styleProp);
 
     const renderDescription = (descriptionColor: string, description?: Description | null) => {
         return typeof description === 'function' ? (
@@ -159,7 +159,7 @@ const ListItem = ({
                 selectable: false,
                 ellipsizeMode: titleEllipsizeMode,
                 color: titleColor,
-                fontSize: styles.title.fontSize,
+                fontSize: TitleStyle.fontSize,
             })
         ) : (
             <Text
