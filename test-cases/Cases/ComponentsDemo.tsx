@@ -76,15 +76,10 @@ const Example = () => {
             <Checkbox.Item
                 status={isSwitchOn ? 'checked' : 'unchecked'}
                 label="Our Checkbox"
-                size={30}
                 style={{ color: 'colors.tertiary' }}
-                onPress={toggleSwitch}
+                onChange={toggleSwitch}
             />
-            <Checkbox.IOS status={isSwitchOn ? 'checked' : 'unchecked'} onPress={toggleSwitch} />
-            <Checkbox.Android
-                status={isSwitchOn ? 'checked' : 'unchecked'}
-                onPress={toggleSwitch}
-            />
+            <Checkbox status={isSwitchOn ? 'checked' : 'unchecked'} onChange={toggleSwitch} />
             <HorizontalDivider
                 leftInset={28}
                 rightInset={28}
@@ -108,8 +103,8 @@ const Example = () => {
                 variant="contained"
                 onPress={() => {}}
                 ref={buttonRef}
+                size="lg"
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Contained Button
             </Button>
@@ -118,7 +113,6 @@ const Example = () => {
                 variant="outlined"
                 onPress={() => {}}
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Outlined Button
             </Button>
@@ -127,7 +121,6 @@ const Example = () => {
                 variant="text"
                 onPress={() => {}}
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Text Button
             </Button>
@@ -136,7 +129,6 @@ const Example = () => {
                 variant="elevated"
                 onPress={() => {}}
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Elevated Button
             </Button>
