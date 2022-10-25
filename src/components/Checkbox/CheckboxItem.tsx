@@ -49,7 +49,7 @@ const CheckboxItem = (
         containerStyle,
         status,
         label,
-        onPress,
+        onChange,
         labelStyle,
         testID,
         position = 'trailing',
@@ -114,7 +114,7 @@ const CheckboxItem = (
                 checked: status === 'checked',
                 disabled,
             }}
-            onPress={onPress}
+            onPress={onChange}
             testID={testID}
             disabled={disabled}
             ref={ref}>
