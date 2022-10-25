@@ -1,15 +1,8 @@
 import { ReactNode, memo } from 'react';
-import {
-    StyleProp,
-    StyleSheet,
-    TextStyle,
-    TouchableWithoutFeedback,
-    View,
-    ViewStyle,
-} from 'react-native';
-import setColor from 'color';
-import type { $RemoveChildren, ComponentStylePropWithVariants } from '../../types';
-import { useMolecules, useCurrentTheme, useComponentStyles } from '../../hooks';
+import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import type { WithElements } from '../../types';
+import { useMolecules, useComponentStyles } from '../../hooks';
+import type { TouchableRippleProps } from '../TouchableRipple';
 
 type Title =
     | ReactNode
@@ -29,77 +22,66 @@ type Description =
           fontSize: number;
       }) => ReactNode);
 
-export type Props = $RemoveChildren<typeof TouchableWithoutFeedback> & {
-    /**
-     * Title text for the list item.
-     */
-    title: Title;
-    /**
-     * Description text for the list item or callback which returns a React element to display the description.
-     */
-    description?: Description;
-    /**
-     * Callback which returns a React element to display on the left side.
-     */
-    left?: (props: {
-        color: string;
-        style: {
-            marginLeft: number;
-            marginRight: number;
-            marginVertical?: number;
-        };
-    }) => ReactNode;
-    /**
-     * Callback which returns a React element to display on the right side.
-     */
-    right?: (props: {
-        color: string;
-        style?: {
-            marginRight: number;
-            marginVertical?: number;
-        };
-    }) => ReactNode;
-    /**
-     * Function to execute on press.
-     */
-    onPress?: () => void;
-    /**
-     * Style that is passed to the wrapping TouchableRipple element.
-     */
-    style?: StyleProp<ViewStyle>;
-    /**
-     * Style that is passed to Title element.
-     */
-    titleStyle?: StyleProp<TextStyle>;
-    /**
-     * Style that is passed to Description element.
-     */
-    descriptionStyle?: StyleProp<TextStyle>;
-    /**
-     * Truncate Title text such that the total number of lines does not
-     * exceed this number.
-     */
-    titleNumberOfLines?: number;
-    /**
-     * Truncate Description text such that the total number of lines does not
-     * exceed this number.
-     */
-    descriptionNumberOfLines?: number;
-    /**
-     * Ellipsize Mode for the Title.  One of `'head'`, `'middle'`, `'tail'`, `'clip'`.
-     *
-     * See [`ellipsizeMode`](https://reactnative.dev/docs/text#ellipsizemode)
-     */
-    titleEllipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
-    /**
-     * Ellipsize Mode for the Description.  One of `'head'`, `'middle'`, `'tail'`, `'clip'`.
-     *
-     * See [`ellipsizeMode`](https://reactnative.dev/docs/text#ellipsizemode)
-     */
-    descriptionEllipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
+type Element = (props: {
+    color: string;
+    style: {
+        marginLeft?: number;
+        marginRight: number;
+        marginVertical?: number;
+    };
+}) => ReactNode;
 
-    disabled?: boolean;
-};
+export type Props = Omit<TouchableRippleProps, 'children'> &
+    WithElements<Element> & {
+        /**
+         * Title text for the list item.
+         */
+        title: Title;
+        /**
+         * Description text for the list item or callback which returns a React element to display the description.
+         */
+        description?: Description;
+        /**
+         * Function to execute on press.
+         */
+        onPress?: () => void;
+        /**
+         * Style that is passed to the wrapping TouchableRipple element.
+         */
+        style?: StyleProp<ViewStyle>;
+        /**
+         * Style that is passed to Title element.
+         */
+        titleStyle?: StyleProp<TextStyle>;
+        /**
+         * Style that is passed to Description element.
+         */
+        descriptionStyle?: StyleProp<TextStyle>;
+        /**
+         * Truncate Title text such that the total number of lines does not
+         * exceed this number.
+         */
+        titleNumberOfLines?: number;
+        /**
+         * Truncate Description text such that the total number of lines does not
+         * exceed this number.
+         */
+        descriptionNumberOfLines?: number;
+        /**
+         * Ellipsize Mode for the Title.  One of `'head'`, `'middle'`, `'tail'`, `'clip'`.
+         *
+         * See [`ellipsizeMode`](https://reactnative.dev/docs/text#ellipsizemode)
+         */
+        titleEllipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
+        /**
+         * Ellipsize Mode for the Description.  One of `'head'`, `'middle'`, `'tail'`, `'clip'`.
+         *
+         * See [`ellipsizeMode`](https://reactnative.dev/docs/text#ellipsizemode)
+         */
+        descriptionEllipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
+
+        disabled?: boolean;
+    };
 
 /**
  * A component to show tiles inside a List.
@@ -144,9 +126,13 @@ const ListItem = ({
     ...rest
 }: Props) => {
     const { Text, TouchableRipple } = useMolecules();
-    const theme = useCurrentTheme();
 
-    const { ...itemStyles } = useComponentStyles('ListItem', styleProp);
+    const { Title, titleColor, descriptionColor, ...itemStyles } = useComponentStyles(
+        'ListItem',
+        styleProp,
+    );
+
+    console.log('...', Title);
 
     const renderDescription = (descriptionColor: string, description?: Description | null) => {
         return typeof description === 'function' ? (
@@ -168,10 +154,6 @@ const ListItem = ({
     };
 
     const renderTitle = () => {
-        const titleColor = theme.dark
-            ? theme.colors.onSurface
-            : setColor(theme.colors.primary).alpha(0.87).rgb().string();
-
         return typeof title === 'function' ? (
             title({
                 selectable: false,
@@ -189,10 +171,6 @@ const ListItem = ({
             </Text>
         );
     };
-
-    const descriptionColor = theme.dark
-        ? theme.colors.onSurfaceVariant
-        : setColor(theme.colors.primary).alpha(0.54).rgb().string();
 
     return (
         <TouchableRipple {...rest} style={[styles.container, itemStyles]} onPress={onPress}>
@@ -257,6 +235,18 @@ const styles = StyleSheet.create({
     },
 });
 
-export const defaultStyles: ComponentStylePropWithVariants<ViewStyle> = {};
+export interface ListStyles {
+    titleColor: string;
+    descriptionColor: string;
+    Title: any;
+}
+
+export const defaultStyles: ListStyles = {
+    titleColor: 'colors.onSurface',
+    descriptionColor: 'colors.onSurfaceVariants',
+    Title: {
+        fontSize: 16,
+    },
+};
 
 export default memo(ListItem);
