@@ -27,7 +27,7 @@ const CheckboxIOS = (
         status,
         disabled = false,
         size = 'sm',
-        onPress,
+        onChange,
         color: colorProp,
         style,
         testID,
@@ -40,24 +40,18 @@ const CheckboxIOS = (
     const checked = status === 'checked';
     const indeterminate = status === 'indeterminate';
 
-    const {
-        color,
-        iconSize,
-        borderRadius,
-        padding,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        width: _height,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        height: _width,
-        ...checkboxStyles
-    } = useComponentStyles('Checkbox', style, {
-        variant: 'ios',
-        states: {
-            disabled,
-            checked,
+    const { color, iconSize, borderRadius, padding, ...checkboxStyles } = useComponentStyles(
+        'Checkbox',
+        style,
+        {
+            variant: 'ios',
+            states: {
+                disabled,
+                checked,
+            },
+            size,
         },
-        size,
-    });
+    );
 
     const checkedColor = colorProp || color;
 
@@ -87,7 +81,7 @@ const CheckboxIOS = (
             {...rest}
             borderless
             rippleColor={rippleColor}
-            onPress={onPress}
+            onPress={onChange}
             disabled={disabled}
             accessibilityRole="checkbox"
             accessibilityState={{ disabled, checked }}

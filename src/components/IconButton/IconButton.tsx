@@ -128,7 +128,7 @@ const IconButton = (
         size,
     });
 
-    const rippleColor = color(iconColor).alpha(0.12).rgb().string();
+    const rippleColor = useMemo(() => color(iconColor).alpha(0.12).rgb().string(), [iconColor]);
 
     const containerStyles = useMemo(() => {
         const borderStyles = {
@@ -158,8 +158,16 @@ const IconButton = (
         width,
     ]);
 
+    const { accessibilityTraits, accessibilityState } = useMemo(
+        () => ({
+            accessibilityTraits: disabled ? ['button', 'disabled'] : 'button',
+            accessibilityState: { disabled },
+        }),
+        [disabled],
+    );
+
     return (
-        <Surface style={containerStyles} {...{ elevation: 0 }}>
+        <Surface style={containerStyles} elevation={0}>
             <TouchableRipple
                 borderless
                 centered
@@ -168,16 +176,14 @@ const IconButton = (
                 accessibilityLabel={accessibilityLabel}
                 style={styles.touchable}
                 // @ts-expect-error We keep old a11y props for backwards compat with old RN versions
-                accessibilityTraits={disabled ? ['button', 'disabled'] : 'button'}
+                accessibilityTraits={accessibilityTraits}
                 accessibilityComponentType="button"
                 accessibilityRole="button"
-                accessibilityState={{ disabled }}
+                accessibilityState={accessibilityState}
                 disabled={disabled}
                 hitSlop={
                     // @ts-ignore
-                    TouchableRipple?.supported
-                        ? { top: 10, left: 10, bottom: 10, right: 10 }
-                        : { top: 6, left: 6, bottom: 6, right: 6 }
+                    TouchableRipple?.supported ? rippleSupportedHitSlop : rippleUnsupportedHitSlop
                 }
                 ref={ref}
                 {...rest}>
@@ -187,10 +193,12 @@ const IconButton = (
     );
 };
 
+const rippleSupportedHitSlop = { top: 10, left: 10, bottom: 10, right: 10 };
+const rippleUnsupportedHitSlop = { top: 6, left: 6, bottom: 6, right: 6 };
+
 const styles = StyleSheet.create({
     container: {
         overflow: 'hidden',
-        elevation: 0,
     },
     touchable: {
         flexGrow: 1,

@@ -31,7 +31,7 @@ const CheckboxAndroid = (
         status,
         disabled = false,
         size = 'md',
-        onPress,
+        onChange,
         testID,
         style,
         color: colorProp,
@@ -145,7 +145,7 @@ const CheckboxAndroid = (
             {...rest}
             borderless
             rippleColor={rippleColor}
-            onPress={onPress}
+            onPress={onChange}
             disabled={disabled}
             accessibilityRole="checkbox"
             accessibilityState={{ disabled, checked }}

@@ -18,7 +18,7 @@ export type CheckBoxBaseProps = Omit<TouchableRippleProps, 'children'> & {
     /**
      * Function to execute on press.
      */
-    onPress?: () => void;
+    onChange?: () => void;
     /**
      * Custom color for unchecked checkbox.
      */

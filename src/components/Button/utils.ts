@@ -22,7 +22,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
         // TODO - add more sizes
         sm: {
             minWidth: 64,
-            iconSize: 20,
+            iconSize: 22,
             borderRadius: 'roundness.5',
             typeScale: 'typescale.labelMedium',
         },
@@ -34,7 +34,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
         },
         lg: {
             minWidth: 64,
-            iconSize: 28,
+            iconSize: 26,
             borderRadius: 'roundness.5',
             typeScale: 'typescale.labelLarge',
             fontSize: 16,
