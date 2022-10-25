@@ -1,43 +1,11 @@
 import { useRef, useEffect, useMemo, memo, forwardRef } from 'react';
-import { Animated, StyleProp, StyleSheet, TextStyle } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import setColor from 'color';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
-import type { TouchableRippleProps } from '../TouchableRipple';
+import type { CheckBoxBaseProps } from './types';
 
-export type Props = Omit<TouchableRippleProps, 'children'> & {
-    /**
-     * Status of checkbox.
-     */
-    status: 'checked' | 'unchecked' | 'indeterminate';
-    /**
-     * Whether checkbox is disabled.
-     */
-    disabled?: boolean;
-    /**
-     * Size of the icon.
-     * Should be a number or a Design Token
-     */
-    size?: number | string;
-    /**
-     * Function to execute on press.
-     */
-    onPress?: () => void;
-    /**
-     * Custom color for unchecked checkbox.
-     */
-    uncheckedColor?: string;
-    /**
-     * Custom color for checkbox.
-     */
-    color?: string;
-    /**
-     * testID to be used on tests.
-     */
-    testID?: string;
-
-    style?: StyleProp<TextStyle>;
-};
+export type Props = CheckBoxBaseProps & {};
 
 // From https://material.io/design/motion/speed.html#duration
 // const ANIMATION_DURATION = 100;
@@ -62,10 +30,10 @@ const CheckboxAndroid = (
     {
         status,
         disabled = false,
-        size: sizeProp,
+        size = 'md',
         onPress,
         testID,
-        style: styleProp,
+        style,
         color: colorProp,
         uncheckedColor: uncheckedColorProp,
         ...rest
@@ -76,16 +44,6 @@ const CheckboxAndroid = (
     const { current: scaleAnim } = useRef<Animated.Value>(new Animated.Value(1));
     const isFirstRendering = useRef<boolean>(true);
 
-    const style = useMemo(
-        () => ({
-            ...StyleSheet.flatten((styleProp || {}) as TextStyle),
-            ...(colorProp ? { color: colorProp } : {}), // to avoid undefined value overriding the color from the theme provider
-            ...(uncheckedColorProp ? { uncheckedColor: uncheckedColorProp } : {}),
-            ...(sizeProp ? { size: sizeProp } : {}),
-        }),
-        [colorProp, styleProp, uncheckedColorProp, sizeProp],
-    );
-
     const checked = status === 'checked';
     const indeterminate = status === 'indeterminate';
 
@@ -94,18 +52,23 @@ const CheckboxAndroid = (
         uncheckedColor,
         animationScale: scale,
         animationDuration,
-        size,
-        checkboxPadding,
+        iconSize,
+        padding,
+        width,
+        height,
+        borderRadius,
         ...checkboxStyles
     } = useComponentStyles('Checkbox', style, {
+        variant: 'android',
         states: {
             disabled,
             checked,
         },
+        size,
     });
 
-    const color = checked ? checkedColor : uncheckedColor;
-    const rippleColor = setColor(color).fade(0.32).rgb().string();
+    const color = checked ? colorProp || checkedColor : uncheckedColorProp || uncheckedColor;
+    const rippleColor = useMemo(() => setColor(color).fade(0.32).rgb().string(), [color]);
 
     useEffect(() => {
         // Do not run animation on very first rendering
@@ -148,23 +111,33 @@ const CheckboxAndroid = (
         () => ({
             rippleContainerStyles: [
                 {
-                    borderRadius: size / 2 + checkboxPadding,
-                    width: size + checkboxPadding * 2,
-                    height: size + checkboxPadding * 2,
-                    padding: checkboxPadding,
+                    borderRadius,
+                    width,
+                    height,
+                    padding,
                 },
                 checkboxStyles,
             ],
             animatedContainerStyles: { transform: [{ scale: scaleAnim }] },
             filledContainerStyles: [StyleSheet.absoluteFill, styles.fillContainer],
-            // for toggle animation
+            // for toggle animation // This needs to be computed because it's opinionated animation
             animatedFillStyles: [
-                { width: size / 2 + 4, height: size / 2 + 4 }, // 4 because padding - border(which is 1px each side)
+                { width: iconSize / 2 + (padding - 2), height: iconSize / 2 + (padding - 2) }, // 4 because padding - border(which is 1px each side)
                 { borderColor: color },
                 { borderWidth },
             ],
         }),
-        [checkboxPadding, borderWidth, checkboxStyles, color, scaleAnim, size],
+        [
+            borderRadius,
+            width,
+            height,
+            padding,
+            checkboxStyles,
+            scaleAnim,
+            iconSize,
+            color,
+            borderWidth,
+        ],
     );
 
     return (
@@ -185,7 +158,7 @@ const CheckboxAndroid = (
                     allowFontScaling={false}
                     type="material-community"
                     name={icon}
-                    size={size}
+                    size={iconSize}
                     color={color}
                 />
                 <View style={filledContainerStyles}>

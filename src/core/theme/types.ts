@@ -18,7 +18,6 @@ export type MD3Theme = {
     typescale: MD3Typescale;
     roundness: Record<string, string | number>;
     spacings: Record<string, string | number>;
-    sizes: Record<string, string | number>;
     letterSpacings: Record<string, string | number>;
     fontSizes: Record<string, string | number>;
     fontWeights: Record<string, string | number>;
@@ -30,6 +29,7 @@ export type ResolveComponentStylesArgs = {
     style: StyleProp<any>;
     variant?: string;
     states?: { [key: string]: boolean };
+    size?: string;
 };
 
 export interface ProvideThemeArgs {

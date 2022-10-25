@@ -2,20 +2,44 @@ import { StyleSheet, TextStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
 type CustomProps = {
-    typeScale?: string; // because it's a design token
-    animationScale?: string;
-    iconSize?: string;
+    animationScale?: string; // because it's a design token
+};
+
+type CustomSizeProps = {
+    iconSize?: string | number;
+    typeScale?: string | number; // because it's a design token
 };
 
 export const defaultStyles: ComponentStylePropWithVariants<
     TextStyle,
     'disabled' | 'hovered',
-    CustomProps
+    CustomProps,
+    CustomSizeProps
 > = {
-    typeScale: 'typescale.labelLarge',
     animationScale: 'animation.scale',
-    borderRadius: 'roundness.5' as unknown as number, // TODO better type definitions for design tokens
-    iconSize: 'sizes.4l',
+
+    sizes: {
+        // TODO - add more sizes
+        sm: {
+            minWidth: 64,
+            iconSize: 20,
+            borderRadius: 'roundness.5',
+            typeScale: 'typescale.labelMedium',
+        },
+        md: {
+            minWidth: 64,
+            iconSize: 24,
+            borderRadius: 'roundness.5',
+            typeScale: 'typescale.labelLarge',
+        },
+        lg: {
+            minWidth: 64,
+            iconSize: 28,
+            borderRadius: 'roundness.5',
+            typeScale: 'typescale.labelLarge',
+            fontSize: 16,
+        },
+    },
 
     states: {
         disabled: {
@@ -94,7 +118,6 @@ export const defaultStyles: ComponentStylePropWithVariants<
 
 export const styles = StyleSheet.create({
     button: {
-        minWidth: 64,
         borderStyle: 'solid',
     },
     content: {
@@ -106,17 +129,9 @@ export const styles = StyleSheet.create({
         marginLeft: 16,
         marginRight: -16,
     },
-    iconReverse: {
-        marginLeft: -16,
-        marginRight: 16,
-    },
     iconTextMode: {
         marginLeft: 12,
         marginRight: -8,
-    },
-    iconReverseTextMode: {
-        marginLeft: -8,
-        marginRight: 12,
     },
     label: {
         textAlign: 'center',

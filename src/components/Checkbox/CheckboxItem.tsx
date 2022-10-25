@@ -1,66 +1,27 @@
-import { StyleProp, StyleSheet, TextStyle, View } from 'react-native';
-
-import Checkbox from './Checkbox';
-import CheckboxAndroid from './CheckboxAndroid';
-import CheckboxIOS from './CheckboxIOS';
-import { useComponentStyles, useMolecules } from '../../hooks';
 import { forwardRef, memo, useMemo } from 'react';
+import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 
-export type Props = {
-    /**
-     * Status of checkbox.
-     */
-    status: 'checked' | 'unchecked' | 'indeterminate';
-    /**
-     * Whether checkbox is disabled.
-     */
-    disabled?: boolean;
-    /**
-     * Size of the icon.
-     * Should be a number or a Design Token
-     */
-    size?: number | string;
+import { useComponentStyles, useMolecules } from '../../hooks';
+import type { CheckBoxBaseProps } from './types';
+import Checkbox from './Checkbox';
+
+export type Props = CheckBoxBaseProps & {
     /**
      * Label to be displayed on the item.
      */
     label: string;
     /**
-     * Function to execute on press.
-     */
-    onPress?: () => void;
-    /**
-     * Accessibility label for the touchable. This is read by the screen reader when the user taps the touchable.
-     */
-    accessibilityLabel?: string;
-    /**
-     * Custom color for unchecked checkbox.
-     */
-    uncheckedColor?: string;
-    /**
-     * Custom color for checkbox.
-     */
-    color?: string;
-    /**
-     * Additional styles for container View.
-     */
-    style?: StyleProp<TextStyle>;
-    /**
      * Style that is passed to Label element.
      */
     labelStyle?: StyleProp<TextStyle>;
     /**
-     * testID to be used on tests.
+     * Style that is passed to Container element.
      */
-    testID?: string;
+    containerStyle?: StyleProp<ViewStyle>;
     /**
      * Checkbox control position.
      */
     position?: 'leading' | 'trailing';
-    /**
-     * Whether `<Checkbox.Android />` or `<Checkbox.IOS />` should be used.
-     * Left undefined `<Checkbox />` will be used.
-     */
-    mode?: 'android' | 'ios';
 };
 
 /**
@@ -85,52 +46,64 @@ export type Props = {
 const CheckboxItem = (
     {
         style: styleProp,
+        containerStyle,
         status,
         label,
         onPress,
         labelStyle,
         testID,
-        mode,
         position = 'trailing',
         accessibilityLabel = label,
         disabled = false,
+        size,
         ...props
     }: Props,
     ref: any,
 ) => {
     const { Text, TouchableRipple } = useMolecules();
-    const { labelColor, labelTypeScale, ...style } = useComponentStyles('Checkbox', styleProp, {
-        states: { disabled },
-    });
+    const { labelColor, labelTypeScale, paddingVertical, paddingHorizontal, fontSize, ...style } =
+        useComponentStyles('Checkbox', styleProp, {
+            variant: 'item',
+            states: { disabled },
+            size,
+        });
 
     const isLeading = position === 'leading';
 
     const checkbox = useMemo(() => {
-        const checkboxProps = { ...props, status, disabled };
+        const checkboxProps = { ...props, status, disabled, size, style };
 
-        if (mode === 'android') {
-            return <CheckboxAndroid {...checkboxProps} />;
-        } else if (mode === 'ios') {
-            return <CheckboxIOS {...checkboxProps} />;
-        } else {
-            return <Checkbox {...checkboxProps} />;
-        }
-    }, [disabled, mode, props, status]);
+        return <Checkbox {...checkboxProps} />;
+    }, [props, status, disabled, size, style]);
 
     const { containerStyles, labelStyles } = useMemo(
         () => ({
-            containerStyles: [styles.container, style],
+            containerStyles: [
+                styles.container,
+                { paddingVertical, paddingHorizontal },
+                containerStyle,
+            ],
             labelStyles: [
                 styles.label,
                 labelTypeScale,
                 {
                     color: labelColor,
                     textAlign: isLeading ? 'right' : 'left',
+                    fontSize,
                 },
                 labelStyle,
             ],
         }),
-        [isLeading, labelColor, labelStyle, labelTypeScale, style],
+        [
+            containerStyle,
+            fontSize,
+            isLeading,
+            labelColor,
+            labelStyle,
+            labelTypeScale,
+            paddingHorizontal,
+            paddingVertical,
+        ],
     );
 
     return (
@@ -150,7 +123,9 @@ const CheckboxItem = (
                 pointerEvents="none"
                 importantForAccessibility="no-hide-descendants">
                 {isLeading && checkbox}
-                <Text style={labelStyles}>{label}</Text>
+                <Text style={labelStyles} selectable={false}>
+                    {label}
+                </Text>
                 {!isLeading && checkbox}
             </View>
         </TouchableRipple>
@@ -164,15 +139,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingVertical: 8,
-        paddingHorizontal: 16,
     },
     label: {
         flexShrink: 1,
         flexGrow: 1,
-    },
-    font: {
-        fontSize: 16,
     },
 });
 

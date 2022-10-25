@@ -1,39 +1,10 @@
 import { forwardRef, memo, useMemo } from 'react';
-import { StyleProp, StyleSheet, TextStyle } from 'react-native';
 import setColor from 'color';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
-import type { TouchableRippleProps } from '../TouchableRipple';
+import type { CheckBoxBaseProps } from './types';
 
-export type Props = Omit<TouchableRippleProps, 'children'> & {
-    /**
-     * Status of checkbox.
-     */
-    status: 'checked' | 'unchecked' | 'indeterminate';
-    /**
-     * Whether checkbox is disabled.
-     */
-    disabled?: boolean;
-    /**
-     * Size of the icon.
-     * Should be a number or a Design Token
-     */
-    size?: number | string;
-    /**
-     * Function to execute on press.
-     */
-    onPress?: () => void;
-    /**
-     * Custom color for checkbox.
-     */
-    color?: string;
-    /**
-     * testID to be used on tests.
-     */
-    testID?: string;
-
-    style?: StyleProp<TextStyle>;
-};
+export type Props = Omit<CheckBoxBaseProps, 'uncheckedColor'> & {};
 
 /**
  * Checkboxes allow the selection of multiple options from a set.
@@ -55,10 +26,10 @@ const CheckboxIOS = (
     {
         status,
         disabled = false,
-        size: sizeProp,
+        size = 'sm',
         onPress,
         color: colorProp,
-        style: styleProp,
+        style,
         testID,
         ...rest
     }: Props,
@@ -69,27 +40,31 @@ const CheckboxIOS = (
     const checked = status === 'checked';
     const indeterminate = status === 'indeterminate';
 
-    const style = useMemo(
-        () => ({
-            ...StyleSheet.flatten((styleProp || {}) as TextStyle),
-            ...(colorProp ? { color: colorProp } : {}), // to avoid undefined value overriding the color from the theme provider
-            ...(sizeProp ? { size: sizeProp } : {}),
-        }),
-        [colorProp, styleProp, sizeProp],
-    );
-
-    const { color, size, checkboxPadding, ...checkboxStyles } = useComponentStyles(
-        'Checkbox',
-        style,
-        {
-            states: {
-                disabled,
-                checked,
-            },
+    const {
+        color,
+        iconSize,
+        borderRadius,
+        padding,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        width: _height,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        height: _width,
+        ...checkboxStyles
+    } = useComponentStyles('Checkbox', style, {
+        variant: 'ios',
+        states: {
+            disabled,
+            checked,
         },
-    );
+        size,
+    });
 
-    const rippleColor = setColor(color).fade(0.32).rgb().string();
+    const checkedColor = colorProp || color;
+
+    const rippleColor = useMemo(
+        () => setColor(checkedColor).fade(0.32).rgb().string(),
+        [checkedColor],
+    );
 
     const icon = indeterminate ? 'minus' : 'check';
 
@@ -97,14 +72,14 @@ const CheckboxIOS = (
         () => ({
             rippleContainerStyles: [
                 {
-                    borderRadius: size / 2 + checkboxPadding,
-                    padding: checkboxPadding,
+                    borderRadius,
+                    padding,
                 },
                 checkboxStyles,
             ],
             iconContainerStyles: { opacity: indeterminate || checked ? 1 : 0 },
         }),
-        [size, checkboxPadding, checkboxStyles, indeterminate, checked],
+        [borderRadius, padding, checkboxStyles, indeterminate, checked],
     );
 
     return (
@@ -125,7 +100,7 @@ const CheckboxIOS = (
                     allowFontScaling={false}
                     type="material-community"
                     name={icon}
-                    size={size}
+                    size={iconSize}
                     color={color}
                 />
             </View>

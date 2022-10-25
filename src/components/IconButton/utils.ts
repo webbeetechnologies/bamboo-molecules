@@ -4,14 +4,38 @@ import type { ComponentStylePropWithVariants } from '../../types';
 type States = 'disabled' | 'selected'; // 'disabled' | 'hovered' | 'pressed';
 type CustomProps = {
     buttonSize?: string;
-    // labelColor: string
-    // checkedColor: string;
 };
 
 export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, CustomProps> = {
     borderColor: 'colors.outline',
     color: 'colors.onSurfaceVariant',
-    padding: 'spacings.1',
+
+    sizes: {
+        sm: {
+            width: 30,
+            height: 30,
+            borderRadius: 15,
+            margin: 4,
+            // @ts-ignore
+            iconSize: 20,
+        },
+        md: {
+            width: 34,
+            height: 34,
+            borderRadius: 17,
+            margin: 6,
+            // @ts-ignore
+            iconSize: 24,
+        },
+        lg: {
+            width: 38,
+            height: 38,
+            borderRadius: 19,
+            margin: 8,
+            // @ts-ignore
+            iconSize: 28,
+        },
+    },
 
     states: {
         disabled: {
