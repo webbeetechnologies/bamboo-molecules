@@ -14,6 +14,7 @@ export {
     ItalicProps,
     ViewProps,
     IconProps,
+    IconButtonProps,
     ActivityIndicatorProps,
     HorizontalDividerProps,
     VerticalDividerProps,
@@ -21,6 +22,7 @@ export {
     ButtonProps,
     SurfaceProps,
     SwitchProps,
+    CheckboxProps,
 } from './components';
 
 export {

@@ -8,6 +8,7 @@ import {
 import {
     ActivityIndicator,
     Icon,
+    IconButton,
     HorizontalDivider,
     VerticalDivider,
     TouchableRipple,
@@ -16,6 +17,7 @@ import {
     Surface,
     Switch,
     ListItem,
+    Checkbox,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -29,6 +31,7 @@ import type { DefaultComponents, ProvideComponentsProps } from './types';
  */
 const defaultComponents: DefaultComponents = {
     Icon,
+    IconButton,
     TouchableRipple: TouchableRipple as ComponentType<TouchableRippleProps>, // ts-error
     ActivityIndicator,
     HorizontalDivider,
@@ -37,6 +40,7 @@ const defaultComponents: DefaultComponents = {
     Surface,
     Switch,
     ListItem,
+    Checkbox,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
