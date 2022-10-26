@@ -1,6 +1,6 @@
-import { ReactNode, memo } from 'react';
+import { ReactNode, memo, useMemo } from 'react';
 import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
-import type { WithElements } from '../../types';
+import type { ComponentStylePropWithVariants, WithElements } from '../../types';
 import { useMolecules, useComponentStyles } from '../../hooks';
 import type { TouchableRippleProps } from '../TouchableRipple';
 
@@ -22,14 +22,7 @@ type Description =
           fontSize: number;
       }) => ReactNode);
 
-type Element = (props: {
-    color: string;
-    style: {
-        marginLeft?: number;
-        marginRight: number;
-        marginVertical?: number;
-    };
-}) => ReactNode;
+type Element = ReactNode;
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
     WithElements<Element> & {
@@ -118,96 +111,71 @@ const ListItem = ({
     onPress,
     style: styleProp,
     titleStyle,
+    descriptionStyle,
     titleNumberOfLines = 1,
     descriptionNumberOfLines = 2,
     titleEllipsizeMode,
     descriptionEllipsizeMode,
-    descriptionStyle,
-    ...rest
+    disabled = false,
+    ...props
 }: Props) => {
     const { Text, TouchableRipple } = useMolecules();
 
-    const {
-        Title: TitleStyle,
-        titleColor,
-        descriptionColor,
-        ...itemStyles
-    } = useComponentStyles('ListItem', styleProp);
+    const { titleColor, descriptionColor, ...itemStyles } = useComponentStyles(
+        'ListItem',
+        styleProp,
+        { states: { disabled } },
+    );
 
-    const renderDescription = (descriptionColor: string, description?: Description | null) => {
-        return typeof description === 'function' ? (
-            description({
-                selectable: false,
-                ellipsizeMode: descriptionEllipsizeMode,
-                color: descriptionColor,
-                fontSize: styles.description.fontSize,
-            })
-        ) : (
-            <Text
-                selectable={false}
-                numberOfLines={descriptionNumberOfLines}
-                ellipsizeMode={descriptionEllipsizeMode}
-                style={[styles.description, { color: descriptionColor }, descriptionStyle]}>
-                {description}
-            </Text>
-        );
-    };
+    const { titleStyles, descriptionStyles } = useMemo(
+        () => ({
+            titleStyles: [{ color: titleColor }, titleStyle],
+            descriptionStyles: [{ color: descriptionColor }, descriptionStyle],
+        }),
+        [titleStyle, descriptionStyle, titleColor, descriptionColor],
+    );
 
-    const renderTitle = () => {
-        return typeof title === 'function' ? (
-            title({
-                selectable: false,
-                ellipsizeMode: titleEllipsizeMode,
-                color: titleColor,
-                fontSize: TitleStyle.fontSize,
-            })
-        ) : (
-            <Text
-                selectable={false}
-                ellipsizeMode={titleEllipsizeMode}
-                numberOfLines={titleNumberOfLines}
-                style={[styles.title, { color: titleColor }, titleStyle]}>
+    // console.log('t', titleColor, titleStyles);
+
+    const renderTitle = useMemo(() => {
+        const titleProps = { style: titleStyles, titleEllipsizeMode, titleNumberOfLines };
+        console.log('12', titleStyles);
+        return (
+            <Text {...titleProps} selectable={false}>
                 {title}
             </Text>
         );
-    };
+    }, [titleStyles, titleEllipsizeMode, titleNumberOfLines]);
+
+    const renderDescription = useMemo(() => {
+        const titleProps = { style: descriptionStyles, titleEllipsizeMode, titleNumberOfLines };
+
+        return (
+            <Text {...titleProps} selectable={false}>
+                {description}
+            </Text>
+        );
+    }, [descriptionStyles, titleEllipsizeMode, titleNumberOfLines]);
 
     return (
-        <TouchableRipple {...rest} style={[styles.container, itemStyles]} onPress={onPress}>
+        <TouchableRipple
+            {...props}
+            style={[styles.container, itemStyles]}
+            onPress={onPress}
+            disabled={disabled}>
             <View style={styles.row}>
-                {left
-                    ? left({
-                          color: descriptionColor,
-                          style: description
-                              ? styles.iconMarginLeft
-                              : {
-                                    ...styles.iconMarginLeft,
-                                    ...styles.marginVerticalNone,
-                                },
-                      })
-                    : null}
-                <View style={[styles.item, styles.content]}>
-                    {renderTitle()}
-
-                    {description ? renderDescription(descriptionColor, description) : null}
+                {left ? left : null}
+                <View style={[styles.content]}>
+                    {renderTitle}
+                    {description ? renderDescription : null}
                 </View>
-                {right
-                    ? right({
-                          color: descriptionColor,
-                          style: description
-                              ? styles.iconMarginRight
-                              : {
-                                    ...styles.iconMarginRight,
-                                    ...styles.marginVerticalNone,
-                                },
-                      })
-                    : null}
+                {right ? right : null}
             </View>
         </TouchableRipple>
     );
 };
 
-// ListItem.displayName = 'List.Item';
+ListItem.displayName = 'List.Item';
 
 const styles = StyleSheet.create({
     container: {
@@ -216,36 +184,36 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
     },
-    title: {
-        fontSize: 16,
-    },
-    description: {
-        fontSize: 14,
-    },
-    marginVerticalNone: { marginVertical: 0 },
-    iconMarginLeft: { marginLeft: 0, marginRight: 16 },
-    iconMarginRight: { marginRight: 0 },
-    item: {
-        marginVertical: 6,
-        paddingLeft: 8,
-    },
     content: {
         flex: 1,
         justifyContent: 'center',
     },
 });
 
-export interface ListStyles {
-    titleColor: string;
-    descriptionColor: string;
-    Title: any;
-}
+export type ListStyles = {
+    titleColor?: string;
+    descriptionColor?: string;
+};
 
-export const defaultStyles: ListStyles = {
+type States = 'disabled' | 'hovered' | 'focused' | 'pressed';
+
+export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, ListStyles> = {
     titleColor: 'colors.onSurface',
     descriptionColor: 'colors.onSurfaceVariants',
-    Title: {
-        fontSize: 16,
+    states: {
+        disabled: {
+            titleColor: 'colors.surfaceDisabled',
+            descriptionColor: 'colors.surfaceDisabled',
+        },
+        hovered: {
+            titleColor: 'colors.surfaceDisabled',
+        },
+        focused: {
+            titleColor: 'colors.onSurface',
+        },
+        pressed: {
+            titleColor: 'colors.surfaceDisabled',
+        },
     },
 };
 

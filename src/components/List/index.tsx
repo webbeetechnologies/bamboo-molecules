@@ -2,5 +2,5 @@
 export {
     default as ListItem,
     Props as ListItemProps,
-    defaultStyles as ListItemStyles,
+    defaultStyles as listItemStyles,
 } from './ListItem';

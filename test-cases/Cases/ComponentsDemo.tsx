@@ -132,27 +132,40 @@ const Example = () => {
             />
 
             <ListItem
-                title="This is my title"
+                rippleColor="pink"
+                disabled={true}
+                title="This is my title with description"
                 description="This is my description"
-                titleStyle={{ fontWeight: '800' }}
-                left={leftProps => (
-                    <View style={[styles.listIcon, leftProps.style]} pointerEvents="box-none">
-                        <Icon
-                            style={{ color: leftProps.color }}
-                            type="material-community"
-                            name="account-plus-outline"
-                        />
-                    </View>
-                )}
-                right={rightProps => (
-                    <View style={[styles.listIcon, rightProps.style]} pointerEvents="box-none">
-                        <Icon
-                            style={{ color: rightProps.color }}
-                            type="material-community"
-                            name="robot-angry-outline"
-                        />
-                    </View>
-                )}
+                style={{ borderColor: 'colors.danger', borderWidth: 2, marginBottom: 10 }}
+                titleStyle={{ fontWeight: '800', fontSize: 16 }}
+                left={
+                    <Icon
+                        style={styles.listIcon}
+                        type="material-community"
+                        name="robot-angry-outline"
+                    />
+                }
+                right={
+                    <Icon
+                        style={styles.listIcon}
+                        type="material-community"
+                        name="account-plus-outline"
+                        size={20}
+                    />
+                }
+            />
+            <ListItem
+                title="This is my title without description"
+                style={{ borderColor: 'colors.primary', borderWidth: 1 }}
+                titleStyle={{ fontWeight: '800', fontSize: 16 }}
+                right={
+                    <Icon
+                        style={styles.listIcon}
+                        type="material-community"
+                        name="account-plus-outline"
+                        size={20}
+                    />
+                }
             />
         </View>
     );
@@ -194,10 +207,9 @@ const styles = StyleSheet.create({
         padding: 50,
     },
     listIcon: {
-        margin: 8,
-        height: 40,
-        width: 40,
         alignItems: 'center',
         justifyContent: 'center',
+        display: 'flex',
+        color: 'colors.primary',
     },
 });
