@@ -115,6 +115,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
     },
 };
 
+// TODO Revisit to match MD3 guideline
 export const styles = StyleSheet.create({
     button: {
         borderStyle: 'solid',
@@ -130,7 +131,7 @@ export const styles = StyleSheet.create({
     },
     iconTextMode: {
         marginLeft: 'spacings.3',
-        marginRight: 'spacings.-2',
+        marginRight: 'spacings._2',
     },
     label: {
         textAlign: 'center',
