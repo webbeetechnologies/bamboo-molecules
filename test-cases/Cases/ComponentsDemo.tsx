@@ -137,7 +137,6 @@ const Example = () => {
                 variant="contained-tonal"
                 onPress={() => {}}
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Contained-tonal Button
             </Button>
