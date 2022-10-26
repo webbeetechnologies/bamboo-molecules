@@ -1,6 +1,4 @@
 // @component ./ListItem.tsx
-export {
-    default as ListItem,
-    Props as ListItemProps,
-    defaultStyles as listItemStyles,
-} from './ListItem';
+export { default as ListItem, Props as ListItemProps } from './ListItem';
+
+export { defaultStyles as listItemStyles } from './utils';

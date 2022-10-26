@@ -1,8 +1,9 @@
-import { ReactNode, memo, useMemo } from 'react';
+import { ReactNode, memo, useMemo, forwardRef } from 'react';
 import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
-import type { ComponentStylePropWithVariants, WithElements } from '../../types';
+import type { WithElements } from '../../types';
 import { useMolecules, useComponentStyles } from '../../hooks';
 import type { TouchableRippleProps } from '../TouchableRipple';
+import { CallbackActionState, withActionState } from '../../hocs';
 
 type Title =
     | ReactNode
@@ -25,7 +26,8 @@ type Description =
 type Element = ReactNode;
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
-    WithElements<Element> & {
+    WithElements<Element> &
+    CallbackActionState & {
         /**
          * Title text for the list item.
          */
@@ -103,70 +105,72 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
  *
  * @extends TouchableWithoutFeedback props https://reactnative.dev/docs/touchablewithoutfeedback#props
  */
-const ListItem = ({
-    left,
-    right,
-    title,
-    description,
-    onPress,
-    style: styleProp,
-    titleStyle: titleStyleProp,
-    descriptionStyle: descriptionStyleProp,
-    titleNumberOfLines = 1,
-    descriptionNumberOfLines = 2,
-    titleEllipsizeMode,
-    descriptionEllipsizeMode,
-    disabled = false,
-    ...props
-}: Props) => {
+const ListItem = (
+    {
+        left,
+        right,
+        title,
+        description,
+        onPress,
+        style: styleProp,
+        titleStyle: titleStyleProp,
+        descriptionStyle: descriptionStyleProp,
+        titleNumberOfLines = 1,
+        descriptionNumberOfLines = 2,
+        titleEllipsizeMode,
+        descriptionEllipsizeMode,
+        disabled = false,
+        hovered,
+        focused,
+        pressed,
+        ...props
+    }: Props,
+    ref: any,
+) => {
     const { Text, TouchableRipple } = useMolecules();
 
-    const { titleColor, descriptionColor, titleStyle, descriptionStyle, ...itemStyles } =
-        useComponentStyles(
-            'ListItem',
-            [styleProp, { titleStyle: titleStyleProp, descriptionStyle: descriptionStyleProp }],
-            { states: { disabled } },
-        );
-
-    console.log('test color', titleColor);
-
-    const { titleStyles, descriptionStyles } = useMemo(
-        () => ({
-            titleStyles: [{ color: titleColor }, titleStyle],
-            descriptionStyles: [{ color: descriptionColor }, descriptionStyle],
-        }),
-        [titleStyle, descriptionStyle, titleColor, descriptionColor],
+    const componentStyles = useComponentStyles(
+        'ListItem',
+        [styleProp, { titleStyle: titleStyleProp, descriptionStyle: descriptionStyleProp }],
+        { states: { disabled, hovered: !!hovered, focused: !!focused, pressed: !!pressed } },
     );
 
-    // console.log('t', titleColor, titleStyles);
-
-    const renderTitle = useMemo(() => {
-        const titleProps = { style: titleStyles, titleEllipsizeMode, titleNumberOfLines };
-        console.log('12', titleStyles);
-        return (
-            <Text {...titleProps} selectable={false}>
-                {title}
-            </Text>
-        );
-    }, [titleStyles, titleEllipsizeMode, titleNumberOfLines]);
-
-    const renderDescription = useMemo(() => {
-        const titleProps = { style: descriptionStyles, titleEllipsizeMode, titleNumberOfLines };
-
-        return (
-            <Text {...titleProps} selectable={false}>
-                {description}
-            </Text>
-        );
-    }, [descriptionStyles, titleEllipsizeMode, titleNumberOfLines]);
+    const { titleStyles, descriptionStyles, containerStyles } = useMemo(() => {
+        const { titleColor, descriptionColor, titleStyle, descriptionStyle, ...itemStyles } =
+            componentStyles;
+        return {
+            containerStyles: itemStyles,
+            titleStyles: [{ color: titleColor }, titleStyle],
+            descriptionStyles: [{ color: descriptionColor }, descriptionStyle],
+        };
+    }, [componentStyles]);
 
     return (
-        <TouchableRipple {...props} style={itemStyles} onPress={onPress} disabled={disabled}>
+        <TouchableRipple
+            {...props}
+            style={containerStyles}
+            onPress={onPress}
+            disabled={disabled}
+            ref={ref}>
             <View style={styles.row}>
                 {left ? left : null}
                 <View style={[styles.content]}>
-                    {renderTitle}
-                    {description ? renderDescription : null}
+                    <Text
+                        style={titleStyles}
+                        selectable={false}
+                        titleEllipsizeMode={titleEllipsizeMode}
+                        titleNumberOfLines={titleNumberOfLines}>
+                        {title}
+                    </Text>
+                    {description ? (
+                        <Text
+                            style={descriptionStyles}
+                            selectable={false}
+                            titleEllipsizeMode={descriptionEllipsizeMode}
+                            titleNumberOfLines={descriptionNumberOfLines}>
+                            {description}
+                        </Text>
+                    ) : null}
                 </View>
                 {right ? right : null}
             </View>
@@ -186,31 +190,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export type ListStyles = {
-    titleColor?: string;
-    descriptionColor?: string;
-};
-
-type States = 'disabled' | 'hovered' | 'focused' | 'pressed';
-
-export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, ListStyles> = {
-    titleColor: 'colors.onSurface',
-    descriptionColor: 'colors.onSurfaceVariants',
-    states: {
-        disabled: {
-            titleColor: 'colors.surfaceDisabled',
-            descriptionColor: 'colors.surfaceDisabled',
-        },
-        hovered: {
-            titleColor: 'colors.surfaceDisabled',
-        },
-        focused: {
-            titleColor: 'colors.onSurface',
-        },
-        pressed: {
-            titleColor: 'colors.surfaceDisabled',
-        },
-    },
-};
-
-export default memo(ListItem);
+export default memo(withActionState(forwardRef(ListItem)));
