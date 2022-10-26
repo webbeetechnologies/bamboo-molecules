@@ -61,23 +61,25 @@ const CheckboxItem = (
     ref: any,
 ) => {
     const { Text, TouchableRipple } = useMolecules();
-    const { labelColor, labelTypeScale, paddingVertical, paddingHorizontal, fontSize, ...style } =
-        useComponentStyles('Checkbox', styleProp, {
-            variant: 'item',
-            states: { disabled },
-            size,
-        });
+    const componentStyles = useComponentStyles('Checkbox', styleProp, {
+        variant: 'item',
+        states: { disabled },
+        size,
+    });
 
     const isLeading = position === 'leading';
 
-    const checkbox = useMemo(() => {
-        const checkboxProps = { ...props, status, disabled, size, style };
+    const { containerStyles, labelStyles, style } = useMemo(() => {
+        const {
+            labelColor,
+            labelTypeScale,
+            paddingVertical,
+            paddingHorizontal,
+            fontSize,
+            ..._style
+        } = componentStyles;
 
-        return <Checkbox {...checkboxProps} />;
-    }, [props, status, disabled, size, style]);
-
-    const { containerStyles, labelStyles } = useMemo(
-        () => ({
+        return {
             containerStyles: [
                 styles.container,
                 { paddingVertical, paddingHorizontal },
@@ -93,18 +95,15 @@ const CheckboxItem = (
                 fontSize ? { fontSize } : {},
                 labelStyle,
             ],
-        }),
-        [
-            containerStyle,
-            fontSize,
-            isLeading,
-            labelColor,
-            labelStyle,
-            labelTypeScale,
-            paddingHorizontal,
-            paddingVertical,
-        ],
-    );
+            style: _style,
+        };
+    }, [componentStyles, containerStyle, isLeading, labelStyle]);
+
+    const checkbox = useMemo(() => {
+        const checkboxProps = { ...props, status, disabled, size, style };
+
+        return <Checkbox {...checkboxProps} />;
+    }, [props, status, disabled, size, style]);
 
     return (
         <TouchableRipple

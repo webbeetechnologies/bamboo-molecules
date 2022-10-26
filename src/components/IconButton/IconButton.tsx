@@ -108,18 +108,7 @@ const IconButton = (
     const { TouchableRipple, Surface, Icon } = useMolecules();
     const IconComponent = animated ? CrossFadeIcon : Icon;
 
-    const {
-        color: iconColor,
-        borderColor,
-        backgroundColor,
-        borderWidth,
-        borderRadius,
-        width,
-        height,
-        iconSize,
-        margin,
-        ...iconButtonStyles
-    } = useComponentStyles('IconButton', style, {
+    const componentStyles = useComponentStyles('IconButton', style, {
         variant,
         states: {
             disabled,
@@ -128,46 +117,53 @@ const IconButton = (
         size,
     });
 
-    const rippleColor = useMemo(() => color(iconColor).alpha(0.12).rgb().string(), [iconColor]);
-
-    const containerStyles = useMemo(() => {
-        const borderStyles = {
-            borderWidth,
-            borderRadius: borderRadius, // if the default borderRadius is provided will use it, other borderRadius will be circle by default
+    const {
+        iconSize,
+        iconColor,
+        rippleColor,
+        containerStyle,
+        accessibilityState,
+        accessibilityTraits,
+    } = useMemo(() => {
+        const {
+            color: _iconColor,
             borderColor,
-        };
-        return [
-            {
-                backgroundColor,
-                width,
-                height,
-                margin,
-            },
-            styles.container,
-            borderStyles,
-            iconButtonStyles,
-        ];
-    }, [
-        backgroundColor,
-        borderColor,
-        borderRadius,
-        borderWidth,
-        height,
-        iconButtonStyles,
-        margin,
-        width,
-    ]);
+            backgroundColor,
+            borderWidth,
+            borderRadius,
+            width,
+            height,
+            iconSize: _iconSize,
+            margin,
+            ...iconButtonStyles
+        } = componentStyles;
 
-    const { accessibilityTraits, accessibilityState } = useMemo(
-        () => ({
+        return {
+            iconSize: _iconSize,
+            iconColor: _iconColor,
+            rippleColor: color(_iconColor).alpha(0.12).rgb().string(),
+            containerStyle: [
+                {
+                    backgroundColor,
+                    width,
+                    height,
+                    margin,
+                },
+                styles.container,
+                {
+                    borderWidth,
+                    borderColor,
+                    borderRadius,
+                },
+                iconButtonStyles,
+            ],
             accessibilityTraits: disabled ? ['button', 'disabled'] : 'button',
             accessibilityState: { disabled },
-        }),
-        [disabled],
-    );
+        };
+    }, [componentStyles, disabled]);
 
     return (
-        <Surface style={containerStyles} elevation={0}>
+        <Surface style={containerStyle} elevation={0}>
             <TouchableRipple
                 borderless
                 centered

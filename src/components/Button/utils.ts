@@ -126,25 +126,25 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     icon: {
-        marginLeft: 16,
-        marginRight: -16,
+        marginLeft: 'spacings.4',
+        marginRight: 'spacings._4',
     },
     iconTextMode: {
-        marginLeft: 12,
-        marginRight: -8,
+        marginLeft: 'spacings.3',
+        marginRight: 'spacings.-2',
     },
     label: {
         textAlign: 'center',
-        marginVertical: 10,
-        marginHorizontal: 24,
+        marginVertical: 'spacings.2l',
+        marginHorizontal: 'spacings.6',
     },
     uppercaseLabel: {
         textTransform: 'uppercase',
     },
     labelText: {
-        marginHorizontal: 12,
+        marginHorizontal: 'spacings.3',
     },
     labelTextAddons: {
-        marginHorizontal: 16,
+        marginHorizontal: 'spacings.4',
     },
 });

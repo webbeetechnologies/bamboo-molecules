@@ -40,41 +40,43 @@ const CheckboxIOS = (
     const checked = status === 'checked';
     const indeterminate = status === 'indeterminate';
 
-    const { color, iconSize, borderRadius, padding, ...checkboxStyles } = useComponentStyles(
-        'Checkbox',
-        style,
-        {
-            variant: 'ios',
-            states: {
-                disabled,
-                checked,
-            },
-            size,
+    const componentStyles = useComponentStyles('Checkbox', style, {
+        variant: 'ios',
+        states: {
+            disabled,
+            checked,
         },
-    );
+        size,
+    });
 
-    const checkedColor = colorProp || color;
+    const { checkedColor, iconSize, rippleColor, rippleContainerStyles, iconContainerStyles } =
+        useMemo(() => {
+            const {
+                color,
+                iconSize: _iconSize,
+                borderRadius,
+                padding,
+                ...checkboxStyles
+            } = componentStyles;
 
-    const rippleColor = useMemo(
-        () => setColor(checkedColor).fade(0.32).rgb().string(),
-        [checkedColor],
-    );
+            const _checkedColor = colorProp || color;
+
+            return {
+                checkedColor: _checkedColor,
+                iconSize: _iconSize,
+                rippleColor: setColor(_checkedColor).fade(0.32).rgb().string(),
+                rippleContainerStyles: [
+                    {
+                        borderRadius,
+                        padding,
+                    },
+                    checkboxStyles,
+                ],
+                iconContainerStyles: { opacity: indeterminate || checked ? 1 : 0 },
+            };
+        }, [checked, colorProp, componentStyles, indeterminate]);
 
     const icon = indeterminate ? 'minus' : 'check';
-
-    const { rippleContainerStyles, iconContainerStyles } = useMemo(
-        () => ({
-            rippleContainerStyles: [
-                {
-                    borderRadius,
-                    padding,
-                },
-                checkboxStyles,
-            ],
-            iconContainerStyles: { opacity: indeterminate || checked ? 1 : 0 },
-        }),
-        [borderRadius, padding, checkboxStyles, indeterminate, checked],
-    );
 
     return (
         <TouchableRipple
@@ -95,7 +97,7 @@ const CheckboxIOS = (
                     type="material-community"
                     name={icon}
                     size={iconSize}
-                    color={color}
+                    color={checkedColor}
                 />
             </View>
         </TouchableRipple>
