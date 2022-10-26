@@ -19,7 +19,6 @@ export const defaultStyles: ComponentStylePropWithVariants<
     animationScale: 'animation.scale',
 
     sizes: {
-        // TODO - add more sizes
         sm: {
             minWidth: 64,
             iconSize: 22,
@@ -37,7 +36,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
             iconSize: 26,
             borderRadius: 'roundness.5',
             typeScale: 'typescale.labelLarge',
-            fontSize: 16,
+            fontSize: 'fontSizes.md',
         },
     },
 
