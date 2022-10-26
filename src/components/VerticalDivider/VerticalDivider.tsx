@@ -60,17 +60,19 @@ const VerticalDivider = ({
     ...rest
 }: Props) => {
     const { View } = useMolecules();
-    const { bold: boldStyles, ...defaultStyles } = useComponentStyles('VerticalDivider', style);
-    const memoizedStyles = useMemo(
-        () => [
+    const componentStyles = useComponentStyles('VerticalDivider', style);
+
+    const memoizedStyles = useMemo(() => {
+        const { bold: boldStyles, ...defaultStyles } = componentStyles;
+
+        return [
             defaultStyles,
             topInset && { marginTop: topInset },
             bottomInset && { marginBottom: bottomInset },
             bold && boldStyles,
             spacing && { marginHorizontal: spacing },
-        ],
-        [bold, boldStyles, bottomInset, defaultStyles, spacing, topInset],
-    );
+        ];
+    }, [bold, bottomInset, componentStyles, spacing, topInset]);
 
     return <View {...rest} style={memoizedStyles} />;
 };

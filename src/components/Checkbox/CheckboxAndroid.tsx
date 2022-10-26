@@ -47,18 +47,7 @@ const CheckboxAndroid = (
     const checked = status === 'checked';
     const indeterminate = status === 'indeterminate';
 
-    const {
-        color: checkedColor,
-        uncheckedColor,
-        animationScale: scale,
-        animationDuration,
-        iconSize,
-        padding,
-        width,
-        height,
-        borderRadius,
-        ...checkboxStyles
-    } = useComponentStyles('Checkbox', style, {
+    const componentStyles = useComponentStyles('Checkbox', style, {
         variant: 'android',
         states: {
             disabled,
@@ -67,8 +56,63 @@ const CheckboxAndroid = (
         size,
     });
 
-    const color = checked ? colorProp || checkedColor : uncheckedColorProp || uncheckedColor;
-    const rippleColor = useMemo(() => setColor(color).fade(0.32).rgb().string(), [color]);
+    const borderWidth = scaleAnim.interpolate({
+        inputRange: [0.8, 1],
+        outputRange: [7, 0],
+    });
+
+    const {
+        iconSize,
+        color,
+        rippleColor,
+        scale,
+        animationDuration,
+        rippleContainerStyles,
+        filledContainerStyles,
+        animatedContainerStyles,
+        animatedFillStyles,
+    } = useMemo(() => {
+        const {
+            color: checkedColor,
+            uncheckedColor,
+            animationScale: _scale,
+            animationDuration: _animationDuration,
+            iconSize: _iconSize,
+            padding,
+            width,
+            height,
+            borderRadius,
+            ...checkboxStyles
+        } = componentStyles;
+
+        const _color = checked ? colorProp || checkedColor : uncheckedColorProp || uncheckedColor;
+
+        return {
+            color: _color,
+            iconSize: _iconSize,
+            rippleColor: setColor(_color).fade(0.32).rgb().string(),
+            checkboxStyle: checkboxStyles,
+            scale: _scale,
+            animationDuration: _animationDuration,
+            rippleContainerStyles: [
+                {
+                    borderRadius,
+                    width,
+                    height,
+                    padding,
+                },
+                checkboxStyles,
+            ],
+            animatedContainerStyles: { transform: [{ scale: scaleAnim }] },
+            filledContainerStyles: [StyleSheet.absoluteFill, styles.fillContainer],
+            // for toggle animation // This needs to be computed because it's opinionated animation
+            animatedFillStyles: [
+                { width: _iconSize / 2 + (padding - 2), height: _iconSize / 2 + (padding - 2) }, // 4 because padding - border(which is 1px each side)
+                { borderColor: _color },
+                { borderWidth },
+            ],
+        };
+    }, [borderWidth, checked, colorProp, componentStyles, scaleAnim, uncheckedColorProp]);
 
     useEffect(() => {
         // Do not run animation on very first rendering
@@ -91,54 +135,11 @@ const CheckboxAndroid = (
         ]).start();
     }, [status, checked, scaleAnim, scale, animationDuration]);
 
-    const borderWidth = scaleAnim.interpolate({
-        inputRange: [0.8, 1],
-        outputRange: [7, 0],
-    });
-
     const icon = indeterminate
         ? 'minus-box'
         : checked
         ? 'checkbox-marked'
         : 'checkbox-blank-outline';
-
-    const {
-        rippleContainerStyles,
-        animatedContainerStyles,
-        filledContainerStyles,
-        animatedFillStyles,
-    } = useMemo(
-        () => ({
-            rippleContainerStyles: [
-                {
-                    borderRadius,
-                    width,
-                    height,
-                    padding,
-                },
-                checkboxStyles,
-            ],
-            animatedContainerStyles: { transform: [{ scale: scaleAnim }] },
-            filledContainerStyles: [StyleSheet.absoluteFill, styles.fillContainer],
-            // for toggle animation // This needs to be computed because it's opinionated animation
-            animatedFillStyles: [
-                { width: iconSize / 2 + (padding - 2), height: iconSize / 2 + (padding - 2) }, // 4 because padding - border(which is 1px each side)
-                { borderColor: color },
-                { borderWidth },
-            ],
-        }),
-        [
-            borderRadius,
-            width,
-            height,
-            padding,
-            checkboxStyles,
-            scaleAnim,
-            iconSize,
-            color,
-            borderWidth,
-        ],
-    );
 
     return (
         <TouchableRipple

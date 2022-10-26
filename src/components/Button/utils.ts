@@ -19,7 +19,6 @@ export const defaultStyles: ComponentStylePropWithVariants<
     animationScale: 'animation.scale',
 
     sizes: {
-        // TODO - add more sizes
         sm: {
             minWidth: 64,
             iconSize: 22,
@@ -37,7 +36,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
             iconSize: 26,
             borderRadius: 'roundness.5',
             typeScale: 'typescale.labelLarge',
-            fontSize: 16,
+            fontSize: 'fontSizes.md',
         },
     },
 
@@ -126,25 +125,25 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     icon: {
-        marginLeft: 16,
-        marginRight: -16,
+        marginLeft: 'spacings.4',
+        marginRight: 'spacings._4',
     },
     iconTextMode: {
-        marginLeft: 12,
-        marginRight: -8,
+        marginLeft: 'spacings.3',
+        marginRight: 'spacings.-2',
     },
     label: {
         textAlign: 'center',
-        marginVertical: 10,
-        marginHorizontal: 24,
+        marginVertical: 'spacings.2l',
+        marginHorizontal: 'spacings.6',
     },
     uppercaseLabel: {
         textTransform: 'uppercase',
     },
     labelText: {
-        marginHorizontal: 12,
+        marginHorizontal: 'spacings.3',
     },
     labelTextAddons: {
-        marginHorizontal: 16,
+        marginHorizontal: 'spacings.4',
     },
 });
