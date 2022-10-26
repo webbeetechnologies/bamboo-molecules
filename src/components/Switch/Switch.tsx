@@ -1,4 +1,4 @@
-import { forwardRef, memo } from 'react';
+import { forwardRef, memo, useMemo } from 'react';
 import type { ComponentPropsWithRef } from 'react';
 import {
     NativeModules,
@@ -10,8 +10,7 @@ import {
 import setColor from 'color';
 
 import type { ComponentStylePropWithVariants } from '../../types';
-import { useComponentStyles, useCurrentTheme } from '../../hooks';
-import { normalizeStyles } from '../../utils';
+import { useComponentStyles } from '../../hooks';
 
 const version = NativeModules.PlatformConstants
     ? NativeModules.PlatformConstants.reactNativeVersion
@@ -75,59 +74,73 @@ export type Props = ComponentPropsWithRef<typeof NativeSwitch> & {
  * export default MyComponent;
  * ```
  */
-const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props, ref: any) => {
-    const theme = useCurrentTheme();
-    const {
-        checkedColor: checkedColorProp,
+const Switch = (
+    {
+        value,
+        disabled,
+        onValueChange,
+        color,
+        style,
         onTintColor: onTintColorProp,
         thumbTintColor: thumbTintColorProp,
-        ...switchStyles
-    } = useComponentStyles('Switch', style, {
-        states: {
-            selected_disabled: !!value && !!disabled,
-            active: !!value,
-            disabled: !!disabled,
-        },
-    });
-
-    const resolvedCheckColor = color ? color : checkedColorProp;
-
-    const { normalizedCheckColor, normalizedThumbTintColor, normalizedOnTintColor } =
-        normalizeStyles(
+        ...rest
+    }: Props,
+    ref: any,
+) => {
+    const componentStyles = useComponentStyles(
+        'Switch',
+        [
+            style,
             {
-                normalizedCheckColor: resolvedCheckColor,
-                normalizedThumbTintColor: thumbTintColorProp,
-                normalizedOnTintColor: onTintColorProp,
+                checkedColor: color,
+                onTintColor: onTintColorProp,
+                thumbTintColor: thumbTintColorProp,
             },
-            theme,
-        );
+        ],
+        {
+            states: {
+                selected_disabled: !!value && !!disabled,
+                active: !!value,
+                disabled: !!disabled,
+            },
+        },
+    );
 
-    const thumbTintColor = value && !disabled ? normalizedCheckColor : normalizedThumbTintColor;
+    const { switchStyle, props } = useMemo(() => {
+        const {
+            checkedColor,
+            onTintColor: _onTintColor,
+            thumbTintColor: _thumbTintColor,
+            ...switchStyles
+        } = componentStyles;
 
-    const onTintColor =
-        value && !disabled
-            ? setColor(normalizedCheckColor).alpha(0.5).rgb().string()
-            : normalizedOnTintColor;
+        const thumbTintColor = value && !disabled ? checkedColor : _thumbTintColor;
+        const onTintColor =
+            value && !disabled ? setColor(checkedColor).alpha(0.5).rgb().string() : _onTintColor;
 
-    const props =
-        version && version.major === 0 && version.minor <= 56
-            ? {
-                  onTintColor,
-                  thumbTintColor,
-              }
-            : Platform.OS === 'web'
-            ? {
-                  activeTrackColor: onTintColor,
-                  thumbColor: thumbTintColor,
-                  activeThumbColor: normalizedCheckColor,
-              }
-            : {
-                  thumbColor: thumbTintColor,
-                  trackColor: {
-                      true: onTintColor,
-                      false: onTintColor,
-                  },
-              };
+        return {
+            switchStyle: switchStyles,
+            props:
+                version && version.major === 0 && version.minor <= 56
+                    ? {
+                          onTintColor,
+                          thumbTintColor,
+                      }
+                    : Platform.OS === 'web'
+                    ? {
+                          activeTrackColor: onTintColor,
+                          thumbColor: thumbTintColor,
+                          activeThumbColor: checkedColor,
+                      }
+                    : {
+                          thumbColor: thumbTintColor,
+                          trackColor: {
+                              true: onTintColor,
+                              false: onTintColor,
+                          },
+                      },
+        };
+    }, [componentStyles, disabled, value]);
 
     return (
         <NativeSwitch
@@ -135,7 +148,7 @@ const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props
             value={value}
             disabled={disabled}
             onValueChange={disabled ? undefined : onValueChange}
-            style={switchStyles}
+            style={switchStyle}
             {...props}
             {...rest}
         />

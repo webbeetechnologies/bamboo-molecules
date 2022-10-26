@@ -1,4 +1,6 @@
+import { useRef } from 'react';
 import { StyleSheet } from 'react-native';
+import { Checkbox as PaperCheckbox } from 'react-native-paper';
 import {
     extendTheme,
     ProvideMolecules,
@@ -7,7 +9,6 @@ import {
     withRipple,
     TextProps,
 } from 'bamboo-molecules';
-import { useRef } from 'react';
 
 const themeDark = extendTheme({
     colorMode: 'dark',
@@ -41,6 +42,8 @@ const Example = () => {
         Icon,
         Switch,
         VerticalDivider,
+        IconButton,
+        Checkbox,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
@@ -56,8 +59,27 @@ const Example = () => {
                 </TouchableRipple>
             </Surface>
             <Icon type="material-community" name="robot-angry-outline" />
+            <IconButton
+                name={isSwitchOn ? 'chevron-left' : 'chevron-right'}
+                onPress={() => {}}
+                variant="outlined"
+                style={{ backgroundColor: 'colors.primary', color: '#fff' }}
+                animated
+            />
 
             <Text>Text</Text>
+            <PaperCheckbox.Item
+                status={isSwitchOn ? 'checked' : 'unchecked'}
+                label="Paper Checkbox"
+                onPress={toggleSwitch}
+            />
+            <Checkbox.Item
+                status={isSwitchOn ? 'checked' : 'unchecked'}
+                label="Our Checkbox"
+                style={{ color: 'colors.tertiary' }}
+                onChange={toggleSwitch}
+            />
+            <Checkbox status={isSwitchOn ? 'checked' : 'unchecked'} onChange={toggleSwitch} />
             <HorizontalDivider
                 leftInset={28}
                 rightInset={28}
@@ -81,8 +103,8 @@ const Example = () => {
                 variant="contained"
                 onPress={() => {}}
                 ref={buttonRef}
+                size="lg"
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Contained Button
             </Button>
@@ -91,7 +113,6 @@ const Example = () => {
                 variant="outlined"
                 onPress={() => {}}
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Outlined Button
             </Button>
@@ -100,7 +121,6 @@ const Example = () => {
                 variant="text"
                 onPress={() => {}}
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Text Button
             </Button>
@@ -109,7 +129,6 @@ const Example = () => {
                 variant="elevated"
                 onPress={() => {}}
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Elevated Button
             </Button>
@@ -118,17 +137,11 @@ const Example = () => {
                 variant="contained-tonal"
                 onPress={() => {}}
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Contained-tonal Button
             </Button>
 
-            <Switch
-                value={isSwitchOn}
-                disabled
-                onValueChange={toggleSwitch}
-                color="rgba(125, 82, 96, 1)"
-            />
+            <Switch value={isSwitchOn} onValueChange={toggleSwitch} color="rgba(125, 82, 96, 1)" />
         </View>
     );
 };

@@ -15,6 +15,12 @@ const Icon = ({ type = 'material', style, ...rest }: IconProps) => {
     return <IconComponent style={componentStyles} {...rest} />;
 };
 
-export const defaultStyles: ComponentStylePropWithVariants<ViewStyle> = {};
+type CustomProps = {
+    animationScale: string;
+};
+
+export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
+    animationScale: 'animation.scale',
+};
 
 export default memo(Icon);

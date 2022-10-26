@@ -30,3 +30,6 @@ export {
 } from './HorizontalDivider';
 export { VerticalDivider, verticalDividerStyles, VerticalDividerProps } from './VerticalDivider';
 export { Switch, switchStyles, SwitchProps } from './Switch';
+
+export { IconButton, IconButtonProps, iconButtonStyles } from './IconButton';
+export { default as Checkbox, CheckboxProps, checkboxStyles } from './Checkbox';
