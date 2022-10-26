@@ -158,11 +158,7 @@ const ListItem = ({
     }, [descriptionStyles, titleEllipsizeMode, titleNumberOfLines]);
 
     return (
-        <TouchableRipple
-            {...props}
-            style={[styles.container, itemStyles]}
-            onPress={onPress}
-            disabled={disabled}>
+        <TouchableRipple {...props} style={itemStyles} onPress={onPress} disabled={disabled}>
             <View style={styles.row}>
                 {left ? left : null}
                 <View style={[styles.content]}>
@@ -178,9 +174,6 @@ const ListItem = ({
 ListItem.displayName = 'List.Item';
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 8,
-    },
     row: {
         flexDirection: 'row',
     },

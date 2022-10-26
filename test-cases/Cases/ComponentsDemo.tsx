@@ -136,7 +136,7 @@ const Example = () => {
                 disabled={true}
                 title="This is my title with description"
                 description="This is my description"
-                style={{ borderColor: 'colors.danger', borderWidth: 2, marginBottom: 10 }}
+                style={{ borderColor: 'colors.primary', borderWidth: 2, marginBottom: 10 }}
                 titleStyle={{ fontWeight: '800', fontSize: 16 }}
                 left={
                     <Icon
