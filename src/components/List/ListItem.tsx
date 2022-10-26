@@ -110,8 +110,8 @@ const ListItem = ({
     description,
     onPress,
     style: styleProp,
-    titleStyle,
-    descriptionStyle,
+    titleStyle: titleStyleProp,
+    descriptionStyle: descriptionStyleProp,
     titleNumberOfLines = 1,
     descriptionNumberOfLines = 2,
     titleEllipsizeMode,
@@ -121,11 +121,14 @@ const ListItem = ({
 }: Props) => {
     const { Text, TouchableRipple } = useMolecules();
 
-    const { titleColor, descriptionColor, ...itemStyles } = useComponentStyles(
-        'ListItem',
-        styleProp,
-        { states: { disabled } },
-    );
+    const { titleColor, descriptionColor, titleStyle, descriptionStyle, ...itemStyles } =
+        useComponentStyles(
+            'ListItem',
+            [styleProp, { titleStyle: titleStyleProp, descriptionStyle: descriptionStyleProp }],
+            { states: { disabled } },
+        );
+
+    console.log('test color', titleColor);
 
     const { titleStyles, descriptionStyles } = useMemo(
         () => ({

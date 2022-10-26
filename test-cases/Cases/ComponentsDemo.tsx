@@ -149,13 +149,15 @@ const Example = () => {
                 color="rgba(125, 82, 96, 1)"
             />
 
+            <Switch value={isSwitchOn} onValueChange={toggleSwitch} color="rgba(125, 82, 96, 1)" />
+
             <ListItem
                 rippleColor="pink"
                 disabled={true}
                 title="This is my title with description"
                 description="This is my description"
                 style={{ borderColor: 'colors.primary', borderWidth: 2, marginBottom: 10 }}
-                titleStyle={{ fontWeight: '800', fontSize: 16 }}
+                titleStyle={{ fontWeight: '800', fontSize: 16, color: 'colors.primary' }}
                 left={
                     <Icon
                         style={styles.listIcon}
@@ -185,7 +187,6 @@ const Example = () => {
                     />
                 }
             />
-            <Switch value={isSwitchOn} onValueChange={toggleSwitch} color="rgba(125, 82, 96, 1)" />
         </View>
     );
 };
