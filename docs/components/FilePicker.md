@@ -6,7 +6,9 @@ A react-native component that allows you to use native UI to select a file from 
 
 ## References:
 
--   https://www.npmjs.com/package/react-native-document-picker
+-   [Library to use](https://www.npmjs.com/package/react-native-document-picker)
+-   [Bootstrap](https://getbootstrap.com/docs/5.2/forms/form-control/#file-input)\
+    Though we are not going to implement bootstrap, this is the closest reference to a file input field.
 
 ## Personas
 
@@ -24,15 +26,17 @@ A react-native component that allows you to use native UI to select a file from 
 
 ### Component Consumer
 
--   As a component consumer, I expect that the file upload field follows Material You Guidelines for input fields
+-   As a component consumer, I expect that the File Picker follows Material You Guidelines for input fields
 -   As a component consumer, I want to extend the ability of the input component to select file(s).
 -   As a component consumer, I want the ability to allow selection of single or multiple files.
 -   As a component consumer, I want the ability to select specific type of files. (image/ pdf/ doc/ xls/ csv or any other)
 -   As a component consumer, I want to pick the icon that is displayed for the file type.
--   As a component consumer, I want to upload the files and notify the user of the same.
+-   As a component consumer, I want to pass an onChange function to handle file changes.
+-   As a component consumer, I want to be able to show a progress indicator with a controlled loading prop.
 -   As a component consumer, I want to update the user in case of upload errors.
 -   As a component consumer, I want to be able to make a File picker field as required.
--   As a component consumer, I want to be limit the size of the file that can be selected.
+-   As a component consumer, I want to limit the size of the file that can be selected.
+-   As a component consumer, I want to limit the number of files that can be selected at once.
 
 ## Components Consumed
 
@@ -41,5 +45,5 @@ A react-native component that allows you to use native UI to select a file from 
 
 ## Implementation details
 
--   Maybe create an HOC that accepts a component that can serve as a trigger to display the file picker.
--   FilePicker field could just implement the HOC with an input field.
+-   Maybe create an HOC/ custom hook that exposes a common behaviour to display the file picker.
+-   FilePicker field could just implement the HOC/ Hook with an input field.
