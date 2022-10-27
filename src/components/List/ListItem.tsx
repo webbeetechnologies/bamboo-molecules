@@ -74,9 +74,13 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          * See [`ellipsizeMode`](https://reactnative.dev/docs/text#ellipsizemode)
          */
         descriptionEllipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
-
+        /**
+         * Whether the item is disabled.
+         */
         disabled?: boolean;
-
+        /**
+         * Whether the divider shows or not.
+         */
         divider?: boolean;
     };
 
@@ -130,7 +134,7 @@ const ListItem = (
     }: Props,
     ref: any,
 ) => {
-    const { Text, TouchableRipple, View, VerticalDivider } = useMolecules();
+    const { Text, TouchableRipple, View, HorizontalDivider } = useMolecules();
 
     const componentStyles = useComponentStyles(
         'ListItem',
@@ -139,12 +143,11 @@ const ListItem = (
     );
 
     const { titleStyles, descriptionStyles, containerStyles } = useMemo(() => {
-        const { titleColor, descriptionColor, titleStyle, descriptionStyle, ...itemStyles } =
-            componentStyles;
+        const { titleStyle, descriptionStyle, ...itemStyles } = componentStyles;
         return {
             containerStyles: itemStyles,
-            titleStyles: [{ color: titleColor }, titleStyle],
-            descriptionStyles: [{ color: descriptionColor }, descriptionStyle],
+            titleStyles: titleStyle,
+            descriptionStyles: descriptionStyle,
         };
     }, [componentStyles]);
 
@@ -157,7 +160,7 @@ const ListItem = (
             ref={ref}>
             <View>
                 <View style={styles.row}>
-                    {left ? left : null}
+                    {left ? <View>{left}</View> : null}
                     <View style={[styles.content]}>
                         <Text
                             style={titleStyles}
@@ -176,9 +179,9 @@ const ListItem = (
                             </Text>
                         ) : null}
                     </View>
-                    {right ? right : null}
+                    {right ? <View>{right}</View> : null}
                 </View>
-                {divider && <VerticalDivider spacing={10} bold style={styles.divider} />}
+                {divider && <HorizontalDivider spacing={20} leftInset={16} rightInset={24} />}
             </View>
         </TouchableRipple>
     );
@@ -193,9 +196,6 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         justifyContent: 'center',
-    },
-    divider: {
-        backgroundColor: 'red',
     },
 });
 

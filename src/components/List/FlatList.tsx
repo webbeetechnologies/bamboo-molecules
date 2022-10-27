@@ -1,55 +1,67 @@
 import { memo, useMemo, forwardRef } from 'react';
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
-
+import type { StyleProp, ViewStyle } from 'react-native';
 import { FlashList, FlashListProps } from '@shopify/flash-list';
-import { useComponentStyles, useMolecules } from '../../hooks';
-// import type { WithElements } from '../../types';
-// import { useMolecules, useComponentStyles } from '../../hooks';
-// import type { TouchableRippleProps } from '../TouchableRipple';
-// import { CallbackActionState, withActionState } from '../../hocs';
-
-// type ItemT = ReactNode;
+import { useComponentStyles } from '../../hooks';
 
 export type Props = FlashListProps<{}> & {
     /**
-     * Style that is passed to Container element.
+     * You can use `contentContainerStyle` to apply padding that will be applied to the whole content itself.
+     * For example, you can apply this padding, so that all of your items have leading and trailing space.
+     * Note: horizontal padding is ignored on vertical lists and vertical padding on horizontal ones.
      */
-    style?: StyleProp<TextStyle>;
+    contentContainerStyle?: StyleProp<ViewStyle>;
+
     /**
-     * Style that is passed to Container element.
+     * Styling for internal View for `ListHeaderComponent`.
      */
-    containerStyle?: StyleProp<ViewStyle>;
+    ListHeaderComponentStyle?: StyleProp<ViewStyle>;
 
-    // renderItem: ({ item, index, target, extraData }: any) => void;
-
-    // data: ItemT[];
+    /**
+     * Styling for internal View for `ListFooterComponent`.
+     */
+    ListFooterComponentStyle?: StyleProp<ViewStyle>;
 };
 
 const FlatList = (
-    { style: styleProp, containerStyle, data, renderItem, ...props }: Props,
+    {
+        style: styleProp,
+        contentContainerStyle: contentContainerStyleProps,
+        ListHeaderComponentStyle: listHeaderComponentStyleProps,
+        ListFooterComponentStyle: listFooterComponentStyleProps,
+        data,
+        renderItem,
+        ...props
+    }: Props,
     ref: any,
 ) => {
-    const { Surface } = useMolecules();
-    const componentStyles = useComponentStyles('FlatList', styleProp);
+    const componentStyles = useComponentStyles('FlatList', [
+        styleProp,
+        contentContainerStyleProps,
+        listHeaderComponentStyleProps,
+        listFooterComponentStyleProps,
+    ]);
 
-    const { containerStyles, style } = useMemo(() => {
-        const { ..._style } = componentStyles;
-        return {
-            containerStyles: [containerStyle],
-            style: _style,
-        };
-    }, [componentStyles, containerStyle]);
-
-    const flashList = useMemo(() => {
-        const flashListProps = { ...props, data, renderItem, style };
-
-        return <FlashList {...flashListProps} />;
-    }, [props, data, renderItem, style]);
+    const { contentContainerStyles, listFooterComponentStyles, listHeaderComponentStyles } =
+        useMemo(() => {
+            const { contentContainerStyle, ListHeaderComponentStyle, ListFooterComponentStyle } =
+                componentStyles;
+            return {
+                contentContainerStyles: contentContainerStyle,
+                listFooterComponentStyles: ListFooterComponentStyle,
+                listHeaderComponentStyles: ListHeaderComponentStyle,
+            };
+        }, [componentStyles]);
 
     return (
-        <Surface style={containerStyles} ref={ref} elevation={0}>
-            {flashList}
-        </Surface>
+        <FlashList
+            data={data}
+            renderItem={renderItem}
+            contentContainerStyle={contentContainerStyles}
+            ListHeaderComponentStyle={listHeaderComponentStyles}
+            ListFooterComponentStyle={listFooterComponentStyles}
+            {...props}
+            ref={ref}
+        />
     );
 };
 

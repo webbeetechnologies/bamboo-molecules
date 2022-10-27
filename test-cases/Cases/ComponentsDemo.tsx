@@ -176,8 +176,10 @@ const Example = () => {
                 }
             />
             <ListItem
+                onPress={() => {}}
                 title="This is my title without description"
                 style={{ borderColor: 'colors.primary', borderWidth: 1 }}
+                divider={true}
                 titleStyle={{ fontWeight: '800', fontSize: 16 }}
                 right={
                     <Icon
@@ -209,9 +211,6 @@ const Example = () => {
                     { title: 'First item title', description: 'First item description' },
                     { title: 'Second item title', description: 'Second item description' },
                 ]}
-                containerStyle={{
-                    marginVertical: 4,
-                }}
             />
         </View>
     );

@@ -2,28 +2,39 @@ import type { TextStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from 'src/types';
 
 export type ListStyles = {
-    titleColor?: string;
-    descriptionColor?: string;
+    titleStyle?: object | string | number;
+    descriptionStyle?: object | string | number;
 };
 
 type States = 'disabled' | 'hovered' | 'focused' | 'pressed';
 
 export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, ListStyles> = {
-    titleColor: 'colors.onSurface',
-    descriptionColor: 'colors.onSurfaceVariants',
+    color: 'colors.surface',
+    titleStyle: { color: 'colors.onSurface' },
+    descriptionStyle: { color: 'colors.onSurfaceVariants' },
     states: {
         disabled: {
-            titleColor: 'colors.surfaceDisabled',
-            descriptionColor: 'colors.surfaceDisabled',
+            titleStyle: {
+                color: 'colors.surfaceDisabled',
+            },
+            descriptionStyle: {
+                color: 'colors.surfaceDisabled',
+            },
         },
         hovered: {
-            titleColor: 'colors.surfaceDisabled',
+            titleStyle: {
+                color: 'colors.surfaceDisabled',
+            },
         },
         focused: {
-            titleColor: 'colors.onSurface',
+            titleStyle: {
+                color: 'colors.onSurface',
+            },
         },
         pressed: {
-            titleColor: 'colors.surfaceDisabled',
+            titleStyle: {
+                color: 'colors.surfaceDisabled',
+            },
         },
     },
 };
