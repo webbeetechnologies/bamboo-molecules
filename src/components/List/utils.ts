@@ -27,3 +27,5 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Li
         },
     },
 };
+
+export const flatListStyles: ComponentStylePropWithVariants<TextStyle> = {};

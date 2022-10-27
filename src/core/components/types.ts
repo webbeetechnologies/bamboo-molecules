@@ -12,6 +12,7 @@ import type {
     VerticalDividerProps,
     ListItemProps,
     Checkbox,
+    FlatListProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -31,6 +32,7 @@ export interface DefaultComponents {
     Switch: ComponentType<SwitchProps>;
     ListItem: ComponentType<ListItemProps>;
     Checkbox: typeof Checkbox;
+    FlatList: ComponentType<FlatListProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

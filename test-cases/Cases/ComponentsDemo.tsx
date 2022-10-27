@@ -45,6 +45,7 @@ const Example = () => {
         ListItem,
         IconButton,
         Checkbox,
+        FlatList,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
@@ -187,6 +188,31 @@ const Example = () => {
                     />
                 }
             />
+
+            <FlatList
+                renderItem={({ item }: any) => (
+                    <ListItem
+                        title={item.title}
+                        description={item.description}
+                        style={{ marginBottom: 5 }}
+                        titleStyle={{ fontWeight: '800', fontSize: 16 }}
+                        divider={true}
+                        right={
+                            <Checkbox
+                                status={isSwitchOn ? 'checked' : 'unchecked'}
+                                onChange={toggleSwitch}
+                            />
+                        }
+                    />
+                )}
+                data={[
+                    { title: 'First item title', description: 'First item description' },
+                    { title: 'Second item title', description: 'Second item description' },
+                ]}
+                containerStyle={{
+                    marginVertical: 4,
+                }}
+            />
         </View>
     );
 };
@@ -230,6 +256,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         display: 'flex',
-        color: 'colors.primary',
     },
 });

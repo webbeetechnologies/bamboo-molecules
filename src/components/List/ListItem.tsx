@@ -1,5 +1,5 @@
 import { ReactNode, memo, useMemo, forwardRef } from 'react';
-import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TextStyle, ViewStyle } from 'react-native';
 import type { WithElements } from '../../types';
 import { useMolecules, useComponentStyles } from '../../hooks';
 import type { TouchableRippleProps } from '../TouchableRipple';
@@ -76,6 +76,8 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
         descriptionEllipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
 
         disabled?: boolean;
+
+        divider?: boolean;
     };
 
 /**
@@ -123,11 +125,12 @@ const ListItem = (
         hovered,
         focused,
         pressed,
+        divider = false,
         ...props
     }: Props,
     ref: any,
 ) => {
-    const { Text, TouchableRipple } = useMolecules();
+    const { Text, TouchableRipple, View, VerticalDivider } = useMolecules();
 
     const componentStyles = useComponentStyles(
         'ListItem',
@@ -152,27 +155,30 @@ const ListItem = (
             onPress={onPress}
             disabled={disabled}
             ref={ref}>
-            <View style={styles.row}>
-                {left ? left : null}
-                <View style={[styles.content]}>
-                    <Text
-                        style={titleStyles}
-                        selectable={false}
-                        titleEllipsizeMode={titleEllipsizeMode}
-                        titleNumberOfLines={titleNumberOfLines}>
-                        {title}
-                    </Text>
-                    {description ? (
+            <View>
+                <View style={styles.row}>
+                    {left ? left : null}
+                    <View style={[styles.content]}>
                         <Text
-                            style={descriptionStyles}
+                            style={titleStyles}
                             selectable={false}
-                            titleEllipsizeMode={descriptionEllipsizeMode}
-                            titleNumberOfLines={descriptionNumberOfLines}>
-                            {description}
+                            titleEllipsizeMode={titleEllipsizeMode}
+                            titleNumberOfLines={titleNumberOfLines}>
+                            {title}
                         </Text>
-                    ) : null}
+                        {description ? (
+                            <Text
+                                style={descriptionStyles}
+                                selectable={false}
+                                titleEllipsizeMode={descriptionEllipsizeMode}
+                                titleNumberOfLines={descriptionNumberOfLines}>
+                                {description}
+                            </Text>
+                        ) : null}
+                    </View>
+                    {right ? right : null}
                 </View>
-                {right ? right : null}
+                {divider && <VerticalDivider spacing={10} bold style={styles.divider} />}
             </View>
         </TouchableRipple>
     );
@@ -187,6 +193,9 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         justifyContent: 'center',
+    },
+    divider: {
+        backgroundColor: 'red',
     },
 });
 
