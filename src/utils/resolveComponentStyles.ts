@@ -1,3 +1,4 @@
+import deepmerge from 'ts-deepmerge';
 import type { ResolveComponentStylesArgs } from '../core/theme/types';
 import type { ComponentSize } from '../types';
 
@@ -13,15 +14,15 @@ export const resolveComponentStyles = ({
     const variantStyles = variant ? variants[variant] || {} : {};
     const { states: variantStates, sizes: variantSizes, ...nonStateStyles } = variantStyles; // filtering the unused state styles
 
-    return {
-        ...styles,
-        ...nonStateStyles,
-        ...flattenStateStyles(states, componentStates),
-        ...flattenStateStyles(states, variantStates),
-        ...resolveSizeStyles(size, componentSizes),
-        ...resolveSizeStyles(size, variantSizes),
-        ...style, // style prop will always get the highest priority
-    };
+    return deepmerge(
+        styles,
+        nonStateStyles,
+        flattenStateStyles(states, componentStates),
+        flattenStateStyles(states, variantStates),
+        resolveSizeStyles(size, componentSizes),
+        resolveSizeStyles(size, variantSizes),
+        style,
+    );
 };
 
 export const flattenStateStyles = (
