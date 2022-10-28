@@ -1,23 +1,33 @@
-import { memo, forwardRef, useMemo } from 'react';
+import { memo, forwardRef, useMemo, useCallback } from 'react';
 import type { FlashListProps } from '@shopify/flash-list';
 import type { StyleProp, TextStyle } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
-// type NewItems = { rowItems: {}; rowIndex: number };
+type NewItems = { item: Section; index: number };
 
 // interface Data {
 //     title: string;
 //     data: any[];
 // }
 
+type Item = {};
+
+interface Section {
+    title: string;
+    data: Item[];
+}
+
 export type Props = FlashListProps<{}> & {
     headerStyle?: StyleProp<TextStyle>;
+    section: Section;
+    renderHeader?: Section;
 } & any;
 
 const SectionList = (
     {
-        data,
-        // renderItem,
+        section,
+        renderItem,
+        renderHeader,
         style: styleProp,
         headerStyle: headerStyleProp,
         contentContainerStyle: contentContainerStyleProps,
@@ -73,19 +83,51 @@ const SectionList = (
     //     })
     //     .filter((item: any) => item !== null) as number[];
 
-    // const render = (items: {}, index: number) => {
+    // const render = (items: any, index: number) => {
     //     if (!items) return null;
-
-    //     //
-    //     // const;
+    //     const newItems = items;
+    //     const flattenItem = newItems.flat();
+    //     // console.error('>>>>', items, typeof items, index);
+    //     console.error('>>>> flatten >>>>', flattenItem, index);
+    //     return null;
     // };
+
+    // const flattenItems = (itemVal: Record<string, any>) => {
+    //     let flattenedStyles = {};
+    //     if (itemVal) {
+    //         flattenedStyles = { ...flattenedStyles, ...(itemVal || {}) };
+    //     }
+    //     return flattenedStyles;
+    // };
+
+    const render = useCallback(
+        ({ item, index }: NewItems) => {
+            if (Object.keys(item).find(e => e === 'data')) {
+                // const newArr = ...item;
+                // console.error('data is available', item, typeof item);
+                const newData = item?.data;
+                return newData.map(val => renderItem({ item: val, index }));
+            }
+            return renderHeader({ item, index });
+
+            // const newData = item?.data;
+            // return typeof Object.values(item).flat() === 'object'
+            //     ? newData.map(val => renderItem({ item: val, index }))
+            //     : renderHeader({ item, index });
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [renderItem],
+    );
 
     return (
         <FlatList
-            data={data}
+            section
+            data={section}
             // renderItem={({ item, index }) => render({ rowItems: item, rowIndex: index })}
-            // renderItem={({ item, index }) => render(item, index)}
-            getItemType={item => (typeof item === 'string' ? 'sectionHeader' : 'row')}
+            renderItem={render}
+            // renderItem={renderItem}
+            // getItemType={item => (typeof item === 'string' ? 'sectionHeader' : 'row')}
+            // getItemType={type => console.log('type', type)}
             // stickyHeaderIndices={stickyHeaderIndices}
             contentContainerStyle={contentContainerStyles}
             ListHeaderComponentStyle={listHeaderComponentStyles}

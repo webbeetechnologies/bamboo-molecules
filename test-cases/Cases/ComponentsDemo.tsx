@@ -215,57 +215,26 @@ const Example = () => {
             />
 
             <SectionList
-                data={[
+                section={[
                     { title: 'First' },
                     {
+                        title: 'Second',
                         data: [
                             {
-                                title: 'Section List item title',
-                                description: 'Section item description',
+                                firstname: 'Whales',
+                                lastname: 'Teju',
                             },
                             {
-                                title: 'Section List item title',
-                                description: 'Section item description',
-                            },
-                            {
-                                title: 'Section List item title',
-                                description: 'Section item description',
-                            },
-                            {
-                                title: 'Section List item title',
-                                description: 'Section item description',
-                            },
-                            {
-                                title: 'Section List item title',
-                                description: 'Section item description',
-                            },
-                            {
-                                title: 'Section List item title',
-                                description: 'Section item description',
-                            },
-                            {
-                                title: 'Section List item title',
-                                description: 'Section item description',
-                            },
-                            {
-                                title: 'Section List item title',
-                                description: 'Section item description',
-                            },
-                            {
-                                title: 'Section List item title',
-                                description: 'Section item description',
-                            },
-                            {
-                                title: 'Section List item title',
-                                description: 'Section item description',
+                                firstname: '12',
+                                lastname: 'USA',
                             },
                         ],
                     },
                 ]}
                 renderItem={({ item }: any) => (
                     <ListItem
-                        title={item.title}
-                        description={item.description}
+                        title={item.firstname}
+                        description={item.lastname}
                         style={{ marginBottom: 5 }}
                         titleStyle={{ fontWeight: '800', fontSize: 16 }}
                         right={
@@ -279,6 +248,7 @@ const Example = () => {
                         }
                     />
                 )}
+                renderHeader={({ item: { title } }) => <Text>{title}</Text>}
                 headerStyles={{ color: 'colors.error' }}
             />
         </View>
