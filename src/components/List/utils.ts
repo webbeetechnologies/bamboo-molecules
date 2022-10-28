@@ -1,15 +1,17 @@
-import type { TextStyle } from 'react-native';
+import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from 'src/types';
 
 export type ListItemStylesProp = {
-    titleStyle?: object;
-    descriptionStyle?: object;
+    color?: string;
+    titleStyle?: StyleProp<TextStyle>;
+    descriptionStyle?: StyleProp<TextStyle>;
 };
 
 type States = 'disabled' | 'hovered' | 'focused' | 'pressed';
 
-export const listItemStyles: ComponentStylePropWithVariants<TextStyle, States, ListItemStylesProp> =
+export const listItemStyles: ComponentStylePropWithVariants<ViewStyle, States, ListItemStylesProp> =
     {
+        color: 'colors.surface',
         titleStyle: { color: 'colors.onSurface' },
         descriptionStyle: { color: 'colors.onSurfaceVariants' },
         states: {
