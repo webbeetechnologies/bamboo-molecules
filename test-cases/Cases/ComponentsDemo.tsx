@@ -144,13 +144,6 @@ const Example = () => {
                 Contained-tonal Button
             </Button>
 
-            <Switch
-                value={isSwitchOn}
-                disabled
-                onValueChange={toggleSwitch}
-                color="rgba(125, 82, 96, 1)"
-            />
-
             <Switch value={isSwitchOn} onValueChange={toggleSwitch} color="rgba(125, 82, 96, 1)" />
 
             <ListItem
@@ -215,24 +208,10 @@ const Example = () => {
             />
 
             <SectionList
-                section={[
-                    { title: 'First' },
-                    {
-                        title: 'Second',
-                        data: [
-                            {
-                                firstname: 'Whales',
-                                lastname: 'Teju',
-                            },
-                            {
-                                firstname: '12',
-                                lastname: 'USA',
-                            },
-                        ],
-                    },
-                ]}
+                data={sectionData}
                 renderItem={({ item }: any) => (
                     <ListItem
+                        onPress={() => {}}
                         title={item.firstname}
                         description={item.lastname}
                         style={{ marginBottom: 5 }}
@@ -248,8 +227,10 @@ const Example = () => {
                         }
                     />
                 )}
-                renderHeader={({ item: { title } }) => <Text>{title}</Text>}
-                headerStyles={{ color: 'colors.error' }}
+                // renderHeader={({ item: { title } }) => (
+                //     <Text style={{ color: 'red' }}>{title}</Text>
+                // )}
+                headerStyle={{ color: 'colors.error' }}
             />
         </View>
     );
@@ -296,3 +277,32 @@ const styles = StyleSheet.create({
         display: 'flex',
     },
 });
+
+const sectionData = [
+    {
+        title: 'Title First',
+        data: [
+            {
+                firstname: 'Ola',
+                lastname: 'Asiko',
+            },
+            {
+                firstname: 'eddy',
+                lastname: 'Hydro',
+            },
+        ],
+    },
+    {
+        title: 'Title Second',
+        data: [
+            {
+                firstname: 'Whales',
+                lastname: 'Teju',
+            },
+            {
+                firstname: '12',
+                lastname: 'USA',
+            },
+        ],
+    },
+];

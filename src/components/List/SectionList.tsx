@@ -5,11 +5,6 @@ import { useComponentStyles, useMolecules } from '../../hooks';
 
 type NewItems = { item: Section; index: number };
 
-// interface Data {
-//     title: string;
-//     data: any[];
-// }
-
 type Item = {};
 
 interface Section {
@@ -19,45 +14,56 @@ interface Section {
 
 export type Props = FlashListProps<{}> & {
     headerStyle?: StyleProp<TextStyle>;
-    section: Section;
     renderHeader?: Section;
 } & any;
 
 const SectionList = (
     {
-        section,
-        renderItem,
+        data,
+        renderItem: renderItemProps,
         renderHeader,
         style: styleProp,
         headerStyle: headerStyleProp,
-        contentContainerStyle: contentContainerStyleProps,
-        ListHeaderComponentStyle: listHeaderComponentStyleProps,
-        ListFooterComponentStyle: listFooterComponentStyleProps,
+        contentContainerStyle: contentContainerStyleProp,
+        ListHeaderComponentStyle: listHeaderComponentStyleProp,
+        ListFooterComponentStyle: listFooterComponentStyleProp,
         ...props
     }: Props,
     ref: any,
 ) => {
-    const { FlatList } = useMolecules();
+    const { FlatList, Text } = useMolecules();
     const componentStyles = useComponentStyles('SectionList', [
         styleProp,
         {
             headerStyleProp,
-            contentContainerStyleProps,
-            listFooterComponentStyleProps,
-            listHeaderComponentStyleProps,
+            contentContainerStyleProp,
+            listFooterComponentStyleProp,
+            listHeaderComponentStyleProp,
         },
     ]);
 
-    const { contentContainerStyles, listFooterComponentStyles, listHeaderComponentStyles } =
-        useMemo(() => {
-            const { contentContainerStyle, ListHeaderComponentStyle, ListFooterComponentStyle } =
-                componentStyles;
-            return {
-                contentContainerStyles: contentContainerStyle,
-                listFooterComponentStyles: ListFooterComponentStyle,
-                listHeaderComponentStyles: ListHeaderComponentStyle,
-            };
-        }, [componentStyles]);
+    const {
+        contentContainerStyles,
+        listFooterComponentStyles,
+        listHeaderComponentStyles,
+        headerStyles,
+        styles,
+    } = useMemo(() => {
+        const {
+            headerStyleProp: headerStyle,
+            contentContainerStyleProp: contentContainerStyle,
+            listHeaderComponentStyleProp: listHeaderComponentStyle,
+            listFooterComponentStyleProp: listFooterComponentStyle,
+            styleProp: style,
+        } = componentStyles;
+        return {
+            contentContainerStyles: contentContainerStyle,
+            listFooterComponentStyles: listFooterComponentStyle,
+            listHeaderComponentStyles: listHeaderComponentStyle,
+            headerStyles: headerStyle,
+            styles: style,
+        };
+    }, [componentStyles]);
 
     // const render = useCallback(
     //     ({ rowItems, rowIndex }: NewItems) => {
@@ -83,51 +89,32 @@ const SectionList = (
     //     })
     //     .filter((item: any) => item !== null) as number[];
 
-    // const render = (items: any, index: number) => {
-    //     if (!items) return null;
-    //     const newItems = items;
-    //     const flattenItem = newItems.flat();
-    //     // console.error('>>>>', items, typeof items, index);
-    //     console.error('>>>> flatten >>>>', flattenItem, index);
-    //     return null;
-    // };
-
-    // const flattenItems = (itemVal: Record<string, any>) => {
-    //     let flattenedStyles = {};
-    //     if (itemVal) {
-    //         flattenedStyles = { ...flattenedStyles, ...(itemVal || {}) };
-    //     }
-    //     return flattenedStyles;
-    // };
-
     const render = useCallback(
         ({ item, index }: NewItems) => {
-            if (Object.keys(item).find(e => e === 'data')) {
-                // const newArr = ...item;
-                // console.error('data is available', item, typeof item);
-                const newData = item?.data;
-                return newData.map(val => renderItem({ item: val, index }));
-            }
-            return renderHeader({ item, index });
-
-            // const newData = item?.data;
-            // return typeof Object.values(item).flat() === 'object'
-            //     ? newData.map(val => renderItem({ item: val, index }))
-            //     : renderHeader({ item, index });
+            const newData = [...Object.values(item)].flat();
+            return newData.map(val => {
+                if (typeof val === 'object') {
+                    return renderItemProps({ item: val, index, target: 'Cell' });
+                } else {
+                    return renderHeader ? (
+                        renderHeader({ item })
+                    ) : (
+                        <Text style={headerStyles}>{val}</Text>
+                    );
+                }
+            });
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [renderItem],
+        [renderItemProps],
     );
 
     return (
         <FlatList
-            section
-            data={section}
+            data={data}
+            style={styles}
             // renderItem={({ item, index }) => render({ rowItems: item, rowIndex: index })}
             renderItem={render}
-            // renderItem={renderItem}
             // getItemType={item => (typeof item === 'string' ? 'sectionHeader' : 'row')}
-            // getItemType={type => console.log('type', type)}
             // stickyHeaderIndices={stickyHeaderIndices}
             contentContainerStyle={contentContainerStyles}
             ListHeaderComponentStyle={listHeaderComponentStyles}
