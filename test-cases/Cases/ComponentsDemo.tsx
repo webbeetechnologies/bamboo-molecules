@@ -216,18 +216,51 @@ const Example = () => {
 
             <SectionList
                 data={[
-                    'First',
-                    { title: 'Section List item title', description: 'Section item description' },
-                    'Second',
-                    { title: 'Section List item title', description: 'Section item description' },
-                    { title: 'Section List item title', description: 'Section item description' },
-                    { title: 'Section List item title', description: 'Section item description' },
-                    { title: 'Section List item title', description: 'Section item description' },
-                    { title: 'Section List item title', description: 'Section item description' },
-                    { title: 'Section List item title', description: 'Section item description' },
-                    { title: 'Section List item title', description: 'Section item description' },
-                    { title: 'Section List item title', description: 'Section item description' },
-                    { title: 'Section List item title', description: 'Section item description' },
+                    { title: 'First' },
+                    {
+                        data: [
+                            {
+                                title: 'Section List item title',
+                                description: 'Section item description',
+                            },
+                            {
+                                title: 'Section List item title',
+                                description: 'Section item description',
+                            },
+                            {
+                                title: 'Section List item title',
+                                description: 'Section item description',
+                            },
+                            {
+                                title: 'Section List item title',
+                                description: 'Section item description',
+                            },
+                            {
+                                title: 'Section List item title',
+                                description: 'Section item description',
+                            },
+                            {
+                                title: 'Section List item title',
+                                description: 'Section item description',
+                            },
+                            {
+                                title: 'Section List item title',
+                                description: 'Section item description',
+                            },
+                            {
+                                title: 'Section List item title',
+                                description: 'Section item description',
+                            },
+                            {
+                                title: 'Section List item title',
+                                description: 'Section item description',
+                            },
+                            {
+                                title: 'Section List item title',
+                                description: 'Section item description',
+                            },
+                        ],
+                    },
                 ]}
                 renderItem={({ item }: any) => (
                     <ListItem

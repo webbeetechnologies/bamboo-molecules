@@ -41,11 +41,16 @@ const FlatList = (
         listFooterComponentStyleProps,
     ]);
 
-    const { contentContainerStyles, listFooterComponentStyles, listHeaderComponentStyles } =
+    const { contentContainerStyles, listFooterComponentStyles, listHeaderComponentStyles, style } =
         useMemo(() => {
-            const { contentContainerStyle, ListHeaderComponentStyle, ListFooterComponentStyle } =
-                componentStyles;
+            const {
+                contentContainerStyle,
+                ListHeaderComponentStyle,
+                ListFooterComponentStyle,
+                ...styles
+            } = componentStyles;
             return {
+                style: styles,
                 contentContainerStyles: contentContainerStyle,
                 listFooterComponentStyles: ListFooterComponentStyle,
                 listHeaderComponentStyles: ListHeaderComponentStyle,
@@ -55,6 +60,7 @@ const FlatList = (
     return (
         <FlashList
             data={data}
+            style={style}
             renderItem={renderItem}
             contentContainerStyle={contentContainerStyles}
             ListHeaderComponentStyle={listHeaderComponentStyles}
