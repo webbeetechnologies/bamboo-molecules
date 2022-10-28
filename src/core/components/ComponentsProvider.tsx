@@ -19,6 +19,7 @@ import {
     ListItem,
     Checkbox,
     FlatList,
+    SectionList,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -43,6 +44,7 @@ const defaultComponents: DefaultComponents = {
     ListItem,
     Checkbox,
     FlatList,
+    SectionList,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

@@ -46,6 +46,7 @@ const Example = () => {
         IconButton,
         Checkbox,
         FlatList,
+        SectionList,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
@@ -211,6 +212,41 @@ const Example = () => {
                     { title: 'First item title', description: 'First item description' },
                     { title: 'Second item title', description: 'Second item description' },
                 ]}
+            />
+
+            <SectionList
+                data={[
+                    'First',
+                    { title: 'Section List item title', description: 'Section item description' },
+                    'Second',
+                    { title: 'Section List item title', description: 'Section item description' },
+                    { title: 'Section List item title', description: 'Section item description' },
+                    { title: 'Section List item title', description: 'Section item description' },
+                    { title: 'Section List item title', description: 'Section item description' },
+                    { title: 'Section List item title', description: 'Section item description' },
+                    { title: 'Section List item title', description: 'Section item description' },
+                    { title: 'Section List item title', description: 'Section item description' },
+                    { title: 'Section List item title', description: 'Section item description' },
+                    { title: 'Section List item title', description: 'Section item description' },
+                ]}
+                renderItem={({ item }: any) => (
+                    <ListItem
+                        title={item.title}
+                        description={item.description}
+                        style={{ marginBottom: 5 }}
+                        titleStyle={{ fontWeight: '800', fontSize: 16 }}
+                        right={
+                            <IconButton
+                                name={isSwitchOn ? 'chevron-right' : 'chevron-left'}
+                                onPress={() => {}}
+                                variant="outlined"
+                                style={{ backgroundColor: 'colors.primary', color: '#fff' }}
+                                animated
+                            />
+                        }
+                    />
+                )}
+                headerStyles={{ color: 'colors.error' }}
             />
         </View>
     );

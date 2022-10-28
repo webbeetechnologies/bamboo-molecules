@@ -23,6 +23,8 @@ export {
     SurfaceProps,
     SwitchProps,
     CheckboxProps,
+    ListItemProps,
+    FlatListProps,
 } from './components';
 
 export {

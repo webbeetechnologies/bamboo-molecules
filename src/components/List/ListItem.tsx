@@ -5,23 +5,9 @@ import { useMolecules, useComponentStyles } from '../../hooks';
 import type { TouchableRippleProps } from '../TouchableRipple';
 import { CallbackActionState, withActionState } from '../../hocs';
 
-type Title =
-    | ReactNode
-    | ((props: {
-          selectable: boolean;
-          ellipsizeMode: 'head' | 'middle' | 'tail' | 'clip' | undefined;
-          color: string;
-          fontSize: number;
-      }) => ReactNode);
+type Title = ReactNode;
 
-type Description =
-    | ReactNode
-    | ((props: {
-          selectable: boolean;
-          ellipsizeMode: 'head' | 'middle' | 'tail' | 'clip' | undefined;
-          color: string;
-          fontSize: number;
-      }) => ReactNode);
+type Description = ReactNode;
 
 type Element = ReactNode;
 
@@ -181,7 +167,7 @@ const ListItem = (
                     </View>
                     {right ? <View>{right}</View> : null}
                 </View>
-                {divider && <HorizontalDivider spacing={20} leftInset={16} rightInset={24} />}
+                {divider && <HorizontalDivider leftInset={16} rightInset={24} />}
             </View>
         </TouchableRipple>
     );

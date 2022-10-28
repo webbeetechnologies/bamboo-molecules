@@ -20,6 +20,7 @@ import {
     listItemStyles,
     checkboxStyles,
     flatListStyles,
+    sectionListStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -44,6 +45,7 @@ const defaultThemeValue: Partial<ITheme> = {
     ListItem: listItemStyles,
     Checkbox: checkboxStyles,
     FlatList: flatListStyles,
+    SectionList: sectionListStyles,
 };
 
 const defaultExtractStyles = memoize(

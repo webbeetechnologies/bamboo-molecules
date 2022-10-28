@@ -40,3 +40,8 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Li
 };
 
 export const flatListStyles: ComponentStylePropWithVariants<TextStyle> = {};
+
+export const sectionListStyles: ComponentStylePropWithVariants<TextStyle> = {
+    color: 'colors.onSurface',
+    fontSize: 32,
+};

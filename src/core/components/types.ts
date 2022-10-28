@@ -13,6 +13,7 @@ import type {
     ListItemProps,
     Checkbox,
     FlatListProps,
+    SectionListProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -33,6 +34,7 @@ export interface DefaultComponents {
     ListItem: ComponentType<ListItemProps>;
     Checkbox: typeof Checkbox;
     FlatList: ComponentType<FlatListProps>;
+    SectionList: ComponentType<SectionListProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

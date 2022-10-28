@@ -37,6 +37,9 @@ export {
     FlatList,
     FlatListProps,
     flatListStyles,
+    SectionList,
+    SectionListProps,
+    sectionListStyles,
 } from './List';
 
 export { IconButton, IconButtonProps, iconButtonStyles } from './IconButton';
