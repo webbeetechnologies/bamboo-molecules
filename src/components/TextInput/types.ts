@@ -50,7 +50,17 @@ export type InputBaseProps = {
     onLayoutAnimatedText: (args: any) => void;
     onLeftAffixLayoutChange: (event: LayoutChangeEvent) => void;
     onRightAffixLayoutChange: (event: LayoutChangeEvent) => void;
-} & TextInputProps;
+    componentStyles: Record<string, any>;
+} & Omit<
+    TextInputProps,
+    | 'style'
+    | 'activeOutlineColor'
+    | 'activeUnderlineColor'
+    | 'underlineColor'
+    | 'outlineColor'
+    | 'placeholderTextColor'
+    | 'selectionColor'
+>;
 
 export type InputLabelProps = {
     parentState: State;

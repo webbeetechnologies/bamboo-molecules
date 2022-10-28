@@ -12,6 +12,7 @@ type States =
 
 type CustomProps = {
     activeColor?: string;
+    animationScale?: string;
 
     container?: Record<string, string | number>;
     labelText?: Record<string, string | number>;
@@ -25,6 +26,8 @@ type CustomProps = {
 };
 
 export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, CustomProps> = {
+    animationScale: 'animation.scale',
+
     container: {
         flexDirection: 'row',
         paddingHorizontal: 'spacings.4',
@@ -57,10 +60,12 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
         fontWeight: 'typescale.bodyLarge.fontWeight',
     },
     supportingText: {
-        color: 'colors.onSurfaceVaraint',
+        color: 'colors.onSurfaceVariant',
         fontSize: 'typescale.bodySmall.fontSize',
         lineHeight: 'typescale.bodySmall.lineHeight',
         fontWeight: 'typescale.bodySmall.fontWeight',
+        marginTop: 'spacings.1',
+        marginHorizontal: 'spacings.4',
     },
     placeholder: {
         position: 'absolute',
@@ -89,8 +94,16 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
                         paddingHorizontal: 'spacings.1',
                     },
                 },
+
                 disabled: {},
-                errorDisabled: {},
+
+                errorDisabled: {
+                    outline: {
+                        borderColor: 'colors.error',
+                        backgroundColor: 'colors.surface',
+                    },
+                },
+
                 errorFocused: {
                     outline: {
                         borderWidth: 2,
@@ -100,6 +113,13 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
                     labelText: {
                         backgroundColor: 'colors.surface',
                         paddingHorizontal: 'spacings.1',
+                    },
+                },
+
+                error: {
+                    outline: {
+                        borderColor: 'colors.error',
+                        backgroundColor: 'colors.surface',
                     },
                 },
             },
@@ -139,6 +159,9 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
                 },
 
                 disabled: {
+                    container: {
+                        backgroundColor: 'colors.surfaceVariant',
+                    },
                     activeIndicator: {
                         height: 1,
                         backgroundColor: 'colors.onSurface',
@@ -182,9 +205,6 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
         hovered: {},
 
         disabled: {
-            container: {
-                backgroundColor: 'colors.surfaceVariant',
-            },
             labelText: {
                 color: 'colors.onSurface',
                 opacity: 0.38,
@@ -206,6 +226,7 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
                 opacity: 0.38,
             },
         },
+
         error: {
             activeColor: 'colors.error',
 
@@ -292,6 +313,8 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
             },
         },
     },
+
+    sizes: {},
 };
 
 export const styles = StyleSheet.create({

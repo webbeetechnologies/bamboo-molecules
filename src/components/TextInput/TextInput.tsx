@@ -14,10 +14,11 @@ import {
     LayoutChangeEvent,
     StyleProp,
     TextStyle,
+    Text,
 } from 'react-native';
 import type { TextInputProps } from '@webbee/bamboo-atoms';
 
-import { useCurrentTheme } from '../../hooks';
+import { useComponentStyles } from '../../hooks';
 import type { WithElements } from '../../types';
 import TextInputBase from './TextInputBase';
 import type { RenderProps, TextInputLabelProp } from './types';
@@ -100,6 +101,14 @@ export type Props = TextInputProps &
          * The number of lines to show in the input (Android only).
          */
         numberOfLines?: number;
+        /**
+         * The Supporting Text below the TextInput
+         */
+        supportingText?: string;
+        /**
+         * To display the required indicator in Supporting Text and in the Label
+         */
+        required?: boolean;
         /**
          * Callback that is called when the text input is focused.
          */
@@ -204,8 +213,16 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             error: errorProp = false,
             multiline = false,
             editable = true,
-            render = (props: RenderProps) => <NativeTextInput {...props} />,
+            required = false,
             maxFontSizeMultiplier = 15,
+            supportingText,
+            selectionColor: selectionColorProp,
+            underlineColor: underlineColorProp,
+            activeUnderlineColor: activeUnderlineColorProp,
+            outlineColor: outlineColorProp,
+            activeOutlineColor: activeOutlineColorProp,
+            placeholderTextColor: placeholderTextColorProp,
+            style,
             ...rest
         }: Props,
         ref,
@@ -224,6 +241,31 @@ const TextInput = forwardRef<TextInputHandles, Props>(
         );
         // Use value from props instead of local state when input is controlled
         const value = isControlled ? rest.value : uncontrolledValue;
+
+        const styles = useComponentStyles(
+            'TextInput',
+            [
+                style,
+                {
+                    selectionColor: selectionColorProp,
+                    underlineColor: underlineColorProp,
+                    activeUnderlineColor: activeUnderlineColorProp,
+                    outlineColor: outlineColorProp,
+                    activeOutlineColor: activeOutlineColorProp,
+                    placeholderTextColor: placeholderTextColorProp,
+                },
+            ],
+            {
+                variant,
+                states: {
+                    errorDisabled: error && disabled,
+                    disabled,
+                    errorFocused: error && focused,
+                    focused: focused,
+                    error: !!error,
+                },
+            },
+        );
 
         const [labelLayout, setLabelLayout] = useState<{
             measured: boolean;
@@ -253,10 +295,6 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
         const root = useRef<NativeTextInput | undefined | null>();
 
-        const currentTheme = useCurrentTheme();
-
-        const { scale } = currentTheme.animation;
-
         useImperativeHandle(ref, () => ({
             focus: () => root.current?.focus(),
             clear: () => root.current?.clear(),
@@ -272,7 +310,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                 // show error
                 Animated.timing(error, {
                     toValue: 1,
-                    duration: FOCUS_ANIMATION_DURATION * scale,
+                    duration: FOCUS_ANIMATION_DURATION * (styles.animationScale || 1),
                     // To prevent this - https://github.com/callstack/react-native-paper/issues/941
                     useNativeDriver: true,
                 }).start();
@@ -281,13 +319,13 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                 {
                     Animated.timing(error, {
                         toValue: 0,
-                        duration: BLUR_ANIMATION_DURATION * scale,
+                        duration: BLUR_ANIMATION_DURATION * (styles.animationScale || 1),
                         // To prevent this - https://github.com/callstack/react-native-paper/issues/941
                         useNativeDriver: true,
                     }).start();
                 }
             }
-        }, [errorProp, scale, error]);
+        }, [errorProp, error, styles]);
 
         useEffect(() => {
             // Show placeholder text only if the input is focused, or there's no label
@@ -321,7 +359,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                 // minimize label
                 Animated.timing(labeled, {
                     toValue: 0,
-                    duration: BLUR_ANIMATION_DURATION * scale,
+                    duration: BLUR_ANIMATION_DURATION * (styles.animationScale || 1),
                     // To prevent this - https://github.com/callstack/react-native-paper/issues/941
                     useNativeDriver: true,
                 }).start();
@@ -330,13 +368,13 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                 {
                     Animated.timing(labeled, {
                         toValue: 1,
-                        duration: FOCUS_ANIMATION_DURATION * scale,
+                        duration: FOCUS_ANIMATION_DURATION * (styles.animationScale || 1),
                         // To prevent this - https://github.com/callstack/react-native-paper/issues/941
                         useNativeDriver: true,
                     }).start();
                 }
             }
-        }, [focused, value, labeled, scale]);
+        }, [focused, value, labeled, styles]);
 
         const onLeftAffixLayoutChange = useCallback((event: LayoutChangeEvent) => {
             setLeftLayout({
@@ -417,29 +455,37 @@ const TextInput = forwardRef<TextInputHandles, Props>(
         );
 
         return (
-            <TextInputBase
-                variant={variant}
-                dense={dense}
-                disabled={disabled}
-                error={errorProp}
-                multiline={multiline}
-                editable={editable}
-                render={render}
-                {...rest}
-                value={value}
-                parentState={parentState}
-                innerRef={ref => {
-                    root.current = ref;
-                }}
-                onFocus={handleFocus}
-                forceFocus={forceFocus}
-                onBlur={handleBlur}
-                onChangeText={handleChangeText}
-                onLayoutAnimatedText={handleLayoutAnimatedText}
-                onLeftAffixLayoutChange={onLeftAffixLayoutChange}
-                onRightAffixLayoutChange={onRightAffixLayoutChange}
-                maxFontSizeMultiplier={maxFontSizeMultiplier}
-            />
+            <>
+                <TextInputBase
+                    componentStyles={styles}
+                    variant={variant}
+                    dense={dense}
+                    disabled={disabled}
+                    error={errorProp}
+                    multiline={multiline}
+                    editable={editable}
+                    required={required}
+                    {...rest}
+                    value={value}
+                    parentState={parentState}
+                    innerRef={ref => {
+                        root.current = ref;
+                    }}
+                    onFocus={handleFocus}
+                    forceFocus={forceFocus}
+                    onBlur={handleBlur}
+                    onChangeText={handleChangeText}
+                    onLayoutAnimatedText={handleLayoutAnimatedText}
+                    onLeftAffixLayoutChange={onLeftAffixLayoutChange}
+                    onRightAffixLayoutChange={onRightAffixLayoutChange}
+                    maxFontSizeMultiplier={maxFontSizeMultiplier}
+                />
+                <>
+                    {(supportingText || required) && (
+                        <Text style={styles.supportingText}>{supportingText || '*required'}</Text>
+                    )}
+                </>
+            </>
         );
     },
 );

@@ -8,7 +8,7 @@ import {
     TextInput as NativeTextInput,
 } from 'react-native';
 
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { useMolecules } from '../../hooks';
 import InputLabel from './InputLabel';
 import type { InputBaseProps, RenderProps } from './types';
 // TODO replace this with tokens
@@ -25,13 +25,13 @@ import {
 import { styles as defaultStyles } from './utils';
 
 const TextInputBase = ({
+    componentStyles,
     variant,
     disabled = false,
     editable = true,
     label,
     error = false,
     dense,
-    style,
     multiline = false,
     parentState,
     innerRef,
@@ -41,48 +41,16 @@ const TextInputBase = ({
     onLayoutAnimatedText,
     left,
     right,
-    render: _render,
-    selectionColor: selectionColorProp,
-    underlineColor: underlineColorProp,
-    activeUnderlineColor: activeUnderlineColorProp,
-    outlineColor: outlineColorProp,
-    activeOutlineColor: activeOutlineColorProp,
-    placeholderTextColor: placeholderTextColorProp,
+    render = (props: RenderProps) => <NativeTextInput {...props} />,
     forceFocus,
     testID = 'text-input',
+    required,
     ...rest
 }: InputBaseProps) => {
     const isAndroid = Platform.OS === 'android';
     const hasActiveOutline = parentState.focused || error;
 
     const { View } = useMolecules();
-
-    const render = _render ? _render : (props: RenderProps) => <NativeTextInput {...props} />;
-
-    const componentStyles = useComponentStyles(
-        'TextInput',
-        [
-            style,
-            {
-                selectionColor: selectionColorProp,
-                underlineColor: underlineColorProp,
-                activeUnderlineColor: activeUnderlineColorProp,
-                outlineColor: outlineColorProp,
-                activeOutlineColor: activeOutlineColorProp,
-                placeholderTextColor: placeholderTextColorProp,
-            },
-        ],
-        {
-            variant,
-            states: {
-                errorDisabled: error && disabled,
-                disabled,
-                errorFocused: error && parentState.focused,
-                focused: parentState.focused,
-                error: error,
-            },
-        },
-    );
 
     const labelWidth = parentState.labelLayout.width;
     const labelHeight = parentState.labelLayout.height;
@@ -234,17 +202,19 @@ const TextInputBase = ({
                 />
             )}
 
-            {left && (
-                <View style={styles.leadingIcon}>
-                    {typeof left === 'function'
-                        ? left?.({
-                              color: styles.activeColor,
-                              forceFocus,
-                              focused: parentState.focused,
-                          })
-                        : left}
-                </View>
-            )}
+            <>
+                {left && (
+                    <View style={styles.leadingIcon}>
+                        {typeof left === 'function'
+                            ? left?.({
+                                  color: styles.activeColor,
+                                  forceFocus,
+                                  focused: parentState.focused,
+                              })
+                            : left}
+                    </View>
+                )}
+            </>
 
             <View style={styles.labelContainerStyle}>
                 {!isAndroid && multiline && !!label && (
@@ -258,7 +228,7 @@ const TextInputBase = ({
                 )}
                 <InputLabel
                     parentState={parentState}
-                    label={label}
+                    label={`${label}${required ? '*' : ''}`}
                     onLayoutAnimatedText={onLayoutAnimatedText}
                     error={error}
                     placeholderStyle={styles.placeholder}
@@ -288,17 +258,19 @@ const TextInputBase = ({
                 })}
             </View>
 
-            {right && (
-                <View style={styles.trailingIcon}>
-                    {typeof right === 'function'
-                        ? right?.({
-                              color: styles.activeColor,
-                              forceFocus,
-                              focused: parentState.focused,
-                          })
-                        : right}
-                </View>
-            )}
+            <>
+                {right && (
+                    <View style={styles.trailingIcon}>
+                        {typeof right === 'function'
+                            ? right?.({
+                                  color: styles.activeColor,
+                                  forceFocus,
+                                  focused: parentState.focused,
+                              })
+                            : right}
+                    </View>
+                )}
+            </>
         </View>
     );
 };
