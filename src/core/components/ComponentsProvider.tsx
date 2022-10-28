@@ -12,11 +12,12 @@ import {
     HorizontalDivider,
     VerticalDivider,
     TouchableRipple,
-    TouchableRippleProps,
     Button,
     Surface,
     Switch,
     Checkbox,
+    TextInput,
+    TextInputProps,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -31,7 +32,7 @@ import type { DefaultComponents, ProvideComponentsProps } from './types';
 const defaultComponents: DefaultComponents = {
     Icon,
     IconButton,
-    TouchableRipple: TouchableRipple as ComponentType<TouchableRippleProps>, // ts-error
+    TouchableRipple,
     ActivityIndicator,
     HorizontalDivider,
     VerticalDivider,
@@ -39,6 +40,7 @@ const defaultComponents: DefaultComponents = {
     Surface,
     Switch,
     Checkbox,
+    TextInput: TextInput as ComponentType<TextInputProps>,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

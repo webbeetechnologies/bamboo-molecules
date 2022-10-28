@@ -23,6 +23,7 @@ export {
     SurfaceProps,
     SwitchProps,
     CheckboxProps,
+    TextInputProps,
 } from './components';
 
 export {
