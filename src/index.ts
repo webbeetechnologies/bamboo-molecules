@@ -52,6 +52,7 @@ export {
     useCurrentTheme,
     useToggle,
     useMediaQuery,
+    useControlledValue,
 } from './hooks';
 
 export {
