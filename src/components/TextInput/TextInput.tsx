@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 import type { TextInputProps } from '@webbee/bamboo-atoms';
 
-import { useComponentStyles } from '../../hooks';
+import { useComponentStyles, useControlledValue } from '../../hooks';
 import type { WithElements } from '../../types';
 import TextInputBase from './TextInputBase';
 import type { RenderProps, TextInputLabelProp } from './types';
@@ -37,11 +37,11 @@ type Element = ReactNode | ((props: ElementProps) => ReactNode);
 export type Props = TextInputProps &
     WithElements<Element> & {
         /**
-         * Mode of the TextInput.
+         * Variant of the TextInput.
          * - `flat` - flat input with an underline.
          * - `outlined` - input with an outline.
          *
-         * In `outlined` mode, the background color of the label is derived from `colors?.background` in theme or the `backgroundColor` style.
+         * In `outlined` variant, the background color of the label is derived from `colors?.background` in theme or the `backgroundColor` style.
          * This component render TextInputOutlined or TextInputFlat based on that props
          */
         variant?: 'flat' | 'outlined';
@@ -230,17 +230,20 @@ const TextInput = forwardRef<TextInputHandles, Props>(
         const isControlled = rest.value !== undefined;
         const validInputValue = isControlled ? rest.value : rest.defaultValue;
 
-        const { current: labeled } = useRef<Animated.Value>(
+        const { current: labelAnimation } = useRef<Animated.Value>(
             new Animated.Value(validInputValue ? 0 : 1),
         );
-        const { current: error } = useRef<Animated.Value>(new Animated.Value(errorProp ? 1 : 0));
+        const { current: errorAnimation } = useRef<Animated.Value>(
+            new Animated.Value(errorProp ? 1 : 0),
+        );
         const [focused, setFocused] = useState<boolean>(false);
         const [placeholder, setPlaceholder] = useState<string | undefined>('');
-        const [uncontrolledValue, setUncontrolledValue] = useState<string | undefined>(
-            validInputValue,
-        );
         // Use value from props instead of local state when input is controlled
-        const value = isControlled ? rest.value : uncontrolledValue;
+        const [value, onChangeValue] = useControlledValue(
+            validInputValue,
+            rest.onChangeText,
+            !editable || disabled,
+        );
 
         const styles = useComponentStyles(
             'TextInput',
@@ -258,11 +261,11 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             {
                 variant,
                 states: {
-                    errorDisabled: error && disabled,
+                    errorDisabled: errorProp && disabled,
                     disabled,
-                    errorFocused: error && focused,
+                    errorFocused: errorProp && focused,
                     focused: focused,
-                    error: !!error,
+                    error: !!errorProp,
                 },
             },
         );
@@ -275,20 +278,6 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             measured: false,
             width: 0,
             height: 0,
-        });
-        const [leftLayout, setLeftLayout] = useState<{
-            height: number | null;
-            width: number | null;
-        }>({
-            width: null,
-            height: null,
-        });
-        const [rightLayout, setRightLayout] = useState<{
-            height: number | null;
-            width: number | null;
-        }>({
-            width: null,
-            height: null,
         });
 
         const timer = useRef<NodeJS.Timeout | undefined>();
@@ -308,7 +297,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             // When the input has an error, we wiggle the label and apply error styles
             if (errorProp) {
                 // show error
-                Animated.timing(error, {
+                Animated.timing(errorAnimation, {
                     toValue: 1,
                     duration: FOCUS_ANIMATION_DURATION * (styles.animationScale || 1),
                     // To prevent this - https://github.com/callstack/react-native-paper/issues/941
@@ -317,7 +306,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             } else {
                 // hide error
                 {
-                    Animated.timing(error, {
+                    Animated.timing(errorAnimation, {
                         toValue: 0,
                         duration: BLUR_ANIMATION_DURATION * (styles.animationScale || 1),
                         // To prevent this - https://github.com/callstack/react-native-paper/issues/941
@@ -325,7 +314,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                     }).start();
                 }
             }
-        }, [errorProp, error, styles]);
+        }, [errorProp, errorAnimation, styles]);
 
         useEffect(() => {
             // Show placeholder text only if the input is focused, or there's no label
@@ -357,7 +346,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             // https://github.com/callstack/react-native-paper/pull/1440
             if (value || focused) {
                 // minimize label
-                Animated.timing(labeled, {
+                Animated.timing(labelAnimation, {
                     toValue: 0,
                     duration: BLUR_ANIMATION_DURATION * (styles.animationScale || 1),
                     // To prevent this - https://github.com/callstack/react-native-paper/issues/941
@@ -366,7 +355,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             } else {
                 // restore label
                 {
-                    Animated.timing(labeled, {
+                    Animated.timing(labelAnimation, {
                         toValue: 1,
                         duration: FOCUS_ANIMATION_DURATION * (styles.animationScale || 1),
                         // To prevent this - https://github.com/callstack/react-native-paper/issues/941
@@ -374,21 +363,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                     }).start();
                 }
             }
-        }, [focused, value, labeled, styles]);
-
-        const onLeftAffixLayoutChange = useCallback((event: LayoutChangeEvent) => {
-            setLeftLayout({
-                height: event.nativeEvent.layout.height,
-                width: event.nativeEvent.layout.width,
-            });
-        }, []);
-
-        const onRightAffixLayoutChange = useCallback((event: LayoutChangeEvent) => {
-            setRightLayout({
-                width: event.nativeEvent.layout.width,
-                height: event.nativeEvent.layout.height,
-            });
-        }, []);
+        }, [focused, value, labelAnimation, styles]);
 
         const handleFocus = useCallback(
             (args: any) => {
@@ -415,21 +390,6 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             [editable, rest],
         );
 
-        const handleChangeText = useCallback(
-            (value: string) => {
-                if (!editable || disabled) {
-                    return;
-                }
-
-                if (!isControlled) {
-                    // Keep track of value in local state when input is not controlled
-                    setUncontrolledValue(value);
-                }
-                rest.onChangeText?.(value);
-            },
-            [disabled, editable, isControlled, rest],
-        );
-
         const handleLayoutAnimatedText = useCallback((e: LayoutChangeEvent) => {
             setLabelLayout({
                 width: e.nativeEvent.layout.width,
@@ -442,16 +402,14 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
         const parentState = useMemo(
             () => ({
-                labeled,
-                error,
+                labelAnimation,
+                errorAnimation,
                 focused,
                 placeholder,
                 value,
                 labelLayout,
-                leftLayout,
-                rightLayout,
             }),
-            [error, focused, labelLayout, labeled, leftLayout, placeholder, rightLayout, value],
+            [errorAnimation, focused, labelLayout, labelAnimation, placeholder, value],
         );
 
         return (
@@ -474,10 +432,8 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                     onFocus={handleFocus}
                     forceFocus={forceFocus}
                     onBlur={handleBlur}
-                    onChangeText={handleChangeText}
+                    onChangeText={onChangeValue}
                     onLayoutAnimatedText={handleLayoutAnimatedText}
-                    onLeftAffixLayoutChange={onLeftAffixLayoutChange}
-                    onRightAffixLayoutChange={onRightAffixLayoutChange}
                     maxFontSizeMultiplier={maxFontSizeMultiplier}
                 />
                 <>
