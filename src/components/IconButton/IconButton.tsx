@@ -13,7 +13,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
     /**
      * Icon to display.
      */
-    name: IconType;
+    name: string;
     /**
      * Mode of the icon button. By default there is no specified mode - only pressable icon will be rendered.
      */
