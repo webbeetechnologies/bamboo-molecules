@@ -3,7 +3,6 @@ import type {
     TextInput as NativeTextInput,
     Animated,
     TextStyle,
-    LayoutChangeEvent,
     ColorValue,
     StyleProp,
 } from 'react-native';
@@ -30,14 +29,12 @@ export type RenderProps = {
 };
 
 export type State = {
-    labeled: Animated.Value;
-    error: Animated.Value;
+    labelAnimation: Animated.Value;
+    errorAnimation: Animated.Value;
     focused: boolean;
     placeholder?: string;
     value?: string;
     labelLayout: { measured: boolean; width: number; height: number };
-    leftLayout: { height: number | null; width: number | null };
-    rightLayout: { height: number | null; width: number | null };
 };
 
 export type InputBaseProps = {
@@ -48,8 +45,6 @@ export type InputBaseProps = {
     forceFocus: () => void;
     onChangeText?: (value: string) => void;
     onLayoutAnimatedText: (args: any) => void;
-    onLeftAffixLayoutChange: (event: LayoutChangeEvent) => void;
-    onRightAffixLayoutChange: (event: LayoutChangeEvent) => void;
     componentStyles: Record<string, any>;
 } & Omit<
     TextInputProps,
@@ -64,21 +59,18 @@ export type InputBaseProps = {
 
 export type InputLabelProps = {
     parentState: State;
-    labelBackground?: any;
-    placeholderStyle: any;
+    labelBackground?: string;
     baseLabelTranslateX: number;
     wiggleOffsetX: number;
     labelScale: number;
+    floatingLabelHorizontalOffset?: number;
     paddingOffset?: { paddingLeft: number; paddingRight: number } | null;
     labelTranslationXOffset?: number;
-    backgroundColor?: ColorValue;
     label?: TextInputLabelProp | null;
-    hasActiveOutline?: boolean | null;
-    errorColor?: string;
     error?: boolean | null;
     onLayoutAnimatedText: (args: any) => void;
     maxFontSizeMultiplier?: number | undefined | null;
-    inputHeight: number;
+    required?: boolean;
     testID?: string;
     style?: StyleProp<TextStyle>;
 };

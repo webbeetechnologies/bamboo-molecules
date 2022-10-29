@@ -1,11 +1,10 @@
-import { memo, useMemo } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import {
     Animated,
-    StyleSheet,
     I18nManager,
     Platform,
-    ViewStyle,
     TextInput as NativeTextInput,
+    LayoutChangeEvent,
 } from 'react-native';
 
 import { useMolecules } from '../../hooks';
@@ -26,7 +25,7 @@ import { styles as defaultStyles } from './utils';
 
 const TextInputBase = ({
     componentStyles,
-    variant,
+    variant = 'flat',
     disabled = false,
     editable = true,
     label,
@@ -47,7 +46,6 @@ const TextInputBase = ({
     required,
     ...rest
 }: InputBaseProps) => {
-    const isAndroid = Platform.OS === 'android';
     const hasActiveOutline = parentState.focused || error;
 
     const { View } = useMolecules();
@@ -55,11 +53,28 @@ const TextInputBase = ({
     const labelWidth = parentState.labelLayout.width;
     const labelHeight = parentState.labelLayout.height;
     const labelHalfWidth = labelWidth / 2;
-    // const labelHalfHeight = labelHeight / 2;
 
     const minInputHeight = dense
         ? (label ? MIN_DENSE_HEIGHT_WL : MIN_DENSE_HEIGHT) - LABEL_PADDING_TOP_DENSE
         : MD3_MIN_HEIGHT - MD3_LABEL_PADDING_TOP;
+
+    const [leftElementLayout, setElementLayout] = useState<{
+        measured: boolean;
+        width: number;
+        height: number;
+    }>({
+        measured: false,
+        width: 0,
+        height: 0,
+    });
+
+    const handleLayoutLeftElement = useCallback((e: LayoutChangeEvent) => {
+        setElementLayout({
+            width: e.nativeEvent.layout.width,
+            height: e.nativeEvent.layout.height,
+            measured: true,
+        });
+    }, []);
 
     const styles = useMemo(() => {
         const {
@@ -84,6 +99,8 @@ const TextInputBase = ({
             outlineColor,
             activeOutlineColor,
             placeholderTextColor,
+            backgroundColor,
+            floatingLabelHorizontalOffset,
             ...viewStyle
         } = componentStyles;
 
@@ -105,6 +122,9 @@ const TextInputBase = ({
             (I18nManager.isRTL ? 1 : -1) * (labelHalfWidth - (labelScale * labelWidth) / 2) +
             (1 - labelScale) * (I18nManager.isRTL ? -1 : 1) * (paddingHorizontal || 0);
 
+        const baseLabelTranslateXOutline =
+            baseLabelTranslateX - container?.paddingHorizontal - (leftElementLayout.width || 0); // minus the width of the icon and the padding
+
         return {
             activeColor,
             container: [container, viewStyle, { height }],
@@ -120,8 +140,9 @@ const TextInputBase = ({
             height,
             paddingHorizontal,
             textAlign,
-            backgroundColor: viewStyle?.backgroundColor,
-            baseLabelTranslateX,
+            backgroundColor,
+            baseLabelTranslateX:
+                variant === 'outlined' ? baseLabelTranslateXOutline : baseLabelTranslateX,
             labelScale,
             selectionColor: selectionColor || activeColor,
             underlineColor,
@@ -129,6 +150,7 @@ const TextInputBase = ({
             outlineColor,
             activeOutlineColor,
             placeholderTextColor: placeholderTextColor || placeholder?.color,
+            floatingLabelHorizontalOffset,
             textInputStyle: [
                 inputText,
                 { paddingLeft: paddingHorizontal, paddingRight: paddingHorizontal },
@@ -140,17 +162,6 @@ const TextInputBase = ({
                     textAlign: textAlign ? textAlign : I18nManager.isRTL ? 'right' : 'left',
                 },
                 Platform.OS === 'web' && { outline: 'none' },
-            ],
-            patchContainerStyle: [
-                StyleSheet.absoluteFill,
-                // TODO replace this with sizes // 'dense' | 'labeled-dense' | 'regular' | 'labeled-regular'
-                dense ? defaultStyles.densePatchContainer : defaultStyles.patchContainer,
-                {
-                    backgroundColor:
-                        viewStyle.backgroundColor || (container as ViewStyle)?.backgroundColor,
-                    left: paddingHorizontal,
-                    right: paddingHorizontal,
-                },
             ],
             labelContainerStyle: [
                 defaultStyles.labelContainer,
@@ -175,8 +186,8 @@ const TextInputBase = ({
                         (hasActiveOutline ? outlineColor : activeOutlineColor) ||
                         outline.borderColor,
                 },
+                backgroundColor ? { backgroundColor } : {},
             ],
-            inputHeight: height || minHeight,
         };
     }, [
         componentStyles,
@@ -186,14 +197,16 @@ const TextInputBase = ({
         labelHalfWidth,
         labelHeight,
         labelWidth,
+        leftElementLayout.width,
         minInputHeight,
         multiline,
+        variant,
     ]);
 
     return (
         <View style={styles.container}>
             {variant === 'flat' ? (
-                <Animated.View style={styles.underlineStyle} />
+                <Animated.View testID="text-input-underline" style={styles.underlineStyle} />
             ) : (
                 <Animated.View
                     testID="text-input-outline"
@@ -204,7 +217,7 @@ const TextInputBase = ({
 
             <>
                 {left && (
-                    <View style={styles.leadingIcon}>
+                    <View style={styles.leadingIcon} onLayout={handleLayoutLeftElement}>
                         {typeof left === 'function'
                             ? left?.({
                                   color: styles.activeColor,
@@ -217,44 +230,36 @@ const TextInputBase = ({
             </>
 
             <View style={styles.labelContainerStyle}>
-                {!isAndroid && multiline && !!label && (
-                    // Workaround for: https://github.com/callstack/react-native-paper/issues/2799
-                    // Patch for a multiline TextInput with fixed height, which allow to avoid covering input label with its value.
-                    <View
-                        testID="patch-container"
-                        pointerEvents="none"
-                        style={styles.patchContainerStyle}
-                    />
-                )}
                 <InputLabel
                     parentState={parentState}
-                    label={`${label}${required ? '*' : ''}`}
+                    label={label}
+                    labelBackground={styles.backgroundColor}
+                    floatingLabelHorizontalOffset={styles.floatingLabelHorizontalOffset}
+                    required={required}
                     onLayoutAnimatedText={onLayoutAnimatedText}
                     error={error}
-                    placeholderStyle={styles.placeholder}
                     baseLabelTranslateX={styles.baseLabelTranslateX}
                     labelScale={styles.labelScale}
                     wiggleOffsetX={LABEL_WIGGLE_X_OFFSET}
-                    hasActiveOutline={hasActiveOutline}
                     maxFontSizeMultiplier={rest.maxFontSizeMultiplier}
-                    inputHeight={styles.inputHeight}
                     testID={testID}
                     style={styles.labelText}
                 />
 
                 {render({
-                    testID: `${testID}-flat`,
+                    testID: `${testID}-${variant}`,
+                    ...rest,
                     style: styles.textInputStyle,
                     ref: innerRef,
-                    onChangeText: onChangeText,
+                    onChangeText,
                     placeholder: label ? parentState.placeholder : rest.placeholder,
                     placeholderTextColor: styles.placeholderTextColor,
                     editable: !disabled && editable,
                     selectionColor: styles.selectionColor,
-                    onFocus: onFocus,
-                    onBlur: onBlur,
+                    onFocus,
+                    onBlur,
                     underlineColorAndroid: 'transparent',
-                    multiline: multiline,
+                    multiline,
                 })}
             </View>
 

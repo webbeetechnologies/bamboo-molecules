@@ -13,6 +13,7 @@ type States =
 type CustomProps = {
     activeColor?: string;
     animationScale?: string;
+    floatingLabelHorizontalOffset?: number;
 
     container?: Record<string, string | number>;
     labelText?: Record<string, string | number>;
@@ -27,6 +28,7 @@ type CustomProps = {
 
 export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, CustomProps> = {
     animationScale: 'animation.scale',
+    floatingLabelHorizontalOffset: 18,
 
     container: {
         flexDirection: 'row',
@@ -48,6 +50,7 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
     },
     labelText: {
         position: 'absolute',
+        left: 0,
         color: 'colors.onSurfaceVariant',
         fontSize: 'typescale.bodyLarge.fontSize',
         lineHeight: 'typescale.bodyLarge.lineHeight',
@@ -68,8 +71,6 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
         marginHorizontal: 'spacings.4',
     },
     placeholder: {
-        position: 'absolute',
-        left: 0,
         color: 'colors.onSurfaceVariant',
     },
     outline: {},
@@ -77,10 +78,16 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
 
     variants: {
         outlined: {
+            backgroundColor: 'colors.surface', // floating label backgroundColor comes from here because we want it to be the same background as the TextInput
+            floatingLabelHorizontalOffset: 6,
+
             outline: {
                 borderRadius: 'roundness.1',
                 borderColor: 'colors.outline',
                 borderWidth: 1,
+            },
+            labelText: {
+                paddingHorizontal: 'spacings.1',
             },
 
             states: {
@@ -88,10 +95,6 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
                     outline: {
                         borderWidth: 2,
                         borderColor: 'colors.primary',
-                    },
-                    labelText: {
-                        backgroundColor: 'colors.surface',
-                        paddingHorizontal: 'spacings.1',
                     },
                 },
 
@@ -109,10 +112,6 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
                         borderWidth: 2,
                         borderColor: 'colors.error',
                         backgroundColor: 'colors.surface',
-                    },
-                    labelText: {
-                        backgroundColor: 'colors.surface',
-                        paddingHorizontal: 'spacings.1',
                     },
                 },
 
@@ -353,13 +352,5 @@ export const styles = StyleSheet.create({
     inputFlatDense: {
         paddingTop: 22,
         paddingBottom: 2,
-    },
-    patchContainer: {
-        height: 24,
-        zIndex: 2,
-    },
-    densePatchContainer: {
-        height: 22,
-        zIndex: 2,
     },
 });
