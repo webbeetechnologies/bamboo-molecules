@@ -18,7 +18,7 @@ export enum IconPacks {
     FontAwesome5 = 'font-awesome-5',
 }
 
-export type IconType = IconPacks | string;
+export type IconType = `${IconPacks}`; // in TS 4.1+, we can do this to make enum values as a union type
 
 export type IconProps = VectorIconProps &
     RefAttributes<VectorIconProps> & {
