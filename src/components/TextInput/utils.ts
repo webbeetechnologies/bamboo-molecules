@@ -13,7 +13,10 @@ type States =
 type CustomProps = {
     activeColor?: string;
     animationScale?: string;
-    floatingLabelHorizontalOffset?: number;
+    floatingLabelHorizontalOffset?: number | string;
+    minimizedLabelFontSize?: number;
+    maximizedLabelFontSize?: number;
+    labelWiggleXOffset?: number;
 
     container?: Record<string, string | number>;
     labelText?: Record<string, string | number>;
@@ -26,9 +29,24 @@ type CustomProps = {
     outline?: Record<string, string | number>;
 };
 
-export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, CustomProps> = {
+type CustomSizeProps = {
+    inputText?: Record<string, string | number>;
+    inputMinHeight?: number;
+};
+
+export type TextInputStyles = ComponentStylePropWithVariants<
+    ViewStyle,
+    States,
+    CustomProps,
+    CustomSizeProps
+>;
+
+export const defaultStyles: TextInputStyles = {
     animationScale: 'animation.scale',
-    floatingLabelHorizontalOffset: 18,
+    floatingLabelHorizontalOffset: 16,
+    minimizedLabelFontSize: 12,
+    maximizedLabelFontSize: 16,
+    labelWiggleXOffset: 4,
 
     container: {
         flexDirection: 'row',
@@ -61,6 +79,7 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
         fontSize: 'typescale.bodyLarge.fontSize',
         lineHeight: 'typescale.bodyLarge.lineHeight',
         fontWeight: 'typescale.bodyLarge.fontWeight',
+        flexGrow: 1,
     },
     supportingText: {
         color: 'colors.onSurfaceVariant',
@@ -79,7 +98,7 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
     variants: {
         outlined: {
             backgroundColor: 'colors.surface', // floating label backgroundColor comes from here because we want it to be the same background as the TextInput
-            floatingLabelHorizontalOffset: 6,
+            floatingLabelHorizontalOffset: 0,
 
             outline: {
                 borderRadius: 'roundness.1',
@@ -120,6 +139,31 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
                         borderColor: 'colors.error',
                         backgroundColor: 'colors.surface',
                     },
+                },
+            },
+
+            sizes: {
+                lg: {
+                    inputMinHeight: 56,
+
+                    inputText: {
+                        paddingTop: 'spacings.3',
+                        paddingBottom: 2,
+                    },
+                },
+                md: {
+                    inputMinHeight: 56,
+
+                    inputText: {
+                        paddingTop: 2,
+                        paddingBottom: 2,
+                    },
+                },
+                dense: {
+                    inputMinHeight: 48,
+                },
+                labeledDense: {
+                    inputMinHeight: 48,
                 },
             },
         },
@@ -186,6 +230,36 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
                         height: 1,
                         backgroundColor: 'colors.error',
                         opacity: 0.38,
+                    },
+                },
+            },
+
+            sizes: {
+                lg: {
+                    inputMinHeight: 56,
+
+                    inputText: {
+                        paddingTop: 'spacings.8',
+                        paddingBottom: 2,
+                    },
+                },
+                md: {
+                    inputMinHeight: 56,
+
+                    inputText: {
+                        paddingTop: 'spacings.4',
+                        paddingBottom: 2,
+                    },
+                },
+                dense: {
+                    inputMinHeight: 40,
+                },
+                labeledDense: {
+                    inputMinHeight: 52,
+
+                    inputText: {
+                        paddingTop: 'spacings.5',
+                        paddingBottom: 2,
                     },
                 },
             },
@@ -312,15 +386,9 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, States, Cu
             },
         },
     },
-
-    sizes: {},
 };
 
 export const styles = StyleSheet.create({
-    placeholder: {
-        position: 'absolute',
-        left: 0,
-    },
     underline: {
         position: 'absolute',
         left: 0,
@@ -333,24 +401,12 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         right: 0,
-        top: 6,
+        top: 0,
         bottom: 0,
     },
     labelContainer: {
         paddingTop: 0,
         paddingBottom: 0,
         flexGrow: 1,
-    },
-    input: {
-        flexGrow: 1,
-        margin: 0,
-    },
-    inputFlat: {
-        paddingTop: 24,
-        paddingBottom: 4,
-    },
-    inputFlatDense: {
-        paddingTop: 22,
-        paddingBottom: 2,
     },
 });

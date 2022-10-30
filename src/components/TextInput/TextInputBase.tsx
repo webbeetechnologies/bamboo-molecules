@@ -10,17 +10,6 @@ import {
 import { useMolecules } from '../../hooks';
 import InputLabel from './InputLabel';
 import type { InputBaseProps, RenderProps } from './types';
-// TODO replace this with tokens
-import {
-    MINIMIZED_LABEL_FONT_SIZE,
-    LABEL_WIGGLE_X_OFFSET,
-    LABEL_PADDING_TOP_DENSE,
-    MIN_DENSE_HEIGHT_WL,
-    MIN_DENSE_HEIGHT,
-    MAXIMIZED_LABEL_FONT_SIZE,
-    MD3_MIN_HEIGHT,
-    MD3_LABEL_PADDING_TOP,
-} from './constants';
 import { styles as defaultStyles } from './utils';
 
 const TextInputBase = ({
@@ -30,7 +19,6 @@ const TextInputBase = ({
     editable = true,
     label,
     error = false,
-    dense,
     multiline = false,
     parentState,
     innerRef,
@@ -54,10 +42,6 @@ const TextInputBase = ({
     const labelHeight = parentState.labelLayout.height;
     const labelHalfWidth = labelWidth / 2;
 
-    const minInputHeight = dense
-        ? (label ? MIN_DENSE_HEIGHT_WL : MIN_DENSE_HEIGHT) - LABEL_PADDING_TOP_DENSE
-        : MD3_MIN_HEIGHT - MD3_LABEL_PADDING_TOP;
-
     const [leftElementLayout, setElementLayout] = useState<{
         measured: boolean;
         width: number;
@@ -78,7 +62,7 @@ const TextInputBase = ({
 
     const styles = useMemo(() => {
         const {
-            activeColor,
+            // style objects
             container,
             leadingIcon,
             trailingIcon,
@@ -88,35 +72,36 @@ const TextInputBase = ({
             supportingText,
             placeholder,
             outline,
+
+            // extracted styles
+            backgroundColor,
             fontSize,
             fontWeight,
             height,
             paddingHorizontal,
             textAlign,
+            activeColor,
+
+            // custom props
             selectionColor,
             underlineColor,
             activeUnderlineColor,
             outlineColor,
             activeOutlineColor,
             placeholderTextColor,
-            backgroundColor,
             floatingLabelHorizontalOffset,
+            inputMinHeight,
+            minimizedLabelFontSize,
+            maximizedLabelFontSize,
+            labelWiggleXOffset,
             ...viewStyle
         } = componentStyles;
 
-        // TODO replace this with sizes // 'dense' | 'labeled-dense' | 'regular' | 'labeled-regular'
-        const minHeight =
-            height || (dense ? (label ? MIN_DENSE_HEIGHT_WL : MIN_DENSE_HEIGHT) : MD3_MIN_HEIGHT);
-
         const finalHeight = height > 0 ? height : labelHeight;
 
-        const inputHeight =
-            height > 0 ? height : finalHeight < minInputHeight ? minInputHeight : finalHeight;
+        const inputHeight = finalHeight < inputMinHeight ? inputMinHeight : finalHeight;
 
-        const flatHeight =
-            inputHeight + (!height ? (dense ? LABEL_PADDING_TOP_DENSE : MD3_LABEL_PADDING_TOP) : 0);
-
-        const labelScale = MINIMIZED_LABEL_FONT_SIZE / (fontSize || MAXIMIZED_LABEL_FONT_SIZE);
+        const labelScale = minimizedLabelFontSize / (fontSize || maximizedLabelFontSize);
 
         const baseLabelTranslateX =
             (I18nManager.isRTL ? 1 : -1) * (labelHalfWidth - (labelScale * labelWidth) / 2) +
@@ -126,14 +111,14 @@ const TextInputBase = ({
             baseLabelTranslateX - container?.paddingHorizontal - (leftElementLayout.width || 0); // minus the width of the icon and the padding
 
         return {
-            activeColor,
-            container: [container, viewStyle, { height }],
+            container: [container, viewStyle],
             leadingIcon,
             trailingIcon,
             activeIndicator,
             labelText,
             inputText,
             supportingText,
+
             placeholder,
             fontSize,
             fontWeight,
@@ -141,6 +126,8 @@ const TextInputBase = ({
             paddingHorizontal,
             textAlign,
             backgroundColor,
+
+            activeColor,
             baseLabelTranslateX:
                 variant === 'outlined' ? baseLabelTranslateXOutline : baseLabelTranslateX,
             labelScale,
@@ -151,12 +138,12 @@ const TextInputBase = ({
             activeOutlineColor,
             placeholderTextColor: placeholderTextColor || placeholder?.color,
             floatingLabelHorizontalOffset,
+            labelWiggleXOffset,
+
             textInputStyle: [
                 inputText,
                 { paddingLeft: paddingHorizontal, paddingRight: paddingHorizontal },
-                !multiline || (multiline && height) ? { height: flatHeight } : {},
-                // TODO replace this with sizes // 'dense' | 'labeled-dense' | 'regular' | 'labeled-regular'
-                dense ? defaultStyles.inputFlatDense : defaultStyles.inputFlat,
+                !multiline || (multiline && height) ? { height: inputHeight } : {},
                 {
                     textAlignVertical: multiline ? 'top' : 'center',
                     textAlign: textAlign ? textAlign : I18nManager.isRTL ? 'right' : 'left',
@@ -166,7 +153,7 @@ const TextInputBase = ({
             labelContainerStyle: [
                 defaultStyles.labelContainer,
                 {
-                    minHeight,
+                    minHeight: inputMinHeight,
                 },
             ],
             underlineStyle: [
@@ -191,14 +178,11 @@ const TextInputBase = ({
         };
     }, [
         componentStyles,
-        dense,
         hasActiveOutline,
-        label,
         labelHalfWidth,
         labelHeight,
         labelWidth,
         leftElementLayout.width,
-        minInputHeight,
         multiline,
         variant,
     ]);
@@ -240,7 +224,7 @@ const TextInputBase = ({
                     error={error}
                     baseLabelTranslateX={styles.baseLabelTranslateX}
                     labelScale={styles.labelScale}
-                    wiggleOffsetX={LABEL_WIGGLE_X_OFFSET}
+                    wiggleOffsetX={styles.labelWiggleXOffset}
                     maxFontSizeMultiplier={rest.maxFontSizeMultiplier}
                     testID={testID}
                     style={styles.labelText}

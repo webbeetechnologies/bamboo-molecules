@@ -267,6 +267,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                     focused: focused,
                     error: !!errorProp,
                 },
+                size: dense ? (rest.label ? 'labeledDense' : 'dense') : multiline ? 'lg' : 'md',
             },
         );
 
