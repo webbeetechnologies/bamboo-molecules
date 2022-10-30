@@ -44,6 +44,7 @@ const Example = () => {
         VerticalDivider,
         IconButton,
         Checkbox,
+        TextInput,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
@@ -58,6 +59,64 @@ const Example = () => {
                     </View>
                 </TouchableRipple>
             </Surface>
+
+            <HorizontalDivider spacing={30} />
+
+            <TextInput
+                variant="flat"
+                placeholder="Placeholder"
+                label={'hello'}
+                left={({ color, forceFocus }) => (
+                    <Icon
+                        name={'magnify'}
+                        type="material-community"
+                        size={24}
+                        color={color}
+                        onPress={forceFocus}
+                    />
+                )}
+                dense
+            />
+
+            <HorizontalDivider spacing={30} />
+
+            <TextInput
+                variant="outlined"
+                placeholder="Placeholder"
+                label="jeal"
+                left={({ color, forceFocus }) => (
+                    <Icon
+                        name={'magnify'}
+                        type="material-community"
+                        size={24}
+                        color={color}
+                        onPress={forceFocus}
+                    />
+                )}
+            />
+
+            <HorizontalDivider spacing={30} />
+
+            <TextInput
+                variant="outlined"
+                placeholder="Placeholder"
+                label="Label"
+                multiline
+                left={({ color, forceFocus }) => (
+                    <Icon
+                        name={'magnify'}
+                        type="material-community"
+                        size={24}
+                        color={color}
+                        onPress={forceFocus}
+                    />
+                )}
+                right={<Text>/100</Text>}
+                style={{ height: 100 }}
+                required
+                error
+            />
+
             <Icon type="material-community" name="robot-angry-outline" />
             <IconButton
                 name={isSwitchOn ? 'chevron-left' : 'chevron-right'}
