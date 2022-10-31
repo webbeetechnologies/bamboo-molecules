@@ -187,6 +187,13 @@ const TextInputBase = ({
                 },
                 backgroundColor ? { backgroundColor } : {},
             ],
+            patchContainer: [
+                StyleSheet.absoluteFill,
+                {
+                    backgroundColor,
+                },
+                defaultStyles.patchContainer,
+            ],
         };
     }, [
         componentStyles,
@@ -234,13 +241,7 @@ const TextInputBase = ({
                     <View
                         testID="patch-container"
                         pointerEvents="none"
-                        style={[
-                            StyleSheet.absoluteFill,
-                            {
-                                backgroundColor: styles.backgroundColor,
-                            },
-                            defaultStyles.patchContainer,
-                        ]}
+                        style={styles.patchContainer}
                     />
                 )}
 
