@@ -443,4 +443,8 @@ export const styles = StyleSheet.create({
         paddingBottom: 0,
         flexGrow: 1,
     },
+    patchContainer: {
+        height: 24,
+        zIndex: 2,
+    },
 });

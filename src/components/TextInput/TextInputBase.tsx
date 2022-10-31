@@ -5,6 +5,7 @@ import {
     Platform,
     TextInput as NativeTextInput,
     LayoutChangeEvent,
+    StyleSheet,
 } from 'react-native';
 
 import { useMolecules } from '../../hooks';
@@ -77,7 +78,6 @@ const TextInputBase = ({
             outline,
 
             // extracted styles
-            backgroundColor,
             fontSize,
             fontWeight,
             height,
@@ -118,6 +118,8 @@ const TextInputBase = ({
 
         const baseLabelTranslateXOutline =
             baseLabelTranslateX - leftElementLayout.width - normalizedLeftElementMarginLeft; // minus the width of the icon and the padding
+
+        const backgroundColor = viewStyle?.backgroundColor || container?.backgroundColor; // to give the opportunity to change the backgroundColor of the TextInput with the StyleProp
 
         return {
             container: [container, viewStyle],
@@ -226,6 +228,22 @@ const TextInputBase = ({
             </>
 
             <View style={styles.inputContainerStyle}>
+                {Platform.OS !== 'android' && multiline && !!label && variant === 'flat' && (
+                    // Workaround for: https://github.com/callstack/react-native-paper/issues/2799
+                    // Patch for a multiline TextInput with fixed height, which allow to avoid covering input label with its value.
+                    <View
+                        testID="patch-container"
+                        pointerEvents="none"
+                        style={[
+                            StyleSheet.absoluteFill,
+                            {
+                                backgroundColor: styles.backgroundColor,
+                            },
+                            defaultStyles.patchContainer,
+                        ]}
+                    />
+                )}
+
                 <InputLabel
                     parentState={parentState}
                     label={label}

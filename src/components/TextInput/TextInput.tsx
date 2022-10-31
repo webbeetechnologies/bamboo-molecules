@@ -144,7 +144,8 @@ export type Props = TextInputProps &
         value?: string;
         /**
          * Pass `fontSize` prop to modify the font size inside `TextInput`.
-         * Pass `height` prop to set `TextInput` height. When `height` is passed,
+         * Pass `height` prop to set `TextInput` height.
+         * Pass `backgroundColor` prop to set `TextInput` backgroundColor.
          */
         style?: StyleProp<TextStyle>;
         /**
