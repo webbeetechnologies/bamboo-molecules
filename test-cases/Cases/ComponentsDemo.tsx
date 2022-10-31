@@ -87,15 +87,6 @@ const Example = () => {
                 placeholder="Placeholder"
                 label="Label"
                 multiline
-                left={({ color, forceFocus }) => (
-                    <Icon
-                        name={'magnify'}
-                        type="material-community"
-                        size={24}
-                        color={color}
-                        onPress={forceFocus}
-                    />
-                )}
                 size="sm"
             />
 

@@ -117,7 +117,9 @@ const TextInputBase = ({
             0;
 
         const baseLabelTranslateXOutline =
-            baseLabelTranslateX - leftElementLayout.width - normalizedLeftElementMarginLeft; // minus the width of the icon and the padding
+            baseLabelTranslateX -
+            leftElementLayout.width -
+            (left ? normalizedLeftElementMarginLeft : 0); // minus the width of the icon and the padding
 
         const backgroundColor = viewStyle?.backgroundColor || container?.backgroundColor; // to give the opportunity to change the backgroundColor of the TextInput with the StyleProp
 
@@ -203,6 +205,7 @@ const TextInputBase = ({
         labelHalfWidth,
         labelHeight,
         labelWidth,
+        left,
         leftElementLayout.width,
         multiline,
         variant,

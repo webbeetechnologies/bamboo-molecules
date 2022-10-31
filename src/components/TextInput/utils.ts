@@ -108,6 +108,7 @@ export const defaultStyles: TextInputStyles = {
             },
             labelText: {
                 paddingHorizontal: 'spacings.1',
+                marginLeft: 'spacings._1', // to counter-act the padding
             },
 
             states: {
