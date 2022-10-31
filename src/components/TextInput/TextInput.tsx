@@ -16,13 +16,14 @@ import {
     StyleProp,
     TextStyle,
     Text,
+    ViewStyle,
 } from 'react-native';
 import type { TextInputProps } from '@webbee/bamboo-atoms';
 
-import { useComponentStyles, useControlledValue } from '../../hooks';
+import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { WithElements } from '../../types';
 import TextInputBase from './TextInputBase';
-import type { RenderProps, TextInputLabelProp } from './types';
+import type { RenderProps, TextInputLabelProp, TextInputSize } from './types';
 
 const BLUR_ANIMATION_DURATION = 180;
 const FOCUS_ANIMATION_DURATION = 150;
@@ -93,7 +94,7 @@ export type Props = TextInputProps &
          * height is `56dp` or in dense layout - `40dp` regardless of label.
          * When you apply `height` prop in style the `dense` prop affects only `paddingVertical` inside `TextInput`
          */
-        dense?: boolean;
+        size?: TextInputSize;
         /**
          * Whether the input can have multiple lines.
          */
@@ -144,11 +145,20 @@ export type Props = TextInputProps &
         /**
          * Pass `fontSize` prop to modify the font size inside `TextInput`.
          * Pass `height` prop to set `TextInput` height. When `height` is passed,
-         * `dense` prop will affect only input's `paddingVertical`.
-         * Pass `paddingHorizontal` to modify horizontal padding.
-         * This can be used to get MD Guidelines v1 TextInput look.
          */
         style?: StyleProp<TextStyle>;
+        /**
+         * Style of the entire Container
+         */
+        containerStyle?: StyleProp<ViewStyle>;
+        /**
+         * Style of the Input Container
+         */
+        inputContainerStyle?: StyleProp<ViewStyle>;
+        /**
+         * Style of the Input
+         */
+        inputStyle?: StyleProp<TextStyle>;
         /**
          * testID to be used on tests.
          */
@@ -209,7 +219,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
     (
         {
             variant = 'flat',
-            dense = false,
+            size = 'md',
             disabled = false,
             error: errorProp = false,
             multiline = false,
@@ -224,12 +234,15 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             activeOutlineColor: activeOutlineColorProp,
             placeholderTextColor: placeholderTextColorProp,
             style,
+            containerStyle,
             ...rest
         }: Props,
         ref,
     ) => {
         const isControlled = rest.value !== undefined;
         const validInputValue = isControlled ? rest.value : rest.defaultValue;
+
+        const { View } = useMolecules();
 
         const { current: labelAnimation } = useRef<Animated.Value>(
             new Animated.Value(validInputValue ? 0 : 1),
@@ -268,7 +281,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                     focused: focused,
                     error: !!errorProp,
                 },
-                size: dense ? (rest.label ? 'labeledDense' : 'dense') : multiline ? 'lg' : 'md',
+                size,
             },
         );
 
@@ -415,11 +428,11 @@ const TextInput = forwardRef<TextInputHandles, Props>(
         );
 
         return (
-            <>
+            <View style={containerStyle}>
                 <TextInputBase
                     componentStyles={styles}
                     variant={variant}
-                    dense={dense}
+                    size={size}
                     disabled={disabled}
                     error={errorProp}
                     multiline={multiline}
@@ -443,7 +456,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                         <Text style={styles.supportingText}>{supportingText || '*required'}</Text>
                     )}
                 </>
-            </>
+            </View>
         );
     },
 );

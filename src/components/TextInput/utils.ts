@@ -13,15 +13,15 @@ type States =
 type CustomProps = {
     activeColor?: string;
     animationScale?: string;
-    floatingLabelHorizontalOffset?: number | string;
+    floatingLabelVerticalOffset?: number | string;
     minimizedLabelFontSize?: number;
     maximizedLabelFontSize?: number;
     labelWiggleXOffset?: number;
 
     container?: Record<string, string | number>;
     labelText?: Record<string, string | number>;
-    leadingIcon?: Record<string, string | number>;
-    trailingIcon?: Record<string, string | number>;
+    leadingElement?: Record<string, string | number>;
+    trailingElement?: Record<string, string | number>;
     activeIndicator?: Record<string, string | number>;
     inputText?: Record<string, string | number>;
     supportingText?: Record<string, string | number>;
@@ -31,6 +31,7 @@ type CustomProps = {
 
 type CustomSizeProps = {
     inputText?: Record<string, string | number>;
+    labelText?: Record<string, string | number>;
     inputMinHeight?: number;
 };
 
@@ -43,7 +44,7 @@ export type TextInputStyles = ComponentStylePropWithVariants<
 
 export const defaultStyles: TextInputStyles = {
     animationScale: 'animation.scale',
-    floatingLabelHorizontalOffset: 16,
+    floatingLabelVerticalOffset: 16,
     minimizedLabelFontSize: 12,
     maximizedLabelFontSize: 16,
     labelWiggleXOffset: 4,
@@ -52,14 +53,14 @@ export const defaultStyles: TextInputStyles = {
         flexDirection: 'row',
         paddingHorizontal: 'spacings.4',
     },
-    leadingIcon: {
+    leadingElement: {
         color: 'colors.onSurfaceVariant',
         iconSize: 20,
         marginRight: 'spacings.3',
         marginLeft: 'spacings._1',
         justifyContent: 'center',
     },
-    trailingIcon: {
+    trailingElement: {
         color: 'colors.onSurfaceVariant',
         iconSize: 24,
         marginRight: 'spacings._1',
@@ -98,7 +99,7 @@ export const defaultStyles: TextInputStyles = {
     variants: {
         outlined: {
             backgroundColor: 'colors.surface', // floating label backgroundColor comes from here because we want it to be the same background as the TextInput
-            floatingLabelHorizontalOffset: 0,
+            floatingLabelVerticalOffset: 0,
 
             outline: {
                 borderRadius: 'roundness.1',
@@ -144,25 +145,22 @@ export const defaultStyles: TextInputStyles = {
 
             sizes: {
                 lg: {
-                    inputMinHeight: 56,
+                    inputMinHeight: 64,
 
                     inputText: {
                         paddingTop: 'spacings.3',
-                        paddingBottom: 2,
+                        paddingBottom: 'spacings.3',
                     },
                 },
                 md: {
                     inputMinHeight: 56,
 
                     inputText: {
-                        paddingTop: 2,
-                        paddingBottom: 2,
+                        paddingTop: 'spacings.1',
+                        paddingBottom: 'spacings.1',
                     },
                 },
-                dense: {
-                    inputMinHeight: 48,
-                },
-                labeledDense: {
+                sm: {
                     inputMinHeight: 48,
                 },
             },
@@ -174,8 +172,8 @@ export const defaultStyles: TextInputStyles = {
                 borderTopRightRadius: 'roundness.1',
             },
 
-            leadingIcon: {},
-            trailingIcon: {},
+            leadingElement: {},
+            trailingElement: {},
             activeIndicator: {
                 height: 1,
                 backgroundColor: 'colors.onSurfaceVariant',
@@ -236,7 +234,7 @@ export const defaultStyles: TextInputStyles = {
 
             sizes: {
                 lg: {
-                    inputMinHeight: 56,
+                    inputMinHeight: 64,
 
                     inputText: {
                         paddingTop: 'spacings.8',
@@ -248,18 +246,15 @@ export const defaultStyles: TextInputStyles = {
 
                     inputText: {
                         paddingTop: 'spacings.4',
-                        paddingBottom: 2,
+                        paddingBottom: 'spacings.2',
                     },
                 },
-                dense: {
-                    inputMinHeight: 40,
-                },
-                labeledDense: {
+                sm: {
                     inputMinHeight: 52,
 
                     inputText: {
                         paddingTop: 'spacings.5',
-                        paddingBottom: 2,
+                        paddingBottom: 'spacings.2',
                     },
                 },
             },
@@ -290,11 +285,11 @@ export const defaultStyles: TextInputStyles = {
                 color: 'colors.onSurface',
                 opacity: 0.38,
             },
-            leadingIcon: {
+            leadingElement: {
                 color: 'colors.onSurface',
                 opacity: 0.38,
             },
-            trailingIcon: {
+            trailingElement: {
                 color: 'colors.onSurface',
                 opacity: 0.38,
             },
@@ -312,10 +307,10 @@ export const defaultStyles: TextInputStyles = {
             supportingText: {
                 color: 'colors.error',
             },
-            leadingIcon: {
+            leadingElement: {
                 color: 'colors.onSurfaceVariant',
             },
-            trailingIcon: {
+            trailingElement: {
                 color: 'colors.error',
             },
         },
@@ -332,10 +327,10 @@ export const defaultStyles: TextInputStyles = {
             supportingText: {
                 color: 'colors.error',
             },
-            leadingIcon: {
+            leadingElement: {
                 color: 'colors.onSurfaceVariant',
             },
-            trailingIcon: {
+            trailingElement: {
                 color: 'colors.error',
             },
         },
@@ -355,11 +350,11 @@ export const defaultStyles: TextInputStyles = {
                 color: 'colors.error',
                 opacity: 0.38,
             },
-            leadingIcon: {
+            leadingElement: {
                 color: 'colors.onSurfaceVariant',
                 opacity: 0.38,
             },
-            trailingIcon: {
+            trailingElement: {
                 color: 'colors.error',
                 opacity: 0.38,
             },
@@ -378,11 +373,50 @@ export const defaultStyles: TextInputStyles = {
             supportingText: {
                 color: 'colors.error',
             },
-            leadingIcon: {
+            leadingElement: {
                 color: 'colors.onSurfaceVariant',
             },
-            trailingIcon: {
+            trailingElement: {
                 color: 'colors.onErrorContainer',
+            },
+        },
+    },
+
+    sizes: {
+        lg: {
+            labelText: {
+                fontSize: 'typescale.bodyExtraLarge.fontSize',
+                lineHeight: 'typescale.bodyExtraLarge.lineHeight',
+                fontWeight: 'typescale.bodyExtraLarge.fontWeight',
+            },
+            inputText: {
+                fontSize: 'typescale.bodyExtraLarge.fontSize',
+                lineHeight: 'typescale.bodyExtraLarge.lineHeight',
+                fontWeight: 'typescale.bodyExtraLarge.fontWeight',
+            },
+        },
+        md: {
+            labelText: {
+                fontSize: 'typescale.bodyLarge.fontSize',
+                lineHeight: 'typescale.bodyLarge.lineHeight',
+                fontWeight: 'typescale.bodyLarge.fontWeight',
+            },
+            inputText: {
+                fontSize: 'typescale.bodyLarge.fontSize',
+                lineHeight: 'typescale.bodyLarge.lineHeight',
+                fontWeight: 'typescale.bodyLarge.fontWeight',
+            },
+        },
+        sm: {
+            labelText: {
+                fontSize: 'typescale.bodyMedium.fontSize',
+                lineHeight: 'typescale.bodyMedium.lineHeight',
+                fontWeight: 'typescale.bodyMedium.fontWeight',
+            },
+            inputText: {
+                fontSize: 'typescale.bodyMedium.fontSize',
+                lineHeight: 'typescale.bodyMedium.lineHeight',
+                fontWeight: 'typescale.bodyMedium.fontWeight',
             },
         },
     },

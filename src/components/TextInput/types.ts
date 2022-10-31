@@ -10,6 +10,8 @@ import type { Props as TextInputProps } from './TextInput';
 
 export type TextInputLabelProp = string | ReactElement;
 
+export type TextInputSize = 'lg' | 'md' | 'sm';
+
 export type RenderProps = {
     ref: (a?: NativeTextInput | null) => void;
     onChangeText?: (a: string) => void;
@@ -22,6 +24,7 @@ export type RenderProps = {
     underlineColorAndroid?: string;
     style: any;
     multiline?: boolean;
+    size?: TextInputSize;
     numberOfLines?: number;
     value?: string;
     adjustsFontSizeToFit?: boolean;
@@ -55,6 +58,7 @@ export type InputBaseProps = {
     | 'outlineColor'
     | 'placeholderTextColor'
     | 'selectionColor'
+    | 'containerStyle'
 >;
 
 export type InputLabelProps = {
@@ -63,7 +67,7 @@ export type InputLabelProps = {
     baseLabelTranslateX: number;
     wiggleOffsetX: number;
     labelScale: number;
-    floatingLabelHorizontalOffset?: number;
+    floatingLabelVerticalOffset?: number;
     paddingOffset?: { paddingLeft: number; paddingRight: number } | null;
     labelTranslationXOffset?: number;
     label?: TextInputLabelProp | null;

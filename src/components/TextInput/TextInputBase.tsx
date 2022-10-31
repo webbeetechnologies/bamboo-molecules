@@ -32,6 +32,9 @@ const TextInputBase = ({
     forceFocus,
     testID = 'text-input',
     required,
+    size,
+    inputContainerStyle,
+    inputStyle,
     ...rest
 }: InputBaseProps) => {
     const hasActiveOutline = parentState.focused || error;
@@ -64,8 +67,8 @@ const TextInputBase = ({
         const {
             // style objects
             container,
-            leadingIcon,
-            trailingIcon,
+            leadingElement,
+            trailingElement,
             activeIndicator,
             labelText,
             inputText,
@@ -78,7 +81,6 @@ const TextInputBase = ({
             fontSize,
             fontWeight,
             height,
-            paddingHorizontal,
             textAlign,
             activeColor,
 
@@ -89,7 +91,7 @@ const TextInputBase = ({
             outlineColor,
             activeOutlineColor,
             placeholderTextColor,
-            floatingLabelHorizontalOffset,
+            floatingLabelVerticalOffset,
             inputMinHeight,
             minimizedLabelFontSize,
             maximizedLabelFontSize,
@@ -104,18 +106,23 @@ const TextInputBase = ({
         const labelScale = minimizedLabelFontSize / (fontSize || maximizedLabelFontSize);
 
         const baseLabelTranslateX =
-            (I18nManager.isRTL ? 1 : -1) * (labelHalfWidth - (labelScale * labelWidth) / 2) +
-            (1 - labelScale) * (I18nManager.isRTL ? -1 : 1) * (paddingHorizontal || 0);
+            (I18nManager.isRTL ? 1 : -1) *
+            (labelScale - 1 + labelHalfWidth - (labelScale * labelWidth) / 2);
+
+        const normalizedLeftElementMarginLeft =
+            leadingElement?.marginHorizontal ||
+            leadingElement?.marginRight ||
+            leadingElement?.margin ||
+            (I18nManager.isRTL ? leadingElement?.marginStart : leadingElement?.marginEnd) ||
+            0;
 
         const baseLabelTranslateXOutline =
-            baseLabelTranslateX -
-            (left ? container?.paddingHorizontal : container?.paddingHorizontal / 2) -
-            leftElementLayout.width; // minus the width of the icon and the padding
+            baseLabelTranslateX - leftElementLayout.width - normalizedLeftElementMarginLeft; // minus the width of the icon and the padding
 
         return {
             container: [container, viewStyle],
-            leadingIcon,
-            trailingIcon,
+            leadingElement,
+            trailingElement,
             activeIndicator,
             labelText,
             inputText,
@@ -125,7 +132,6 @@ const TextInputBase = ({
             fontSize,
             fontWeight,
             height,
-            paddingHorizontal,
             textAlign,
             backgroundColor,
 
@@ -139,24 +145,26 @@ const TextInputBase = ({
             outlineColor,
             activeOutlineColor,
             placeholderTextColor: placeholderTextColor || placeholder?.color,
-            floatingLabelHorizontalOffset,
+            floatingLabelVerticalOffset,
             labelWiggleXOffset,
 
             textInputStyle: [
                 inputText,
-                { paddingLeft: paddingHorizontal, paddingRight: paddingHorizontal },
                 !multiline || (multiline && height) ? { height: inputHeight } : {},
+                multiline && variant === 'outlined' && { paddingTop: 12 },
                 {
                     textAlignVertical: multiline ? 'top' : 'center',
                     textAlign: textAlign ? textAlign : I18nManager.isRTL ? 'right' : 'left',
                 },
                 Platform.OS === 'web' && { outline: 'none' },
+                inputStyle,
             ],
-            labelContainerStyle: [
+            inputContainerStyle: [
                 defaultStyles.labelContainer,
                 {
                     minHeight: inputMinHeight,
                 },
+                inputContainerStyle,
             ],
             underlineStyle: [
                 defaultStyles.underline,
@@ -181,10 +189,11 @@ const TextInputBase = ({
     }, [
         componentStyles,
         hasActiveOutline,
+        inputContainerStyle,
+        inputStyle,
         labelHalfWidth,
         labelHeight,
         labelWidth,
-        left,
         leftElementLayout.width,
         multiline,
         variant,
@@ -204,7 +213,7 @@ const TextInputBase = ({
 
             <>
                 {left && (
-                    <View style={styles.leadingIcon} onLayout={handleLayoutLeftElement}>
+                    <View style={styles.leadingElement} onLayout={handleLayoutLeftElement}>
                         {typeof left === 'function'
                             ? left?.({
                                   color: styles.activeColor,
@@ -216,12 +225,12 @@ const TextInputBase = ({
                 )}
             </>
 
-            <View style={styles.labelContainerStyle}>
+            <View style={styles.inputContainerStyle}>
                 <InputLabel
                     parentState={parentState}
                     label={label}
                     labelBackground={styles.backgroundColor}
-                    floatingLabelHorizontalOffset={styles.floatingLabelHorizontalOffset}
+                    floatingLabelVerticalOffset={styles.floatingLabelVerticalOffset}
                     required={required}
                     onLayoutAnimatedText={onLayoutAnimatedText}
                     error={error}
@@ -247,12 +256,13 @@ const TextInputBase = ({
                     onBlur,
                     underlineColorAndroid: 'transparent',
                     multiline,
+                    size,
                 })}
             </View>
 
             <>
                 {right && (
-                    <View style={styles.trailingIcon}>
+                    <View style={styles.trailingElement}>
                         {typeof right === 'function'
                             ? right?.({
                                   color: styles.activeColor,

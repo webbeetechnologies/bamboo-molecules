@@ -9,7 +9,7 @@ const InputLabel = (props: InputLabelProps) => {
         style,
         label,
         labelBackground,
-        floatingLabelHorizontalOffset,
+        floatingLabelVerticalOffset,
         error,
         onLayoutAnimatedText,
         baseLabelTranslateX,
@@ -57,7 +57,7 @@ const InputLabel = (props: InputLabelProps) => {
                     translateY: parentState.labelAnimation.interpolate({
                         inputRange: [0, 1],
                         outputRange: [
-                            (floatingLabelHorizontalOffset || 0) - containerLayout.height / 2,
+                            (floatingLabelVerticalOffset || 0) - containerLayout.height / 2,
                             0,
                         ],
                     }),
@@ -117,7 +117,7 @@ const InputLabel = (props: InputLabelProps) => {
         };
     }, [
         labelBackground,
-        floatingLabelHorizontalOffset,
+        floatingLabelVerticalOffset,
         baseLabelTranslateX,
         containerLayout.height,
         error,
