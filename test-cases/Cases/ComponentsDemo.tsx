@@ -65,7 +65,7 @@ const Example = () => {
             <TextInput
                 variant="flat"
                 placeholder="Placeholder"
-                label={'hello'}
+                label="Label"
                 left={({ color, forceFocus }) => (
                     <Icon
                         name={'magnify'}
@@ -75,7 +75,9 @@ const Example = () => {
                         onPress={forceFocus}
                     />
                 )}
-                dense
+                style={{ paddingLeft: 20 }}
+                size="sm"
+                multiline
             />
 
             <HorizontalDivider spacing={30} />
@@ -83,7 +85,8 @@ const Example = () => {
             <TextInput
                 variant="outlined"
                 placeholder="Placeholder"
-                label="jeal"
+                label="Label"
+                multiline
                 left={({ color, forceFocus }) => (
                     <Icon
                         name={'magnify'}
@@ -93,6 +96,7 @@ const Example = () => {
                         onPress={forceFocus}
                     />
                 )}
+                size="sm"
             />
 
             <HorizontalDivider spacing={30} />
@@ -115,6 +119,7 @@ const Example = () => {
                 style={{ height: 100 }}
                 required
                 error
+                size="lg"
             />
 
             <Icon type="material-community" name="robot-angry-outline" />
