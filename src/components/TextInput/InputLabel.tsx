@@ -90,7 +90,7 @@ const InputLabel = (props: InputLabelProps) => {
                 {
                     opacity:
                         // Hide the label in minimized state until we measure it's width
-                        isLabelFloating ? (parentState.labelLayout.measured ? 1 : 0) : 1,
+                        !isLabelFloating || parentState.labelLayout.measured ? 1 : 0,
                 },
                 labelTranslationX,
             ],
