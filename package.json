@@ -35,6 +35,7 @@
     "color": "^4.2.3",
     "lodash.get": "^4.4.2",
     "lodash.memoize": "^4.1.2",
+    "react-native-mask-input": "^1.2.2",
     "ts-deepmerge": "^4.0.0"
   },
   "devDependencies": {
