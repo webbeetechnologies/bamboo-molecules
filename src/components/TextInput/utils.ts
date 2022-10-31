@@ -238,7 +238,7 @@ export const defaultStyles: TextInputStyles = {
                     inputMinHeight: 64,
 
                     inputText: {
-                        paddingTop: 'spacings.8',
+                        paddingTop: 'spacings.6',
                         paddingBottom: 2,
                     },
                 },
@@ -246,7 +246,7 @@ export const defaultStyles: TextInputStyles = {
                     inputMinHeight: 56,
 
                     inputText: {
-                        paddingTop: 'spacings.4',
+                        paddingTop: 'spacings.5',
                         paddingBottom: 'spacings.2',
                     },
                 },
