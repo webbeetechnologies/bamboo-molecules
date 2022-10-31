@@ -175,7 +175,7 @@ const TextInputBase = ({
                 activeIndicator,
                 {
                     backgroundColor:
-                        (hasActiveOutline ? underlineColor : activeUnderlineColor) ||
+                        (hasActiveOutline ? activeUnderlineColor : underlineColor) ||
                         activeIndicator?.backgroundColor,
                 },
             ],
@@ -184,7 +184,7 @@ const TextInputBase = ({
                 outline,
                 {
                     borderColor:
-                        (hasActiveOutline ? outlineColor : activeOutlineColor) ||
+                        (hasActiveOutline ? activeOutlineColor : outlineColor) ||
                         outline.borderColor,
                 },
                 backgroundColor ? { backgroundColor } : {},
