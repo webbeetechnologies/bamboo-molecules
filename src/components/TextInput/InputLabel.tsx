@@ -144,7 +144,7 @@ const InputLabel = (props: InputLabelProps) => {
                         numberOfLines={1}
                         maxFontSizeMultiplier={maxFontSizeMultiplier}
                         testID={`${testID}-label-active`}>
-                        {typeof label === 'string' ? `${label}${required ? '*' : ''}` : label}
+                        {label}
                     </Animated.Text>
                     <Animated.Text
                         // variant={parentState.focused ? 'bodyLarge' : 'bodySmall'}
@@ -152,7 +152,7 @@ const InputLabel = (props: InputLabelProps) => {
                         numberOfLines={1}
                         maxFontSizeMultiplier={maxFontSizeMultiplier}
                         testID={`${testID}-label-inactive`}>
-                        {label}
+                        {typeof label === 'string' ? `${label}${required ? '*' : ''}` : label}
                     </Animated.Text>
                 </Animated.View>
             )}
