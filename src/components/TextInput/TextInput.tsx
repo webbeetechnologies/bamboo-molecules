@@ -7,6 +7,7 @@ import {
     ReactNode,
     useCallback,
     useMemo,
+    memo,
 } from 'react';
 import {
     Animated,
@@ -447,4 +448,4 @@ const TextInput = forwardRef<TextInputHandles, Props>(
     },
 );
 
-export default TextInput;
+export default memo(TextInput);

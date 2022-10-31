@@ -108,7 +108,9 @@ const TextInputBase = ({
             (1 - labelScale) * (I18nManager.isRTL ? -1 : 1) * (paddingHorizontal || 0);
 
         const baseLabelTranslateXOutline =
-            baseLabelTranslateX - container?.paddingHorizontal - (leftElementLayout.width || 0); // minus the width of the icon and the padding
+            baseLabelTranslateX -
+            (left ? container?.paddingHorizontal : container?.paddingHorizontal / 2) -
+            leftElementLayout.width; // minus the width of the icon and the padding
 
         return {
             container: [container, viewStyle],
@@ -182,6 +184,7 @@ const TextInputBase = ({
         labelHalfWidth,
         labelHeight,
         labelWidth,
+        left,
         leftElementLayout.width,
         multiline,
         variant,
