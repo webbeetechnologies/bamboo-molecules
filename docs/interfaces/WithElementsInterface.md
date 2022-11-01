@@ -26,6 +26,6 @@ Several elements implement the WithElements Interface. Some of them are listed b
 
 -   [Input](../Input.md)
 -   [Button](../Button.md)
--   [Select](../Select.md)
+-   [SelectInput](../SelectInput.md)
 -   [Chips](../Chips.md)
 -   Textarea

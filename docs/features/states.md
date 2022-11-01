@@ -5,8 +5,6 @@ States allows a component developer to make design extendible. Dimension propert
 
 [**» Watch detailed explanation**](https://www.loom.com/share/3d7a27529c454484af0123ea756b5f37)
 
-## References
-
 ## Personas
 
 -   Component consumer

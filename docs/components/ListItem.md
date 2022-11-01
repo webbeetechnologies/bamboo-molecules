@@ -19,6 +19,15 @@ List items are composed components that differ in the context they present. List
 1. End User
 2. Component Consumer
 
+## States
+
+List items can be either of these [User States](../features/user-input-states) on user interaction
+
+-   hovered
+-   focused
+-   pressed
+-   disabled
+
 ### End User
 
 1. As an end user, I want to a list item that can be selected.
@@ -40,10 +49,9 @@ List items are composed components that differ in the context they present. List
 6. As a component consumer, I want to add text/ badges to the list items.
 7. As a component consumer, I want to add switches to the list items.
 8. As a component consumer, I want to show a ripple on an item that can be clicked.
-9. As a component consumer, I expect to have touch/press [feedback](../features/states.md) when the item can be clicked.
-10. As a component consumer, I want to change the state of the list item with code.\
-    On keyboard, I want to set it to be focused.
-11. As a component consumer, I expect that the left, right and the primary content (title/description) of the list items are correctly spaced out.
+9. As a component consumer, I want to change the state of the list item with code.\
+   On keyboard, I want to set it to be focused.
+10. As a component consumer, I expect that the left, right and the primary content (title/description) of the list items are correctly spaced out.
 
 ## Flavours
 

@@ -23,20 +23,11 @@ TextInput fields in bamboo, like other components, are super fast and extremely 
 ## End user
 
 -   As a user, I want to type into a TextInput field.
--   As a user, I want that the feedback from the TextInput field is instant.
--   As a user, I want to know if the field is disabled.
--   As a user, I want to see [feedback](../features/states.md) from TextInputs on hover and focus.
--   As a user, I want to be able to distinguish a [required](https://m3.material.io/components/text-fields/guidelines#6c36a812-273d-4f5d-9102-2f00386c9145) field from an optional field.
--   As a user, where necessary I want to see extra description about the field.
 
 ## Component consumer
 
--   As a component consumer, I expect the TextInput component to follow the platform specific guidelines.
 -   As a component consumer, I want to change the keyboard type for TextInput field. ([TextInput:keyboardType](https://reactnative.dev/docs/textinput#keyboardtype)).\
     **NOTE:** this doesn't handle type=number on the web;
--   As a component consumer, I want to mark a field as required.
--   As a component consumer, I want to mark a field as disabled.
--   As a component consumer, I want to define the various [states](../features/states.md) such as hover / focus / disabled.
 -   As a component consumer, I want to supplement my TextInput component with icons/text.
 -   As a component consumer, I want the supplementing components react to the state changes such as color change on disabled state etc.
 -   As a component consumer, I want the icons are wrapped within the borders of the TextInput field.

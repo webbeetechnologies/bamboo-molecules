@@ -36,12 +36,12 @@ Molecules is heavily inspired by Material and Cupertino components and thus trie
     -   Modals/ Dialogs
     -   [Button](./components/Button.md)
     -   [IconButton](./components/IconButton.md)
-    -   [Select](./components/Select.md)
+    -   [SelectInput](./components/SelectInput.md)
     -   [Radio](./components/Radio.md)
     -   [Checkbox](./components/Checkbox.md)
     -   [Date Picker](./components/DatePicker.md)
     -   [Time Picker](./components/TimePicker.md)
-    -   Menu and Menu Items
+    -   [Menu and Menu Items](./components/DropdownList.md)
     -   Alert
     -   Cards
     -   Accordion
