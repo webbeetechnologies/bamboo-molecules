@@ -20,8 +20,8 @@ type CustomProps = {
 
     container?: Record<string, string | number>;
     labelText?: Record<string, string | number>;
-    leadingElement?: Record<string, string | number>;
-    trailingElement?: Record<string, string | number>;
+    leftElement?: Record<string, string | number>;
+    rightElement?: Record<string, string | number>;
     activeIndicator?: Record<string, string | number>;
     inputText?: Record<string, string | number>;
     supportingText?: Record<string, string | number>;
@@ -53,14 +53,14 @@ export const defaultStyles: TextInputStyles = {
         flexDirection: 'row',
         paddingHorizontal: 'spacings.4',
     },
-    leadingElement: {
+    leftElement: {
         color: 'colors.onSurfaceVariant',
         iconSize: 20,
         marginRight: 'spacings.3',
         marginLeft: 'spacings._1',
         justifyContent: 'center',
     },
-    trailingElement: {
+    rightElement: {
         color: 'colors.onSurfaceVariant',
         iconSize: 24,
         marginRight: 'spacings._1',
@@ -173,8 +173,8 @@ export const defaultStyles: TextInputStyles = {
                 borderTopRightRadius: 'roundness.1',
             },
 
-            leadingElement: {},
-            trailingElement: {},
+            leftElement: {},
+            rightElement: {},
             activeIndicator: {
                 height: 1,
                 backgroundColor: 'colors.onSurfaceVariant',
@@ -286,11 +286,11 @@ export const defaultStyles: TextInputStyles = {
                 color: 'colors.onSurface',
                 opacity: 0.38,
             },
-            leadingElement: {
+            leftElement: {
                 color: 'colors.onSurface',
                 opacity: 0.38,
             },
-            trailingElement: {
+            rightElement: {
                 color: 'colors.onSurface',
                 opacity: 0.38,
             },
@@ -308,10 +308,10 @@ export const defaultStyles: TextInputStyles = {
             supportingText: {
                 color: 'colors.error',
             },
-            leadingElement: {
+            leftElement: {
                 color: 'colors.onSurfaceVariant',
             },
-            trailingElement: {
+            rightElement: {
                 color: 'colors.error',
             },
         },
@@ -328,10 +328,10 @@ export const defaultStyles: TextInputStyles = {
             supportingText: {
                 color: 'colors.error',
             },
-            leadingElement: {
+            leftElement: {
                 color: 'colors.onSurfaceVariant',
             },
-            trailingElement: {
+            rightElement: {
                 color: 'colors.error',
             },
         },
@@ -351,11 +351,11 @@ export const defaultStyles: TextInputStyles = {
                 color: 'colors.error',
                 opacity: 0.38,
             },
-            leadingElement: {
+            leftElement: {
                 color: 'colors.onSurfaceVariant',
                 opacity: 0.38,
             },
-            trailingElement: {
+            rightElement: {
                 color: 'colors.error',
                 opacity: 0.38,
             },
@@ -374,10 +374,10 @@ export const defaultStyles: TextInputStyles = {
             supportingText: {
                 color: 'colors.error',
             },
-            leadingElement: {
+            leftElement: {
                 color: 'colors.onSurfaceVariant',
             },
-            trailingElement: {
+            rightElement: {
                 color: 'colors.onErrorContainer',
             },
         },
