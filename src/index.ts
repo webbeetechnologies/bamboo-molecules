@@ -63,6 +63,12 @@ export {
     generateDarkThemeColors,
 } from './styles';
 
-export { normalizeStyles, resolveComponentStyles } from './utils';
+export {
+    normalizeStyles,
+    resolveComponentStyles,
+    normalizeSpacings,
+    SpacingType,
+    SpacingKey,
+} from './utils';
 
 export { ComponentStylePropWithVariants, WithElements } from './types';
