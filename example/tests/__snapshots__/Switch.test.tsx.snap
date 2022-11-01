@@ -7,7 +7,6 @@ exports[`renders disabled switch 1`] = `
   onChange={[Function]}
   onResponderTerminationRequest={[Function]}
   onStartShouldSetResponder={[Function]}
-  onTintColor=""
   style={
     Array [
       Object {
@@ -17,8 +16,6 @@ exports[`renders disabled switch 1`] = `
       Object {},
     ]
   }
-  thumbTintColor="rgba(255, 255, 255, 1)"
-  tintColor=""
   value={true}
 />
 `;
@@ -29,7 +26,6 @@ exports[`renders off switch 1`] = `
   onChange={[Function]}
   onResponderTerminationRequest={[Function]}
   onStartShouldSetResponder={[Function]}
-  onTintColor="rgba(174, 170, 174, 1)"
   style={
     Array [
       Object {
@@ -39,8 +35,6 @@ exports[`renders off switch 1`] = `
       Object {},
     ]
   }
-  thumbTintColor="rgba(255, 255, 255, 1)"
-  tintColor="rgba(174, 170, 174, 1)"
   value={false}
 />
 `;
