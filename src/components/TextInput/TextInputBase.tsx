@@ -12,6 +12,7 @@ import { useMolecules } from '../../hooks';
 import InputLabel from './InputLabel';
 import type { InputBaseProps, RenderProps } from './types';
 import { styles as defaultStyles } from './utils';
+import { normalizeSpacings } from '../../utils/normalizeSpacings';
 
 const TextInputBase = ({
     componentStyles,
@@ -68,8 +69,8 @@ const TextInputBase = ({
         const {
             // style objects
             container,
-            leadingElement,
-            trailingElement,
+            leftElement,
+            rightElement,
             activeIndicator,
             labelText,
             inputText,
@@ -109,24 +110,19 @@ const TextInputBase = ({
             (I18nManager.isRTL ? 1 : -1) *
             (labelScale - 1 + labelHalfWidth - (labelScale * labelWidth) / 2);
 
-        const normalizedLeftElementMarginLeft =
-            leadingElement?.marginHorizontal ||
-            leadingElement?.marginRight ||
-            leadingElement?.margin ||
-            (I18nManager.isRTL ? leadingElement?.marginStart : leadingElement?.marginEnd) ||
-            0;
+        const normalizedLeftElementMarginRight = normalizeSpacings(leftElement, 'marginRight');
 
         const baseLabelTranslateXOutline =
             baseLabelTranslateX -
             leftElementLayout.width -
-            (left ? normalizedLeftElementMarginLeft : 0); // minus the width of the icon and the padding
+            (left ? normalizedLeftElementMarginRight : 0); // minus the width of the icon and the padding
 
         const backgroundColor = viewStyle?.backgroundColor || container?.backgroundColor; // to give the opportunity to change the backgroundColor of the TextInput with the StyleProp
 
         return {
             container: [container, viewStyle],
-            leadingElement,
-            trailingElement,
+            leftElement,
+            rightElement,
             activeIndicator,
             labelText,
             inputText,
@@ -225,7 +221,10 @@ const TextInputBase = ({
 
             <>
                 {left && (
-                    <View style={styles.leadingElement} onLayout={handleLayoutLeftElement}>
+                    <View
+                        style={styles.leftElement}
+                        onLayout={handleLayoutLeftElement}
+                        testID="text-input-left-element">
                         {typeof left === 'function'
                             ? left?.({
                                   color: styles.activeColor,
@@ -284,7 +283,7 @@ const TextInputBase = ({
 
             <>
                 {right && (
-                    <View style={styles.trailingElement}>
+                    <View style={styles.rightElement} testID="text-input-right-element">
                         {typeof right === 'function'
                             ? right?.({
                                   color: styles.activeColor,
