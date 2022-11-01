@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Checkbox as PaperCheckbox } from 'react-native-paper';
 import {
@@ -9,6 +9,7 @@ import {
     withRipple,
     TextProps,
 } from 'bamboo-molecules';
+import { Masks } from 'react-native-mask-input';
 
 const themeDark = extendTheme({
     colorMode: 'dark',
@@ -45,9 +46,11 @@ const Example = () => {
         IconButton,
         Checkbox,
         TextInput,
+        NumberInput,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
+    const [number, setNumber] = useState('');
 
     return (
         <View>
@@ -113,6 +116,16 @@ const Example = () => {
                 size="lg"
             />
 
+            <HorizontalDivider spacing={30} />
+
+            <NumberInput
+                placeholder="Enter Numbers"
+                label="Label"
+                value={number}
+                onChangeText={text => setNumber(text)}
+                keyboardType="numeric"
+                mask={Masks.CREDIT_CARD}
+            />
             <Icon type="material-community" name="robot-angry-outline" />
             <IconButton
                 name={isSwitchOn ? 'chevron-left' : 'chevron-right'}
