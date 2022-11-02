@@ -65,7 +65,7 @@ const NumberInput = (
     );
 
     const [number, onChangeNumber] = useControlledValue(
-        value,
+        value !== undefined ? value : rest.defaultValue,
         onChangeText,
         !editable || disabled,
         handleMaskString,
