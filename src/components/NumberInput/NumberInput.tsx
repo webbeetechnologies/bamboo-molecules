@@ -32,7 +32,6 @@ export const NumberInputMasks = {
 
 const NumberInput = (
     {
-        containerStyle,
         onChangeText,
         keyboardType = 'numeric',
         mask,
@@ -45,7 +44,7 @@ const NumberInput = (
     }: Props,
     ref: any,
 ) => {
-    const { View, TextInput } = useMolecules();
+    const { TextInput } = useMolecules();
 
     const defaultMask = useMemo(
         () => (separator === '.' ? NumberInputMasks.NUM_WITH_DOT : NumberInputMasks.NUM_WITH_COMMA),
@@ -73,17 +72,15 @@ const NumberInput = (
     );
 
     return (
-        <View style={containerStyle}>
-            <TextInput
-                {...rest}
-                value={number}
-                onChangeText={onChangeNumber}
-                keyboardType={keyboardType}
-                editable={editable}
-                disabled={disabled}
-                ref={ref}
-            />
-        </View>
+        <TextInput
+            {...rest}
+            value={number}
+            onChangeText={onChangeNumber}
+            keyboardType={keyboardType}
+            editable={editable}
+            disabled={disabled}
+            ref={ref}
+        />
     );
 };
 
