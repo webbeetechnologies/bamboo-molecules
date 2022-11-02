@@ -35,15 +35,15 @@ Default.parameters = {
     },
 };
 
-export const WithCustomMusk: ComponentStory<typeof Example> = args => <Example {...args} />;
+export const WithCustomMask: ComponentStory<typeof Example> = args => <Example {...args} />;
 
-WithCustomMusk.args = {
+WithCustomMask.args = {
     placeholder: 'Placeholder',
     label: 'Credit card',
     mask: NumberInputMasks.CREDIT_CARD,
 };
 
-WithCustomMusk.parameters = {
+WithCustomMask.parameters = {
     docs: {
         source: {
             code: `
