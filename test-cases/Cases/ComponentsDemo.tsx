@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import { Checkbox as PaperCheckbox } from 'react-native-paper';
 import {
@@ -50,7 +50,6 @@ const Example = () => {
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
-    const [number, setNumber] = useState('');
 
     return (
         <View>
@@ -121,8 +120,6 @@ const Example = () => {
             <NumberInput
                 placeholder="Enter Numbers"
                 label="Label"
-                value={number}
-                onChangeText={text => setNumber(text)}
                 keyboardType="numeric"
                 mask={NumberInputMasks.CREDIT_CARD}
             />
