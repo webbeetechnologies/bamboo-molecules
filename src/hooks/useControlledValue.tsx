@@ -1,12 +1,19 @@
 import { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 
+type Value = string | undefined;
+
+type ReturnType = [Value, (value: string) => void];
+
+const defaultManipulateValue = (val: Value) => val;
+
 const useControlledValue = (
-    value: string | undefined,
+    value: Value,
     onChange: ((value: string) => any) | undefined,
     isDisabled: boolean = false,
-): [string | undefined, (value: string) => void] => {
+    manipulateValue: (value: Value) => Value = defaultManipulateValue,
+): ReturnType => {
     const isUncontrolled = useRef(value).current === undefined;
-    const [uncontrolledValue, setValue] = useState(value);
+    const [uncontrolledValue, setValue] = useState(manipulateValue(value));
 
     const updateValue = useCallback(
         (val: string) => {
@@ -30,8 +37,11 @@ const useControlledValue = (
     }, [uncontrolledValue, value]);
 
     return useMemo(
-        () => (isUncontrolled ? [uncontrolledValue, updateValue] : [value, updateValue]),
-        [isUncontrolled, uncontrolledValue, updateValue, value],
+        () =>
+            isUncontrolled
+                ? [manipulateValue(uncontrolledValue), updateValue]
+                : [manipulateValue(value), updateValue],
+        [isUncontrolled, manipulateValue, uncontrolledValue, updateValue, value],
     );
 };
 
