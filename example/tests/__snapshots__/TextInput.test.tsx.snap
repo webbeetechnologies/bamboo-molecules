@@ -10,21 +10,7 @@ exports[`correctly applies height to multiline Outline TextInput 1`] = `
         "animationScale": 1,
         "backgroundColor": "rgba(255, 251, 254, 1)",
         "flexDirection": "row",
-        "leadingElement": Object {
-          "color": "rgba(73, 69, 79, 1)",
-          "iconSize": 20,
-          "justifyContent": "center",
-          "marginLeft": -4,
-          "marginRight": 12,
-        },
         "paddingHorizontal": 16,
-        "trailingElement": Object {
-          "color": "rgba(73, 69, 79, 1)",
-          "iconSize": 24,
-          "justifyContent": "center",
-          "marginLeft": 12,
-          "marginRight": -4,
-        },
       }
     }
   >
@@ -199,21 +185,7 @@ exports[`renders button with flat variant 1`] = `
         "borderTopLeftRadius": 4,
         "borderTopRightRadius": 4,
         "flexDirection": "row",
-        "leadingElement": Object {
-          "color": "rgba(73, 69, 79, 1)",
-          "iconSize": 20,
-          "justifyContent": "center",
-          "marginLeft": -4,
-          "marginRight": 12,
-        },
         "paddingHorizontal": 16,
-        "trailingElement": Object {
-          "color": "rgba(73, 69, 79, 1)",
-          "iconSize": 24,
-          "justifyContent": "center",
-          "marginLeft": 12,
-          "marginRight": -4,
-        },
       }
     }
   >
@@ -294,21 +266,7 @@ exports[`renders button with left element 1`] = `
         "borderTopLeftRadius": 4,
         "borderTopRightRadius": 4,
         "flexDirection": "row",
-        "leadingElement": Object {
-          "color": "rgba(73, 69, 79, 1)",
-          "iconSize": 20,
-          "justifyContent": "center",
-          "marginLeft": -4,
-          "marginRight": 12,
-        },
         "paddingHorizontal": 16,
-        "trailingElement": Object {
-          "color": "rgba(73, 69, 79, 1)",
-          "iconSize": 24,
-          "justifyContent": "center",
-          "marginLeft": 12,
-          "marginRight": -4,
-        },
       }
     }
   >
@@ -329,7 +287,15 @@ exports[`renders button with left element 1`] = `
     />
     <View
       onLayout={[Function]}
-      style={Object {}}
+      style={
+        Object {
+          "color": "rgba(73, 69, 79, 1)",
+          "iconSize": 20,
+          "justifyContent": "center",
+          "marginLeft": -4,
+          "marginRight": 12,
+        }
+      }
       testID="text-input-left-element"
     >
       {"name":"magnify","type":"material-community"}
@@ -394,21 +360,7 @@ exports[`renders button with outlined variant 1`] = `
         "animationScale": 1,
         "backgroundColor": "rgba(255, 251, 254, 1)",
         "flexDirection": "row",
-        "leadingElement": Object {
-          "color": "rgba(73, 69, 79, 1)",
-          "iconSize": 20,
-          "justifyContent": "center",
-          "marginLeft": -4,
-          "marginRight": 12,
-        },
         "paddingHorizontal": 16,
-        "trailingElement": Object {
-          "color": "rgba(73, 69, 79, 1)",
-          "iconSize": 24,
-          "justifyContent": "center",
-          "marginLeft": 12,
-          "marginRight": -4,
-        },
       }
     }
   >
@@ -492,21 +444,7 @@ exports[`renders button with right element 1`] = `
         "borderTopLeftRadius": 4,
         "borderTopRightRadius": 4,
         "flexDirection": "row",
-        "leadingElement": Object {
-          "color": "rgba(73, 69, 79, 1)",
-          "iconSize": 20,
-          "justifyContent": "center",
-          "marginLeft": -4,
-          "marginRight": 12,
-        },
         "paddingHorizontal": 16,
-        "trailingElement": Object {
-          "color": "rgba(73, 69, 79, 1)",
-          "iconSize": 24,
-          "justifyContent": "center",
-          "marginLeft": 12,
-          "marginRight": -4,
-        },
       }
     }
   >
@@ -572,7 +510,15 @@ exports[`renders button with right element 1`] = `
       />
     </View>
     <View
-      style={Object {}}
+      style={
+        Object {
+          "color": "rgba(73, 69, 79, 1)",
+          "iconSize": 24,
+          "justifyContent": "center",
+          "marginLeft": 12,
+          "marginRight": -4,
+        }
+      }
       testID="text-input-right-element"
     >
       {"name":"magnify","type":"material-community"}
@@ -593,21 +539,7 @@ exports[`renders text button by default 1`] = `
         "borderTopLeftRadius": 4,
         "borderTopRightRadius": 4,
         "flexDirection": "row",
-        "leadingElement": Object {
-          "color": "rgba(73, 69, 79, 1)",
-          "iconSize": 20,
-          "justifyContent": "center",
-          "marginLeft": -4,
-          "marginRight": 12,
-        },
         "paddingHorizontal": 16,
-        "trailingElement": Object {
-          "color": "rgba(73, 69, 79, 1)",
-          "iconSize": 24,
-          "justifyContent": "center",
-          "marginLeft": 12,
-          "marginRight": -4,
-        },
       }
     }
   >
