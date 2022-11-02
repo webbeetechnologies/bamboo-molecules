@@ -188,6 +188,13 @@ export const typescale = {
         fontSize: 11,
     },
 
+    bodyExtraLarge: {
+        ...mediumType,
+        fontWeight: ref.typeface.weightRegular,
+        fontFamily: ref.typeface.brandRegular,
+        lineHeight: 28,
+        fontSize: 18,
+    },
     bodyLarge: {
         ...mediumType,
         fontWeight: ref.typeface.weightRegular,

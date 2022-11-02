@@ -23,6 +23,7 @@ export {
     SurfaceProps,
     SwitchProps,
     CheckboxProps,
+    TextInputProps,
 } from './components';
 
 export {
@@ -51,6 +52,7 @@ export {
     useCurrentTheme,
     useToggle,
     useMediaQuery,
+    useControlledValue,
 } from './hooks';
 
 export {
@@ -61,6 +63,12 @@ export {
     generateDarkThemeColors,
 } from './styles';
 
-export { normalizeStyles, resolveComponentStyles } from './utils';
+export {
+    normalizeStyles,
+    resolveComponentStyles,
+    normalizeSpacings,
+    SpacingType,
+    SpacingKey,
+} from './utils';
 
 export { ComponentStylePropWithVariants, WithElements } from './types';

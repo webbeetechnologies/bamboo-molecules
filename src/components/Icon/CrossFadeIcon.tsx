@@ -1,15 +1,15 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { Animated, StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
-import type { IconProps, IconType } from './types';
+import type { IconProps } from './types';
 
 type Props = IconProps;
 
 const CrossFadeIcon = ({ color, size, name, style, ...rest }: Props) => {
     const { View, Icon } = useMolecules();
     const { animationScale: scale } = useComponentStyles('Icon', style);
-    const [currentIcon, setCurrentIcon] = useState<IconType>(name);
-    const [previousIcon, setPreviousIcon] = useState<IconType | null>(null);
+    const [currentIcon, setCurrentIcon] = useState<string>(name);
+    const [previousIcon, setPreviousIcon] = useState<string | null>(null);
     const { current: fade } = useRef<Animated.Value>(new Animated.Value(1));
 
     useEffect(() => {

@@ -13,7 +13,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
     /**
      * Icon to display.
      */
-    name: IconType;
+    name: string;
     /**
      * Mode of the icon button. By default there is no specified mode - only pressable icon will be rendered.
      */
@@ -27,6 +27,11 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
      * Should be a number or a Design Token
      */
     size?: 'sm' | 'md' | 'lg';
+    /**
+     * Type of the icon. Default is material
+     * Should be a number or a Design Token
+     */
+    type?: IconType;
     /**
      * Whether the button is disabled. A disabled button is greyed out and `onPress` is not called on touch.
      */
@@ -94,6 +99,7 @@ const IconButton = (
     {
         name,
         size = 'md',
+        type,
         accessibilityLabel,
         disabled = false,
         onPress,
@@ -183,7 +189,7 @@ const IconButton = (
                 }
                 ref={ref}
                 {...rest}>
-                <IconComponent color={iconColor} name={name} size={iconSize} />
+                <IconComponent color={iconColor} name={name} size={iconSize} type={type} />
             </TouchableRipple>
         </Surface>
     );
