@@ -8,8 +8,8 @@ import {
     useToggle,
     withRipple,
     TextProps,
+    NumberInputMasks,
 } from 'bamboo-molecules';
-import { Masks } from 'react-native-mask-input';
 
 const themeDark = extendTheme({
     colorMode: 'dark',
@@ -124,7 +124,7 @@ const Example = () => {
                 value={number}
                 onChangeText={text => setNumber(text)}
                 keyboardType="numeric"
-                mask={Masks.CREDIT_CARD}
+                mask={NumberInputMasks.CREDIT_CARD}
             />
             <Icon type="material-community" name="robot-angry-outline" />
             <IconButton
