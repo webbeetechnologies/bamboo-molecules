@@ -1,5 +1,5 @@
-import { forwardRef, memo, useCallback, useState } from 'react';
-import { formatWithMask, Mask, Masks } from 'react-native-mask-input';
+import { forwardRef, memo, useCallback, useMemo, useState } from 'react';
+import { formatWithMask, Mask, Masks, createNumberMask } from 'react-native-mask-input';
 
 import { useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
@@ -24,11 +24,17 @@ export type Props = Omit<TextInputProps, 'onChangeText'> & {
      * @param obfuscated Obfuscated text
      */
     onChangeText?: (masked: string, unmasked: string, obfuscated: string) => void;
+    /**
+     * separator for the default number mask
+     */
+    separator?: '.' | ',';
 };
 
 export const NumberInputMasks = {
     ...Masks,
     // define our own masks here
+    NUM_WITH_DOT: createNumberMask({ separator: '.', delimiter: '', precision: 0 }),
+    NUM_WITH_COMMA: createNumberMask({ separator: ',', delimiter: '', precision: 0 }),
 };
 
 const NumberInput = (
@@ -38,6 +44,7 @@ const NumberInput = (
         keyboardType = 'numeric',
         mask,
         obfuscationCharacter = '',
+        separator = '.',
         ...rest
     }: Props,
     ref: any,
@@ -45,20 +52,24 @@ const NumberInput = (
     const { View, TextInput } = useMolecules();
     const [number, setNumber] = useState('');
 
+    const defaultMask = useMemo(
+        () => (separator === '.' ? NumberInputMasks.NUM_WITH_DOT : NumberInputMasks.NUM_WITH_COMMA),
+        [separator],
+    );
+
     const onChangeWithNumberMask = useCallback(
         (text: string) => {
             const { masked, unmasked, obfuscated } = formatWithMask({
-                mask,
+                mask: mask || defaultMask,
                 text,
                 obfuscationCharacter,
             });
-            const maskedText = mask ? masked : text.replace(/[^0-9]/g, '');
 
-            if (!onChangeText) setNumber(maskedText);
+            if (!onChangeText) setNumber(masked);
 
-            onChangeText?.(maskedText, unmasked || text, obfuscated);
+            onChangeText?.(masked, unmasked || text, obfuscated);
         },
-        [onChangeText, mask, obfuscationCharacter],
+        [mask, defaultMask, obfuscationCharacter, onChangeText],
     );
 
     return (
