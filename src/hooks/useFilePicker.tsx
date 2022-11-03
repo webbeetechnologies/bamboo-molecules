@@ -1,58 +1,24 @@
-import { useCallback } from 'react';
-import { Platform } from 'react-native';
-import DocumentPicker, { DocumentPickerOptions } from 'react-native-document-picker';
-import { DocumentPickerWeb } from '../utils';
+import { useCallback, useMemo, useState } from 'react';
+import { DocumentPicker, DocumentPickerOptions, DocumentResult } from '../utils';
 
-type MobilePlatform = 'android' | 'ios';
+const useFilePicker = (options: DocumentPickerOptions) => {
+    const [error, setError] = useState(false);
 
-type Options = DocumentPickerOptions<MobilePlatform> & {
-    /**
-     * Allows multiple files to be selected from the system UI.
-     * @default false
-     */
-    multiple?: boolean;
-};
+    const onTriggerFilePicker = useCallback(
+        async (callback: (response: DocumentResult | DocumentResult[]) => void): Promise<void> => {
+            try {
+                const response = await DocumentPicker.getDocumentAsync(options);
 
-const useFilePicker = (options: Options) => {
-    return useCallback(async () => {
-        const {
-            type = ['*/*'],
-            multiple = false,
-            mode = 'import',
-            transitionStyle = 'coverVertical',
-            copyTo = 'cachesDirectory',
-            allowMultiSelection = false,
-            presentationStyle = 'pageSheet',
-        } = options;
-
-        if (Platform.OS === 'web') {
-            return await DocumentPickerWeb.getDocumentAsync({
-                type,
-                multiple,
-            });
-        } else {
-            // mobile
-            if (multiple) {
-                return await DocumentPicker.pickMultiple({
-                    type,
-                    transitionStyle,
-                    allowMultiSelection,
-                    presentationStyle,
-                    mode,
-                    copyTo,
-                });
-            } else {
-                return await DocumentPicker.pickSingle({
-                    type,
-                    transitionStyle,
-                    allowMultiSelection,
-                    presentationStyle,
-                    mode,
-                    copyTo,
-                });
+                callback?.(response);
+            } catch (e) {
+                console.error(e);
+                setError(true);
             }
-        }
-    }, [options]);
+        },
+        [options],
+    );
+
+    return useMemo(() => ({ onTriggerFilePicker, error }), [error, onTriggerFilePicker]);
 };
 
 export default useFilePicker;

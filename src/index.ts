@@ -76,8 +76,12 @@ export {
     normalizeStyles,
     resolveComponentStyles,
     normalizeSpacings,
+    DocumentPicker,
     SpacingType,
     SpacingKey,
+    DocumentPickerOptions,
+    DocumentResult,
+    documentTypes,
 } from './utils';
 
 export { ComponentStylePropWithVariants, WithElements } from './types';

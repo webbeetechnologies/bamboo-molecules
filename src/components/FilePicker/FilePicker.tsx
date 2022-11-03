@@ -1,7 +1,7 @@
 import { forwardRef, memo, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useMolecules, useFilePicker } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
-import type { DocumentResult, DocumentPickerOptions } from './types';
+import type { DocumentResult, DocumentPickerOptions } from '../../utils';
 
 export type OmitProp =
     | 'editable'
@@ -39,7 +39,6 @@ export type Props = Omit<TextInputProps, OmitProp> &
 
 const FilePicker = (
     {
-        variant = 'outlined',
         loading,
         right: rightProp,
         progressIndicator,
@@ -59,7 +58,7 @@ const FilePicker = (
     const { TextInput, IconButton, ActivityIndicator } = useMolecules();
     const [displayText, setDisplayText] = useState('');
 
-    const onTriggerFilePicker = useFilePicker({
+    const { onTriggerFilePicker, error } = useFilePicker({
         type,
         copyTo,
         mode,
@@ -72,39 +71,39 @@ const FilePicker = (
     const onSetInputValue = useCallback(
         (response: DocumentResult | DocumentResult[] | undefined) => {
             if (Array.isArray(response)) {
-                if (response.length) {
+                if (response.length > 1) {
                     setDisplayText(`${response.length} file${response.length > 1 ? 's' : ''}`);
+                    return;
                 }
-            } else {
-                setDisplayText(response?.name || '');
+
+                setDisplayText(response[0].name || '');
+                return;
             }
+
+            setDisplayText(response?.name || '');
         },
         [],
     );
 
-    const triggerFilePicker = useCallback(async () => {
-        const response = await onTriggerFilePicker();
+    const onPress = useCallback(() => {
+        onTriggerFilePicker(response => {
+            onSetInputValue(response);
 
-        onSetInputValue(response);
-
-        onChange?.(response);
+            onChange?.(response);
+        });
     }, [onChange, onSetInputValue, onTriggerFilePicker]);
 
     const rightElement = useMemo(() => {
         if (!loading) {
             return (
                 rightProp || (
-                    <IconButton
-                        type="material-community"
-                        name="upload"
-                        onPress={triggerFilePicker}
-                    />
+                    <IconButton type="material-community" name="upload" onPress={onPress} />
                 )
             );
         } else {
             return progressIndicator || <ActivityIndicator />;
         }
-    }, [ActivityIndicator, IconButton, triggerFilePicker, loading, progressIndicator, rightProp]);
+    }, [ActivityIndicator, IconButton, loading, onPress, progressIndicator, rightProp]);
 
     // if the value changes, we only want file name or the length of the array to display the text
     useEffect(() => {
@@ -113,8 +112,8 @@ const FilePicker = (
 
     return (
         <TextInput
-            variant={variant}
-            placeholder="Choose file"
+            label="Choose file"
+            error={error}
             {...rest}
             value={displayText}
             editable={false}
