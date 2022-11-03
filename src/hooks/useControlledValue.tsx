@@ -17,9 +17,12 @@ const useControlledValue = <T,>({
     onChange,
     manipulateValue = val => val as T,
 }: Args<T>): ReturnType<T> => {
-    const value = valueProp !== undefined ? manipulateValue(valueProp, undefined) : defaultValue;
+    const value = useMemo(
+        () => (valueProp !== undefined ? manipulateValue(valueProp, undefined) : defaultValue),
+        [defaultValue, manipulateValue, valueProp],
+    );
 
-    const isUncontrolled = useRef(value).current === undefined;
+    const isUncontrolled = useRef(valueProp).current === undefined;
     const [uncontrolledValue, setValue] = useState(value);
 
     const updateValue = useCallback(
