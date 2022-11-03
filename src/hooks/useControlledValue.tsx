@@ -1,31 +1,41 @@
 import { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 
-type Value = string | undefined;
+type ReturnType<T> = [T | undefined, (value: T) => void];
 
-type ReturnType = [Value, (value: string) => void];
+type Args<T> = {
+    value: T | undefined;
+    defaultValue?: T;
+    onChange: ((value: T) => any) | undefined;
+    disabled?: boolean;
+    manipulateValue?: (value: T | undefined, prevValue: T | undefined) => T;
+};
 
-const defaultManipulateValue = (val: Value) => val;
+const useControlledValue = <T,>({
+    value: valueProp,
+    defaultValue,
+    disabled = false,
+    onChange,
+    manipulateValue = val => val as T,
+}: Args<T>): ReturnType<T> => {
+    const value = useMemo(
+        () => (valueProp !== undefined ? manipulateValue(valueProp, undefined) : defaultValue),
+        [defaultValue, manipulateValue, valueProp],
+    );
 
-const useControlledValue = (
-    value: Value,
-    onChange: ((value: string) => any) | undefined,
-    isDisabled: boolean = false,
-    manipulateValue: (value: Value) => Value = defaultManipulateValue,
-): ReturnType => {
-    const isUncontrolled = useRef(value).current === undefined;
-    const [uncontrolledValue, setValue] = useState(manipulateValue(value));
+    const isUncontrolled = useRef(valueProp).current === undefined;
+    const [uncontrolledValue, setValue] = useState(value);
 
     const updateValue = useCallback(
-        (val: string) => {
-            if (isDisabled) return;
+        (val: T) => {
+            if (disabled) return;
 
             if (isUncontrolled) {
-                setValue(val);
+                setValue(manipulateValue(val, uncontrolledValue));
             }
 
-            onChange?.(val);
+            onChange?.(manipulateValue(val, valueProp));
         },
-        [isDisabled, isUncontrolled, onChange],
+        [disabled, isUncontrolled, manipulateValue, onChange, uncontrolledValue, valueProp],
     );
 
     useEffect(() => {
@@ -37,11 +47,8 @@ const useControlledValue = (
     }, [uncontrolledValue, value]);
 
     return useMemo(
-        () =>
-            isUncontrolled
-                ? [manipulateValue(uncontrolledValue), updateValue]
-                : [manipulateValue(value), updateValue],
-        [isUncontrolled, manipulateValue, uncontrolledValue, updateValue, value],
+        () => (isUncontrolled ? [uncontrolledValue, updateValue] : [value, updateValue]),
+        [isUncontrolled, uncontrolledValue, updateValue, value],
     );
 };
 

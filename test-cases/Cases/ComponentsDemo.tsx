@@ -8,7 +8,6 @@ import {
     useToggle,
     withRipple,
     TextProps,
-    NumberInputMasks,
 } from 'bamboo-molecules';
 
 const themeDark = extendTheme({
@@ -52,6 +51,7 @@ const Example = () => {
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
     const [files, setFiles] = useState<any>(null);
+    const [number, setNumber] = useState('222.a');
 
     return (
         <View>
@@ -125,7 +125,8 @@ const Example = () => {
                 placeholder="Enter Numbers"
                 label="Label"
                 keyboardType="numeric"
-                mask={NumberInputMasks.CREDIT_CARD}
+                value={number}
+                onChangeText={text => setNumber(text)}
             />
 
             <HorizontalDivider spacing={30} />

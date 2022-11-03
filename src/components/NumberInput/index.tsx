@@ -1,1 +1,1 @@
-export { default as NumberInput, Props as NumberInputProps, NumberInputMasks } from './NumberInput';
+export { default as NumberInput, Props as NumberInputProps } from './NumberInput';
