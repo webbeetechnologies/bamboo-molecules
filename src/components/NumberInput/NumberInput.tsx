@@ -1,6 +1,6 @@
-import { forwardRef, memo, useCallback } from 'react';
+import { forwardRef, memo, useCallback, useState } from 'react';
 
-import { useControlledValue, useMolecules } from '../../hooks';
+import { useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 
 export type Props = TextInputProps & {
@@ -10,30 +10,44 @@ export type Props = TextInputProps & {
     keyboardType?: 'number-pad' | 'decimal-pad' | 'numeric' | 'phone-pad';
 };
 
+const toNumber = (val: string = '', prevVal: string = '') => {
+    const sanitizedVal = val.replace(/[^0-9.]/g, '');
+
+    return !isNaN(Number(sanitizedVal)) ? sanitizedVal : prevVal;
+};
+
 const NumberInput = (
-    { onChangeText, keyboardType = 'numeric', editable = true, disabled = false, ...rest }: Props,
+    {
+        onChangeText,
+        keyboardType = 'numeric',
+        editable = true,
+        disabled = false,
+        value: valueProp,
+        defaultValue = '',
+        ...rest
+    }: Props,
     ref: any,
 ) => {
     const { TextInput } = useMolecules();
 
-    const toNumber = useCallback((val: string = '', prevVal: string = '') => {
-        const sanitizedVal = val.replace(/[^0-9.]/g, '');
+    const [value, setValue] = useState(toNumber(defaultValue));
 
-        return !isNaN(Number(sanitizedVal)) ? sanitizedVal : prevVal;
-    }, []);
+    const onChangeValue = useCallback(
+        (currentVal: string) => {
+            if (!onChangeText) {
+                setValue(toNumber(currentVal, value));
+                return;
+            }
 
-    const [value, onChangeValue] = useControlledValue({
-        value: rest.value,
-        defaultValue: rest.defaultValue,
-        onChange: onChangeText,
-        disabled: !editable || disabled,
-        manipulateValue: toNumber,
-    });
+            onChangeText?.(toNumber(currentVal, valueProp));
+        },
+        [onChangeText, value, valueProp],
+    );
 
     return (
         <TextInput
             {...rest}
-            value={value}
+            value={toNumber(valueProp) || value}
             onChangeText={onChangeValue}
             keyboardType={keyboardType}
             editable={editable}
