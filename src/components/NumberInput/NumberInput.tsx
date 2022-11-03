@@ -1,5 +1,4 @@
-import { forwardRef, memo, useCallback, useMemo } from 'react';
-import { formatWithMask, Mask, Masks, createNumberMask } from 'react-native-mask-input';
+import { forwardRef, memo, useCallback } from 'react';
 
 import { useControlledValue, useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
@@ -9,73 +8,33 @@ export type Props = TextInputProps & {
      * Number-only keyboardType
      */
     keyboardType?: 'number-pad' | 'decimal-pad' | 'numeric' | 'phone-pad';
-    /**
-     * Mask
-     */
-    mask?: Mask;
-    /**
-     * Character to be used on the obfuscated characteres. Defaults to `"*"`
-     */
-    obfuscationCharacter?: string;
-    /**
-     * separator for the default number mask
-     */
-    separator?: '.' | ',';
-};
-
-export const NumberInputMasks = {
-    ...Masks,
-    // define our own masks here
-    NUM_WITH_DOT: createNumberMask({ separator: '.', delimiter: '', precision: 2 }),
-    NUM_WITH_COMMA: createNumberMask({ separator: ',', delimiter: '', precision: 2 }),
 };
 
 const NumberInput = (
-    {
-        onChangeText,
-        keyboardType = 'numeric',
-        mask,
-        obfuscationCharacter = '',
-        separator = '.',
-        editable = true,
-        disabled = false,
-        value,
-        ...rest
-    }: Props,
+    { onChangeText, keyboardType = 'numeric', editable = true, disabled = false, ...rest }: Props,
     ref: any,
 ) => {
     const { TextInput } = useMolecules();
 
-    const defaultMask = useMemo(
-        () => (separator === '.' ? NumberInputMasks.NUM_WITH_DOT : NumberInputMasks.NUM_WITH_COMMA),
-        [separator],
-    );
+    const toNumber = useCallback((val: string = '', prevVal: string = '') => {
+        const sanitizedVal = val.replace(/[^0-9.]/g, '');
 
-    const handleMaskString = useCallback(
-        (text: string = '') => {
-            const { masked } = formatWithMask({
-                mask: mask || defaultMask,
-                text,
-                obfuscationCharacter,
-            });
+        return !isNaN(Number(sanitizedVal)) ? sanitizedVal : prevVal;
+    }, []);
 
-            return masked;
-        },
-        [mask, defaultMask, obfuscationCharacter],
-    );
-
-    const [number, onChangeNumber] = useControlledValue(
-        value !== undefined ? value : rest.defaultValue,
-        onChangeText,
-        !editable || disabled,
-        handleMaskString,
-    );
+    const [value, onChangeValue] = useControlledValue({
+        value: rest.value,
+        defaultValue: rest.defaultValue,
+        onChange: onChangeText,
+        disabled: !editable || disabled,
+        manipulateValue: toNumber,
+    });
 
     return (
         <TextInput
             {...rest}
-            value={number}
-            onChangeText={onChangeNumber}
+            value={value}
+            onChangeText={onChangeValue}
             keyboardType={keyboardType}
             editable={editable}
             disabled={disabled}

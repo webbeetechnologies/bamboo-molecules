@@ -25,7 +25,6 @@ export {
     CheckboxProps,
     TextInputProps,
     NumberInputProps,
-    NumberInputMasks,
 } from './components';
 
 export {
