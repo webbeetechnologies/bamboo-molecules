@@ -1,4 +1,3 @@
-import { NumberInputMasks } from 'bamboo-molecules';
 import { renderWithWrapper } from '../testHelper';
 import { NumberInput } from '../../src/components/NumberInput';
 
@@ -14,20 +13,9 @@ it('should render correctly with the default mask', () => {
     expect(tree).toMatchSnapshot();
 });
 
-it('should renders correctly with custom mask', () => {
-    const tree = renderWithWrapper(
-        <NumberInput mask={NumberInputMasks.CREDIT_CARD} onChangeText={mockedOnChangeText} />,
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
-});
-
-it('should renders correctly with custom mask default value', () => {
+it('should correctly mask default value', () => {
     const { getByDisplayValue } = renderWithWrapper(
-        <NumberInput
-            mask={NumberInputMasks.CREDIT_CARD}
-            defaultValue="42424242"
-            onChangeText={mockedOnChangeText}
-        />,
+        <NumberInput defaultValue="+123.22abc" onChangeText={mockedOnChangeText} />,
     );
-    expect(getByDisplayValue('4242 4242')).toBeTruthy();
+    expect(getByDisplayValue('+123.22')).toBeTruthy();
 });
