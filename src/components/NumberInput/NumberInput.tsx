@@ -11,9 +11,9 @@ export type Props = TextInputProps & {
 };
 
 const toNumber = (val: string = '', prevVal: string = '') => {
-    const sanitizedVal = val.replace(/[^0-9.]/g, '');
+    const sanitizedVal = val.replace(/[^\d.-]+[^\d]+/g, ''); // allows plus, minus and decimal
 
-    return !isNaN(Number(sanitizedVal)) ? sanitizedVal : prevVal;
+    return !isNaN(Number(`${sanitizedVal}0`)) ? sanitizedVal : prevVal; // zero at the end because we want + and - signs to be recognized as a number. isNaN('+') => true but isNaN('+0') => false
 };
 
 const NumberInput = (
