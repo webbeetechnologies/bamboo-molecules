@@ -43,13 +43,7 @@ export {
     ResolveComponentStylesArgs,
 } from './core';
 
-export {
-    withRipple,
-    withActionState,
-    CallbackActionState,
-    withFilePicker,
-    WithFilePickerProps,
-} from './hocs';
+export { withRipple, withActionState, CallbackActionState } from './hocs';
 
 export {
     useMolecules,
