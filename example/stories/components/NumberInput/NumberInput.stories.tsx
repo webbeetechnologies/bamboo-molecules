@@ -1,5 +1,5 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { NumberInputMasks, ProvideMolecules } from 'bamboo-molecules';
+import { ProvideMolecules } from 'bamboo-molecules';
 
 import { Example } from './NumberInput';
 
@@ -39,15 +39,14 @@ export const WithCustomMask: ComponentStory<typeof Example> = args => <Example {
 
 WithCustomMask.args = {
     placeholder: 'Placeholder',
-    label: 'Credit card',
-    mask: NumberInputMasks.CREDIT_CARD,
+    label: 'Enter numbers',
 };
 
 WithCustomMask.parameters = {
     docs: {
         source: {
             code: `
-<NumberInput placeholder="Placeholder" value={number} onChangeText={masked => setNumber(masked)} {...props} />
+<NumberInput placeholder="Placeholder" label="Enter numbers" value={number} onChangeText={value => setNumber(value)} {...props} />
 `,
             language: 'tsx',
             type: 'auto',
