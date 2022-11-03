@@ -26,6 +26,7 @@ export {
     TextInputProps,
     NumberInputProps,
     NumberInputMasks,
+    FilePickerProps,
 } from './components';
 
 export {
@@ -43,7 +44,13 @@ export {
     ResolveComponentStylesArgs,
 } from './core';
 
-export { withRipple, withActionState, CallbackActionState } from './hocs';
+export {
+    withRipple,
+    withActionState,
+    CallbackActionState,
+    withFilePicker,
+    WithFilePickerProps,
+} from './hocs';
 
 export {
     useMolecules,
@@ -55,6 +62,7 @@ export {
     useToggle,
     useMediaQuery,
     useControlledValue,
+    useFilePicker,
 } from './hooks';
 
 export {
