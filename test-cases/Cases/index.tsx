@@ -1,10 +1,15 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Platform } from 'react-native';
 import { Card, Headline } from 'react-native-paper';
 import DesignTokens from './DesignTokens';
 import { ComponentsDemoDarkMode, ComponentsDemoLightMode } from './ComponentsDemo';
 
 const style = StyleSheet.create({
-    wrap: { gap: 15, padding: 15 } as any,
+    wrap: {
+        flex: 1,
+        marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        gap: 15,
+        padding: 15,
+    },
     cardTitle: {
         marginHorizontal: -2,
         marginTop: -2,
@@ -19,25 +24,27 @@ const CardHeader: typeof Headline = props => {
 
 export default () => {
     return (
-        <View style={style.wrap}>
-            <Card>
-                <CardHeader children="Design Tokens" />
-                <Card.Content>
-                    <DesignTokens />
-                </Card.Content>
-            </Card>
-            <Card>
-                <CardHeader children="Components Demo Light Mode" />
-                <Card.Content>
-                    <ComponentsDemoLightMode />
-                </Card.Content>
-            </Card>
-            <Card style={{ backgroundColor: '#424242' }}>
-                <CardHeader children="Components Demo Dark Mode" />
-                <Card.Content>
-                    <ComponentsDemoDarkMode />
-                </Card.Content>
-            </Card>
-        </View>
+        <SafeAreaView style={style.wrap}>
+            <ScrollView>
+                <Card>
+                    <CardHeader children="Design Tokens" />
+                    <Card.Content>
+                        <DesignTokens />
+                    </Card.Content>
+                </Card>
+                <Card>
+                    <CardHeader children="Components Demo Light Mode" />
+                    <Card.Content>
+                        <ComponentsDemoLightMode />
+                    </Card.Content>
+                </Card>
+                <Card style={{ backgroundColor: '#424242' }}>
+                    <CardHeader children="Components Demo Dark Mode" />
+                    <Card.Content>
+                        <ComponentsDemoDarkMode />
+                    </Card.Content>
+                </Card>
+            </ScrollView>
+        </SafeAreaView>
     );
 };

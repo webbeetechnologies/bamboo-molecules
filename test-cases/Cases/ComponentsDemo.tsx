@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Checkbox as PaperCheckbox } from 'react-native-paper';
 import {
@@ -47,14 +47,16 @@ const Example = () => {
         Checkbox,
         TextInput,
         NumberInput,
+        FilePicker,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
+    const [files, setFiles] = useState<any>(null);
 
     return (
         <View>
             <Surface elevation={2}>
-                <TouchableRipple rippleColor="colors.primary" onPress={() => {}}>
+                <TouchableRipple rippleColor="colors.primary" onPress={() => setFiles(null)}>
                     <View style={[styles.cardContainer]}>
                         <Text>Test text</Text>
                         <ActivityIndicator animating={true} />
@@ -63,6 +65,8 @@ const Example = () => {
             </Surface>
 
             <HorizontalDivider spacing={30} />
+
+            <FilePicker multiple value={files} onChange={result => setFiles(result)} />
 
             <TextInput
                 variant="flat"
@@ -123,6 +127,9 @@ const Example = () => {
                 keyboardType="numeric"
                 mask={NumberInputMasks.CREDIT_CARD}
             />
+
+            <HorizontalDivider spacing={30} />
+
             <Icon type="material-community" name="robot-angry-outline" />
             <IconButton
                 name={isSwitchOn ? 'chevron-left' : 'chevron-right'}
