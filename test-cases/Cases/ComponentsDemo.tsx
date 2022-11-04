@@ -19,7 +19,6 @@ const theme = extendTheme({
     Label: {
         color: 'colors.onSurface',
         fontSize: 18,
-        fontWeight: 500,
     },
     Button: {
         marginBottom: 10,
