@@ -27,7 +27,7 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<Icon name="share" type="material-community" {...rest} />
+<ActivityIndicator color="colors.primary" size={30} animating {...rest} />
 `,
             language: 'tsx',
             type: 'auto',
