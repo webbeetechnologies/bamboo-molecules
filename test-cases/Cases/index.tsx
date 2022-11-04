@@ -1,7 +1,7 @@
 import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Platform } from 'react-native';
 import { Card, Headline } from 'react-native-paper';
 import DesignTokens from './DesignTokens';
-import { ComponentsDemoDarkMode, ComponentsDemoLightMode } from './ComponentsDemo';
+import { ComponentsDemo } from './ComponentsDemo';
 
 const style = StyleSheet.create({
     wrap: {
@@ -33,15 +33,9 @@ export default () => {
                     </Card.Content>
                 </Card>
                 <Card>
-                    <CardHeader children="Components Demo Light Mode" />
+                    <CardHeader children="Components Demo" />
                     <Card.Content>
-                        <ComponentsDemoLightMode />
-                    </Card.Content>
-                </Card>
-                <Card style={{ backgroundColor: '#424242' }}>
-                    <CardHeader children="Components Demo Dark Mode" />
-                    <Card.Content>
-                        <ComponentsDemoDarkMode />
+                        <ComponentsDemo />
                     </Card.Content>
                 </Card>
             </ScrollView>
