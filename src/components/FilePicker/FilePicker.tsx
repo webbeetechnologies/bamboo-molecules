@@ -96,12 +96,14 @@ const FilePicker = (
     const rightElement = useMemo(() => {
         if (!loading) {
             return (
-                rightProp || (
-                    <IconButton type="material-community" name="upload" onPress={onPress} />
-                )
+                <>
+                    {rightProp || (
+                        <IconButton type="material-community" name="upload" onPress={onPress} />
+                    )}
+                </>
             );
         } else {
-            return progressIndicator || <ActivityIndicator />;
+            return <>{progressIndicator || <ActivityIndicator />}</>;
         }
     }, [ActivityIndicator, IconButton, loading, onPress, progressIndicator, rightProp]);
 
