@@ -7,7 +7,13 @@ const useFilePicker = (options: DocumentPickerOptions) => {
     const onTriggerFilePicker = useCallback(
         async (callback: (response: DocumentResult | DocumentResult[]) => void): Promise<void> => {
             try {
-                const response = await DocumentPicker.getDocumentAsync(options);
+                let response;
+
+                if (options.multiple) {
+                    response = await DocumentPicker.pickMultiple(options);
+                } else {
+                    response = await DocumentPicker.pickSingle(options);
+                }
 
                 callback?.(response);
             } catch (e) {

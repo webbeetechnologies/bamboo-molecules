@@ -1,25 +1,5 @@
 import { Platform } from 'react-native';
-import RNDocumentPicker, {
-    DocumentPickerOptions as RNDocumentPickerOptions,
-    DocumentPickerResponse,
-} from 'react-native-document-picker';
-export { types as documentTypes } from 'react-native-document-picker';
-
-type MobilePlatform = 'android' | 'ios';
-
-export type DocumentPickerOptions = RNDocumentPickerOptions<MobilePlatform> & {
-    /**
-     * Allows multiple files to be selected from the system UI.
-     * @default false
-     */
-    multiple?: boolean;
-};
-
-export type DocumentResult = Partial<DocumentPickerResponse> & {
-    mimeType?: string;
-    file?: File;
-    lastModified?: number;
-};
+import type { DocumentResult, DocumentPickerOptions } from './types';
 
 const resolveFileData = (file: File): Promise<DocumentResult> => {
     return new Promise((resolve, reject) => {
@@ -88,47 +68,7 @@ const getDocumentAsyncWeb = async ({
 };
 
 export default {
-    get name(): string {
-        return 'DocumentPickerWeb';
-    },
-
-    getDocumentAsync: (options: DocumentPickerOptions) => {
-        const {
-            type = ['*/*'],
-            multiple = false,
-            mode = 'import',
-            transitionStyle = 'coverVertical',
-            copyTo = 'cachesDirectory',
-            allowMultiSelection = false,
-            presentationStyle = 'pageSheet',
-        } = options;
-
-        if (Platform.OS === 'web') {
-            return getDocumentAsyncWeb({
-                type,
-                multiple,
-            });
-        } else {
-            // mobile
-            if (multiple) {
-                return RNDocumentPicker.pickMultiple({
-                    type,
-                    transitionStyle,
-                    allowMultiSelection,
-                    presentationStyle,
-                    mode,
-                    copyTo,
-                });
-            } else {
-                return RNDocumentPicker.pickSingle({
-                    type,
-                    transitionStyle,
-                    allowMultiSelection,
-                    presentationStyle,
-                    mode,
-                    copyTo,
-                });
-            }
-        }
-    },
+    pickSingle: ({ type }: DocumentPickerOptions) => getDocumentAsyncWeb({ type, multiple: false }),
+    pickMultiple: ({ type }: DocumentPickerOptions) =>
+        getDocumentAsyncWeb({ type, multiple: true }),
 };
