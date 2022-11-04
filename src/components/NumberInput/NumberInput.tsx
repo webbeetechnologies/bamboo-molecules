@@ -1,6 +1,6 @@
-import { forwardRef, memo, useCallback, useState } from 'react';
+import { forwardRef, memo } from 'react';
 
-import { useMolecules } from '../../hooks';
+import { useControlledValue, useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 
 export type Props = TextInputProps & {
@@ -11,9 +11,9 @@ export type Props = TextInputProps & {
 };
 
 const toNumber = (val: string = '', prevVal: string = '') => {
-    const sanitizedVal = val.replace(/[^\d.-]+[^\d]+/g, ''); // allows plus, minus and decimal
+    const sanitizedVal = val.replace(/[^0-9.-]/g, ''); // allows minus and decimal
 
-    return !isNaN(Number(`${sanitizedVal}0`)) ? sanitizedVal : prevVal; // zero at the end because we want + and - signs to be recognized as a number. isNaN('+') => true but isNaN('+0') => false
+    return !isNaN(Number(`${sanitizedVal}0`)) ? sanitizedVal : prevVal; // zero at the end because we want - signs and trailing dot to be recognized as a number. isNaN('+') => true but isNaN('+0') => false
 };
 
 const NumberInput = (
@@ -23,32 +23,26 @@ const NumberInput = (
         editable = true,
         disabled = false,
         value: valueProp,
-        defaultValue = '',
+        defaultValue,
         ...rest
     }: Props,
     ref: any,
 ) => {
     const { TextInput } = useMolecules();
 
-    const [value, setValue] = useState(toNumber(defaultValue));
-
-    const onChangeValue = useCallback(
-        (currentVal: string) => {
-            if (!onChangeText) {
-                setValue(toNumber(currentVal, value));
-                return;
-            }
-
-            onChangeText?.(toNumber(currentVal, valueProp));
-        },
-        [onChangeText, value, valueProp],
-    );
+    const [value, onChange] = useControlledValue({
+        value: valueProp,
+        defaultValue: defaultValue ?? '', // making one value defined so that textinput's useControlledValue's onChange won't be used
+        disabled: !editable || disabled,
+        onChange: onChangeText,
+        manipulateValue: toNumber,
+    });
 
     return (
         <TextInput
             {...rest}
-            value={toNumber(valueProp) || value}
-            onChangeText={onChangeValue}
+            value={value}
+            onChangeText={onChange}
             keyboardType={keyboardType}
             editable={editable}
             disabled={disabled}
