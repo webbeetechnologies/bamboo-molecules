@@ -355,11 +355,7 @@ const Button = (
                             style={iconStyle}
                         />
                     ) : null}
-                    <Text
-                        variant="labelLarge"
-                        selectable={false}
-                        numberOfLines={1}
-                        style={textStyle}>
+                    <Text selectable={false} numberOfLines={1} style={textStyle}>
                         {children}
                     </Text>
                 </View>

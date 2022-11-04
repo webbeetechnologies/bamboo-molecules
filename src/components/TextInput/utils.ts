@@ -101,6 +101,10 @@ export const defaultStyles: TextInputStyles = {
             backgroundColor: 'colors.surface', // floating label backgroundColor comes from here because we want it to be the same background as the TextInput
             floatingLabelVerticalOffset: 0,
 
+            container: {
+                borderRadius: 'roundness.1',
+            },
+
             outline: {
                 borderRadius: 'roundness.1',
                 borderColor: 'colors.outline',
