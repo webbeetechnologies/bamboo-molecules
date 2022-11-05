@@ -17,6 +17,8 @@ const useFilePicker = (options: DocumentPickerOptions) => {
 
                 callback?.(response);
             } catch (e) {
+                // TODO: Check DocumentPicker cancellation.
+                // It might result in an error.
                 console.error(e);
                 setError(true);
             }
