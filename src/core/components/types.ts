@@ -12,6 +12,7 @@ import type {
     VerticalDividerProps,
     Checkbox,
     TextInputProps,
+    NumberInputProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -31,6 +32,7 @@ export interface DefaultComponents {
     Switch: ComponentType<SwitchProps>;
     Checkbox: typeof Checkbox;
     TextInput: ComponentType<TextInputProps>;
+    NumberInput: ComponentType<NumberInputProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

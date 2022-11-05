@@ -24,6 +24,7 @@ export {
     SwitchProps,
     CheckboxProps,
     TextInputProps,
+    NumberInputProps,
 } from './components';
 
 export {

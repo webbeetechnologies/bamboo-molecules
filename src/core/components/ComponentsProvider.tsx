@@ -18,6 +18,7 @@ import {
     Checkbox,
     TextInput,
     TextInputProps,
+    NumberInput,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -41,6 +42,7 @@ const defaultComponents: DefaultComponents = {
     Switch,
     Checkbox,
     TextInput: TextInput as ComponentType<TextInputProps>,
+    NumberInput,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

@@ -254,11 +254,12 @@ const TextInput = forwardRef<TextInputHandles, Props>(
         const [focused, setFocused] = useState<boolean>(false);
         const [placeholder, setPlaceholder] = useState<string | undefined>('');
         // Use value from props instead of local state when input is controlled
-        const [value, onChangeValue] = useControlledValue(
-            validInputValue,
-            rest.onChangeText,
-            !editable || disabled,
-        );
+        const [value, onChangeValue] = useControlledValue({
+            value: rest.value,
+            defaultValue: rest.defaultValue,
+            onChange: rest.onChangeText,
+            disabled: !editable || disabled,
+        });
 
         const styles = useComponentStyles(
             'TextInput',

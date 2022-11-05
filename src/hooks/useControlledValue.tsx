@@ -1,24 +1,44 @@
 import { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 
-const useControlledValue = (
-    value: string | undefined,
-    onChange: ((value: string) => any) | undefined,
-    isDisabled: boolean = false,
-): [string | undefined, (value: string) => void] => {
-    const isUncontrolled = useRef(value).current === undefined;
+type ReturnType<T> = [T | undefined, (value: T) => void];
+
+type Args<T> = {
+    value: T | undefined;
+    defaultValue?: T;
+    onChange: ((value: T) => any) | undefined;
+    disabled?: boolean;
+    manipulateValue?: (value: T | undefined, prevValue: T | undefined) => T;
+};
+
+const useControlledValue = <T,>({
+    value: valueProp,
+    defaultValue,
+    disabled = false,
+    onChange,
+    manipulateValue = val => val as T,
+}: Args<T>): ReturnType<T> => {
+    const value = useMemo(
+        () =>
+            valueProp !== undefined
+                ? manipulateValue(valueProp, undefined)
+                : manipulateValue(defaultValue, undefined),
+        [defaultValue, manipulateValue, valueProp],
+    );
+
+    const isUncontrolled = useRef(valueProp).current === undefined;
     const [uncontrolledValue, setValue] = useState(value);
 
     const updateValue = useCallback(
-        (val: string) => {
-            if (isDisabled) return;
+        (val: T) => {
+            if (disabled) return;
 
             if (isUncontrolled) {
-                setValue(val);
+                setValue(manipulateValue(val, uncontrolledValue));
             }
 
-            onChange?.(val);
+            onChange?.(manipulateValue(val, valueProp));
         },
-        [isDisabled, isUncontrolled, onChange],
+        [disabled, isUncontrolled, manipulateValue, onChange, uncontrolledValue, valueProp],
     );
 
     useEffect(() => {
