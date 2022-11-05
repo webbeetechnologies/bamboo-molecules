@@ -65,4 +65,4 @@ Molecules exposes a highly performant memoized useSelectableList hook that can s
 
 ## Components Consumed
 
--   [Section List](./SectionList.md)
+-   [Section List](../components/SectionList.md)
