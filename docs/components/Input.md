@@ -46,3 +46,10 @@ TextInput fields in bamboo, like other components, are super fast and extremely 
 ## Implementation Details
 
 -   Implements [WithElements Interface](../interfaces/WithElementsInterface.md)
+-   Implements the features defined in [User Input Fields](../features/user-input-fields.md)
+-   Implements the following states as defined in [User Input States](../features/user-input-states.md)
+    -   disabled
+    -   hovered
+    -   focused
+    -   pressed
+    -   error
