@@ -52,6 +52,12 @@ List items can be either of these [User States](../features/user-input-states) o
 9. As a component consumer, I want to change the state of the list item with code.\
    On keyboard, I want to set it to be focused.
 10. As a component consumer, I expect that the left, right and the primary content (title/description) of the list items are correctly spaced out.
+11. As a component consumer, I expect that ListItem implements the features defined in [User Input Fields](../features/user-input-fields.md)
+12. As a component consumer, I expect that ListItem implements the features defined in [User Input States](../features/user-input-states.md)
+    - disabled
+    - hovered
+    - focused
+    - pressed
 
 ## Flavours
 

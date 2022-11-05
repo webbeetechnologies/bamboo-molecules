@@ -19,19 +19,6 @@ A highly performant React native implementation of the HTML Select element.
 -   As an end user, I expect to see a readonly [input field](./Input.md).
 -   As an end user, I want to identify a select input field from a text input field\
     (expect to see a caret icon on the right)
--   As an end user, I want to see a performant scrollable list of options as:
-
-    -   on desktop;
-        popovers dropdowns for options.
-    -   on mobile/tab;
-        -   if less than less than 5 options are available, display options in
-            -   ios: bottom and centered action-sheets.
-            -   android: popover.
-        -   if count is more than 5 display a scrollable list in modal with a back button.\
-            (See References)
-        -   if the count of options is flexible display a scrollable list in modal with a back button.\
-            (See References)
-
 -   As an end user, in the options list, I want to be able to distinguish between headers and available options.\
     Reference: Options and OptGroups in HTML.
 -   As an end user, I expect that the list of options is not displayed on clicking a disabled Select input field.
@@ -42,19 +29,16 @@ A highly performant React native implementation of the HTML Select element.
 -   As a component consumer, I expect that the Select Input extends all the abilities of the [Text Input](./Input.md) component.
 -   As a component consumer, I expect that the the Input is not editable.
 -   As a component consumer, I want to be able to allow selection of multiple options with `multiple` boolean prop.
--   As a component consumer, I want to control how my options are rendered [see Rendering options](#implementation-details)].
+-   As a component consumer, I want to control how multiple selections are rendered.
 -   As a component consumer, I want to configurable caret/chevron-down icon next to the select field.
 
 ## Interface
 
 ```ts
-    import type { DropdownListProps } from "DropdownList";
-    import type { InputProps } from "InputProps";
-    import type { WithElements } from "WithElements";
-    type SelectProps = DropdownListProps & InputProps & WithElements {
-        multiple?: boolean;
-    }
-
+import type { DropdownListProps } from 'DropdownList';
+import type { InputProps } from 'InputProps';
+import type { WithElements } from 'WithElements';
+type SelectProps = DropdownListProps & InputProps & WithElements;
 ```
 
 ## Implementation Details
