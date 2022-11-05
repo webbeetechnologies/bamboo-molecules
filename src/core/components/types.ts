@@ -13,6 +13,7 @@ import type {
     Checkbox,
     TextInputProps,
     NumberInputProps,
+    FilePickerProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -33,6 +34,7 @@ export interface DefaultComponents {
     Checkbox: typeof Checkbox;
     TextInput: ComponentType<TextInputProps>;
     NumberInput: ComponentType<NumberInputProps>;
+    FilePicker: ComponentType<FilePickerProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

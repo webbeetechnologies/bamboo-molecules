@@ -19,6 +19,7 @@ import {
     TextInput,
     TextInputProps,
     NumberInput,
+    FilePicker,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -43,6 +44,7 @@ const defaultComponents: DefaultComponents = {
     Checkbox,
     TextInput: TextInput as ComponentType<TextInputProps>,
     NumberInput,
+    FilePicker,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

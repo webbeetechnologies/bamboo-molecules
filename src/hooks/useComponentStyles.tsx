@@ -22,10 +22,10 @@ const useComponentStyles = (
 ) => {
     const { variant, states, size } = resolvers || {};
     const theme = useTheme<ITheme>();
-    const colorMode = useColorMode();
+    const { colorMode } = useColorMode();
 
     const componentTheme = theme[componentName];
-    const currentTheme = theme[colorMode];
+    const currentTheme = theme[colorMode as string];
 
     return normalizeStyles(
         theme.resolveComponentStyles({

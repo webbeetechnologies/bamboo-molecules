@@ -25,6 +25,7 @@ export {
     CheckboxProps,
     TextInputProps,
     NumberInputProps,
+    FilePickerProps,
 } from './components';
 
 export {
@@ -54,6 +55,7 @@ export {
     useToggle,
     useMediaQuery,
     useControlledValue,
+    useFilePicker,
 } from './hooks';
 
 export {
@@ -68,8 +70,12 @@ export {
     normalizeStyles,
     resolveComponentStyles,
     normalizeSpacings,
+    DocumentPicker,
     SpacingType,
     SpacingKey,
+    DocumentPickerOptions,
+    DocumentResult,
+    documentTypes,
 } from './utils';
 
 export { ComponentStylePropWithVariants, WithElements } from './types';

@@ -117,7 +117,6 @@ exports[`renders button with an accessibility hint 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Button with accessibility hint
             </Text>
@@ -246,7 +245,6 @@ exports[`renders button with an accessibility label 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Button with accessibility label
             </Text>
@@ -374,7 +372,6 @@ exports[`renders button with color 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Custom Button
             </Text>
@@ -502,7 +499,6 @@ exports[`renders button with custom background color 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Custom Button
             </Text>
@@ -631,7 +627,6 @@ exports[`renders button with custom testID 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Button with custom testID
             </Text>
@@ -759,7 +754,6 @@ exports[`renders contained contained with variant 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Contained Button
             </Text>
@@ -887,7 +881,6 @@ exports[`renders disabled button 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Disabled Button
             </Text>
@@ -1209,7 +1202,6 @@ exports[`renders loading button 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Loading Button
             </Text>
@@ -1339,7 +1331,6 @@ exports[`renders outlined button with variant 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Outlined Button
             </Text>
@@ -1467,7 +1458,6 @@ exports[`renders text button by default 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Text Button
             </Text>
@@ -1595,7 +1585,6 @@ exports[`renders text button with variant 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Text Button
             </Text>
