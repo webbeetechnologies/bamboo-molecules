@@ -82,14 +82,7 @@ export const defaultStyles: TextInputStyles = {
         fontWeight: 'typescale.bodyLarge.fontWeight',
         flexGrow: 1,
     },
-    supportingText: {
-        color: 'colors.onSurfaceVariant',
-        fontSize: 'typescale.bodySmall.fontSize',
-        lineHeight: 'typescale.bodySmall.lineHeight',
-        fontWeight: 'typescale.bodySmall.fontWeight',
-        marginTop: 'spacings.1',
-        marginHorizontal: 'spacings.4',
-    },
+    supportingText: {},
     placeholder: {
         color: 'colors.onSurfaceVariant',
     },
@@ -287,7 +280,6 @@ export const defaultStyles: TextInputStyles = {
                 opacity: 0.38,
             },
             supportingText: {
-                color: 'colors.onSurface',
                 opacity: 0.38,
             },
             leftElement: {
@@ -309,9 +301,6 @@ export const defaultStyles: TextInputStyles = {
             inputText: {
                 color: 'colors.onSurface',
             },
-            supportingText: {
-                color: 'colors.error',
-            },
             leftElement: {
                 color: 'colors.onSurfaceVariant',
             },
@@ -328,9 +317,6 @@ export const defaultStyles: TextInputStyles = {
             },
             inputText: {
                 color: 'colors.onSurface',
-            },
-            supportingText: {
-                color: 'colors.error',
             },
             leftElement: {
                 color: 'colors.onSurfaceVariant',
@@ -352,7 +338,6 @@ export const defaultStyles: TextInputStyles = {
                 opacity: 0.38,
             },
             supportingText: {
-                color: 'colors.error',
                 opacity: 0.38,
             },
             leftElement: {
@@ -374,9 +359,6 @@ export const defaultStyles: TextInputStyles = {
             },
             inputText: {
                 color: 'colors.onSurface',
-            },
-            supportingText: {
-                color: 'colors.error',
             },
             leftElement: {
                 color: 'colors.onSurfaceVariant',

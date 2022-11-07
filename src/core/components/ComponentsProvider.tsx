@@ -20,6 +20,7 @@ import {
     TextInputProps,
     NumberInput,
     FilePicker,
+    HelperText,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -45,6 +46,7 @@ const defaultComponents: DefaultComponents = {
     TextInput: TextInput as ComponentType<TextInputProps>,
     NumberInput,
     FilePicker,
+    HelperText,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
