@@ -15,6 +15,11 @@ import type {
     NumberInputProps,
     FilePickerProps,
     HelperTextProps,
+    CalendarProps,
+    DatePickerModalProps,
+    DatePickerInputProps,
+    TimePickerProps,
+    TimePickerModalProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -37,6 +42,11 @@ export interface DefaultComponents {
     NumberInput: ComponentType<NumberInputProps>;
     FilePicker: ComponentType<FilePickerProps>;
     HelperText: ComponentType<HelperTextProps>;
+    Calendar: ComponentType<CalendarProps>;
+    DatePickerModal: ComponentType<DatePickerModalProps>;
+    DatePickerInput: ComponentType<DatePickerInputProps>;
+    TimePicker: ComponentType<TimePickerProps>;
+    TimePickerModal: ComponentType<TimePickerModalProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

@@ -37,3 +37,17 @@ export { TextInput, TextInputProps, textInputStyles } from './TextInput';
 export { NumberInput, NumberInputProps } from './NumberInput';
 export { FilePicker, FilePickerProps } from './FilePicker';
 export { HelperText, HelperTextProps, helperTextStyles } from './HelperText';
+
+export {
+    Calendar,
+    CalendarProps,
+    calendarStyles,
+    DatePickerModal,
+    DatePickerModalProps,
+    DatePickerInput,
+    DatePickerInputProps,
+    TimePicker,
+    TimePickerProps,
+    TimePickerModal,
+    TimePickerModalProps,
+} from './DateTimePicker';
