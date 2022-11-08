@@ -49,7 +49,7 @@ export type Props = TextProps & {
  *  return (
  *     <View>
  *       <TextInput label="Email" value={text} onChangeText={onChangeText} />
- *       <HelperText type="error" visible={hasErrors()}>
+ *       <HelperText variant="error" visible={hasErrors()}>
  *         Email address is invalid!
  *       </HelperText>
  *     </View>
