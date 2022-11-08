@@ -1,5 +1,5 @@
-import { ProvideMolecules, extendTheme, useComponentTheme, useMolecules } from 'bamboo-molecules';
-import { StyleSheet } from 'react-native';
+import { ProvideMolecules, extendTheme, useComponentStyles, useMolecules } from 'bamboo-molecules';
+import { StyleSheet, Pressable } from 'react-native';
 
 /**
  *
@@ -36,20 +36,20 @@ const theme = extendTheme({
     light: {
         colors: {
             primary: 'red',
+            onPrimary: 'black',
         },
     },
 });
 
 const Example = () => {
-    const { View, Button, Text } = useMolecules();
-    const buttonStyles = useComponentTheme('CustomButton');
-    const textStyles = useComponentTheme('Text');
+    const { View, Text } = useMolecules();
+    const buttonStyles = useComponentStyles('CustomButton');
 
     return (
         <View style={styles.buttonContainer}>
-            <Button style={StyleSheet.flatten([buttonStyles, buttonStyles.primary])}>
-                <Text style={StyleSheet.flatten([textStyles])}>Hello</Text>
-            </Button>
+            <Pressable style={StyleSheet.flatten([buttonStyles, buttonStyles.primary])}>
+                <Text>Hello</Text>
+            </Pressable>
         </View>
     );
 };

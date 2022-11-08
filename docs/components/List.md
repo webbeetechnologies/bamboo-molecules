@@ -1,31 +1,55 @@
-# SelectList v1
-A SelectList is a presentational component which renders its children - SelectGroups and SelectItems.
+# List v1
+
+Lists are easily one of the most used components across the platforms.\
+Menus, dropdowns, Drawers, Selects/Typeaheads are some of the simplest examples where this building block component comes into use.
+
+## Explanation Video
+
+[Explaning Molecules List component](https://www.loom.com/share/349f01909dfd4eeabb02635b8a87be99)
 
 ## User stories
-- As a user I want to see items in a list
-- As a user I want to have smooth performance for 1000 list entries 
-- As a user I want that the items can be grouped
-- As a user I want to select items
-- As a user I want to 
-- As a user I want that the SelectList follows the MaterialYou guidelines
-- As a 
+
+-   As a user I want to see items in a list view.
+-   As a user I want that the List follows the MaterialYou guidelines.
+-   As a user I want to have smooth performance for 1000 list entries
 
 ## Developer stories
-- As a developer I want that this component exports the following components
-  - SelectList
-  - Select
-  - CheckboxSelectItem
-- As a developer I want to implement any number of ListItem flavors
-- As a developer I want to add elements to the right or left side of an item using [WithElements HOC](./HOC/WithElements.md)
-- As a developer I want to use [WithAddons HOC](./HOC/WithAddons.md) to control the grouping and spacing of the List Items.
+
+-   As a developer I want to display items in a flat list or a grouped list.
+-   As a developer I want that this component exports the following components
+    -   List
+    -   ListItem
 
 ## Implementation details
-- Does [FlatList](./FlatList.md) cut it for 1000 elements? As far as I understand, it virtualizes under the hood
+
+-   Does FlatList cut it for 1000 elements? As far as I understand, it virtualizes under the hood
 
 ---
-# SelectList v2
+
+# ListItem
+
+-   As a developer I want add elements to the left and/or right of the List item.
+-   As a developer I want to be give the user ability to swipe left or right to reveal item actions.
+-   As a developer I want use different/mixed flavors of list items: with checkbox, drag, icons, avatars.
+-   As a developer I want compose different flavors of list items using [WithElements HOC](./HOC/WithElements.md).
+
+## Flavours
+
+-   Orderable
+-   Selectable
+-   Checkbox Item
+-   Icons
+-   Avatars
+-   With Description
+-   With Actions
+-   Collapsible Item
+-   Badges
+
+---
+
+# List v2
 
 ## User stories
-- As a user I want to reorder items in the list
-- As a user I want a select item flavor that uses [TODO: Speak to Tobias]
 
+-   As a user I want to reorder items in the list
+-   As a user I want a select item flavor that uses [TODO: Speak to Tobias]
