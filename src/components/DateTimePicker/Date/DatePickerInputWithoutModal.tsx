@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import { useCurrentTheme, useMolecules } from '../../../hooks';
+import { useCurrentTheme } from '../../../hooks';
 import TextInputWithMask from '../TextInputMask';
 import useDateInput from './inputUtils';
 import type { DatePickerInputProps } from './DatePickerInput.shared';
@@ -31,7 +31,6 @@ function DatePickerInputWithoutModal(
     ref: any,
 ) {
     const theme = useCurrentTheme();
-    const { HelperText } = useMolecules();
     const { formattedValue, inputFormat, onChangeText, error } = useDateInput({
         locale,
         value,
@@ -61,14 +60,8 @@ function DatePickerInputWithoutModal(
                     error={!!error}
                     style={[styles.input, style]}
                     right={inputButtons}
+                    supportingText={error as string}
                 />
-                {error ? (
-                    <View style={styles.helperText}>
-                        <HelperText style={styles.helperText} variant="error" visible={!!error}>
-                            {error}
-                        </HelperText>
-                    </View>
-                ) : null}
             </View>
             {modal?.({ value, locale, inputMode, validRange })}
         </>
