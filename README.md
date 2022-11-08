@@ -37,6 +37,9 @@ Bamboo molecules do not provide a for complex screens and layouts; you can creat
 # install dependencies for the library and examples
 yarn
 
+# setup husky
+yarn prepare:husky
+
 # install a new package to a workspace
 yarn workspace <workspace-name> add <package-name>
 

@@ -31,10 +31,12 @@
     "run:storybook": "yarn --cwd ./example storybook"
   },
   "dependencies": {
-    "@webbee/bamboo-atoms": "^0.0.12",
+    "@webbee/bamboo-atoms": "^0.0.18",
     "color": "^4.2.3",
     "lodash.get": "^4.4.2",
     "lodash.memoize": "^4.1.2",
+    "react-native-document-picker": "^8.1.2",
+    "react-native-mask-input": "^1.2.2",
     "ts-deepmerge": "^4.0.0"
   },
   "devDependencies": {
@@ -45,6 +47,7 @@
     "@types/react": "^18.0.20",
     "@types/react-native": "^0.70.0",
     "@types/react-native-vector-icons": "^6.4.12",
+    "@types/uuid": "^8.3.4",
     "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",

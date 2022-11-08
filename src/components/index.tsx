@@ -30,3 +30,10 @@ export {
 } from './HorizontalDivider';
 export { VerticalDivider, verticalDividerStyles, VerticalDividerProps } from './VerticalDivider';
 export { Switch, switchStyles, SwitchProps } from './Switch';
+
+export { IconButton, IconButtonProps, iconButtonStyles } from './IconButton';
+export { default as Checkbox, CheckboxProps, checkboxStyles } from './Checkbox';
+export { TextInput, TextInputProps, textInputStyles } from './TextInput';
+export { NumberInput, NumberInputProps } from './NumberInput';
+export { FilePicker, FilePickerProps } from './FilePicker';
+export { HelperText, HelperTextProps, helperTextStyles } from './HelperText';

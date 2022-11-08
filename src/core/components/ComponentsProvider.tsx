@@ -8,13 +8,19 @@ import {
 import {
     ActivityIndicator,
     Icon,
+    IconButton,
     HorizontalDivider,
     VerticalDivider,
     TouchableRipple,
-    TouchableRippleProps,
     Button,
     Surface,
     Switch,
+    Checkbox,
+    TextInput,
+    TextInputProps,
+    NumberInput,
+    FilePicker,
+    HelperText,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -28,13 +34,19 @@ import type { DefaultComponents, ProvideComponentsProps } from './types';
  */
 const defaultComponents: DefaultComponents = {
     Icon,
-    TouchableRipple: TouchableRipple as ComponentType<TouchableRippleProps>, // ts-error
+    IconButton,
+    TouchableRipple,
     ActivityIndicator,
     HorizontalDivider,
     VerticalDivider,
     Button,
     Surface,
     Switch,
+    Checkbox,
+    TextInput: TextInput as ComponentType<TextInputProps>,
+    NumberInput,
+    FilePicker,
+    HelperText,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

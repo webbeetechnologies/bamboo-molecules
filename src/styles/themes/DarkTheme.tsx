@@ -10,9 +10,9 @@ export const generateDarkThemeColors = (
     opacity: typeof ref.opacity,
 ) => {
     return {
-        primary: palette.primary80,
+        primary: palette.primary70,
         primaryContainer: palette.primary30,
-        primaryOnHover: color(palette.primary80).lighten(0.03).rgb().string(),
+        primaryOnHover: color(palette.primary80).darken(0.12).rgb().string(),
         primaryContainerOnHover: color(palette.primary80).darken(0.9).rgb().string(),
         secondary: palette.secondary80,
         secondaryContainer: palette.secondary30,

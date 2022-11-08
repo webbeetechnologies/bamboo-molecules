@@ -14,6 +14,7 @@ export {
     ItalicProps,
     ViewProps,
     IconProps,
+    IconButtonProps,
     ActivityIndicatorProps,
     HorizontalDividerProps,
     VerticalDividerProps,
@@ -21,6 +22,10 @@ export {
     ButtonProps,
     SurfaceProps,
     SwitchProps,
+    CheckboxProps,
+    TextInputProps,
+    NumberInputProps,
+    FilePickerProps,
 } from './components';
 
 export {
@@ -49,6 +54,8 @@ export {
     useCurrentTheme,
     useToggle,
     useMediaQuery,
+    useControlledValue,
+    useFilePicker,
 } from './hooks';
 
 export {
@@ -59,6 +66,16 @@ export {
     generateDarkThemeColors,
 } from './styles';
 
-export { normalizeStyles, resolveComponentStyles } from './utils';
+export {
+    normalizeStyles,
+    resolveComponentStyles,
+    normalizeSpacings,
+    DocumentPicker,
+    SpacingType,
+    SpacingKey,
+    DocumentPickerOptions,
+    DocumentResult,
+    documentTypes,
+} from './utils';
 
-export { ComponentStylePropWithVariants } from './types';
+export { ComponentStylePropWithVariants, WithElements } from './types';
