@@ -41,6 +41,7 @@ const Example = () => {
         NumberInput,
         FilePicker,
         Label,
+        HelperText,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
@@ -81,6 +82,7 @@ const Example = () => {
                 value={files}
                 onChange={result => setFiles(result)}
             />
+            <HelperText>Helper Text</HelperText>
             <HorizontalDivider spacing={30} />
 
             <TextInput

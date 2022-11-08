@@ -19,6 +19,7 @@ import {
     verticalDividerStyles,
     checkboxStyles,
     textInputStyles,
+    helperTextStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -42,6 +43,7 @@ const defaultThemeValue: Partial<ITheme> = {
     Switch: switchStyles,
     Checkbox: checkboxStyles,
     TextInput: textInputStyles,
+    HelperText: helperTextStyles,
 };
 
 const defaultExtractStyles = memoize(

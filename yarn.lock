@@ -1486,6 +1486,72 @@
     uuid "^3.4.0"
     wrap-ansi "^7.0.0"
 
+"@expo/cli@0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@expo/cli/-/cli-0.3.2.tgz#83c8587ec38f9c7361222751bc4bb829520201b8"
+  integrity sha512-P6yogdPCRKaoLjuH7D8jgq6kTzM4gWuQ+vssBPWhbnoymV5AClQOxvACPDHD+biKhvGsaXEQLMoi93lPQzcDlQ==
+  dependencies:
+    "@babel/runtime" "^7.14.0"
+    "@expo/code-signing-certificates" "^0.0.2"
+    "@expo/config" "~7.0.1"
+    "@expo/config-plugins" "~5.0.1"
+    "@expo/dev-server" "~0.1.120"
+    "@expo/devcert" "^1.0.0"
+    "@expo/json-file" "^8.2.35"
+    "@expo/metro-config" "~0.4.0"
+    "@expo/osascript" "^2.0.31"
+    "@expo/package-manager" "~0.0.53"
+    "@expo/plist" "^0.0.18"
+    "@expo/prebuild-config" "~5.0.3"
+    "@expo/rudder-sdk-node" "1.1.1"
+    "@expo/spawn-async" "1.5.0"
+    "@expo/xcpretty" "^4.2.1"
+    "@urql/core" "2.3.6"
+    "@urql/exchange-retry" "0.3.0"
+    accepts "^1.3.8"
+    arg "4.1.0"
+    better-opn "~3.0.2"
+    bplist-parser "^0.3.1"
+    cacache "^15.3.0"
+    chalk "^4.0.0"
+    ci-info "^3.3.0"
+    debug "^4.3.4"
+    env-editor "^0.4.1"
+    form-data "^3.0.1"
+    freeport-async "2.0.0"
+    fs-extra "~8.1.0"
+    getenv "^1.0.0"
+    graphql "15.8.0"
+    graphql-tag "^2.10.1"
+    internal-ip "4.3.0"
+    is-root "^2.1.0"
+    js-yaml "^3.13.1"
+    json-schema-deref-sync "^0.13.0"
+    md5-file "^3.2.3"
+    md5hex "^1.0.0"
+    minipass "3.1.6"
+    node-fetch "^2.6.7"
+    node-forge "^1.3.1"
+    npm-package-arg "^7.0.0"
+    ora "3.4.0"
+    pretty-bytes "5.6.0"
+    progress "2.0.3"
+    prompts "^2.3.2"
+    qrcode-terminal "0.11.0"
+    requireg "^0.2.2"
+    resolve-from "^5.0.0"
+    semver "^6.3.0"
+    send "^0.18.0"
+    slugify "^1.3.4"
+    structured-headers "^0.4.1"
+    tar "^6.0.5"
+    tempy "^0.7.1"
+    terminal-link "^2.1.1"
+    text-table "^0.2.0"
+    url-join "4.0.0"
+    uuid "^3.4.0"
+    wrap-ansi "^7.0.0"
+
 "@expo/code-signing-certificates@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@expo/code-signing-certificates/-/code-signing-certificates-0.0.2.tgz#65cd615800e6724b54831c966dd1a90145017246"
@@ -1570,6 +1636,25 @@
     serialize-error "6.0.0"
     temp-dir "^2.0.0"
 
+"@expo/dev-server@~0.1.120":
+  version "0.1.120"
+  resolved "https://registry.yarnpkg.com/@expo/dev-server/-/dev-server-0.1.120.tgz#0c7aff4e29d98298214129127f5df951cb7b81dd"
+  integrity sha512-x5/jCv0EOpz6FyehXpI5bgDQTVsGZYvgISkAw7n60RhtG+aid6N2CCR9SDMCH70XaUpFnfTW9qvderpCEj7Puw==
+  dependencies:
+    "@expo/bunyan" "4.0.0"
+    "@expo/metro-config" "~0.4.0"
+    "@expo/osascript" "2.0.33"
+    body-parser "1.19.0"
+    chalk "^4.0.0"
+    connect "^3.7.0"
+    fs-extra "9.0.0"
+    node-fetch "^2.6.0"
+    open "^8.3.0"
+    resolve-from "^5.0.0"
+    semver "7.3.2"
+    serialize-error "6.0.0"
+    temp-dir "^2.0.0"
+
 "@expo/devcert@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@expo/devcert/-/devcert-1.0.0.tgz#79df9431e806bc546f6399e35934b9876384f0a9"
@@ -1636,6 +1721,20 @@
   version "0.3.22"
   resolved "https://registry.yarnpkg.com/@expo/metro-config/-/metro-config-0.3.22.tgz#fa4a0729ec8ecbc9c9fb79c63ecc66a299505c82"
   integrity sha512-R81sLbaeUBjN8IXcxiVx7GcpSj8z7szILl1b5yJDb38WdIFwxhrseA5wXaTT1yMhI+59w6n99T2qtFV2yD5qYA==
+  dependencies:
+    "@expo/config" "7.0.1"
+    "@expo/json-file" "8.2.36"
+    chalk "^4.1.0"
+    debug "^4.3.2"
+    find-yarn-workspace-root "~2.0.0"
+    getenv "^1.0.0"
+    resolve-from "^5.0.0"
+    sucrase "^3.20.0"
+
+"@expo/metro-config@~0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@expo/metro-config/-/metro-config-0.4.0.tgz#1b446c94020dce595aa9fc7610d92601a098b753"
+  integrity sha512-QhOiotuzklalLbbsTMXJ5v4q4jffQ5xXhy1zsosgc2DL/ZzUr/Yhm3xUcOGnPQ2x7UyeY9Tl3njPHBOJJe7CSA==
   dependencies:
     "@expo/config" "7.0.1"
     "@expo/json-file" "8.2.36"
@@ -8651,6 +8750,13 @@ expo-font@^10.2.0, expo-font@~10.2.0:
   dependencies:
     fontfaceobserver "^2.1.0"
 
+expo-font@~10.2.1:
+  version "10.2.1"
+  resolved "https://registry.yarnpkg.com/expo-font/-/expo-font-10.2.1.tgz#c13e65e864befaa4710504096b68635c6f7e48d8"
+  integrity sha512-sxy5GrdtY+Ka8Wo5wnrcFFeO6MbYC6Dris5wMLqshvVK6BneJNMUsFvwRfvVgg0TzsmMAc3Rlca2xyZ8ettinw==
+  dependencies:
+    fontfaceobserver "^2.1.0"
+
 expo-keep-awake@~10.2.0:
   version "10.2.0"
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-10.2.0.tgz#46f04740bccd321732bbbed93491e2076d5dbbd7"
@@ -8675,7 +8781,7 @@ expo-modules-core@0.11.5:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
-expo-modules-core@^0.11.8:
+expo-modules-core@0.11.8, expo-modules-core@^0.11.8:
   version "0.11.8"
   resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-0.11.8.tgz#68de1bc56a148b9a9c03f1268c67e9e264d4d4b9"
   integrity sha512-goC2ghZFVaV6nXEbk+kz9oKnQmqW8fHVUCSPxC0QXhV0ay1dA9Ki6qqMPagkBJUPAz89NsNqW3bYR6DFXq7lvA==
@@ -8706,7 +8812,35 @@ expo-status-bar@~1.4.0:
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.4.0.tgz#c0317de2c53878340f4b4f00ff7e4ba14399a7fb"
   integrity sha512-vh98g8qMIjig/2XTBsoAWS6Vo2dIIwDWjB3/GiuZ9Lazpxc9GO/APfJ4dar7MibzIDUKIrjotrcL6rLdPH13Ew==
 
-expo@^46.0.7, expo@~46.0.9:
+expo@~46.0.16:
+  version "46.0.16"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-46.0.16.tgz#8fe6d10207dabda34a684efac2c45c3c1c089f11"
+  integrity sha512-lZETkf3t+gbZjKjSceIpU7I8Rmm5nZ0ZG1WPzNBBbm+k64/+kKV96s6RqS37W1TTDpIbd+AucT9kKpvtv0JB2A==
+  dependencies:
+    "@babel/runtime" "^7.14.0"
+    "@expo/cli" "0.3.2"
+    "@expo/vector-icons" "^13.0.0"
+    babel-preset-expo "~9.2.0"
+    cross-spawn "^6.0.5"
+    expo-application "~4.2.2"
+    expo-asset "~8.6.1"
+    expo-constants "~13.2.4"
+    expo-file-system "~14.1.0"
+    expo-font "~10.2.1"
+    expo-keep-awake "~10.2.0"
+    expo-modules-autolinking "0.10.3"
+    expo-modules-core "0.11.8"
+    fbemitter "^3.0.0"
+    getenv "^1.0.0"
+    invariant "^2.2.4"
+    md5-file "^3.2.3"
+    node-fetch "^2.6.7"
+    pretty-format "^26.5.2"
+    uuid "^3.4.0"
+  optionalDependencies:
+    expo-error-recovery "~3.2.0"
+
+expo@~46.0.9:
   version "46.0.10"
   resolved "https://registry.yarnpkg.com/expo/-/expo-46.0.10.tgz#a352057489474279b0207cc6b01540edc04e1806"
   integrity sha512-MUDLTnBYOOabzFo2HATTMXiAYoQ4n1IWBM3HlOmsQVoMBKOs6FcZDqte/lwK80KkhHIpr1Q37JD8Dq1Fk4b9eA==

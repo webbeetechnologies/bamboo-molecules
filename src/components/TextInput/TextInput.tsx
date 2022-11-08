@@ -15,7 +15,6 @@ import {
     LayoutChangeEvent,
     StyleProp,
     TextStyle,
-    Text,
     ViewStyle,
 } from 'react-native';
 import type { TextInputProps } from '@webbee/bamboo-atoms';
@@ -243,7 +242,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
         const isControlled = rest.value !== undefined;
         const validInputValue = isControlled ? rest.value : rest.defaultValue;
 
-        const { View } = useMolecules();
+        const { View, HelperText } = useMolecules();
 
         const { current: labelAnimation } = useRef<Animated.Value>(
             new Animated.Value(validInputValue ? 0 : 1),
@@ -455,7 +454,11 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                 />
                 <>
                     {(supportingText || required) && (
-                        <Text style={styles.supportingText}>{supportingText || '*required'}</Text>
+                        <HelperText
+                            variant={errorProp ? 'error' : 'info'}
+                            style={styles.supportingText}>
+                            {supportingText || '*required'}
+                        </HelperText>
                     )}
                 </>
             </View>
