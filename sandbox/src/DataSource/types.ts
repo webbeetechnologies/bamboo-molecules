@@ -1,134 +1,85 @@
-import {ActionInterface, EStoreActions} from "./reducers/types";
-import {TApplySortFunc} from "./SortableDataSource";
-import {TApplyFilterFunc} from "./FilterableDataSource";
+import { PaginatedDataSourceProps } from "./PageableDatasource/types";
 
-export type TPagination = {
-    page: number;
-    pageSize: number;
+/**
+ *
+ * Filterable DataSource
+ *
+ */
+type FilterableDataSource = { isFilterable?: false } | FilterPropsTrue;
+
+type OnFilter = (
+    dataSource: DataSource,
+    onFilter: OnFilter,
+) => Omit<FilterableDataSource, 'onFilter'>;
+
+interface FilterPropsTrue {
+    isFilterable: true;
+    filters: Record<string, any>;
+    onFilter?: OnFilter;
 }
 
-export interface IPaginationProps {
-  pagination: TPagination
+/**
+ *
+ * Sortable DataSource
+ *
+ */
+type SortableDataSource = { isSortable?: false } | SortPropsTrue;
+type OnSort = (dataSource: DataSource, onSort: OnSort) => Omit<SortableDataSource, 'onSort'>;
+interface SortPropsTrue {
+    isSortable: true;
+    sort: Record<string, { direction: 'asc' | 'desc'; order: number }>;
+    onSort?: OnSort;
+}
+interface DataSourceGetStateReturnOmits {
+    onSort: true;
 }
 
-export type TFilters = {
-  // TODO: Define filter types
-  [key: string]: any
+/**
+ *
+ * Loadable DataSource
+ *
+ */
+type LoadableDataSource = { isLoadable?: false } | LoadblePropsTrue;
+interface LoadblePropsTrue {
+    isLoadable: true;
+    loading: LoadingState;
+    hasStarted: boolean;
+    hasLoaded: boolean;
+    isLoading: boolean;
+    hasErrored: boolean;
 }
 
-export interface IFilterProps {
-  filters: TFilters;
+interface LoadingState {
+    started_at: Date | null;
+    finished_at: Date | null;
+    errorored_at: Date | null;
 }
 
-export enum ESortDirection {
-    ASC,
-    DESC,
+/**
+ *
+ * Datasource Base
+ *
+ */
+export interface DataSourceType<T> {
+    records: T[];
 }
 
-export type TSort = { column: "", direction: ESortDirection; }
-
-
-export interface ISortProps {
-  sort: TSort[];
+interface DataSourceSupports {
+    isFilterable: boolean;
+    isSortable: boolean;
+    isPaginated: boolean;
+    isLoadable: boolean;
 }
 
+interface DataSourceGetStateReturnOmits {}
 
-export interface PaginationInfo {
-  count: number;
-}
-
-export interface LoadingState {
-  started_at: number | null;
-  finished_at: number | null;
-  errored_at: number | null;
-}
-
-export type Records<ResultType extends {} = {}> = ResultType[];
-
-
-export type TSetRecords = <ResultType extends {} = {}>(records:  Records<ResultType>) => void;
-
-
-export type TFetchRecords = <ResultType extends {} = {}>(...args : ResultType[]) => Promise<ResultType[]>
-
-export interface IAsyncProps {
-  fetchRecords: TFetchRecords
-}
-
-export type DataSourceResult<ResultType extends {} = {}> = Omit<{ setRecords: TSetRecords }
-      & ITypedDataSource<ResultType>
-      & Partial<ISortableDataSource>
-      & Partial<IOrderableDataSource>
-      & Partial<IFilterableDataSource>
-      & Partial<IPaginatedDataSource>
-      & Partial<ILoadableDataSource>, "dispatch">
-
-
-
-export interface IDataSourceState<ResultType extends {} = {}> {
-  records: Records<ResultType>;
-
-  filters?: TFilters;
-  sort?: TSort[];
-  pagination?: TPagination;
-  loading?: LoadingState;
-  error?: Error;
-
-  pages?: Records<ResultType>[],
-  action?: EStoreActions,
-  originalRecords?: Records<ResultType>
-}
-
-export interface ITypedDataSourceState<ResultType extends {}> extends IDataSourceState<ResultType>{
-}
-
-
-export interface IDataSource<ResultType extends {} = {}> extends IDataSourceState<ResultType> {
-  dispatch: Function;
-  setRecords: TSetRecords,
-}
-
-
-export interface ITypedDataSource<ResultType extends {}> extends IDataSource<ResultType>{
-}
-
-export interface ISortableDataSource extends IDataSource {
-  applySort: TApplySortFunc,
-  removeSort: TApplySortFunc,
-}
-
-
-export interface IOrderableDataSource extends IDataSource {
-  move: TApplySortFunc,
-}
-
-
-export interface IFilterableDataSource extends IDataSource {
-  applyFilter: TApplyFilterFunc,
-}
-
-
-export interface IPaginatedDataSource extends IDataSource {
-  goTo: Function,
-  goToStart: Function,
-  goToEnd: Function,
-  goToNext: Function,
-  goToPrev: Function,
-}
-
-export interface ILoadableDataSource extends IDataSource {
-  loadResults: () => void,
-  hasInitialized: Boolean,
-  hasLoaded: Boolean,
-  hasErrored: Boolean,
-  isLoading: Boolean,
-}
-
-
-export interface TStoreConfig {
-  loadable?: boolean,
-  filterable?: boolean,
-  sortable?: boolean,
-  pageable?: boolean,
-  orderable?: boolean,
-}
+export type DataSource<T extends {} = {}> = DataSourceType<T> &
+    LoadableDataSource &
+    SortableDataSource &
+    PaginatedDataSourceProps<T> &
+    FilterableDataSource & {
+        getState(): Omit<
+            DataSource<T>,
+            'getState' | keyof DataSourceSupports | keyof DataSourceGetStateReturnOmits
+        >;
+    };

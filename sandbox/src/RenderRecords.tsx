@@ -1,103 +1,124 @@
 import * as React from 'react';
-import { ESortDirection, DataSourceResult } from './DataSource';
+import { PageableDataSource } from './DataSource/PageableDatasource/types';
+import { DataSource } from './DataSource/types';
 import { RecordType } from './types';
 
+const RenderRecords: React.FC<PageableDataSource<RecordType> & { isPaginated: true }> = props => {
+    const { pagination, records, goToStart, goToEnd, goToNext, goToPrev, setPerPage, ...rest } =
+        props;
 
-const RenderRecords: React.FC<DataSourceResult<RecordType>> = (props) => {
-  const {pages, pagination, records, sort = [], applySort, filters, applyFilter, goToStart, goToEnd, goToNext, goToPrev, removeSort, ...rest } = props;
+    // const sortSource = useSortableDataSource({ records: workers as string[], setRecords: () => {}, sort: { }, searchKey: "test" });
+    // const searchSource = useFilterableDataSource({ ...sortSource, searchKey: "test", setRecords: () => {}, sort: { },  });
 
-  // const sortSource = useSortableDataSource({ records: workers as string[], setRecords: () => {}, sort: { }, searchKey: "test" });
-  // const searchSource = useFilterableDataSource({ ...sortSource, searchKey: "test", setRecords: () => {}, sort: { },  });
+    // searchSource.
 
-  // searchSource.
+    // const { useArraySource, useAsyncSource } = require('bamboo-datasource').state;
+    // const { useArraySource, useAsyncSource } = require('bamboo-datasource').redux;
 
-  // const { useArraySource, useAsyncSource } = require('bamboo-datasource').state;
-  // const { useArraySource, useAsyncSource } = require('bamboo-datasource').redux;
+    // const = [model, setModel] useState();
 
-  // const = [model, setModel] useState();
+    // const {records, pagination,} = useArrayStateSource([] , {filter: (filters) => {}});
+    // const asyncSource = useAsyncStateSource<Filterable&Sortable>(async ({filters}, {}) => {
+    //   model
 
-  // const {records, pagination,} = useArrayStateSource([] , {filter: (filters) => {}});
-  // const asyncSource = useAsyncStateSource<Filterable&Sortable>(async ({filters}, {}) => {
-  //   model
+    //   return {
+    //     results: await axios.get(''),
+    //     pagination: await axios.get('')
+    //   };
+    // });
 
-  //   return {
-  //     results: await axios.get(''),
-  //     pagination: await axios.get('')
-  //   };
-  // });
+    const [column, selectColumn] = React.useState('');
 
+    // const changeColumn = (column: string, direction?: ESortDirection ) => {
+    //   applySort?.({ column, direction})
+    //   selectColumn("");
+    // }
 
-  const [column, selectColumn] = React.useState("");
+    // const changeSort = (column: string, direction?: ESortDirection | "" ) => {
+    //   if (direction === "") {
+    //     removeSort?.({ column })
+    //   } else {
+    //     changeColumn(column, Number(direction))
+    //   }
+    // }
 
+    const handleApplyFilter = (_e: React.SyntheticEvent) => {
+        // {filterName: string, value: any, operator: EFilterOperator }
+        // applyFilter?.()
+    };
 
-  const changeColumn = (column: string, direction?: ESortDirection ) => {
-    applySort?.({ column, direction})
-    selectColumn("");
-  }
+    const handleGoToStart = (_e: React.SyntheticEvent) => {
+        goToStart?.();
+    };
 
-  const changeSort = (column: string, direction?: ESortDirection | "" ) => {
-    if (direction === "") {
-      removeSort?.({ column })
-    } else {
-      changeColumn(column, Number(direction))
-    }
-  }
+    const handleGoToPrev = (_e: React.SyntheticEvent) => {
+        goToPrev?.();
+    };
 
-  const handleApplyFilter = (_e: React.SyntheticEvent) => {
-    // {filterName: string, value: any, operator: EFilterOperator }
-    // applyFilter?.()
-  }
+    const handleGoToNext = (_e: React.SyntheticEvent) => {
+        goToNext?.();
+    };
 
-  const handleGoToStart = (_e: React.SyntheticEvent) => {
-    goToStart?.()
-  }
+    const handleGoToEnd = (_e: React.SyntheticEvent) => {
+        goToEnd?.();
+    };
 
-  const handleGoToPrev = (_e: React.SyntheticEvent) => {
-    goToPrev?.()
-  }
+    const handleSetPerPage: React.ChangeEventHandler<HTMLInputElement> = e => {
+        setPerPage?.(+e.target.value || 1);
+    };
 
-  const handleGoToNext = (_e: React.SyntheticEvent) => {
-    goToNext?.()
-  }
+    // NOTE:: Don't judge the code below; it's meant to be a demo only :D
 
-  const handleGoToEnd = (_e: React.SyntheticEvent) => {
-    goToEnd?.()
-  }
+    return (
+        <>
+            {pagination.page && pagination && (
+                <ul>
+                    {pagination.page?.map(worker => (
+                        <Coworker worker={worker} key={worker.id} />
+                    ))}
+                </ul>
+            )}
 
-  // NOTE:: Don't judge the code below; it's meant to be a demo only :D
-
-  return (
-    <>
-
-        {
-          pages && pagination && (!props.isLoading || records.length > 0) &&
-          <ul>
-              {pages?.[pagination?.page - 1]?.map((worker) => (
-                <Coworker worker={worker} key={worker.id} />
-              ))}
-          </ul>
-        }
-
-        {
+            {/* {
           (props.isLoading && records.length <= 0) &&
           <h2>Loading...</h2>
         }
+ */}
 
+            {!goToStart ? null : (
+                <>
+                    <h1>Paginate</h1>
+                    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                        <button style={{ flex: 1, flexBasis: 100 }} onClick={handleGoToStart}>
+                            &lt;&lt; Start
+                        </button>
+                        <button style={{ flex: 1, flexBasis: 100 }} onClick={handleGoToPrev}>
+                            &lt; Prev
+                        </button>
+                        <button style={{ flex: 1, flexBasis: 100 }} onClick={handleGoToNext}>
+                            Next &gt;
+                        </button>
+                        <button style={{ flex: 1, flexBasis: 100 }} onClick={handleGoToEnd}>
+                            End &gt;&gt;
+                        </button>
+                        <input
+                            style={{ flex: 1, flexBasis: 100 }}
+                            value={pagination.perPage}
+                            onChange={handleSetPerPage}
+                        />
+                        <div style={{ flex: 10, flexBasis: 100 }}>
+                            <textarea
+                                disabled
+                                style={{ width: '100%' }}
+                                value={JSON.stringify(pagination, null, 4)}
+                                rows={20}
+                            />
+                        </div>
+                    </div>
+                </>
+            )}
 
-        {
-          goToStart &&
-            <>
-              <h1>Paginate</h1>
-              <div style={{ display: "flex" }}>
-              <button onClick={handleGoToStart}>&lt;&lt; Start</button>
-              <button onClick={handleGoToPrev}>&lt; Prev</button>
-              <button onClick={handleGoToNext}>Next &gt;</button>
-              <button onClick={handleGoToEnd}>End &gt;&gt;</button>
-              </div>
-            </>
-        }
-
-        <div style={{ display: "flex", alignItems: 'flex-start' }}>
+            {/* <div style={{ display: "flex", alignItems: 'flex-start' }}>
         {
           applySort &&
           <div>
@@ -147,20 +168,18 @@ const RenderRecords: React.FC<DataSourceResult<RecordType>> = (props) => {
               <button onClick={ handleApplyFilter }>Filter</button>
             </div>
         }
-        </div>
-    </>
-  );
-}
-
+        </div> */}
+        </>
+    );
+};
 
 export default RenderRecords;
 
-
 const Coworker = (props: { worker: RecordType }) => {
-  const worker = props.worker;
-  return (
-    <li>
-      {worker.id} {worker.first_name} {worker.last_name}
-    </li>
-  );
+    const worker = props.worker;
+    return (
+        <li>
+            {worker.id} {worker.first_name} {worker.last_name}
+        </li>
+    );
 };

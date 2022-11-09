@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Records } from './DataSource';
-import { useArrayDataSource } from './DataSource/useArrayDataSource/useArrayDataSource';
+import { usePageableDatasource } from './DataSource';
+import { PageableReturnProps } from './DataSource/PageableDatasource/types';
 import RenderRecords from "./RenderRecords";
 import { RecordType } from './types';
 
@@ -62,16 +62,14 @@ function findAllCustomerData() {
         ...records.map((x) => ({ ...x, last_name: x.last_name + " DEF", id: x.id + 2000})),
         ...records.map((x) => ({ ...x, id: x.id + 1000})),
         ...records.map((x) => ({ ...x, first_name: x.first_name + " ABC", id: x.id + 3000})),
-    ] as Records<RecordType>
+    ] as RecordType[]
 }
 
 
 export default function UsingArraySource() {
   const [workers, ] = React.useState(findAllCustomerData);
 
-  const state = useArrayDataSource({ records: workers, sort: [] }, (state) => {
-    return state.records;
-  });
+  const state = usePageableDatasource({ records: workers, pagination: { pageNumber: 1, perPage: 10 }, isPaginated: true }) as PageableReturnProps<RecordType>;
   
 
   return (

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import UsingArraySource from "./UsingArrayDataSource";
-import UsingAsyncSource from './UsingAsyncDataSource';
+// import UsingAsyncSource from './UsingAsyncDataSource';
 
 
 export default function App({ coworkers = [] as string[] }) {
@@ -38,8 +38,8 @@ export default function App({ coworkers = [] as string[] }) {
 
   return (
     <>
-        {/* <UsingArraySource /> */}
-        <UsingAsyncSource />
+        <UsingArraySource />
+        {/* <UsingAsyncSource /> */}
     </>
   );
 }
