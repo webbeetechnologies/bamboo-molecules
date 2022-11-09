@@ -1,8 +1,6 @@
 import { useMemo, useRef } from 'react';
 import {
     EPageableActions,
-    GoToRelative,
-    GoToArbitrary,
     SetPerPage,
     NotPageable,
     OnPaginate,
@@ -12,6 +10,8 @@ import {
     PageableDataSource,
     NotPageableReturnProps,
     PaginatedDataSourcePropsEnabled,
+    OnPaginateAction,
+    GoToArbitrary,
 } from './types';
 import { useControlledValue } from 'bamboo-molecules';
 import chunk from 'lodash/chunk';
@@ -30,12 +30,13 @@ const getPage = <T>({ pagination, records }: Args<T>) => {
 
 const getPaginatedValue = <T extends {}>({ isPaginated, pagination, records }: Args<T>) => {
     if (!isPaginated) {
-        return { isPaginated: false } as NotPageable;
+        return { ...{isPaginated: false} as NotPageable, records, };
     }
 
     const page = getPage({ pagination, records });
     return {
         isPaginated,
+        records,
         pagination: {
             ...pagination,
             page,
@@ -55,10 +56,10 @@ const defaultPaginate: OnPaginate = (dataSource, args) => {
 
     switch (args.type) {
         case EPageableActions.SetPerPage:
-            perPage = (args as SetPerPage).perPage;
+            perPage = (args as SetPerPage).payload.perPage;
             break;
         case EPageableActions.Page:
-            pageNumber = (args as GoToArbitrary).pageNumber;
+            pageNumber = (args as GoToArbitrary).payload.pageNumber;
             break;
         case EPageableActions.Start:
             pageNumber = 1;
@@ -79,7 +80,7 @@ const defaultPaginate: OnPaginate = (dataSource, args) => {
 
 export const usePageableDatasource = <T extends {}>(
     props: PaginatedDataSourceProps<T>,
-    callBack: (x: PaginatedDataSourceProps<T>) => T[] = x => x.records,
+    callBack: (x: PaginatedDataSourceProps<T>, args: OnPaginateAction) => T[] = x => x.records,
 ): PageableDataSource<T> => {
     const paginatedProps = props as PaginatedDataSourcePropsEnabled<T>
     const { isPaginated, onPaginate = defaultPaginate, records, pagination, ...rest } = paginatedProps;
@@ -102,24 +103,31 @@ export const usePageableDatasource = <T extends {}>(
               ),
     });
 
-    const handlePaginate = (args: GoToArbitrary | GoToRelative | SetPerPage) => {
+    const handlePaginate = (args: OnPaginateAction) => {
         const { onPaginate: _, ...rest } = paginatedProps;
         if (rest.pagination.disabled) {
             return;
         }
 
+        const pagination = onPaginate(
+            {
+                ...rest,
+                ...paginatedSource,
+                records: props.records,
+            } as PaginatedDataSourcePropsEnabled<T>,
+            args,
+            defaultPaginate,
+        )
+
         const value = getPaginatedValue({
             isPaginated,
-            pagination: onPaginate(
-                {
-                    ...rest,
-                    ...paginatedSource,
-                    records: props.records,
-                } as PaginatedDataSourcePropsEnabled<T>,
-                args,
-                defaultPaginate,
-            ),
-            records,
+            pagination,
+            records: callBack({
+                ...rest,
+                isPaginated,
+                pagination,
+                records,
+            }, args),
         });
 
         setPaginatedSource(value);
@@ -127,17 +135,16 @@ export const usePageableDatasource = <T extends {}>(
 
     return useMemo(
         () =>
-            !isPaginated
-                ? ({ ...rest, ...paginatedSource, records } as NotPageableReturnProps<T>)
+            !paginatedSource.isPaginated
+                ? ({ ...rest, ...paginatedSource } as NotPageableReturnProps<T>)
                 : {
                       ...rest,
                       ...paginatedSource,
-                      records,
-                      setPerPage: (perPage: number) => {
-                          handlePaginate({ type: EPageableActions.SetPerPage, perPage });
+                      setPerPage: (payload) => {
+                          handlePaginate({ type: EPageableActions.SetPerPage, payload });
                       },
-                      goTo: (pageNumber: number) => {
-                          handlePaginate({ type: EPageableActions.Page, pageNumber });
+                      goTo: (payload) => {
+                          handlePaginate({ type: EPageableActions.Page, payload });
                       },
                       goToStart: () => {
                           handlePaginate({ type: EPageableActions.Start });
@@ -152,6 +159,6 @@ export const usePageableDatasource = <T extends {}>(
                           handlePaginate({ type: EPageableActions.Next });
                       },
                   },
-        [paginatedSource, records].concat(memoizedKeys.map(key => (rest as any)[key])),
+        [paginatedSource].concat(memoizedKeys.map(key => (rest as any)[key])),
     );
 };

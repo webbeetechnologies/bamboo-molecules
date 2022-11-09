@@ -9,9 +9,10 @@ export interface Pagination {
 
 
 // Define type of arguments for GoToMethods
-export type GoToRelative = { type: EPageableActions }
-export type GoToArbitrary = { type: EPageableActions.Page, pageNumber: number }
-export type SetPerPage = { type: EPageableActions.SetPerPage, perPage: number }
+export type PaginateAction = { type: EPageableActions }
+export type GoToArbitrary = { type: EPageableActions.Page, payload: { pageNumber: number } }
+export type SetPerPage = { type: EPageableActions.SetPerPage, payload: {perPage: number} }
+export type OnPaginateAction = PaginateAction | GoToArbitrary | SetPerPage
 
 // Data Source Supported/ NotSupported
 export type NotPageable = { isPaginated: false };
@@ -34,7 +35,7 @@ export interface PaginationInfo<T extends {}> {
 // Add Support for custom pagination handler.
 export type OnPaginate = <T extends {}>(
     dataSource: PaginatedDataSourcePropsWithoutOnPaginate<T>,
-    args: GoToArbitrary | GoToRelative | SetPerPage,
+    args: OnPaginateAction,
 
     // In case, the developer wants to extend the default behavior.
     onPaginate?: OnPaginate,
@@ -59,8 +60,8 @@ export type NotPageableReturnProps<T> = (Required<NotPageable> & DataSourceType<
 // Return type for a paginated datasource when pagination is turned on.
 export type PageableReturnProps<T extends {}> = PaginatedDataSourcePropsWithoutOnPaginate<T> & {
     pagination: Pagination & PaginationInfo<T>;
-    setPerPage(perPage: number): void;
-    goTo(pageNumber: number): void,
+    setPerPage(args: SetPerPage["payload"]): void;
+    goTo(args: GoToArbitrary["payload"]): void,
     goToPrev(): void,
     goToNext(): void,
     goToStart(): void,
@@ -79,10 +80,10 @@ export interface DataSourceGetStateReturnOmits {
 
 // Paginate methods.
 export enum EPageableActions {
-    Page,
-    Start,
-    End,
-    Next,
-    Prev,
-    SetPerPage
+    Page = "GOTO_PAGE",
+    Start = "GOTO_START",
+    End = "GOTO_END",
+    Next = "GOTO_NEXT",
+    Prev = "GOTO_PREV",
+    SetPerPage = "SET_PER_PAGE"
 }
