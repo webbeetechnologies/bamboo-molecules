@@ -39,3 +39,17 @@ export { FilePicker, FilePickerProps } from './FilePicker';
 export { HelperText, HelperTextProps, helperTextStyles } from './HelperText';
 
 export { Modal, ModalProps, modalStyles } from './Modal';
+
+export {
+    Calendar,
+    CalendarProps,
+    calendarStyles,
+    DatePickerModal,
+    DatePickerModalProps,
+    DatePickerInput,
+    DatePickerInputProps,
+    TimePicker,
+    TimePickerProps,
+    TimePickerModal,
+    TimePickerModalProps,
+} from './DateTimePicker';

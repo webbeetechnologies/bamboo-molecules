@@ -44,6 +44,7 @@ export const generateLightThemeColors = (
         backdrop: color(MD3Colors.neutralVariant20).alpha(0.4).rgb().string(),
         disabled: palette.neutral70,
         disabledOnBackground: color(palette.neutral0).alpha(0.12).rgb().string(),
+        onSurfaceNeutral: palette.neutral100,
         neutral1: palette.neutral100,
         onNeutral1: palette.neutral70,
         elevation: {

@@ -27,6 +27,11 @@ export {
     NumberInputProps,
     FilePickerProps,
     ModalProps,
+    CalendarProps,
+    DatePickerModalProps,
+    DatePickerInputProps,
+    TimePickerModalProps,
+    TimePickerProps,
 } from './components';
 
 export {

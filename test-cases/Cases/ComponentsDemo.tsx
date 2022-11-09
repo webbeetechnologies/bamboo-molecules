@@ -42,11 +42,15 @@ const Example = () => {
         FilePicker,
         Label,
         HelperText,
+        Calendar,
+        DatePickerInput,
+        TimePickerModal,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
     const [files, setFiles] = useState<any>(null);
     const [number, setNumber] = useState('222.a');
+    const [pickTime, setPickTime] = useState(false);
 
     const { colorMode, toggleColorMode } = useColorMode();
 
@@ -73,6 +77,31 @@ const Example = () => {
                     </View>
                 </TouchableRipple>
             </Surface>
+
+            <Calendar
+                onChange={date => {
+                    // eslint-disable-next-line no-console
+                    console.log(date);
+                }}
+                locale={'en'}
+                date={undefined}
+                mode={'single'}
+            />
+
+            <DatePickerInput
+                locale={'en'}
+                value={new Date()}
+                onChange={() => {}}
+                inputMode="start"
+            />
+
+            <TimePickerModal
+                visible={pickTime}
+                onDismiss={() => setPickTime(false)}
+                onConfirm={() => setPickTime(false)}
+            />
+
+            <Button onPress={() => setPickTime(true)}>Pick Time</Button>
 
             <HorizontalDivider spacing={30} />
 

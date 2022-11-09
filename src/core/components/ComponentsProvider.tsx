@@ -22,6 +22,11 @@ import {
     FilePicker,
     HelperText,
     Modal,
+    Calendar,
+    DatePickerModal,
+    DatePickerInput,
+    TimePicker,
+    TimePickerModal,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -49,6 +54,11 @@ const defaultComponents: DefaultComponents = {
     FilePicker,
     HelperText,
     Modal,
+    Calendar,
+    DatePickerModal,
+    DatePickerInput,
+    TimePicker,
+    TimePickerModal,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
