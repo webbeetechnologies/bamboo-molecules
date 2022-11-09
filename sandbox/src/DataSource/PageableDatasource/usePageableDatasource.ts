@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
     EPageableActions,
     SetPerPage,
@@ -12,6 +12,7 @@ import {
     PaginatedDataSourcePropsEnabled,
     OnPaginateAction,
     GoToArbitrary,
+    PageableWithInfo,
 } from './types';
 import { useControlledValue } from 'bamboo-molecules';
 import chunk from 'lodash/chunk';
@@ -30,16 +31,14 @@ const getPage = <T>({ pagination, records }: Args<T>) => {
 
 const getPaginatedValue = <T extends {}>({ isPaginated, pagination, records }: Args<T>) => {
     if (!isPaginated) {
-        return { ...{isPaginated: false} as NotPageable, records, };
+        return { ...{isPaginated: false} as NotPageable, };
     }
 
     const page = getPage({ pagination, records });
     return {
         isPaginated,
-        records,
         pagination: {
             ...pagination,
-            page,
             count: page.length || 0,
             totalRecords: records.length,
         } as Pagination & PaginationInfo<T>,
@@ -57,6 +56,7 @@ const defaultPaginate: OnPaginate = (dataSource, args) => {
     switch (args.type) {
         case EPageableActions.SetPerPage:
             perPage = (args as SetPerPage).payload.perPage;
+            pageNumber = perPage !== dataSource.pagination.perPage ? 1 : pageNumber;
             break;
         case EPageableActions.Page:
             pageNumber = (args as GoToArbitrary).payload.pageNumber;
@@ -78,17 +78,14 @@ const defaultPaginate: OnPaginate = (dataSource, args) => {
     return { pageNumber, perPage };
 };
 
-export const usePageableDatasource = <T extends {}>(
-    props: PaginatedDataSourceProps<T>,
-    callBack: (x: PaginatedDataSourceProps<T>, args: OnPaginateAction) => T[] = x => x.records,
-): PageableDataSource<T> => {
+export const usePageableDatasource = <T extends {}>(props: PaginatedDataSourceProps<T>,): PageableDataSource<T> => {
     const paginatedProps = props as PaginatedDataSourcePropsEnabled<T>
-    const { isPaginated, onPaginate = defaultPaginate, records, pagination, ...rest } = paginatedProps;
+    const {isPaginated, onPaginate = defaultPaginate, records, pagination, ...rest} = paginatedProps;
     const memoizedKeys = useMemo(() => Object.keys(rest), []);
     const isControlled = useRef(onPaginate !== defaultPaginate).current;
+    const [lastAction, setLastAction] = useState<OnPaginateAction | null>(null);
 
     const [paginatedSource, setPaginatedSource] = useControlledValue({
-        onChange: isControlled ? () => {} : undefined,
         value: !isControlled
             ? undefined
             : useMemo(
@@ -103,43 +100,46 @@ export const usePageableDatasource = <T extends {}>(
               ),
     });
 
+
     const handlePaginate = (args: OnPaginateAction) => {
         const { onPaginate: _, ...rest } = paginatedProps;
         if (rest.pagination.disabled) {
             return;
         }
 
+        if (!rest.isPaginated) {
+            throw new Error("Cannot paginate when isPaginated is false");
+        }
+
         const pagination = onPaginate(
             {
                 ...rest,
                 ...paginatedSource,
-                records: props.records,
+                records: rest.records,
             } as PaginatedDataSourcePropsEnabled<T>,
             args,
             defaultPaginate,
         )
 
         const value = getPaginatedValue({
-            isPaginated,
+            isPaginated: rest.isPaginated,
             pagination,
-            records: callBack({
-                ...rest,
-                isPaginated,
-                pagination,
-                records,
-            }, args),
-        });
+            records: rest.records,
+        }) as PageableWithInfo<T>;
 
+
+        setLastAction(args);
         setPaginatedSource(value);
     };
 
     return useMemo(
         () =>
             !paginatedSource.isPaginated
-                ? ({ ...rest, ...paginatedSource } as NotPageableReturnProps<T>)
+                ? ({ ...rest, ...paginatedSource, records, } as NotPageableReturnProps<T>)
                 : {
                       ...rest,
                       ...paginatedSource,
+                      records: getPage({...rest, ...paginatedSource, records}),
                       setPerPage: (payload) => {
                           handlePaginate({ type: EPageableActions.SetPerPage, payload });
                       },
@@ -159,6 +159,6 @@ export const usePageableDatasource = <T extends {}>(
                           handlePaginate({ type: EPageableActions.Next });
                       },
                   },
-        [paginatedSource].concat(memoizedKeys.map(key => (rest as any)[key])),
+        [paginatedSource, records].concat(memoizedKeys.map(key => (rest as any)[key])),
     );
 };

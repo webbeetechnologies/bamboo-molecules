@@ -1,4 +1,5 @@
-import { PaginatedDataSourceProps } from "./PageableDatasource/types";
+import { PageableDataSource, PaginatedDataSourceProps } from "./PageableDatasource/types";
+import { SortableDataSource, SortableDataSourceProps } from "./SortableDatasource/types";
 
 /**
  *
@@ -16,22 +17,6 @@ interface FilterPropsTrue {
     isFilterable: true;
     filters: Record<string, any>;
     onFilter?: OnFilter;
-}
-
-/**
- *
- * Sortable DataSource
- *
- */
-type SortableDataSource = { isSortable?: false } | SortPropsTrue;
-type OnSort = (dataSource: DataSource, onSort: OnSort) => Omit<SortableDataSource, 'onSort'>;
-interface SortPropsTrue {
-    isSortable: true;
-    sort: Record<string, { direction: 'asc' | 'desc'; order: number }>;
-    onSort?: OnSort;
-}
-interface DataSourceGetStateReturnOmits {
-    onSort: true;
 }
 
 /**
@@ -75,7 +60,7 @@ interface DataSourceGetStateReturnOmits {}
 
 export type DataSource<T extends {} = {}> = DataSourceType<T> &
     LoadableDataSource &
-    SortableDataSource &
+    SortableDataSourceProps<T> &
     PaginatedDataSourceProps<T> &
     FilterableDataSource & {
         getState(): Omit<
@@ -83,3 +68,7 @@ export type DataSource<T extends {} = {}> = DataSourceType<T> &
             'getState' | keyof DataSourceSupports | keyof DataSourceGetStateReturnOmits
         >;
     };
+
+export type DataSourceReturnType<T extends {} = {}> = DataSourceType<T> &
+    PageableDataSource<T> &
+    SortableDataSource<T>

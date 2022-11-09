@@ -17,6 +17,7 @@ export type OnPaginateAction = PaginateAction | GoToArbitrary | SetPerPage
 // Data Source Supported/ NotSupported
 export type NotPageable = { isPaginated: false };
 export type Pageable = { isPaginated: true, pagination: Pagination } ;
+export type PageableWithInfo<T extends {}> = { isPaginated: true, pagination: Pagination & PaginationInfo<T> } ;
 
 
 // Added Props for Pagination.
@@ -58,8 +59,7 @@ export type PaginatedDataSourceProps<T extends {}> = PaginatedDataSourcePropsEna
 export type NotPageableReturnProps<T> = (Required<NotPageable> & DataSourceType<T>);
 
 // Return type for a paginated datasource when pagination is turned on.
-export type PageableReturnProps<T extends {}> = PaginatedDataSourcePropsWithoutOnPaginate<T> & {
-    pagination: Pagination & PaginationInfo<T>;
+export type PageableReturnProps<T extends {}> = PaginatedDataSourcePropsWithoutOnPaginate<T> & PageableWithInfo<T> & {
     setPerPage(args: SetPerPage["payload"]): void;
     goTo(args: GoToArbitrary["payload"]): void,
     goToPrev(): void,
@@ -80,6 +80,7 @@ export interface DataSourceGetStateReturnOmits {
 
 // Paginate methods.
 export enum EPageableActions {
+    INIT = "PAGINATION_INIT",
     Page = "GOTO_PAGE",
     Start = "GOTO_START",
     End = "GOTO_END",

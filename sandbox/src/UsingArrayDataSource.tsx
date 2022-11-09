@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { usePageableDatasource } from './DataSource';
 import { PageableReturnProps } from './DataSource/PageableDatasource/types';
+import { useSortableDataSource } from './DataSource/SortableDatasource';
+import { SortableReturnProps } from './DataSource/SortableDatasource/types';
 import RenderRecords from "./RenderRecords";
 import { RecordType } from './types';
 
@@ -69,12 +71,23 @@ function findAllCustomerData() {
 export default function UsingArraySource() {
   const [workers, ] = React.useState(findAllCustomerData);
 
-  const state = usePageableDatasource({ records: workers, pagination: { pageNumber: 1, perPage: 10 }, isPaginated: true }) as PageableReturnProps<RecordType>;
-  
+   const sortable = useSortableDataSource({
+        records: workers,
+        sorting: { sort: [], },
+        isSortable: true,
+    }) as SortableReturnProps<RecordType>;
+
+  const pageable = usePageableDatasource({
+        ...sortable,
+        pagination: { pageNumber: 1, perPage: 10 },
+        isPaginated: true,
+    }) as PageableReturnProps<RecordType> & SortableReturnProps<RecordType>;
+
+ 
 
   return (
     <RenderRecords {...{
-        ...state
+        ...pageable,
     }} />
   );
 }
