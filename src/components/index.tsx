@@ -37,3 +37,5 @@ export { TextInput, TextInputProps, textInputStyles } from './TextInput';
 export { NumberInput, NumberInputProps } from './NumberInput';
 export { FilePicker, FilePickerProps } from './FilePicker';
 export { HelperText, HelperTextProps, helperTextStyles } from './HelperText';
+
+export { Modal, ModalProps, modalStyles } from './Modal';

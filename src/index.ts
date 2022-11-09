@@ -26,6 +26,7 @@ export {
     TextInputProps,
     NumberInputProps,
     FilePickerProps,
+    ModalProps,
 } from './components';
 
 export {

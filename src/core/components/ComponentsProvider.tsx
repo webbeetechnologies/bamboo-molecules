@@ -21,6 +21,7 @@ import {
     NumberInput,
     FilePicker,
     HelperText,
+    Modal,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -47,6 +48,7 @@ const defaultComponents: DefaultComponents = {
     NumberInput,
     FilePicker,
     HelperText,
+    Modal,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

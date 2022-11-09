@@ -15,6 +15,7 @@ import type {
     NumberInputProps,
     FilePickerProps,
     HelperTextProps,
+    ModalProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -37,6 +38,7 @@ export interface DefaultComponents {
     NumberInput: ComponentType<NumberInputProps>;
     FilePicker: ComponentType<FilePickerProps>;
     HelperText: ComponentType<HelperTextProps>;
+    Modal: ComponentType<ModalProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
