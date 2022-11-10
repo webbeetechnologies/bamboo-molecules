@@ -1,50 +1,70 @@
 import { memo, useContext, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
 
-import { useMolecules } from '../../hooks';
-import { useTextColorOnPrimary } from '../../utils/dateTimePicker';
+import { useComponentStyles, useMolecules } from '../../hooks';
 import { circleSize } from './timeUtils';
 import { DisplayModeContext } from './TimePicker';
 
 function AnalogClockHours({ is24Hour, hours }: { is24Hour: boolean; hours: number }) {
     const { View, Text } = useMolecules();
+    const componentStyles = useComponentStyles('TimePicker_ClockHours');
     const { mode } = useContext(DisplayModeContext);
 
     const outerRange = getHourNumbers(false, circleSize, 12, 12);
     const innerRange = getHourNumbers(true, circleSize, 12, 12);
 
-    const color = useTextColorOnPrimary();
+    const {
+        activeTextColor,
+        outerHourRootStyle,
+        innerHourRootStyle,
+        innerHourTextStyle,
+        innerHourInner,
+        outerHourInner,
+    } = useMemo(() => {
+        const {
+            activeTextColor: _activeTextColor,
+            outerHourRoot,
+            outerHourInner: _outerHourInner,
+            innerHourRoot,
+            innerHourInner: _innerHourInner,
+            innerHourText,
+        } = componentStyles;
 
-    const { outerHourRootStyle, innerHourRootStyle, innerHourTextStyle } = useMemo(() => {
         return {
+            activeTextColor: _activeTextColor,
             outerHourRootStyle: (a: number[]) => [
-                styles.outerHourRoot,
+                outerHourRoot,
                 {
                     top: a[1] || 0,
                     left: a[0] || 0,
                 },
             ],
             innerHourRootStyle: (a: number[]) => [
-                styles.innerHourRoot,
+                innerHourRoot,
                 {
                     top: a[1] || 0,
                     left: a[0] || 0,
                 },
             ],
             innerHourTextStyle: (i: number) => [
-                styles.innerHourText,
-                i + 13 === hours || (i + 13 === 24 && hours === 0) ? { color } : null,
+                innerHourText,
+                i + 13 === hours || (i + 13 === 24 && hours === 0)
+                    ? { color: _activeTextColor }
+                    : null,
             ],
+            outerHourInner: _outerHourInner,
+            innerHourInner: _innerHourInner,
         };
-    }, [color, hours]);
+    }, [componentStyles, hours]);
 
     return (
         <>
             {outerRange.map((a, i) => (
                 <View key={i} pointerEvents="none" style={outerHourRootStyle(a)}>
-                    <View style={styles.outerHourInner}>
+                    <View style={outerHourInner}>
                         {/* Display 00 instead of 12 for AM hours */}
-                        <Text style={hours === i + 1 ? { color } : null} selectable={false}>
+                        <Text
+                            style={hours === i + 1 ? { color: activeTextColor } : null}
+                            selectable={false}>
                             {mode === 'AM' && !is24Hour && i + 1 === 12 ? '00' : i + 1}
                         </Text>
                     </View>
@@ -54,7 +74,7 @@ function AnalogClockHours({ is24Hour, hours }: { is24Hour: boolean; hours: numbe
                 {is24Hour
                     ? innerRange.map((a, i) => (
                           <View key={i} pointerEvents="none" style={innerHourRootStyle(a)}>
-                              <View style={styles.innerHourInner}>
+                              <View style={innerHourInner}>
                                   <Text selectable={false} style={innerHourTextStyle(i)}>
                                       {i + 13 === 24 ? '00' : i + 13}
                                   </Text>
@@ -66,35 +86,6 @@ function AnalogClockHours({ is24Hour, hours }: { is24Hour: boolean; hours: numbe
         </>
     );
 }
-
-const styles = StyleSheet.create({
-    outerHourRoot: {
-        position: 'absolute',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 20,
-        width: 50,
-        height: 50,
-        marginLeft: -25,
-        marginTop: -25,
-
-        borderRadius: 25,
-    },
-    outerHourInner: { borderRadius: 25 },
-    innerHourRoot: {
-        position: 'absolute',
-        zIndex: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 40,
-        height: 40,
-        marginLeft: -20,
-        marginTop: -20,
-        borderRadius: 20,
-    },
-    innerHourInner: { borderRadius: 20 },
-    innerHourText: { fontSize: 13 },
-});
 
 function getHourNumbers(is24Hour: boolean, size: number, count: number, arrayLength: number) {
     let angle = 0;

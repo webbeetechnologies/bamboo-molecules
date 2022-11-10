@@ -1,7 +1,3 @@
-import * as React from 'react';
-import Color from 'color';
-import { useCurrentTheme } from '../../hooks';
-
 // 250? when bigger?
 export const circleSize = 215;
 
@@ -147,58 +143,6 @@ export function getAngle(left: number, top: number, size: number) {
     }
 
     return angle;
-}
-
-export function useSwitchColors(highlighted: boolean) {
-    const theme = useCurrentTheme();
-    const backgroundColor = React.useMemo<string>(() => {
-        if (theme.dark) {
-            if (highlighted) {
-                return Color(theme.colors.primary).hex();
-            }
-            return theme.colors.backdrop;
-        }
-
-        if (highlighted) {
-            return Color(theme.colors.primary).lighten(1).hex();
-        }
-        return theme.colors.surface;
-    }, [highlighted, theme]);
-
-    const color = React.useMemo<string>(() => {
-        if (highlighted && !theme.dark) {
-            return theme.colors.primary;
-        }
-        return theme.colors.onSurface; // colors.placeholder
-    }, [highlighted, theme]);
-
-    return { backgroundColor, color };
-}
-
-export function useInputColors(highlighted: boolean) {
-    const theme = useCurrentTheme();
-    const backgroundColor = React.useMemo<string>(() => {
-        if (theme.dark) {
-            if (highlighted) {
-                return Color(theme.colors.primary).hex();
-            }
-            return Color(theme.colors.surface).lighten(1.2).hex();
-        }
-
-        if (highlighted) {
-            return Color(theme.colors.primary).lighten(1).hex();
-        }
-        return Color(theme.colors.surface).darken(0.1).hex();
-    }, [highlighted, theme]);
-
-    const color = React.useMemo<string>(() => {
-        if (highlighted && !theme.dark) {
-            return theme.colors.primary;
-        }
-        return theme.colors.onSurface;
-    }, [highlighted, theme]);
-
-    return { backgroundColor, color };
 }
 
 export function toHourInputFormat(hours: number, is24Hour: boolean): number {

@@ -1,5 +1,5 @@
 import { useMemo, memo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import {
@@ -113,14 +113,24 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         yearInnerStyle,
         monthLabelStyle,
         iconContainerStyle,
+        emptyDayStyle,
+        weekStyle,
     } = useMemo(() => {
-        const { monthLabel: _monthLabel, yearButton, yearButtonInner } = monthStyles;
+        const {
+            monthLabel: _monthLabel,
+            yearButton,
+            yearButtonInner,
+            emptyDay,
+            month: _monthStyle,
+            monthHeader,
+            week,
+        } = monthStyles;
         const { typescale, ...monthLabel } = _monthLabel;
 
         return {
-            monthStyle: [styles.month, { height: getMonthHeight(scrollMode, index) }],
+            monthStyle: [_monthStyle, { height: getMonthHeight(scrollMode, index) }],
             headerStyle: [
-                styles.monthHeader,
+                monthHeader,
                 isHorizontal
                     ? {
                           marginTop: monthHeaderSingleMarginTop,
@@ -131,7 +141,9 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
             yearButtonStyle: yearButton,
             yearInnerStyle: yearButtonInner,
             monthLabelStyle: [monthLabel, typescale],
-            iconContainerStyle: isHorizontal ? styles.opacity1 : styles.opacity0,
+            iconContainerStyle: isHorizontal ? { opacity: 1 } : { opacity: 0 },
+            emptyDayStyle: emptyDay,
+            weekStyle: week,
         };
     }, [index, isHorizontal, monthStyles, scrollMode]);
 
@@ -159,14 +171,14 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
             </View>
 
             {grid.map(({ weekIndex, generatedDays }) => (
-                <View style={styles.week} key={weekIndex}>
+                <View style={weekStyle} key={weekIndex}>
                     {generatedDays
                         .filter(gd => showWeekDay(gd.dayIndex, disableWeekDays))
                         .map(gd => {
                             return (
                                 <>
                                     {gd.beforeWeekDay || gd.afterWeekDay ? (
-                                        <EmptyDay key={gd.dayIndex} />
+                                        <EmptyDay key={gd.dayIndex} style={emptyDayStyle} />
                                     ) : (
                                         <Day
                                             key={gd.dayIndex + weekIndex}
@@ -198,24 +210,6 @@ export const montHeaderHeight = 56;
 export const monthHeaderSingleMarginTop = 4;
 export const monthHeaderSingleMarginBottom = 8 + 44 + 12;
 export const monthHeaderSingleHeight = monthHeaderSingleMarginTop + monthHeaderSingleMarginBottom;
-
-const styles = StyleSheet.create({
-    week: {
-        flexDirection: 'row',
-        marginBottom: weekMargin,
-        height: daySize,
-    },
-
-    month: {},
-
-    monthHeader: {
-        height: montHeaderHeight,
-        justifyContent: 'center',
-        overflow: 'hidden',
-    },
-    opacity0: { opacity: 0 },
-    opacity1: { opacity: 1 },
-});
 
 const monthGrid = (index: number) => {
     return Array(getGridCount(index))

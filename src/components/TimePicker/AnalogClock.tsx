@@ -1,8 +1,7 @@
 import { memo, useContext, useRef, useCallback, useMemo } from 'react';
 import { GestureResponderEvent, PanResponder, StyleSheet, View } from 'react-native';
-import Color from 'color';
 
-import { useCurrentTheme } from '../../hooks';
+import { useComponentStyles, useLatest } from '../../hooks';
 import {
     circleSize,
     clockTypes,
@@ -14,7 +13,6 @@ import {
     hourTypes,
     PossibleClockTypes,
 } from './timeUtils';
-import { useLatest } from '../../utils/dateTimePicker';
 import AnalogClockHours from './AnalogClockHours';
 import AnimatedClockSwitcher from './AnimatedClockSwitcher';
 import AnalogClockMinutes from './AnalogClockMinutes';
@@ -37,7 +35,7 @@ function AnalogClock({
         focused?: undefined | PossibleClockTypes;
     }) => any;
 }) {
-    const theme = useCurrentTheme();
+    const componentStyles = useComponentStyles('TimePicker_Clock');
     const { mode } = useContext(DisplayModeContext);
     // used to make pointer shorter if hours are selected and above 12
     const shortPointer = (hours === 0 || hours > 12) && is24Hour;
@@ -50,11 +48,13 @@ function AnalogClock({
     const focusedRef = useLatest(focused);
     const is24HourRef = useLatest(is24Hour);
     const modeRef = useLatest(mode);
+
     const onPointerMove = useCallback(
         (e: GestureResponderEvent, final: boolean) => {
             const x = e.nativeEvent.locationX;
             const y = e.nativeEvent.locationY;
             const angle = getAngle(x, y, circleSize);
+
             if (focusedRef.current === clockTypes.hours) {
                 const hours24 = is24HourRef.current;
                 const previousHourType = getHourType(hoursRef.current);
@@ -115,25 +115,18 @@ function AnalogClock({
         }),
     ).current;
 
-    const dynamicSize = focused === clockTypes.hours && shortPointer ? 33 : 0;
-    const pointerNumber = focused === clockTypes.hours ? hours : minutes;
-    const degreesPerNumber = focused === clockTypes.hours ? 30 : 6;
-
     const { clockStyle, lineStyle, endPointStyle, middlePointContainerStyle, middlePointStyle } =
         useMemo(() => {
+            const { clock, endPoint, center, line, middlePoint } = componentStyles;
+            const dynamicSize = focused === clockTypes.hours && shortPointer ? 33 : 0;
+            const pointerNumber = focused === clockTypes.hours ? hours : minutes;
+            const degreesPerNumber = focused === clockTypes.hours ? 30 : 6;
+
             return {
-                clockStyle: [
-                    styles.clock,
-                    {
-                        backgroundColor: theme.dark
-                            ? Color(theme.colors.surface).lighten(1.2).hex()
-                            : Color(theme.colors.surface).darken(0.1).hex(),
-                    },
-                ],
+                clockStyle: clock,
                 lineStyle: [
-                    styles.line,
+                    line,
                     {
-                        backgroundColor: theme.colors.primary,
                         transform: [
                             { rotate: -90 + pointerNumber * degreesPerNumber + 'deg' },
                             {
@@ -143,23 +136,11 @@ function AnalogClock({
                         width: circleSize / 2 - 4 - dynamicSize,
                     },
                 ],
-                endPointStyle: [styles.endPoint, { backgroundColor: theme.colors.primary }],
-                middlePointContainerStyle: [StyleSheet.absoluteFill, styles.center],
-                middlePointStyle: [
-                    styles.middlePoint,
-                    {
-                        backgroundColor: theme.colors.primary,
-                    },
-                ],
+                endPointStyle: endPoint,
+                middlePointContainerStyle: [StyleSheet.absoluteFill, center],
+                middlePointStyle: middlePoint,
             };
-        }, [
-            degreesPerNumber,
-            dynamicSize,
-            pointerNumber,
-            theme.colors.primary,
-            theme.colors.surface,
-            theme.dark,
-        ]);
+        }, [componentStyles, focused, hours, minutes, shortPointer]);
 
     return (
         <View
@@ -182,36 +163,6 @@ function AnalogClock({
         </View>
     );
 }
-const styles = StyleSheet.create({
-    clock: {
-        height: circleSize,
-        width: circleSize,
-        position: 'relative',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: circleSize / 2,
-    },
-    middlePoint: {
-        borderRadius: 4,
-        height: 8,
-        width: 8,
-    },
-    center: { justifyContent: 'center', alignItems: 'center' },
-    endPoint: {
-        borderRadius: 15,
-        height: 30,
-        width: 30,
-        position: 'absolute',
-        right: 0,
-        bottom: -14,
-    },
-    line: {
-        position: 'absolute',
-        marginBottom: -1,
-        height: 2,
-        borderRadius: 4,
-    },
-});
 
 function returnTrue() {
     return true;

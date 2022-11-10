@@ -63,6 +63,7 @@ export {
     useMediaQuery,
     useControlledValue,
     useFilePicker,
+    useLatest,
 } from './hooks';
 
 export {

@@ -2,6 +2,7 @@ import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 import { daySize } from '../DatePickerInput/dateUtils';
 import { dayNamesHeight } from './DayNames';
+import { montHeaderHeight, weekMargin } from './Month';
 
 type States = '';
 
@@ -24,6 +25,10 @@ type DatePickerMonthCustomProps = {
     monthLabel?: TextStyle & { typescale: string };
     yearButton?: TextStyle;
     yearButtonInner?: ViewStyle;
+    emptyDay?: ViewStyle;
+    week?: ViewStyle;
+    month?: ViewStyle;
+    monthHeader?: ViewStyle;
 };
 
 export const datePickerMonthStyles: ComponentStylePropWithVariants<
@@ -45,6 +50,21 @@ export const datePickerMonthStyles: ComponentStylePropWithVariants<
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 'roundness.1' as unknown as number,
+    },
+    emptyDay: {
+        flex: 1,
+        flexBasis: 0,
+    },
+    week: {
+        flexDirection: 'row',
+        marginBottom: weekMargin,
+        height: daySize,
+    },
+    month: {},
+    monthHeader: {
+        height: montHeaderHeight,
+        justifyContent: 'center',
+        overflow: 'hidden',
     },
 };
 

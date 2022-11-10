@@ -10,8 +10,9 @@ import {
     PossibleInputTypes,
     reverseInputTypes,
 } from '../TimePicker/timeUtils';
+import type { ModalProps } from '../Modal';
 
-export type Props = {
+export type Props = ModalProps & {
     locale?: undefined | string;
     label?: string;
     uppercase?: boolean;
@@ -34,13 +35,14 @@ export function TimePickerModal({
     hours,
     minutes,
     label = 'Select time',
-    uppercase = true,
+    uppercase = false,
     cancelLabel = 'Cancel',
     confirmLabel = 'Ok',
     animationType = 'none',
     locale,
     keyboardIcon = 'keyboard-outline',
     clockIcon = 'clock-outline',
+    ...rest
 }: Props) {
     const { IconButton, Button, Modal, TimePicker } = useMolecules();
     const componentStyles = useComponentStyles('TimePickerModal');
@@ -75,7 +77,9 @@ export function TimePickerModal({
         <Modal
             animationType={animationType}
             visible={visible}
-            contentStyle={componentStyles.modalContent}>
+            contentStyle={componentStyles.modalContent}
+            onDismiss={onDismiss}
+            {...rest}>
             <KeyboardAvoidingView style={componentStyles.keyboardView} behavior={'padding'}>
                 <View style={componentStyles.labelContainer}>
                     <Text style={componentStyles.label}>

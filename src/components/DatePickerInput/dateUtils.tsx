@@ -1,10 +1,6 @@
 import { useMemo, useCallback } from 'react';
-import { useLatest } from '../../utils/dateTimePicker';
-import type {
-    CalendarDate,
-    CalendarDates,
-    ValidRangeType,
-} from '../DatePickerInline/DatePickerInline';
+import { useLatest } from '../../hooks';
+import type { CalendarDate, CalendarDates, ValidRangeType } from '../DatePickerInline';
 
 export type DisableWeekDaysType = number[];
 

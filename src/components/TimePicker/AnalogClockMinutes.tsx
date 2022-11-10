@@ -1,26 +1,32 @@
 import { memo, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
 
-import { useMolecules } from '../../hooks';
+import { useComponentStyles, useMolecules } from '../../hooks';
 import { circleSize } from './timeUtils';
-import { useTextColorOnPrimary } from '../../utils/dateTimePicker';
 
 function AnalogClockMinutes({ minutes }: { minutes: number }) {
     const { Text, View } = useMolecules();
+    const componentStyles = useComponentStyles('TimePicker_ClockMinutes');
     const range = getMinuteNumbers(circleSize, 12);
-    const color = useTextColorOnPrimary();
 
-    const { outerHourRootStyle } = useMemo(() => {
+    const { activeTextColor, outerHourRootStyle, outerHourInnerStyle } = useMemo(() => {
+        const {
+            activeTextColor: _activeTextColor,
+            outerHourRoot,
+            outerHourInner,
+        } = componentStyles;
+
         return {
+            activeTextColor: _activeTextColor,
             outerHourRootStyle: (a: number[]) => [
-                styles.outerHourRoot,
+                outerHourRoot,
                 {
                     top: a[1] || 0,
                     left: a[0] || 0,
                 },
             ],
+            outerHourInnerStyle: outerHourInner,
         };
-    }, []);
+    }, [componentStyles]);
 
     return (
         <>
@@ -33,8 +39,10 @@ function AnalogClockMinutes({ minutes }: { minutes: number }) {
                 }
                 return (
                     <View key={i} pointerEvents="none" style={outerHourRootStyle(a)}>
-                        <View style={styles.outerHourInner}>
-                            <Text style={isCurrent ? { color } : undefined} selectable={false}>
+                        <View style={outerHourInnerStyle}>
+                            <Text
+                                style={isCurrent ? { color: activeTextColor } : undefined}
+                                selectable={false}>
                                 {isZero ? '00' : currentMinutes}
                             </Text>
                         </View>
@@ -44,36 +52,6 @@ function AnalogClockMinutes({ minutes }: { minutes: number }) {
         </>
     );
 }
-
-const styles = StyleSheet.create({
-    outerHourRoot: {
-        position: 'absolute',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 20,
-        width: 50,
-        height: 50,
-        marginLeft: -25,
-        marginTop: -25,
-
-        borderRadius: 25,
-    },
-    outerHourInner: { borderRadius: 25 },
-    innerHourRoot: {
-        position: 'absolute',
-        zIndex: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 40,
-        height: 40,
-        marginLeft: -20,
-        marginTop: -20,
-        borderRadius: 20,
-    },
-    innerHourInner: { borderRadius: 20 },
-    innerHourText: { fontSize: 13 },
-    textWhite: { color: '#fff' },
-});
 
 function getMinuteNumbers(size: number, count: number) {
     let angle = 0;

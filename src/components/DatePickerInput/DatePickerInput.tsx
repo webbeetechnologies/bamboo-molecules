@@ -1,8 +1,7 @@
 import { useCallback, useState, forwardRef, memo } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { useMolecules } from '../../hooks';
-import { useLatest } from '../../utils/dateTimePicker';
+import { useMolecules, useLatest } from '../../hooks';
 import type { DatePickerInputProps } from './types';
 import DatePickerInputWithoutModal from './DatePickerInputWithoutModal';
 

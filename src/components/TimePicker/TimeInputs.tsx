@@ -3,7 +3,7 @@
 
 import { memo, useCallback, useRef } from 'react';
 import { View, useWindowDimensions, TextInput as TextInputNative } from 'react-native';
-import { useComponentStyles } from '../../hooks';
+import { useComponentStyles, useLatest } from '../../hooks';
 
 import {
     clockTypes,
@@ -14,7 +14,6 @@ import {
 } from './timeUtils';
 import TimeInput from './TimeInput';
 import AmPmSwitcher from './AmPmSwitcher';
-import { useLatest } from '../../utils/dateTimePicker';
 
 function TimeInputs({
     hours,
@@ -44,7 +43,7 @@ function TimeInputs({
         {},
         {
             states: {
-                landscape: isLandscape,
+                landScape: isLandscape,
             },
         },
     );

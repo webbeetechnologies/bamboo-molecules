@@ -82,6 +82,7 @@ export function DatePickerModal(props: Props) {
                 onDismiss={rest.onDismiss}
                 presentationStyle="overFullScreen"
                 supportedOrientations={supportedOrientations}
+                elevation={0}
                 //@ts-ignore
                 statusBarTranslucent={true}>
                 <>

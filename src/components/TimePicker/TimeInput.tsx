@@ -1,9 +1,8 @@
 import { useState, useEffect, forwardRef, useMemo } from 'react';
 import { TextInput, TextInputProps, StyleSheet } from 'react-native';
-import Color from 'color';
 
-import { useMolecules, useCurrentTheme } from '../../hooks';
-import { inputTypes, PossibleClockTypes, PossibleInputTypes, useInputColors } from './timeUtils';
+import { useMolecules, useCurrentTheme, useComponentStyles } from '../../hooks';
+import { inputTypes, PossibleClockTypes, PossibleInputTypes } from './timeUtils';
 
 interface TimeInputProps extends Omit<Omit<TextInputProps, 'value'>, 'onFocus'> {
     value: number;
@@ -37,7 +36,15 @@ function TimeInput(
 
     const highlighted = inputType === inputTypes.picker ? pressed : inputFocused;
 
-    const { color, backgroundColor } = useInputColors(highlighted);
+    const componentStyles = useComponentStyles(
+        'TimePicker_Input',
+        {},
+        {
+            states: {
+                highlighted,
+            },
+        },
+    );
 
     let formattedValue = controlledValue;
     if (!inputFocused) {
@@ -45,29 +52,19 @@ function TimeInput(
             controlledValue.length === 1 ? `0${controlledValue}` : `${controlledValue}`;
     }
 
-    const { textInputStyle, buttonStyle } = useMemo(() => {
+    const { rippleColor, containerStyle, textInputStyle, buttonStyle } = useMemo(() => {
+        const { rippleColor: _rippleColor, container, input, button } = componentStyles;
+
         return {
-            textInputStyle: [
-                styles.input,
-                {
-                    color,
-                    backgroundColor,
-                    borderRadius: theme.roundness['1'] as number,
-                },
-            ],
-            buttonStyle: [
-                StyleSheet.absoluteFill,
-                styles.buttonOverlay,
-                {
-                    // backgroundColor: 'blue',
-                    borderRadius: theme.roundness['1'] as number,
-                },
-            ],
+            rippleColor: _rippleColor,
+            containerStyle: container,
+            textInputStyle: input,
+            buttonStyle: [StyleSheet.absoluteFill, button],
         };
-    }, [backgroundColor, color, theme.roundness]);
+    }, [componentStyles]);
 
     return (
-        <View style={styles.root}>
+        <View style={containerStyle}>
             <TextInput
                 ref={ref}
                 style={textInputStyle}
@@ -84,7 +81,7 @@ function TimeInput(
                 {onPress && inputType === inputTypes.picker ? (
                     <TouchableRipple
                         style={buttonStyle}
-                        rippleColor={Color(theme.colors.primary).fade(0.7).hex()}
+                        rippleColor={rippleColor}
                         onPress={() => onPress(clockType)}
                         borderless={true}>
                         <View />
@@ -94,17 +91,5 @@ function TimeInput(
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    root: { position: 'relative', height: 80, width: 96 },
-    input: {
-        fontSize: 50,
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        width: 96,
-        height: 80,
-    },
-    buttonOverlay: { overflow: 'hidden' },
-});
 
 export default forwardRef(TimeInput);

@@ -1,9 +1,7 @@
-import { useMemo, useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
-import Color from 'color';
+import { useMemo, useContext, useCallback } from 'react';
+import { View } from 'react-native';
 
-import { useCurrentTheme, useMolecules } from '../../hooks';
-import { useSwitchColors } from './timeUtils';
+import { useComponentStyles, useMolecules } from '../../hooks';
 import { DisplayModeContext } from './TimePicker';
 
 export default function AmPmSwitcher({
@@ -14,49 +12,46 @@ export default function AmPmSwitcher({
     onChange: (newHours: number) => any;
 }) {
     const { setMode, mode } = useContext(DisplayModeContext);
-    const theme = useCurrentTheme();
+    const componentStyles = useComponentStyles('TimePicker_AmPmSwitcher');
 
-    const { containerStyle, switchSeparatorStyle } = useMemo(() => {
-        const backgroundColor = theme.dark
-            ? Color(theme.colors.surface).lighten(1.2).hex()
-            : Color(theme.colors.surface).darken(0.1).hex();
+    const { containerStyle, switchSeparatorStyle, isAM } = useMemo(() => {
+        const { container, switchSeparator } = componentStyles;
 
         return {
-            containerStyle: [
-                styles.root,
-                {
-                    borderColor: backgroundColor,
-                    borderRadius: theme.roundness,
-                } as any,
-            ],
-            switchSeparatorStyle: [styles.switchSeparator, { backgroundColor }],
+            containerStyle: container,
+            switchSeparatorStyle: switchSeparator,
+            isAM: mode === 'AM',
         };
-    }, [theme.colors.surface, theme.dark, theme.roundness]);
+    }, [componentStyles, mode]);
 
-    const isAM = mode === 'AM';
+    const onSwitchButtonPress = useCallback(
+        (period: 'AM' | 'PM') => {
+            setMode(period);
+
+            if (period === 'AM' && hours - 12 >= 0) {
+                onChange(hours - 12);
+                return;
+            }
+
+            if (period === 'PM' && hours + 12 <= 24) {
+                onChange(hours + 12);
+            }
+        },
+        [hours, onChange, setMode],
+    );
 
     return (
         <View style={containerStyle}>
             <SwitchButton
                 label="AM"
-                onPress={() => {
-                    setMode('AM');
-                    if (hours - 12 >= 0) {
-                        onChange(hours - 12);
-                    }
-                }}
+                onPress={() => onSwitchButtonPress('AM')}
                 selected={isAM}
                 disabled={isAM}
             />
             <View style={switchSeparatorStyle} />
             <SwitchButton
                 label="PM"
-                onPress={() => {
-                    setMode('PM');
-                    if (hours + 12 <= 24) {
-                        onChange(hours + 12);
-                    }
-                }}
+                onPress={() => onSwitchButtonPress('PM')}
                 selected={!isAM}
                 disabled={!isAM}
             />
@@ -75,26 +70,33 @@ function SwitchButton({
     selected: boolean;
     disabled: boolean;
 }) {
-    const theme = useCurrentTheme();
+    const componentStyles = useComponentStyles(
+        'TimePicker_AmPmSwitcher',
+        {},
+        {
+            states: {
+                selected,
+            },
+        },
+    );
     const { TouchableRipple, Text } = useMolecules();
-    const { backgroundColor, color } = useSwitchColors(selected);
 
-    const { switchButtonInnerStyle, textStyle } = useMemo(() => {
+    const { switchButtonInnerStyle, switchButtonStyle, textStyle } = useMemo(() => {
+        const { container, switchButton, switchButtonInner, text } = componentStyles;
+        const { typescale, ..._textStyle } = text;
+
         return {
-            switchButtonInnerStyle: [styles.switchButtonInner, { backgroundColor }],
-            textStyle: [
-                {
-                    ...theme.typescale.bodyMedium,
-                    color: color,
-                },
-            ],
+            containerStyle: container,
+            switchButtonInnerStyle: switchButtonInner,
+            switchButtonStyle: switchButton,
+            textStyle: [_textStyle, typescale],
         };
-    }, [backgroundColor, color, theme.typescale.bodyMedium]);
+    }, [componentStyles]);
 
     return (
         <TouchableRipple
             onPress={onPress}
-            style={styles.switchButton}
+            style={switchButtonStyle}
             accessibilityLabel={label}
             // @ts-ignore old React Native versions
             accessibilityTraits={disabled ? ['button', 'disabled'] : 'button'}
@@ -111,24 +113,3 @@ function SwitchButton({
         </TouchableRipple>
     );
 }
-
-const styles = StyleSheet.create({
-    root: {
-        width: 50,
-        height: 80,
-        borderWidth: 1,
-        overflow: 'hidden',
-    },
-    switchSeparator: {
-        height: 1,
-        width: 48,
-    },
-    switchButton: {
-        flex: 1,
-    },
-    switchButtonInner: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});

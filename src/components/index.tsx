@@ -69,6 +69,10 @@ export {
     timePickerStyles,
     timePickerInputStyles,
     timePickerInputsStyles,
+    timePickerClockStyles,
+    timePickerClockHoursStyles,
+    timePickerClockMinutesStyles,
+    timePickerAmPmSwitcherStyles,
 } from './TimePicker';
 
 export { TimePickerModal, TimePickerModalProps, timePickerModalStyles } from './TimePickerModal';

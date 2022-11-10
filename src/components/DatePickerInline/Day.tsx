@@ -1,11 +1,14 @@
 import { memo, useCallback, useMemo } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
+import type { ViewProps } from '@webbee/bamboo-atoms';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import DayRange from './DayRange';
 
-function EmptyDayPure() {
-    return <View style={styles.empty} />;
+function EmptyDayPure(props: ViewProps) {
+    const { View } = useMolecules();
+
+    return <View {...props} />;
 }
 export const EmptyDay = memo(EmptyDayPure);
 
@@ -34,7 +37,7 @@ function Day(props: {
         disabled,
     } = props;
     // console.log(month, { day })
-    const { TouchableRipple, Text } = useMolecules();
+    const { TouchableRipple, Text, View } = useMolecules();
     const dayStyles = useComponentStyles(
         'DatePicker_Day',
         {},
@@ -88,12 +91,5 @@ function Day(props: {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    empty: {
-        flex: 1,
-        flexBasis: 0,
-    },
-});
 
 export default memo(Day);

@@ -2,7 +2,7 @@ import { memo, useState, useCallback, useMemo } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 
 import { useComponentStyles } from '../../hooks';
-import { useLatest } from '../../utils/dateTimePicker';
+import { useLatest } from '../../hooks';
 import {
     areDatesOnSameDay,
     dateToUnix,

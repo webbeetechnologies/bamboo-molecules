@@ -26,17 +26,20 @@ export const timePickerModalStyles: ComponentStylePropWithVariants<
         minWidth: 287,
         width: undefined,
         flex: undefined,
+        borderRadius: 'roundness.7' as unknown as number,
     },
     labelContainer: {
         height: 28,
         justifyContent: 'flex-end',
         paddingLeft: 'spacings.6',
         paddingRight: 'spacings.6',
+        alignSelf: 'flex-start',
     },
     label: {
         letterSpacing: 1,
-        fontSize: 'typescale.bodyMedium.fontSize' as unknown as number,
+        fontSize: 'typescale.labelLarge.fontSize' as unknown as number,
         color: 'colors.onSurface',
+        fontWeight: 'typescale.labelLarge.fontWeight' as unknown as TextStyle['fontWeight'],
     },
     timePickerContainer: {
         padding: 'spacings.6',
