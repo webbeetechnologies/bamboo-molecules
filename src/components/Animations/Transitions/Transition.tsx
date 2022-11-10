@@ -1,11 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {forwardRef} from 'react';
-import {Animated} from 'react-native';
-import type {
-    ISupportedTransitions,
-    ITransitionConfig,
-    TransitionProps,
-} from './Transition.types';
+import React, { forwardRef } from 'react';
+import { Animated } from 'react-native';
+import type { ISupportedTransitions, ITransitionConfig, TransitionProps } from './Transition.types';
 
 const transformStylesMap = {
     translateY: true,
@@ -26,36 +22,46 @@ const defaultStyles = {
     rotate: '0deg',
 };
 
-const getAnimatedStyles = (animateValue: any) => (
-    defaultStyles: ISupportedTransitions,
-    initial: ISupportedTransitions,
-    to: ISupportedTransitions
-) => {
-    const styles: any = {
-        transform: [],
-    };
-    for (let key in initial) {
-        if (key === 'transition') {
-            continue;
-        }
+const getAnimatedStyles =
+    (animateValue: any) =>
+    (
+        defaultStyles: ISupportedTransitions,
+        initial: ISupportedTransitions,
+        to: ISupportedTransitions,
+    ) => {
+        const styles: any = {
+            transform: [],
+        };
+        for (const key in initial) {
+            if (key === 'transition') {
+                continue;
+            }
 
-        if (key in transformStylesMap) {
-            styles.transform?.push({
-                [key]: animateValue.interpolate({
+            if (key in transformStylesMap) {
+                styles.transform?.push({
+                    [key]: animateValue.interpolate({
+                        inputRange: [0, 1, 2],
+                        outputRange: [
+                            (defaultStyles as any)[key],
+                            (initial as any)[key],
+                            (to as any)[key],
+                        ],
+                    }),
+                } as any);
+            } else {
+                styles[key] = animateValue.interpolate({
                     inputRange: [0, 1, 2],
-                    outputRange: [(defaultStyles as any)[key], (initial as any)[key], (to as any)[key]],
-                }),
-            } as any);
-        } else {
-            styles[key] = animateValue.interpolate({
-                inputRange: [0, 1, 2],
-                outputRange: [(defaultStyles as any)[key], (initial as any)[key], (to as any)[key]],
-            });
+                    outputRange: [
+                        (defaultStyles as any)[key],
+                        (initial as any)[key],
+                        (to as any)[key],
+                    ],
+                });
+            }
         }
-    }
 
-    return styles;
-};
+        return styles;
+    };
 
 const defaultTransitionConfig: ITransitionConfig = {
     type: 'timing',
@@ -77,7 +83,7 @@ const Transition = forwardRef(
             as,
             ...rest
         }: TransitionProps,
-        ref: any
+        ref: any,
     ) => {
         const animateValue = React.useRef(new Animated.Value(0)).current;
 
@@ -93,13 +99,12 @@ const Transition = forwardRef(
 
         const prevVisible = React.useRef(visible);
 
-
         React.useEffect(() => {
             if (animationState === 'entering' || animationState === 'exiting') {
                 const defaultTransition = {
                     ...defaultTransitionConfig,
                     ...animate?.transition,
-                }
+                };
 
                 const entryTransition = {
                     ...defaultTransitionConfig,
@@ -115,7 +120,6 @@ const Transition = forwardRef(
 
                 const transition = startAnimation ? entryTransition : exitTransition;
 
-
                 Animated.sequence([
                     // @ts-ignore - delay is present in defaultTransitionConfig
                     Animated.delay(transition.delay),
@@ -129,15 +133,14 @@ const Transition = forwardRef(
                     animationState === 'entering'
                         ? Animated.delay(0)
                         : Animated[defaultTransition.type ?? 'timing'](animateValue, {
-                            toValue: 0,
-                            useNativeDriver: true,
-                            ...defaultTransition,
-                        }),
-                ]).start(({finished}) => {
+                              toValue: 0,
+                              useNativeDriver: true,
+                              ...defaultTransition,
+                          }),
+                ]).start(({ finished }) => {
                     if (animationState === 'entering') {
                         setAnimationState('entered');
                     } else if (animationState === 'exiting') {
-                        console.log({finished})
                         // Animated.sequence([
                         //   Animated[transition.type ?? 'timing'](animateValue, {
                         //     toValue: startAnimation,
@@ -159,7 +162,6 @@ const Transition = forwardRef(
             // if (animationState === 'entering') {
             //   //
             // }
-            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [animationState, onTransitionComplete]);
 
         React.useEffect(() => {
@@ -177,16 +179,17 @@ const Transition = forwardRef(
 
         // If exit animation is present and state is exiting, we replace 'initial' with 'exit' animation
 
-        const initialState = exit ? {...defaultStyles, ...exit} : {...defaultStyles, ...initial};
+        const initialState = exit
+            ? { ...defaultStyles, ...exit }
+            : { ...defaultStyles, ...initial };
 
-        const animateState = {...defaultStyles, ...animate};
-
+        const animateState = { ...defaultStyles, ...animate };
 
         const styles = React.useMemo(() => {
             // console.log('display state here', initial);
             return [
                 getAnimatedStyles(animateValue)(
-                    {...defaultStyles, opacity: 0},
+                    { ...defaultStyles, opacity: 0 },
                     initialState as ISupportedTransitions,
                     animateState as ISupportedTransitions,
                 ),
@@ -203,12 +206,11 @@ const Transition = forwardRef(
                 // style={[styles]}
                 style={[styles]}
                 ref={ref}
-                {...rest}
-            >
+                {...rest}>
                 {children}
             </Component>
         );
-    }
+    },
 );
 
 export default Transition;

@@ -1,8 +1,8 @@
 export default function mergeRefs<T = any>(
-    refs: Array<React.MutableRefObject<T> | React.LegacyRef<T>>
+    refs: Array<React.MutableRefObject<T> | React.LegacyRef<T>>,
 ): React.RefCallback<T> {
-    return (value) => {
-        refs.forEach((ref) => {
+    return value => {
+        refs.forEach(ref => {
             if (typeof ref === 'function') {
                 ref(value);
             } else if (ref != null) {
