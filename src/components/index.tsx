@@ -32,7 +32,6 @@ export { VerticalDivider, verticalDividerStyles, VerticalDividerProps } from './
 export { Switch, switchStyles, SwitchProps } from './Switch';
 
 export { Popover, PopoverProps, popoverStyles } from './Popover';
-export { Popper, PopperProps, PopperContent } from './Popper';
 export { Overlay, OverlayProps } from './Overlay';
 export { Backdrop, BackdropProps } from './Backdrop';
 export * from './Animations';

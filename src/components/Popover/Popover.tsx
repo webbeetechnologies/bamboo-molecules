@@ -20,6 +20,7 @@ const Popover: FC<PopoverProps> = forwardRef(
             initialFocusRef,
             finalFocusRef,
             trapFocus = true,
+            showArrow = true,
             ...props
         },
         ref: any,
@@ -88,7 +89,7 @@ const Popover: FC<PopoverProps> = forwardRef(
                                     bodyId,
                                     headerId,
                                 }}>
-                                <PopperContent>
+                                <PopperContent showArrow={showArrow}>
                                     {/* <FocusScope contain={trapFocus} restoreFocus> */}
                                     {children}
                                     {/* </FocusScope> */}

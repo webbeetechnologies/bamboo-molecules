@@ -18,9 +18,10 @@ import { DEFAULT_ARROW_HEIGHT, DEFAULT_ARROW_WIDTH } from './constants';
 import { getContainerStyle } from './utils';
 import { ScrollView, StyleSheet } from 'react-native';
 import { useMolecules } from '../../hooks';
-import type PopperArrow from './PopperArrow';
+import PopperArrow from './PopperArrow';
+import type { IPlacement } from './types';
 
-const PopperContent = ({ children, style, ...rest }: any, ref: any) => {
+const PopperContent = ({ children, style, showArrow, ...rest }: any, ref: any) => {
     const { View } = useMolecules();
 
     const {
@@ -121,12 +122,21 @@ const PopperContent = ({ children, style, ...rest }: any, ref: any) => {
 
     return (
         <Fragment>
-            <ScrollView ref={overlayRef} collapsable={false} style={overlayStyle.overlay}>
-                {arrowElement}
-                <View style={StyleSheet.flatten([containerStyle, style])} {...rest} ref={ref}>
-                    {restElements}
-                </View>
-            </ScrollView>
+            <View ref={overlayRef} collapsable={false} style={overlayStyle.overlay}>
+                {arrowElement ??
+                    (showArrow && (
+                        <PopperArrow
+                            width={DEFAULT_ARROW_WIDTH}
+                            height={DEFAULT_ARROW_HEIGHT}
+                            actualPlacement={placement as IPlacement}
+                        />
+                    ))}
+                <ScrollView>
+                    <View style={StyleSheet.flatten([containerStyle, style])} {...rest} ref={ref}>
+                        {restElements}
+                    </View>
+                </ScrollView>
+            </View>
         </Fragment>
     );
 };

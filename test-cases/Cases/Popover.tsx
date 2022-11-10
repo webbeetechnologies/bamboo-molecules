@@ -5,6 +5,7 @@ import { mergeRefs } from '../../src/utils';
 const PopoverContent = () => {
     const { Text, View } = useMolecules();
     console.log('Popover Content', ':)');
+
     return (
         <View style={{ flexDirection: 'column' }}>
             <Text style={{ fontSize: 24 }}>
@@ -21,7 +22,7 @@ export const Popover = () => {
     const triggerRef = React.useRef(null);
 
     const [closeOnScroll, setCloseOnScroll] = React.useState(true);
-    const { Button, Popover, Text, View } = useMolecules();
+    const { Button, Popover, View } = useMolecules();
 
     const trigger = React.useCallback(({ ref, ...props }: any) => {
         const mergedRef = mergeRefs([triggerRef, ref]);
@@ -38,6 +39,7 @@ export const Popover = () => {
                 size="lg"
             />
             <Popover
+                showArrow
                 trigger={trigger}
                 triggerRef={triggerRef}
                 placement="top"

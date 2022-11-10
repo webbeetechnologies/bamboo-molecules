@@ -1,6 +1,7 @@
 import type { MutableRefObject, ReactElement, ReactNode } from 'react';
 
 export type PopoverProps = {
+    showArrow?: boolean;
     trigger: (props: any, state: { open: boolean }) => ReactNode;
     onClose?: () => void;
     onOpen?: () => void;

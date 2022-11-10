@@ -60,13 +60,11 @@ export default function App({ coworkers = [] as string[] }) {
           <View style={{ height: 900 }}></View>
           <Button title={`Close on scroll: ${JSON.stringify(closeOnScroll)}`} onPress={() => setCloseOnScroll((x) => !x)} />
             <Popover scrollRef={scrollRef} trigger={trigger} triggerRef={triggerRef} placement="top" shouldFlip closeOnScroll={closeOnScroll}>
-                <PopperContent>
-                  <View style={{ flexDirection: "column", height: 1000, backgroundColor: "blue" }}>
-                    <Text style={{ fontSize: 24 }}>Create new app</Text>
-                    <Text>Keep the name short!</Text>
-                    <Pressable><Text>Create</Text></Pressable>
-                  </View>
-                </PopperContent>
+                <View style={{ flexDirection: "column", height: 1000, backgroundColor: "blue" }}>
+                  <Text style={{ fontSize: 24 }}>Create new app</Text>
+                  <Text>Keep the name short!</Text>
+                  <Pressable><Text>Create</Text></Pressable>
+                </View>
             </Popover>
           <View style={{ height: 900 }}></View>
         </ScrollView>
