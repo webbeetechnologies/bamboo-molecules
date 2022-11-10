@@ -1,9 +1,10 @@
 import { memo, useMemo } from 'react';
 import { View, ViewStyle } from 'react-native';
+
+import { useComponentStyles, useControlledValue } from '../../hooks';
 import type { LocalState } from '../DatePickerModal/types';
 import DatePickerInlineBase from './DatePickerInlineBase';
 import type { DatePickerInlineBaseProps } from './types';
-import { useControlledValue } from '../../hooks';
 
 export type DatePickerInlineProps = DatePickerInlineBaseProps & {
     containerStyle?: ViewStyle;
@@ -17,7 +18,7 @@ const DatePickerInline = ({
     onChange,
     locale = 'en',
     mode = 'single',
-    containerStyle,
+    containerStyle: containerStyleProp,
     ...rest
 }: DatePickerInlineProps) => {
     const [state, onStateChange] = useControlledValue<LocalState>({
@@ -25,13 +26,18 @@ const DatePickerInline = ({
         onChange: onChange as any,
     });
 
-    const componentStyles = useMemo(
-        () => [{ minHeight: 360, flex: 1 }, containerStyle],
-        [containerStyle],
-    );
+    const componentStyles = useComponentStyles('DatePickerInline', containerStyleProp);
+
+    const { containerStyle } = useMemo(() => {
+        const { container, ...restStyle } = componentStyles;
+
+        return {
+            containerStyle: [container, restStyle],
+        };
+    }, [componentStyles]);
 
     return (
-        <View style={componentStyles}>
+        <View style={containerStyle}>
             <DatePickerInlineBase
                 {...rest}
                 locale={locale}

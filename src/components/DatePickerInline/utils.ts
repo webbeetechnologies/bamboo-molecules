@@ -7,18 +7,21 @@ import { montHeaderHeight, weekMargin } from './Month';
 type States = '';
 
 type CustomProps = {
-    selectColor?: string;
-    primaryColor?: string;
     roundness?: string;
     headerBackgroundColor?: string;
 
-    month?: Record<string, any>;
-    yearPicker?: Record<string, any>;
+    container?: ViewStyle;
 };
 
 export const datePickerStyles: ComponentStylePropWithVariants<TextStyle, States, CustomProps> = {
     roundness: 'roundness.1',
     headerBackgroundColor: 'colors.surface',
+
+    container: {
+        minHeight: 360,
+        flex: 1,
+        minWidth: 360,
+    },
 };
 
 type DatePickerMonthCustomProps = {

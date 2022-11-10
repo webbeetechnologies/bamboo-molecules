@@ -30,6 +30,8 @@ export {
     DatePickerInlineProps,
     DatePickerModalProps,
     DatePickerInputProps,
+    CalendarDate,
+    CalendarDates,
     TimePickerModalProps,
     TimePickerProps,
     TextInputWithMaskProps,

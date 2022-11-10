@@ -52,6 +52,8 @@ export {
     datePickerDayRangeStyles,
     datePickerDayEmptyStyles,
     datePickerWeekStyles,
+    CalendarDate,
+    CalendarDates,
 } from './DatePickerInline';
 
 export {
