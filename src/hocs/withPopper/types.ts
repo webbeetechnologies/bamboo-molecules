@@ -1,5 +1,6 @@
 import type { MutableRefObject, PropsWithChildren, ReactElement, ReactNode } from 'react';
 import type { ViewStyle } from 'react-native';
+import type { TPopperContext } from 'src/components/Popper/types';
 
 export interface TriggerProps {
     ref: React.MutableRefObject<any> | ((value: any) => void);
@@ -11,24 +12,26 @@ export interface TriggerProps {
 
 export type TriggerFunc = (props: TriggerProps, state: { open: boolean }) => ReactNode;
 
-export type PopoverProps = PropsWithChildren<{
-    showArrow?: boolean;
-    trigger?: TriggerFunc;
-    onClose?: () => void;
-    onOpen?: () => void;
-    isOpen?: boolean;
-    defaultIsOpen?: boolean;
-    initialFocusRef?: MutableRefObject<ReactElement | null>;
-    finalFocusRef?: MutableRefObject<ReactElement | null>;
-    trapFocus?: boolean;
+export type PopoverProps = PropsWithChildren<
+    Omit<TPopperContext, 'trigger'> & {
+        showArrow?: boolean;
+        trigger?: TriggerFunc;
+        onClose?: () => void;
+        onOpen?: () => void;
+        isOpen?: boolean;
+        defaultIsOpen?: boolean;
+        initialFocusRef?: MutableRefObject<ReactElement | null>;
+        finalFocusRef?: MutableRefObject<ReactElement | null>;
+        trapFocus?: boolean;
 
-    arrowProps?: ViewStyle;
-    overlayStyles?: ViewStyle;
-    contentStyles?: ViewStyle;
-    initialTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
-    animateTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
-    exitTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
-}>;
+        arrowProps?: ViewStyle;
+        overlayStyles?: ViewStyle;
+        contentStyles?: ViewStyle;
+        initialTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
+        animateTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
+        exitTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
+    }
+>;
 
 export type PopoverPropsTriggerRequired = PopoverProps & { trigger: TriggerFunc };
 

@@ -25,6 +25,17 @@ const withPopper = <T,>(Component: ComponentType<T>) =>
             contentStyles,
             exitTransition,
             trigger,
+
+            shouldFlip,
+            crossOffset,
+            offset,
+            closeOnScroll,
+            scrollRef,
+            shouldOverlapWithTrigger,
+            placement,
+            triggerRef,
+            setOverlayRef,
+
             ...rest
         } = props;
 
@@ -47,6 +58,15 @@ const withPopper = <T,>(Component: ComponentType<T>) =>
                 initialTransition={initialTransition}
                 animateTransition={animateTransition}
                 exitTransition={exitTransition}
+                shouldFlip={shouldFlip}
+                crossOffset={crossOffset}
+                offset={offset}
+                closeOnScroll={closeOnScroll}
+                scrollRef={scrollRef}
+                shouldOverlapWithTrigger={shouldOverlapWithTrigger}
+                placement={placement}
+                triggerRef={triggerRef}
+                setOverlayRef={setOverlayRef}
                 trigger={useCallback(
                     (props: TriggerProps, state: { open: boolean }) => {
                         const mergedRef = mergeRefs([ref, props.ref]);

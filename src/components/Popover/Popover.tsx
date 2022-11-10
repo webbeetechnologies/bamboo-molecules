@@ -23,6 +23,8 @@ const Popover: FC<PopoverProps> = forwardRef(({ children, ...props }, ref: any) 
         <Popper
             ref={ref}
             {...props}
+            offset={8}
+            crossOffset={8}
             arrowProps={arrowProps}
             contentStyles={popoverStyles.content}
             overlayStyles={popoverStyles.overlay}

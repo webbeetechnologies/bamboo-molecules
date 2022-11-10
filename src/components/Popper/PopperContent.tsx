@@ -50,7 +50,7 @@ const PopperContent = ({ children, style, showArrow, ...rest }: any, ref: any) =
         crossOffset: crossOffset,
         isOpen: isOpen,
         offset: offset,
-        placement: placementProp as any,
+        placement: placementProp as IPlacement,
         containerPadding: 0,
         onClose: closeOnScroll ? onClose : undefined,
         shouldOverlapWithTrigger,
