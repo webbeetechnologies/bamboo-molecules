@@ -1,7 +1,45 @@
 import { StyleSheet, TextStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
-export const defaultStyles: ComponentStylePropWithVariants<TextStyle, 'disabled' | 'hovered'> = {
+type CustomProps = {
+    animationScale?: string; // because it's a design token
+};
+
+type CustomSizeProps = {
+    iconSize?: string | number;
+    typeScale?: string | number; // because it's a design token
+};
+
+export const defaultStyles: ComponentStylePropWithVariants<
+    TextStyle,
+    'disabled' | 'hovered',
+    CustomProps,
+    CustomSizeProps
+> = {
+    animationScale: 'animation.scale',
+
+    sizes: {
+        sm: {
+            minWidth: 64,
+            iconSize: 22,
+            borderRadius: 'roundness.5',
+            typeScale: 'typescale.labelMedium',
+        },
+        md: {
+            minWidth: 64,
+            iconSize: 24,
+            borderRadius: 'roundness.5',
+            typeScale: 'typescale.labelLarge',
+        },
+        lg: {
+            minWidth: 64,
+            iconSize: 26,
+            borderRadius: 'roundness.5',
+            typeScale: 'typescale.labelLarge',
+            fontSize: 'fontSizes.md',
+        },
+    },
+
     states: {
         disabled: {
             color: 'colors.onSurfaceDisabled',
@@ -77,9 +115,9 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, 'disabled'
     },
 };
 
+// TODO Revisit to match MD3 guideline
 export const styles = StyleSheet.create({
     button: {
-        minWidth: 64,
         borderStyle: 'solid',
     },
     content: {
@@ -88,33 +126,25 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     icon: {
-        marginLeft: 16,
-        marginRight: -16,
-    },
-    iconReverse: {
-        marginLeft: -16,
-        marginRight: 16,
+        marginLeft: 'spacings.4',
+        marginRight: 'spacings._4',
     },
     iconTextMode: {
-        marginLeft: 12,
-        marginRight: -8,
-    },
-    iconReverseTextMode: {
-        marginLeft: -8,
-        marginRight: 12,
+        marginLeft: 'spacings.3',
+        marginRight: 'spacings._2',
     },
     label: {
         textAlign: 'center',
-        marginVertical: 10,
-        marginHorizontal: 24,
+        marginVertical: 'spacings.2l',
+        marginHorizontal: 'spacings.6',
     },
     uppercaseLabel: {
         textTransform: 'uppercase',
     },
     labelText: {
-        marginHorizontal: 12,
+        marginHorizontal: 'spacings.3',
     },
     labelTextAddons: {
-        marginHorizontal: 16,
+        marginHorizontal: 'spacings.4',
     },
 });

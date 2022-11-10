@@ -1,19 +1,24 @@
-import React, { memo, useCallback } from 'react';
+import {
+    forwardRef,
+    memo,
+    useCallback,
+    useMemo,
+    Children,
+    ComponentPropsWithRef,
+    ReactNode,
+} from 'react';
 import {
     TouchableWithoutFeedback,
-    ViewStyle,
     StyleProp,
     GestureResponderEvent,
     StyleSheet,
     Platform,
+    ViewStyle,
 } from 'react-native';
 
-import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
-import { withNormalizedStyleProp } from '../../hocs';
-import { normalizeStyles } from '../../utils';
-import { getTouchableRippleColors } from './utils';
+import { useComponentStyles, useMolecules } from '../../hooks';
 
-export type Props = React.ComponentPropsWithRef<typeof TouchableWithoutFeedback> & {
+export type Props = ComponentPropsWithRef<typeof TouchableWithoutFeedback> & {
     /**
      * Whether to render the ripple outside the view bounds.
      */
@@ -50,7 +55,7 @@ export type Props = React.ComponentPropsWithRef<typeof TouchableWithoutFeedback>
     /**
      * Content of the `TouchableRipple`.
      */
-    children: React.ReactNode;
+    children: ReactNode;
     style?: StyleProp<ViewStyle>;
 };
 
@@ -85,32 +90,49 @@ export type Props = React.ComponentPropsWithRef<typeof TouchableWithoutFeedback>
  *
  * @extends TouchableWithoutFeedback props https://reactnative.dev/docs/touchablewithoutfeedback#props
  */
-const TouchableRipple = ({
-    style,
-    background: _background,
-    borderless = false,
-    disabled: disabledProp,
-    rippleColor,
-    underlayColor: _underlayColor,
-    onPress,
-    children,
-    ...rest
-}: Props) => {
+const TouchableRipple = (
+    {
+        style,
+        background: _background,
+        borderless = false,
+        disabled: disabledProp,
+        rippleColor: rippleColorProp,
+        underlayColor: _underlayColor,
+        onPress,
+        children,
+        ...rest
+    }: Props,
+    ref: any,
+) => {
     const { View } = useMolecules();
-    const currentTheme = useCurrentTheme();
-    const rippleStyles = useComponentStyles('TouchableRipple');
-    const normalizedColors = normalizeStyles({ rippleColor }, currentTheme);
+
+    const componentStyles = useComponentStyles('TouchableRipple', [
+        style,
+        { normalizedRippleColorProp: rippleColorProp },
+    ]);
+
+    const { rippleColor, containerStyle } = useMemo(() => {
+        const {
+            rippleColor: defaultRippleColor,
+            normalizedRippleColorProp,
+            ...touchableRippleStyles
+        } = componentStyles;
+
+        return {
+            rippleColor: normalizedRippleColorProp || defaultRippleColor,
+            containerStyle: [
+                styles.touchable,
+                borderless && styles.borderless,
+                touchableRippleStyles,
+            ],
+        };
+    }, [borderless, componentStyles]);
 
     const handlePressIn = useCallback(
         (e: any) => {
             const { centered, onPressIn } = rest;
 
             onPressIn?.(e);
-
-            const { calculatedRippleColor } = getTouchableRippleColors({
-                rippleColor: normalizedColors.rippleColor,
-                rippleStyles,
-            });
 
             const button = e.currentTarget;
             const computedStyle = window.getComputedStyle(button);
@@ -163,7 +185,7 @@ const TouchableRipple = ({
             Object.assign(ripple.style, {
                 position: 'absolute',
                 pointerEvents: 'none',
-                backgroundColor: calculatedRippleColor,
+                backgroundColor: rippleColor,
                 borderRadius: '50%',
 
                 /* Transition configuration */
@@ -199,7 +221,7 @@ const TouchableRipple = ({
                 });
             });
         },
-        [rippleStyles, rest, normalizedColors],
+        [rest, rippleColor],
     );
 
     const handlePressOut = useCallback(
@@ -240,13 +262,12 @@ const TouchableRipple = ({
     return (
         <TouchableWithoutFeedback
             {...rest}
+            ref={ref}
             onPress={onPress}
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
             disabled={disabled}>
-            <View style={[styles.touchable, borderless && styles.borderless, style]}>
-                {React.Children.only(children)}
-            </View>
+            <View style={containerStyle}>{Children.only(children)}</View>
         </TouchableWithoutFeedback>
     );
 };
@@ -266,4 +287,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(withNormalizedStyleProp(TouchableRipple));
+export default memo(forwardRef(TouchableRipple));

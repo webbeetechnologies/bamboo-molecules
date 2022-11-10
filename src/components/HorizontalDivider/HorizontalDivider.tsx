@@ -1,8 +1,7 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import type { ViewProps } from '@webbee/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
-import { withNormalizedStyleProp } from '../../hocs';
 
 export type Props = Omit<ViewProps, 'children'> & {
     /**
@@ -61,20 +60,21 @@ const HorizontalDivider = ({
     ...rest
 }: Props) => {
     const { View } = useMolecules();
-    const { bold: boldStyles, ...defaultStyles } = useComponentStyles('HorizontalDivider', style);
+    const componentStyles = useComponentStyles('HorizontalDivider', style);
 
-    return (
-        <View
-            {...rest}
-            style={[
-                defaultStyles,
-                leftInset && { marginLeft: leftInset },
-                rightInset && { marginRight: rightInset },
-                bold && boldStyles,
-                spacing && { marginVertical: spacing },
-            ]}
-        />
-    );
+    const memoizedStyles = useMemo(() => {
+        const { bold: boldStyles, ...defaultStyles } = componentStyles;
+
+        return [
+            defaultStyles,
+            leftInset && { marginLeft: leftInset },
+            rightInset && { marginRight: rightInset },
+            bold && boldStyles,
+            spacing && { marginVertical: spacing },
+        ];
+    }, [bold, componentStyles, leftInset, rightInset, spacing]);
+
+    return <View {...rest} style={memoizedStyles} />;
 };
 
 export const horizontalDividerStyles = {
@@ -85,4 +85,4 @@ export const horizontalDividerStyles = {
     },
 };
 
-export default memo(withNormalizedStyleProp(HorizontalDivider));
+export default memo(HorizontalDivider);

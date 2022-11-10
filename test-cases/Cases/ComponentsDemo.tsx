@@ -1,28 +1,25 @@
+import { useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import type { TextProps } from '@webbee/bamboo-atoms';
 import {
     extendTheme,
     ProvideMolecules,
     useMolecules,
     useToggle,
     withRipple,
+    TextProps,
+    documentTypes,
+    useColorMode,
 } from 'bamboo-molecules';
 
-const themeDark = extendTheme({
-    colorMode: 'dark',
-    Text: {
-        color: '#fff',
-    },
-    Icon: {
-        color: '#fff',
-    },
-    Button: {
-        marginBottom: 10,
-    },
-});
-
-const themeLight = extendTheme({
+const theme = extendTheme({
     colorMode: 'light',
+    Text: {
+        color: 'colors.onSurface',
+    },
+    Label: {
+        color: 'colors.onSurface',
+        fontSize: 18,
+    },
     Button: {
         marginBottom: 10,
     },
@@ -35,27 +32,134 @@ const Example = () => {
         View,
         Text,
         TouchableRipple,
-        ActivityIndicator,
         HorizontalDivider,
-        Icon,
         Switch,
         VerticalDivider,
+        IconButton,
+        Checkbox,
+        TextInput,
+        NumberInput,
+        FilePicker,
+        Label,
+        HelperText,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
+    const buttonRef = useRef(null);
+    const [files, setFiles] = useState<any>(null);
+    const [number, setNumber] = useState('222.a');
+
+    const { colorMode, toggleColorMode } = useColorMode();
 
     return (
-        <View>
+        <View
+            style={{
+                backgroundColor: colorMode === 'light' ? '#fff' : '#424242',
+                margin: -15,
+                padding: 15,
+            }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Label>ColorMode - {colorMode}</Label>
+                <IconButton
+                    size="lg"
+                    type="material-community"
+                    name={colorMode === 'light' ? 'white-balance-sunny' : 'weather-night'}
+                    onPress={toggleColorMode}
+                />
+            </View>
             <Surface elevation={2}>
-                <TouchableRipple rippleColor="colors.primary" onPress={() => {}}>
+                <TouchableRipple rippleColor="colors.primary" onPress={() => setFiles(null)}>
                     <View style={[styles.cardContainer]}>
-                        <Text>Test text</Text>
-                        <ActivityIndicator animating={true} />
+                        <Text>Touchable Ripple Inside a Surface</Text>
                     </View>
                 </TouchableRipple>
             </Surface>
-            <Icon type="material-community" name="robot-angry-outline" />
 
-            <Text>Text</Text>
+            <HorizontalDivider spacing={30} />
+
+            <FilePicker
+                multiple
+                type={[documentTypes.allFiles]}
+                value={files}
+                onChange={result => setFiles(result)}
+            />
+            <HelperText>Helper Text</HelperText>
+            <HorizontalDivider spacing={30} />
+
+            <TextInput
+                variant="flat"
+                placeholder="flat with left element"
+                label="flat"
+                left={({ color, forceFocus }) => (
+                    <IconButton
+                        name={'magnify'}
+                        type="material-community"
+                        style={{ margin: 0, color }}
+                        onPress={forceFocus}
+                    />
+                )}
+                style={{ paddingLeft: 20 }}
+                size="sm"
+                multiline
+            />
+
+            <HorizontalDivider spacing={30} />
+
+            <TextInput
+                variant="outlined"
+                placeholder="multiline sm outlined"
+                label="outlined"
+                multiline
+                size="sm"
+            />
+
+            <HorizontalDivider spacing={30} />
+
+            <TextInput
+                variant="outlined"
+                placeholder="TextInput with custom height"
+                label="multiline"
+                multiline
+                left={({ color, forceFocus }) => (
+                    <IconButton
+                        name={'magnify'}
+                        type="material-community"
+                        style={{ margin: 0, color }}
+                        onPress={forceFocus}
+                    />
+                )}
+                right={<Text>/100</Text>}
+                style={{ height: 100 }}
+                required
+                error
+                size="lg"
+            />
+
+            <HorizontalDivider spacing={30} />
+
+            <NumberInput
+                placeholder="Enter Numbers"
+                label="Label"
+                keyboardType="numeric"
+                value={number}
+                onChangeText={text => setNumber(text)}
+            />
+
+            <HorizontalDivider spacing={30} />
+
+            <IconButton
+                name={isSwitchOn ? 'chevron-left' : 'chevron-right'}
+                onPress={() => {}}
+                variant="outlined"
+                style={{ backgroundColor: 'colors.primary', color: '#fff' }}
+                animated
+            />
+
+            <Checkbox.Item
+                status={isSwitchOn ? 'checked' : 'unchecked'}
+                label="Checkbox Item"
+                onChange={toggleSwitch}
+            />
+            <Checkbox status={isSwitchOn ? 'checked' : 'unchecked'} onChange={toggleSwitch} />
             <HorizontalDivider
                 leftInset={28}
                 rightInset={28}
@@ -63,23 +167,25 @@ const Example = () => {
                 spacing={10}
                 style={{ backgroundColor: 'colors.primary' }}
             />
-            <Text>Divided</Text>
 
             <CustomButton onPress={() => {}} rippleContainerStyles={{ width: 200, padding: 20 }}>
-                Custom Button
+                withRipple HOC
             </CustomButton>
 
             <View style={{ flexDirection: 'row' }}>
-                <Text>Boy</Text>
+                <Text>Left Side of the Divider</Text>
                 <VerticalDivider spacing={10} />
-                <Text>Girl</Text>
+                <Text>Right Side of the Divider</Text>
             </View>
+
+            <HorizontalDivider spacing={30} />
 
             <Button
                 variant="contained"
                 onPress={() => {}}
+                ref={buttonRef}
+                size="lg"
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Contained Button
             </Button>
@@ -88,7 +194,6 @@ const Example = () => {
                 variant="outlined"
                 onPress={() => {}}
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Outlined Button
             </Button>
@@ -97,7 +202,6 @@ const Example = () => {
                 variant="text"
                 onPress={() => {}}
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Text Button
             </Button>
@@ -106,7 +210,6 @@ const Example = () => {
                 variant="elevated"
                 onPress={() => {}}
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Elevated Button
             </Button>
@@ -115,17 +218,11 @@ const Example = () => {
                 variant="contained-tonal"
                 onPress={() => {}}
                 iconType="material-community"
-                contentStyle={{ flexDirection: 'row-reverse' }}
                 iconName="robot-angry-outline">
                 Contained-tonal Button
             </Button>
 
-            <Switch
-                value={isSwitchOn}
-                disabled
-                onValueChange={toggleSwitch}
-                color="rgba(125, 82, 96, 1)"
-            />
+            <Switch value={isSwitchOn} onValueChange={toggleSwitch} color="rgba(125, 82, 96, 1)" />
         </View>
     );
 };
@@ -140,17 +237,9 @@ const CustomButton = withRipple<TextProps>(({ children }) => {
     );
 });
 
-export const ComponentsDemoLightMode = () => {
+export const ComponentsDemo = () => {
     return (
-        <ProvideMolecules theme={themeLight}>
-            <Example />
-        </ProvideMolecules>
-    );
-};
-
-export const ComponentsDemoDarkMode = () => {
-    return (
-        <ProvideMolecules theme={themeDark}>
+        <ProvideMolecules theme={theme}>
             <Example />
         </ProvideMolecules>
     );

@@ -1,7 +1,21 @@
 export {
     registerCustomIconType,
+    TextProps,
+    HeadingProps,
+    H1Props,
+    H2Props,
+    H3Props,
+    H4Props,
+    H6Props,
+    UnderlineProps,
+    StrongProps,
+    LabelProps,
+    StrikethroughProps,
+    ItalicProps,
+    ViewProps,
     IconProps,
     PopoverProps,
+    IconButtonProps,
     ActivityIndicatorProps,
     HorizontalDividerProps,
     VerticalDividerProps,
@@ -9,6 +23,11 @@ export {
     ButtonProps,
     SurfaceProps,
     SwitchProps,
+    CheckboxProps,
+    TextInputProps,
+    NumberInputProps,
+    FilePickerProps,
+    ModalProps,
 } from './components';
 
 export {
@@ -23,9 +42,10 @@ export {
     ITheme,
     PlatformType,
     IComponentsProviderContext,
+    ResolveComponentStylesArgs,
 } from './core';
 
-export { withNormalizedStyleProp, withRipple, withActionState, CallbackActionState } from './hocs';
+export { withRipple, withActionState, CallbackActionState } from './hocs';
 
 export {
     useMolecules,
@@ -35,6 +55,9 @@ export {
     useColorMode,
     useCurrentTheme,
     useToggle,
+    useMediaQuery,
+    useControlledValue,
+    useFilePicker,
 } from './hooks';
 
 export {
@@ -45,4 +68,16 @@ export {
     generateDarkThemeColors,
 } from './styles';
 
-export { normalizeStyles } from './utils';
+export {
+    normalizeStyles,
+    resolveComponentStyles,
+    normalizeSpacings,
+    DocumentPicker,
+    SpacingType,
+    SpacingKey,
+    DocumentPickerOptions,
+    DocumentResult,
+    documentTypes,
+} from './utils';
+
+export { ComponentStylePropWithVariants, WithElements } from './types';

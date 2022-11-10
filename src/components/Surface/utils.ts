@@ -1,6 +1,9 @@
-import type { Animated } from 'react-native';
+import type { Animated, ViewStyle } from 'react-native';
 import { isAnimatedValue } from '../../styles/overlay';
 import { inputRange } from '../../styles/shadow';
+import type { ComponentStylePropWithVariants } from '../../types';
+
+export const defaultStyles: ComponentStylePropWithVariants<ViewStyle> = {};
 
 const _shadowColor = '#000';
 

@@ -1,13 +1,16 @@
-import { useEffect, useCallback, useRef, ReactNode, memo } from 'react';
+import { useEffect, useCallback, useRef, ReactNode, memo, useMemo, forwardRef } from 'react';
 import { Animated, View, ViewStyle, StyleSheet, StyleProp, TextStyle } from 'react-native';
-import color from 'color';
+import setColor from 'color';
 
 import { withActionState, CallbackActionState } from '../../hocs';
-import { useMolecules, useCurrentTheme, useComponentStyles } from '../../hooks';
-import type { IconType } from '../Icon/types';
+import { useMolecules, useComponentStyles, useCurrentTheme } from '../../hooks';
+import type { IconType } from '../Icon';
 import type { SurfaceProps } from '../Surface';
-import { normalizeStyles } from '../../utils';
 import { styles } from './utils';
+import { normalizeStyles } from '../../utils';
+
+const initialElevation = 1;
+const activeElevation = 2;
 
 export type ButtonVariant = 'text' | 'outlined' | 'contained' | 'elevated' | 'contained-tonal';
 
@@ -41,7 +44,6 @@ export type Props = SurfaceProps &
          */
         iconType?: IconType;
         iconName?: string;
-        iconPosition?: 'left' | 'right';
         /**
          * Whether the button is disabled. A disabled button is greyed out and `onPress` is not called on touch.
          */
@@ -97,7 +99,7 @@ export type Props = SurfaceProps &
         /*
          *    Size
          * */
-        size?: 'small' | 'medium' | 'large';
+        size?: 'sm' | 'md' | 'lg';
         /**
          * testID to be used on tests.
          */
@@ -144,55 +146,54 @@ export type Props = SurfaceProps &
  * export default MyComponent;
  * ```
  */
-const Button = ({
-    disabled: disabledProp,
-    variant = 'text',
-    loading,
-    iconType,
-    iconName,
-    iconPosition,
-    buttonColor: customButtonColor,
-    textColor: customTextColor,
-    children,
-    accessibilityLabel,
-    accessibilityHint,
-    onPress,
-    onPressIn,
-    onPressOut,
-    onLongPress,
-    style: styleProp,
-    uppercase = false,
-    contentStyle,
-    labelStyle,
-    iconContainerStyle,
-    testID,
-    accessible,
-    hovered,
-    ...rest
-}: Props) => {
+const Button = (
+    {
+        disabled: disabledProp,
+        variant = 'text',
+        size = 'md',
+        loading,
+        iconType,
+        iconName,
+        buttonColor: customButtonColor,
+        textColor: customTextColor,
+        children,
+        accessibilityLabel,
+        accessibilityHint,
+        onPress,
+        onPressIn,
+        onPressOut,
+        onLongPress,
+        style: styleProp,
+        uppercase = false,
+        contentStyle,
+        labelStyle,
+        iconContainerStyle: iconContainerStyleProp,
+        testID,
+        accessible,
+        hovered,
+        ...rest
+    }: Props,
+    ref: any,
+) => {
     const disabled = disabledProp || !onPress;
     const { ActivityIndicator, TouchableRipple, Text, Icon, Surface } = useMolecules();
-    const theme = useCurrentTheme();
-    const { customButtonColor: normalizedButtonColor, customTextColor: normalizedTextColor } =
-        normalizeStyles({ customButtonColor, customTextColor }, theme);
 
-    const {
-        backgroundColor: _backgroundColor,
-        borderColor,
-        color: _textColor,
-        borderWidth,
-        ...buttonStyles
-    } = useComponentStyles('Button', styleProp, {
-        variant,
-        states: {
-            hovered: !disabled && !!hovered,
-            disabled,
+    const currentTheme = useCurrentTheme();
+
+    const normalizedStyles = normalizeStyles(styles, currentTheme);
+
+    const componentStyles = useComponentStyles(
+        'Button',
+        [styleProp, { customButtonColor, customTextColor }],
+        {
+            variant,
+            states: {
+                hovered: !disabled && !!hovered,
+                disabled,
+            },
+            size,
         },
-    });
-
-    const textColor = normalizedTextColor && !disabled ? normalizedTextColor : _textColor;
-    const backgroundColor =
-        normalizedButtonColor && !disabled ? normalizedButtonColor : _backgroundColor;
+    );
 
     const isVariant = useCallback(
         (variantComponent: ButtonVariant) => {
@@ -200,11 +201,83 @@ const Button = ({
         },
         [variant],
     );
-    const { roundness, animation } = theme;
+
+    const {
+        textColor,
+        animationScale,
+        iconSize,
+        rippleColor,
+        surfaceStyle,
+        touchableStyle,
+        textStyle,
+        iconStyle,
+        viewStyle,
+        iconContainerStyle,
+    } = useMemo(() => {
+        const {
+            backgroundColor: _backgroundColor,
+            color,
+            typeScale,
+            fontSize,
+            animationScale: _animationScale,
+            borderRadius,
+            iconSize: _iconSize,
+            customButtonColor: normalizedButtonColor,
+            customTextColor: normalizedTextColor,
+            ..._buttonStyles
+        } = componentStyles;
+
+        const _textColor = normalizedTextColor && !disabled ? normalizedTextColor : color;
+        const backgroundColor =
+            normalizedButtonColor && !disabled ? normalizedButtonColor : _backgroundColor;
+        const _iconStyle = [
+            normalizedStyles.icon,
+            isVariant('text') && normalizedStyles.iconTextMode,
+        ];
+
+        return {
+            textColor: _textColor,
+            animationScale: _animationScale,
+            iconSize: _iconSize,
+            rippleColor: setColor(_textColor).alpha(0.12).rgb().string(),
+            touchableStyle: { borderRadius },
+            surfaceStyle: [
+                normalizedStyles.button,
+                { backgroundColor, borderRadius, ..._buttonStyles },
+            ],
+            iconStyle: _iconStyle,
+            viewStyle: [normalizedStyles.content, contentStyle],
+            iconContainerStyle: [_iconStyle, iconContainerStyleProp],
+            textStyle: [
+                normalizedStyles.label,
+                isVariant('text')
+                    ? iconName || loading
+                        ? normalizedStyles.labelTextAddons
+                        : normalizedStyles.labelText
+                    : normalizedStyles.label,
+                uppercase && normalizedStyles.uppercaseLabel,
+                {
+                    color: _textColor,
+                    ...typeScale,
+                    fontSize,
+                },
+                labelStyle,
+            ],
+        };
+    }, [
+        componentStyles,
+        contentStyle,
+        disabled,
+        iconContainerStyleProp,
+        iconName,
+        isVariant,
+        labelStyle,
+        loading,
+        normalizedStyles,
+        uppercase,
+    ]);
 
     const isElevationEntitled = !disabled && isVariant('elevated');
-    const initialElevation = 1;
-    const activeElevation = 2;
 
     const { current: elevation } = useRef<Animated.Value>(
         new Animated.Value(isElevationEntitled ? initialElevation : 0),
@@ -212,15 +285,14 @@ const Button = ({
 
     useEffect(() => {
         elevation.setValue(isElevationEntitled ? initialElevation : 0);
-    }, [isElevationEntitled, elevation, initialElevation]);
+    }, [isElevationEntitled, elevation]);
 
     const handlePressIn = () => {
         onPressIn?.();
         if (isVariant('elevated')) {
-            const { scale } = animation;
             Animated.timing(elevation, {
                 toValue: activeElevation,
-                duration: 200 * scale,
+                duration: 200 * animationScale,
                 useNativeDriver: true,
             }).start();
         }
@@ -229,51 +301,19 @@ const Button = ({
     const handlePressOut = () => {
         onPressOut?.();
         if (isVariant('elevated')) {
-            const { scale } = animation;
             Animated.timing(elevation, {
                 toValue: initialElevation,
-                duration: 150 * scale,
+                duration: 150 * animationScale,
                 useNativeDriver: true,
             }).start();
         }
     };
 
-    const borderRadius = 5 * roundness[1];
-    const iconSize = 18;
-
-    const rippleColor = color(textColor).alpha(0.12).rgb().string();
-
-    const buttonStyle = {
-        backgroundColor,
-        borderColor,
-        borderWidth,
-        borderRadius,
-        ...buttonStyles,
-    };
-    const touchableStyle = {
-        borderRadius: buttonStyles
-            ? ((StyleSheet.flatten(buttonStyles) || {}) as ViewStyle).borderRadius || borderRadius
-            : borderRadius,
-    };
-
     const { color: customLabelColor, fontSize: customLabelSize } =
         StyleSheet.flatten(labelStyle) || {};
 
-    const textStyle = {
-        color: textColor,
-        ...theme.typescale.labelLarge,
-    };
-    const iconStyle =
-        StyleSheet.flatten(contentStyle)?.flexDirection === 'row-reverse' ||
-        iconPosition === 'right'
-            ? [styles.iconReverse, isVariant('text') && styles.iconReverseTextMode]
-            : [styles.icon, isVariant('text') && styles.iconTextMode];
-
     return (
-        <Surface
-            {...rest}
-            style={[styles.button, buttonStyle] as ViewStyle}
-            {...{ elevation: elevation }}>
+        <Surface {...rest} style={surfaceStyle} {...{ elevation: elevation }}>
             <TouchableRipple
                 borderless
                 delayPressIn={0}
@@ -289,15 +329,11 @@ const Button = ({
                 disabled={disabled}
                 rippleColor={rippleColor}
                 style={touchableStyle}
+                ref={ref}
                 testID={testID}>
-                <View
-                    style={[
-                        styles.content,
-                        iconPosition === 'right' ? { flexDirection: 'row-reverse' } : {},
-                        contentStyle,
-                    ]}>
+                <View style={viewStyle}>
                     {iconName && loading !== true ? (
-                        <View style={[iconStyle, iconContainerStyle]}>
+                        <View style={iconContainerStyle}>
                             <Icon
                                 type={iconType}
                                 name={iconName}
@@ -319,21 +355,7 @@ const Button = ({
                             style={iconStyle}
                         />
                     ) : null}
-                    <Text
-                        variant="labelLarge"
-                        selectable={false}
-                        numberOfLines={1}
-                        style={[
-                            styles.label,
-                            isVariant('text')
-                                ? iconName || loading
-                                    ? styles.labelTextAddons
-                                    : styles.labelText
-                                : styles.label,
-                            uppercase && styles.uppercaseLabel,
-                            textStyle,
-                            labelStyle,
-                        ]}>
+                    <Text selectable={false} numberOfLines={1} style={textStyle}>
                         {children}
                     </Text>
                 </View>
@@ -342,4 +364,4 @@ const Button = ({
     );
 };
 
-export default memo(withActionState(Button));
+export default memo(withActionState(forwardRef(Button)));

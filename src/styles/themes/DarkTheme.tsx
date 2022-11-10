@@ -10,9 +10,9 @@ export const generateDarkThemeColors = (
     opacity: typeof ref.opacity,
 ) => {
     return {
-        primary: palette.primary80,
+        primary: palette.primary70,
         primaryContainer: palette.primary30,
-        primaryOnHover: color(palette.primary80).lighten(0.03).rgb().string(),
+        primaryOnHover: color(palette.primary80).darken(0.12).rgb().string(),
         primaryContainerOnHover: color(palette.primary80).darken(0.9).rgb().string(),
         secondary: palette.secondary80,
         secondaryContainer: palette.secondary30,
@@ -34,6 +34,7 @@ export const generateDarkThemeColors = (
         onSurface: palette.neutral90,
         onSurfaceVariant: palette.neutralVariant80,
         onSurfaceDisabled: color(palette.neutral90).alpha(opacity.level4).rgb().string(),
+        onSurfaceRipple: color(palette.neutral90).alpha(0.12).rgb().string(),
         onError: palette.error20,
         onErrorContainer: palette.error80,
         onBackground: palette.neutral90,

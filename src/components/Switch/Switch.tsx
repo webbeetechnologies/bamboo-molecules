@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { forwardRef, memo, useMemo } from 'react';
 import type { ComponentPropsWithRef } from 'react';
 import {
     NativeModules,
@@ -74,50 +74,81 @@ export type Props = ComponentPropsWithRef<typeof NativeSwitch> & {
  * export default MyComponent;
  * ```
  */
-const Switch = ({ value, disabled, onValueChange, color, style, ...rest }: Props) => {
-    const {
-        checkedColor: _checkedColor,
-        onTintColor: _onTintColor,
-        thumbTintColor: _thumbTintColor,
-        ...switchStyles
-    } = useComponentStyles('Switch', style, {
-        states: {
-            selected_disabled: !!value && !!disabled,
-            active: !!value,
-            disabled: !!disabled,
+const Switch = (
+    {
+        value,
+        disabled,
+        onValueChange,
+        color,
+        style,
+        onTintColor: onTintColorProp,
+        thumbTintColor: thumbTintColorProp,
+        ...rest
+    }: Props,
+    ref: any,
+) => {
+    const componentStyles = useComponentStyles(
+        'Switch',
+        [
+            style,
+            {
+                checkedColor: color,
+                onTintColor: onTintColorProp,
+                thumbTintColor: thumbTintColorProp,
+            },
+        ],
+        {
+            states: {
+                selected_disabled: !!value && !!disabled,
+                active: !!value,
+                disabled: !!disabled,
+            },
         },
-    });
-    const checkedColor = color ? color : _checkedColor;
-    const thumbTintColor = value && !disabled ? checkedColor : _thumbTintColor;
-    const onTintColor =
-        value && !disabled ? setColor(checkedColor).alpha(0.5).rgb().string() : _onTintColor;
+    );
 
-    const props =
-        version && version.major === 0 && version.minor <= 56
-            ? {
-                  onTintColor,
-                  thumbTintColor,
-              }
-            : Platform.OS === 'web'
-            ? {
-                  activeTrackColor: onTintColor,
-                  thumbColor: thumbTintColor,
-                  activeThumbColor: checkedColor,
-              }
-            : {
-                  thumbColor: thumbTintColor,
-                  trackColor: {
-                      true: onTintColor,
-                      false: onTintColor,
-                  },
-              };
+    const { switchStyle, props } = useMemo(() => {
+        const {
+            checkedColor,
+            onTintColor: _onTintColor,
+            thumbTintColor: _thumbTintColor,
+            ...switchStyles
+        } = componentStyles;
+
+        const thumbTintColor = value && !disabled ? checkedColor : _thumbTintColor;
+        const onTintColor =
+            value && !disabled ? setColor(checkedColor).alpha(0.5).rgb().string() : _onTintColor;
+
+        return {
+            switchStyle: switchStyles,
+            props:
+                version && version.major === 0 && version.minor <= 56
+                    ? {
+                          onTintColor,
+                          thumbTintColor,
+                      }
+                    : Platform.OS === 'web'
+                    ? {
+                          activeTrackColor: onTintColor,
+                          thumbColor: thumbTintColor,
+                          activeThumbColor: checkedColor,
+                      }
+                    : {
+                          thumbColor: thumbTintColor,
+                          trackColor: {
+                              true: onTintColor,
+                              false: onTintColor,
+                          },
+                      },
+        };
+    }, [componentStyles, disabled, value]);
 
     return (
         <NativeSwitch
+            ref={ref}
             value={value}
             disabled={disabled}
             onValueChange={disabled ? undefined : onValueChange}
-            style={switchStyles}
+            style={switchStyle}
             {...props}
             {...rest}
         />
@@ -150,4 +181,4 @@ export const defaultStyles: ComponentStylePropWithVariants<
     },
 };
 
-export default memo(Switch);
+export default memo(forwardRef(Switch));

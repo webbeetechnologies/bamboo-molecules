@@ -16,11 +16,19 @@ const AnimatedSpinner = ({
     color: string;
     styles: StyleProp<any>;
 }) => {
-    const containerStyle = {
-        width: size,
-        height: size / 2,
-        overflow: 'hidden' as const,
-    };
+    const containerStyle = useMemo(
+        () => ({
+            width: size,
+            height: size / 2,
+            overflow: 'hidden' as const,
+        }),
+        [size],
+    );
+    const offsetContainerStyles = useMemo(() => {
+        const offsetStyle = index ? { top: size / 2 } : null;
+
+        return [containerStyle, offsetStyle];
+    }, [containerStyle, index, size]);
 
     const frames = (60 * duration) / 1000;
     const easing = Easing.bezier(0.4, 0.0, 0.7, 1.0);
@@ -71,8 +79,6 @@ const AnimatedSpinner = ({
         ],
     };
 
-    const offsetStyle = index ? { top: size / 2 } : null;
-
     const lineStyle = {
         width: size,
         height: size,
@@ -82,9 +88,9 @@ const AnimatedSpinner = ({
     };
 
     return (
-        <Animated.View style={[styles.layer]}>
+        <Animated.View style={styles.layer}>
             <Animated.View style={layerStyle}>
-                <Animated.View style={[containerStyle, offsetStyle]} collapsable={false}>
+                <Animated.View style={offsetContainerStyles} collapsable={false}>
                     <Animated.View style={viewportStyle}>
                         <Animated.View style={containerStyle} collapsable={false}>
                             <Animated.View style={lineStyle} />

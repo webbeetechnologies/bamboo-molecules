@@ -1,4 +1,4 @@
-# DatePicker
+# TimePicker
 - As a user, I want a user friendly interface to select a time.
 - As a user, I want the ability to type in a time (Masked Input).
 - As a user, I want to see a configurable clock Icon on the right for a date field.
@@ -13,3 +13,6 @@
 
 ## Also see
 - [DateTimePicker](./DateTimePicker.md)
+
+## Reference
+- https://www.npmjs.com/package/@react-native-community/datetimepicker

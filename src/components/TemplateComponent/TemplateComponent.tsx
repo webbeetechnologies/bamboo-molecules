@@ -1,8 +1,8 @@
+import { memo } from 'react';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { TemplateComponentProps } from './types';
 
-
-const TemplateComponent = ({ style, ...rest }: TemplateComponentProps) => {
+const ComponentTemplate = ({ style, ...rest }: TemplateComponentProps) => {
     const { View, Text } = useMolecules();
     const componentStyles = useComponentStyles('View', style); // all the styling logics goes here
 
@@ -13,4 +13,4 @@ const TemplateComponent = ({ style, ...rest }: TemplateComponentProps) => {
     );
 };
 
-export default TemplateComponent;
+export default memo(ComponentTemplate);

@@ -8,10 +8,10 @@ import {
 import {
     ActivityIndicator,
     Icon,
+    IconButton,
     HorizontalDivider,
     VerticalDivider,
     TouchableRipple,
-    TouchableRippleProps,
     Button,
     Surface,
     Switch,
@@ -22,6 +22,13 @@ import {
     PresenceTransition,
     Backdrop,
     Transition,
+    Checkbox,
+    TextInput,
+    TextInputProps,
+    NumberInput,
+    FilePicker,
+    HelperText,
+    Modal,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -35,7 +42,8 @@ import type { DefaultComponents, ProvideComponentsProps } from './types';
  */
 const defaultComponents: DefaultComponents = {
     Icon,
-    TouchableRipple: TouchableRipple as ComponentType<TouchableRippleProps>, // ts-error
+    IconButton,
+    TouchableRipple,
     ActivityIndicator,
     HorizontalDivider,
     VerticalDivider,
@@ -49,6 +57,12 @@ const defaultComponents: DefaultComponents = {
     PresenceTransition,
     Transition,
     Backdrop,
+    Checkbox,
+    TextInput: TextInput as ComponentType<TextInputProps>,
+    NumberInput,
+    FilePicker,
+    HelperText,
+    Modal,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
