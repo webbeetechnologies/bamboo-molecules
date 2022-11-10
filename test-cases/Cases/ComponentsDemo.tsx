@@ -20,9 +20,6 @@ const theme = extendTheme({
         color: 'colors.onSurface',
         fontSize: 18,
     },
-    Button: {
-        marginBottom: 10,
-    },
 });
 
 const Example = () => {
@@ -42,7 +39,8 @@ const Example = () => {
         FilePicker,
         Label,
         HelperText,
-        Calendar,
+        DatePickerInline,
+        DatePickerModal,
         DatePickerInput,
         TimePickerModal,
     } = useMolecules();
@@ -51,6 +49,7 @@ const Example = () => {
     const [files, setFiles] = useState<any>(null);
     const [number, setNumber] = useState('222.a');
     const [pickTime, setPickTime] = useState(false);
+    const [pickDate, setPickDate] = useState(false);
 
     const { colorMode, toggleColorMode } = useColorMode();
 
@@ -78,15 +77,7 @@ const Example = () => {
                 </TouchableRipple>
             </Surface>
 
-            <Calendar
-                onChange={date => {
-                    // eslint-disable-next-line no-console
-                    console.log(date);
-                }}
-                locale={'en'}
-                date={undefined}
-                mode={'single'}
-            />
+            <DatePickerInline mode="single" date={new Date()} onChange={() => {}} />
 
             <DatePickerInput
                 locale={'en'}
@@ -101,7 +92,18 @@ const Example = () => {
                 onConfirm={() => setPickTime(false)}
             />
 
+            <DatePickerModal
+                visible={pickDate}
+                mode="range"
+                onDismiss={() => setPickDate(false)}
+                onConfirm={() => setPickDate(false)}
+                startDate={new Date()}
+                endDate={undefined}
+            />
+
             <Button onPress={() => setPickTime(true)}>Pick Time</Button>
+
+            <Button onPress={() => setPickDate(true)}>Pick Date Range</Button>
 
             <HorizontalDivider spacing={30} />
 
