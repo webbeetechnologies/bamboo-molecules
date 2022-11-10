@@ -1,6 +1,12 @@
 export {
     default as DatePickerInline,
-    Props as DatePickerInlineProps,
+    DatePickerInlineProps,
+    getStateValue,
+} from './DatePickerInline';
+export { default as DatePickerInlineBase } from './DatePickerInlineBase';
+
+export {
+    DatePickerInlineBaseProps,
     ValidRangeType,
     CalendarDate,
     CalendarDates,
@@ -13,7 +19,8 @@ export {
     DatePickerSingleProps,
     DatePickerMultiProps,
     DatePickerRangeProps,
-} from './DatePickerInline';
+} from './types';
+
 export {
     datePickerStyles,
     datePickerMonthStyles,
@@ -22,4 +29,6 @@ export {
     datePickerHeaderStyles,
     dateDayNameStyles,
     datePickerDayRangeStyles,
+    datePickerDayEmptyStyles,
+    datePickerWeekStyles,
 } from './utils';

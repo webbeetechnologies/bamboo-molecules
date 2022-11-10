@@ -15,15 +15,7 @@ import {
 import TimeInput from './TimeInput';
 import AmPmSwitcher from './AmPmSwitcher';
 
-function TimeInputs({
-    hours,
-    minutes,
-    onFocusInput,
-    focused,
-    inputType,
-    onChange,
-    is24Hour,
-}: {
+type Props = {
     inputType: PossibleInputTypes;
     focused: PossibleClockTypes;
     hours: number;
@@ -35,9 +27,20 @@ function TimeInputs({
         focused?: undefined | PossibleClockTypes;
     }) => any;
     is24Hour: boolean;
-}) {
+};
+
+function TimeInputs({
+    hours,
+    minutes,
+    onFocusInput,
+    focused,
+    inputType,
+    onChange,
+    is24Hour,
+}: Props) {
     const dimensions = useWindowDimensions();
     const isLandscape = dimensions.width > dimensions.height;
+
     const componentStyles = useComponentStyles(
         'TimePicker_Inputs',
         {},

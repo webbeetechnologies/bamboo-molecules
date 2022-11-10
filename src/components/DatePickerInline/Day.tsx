@@ -1,14 +1,14 @@
 import { memo, useCallback, useMemo } from 'react';
 import type { ViewStyle } from 'react-native';
-import type { ViewProps } from '@webbee/bamboo-atoms';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import DayRange from './DayRange';
 
-function EmptyDayPure(props: ViewProps) {
+function EmptyDayPure() {
     const { View } = useMolecules();
+    const componentStyles = useComponentStyles('DatePicker_DayEmpty');
 
-    return <View {...props} />;
+    return <View style={componentStyles} />;
 }
 export const EmptyDay = memo(EmptyDayPure);
 

@@ -1,7 +1,7 @@
 import { memo, useContext, useRef, useCallback, useMemo } from 'react';
-import { GestureResponderEvent, PanResponder, StyleSheet, View } from 'react-native';
+import { GestureResponderEvent, PanResponder, StyleSheet, ViewProps } from 'react-native';
 
-import { useComponentStyles, useLatest } from '../../hooks';
+import { useMolecules, useComponentStyles, useLatest } from '../../hooks';
 import {
     circleSize,
     clockTypes,
@@ -18,13 +18,7 @@ import AnimatedClockSwitcher from './AnimatedClockSwitcher';
 import AnalogClockMinutes from './AnalogClockMinutes';
 import { DisplayModeContext } from './TimePicker';
 
-function AnalogClock({
-    hours,
-    minutes,
-    focused,
-    is24Hour,
-    onChange,
-}: {
+type Props = {
     hours: number;
     minutes: number;
     focused: PossibleClockTypes;
@@ -34,12 +28,15 @@ function AnalogClock({
         minutes: number;
         focused?: undefined | PossibleClockTypes;
     }) => any;
-}) {
+};
+
+function AnalogClock({ hours, minutes, focused, is24Hour, onChange }: Props) {
+    const { View } = useMolecules();
     const componentStyles = useComponentStyles('TimePicker_Clock');
     const { mode } = useContext(DisplayModeContext);
     // used to make pointer shorter if hours are selected and above 12
     const shortPointer = (hours === 0 || hours > 12) && is24Hour;
-    const clockRef = useRef<View | null>(null);
+    const clockRef = useRef<ViewProps | null>(null);
     // Hooks are nice, sometimes... :-)..
     // We need the latest values, since the onPointerMove uses a closure to the function
     const hoursRef = useLatest(hours);

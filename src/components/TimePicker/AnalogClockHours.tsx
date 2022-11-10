@@ -19,6 +19,7 @@ function AnalogClockHours({ is24Hour, hours }: { is24Hour: boolean; hours: numbe
         innerHourTextStyle,
         innerHourInner,
         outerHourInner,
+        textStyle,
     } = useMemo(() => {
         const {
             activeTextColor: _activeTextColor,
@@ -53,6 +54,7 @@ function AnalogClockHours({ is24Hour, hours }: { is24Hour: boolean; hours: numbe
             ],
             outerHourInner: _outerHourInner,
             innerHourInner: _innerHourInner,
+            textStyle: (i: number) => (hours === i + 1 ? { color: activeTextColor } : null),
         };
     }, [componentStyles, hours]);
 
@@ -62,9 +64,7 @@ function AnalogClockHours({ is24Hour, hours }: { is24Hour: boolean; hours: numbe
                 <View key={i} pointerEvents="none" style={outerHourRootStyle(a)}>
                     <View style={outerHourInner}>
                         {/* Display 00 instead of 12 for AM hours */}
-                        <Text
-                            style={hours === i + 1 ? { color: activeTextColor } : null}
-                            selectable={false}>
+                        <Text style={textStyle(i)} selectable={false}>
                             {mode === 'AM' && !is24Hour && i + 1 === 12 ? '00' : i + 1}
                         </Text>
                     </View>

@@ -18,7 +18,7 @@ import {
     montHeaderHeight,
 } from './Month';
 
-import { beginOffset, estimatedMonthHeight, totalMonths } from '../DatePickerInput/dateUtils';
+import { beginOffset, estimatedMonthHeight, totalMonths } from './dateUtils';
 import { useLatest } from '../../hooks';
 import { RenderProps, SwiperProps, useYearChange } from './SwiperUtils';
 import AutoSizer from './AutoSizer';

@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react';
 import { View, ViewStyle } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
-import type { DisableWeekDaysType } from '../DatePickerInput/dateUtils';
+import type { DisableWeekDaysType } from './dateUtils';
 import DayNames, { dayNamesHeight } from './DayNames';
 
 const buttonContainerHeight = 56;
@@ -10,6 +10,7 @@ const buttonContainerMarginTop = 4;
 const buttonContainerMarginBottom = 8;
 
 export type CalendarHeaderProps = {
+    locale?: string;
     scrollMode: 'horizontal' | 'vertical';
     onPrev: () => any;
     onNext: () => any;
@@ -17,19 +18,8 @@ export type CalendarHeaderProps = {
     style?: ViewStyle;
 };
 
-export function getCalendarHeaderHeight(scrollMode: 'horizontal' | 'vertical') {
-    if (scrollMode === 'horizontal') {
-        return (
-            buttonContainerHeight +
-            buttonContainerMarginTop +
-            buttonContainerMarginBottom +
-            dayNamesHeight
-        );
-    }
-    return dayNamesHeight;
-}
-
 function DatePickerInline({
+    locale = 'en',
     scrollMode,
     onPrev,
     onNext,
@@ -79,9 +69,21 @@ function DatePickerInline({
                     </View>
                 ) : null}
             </>
-            <DayNames disableWeekDays={disableWeekDays} />
+            <DayNames disableWeekDays={disableWeekDays} locale={locale} />
         </View>
     );
+}
+
+export function getCalendarHeaderHeight(scrollMode: 'horizontal' | 'vertical') {
+    if (scrollMode === 'horizontal') {
+        return (
+            buttonContainerHeight +
+            buttonContainerMarginTop +
+            buttonContainerMarginBottom +
+            dayNamesHeight
+        );
+    }
+    return dayNamesHeight;
 }
 
 export default memo(DatePickerInline);

@@ -49,23 +49,27 @@ export default function YearPicker({
 
     // TODO replace with FlatList Component
     return (
-        <View style={containerStyle} pointerEvents={selectingYear ? 'auto' : 'none'}>
-            <FlatList<number>
-                ref={flatList}
-                style={styles.list}
-                data={years}
-                renderItem={({ item }) => (
-                    <Year
-                        year={item}
-                        selected={selectedYear === item}
-                        onPressYear={onPressYear}
-                        yearStyles={yearStyle}
+        <>
+            {selectingYear && (
+                <View style={containerStyle} pointerEvents={selectingYear ? 'auto' : 'none'}>
+                    <FlatList<number>
+                        ref={flatList}
+                        style={styles.list}
+                        data={years}
+                        renderItem={({ item }) => (
+                            <Year
+                                year={item}
+                                selected={selectedYear === item}
+                                onPressYear={onPressYear}
+                                yearStyles={yearStyle}
+                            />
+                        )}
+                        keyExtractor={item => `${item}`}
+                        numColumns={3}
                     />
-                )}
-                keyExtractor={item => `${item}`}
-                numColumns={3}
-            />
-        </View>
+                </View>
+            )}
+        </>
     );
 }
 

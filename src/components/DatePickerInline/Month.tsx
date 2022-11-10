@@ -5,55 +5,21 @@ import { useComponentStyles, useMolecules } from '../../hooks';
 import {
     addMonths,
     daySize,
-    DisableWeekDaysType,
     getRealIndex,
     getGridCount,
     gridCounts,
-    showWeekDay,
     startAtIndex,
     beginOffset,
     estimatedMonthHeight,
     useRangeChecker,
     generateCalendarGrid,
-} from '../DatePickerInput/dateUtils';
-import Day, { EmptyDay } from './Day';
+} from './dateUtils';
 import { getCalendarHeaderHeight } from './DatePickerInlineHeader';
-import type { CalendarDate, CalendarDates, ModeType, ValidRangeType } from './DatePickerInline';
 import { dayNamesHeight } from './DayNames';
+import type { MonthMultiProps, MonthRangeProps, MonthSingleProps } from './types';
+import Week from './Week';
 
-interface BaseMonthProps {
-    locale: undefined | string;
-    scrollMode: 'horizontal' | 'vertical';
-    disableWeekDays?: DisableWeekDaysType;
-    mode: ModeType;
-    index: number;
-    onPressYear: (year: number) => any;
-    selectingYear: boolean;
-    onPressDate: (date: Date) => any;
-    validRange?: ValidRangeType;
-
-    // some of these should be required in final implementation
-    startDate?: CalendarDate;
-    endDate?: CalendarDate;
-    date?: CalendarDate;
-    dates?: CalendarDates;
-}
-
-interface MonthRangeProps extends BaseMonthProps {
-    mode: 'range';
-    startDate: CalendarDate;
-    endDate: CalendarDate;
-}
-
-interface MonthSingleProps extends BaseMonthProps {
-    mode: 'single';
-    date: CalendarDate;
-}
-
-interface MonthMultiProps extends BaseMonthProps {
-    mode: 'multiple';
-    dates: CalendarDates;
-}
+export type Props = MonthSingleProps | MonthRangeProps | MonthMultiProps;
 
 function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
     const {
@@ -113,17 +79,13 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         yearInnerStyle,
         monthLabelStyle,
         iconContainerStyle,
-        emptyDayStyle,
-        weekStyle,
     } = useMemo(() => {
         const {
             monthLabel: _monthLabel,
             yearButton,
             yearButtonInner,
-            emptyDay,
             month: _monthStyle,
             monthHeader,
-            week,
         } = monthStyles;
         const { typescale, ...monthLabel } = _monthLabel;
 
@@ -141,9 +103,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
             yearButtonStyle: yearButton,
             yearInnerStyle: yearButtonInner,
             monthLabelStyle: [monthLabel, typescale],
-            iconContainerStyle: isHorizontal ? { opacity: 1 } : { opacity: 0 },
-            emptyDayStyle: emptyDay,
-            weekStyle: week,
+            iconContainerStyle: { opacity: isHorizontal ? 1 : 0 },
         };
     }, [index, isHorizontal, monthStyles, scrollMode]);
 
@@ -171,33 +131,12 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
             </View>
 
             {grid.map(({ weekIndex, generatedDays }) => (
-                <View style={weekStyle} key={weekIndex}>
-                    {generatedDays
-                        .filter(gd => showWeekDay(gd.dayIndex, disableWeekDays))
-                        .map(gd => {
-                            return (
-                                <>
-                                    {gd.beforeWeekDay || gd.afterWeekDay ? (
-                                        <EmptyDay key={gd.dayIndex} style={emptyDayStyle} />
-                                    ) : (
-                                        <Day
-                                            key={gd.dayIndex + weekIndex}
-                                            day={gd.dayOfMonth}
-                                            month={gd.month}
-                                            year={gd.year}
-                                            selected={gd.selected}
-                                            inRange={gd.inRange}
-                                            leftCrop={gd.leftCrop}
-                                            rightCrop={gd.rightCrop}
-                                            onPressDate={onPressDate}
-                                            isToday={gd.isToday}
-                                            disabled={gd.disabled}
-                                        />
-                                    )}
-                                </>
-                            );
-                        })}
-                </View>
+                <Week
+                    weekIndex={weekIndex}
+                    generatedDays={generatedDays}
+                    disableWeekDays={disableWeekDays}
+                    onPressDate={onPressDate}
+                />
             ))}
         </View>
     );

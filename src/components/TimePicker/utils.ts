@@ -92,9 +92,6 @@ export const timePickerInputStyles: ComponentStylePropWithVariants<
 
     container: {
         position: 'relative',
-        height: 80,
-        width: 96,
-        borderRadius: 'roundness.2' as unknown as number,
     },
     input: {
         fontSize: 'typescale.displayLarge.fontSize' as unknown as number,

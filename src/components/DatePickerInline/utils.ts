@@ -1,6 +1,6 @@
 import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
-import { daySize } from '../DatePickerInput/dateUtils';
+import { daySize } from './dateUtils';
 import { dayNamesHeight } from './DayNames';
 import { montHeaderHeight, weekMargin } from './Month';
 
@@ -26,7 +26,6 @@ type DatePickerMonthCustomProps = {
     yearButton?: TextStyle;
     yearButtonInner?: ViewStyle;
     emptyDay?: ViewStyle;
-    week?: ViewStyle;
     month?: ViewStyle;
     monthHeader?: ViewStyle;
 };
@@ -50,15 +49,6 @@ export const datePickerMonthStyles: ComponentStylePropWithVariants<
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 'roundness.1' as unknown as number,
-    },
-    emptyDay: {
-        flex: 1,
-        flexBasis: 0,
-    },
-    week: {
-        flexDirection: 'row',
-        marginBottom: weekMargin,
-        height: daySize,
     },
     month: {},
     monthHeader: {
@@ -90,7 +80,7 @@ export const datePickerYearPickerStyles: ComponentStylePropWithVariants<
         marginRight: 16,
         justifyContent: 'center',
     },
-    selectedYear: { color: '#fff' },
+    selectedYear: { color: 'colors.onPrimary' },
     yearButton: {
         borderRadius: 46 / 2,
         overflow: 'hidden',
@@ -112,7 +102,6 @@ type DatePickerDayState = 'disabled' | 'selected' | 'inRange';
 type DatePickerDayCustomProps = {
     containerStyle?: ViewStyle;
     disabled?: TextStyle;
-    root?: ViewStyle;
     button?: ViewStyle;
     day?: ViewStyle;
     today?: ViewStyle;
@@ -128,16 +117,12 @@ export const datePickerDayStyles: ComponentStylePropWithVariants<
     containerStyle: {
         flex: 1,
         flexBasis: 0,
-    },
-    disabled: {
-        opacity: 0.3,
-    },
-    root: {
-        flexBasis: 0,
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
+    },
+    disabled: {
+        opacity: 0.3,
     },
     button: {
         width: daySize,
@@ -166,7 +151,7 @@ export const datePickerDayStyles: ComponentStylePropWithVariants<
 
     states: {
         disabled: {
-            root: {
+            containerStyle: {
                 opacity: 0.3,
             },
         },
@@ -197,6 +182,17 @@ export const datePickerDayStyles: ComponentStylePropWithVariants<
     },
 };
 
+export const datePickerDayEmptyStyles: ComponentStylePropWithVariants<ViewStyle> = {
+    flex: 1,
+    flexBasis: 0,
+};
+
+export const datePickerWeekStyles: ComponentStylePropWithVariants<ViewStyle> = {
+    flexDirection: 'row',
+    marginBottom: weekMargin,
+    height: daySize,
+};
+
 type DatePickerHeaderCustomProps = {
     datePickerHeader: ViewStyle;
     buttonContainer: ViewStyle;
@@ -224,9 +220,7 @@ export const datePickerHeaderStyles: ComponentStylePropWithVariants<
         flexDirection: 'row',
         alignItems: 'center',
     },
-    buttonWrapper: {
-        backgroundColor: 'colors.surface',
-    },
+    buttonWrapper: {},
     spacer: { flex: 1 },
 };
 

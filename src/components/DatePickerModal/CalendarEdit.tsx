@@ -1,10 +1,23 @@
 import { memo, useRef, useEffect, useCallback } from 'react';
-import { View, StyleSheet, TextInput as TextInputNative, Keyboard } from 'react-native';
+import { View, TextInput as TextInputNative, Keyboard } from 'react-native';
 
 import type { ModeType, ValidRangeType } from '../DatePickerInline';
-import type { LocalState } from './DatePickerModalContent';
+import type { LocalState } from './types';
 
 import DatePickerInputWithoutModal from '../DatePickerInput/DatePickerInputWithoutModal';
+import { useComponentStyles } from '../../hooks';
+
+type Props = {
+    mode: ModeType;
+    label?: string;
+    startLabel?: string;
+    endLabel?: string;
+    state: LocalState;
+    collapsed: boolean;
+    onChange: (s: LocalState) => any;
+    validRange: ValidRangeType | undefined;
+    locale: string;
+};
 
 function CalendarEdit({
     mode,
@@ -16,17 +29,9 @@ function CalendarEdit({
     onChange,
     validRange,
     locale,
-}: {
-    mode: ModeType;
-    label?: string;
-    startLabel?: string;
-    endLabel?: string;
-    state: LocalState;
-    collapsed: boolean;
-    onChange: (s: LocalState) => any;
-    validRange: ValidRangeType | undefined;
-    locale: string;
-}) {
+}: Props) {
+    const componentStyles = useComponentStyles('DatePickerModal_Edit');
+
     const dateInput = useRef<TextInputNative | null>(null);
     const startInput = useRef<TextInputNative | null>(null);
     const endInput = useRef<TextInputNative | null>(null);
@@ -68,7 +73,7 @@ function CalendarEdit({
     }, []);
 
     return (
-        <View style={styles.root}>
+        <View style={componentStyles.container}>
             <>
                 {mode === 'single' ? (
                     <DatePickerInputWithoutModal
@@ -88,7 +93,7 @@ function CalendarEdit({
 
             <>
                 {mode === 'range' ? (
-                    <View style={styles.inner}>
+                    <View style={componentStyles.inner}>
                         <DatePickerInputWithoutModal
                             inputMode="start"
                             ref={startInput}
@@ -104,7 +109,7 @@ function CalendarEdit({
                             withModal={false}
                             autoComplete={'off'}
                         />
-                        <View style={styles.separator} />
+                        <View style={componentStyles.separator} />
                         <DatePickerInputWithoutModal
                             inputMode="end"
                             ref={endInput}
@@ -125,13 +130,5 @@ function CalendarEdit({
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    root: { padding: 12 },
-    inner: { flexDirection: 'row' },
-    inputContainer: { flex: 1 },
-    input: { flex: 1 },
-    separator: { width: 12 },
-});
 
 export default memo(CalendarEdit);

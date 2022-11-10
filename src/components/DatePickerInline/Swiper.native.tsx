@@ -16,7 +16,7 @@ import {
 } from './Month';
 
 import { SwiperProps, useYearChange } from './SwiperUtils';
-import { beginOffset, estimatedMonthHeight, totalMonths } from '../DatePickerInput/dateUtils';
+import { beginOffset, estimatedMonthHeight, totalMonths } from './dateUtils';
 import AutoSizer from './AutoSizer';
 
 function getVisibleArray(

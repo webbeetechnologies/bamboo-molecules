@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
+
+import { useMolecules } from '../../hooks';
 import { clockTypes, PossibleClockTypes } from './timeUtils';
 
 export default function AnimatedClockSwitcher({
@@ -11,6 +13,7 @@ export default function AnimatedClockSwitcher({
     hours: any;
     minutes: any;
 }) {
+    const { View } = useMolecules();
     const collapsed = focused === clockTypes.hours;
     const animatedCollapsed = useRef<Animated.Value>(new Animated.Value(collapsed ? 1 : 0));
 

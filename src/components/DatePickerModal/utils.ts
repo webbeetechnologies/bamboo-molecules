@@ -5,7 +5,7 @@ type DatePickerModalCustomProps = {
     header?: ViewStyle;
 };
 
-export const datePickerModalDefaultStyles: ComponentStylePropWithVariants<
+export const datePickerModalStyles: ComponentStylePropWithVariants<
     TextStyle,
     '',
     DatePickerModalCustomProps
@@ -22,7 +22,7 @@ type DatePickerModalHeaderCustomProps = {
     appbarHeader?: ViewStyle;
 };
 
-export const datePickerModalHeaderDefaultStyles: ComponentStylePropWithVariants<
+export const datePickerModalHeaderStyles: ComponentStylePropWithVariants<
     TextStyle,
     'disableSafeTop',
     DatePickerModalHeaderCustomProps
@@ -70,7 +70,7 @@ type DatePickerModalContentHeaderCustomProps = {
     icon?: TextStyle;
 };
 
-export const datePickerModalContentHeaderDefaultStyles: ComponentStylePropWithVariants<
+export const datePickerModalContentHeaderStyles: ComponentStylePropWithVariants<
     TextStyle,
     '',
     DatePickerModalContentHeaderCustomProps
@@ -118,7 +118,7 @@ type DatePickerModalHeaderBackgroundCustomProps = {
     safeContent?: ViewStyle;
 };
 
-export const datePickerModalHeaderBackgroundDefaultStyles: ComponentStylePropWithVariants<
+export const datePickerModalHeaderBackgroundStyles: ComponentStylePropWithVariants<
     TextStyle,
     '',
     DatePickerModalHeaderBackgroundCustomProps
@@ -131,4 +131,24 @@ export const datePickerModalHeaderBackgroundDefaultStyles: ComponentStylePropWit
     safeContent: {
         paddingBottom: 'spacings.0',
     },
+};
+
+type DatePickerModalEditCustomProps = {
+    container?: ViewStyle;
+    inner?: ViewStyle;
+    inputContainer?: ViewStyle;
+    input?: ViewStyle;
+    separator?: ViewStyle;
+};
+
+export const datePickerModalEditStyles: ComponentStylePropWithVariants<
+    ViewStyle,
+    '',
+    DatePickerModalEditCustomProps
+> = {
+    container: { padding: 'spacings.3' },
+    inner: { flexDirection: 'row' },
+    inputContainer: { flex: 1 },
+    input: { flex: 1 },
+    separator: { width: 12 },
 };

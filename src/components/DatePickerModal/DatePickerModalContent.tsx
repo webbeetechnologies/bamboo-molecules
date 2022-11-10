@@ -1,76 +1,26 @@
-import { memo, useState, useCallback, useEffect } from 'react';
+import { memo, useState, useCallback } from 'react';
 
-import { useMolecules } from '../../hooks';
-import type {
-    BaseDatePickerProps,
-    CalendarDate,
-    CalendarDates,
-    MultiChange,
-    MultiConfirm,
-    RangeChange,
-    SingleChange,
-} from '../DatePickerInline';
-
+import { DatePickerInlineBase, getStateValue } from '../DatePickerInline';
 import AnimatedCrossView from './AnimatedCrossView';
-
 import DatePickerModalHeader from './DatePickerModalHeader';
-import DatePickerModalContentHeader, { HeaderPickProps } from './DatePickerModalContentHeader';
+import DatePickerModalContentHeader from './DatePickerModalContentHeader';
 import CalendarEdit from './CalendarEdit';
 import DatePickerModalHeaderBackground from './DatePickerModalHeaderBackground';
 
-export type LocalState = {
-    startDate: CalendarDate;
-    endDate: CalendarDate;
-    date: CalendarDate;
-    dates: CalendarDates;
-};
+import type {
+    DatePickerModalContentSingleProps,
+    DatePickerModalContentRangeProps,
+    DatePickerModalContentMultiProps,
+    LocalState,
+} from './types';
+import { useControlledValue } from '../../hooks';
 
-interface DatePickerModalContentBaseProps {
-    inputFormat?: string;
-    locale?: string;
-    onDismiss: () => any;
-    disableSafeTop?: boolean;
-    saveLabelDisabled?: boolean;
-}
+type Props =
+    | DatePickerModalContentSingleProps
+    | DatePickerModalContentRangeProps
+    | DatePickerModalContentMultiProps;
 
-export interface DatePickerModalContentRangeProps
-    extends HeaderPickProps,
-        BaseDatePickerProps,
-        DatePickerModalContentBaseProps {
-    mode: 'range';
-    startDate: CalendarDate;
-    endDate: CalendarDate;
-    onChange?: RangeChange;
-    onConfirm: RangeChange;
-}
-
-export interface DatePickerModalContentSingleProps
-    extends HeaderPickProps,
-        BaseDatePickerProps,
-        DatePickerModalContentBaseProps {
-    mode: 'single';
-    date?: CalendarDate;
-    onChange?: SingleChange;
-    onConfirm: SingleChange;
-    dateMode?: 'start' | 'end';
-}
-
-export interface DatePickerModalContentMultiProps
-    extends HeaderPickProps,
-        BaseDatePickerProps,
-        DatePickerModalContentBaseProps {
-    mode: 'multiple';
-    dates?: CalendarDates;
-    onChange?: MultiChange;
-    onConfirm: MultiConfirm;
-}
-
-export function DatePickerModalContent(
-    props:
-        | DatePickerModalContentRangeProps
-        | DatePickerModalContentSingleProps
-        | DatePickerModalContentMultiProps,
-) {
+export function DatePickerModalContent(props: Props) {
     const {
         mode,
         onChange,
@@ -83,53 +33,38 @@ export function DatePickerModalContent(
         dateMode,
         startYear,
         endYear,
+        date,
+        startDate,
+        endDate,
+        dates,
     } = props;
-
-    const anyProps = props as any;
-
-    const { DatePickerInline } = useMolecules();
-
-    // use local state to add only onConfirm state changes
-    const [state, setState] = useState<LocalState>({
-        date: anyProps.date,
-        startDate: anyProps.startDate,
-        endDate: anyProps.endDate,
-        dates: anyProps.dates,
-    });
-
-    // update local state if changed from outside or if modal is opened
-    useEffect(() => {
-        setState({
-            date: anyProps.date,
-            startDate: anyProps.startDate,
-            endDate: anyProps.endDate,
-            dates: anyProps.dates,
-        });
-    }, [anyProps.date, anyProps.startDate, anyProps.endDate, anyProps.dates]);
-
     const [collapsed, setCollapsed] = useState<boolean>(true);
-
-    const onInnerChange = useCallback(
-        (params: any) => {
-            onChange && onChange(params);
-            setState(prev => ({ ...prev, ...params }));
-        },
-        [onChange, setState],
-    );
+    const [state, onStateChange] = useControlledValue<LocalState>({
+        value: getStateValue(
+            {
+                date,
+                dates,
+                startDate,
+                endDate,
+            },
+            mode,
+        ),
+        onChange: onChange as any,
+    });
 
     const onInnerConfirm = useCallback(() => {
         if (mode === 'single') {
             (onConfirm as DatePickerModalContentSingleProps['onConfirm'])({
-                date: state.date,
+                date: state?.date,
             });
         } else if (mode === 'range') {
             (onConfirm as DatePickerModalContentRangeProps['onConfirm'])({
-                startDate: state.startDate,
-                endDate: state.endDate,
+                startDate: state?.startDate,
+                endDate: state?.endDate,
             });
         } else if (mode === 'multiple') {
             (onConfirm as DatePickerModalContentMultiProps['onConfirm'])({
-                dates: state.dates || [],
+                dates: state?.dates || [],
             });
         }
     }, [state, mode, onConfirm]);
@@ -151,7 +86,7 @@ export function DatePickerModalContent(
                     closeIcon={props.closeIcon}
                 />
                 <DatePickerModalContentHeader
-                    state={state}
+                    state={state || { startDate, dates, date, endDate }}
                     mode={mode}
                     collapsed={collapsed}
                     onToggle={onToggleCollapse}
@@ -171,15 +106,15 @@ export function DatePickerModalContent(
             <AnimatedCrossView
                 collapsed={collapsed}
                 calendar={
-                    <DatePickerInline
+                    <DatePickerInlineBase
                         locale={locale}
                         mode={mode}
-                        startDate={state.startDate}
-                        endDate={state.endDate}
-                        date={state.date}
-                        onChange={onInnerChange}
+                        startDate={state?.startDate}
+                        endDate={state?.endDate}
+                        date={state?.date}
+                        onChange={onStateChange as any}
                         disableWeekDays={disableWeekDays}
-                        dates={state.dates}
+                        dates={state?.dates}
                         validRange={validRange}
                         dateMode={dateMode}
                         startYear={startYear}
@@ -189,12 +124,12 @@ export function DatePickerModalContent(
                 calendarEdit={
                     <CalendarEdit
                         mode={mode}
-                        state={state}
+                        state={state || { startDate, dates, date, endDate }}
                         label={props.label}
                         startLabel={props.startLabel}
                         endLabel={props.endLabel}
                         collapsed={collapsed}
-                        onChange={onInnerChange}
+                        onChange={onStateChange}
                         validRange={validRange}
                         locale={locale}
                     />

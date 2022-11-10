@@ -50,15 +50,18 @@ export {
     datePickerHeaderStyles,
     dateDayNameStyles,
     datePickerDayRangeStyles,
+    datePickerDayEmptyStyles,
+    datePickerWeekStyles,
 } from './DatePickerInline';
 
 export {
     DatePickerModal,
     DatePickerModalProps,
-    datePickerModalDefaultStyles,
-    datePickerModalContentHeaderDefaultStyles,
-    datePickerModalHeaderDefaultStyles,
-    datePickerModalHeaderBackgroundDefaultStyles,
+    datePickerModalStyles,
+    datePickerModalContentHeaderStyles,
+    datePickerModalHeaderStyles,
+    datePickerModalHeaderBackgroundStyles,
+    datePickerModalEditStyles,
 } from './DatePickerModal';
 
 export { DatePickerInput, DatePickerInputProps, datePickerInputStyles } from './DatePickerInput';

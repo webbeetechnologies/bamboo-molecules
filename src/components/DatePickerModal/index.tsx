@@ -1,8 +1,10 @@
-export { default as DatePickerModal, Props as DatePickerModalProps } from './DatePickerModal';
+export { default as DatePickerModal } from './DatePickerModal';
+export { DatePickerModalProps } from './types';
 
 export {
-    datePickerModalDefaultStyles,
-    datePickerModalContentHeaderDefaultStyles,
-    datePickerModalHeaderDefaultStyles,
-    datePickerModalHeaderBackgroundDefaultStyles,
+    datePickerModalStyles,
+    datePickerModalContentHeaderStyles,
+    datePickerModalHeaderStyles,
+    datePickerModalHeaderBackgroundStyles,
+    datePickerModalEditStyles,
 } from './utils';

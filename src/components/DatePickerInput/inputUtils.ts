@@ -1,6 +1,6 @@
-import { useInputFormat, useInputFormatter, useRangeChecker } from './dateUtils';
+import { useInputFormat, useInputFormatter, useRangeChecker } from '../DatePickerInline/dateUtils';
 import { useState } from 'react';
-import type { ValidRangeType } from '../DatePickerInline/DatePickerInline';
+import type { ValidRangeType } from '../DatePickerInline';
 
 export default function useDateInput({
     locale,

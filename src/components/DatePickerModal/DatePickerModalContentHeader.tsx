@@ -3,7 +3,7 @@ import type { TextStyle } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { ModeType } from '../DatePickerInline';
-import type { LocalState } from './DatePickerModalContent';
+import type { LocalState } from './types';
 
 export interface HeaderPickProps {
     moreLabel?: string;
@@ -160,16 +160,17 @@ export function HeaderContentMulti({
     emptyLabel = ' ',
     moreLabel = 'more',
     textStyle,
+    locale = 'en',
 }: HeaderContentProps & { moreLabel: string | undefined }) {
     const dateCount = state.dates?.length || 0;
     const { Text } = useMolecules();
 
     const formatter = useMemo(() => {
-        return new Intl.DateTimeFormat('en', {
+        return new Intl.DateTimeFormat(locale, {
             month: 'short',
             day: 'numeric',
         });
-    }, []);
+    }, [locale]);
 
     let label = emptyLabel;
     if (dateCount) {

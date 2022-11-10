@@ -1,5 +1,4 @@
 import { forwardRef, memo } from 'react';
-import { View } from 'react-native';
 
 import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
 import useDateInput from './inputUtils';
@@ -28,7 +27,7 @@ function DatePickerInputWithoutModal(
     },
     ref: any,
 ) {
-    const { TextInputWithMask } = useMolecules();
+    const { TextInputWithMask, View } = useMolecules();
     const { container } = useComponentStyles('DatePickerInput');
 
     const theme = useCurrentTheme();

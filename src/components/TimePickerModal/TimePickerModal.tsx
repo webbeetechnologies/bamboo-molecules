@@ -1,5 +1,5 @@
 import { memo, useState, useCallback, useEffect } from 'react';
-import { View, Text, KeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import {
@@ -44,7 +44,7 @@ export function TimePickerModal({
     clockIcon = 'clock-outline',
     ...rest
 }: Props) {
-    const { IconButton, Button, Modal, TimePicker } = useMolecules();
+    const { IconButton, Button, Modal, TimePicker, View, Text } = useMolecules();
     const componentStyles = useComponentStyles('TimePickerModal');
 
     const [inputType, setInputType] = useState<PossibleInputTypes>(inputTypes.picker);

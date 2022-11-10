@@ -1,11 +1,6 @@
 import { MutableRefObject, useEffect } from 'react';
 import { useLatest } from '../../hooks';
-import {
-    addMonths,
-    differenceInMonths,
-    getRealIndex,
-    startAtIndex,
-} from '../DatePickerInput/dateUtils';
+import { addMonths, differenceInMonths, getRealIndex, startAtIndex } from './dateUtils';
 
 export type RenderProps = {
     index: number;

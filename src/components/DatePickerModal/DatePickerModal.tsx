@@ -1,40 +1,12 @@
 import { memo, useMemo } from 'react';
-import { StyleSheet, useWindowDimensions, Platform, StatusBar, ViewStyle } from 'react-native';
+import { StyleSheet, useWindowDimensions, Platform, StatusBar, StatusBarStyle } from 'react-native';
 import color from 'color';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
-import DatePickerModalContent, {
-    DatePickerModalContentMultiProps,
-    DatePickerModalContentRangeProps,
-    DatePickerModalContentSingleProps,
-} from './DatePickerModalContent';
+import { DatePickerModalContent } from './DatePickerModalContent';
+import type { DatePickerModalProps } from './types';
 
-interface DatePickerModalProps {
-    visible: boolean;
-    animationType?: 'slide' | 'fade' | 'none';
-    disableStatusBar?: boolean;
-    disableStatusBarPadding?: boolean;
-    style?: ViewStyle;
-}
-
-export interface DatePickerModalSingleProps
-    extends DatePickerModalContentSingleProps,
-        DatePickerModalProps {}
-
-export interface DatePickerModalMultiProps
-    extends DatePickerModalContentMultiProps,
-        DatePickerModalProps {}
-
-export interface DatePickerModalRangeProps
-    extends DatePickerModalContentRangeProps,
-        DatePickerModalProps {}
-
-export type Props =
-    | DatePickerModalRangeProps
-    | DatePickerModalSingleProps
-    | DatePickerModalMultiProps;
-
-export function DatePickerModal(props: Props) {
+export function DatePickerModal(props: DatePickerModalProps) {
     const { View, Modal } = useMolecules();
     const dimensions = useWindowDimensions();
 
@@ -44,6 +16,7 @@ export function DatePickerModal(props: Props) {
         disableStatusBar,
         disableStatusBarPadding,
         locale = 'en',
+        mode = 'single',
         style: styleProp,
         ...rest
     } = props;
@@ -57,8 +30,9 @@ export function DatePickerModal(props: Props) {
 
     const componentStyles = useComponentStyles('DatePickerModal', styleProp);
 
-    const { containerStyle, headerStyle, isHeaderBackgroundLight } = useMemo(() => {
+    const { containerStyle, headerStyle, barStyle } = useMemo(() => {
         const { header } = componentStyles;
+        const isHeaderBackgroundLight = color(header?.backgroundColor).isLight();
 
         return {
             containerStyle: [StyleSheet.absoluteFill],
@@ -68,7 +42,9 @@ export function DatePickerModal(props: Props) {
                     height: StatusBar.currentHeight,
                 },
             ],
-            isHeaderBackgroundLight: color(header?.backgroundColor).isLight(),
+            barStyle: (isHeaderBackgroundLight
+                ? 'dark-content'
+                : 'light-content') as StatusBarStyle,
         };
     }, [componentStyles]);
 
@@ -83,17 +59,11 @@ export function DatePickerModal(props: Props) {
                 presentationStyle="overFullScreen"
                 supportedOrientations={supportedOrientations}
                 elevation={0}
-                //@ts-ignore
                 statusBarTranslucent={true}>
                 <>
                     <>
                         {disableStatusBar ? null : (
-                            <StatusBar
-                                translucent={true}
-                                barStyle={
-                                    isHeaderBackgroundLight ? 'dark-content' : 'light-content'
-                                }
-                            />
+                            <StatusBar translucent={true} barStyle={barStyle} />
                         )}
                     </>
 
@@ -102,6 +72,7 @@ export function DatePickerModal(props: Props) {
                     <DatePickerModalContent
                         {...rest}
                         locale={locale}
+                        mode={mode as any}
                         disableSafeTop={disableStatusBar}
                     />
                 </>
