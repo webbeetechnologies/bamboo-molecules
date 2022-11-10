@@ -77,11 +77,14 @@ const Example = () => {
                 </TouchableRipple>
             </Surface>
 
-            <DatePickerInline mode="single" date={new Date()} onChange={() => {}} />
+            {/*@ts-ignore*/}
+            <DatePickerInline mode="single" />
+
+            <HorizontalDivider spacing={30} />
 
             <DatePickerInput
                 locale={'en'}
-                value={new Date()}
+                value={undefined}
                 onChange={() => {}}
                 inputMode="start"
             />
@@ -92,13 +95,11 @@ const Example = () => {
                 onConfirm={() => setPickTime(false)}
             />
 
+            {/*@ts-ignore*/}
             <DatePickerModal
+                mode={'range'}
                 visible={pickDate}
-                mode="range"
                 onDismiss={() => setPickDate(false)}
-                onConfirm={() => setPickDate(false)}
-                startDate={new Date()}
-                endDate={undefined}
             />
 
             <Button onPress={() => setPickTime(true)}>Pick Time</Button>
