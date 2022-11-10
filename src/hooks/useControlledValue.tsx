@@ -3,9 +3,9 @@ import { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 type ReturnType<T> = [T | undefined, (value: T) => void];
 
 type Args<T> = {
-    value: T | undefined;
+    value?: T | undefined;
     defaultValue?: T;
-    onChange: ((value: T) => any) | undefined;
+    onChange?: ((value: T) => any) | undefined;
     disabled?: boolean;
     manipulateValue?: (value: T | undefined, prevValue: T | undefined) => T;
 };
@@ -32,7 +32,7 @@ const useControlledValue = <T,>({
         (val: T) => {
             if (disabled) return;
 
-            if (isUncontrolled) {
+            if (isUncontrolled && !onChange) {
                 setValue(manipulateValue(val, uncontrolledValue));
             }
 

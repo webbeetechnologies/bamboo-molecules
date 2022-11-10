@@ -27,11 +27,12 @@ export {
     NumberInputProps,
     FilePickerProps,
     ModalProps,
-    CalendarProps,
+    DatePickerInlineProps,
     DatePickerModalProps,
     DatePickerInputProps,
     TimePickerModalProps,
     TimePickerProps,
+    TextInputWithMaskProps,
 } from './components';
 
 export {
@@ -70,6 +71,8 @@ export {
     tokens,
     generateLightThemeColors,
     generateDarkThemeColors,
+    lightenBy,
+    darkenBy,
 } from './styles';
 
 export {

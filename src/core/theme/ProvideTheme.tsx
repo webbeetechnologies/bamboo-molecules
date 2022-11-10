@@ -21,7 +21,22 @@ import {
     textInputStyles,
     helperTextStyles,
     modalStyles,
-    calendarStyles,
+    datePickerStyles,
+    datePickerYearPickerStyles,
+    datePickerMonthStyles,
+    datePickerDayStyles,
+    datePickerHeaderStyles,
+    dateDayNameStyles,
+    datePickerDayRangeStyles,
+    datePickerModalDefaultStyles,
+    datePickerModalHeaderDefaultStyles,
+    datePickerModalContentHeaderDefaultStyles,
+    datePickerModalHeaderBackgroundDefaultStyles,
+    datePickerInputStyles,
+    timePickerModalStyles,
+    timePickerStyles,
+    timePickerInputStyles,
+    timePickerInputsStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -47,7 +62,27 @@ const defaultThemeValue: Partial<ITheme> = {
     TextInput: textInputStyles,
     HelperText: helperTextStyles,
     Modal: modalStyles,
-    Calendar: calendarStyles,
+
+    DatePickerInline: datePickerStyles,
+    DatePicker_YearPicker: datePickerYearPickerStyles,
+    DatePicker_Month: datePickerMonthStyles,
+    DatePicker_Day: datePickerDayStyles,
+    DatePicker_Header: datePickerHeaderStyles,
+    DatePicker_DayName: dateDayNameStyles,
+    DatePicker_DayRange: datePickerDayRangeStyles,
+
+    DatePickerModal: datePickerModalDefaultStyles,
+    DatePickerModal_Header: datePickerModalHeaderDefaultStyles,
+    DatePickerModal_ContentHeader: datePickerModalContentHeaderDefaultStyles,
+    DatePickerModal_HeaderBackground: datePickerModalHeaderBackgroundDefaultStyles,
+
+    DatePickerInput: datePickerInputStyles,
+
+    TimePickerModal: timePickerModalStyles,
+
+    TimePicker: timePickerStyles,
+    TimePicker_Input: timePickerInputStyles,
+    TimePicker_Inputs: timePickerInputsStyles,
 };
 
 const defaultExtractStyles = memoize(

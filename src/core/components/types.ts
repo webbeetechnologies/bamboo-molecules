@@ -16,11 +16,12 @@ import type {
     FilePickerProps,
     HelperTextProps,
     ModalProps,
-    CalendarProps,
+    DatePickerInlineProps,
     DatePickerModalProps,
     DatePickerInputProps,
     TimePickerProps,
     TimePickerModalProps,
+    TextInputWithMaskProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -44,11 +45,12 @@ export interface DefaultComponents {
     FilePicker: ComponentType<FilePickerProps>;
     HelperText: ComponentType<HelperTextProps>;
     Modal: ComponentType<ModalProps>;
-    Calendar: ComponentType<CalendarProps>;
+    DatePickerInline: ComponentType<DatePickerInlineProps>;
     DatePickerModal: ComponentType<DatePickerModalProps>;
     DatePickerInput: ComponentType<DatePickerInputProps>;
     TimePicker: ComponentType<TimePickerProps>;
     TimePickerModal: ComponentType<TimePickerModalProps>;
+    TextInputWithMask: ComponentType<TextInputWithMaskProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
