@@ -1,10 +1,10 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ProvideMolecules } from '../../common';
 
-import { Example } from './TouchableRipple';
+import { Example } from './TimePickerModal';
 
 export default {
-    title: 'components/TouchableRipple',
+    title: 'components/TimePickerModal',
     component: Example,
     decorators: [
         Story => (
@@ -17,18 +17,17 @@ export default {
 
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
-Default.args = {};
+Default.args = {
+    locale: 'en',
+    hours: 10,
+    minutes: 15,
+};
 
 Default.parameters = {
     docs: {
         source: {
             code: `
-<TouchableRipple
-      style={{ width: 200, height: 100, backgroundColor: '#f1f1f1' }}
-      onPress={() => {}}
-      {...props}>
-      <Text>Touchable Ripple</Text>
-</TouchableRipple>
+<TimePickerModal locale="en" hours={10} minutes={15} {...rest} />
 `,
             language: 'tsx',
             type: 'auto',

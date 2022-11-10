@@ -1,10 +1,10 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ProvideMolecules } from '../../common';
 
-import { Example } from './TouchableRipple';
+import { Example } from './DatePickerInput';
 
 export default {
-    title: 'components/TouchableRipple',
+    title: 'components/DatePickerInput',
     component: Example,
     decorators: [
         Story => (
@@ -17,18 +17,15 @@ export default {
 
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
-Default.args = {};
+Default.args = {
+    locale: 'en',
+};
 
 Default.parameters = {
     docs: {
         source: {
             code: `
-<TouchableRipple
-      style={{ width: 200, height: 100, backgroundColor: '#f1f1f1' }}
-      onPress={() => {}}
-      {...props}>
-      <Text>Touchable Ripple</Text>
-</TouchableRipple>
+<DatePickerInput {...rest} />
 `,
             language: 'tsx',
             type: 'auto',
