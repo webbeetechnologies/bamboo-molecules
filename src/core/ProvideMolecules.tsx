@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
-import { Dimensions, ScrollView, StyleProp } from 'react-native';
+import type { StyleProp } from 'react-native';
 import type { IExtractStylesFuncArgs } from '@webbee/bamboo-atoms';
 import { IComponentsProviderContext, ProvideComponents } from './components';
 import { ProvidePlatformType, PlatformType } from './platform';
 import { extendTheme, ITheme, ProvideTheme, ResolveComponentStylesArgs } from './theme';
-import {PortalProvider} from '@react-native-aria/overlays';
+import { PortalProvider } from './portal';
 
 export type ProvideMoleculesProps = {
     platformType?: PlatformType;

@@ -4,24 +4,24 @@ import {
     forwardRef,
     Fragment,
     isValidElement,
-    memo, ReactElement,
+    memo,
+    ReactElement,
     ReactNode,
     useEffect,
     useMemo,
-    useRef
-} from "react";
-import {useOverlayPosition} from '@react-native-aria/overlays';
+    useRef,
+} from 'react';
+import { useOverlayPosition } from '@react-native-aria/overlays';
 
-import {usePopperContext} from "./PopperContext";
-import {DEFAULT_ARROW_HEIGHT, DEFAULT_ARROW_WIDTH} from "./constants";
-import {getContainerStyle} from "./utils";
-import {ScrollView, StyleSheet} from "react-native";
-import {useMolecules} from "../../hooks";
-import type PopperArrow from "./PopperArrow";
+import { usePopperContext } from './PopperContext';
+import { DEFAULT_ARROW_HEIGHT, DEFAULT_ARROW_WIDTH } from './constants';
+import { getContainerStyle } from './utils';
+import { ScrollView, StyleSheet } from 'react-native';
+import { useMolecules } from '../../hooks';
+import type PopperArrow from './PopperArrow';
 
-const PopperContent = ({children, style, ...rest}: any, ref: any) => {
-    const {View} = useMolecules();
-
+const PopperContent = ({ children, style, ...rest }: any, ref: any) => {
+    const { View } = useMolecules();
 
     const {
         isOpen,
@@ -37,19 +37,10 @@ const PopperContent = ({children, style, ...rest}: any, ref: any) => {
         setOverlayRef,
     } = usePopperContext();
 
-
-
     const overlayRef = useRef(null);
     // const { top } = useSafeAreaInsets();
 
-    const {
-        overlayProps,
-        rendered,
-        arrowProps,
-        placement,
-        updatePosition,
-        ...restO
-    } = useOverlayPosition({
+    const { overlayProps, rendered, arrowProps, placement, updatePosition } = useOverlayPosition({
         scrollRef,
         targetRef: triggerRef,
         overlayRef,
@@ -59,38 +50,26 @@ const PopperContent = ({children, style, ...rest}: any, ref: any) => {
         offset: offset,
         placement: placementProp as any,
         containerPadding: 0,
-        onClose: closeOnScroll ? onClose : null,
+        onClose: closeOnScroll ? onClose : undefined,
         shouldOverlapWithTrigger,
     });
-
-    console.log({
-        overlayProps,
-        rendered,
-        arrowProps,
-        placement,
-        triggerRef,
-        ...restO
-    })
-
-
 
     const restElements: ReactNode[] = [];
     let arrowElement: ReactElement | null = null;
 
     useEffect(() => {
         if (isOpen) {
-            updatePosition()
+            updatePosition();
         }
-    }, [isOpen])
+    }, [isOpen]);
 
     useEffect(() => {
         setOverlayRef && setOverlayRef(overlayRef);
     }, [overlayRef, setOverlayRef]);
 
-
     // Might have performance impact if there are a lot of siblings!
     // Shouldn't be an issue with popovers since it would have atmost 2. Arrow and Content.
-    Children.forEach(children, (child) => {
+    Children.forEach(children, child => {
         if (
             isValidElement(child) &&
             (child.type as typeof PopperArrow).displayName === 'PopperArrow'
@@ -99,23 +78,20 @@ const PopperContent = ({children, style, ...rest}: any, ref: any) => {
                 // @ts-ignore
                 arrowProps,
                 actualPlacement: placement,
-            }) as ReactElement;
+            });
         } else {
             restElements.push(child);
         }
     });
 
-
     let arrowHeight = 0;
     let arrowWidth = 0;
 
     if (arrowElement !== null) {
-        //@ts-ignore
-        const props = arrowElement.props || {};
-        arrowHeight = props.height || DEFAULT_ARROW_HEIGHT;
-        arrowWidth = props.width || DEFAULT_ARROW_WIDTH;
+        const props = (arrowElement as ReactElement).props || {};
+        arrowHeight = props.height ?? DEFAULT_ARROW_HEIGHT;
+        arrowWidth = props.width ?? DEFAULT_ARROW_WIDTH;
     }
-
 
     const containerStyle = useMemo(
         () =>
@@ -124,9 +100,8 @@ const PopperContent = ({children, style, ...rest}: any, ref: any) => {
                 arrowHeight,
                 arrowWidth,
             }),
-        [arrowHeight, arrowWidth, placement]
+        [arrowHeight, arrowWidth, placement],
     );
-
 
     const overlayStyle = useMemo(
         () =>
@@ -139,25 +114,21 @@ const PopperContent = ({children, style, ...rest}: any, ref: any) => {
                     position: 'absolute',
                 },
             }),
-        [rendered, overlayProps.style]
+        [rendered, overlayProps.style],
     );
 
-
-    if (!isOpen) return <Fragment></Fragment>
+    if (!isOpen) return <Fragment />;
 
     return (
-        <ScrollView ref={overlayRef} collapsable={false} style={overlayStyle.overlay}>
-            {arrowElement}
-            <View
-                style={StyleSheet.flatten([containerStyle, style])}
-                {...rest}
-                ref={ref}
-            >
-
-                {restElements}
-            </View>
-        </ScrollView>
+        <Fragment>
+            <ScrollView ref={overlayRef} collapsable={false} style={overlayStyle.overlay}>
+                {arrowElement}
+                <View style={StyleSheet.flatten([containerStyle, style])} {...rest} ref={ref}>
+                    {restElements}
+                </View>
+            </ScrollView>
+        </Fragment>
     );
 };
 
-export default memo(forwardRef(PopperContent))
+export default memo(forwardRef(PopperContent));

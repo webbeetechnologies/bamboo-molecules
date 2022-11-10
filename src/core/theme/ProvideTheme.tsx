@@ -21,6 +21,7 @@ import {
     textInputStyles,
     helperTextStyles,
     modalStyles,
+    popoverStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -46,6 +47,7 @@ const defaultThemeValue: Partial<ITheme> = {
     TextInput: textInputStyles,
     HelperText: helperTextStyles,
     Modal: modalStyles,
+    Popover: popoverStyles,
 };
 
 const defaultExtractStyles = memoize(

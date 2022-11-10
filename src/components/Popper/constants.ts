@@ -1,2 +1,2 @@
-export const DEFAULT_ARROW_HEIGHT = 15;
-export const DEFAULT_ARROW_WIDTH = 15;
+export const DEFAULT_ARROW_HEIGHT = 16;
+export const DEFAULT_ARROW_WIDTH = 16;

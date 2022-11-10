@@ -10,7 +10,6 @@ import type {
     ButtonProps,
     SwitchProps,
     VerticalDividerProps,
-    PopperProps,
     PresenceTransitionProps,
     OverlayProps,
     PopoverProps,
@@ -23,7 +22,6 @@ import type {
     HelperTextProps,
     ModalProps,
 } from '../../components';
-import type { ViewProps } from 'react-native';
 
 export type ProvideComponentsProps = {
     components?: Partial<IComponentsProviderContext>;
@@ -44,9 +42,7 @@ export interface DefaultComponents {
     PresenceTransition: ComponentType<PresenceTransitionProps>;
     Transition: ComponentType<TransitionProps>;
     Backdrop: ComponentType<BackdropProps>;
-    Popper: ComponentType<PopperProps>;
     Popover: ComponentType<PopoverProps>;
-    PopperContent: ComponentType<ViewProps>;
     Checkbox: typeof Checkbox;
     TextInput: ComponentType<TextInputProps>;
     NumberInput: ComponentType<NumberInputProps>;

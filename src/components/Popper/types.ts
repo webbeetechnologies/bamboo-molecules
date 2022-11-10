@@ -1,6 +1,5 @@
-import type {MutableRefObject, PropsWithChildren, ReactElement, ReactNode} from "react";
-import type {ViewProps} from "@webbee/bamboo-atoms";
-
+import type { MutableRefObject, ReactElement, ReactNode } from 'react';
+import type { ViewProps } from '@webbee/bamboo-atoms';
 
 export type IPlacement =
     | 'top'
@@ -16,29 +15,28 @@ export type IPlacement =
     | 'left top'
     | 'left bottom';
 
-export type IPopperProps = {
+export interface TPopperContext {
     shouldFlip?: boolean;
     crossOffset?: number;
     offset?: number;
-    children: ReactNode;
+    onClose?: () => void;
+    onOpen?: () => void;
+    isOpen: boolean;
+    closeOnScroll?: boolean;
+    scrollRef?: MutableRefObject<ReactElement | null>;
     shouldOverlapWithTrigger?: boolean;
     trigger?: ReactElement | MutableRefObject<ReactElement | null>;
     placement?: IPlacement;
-};
-
-export type TPopperContext = IPopperProps;
-
-export type PopperProps = ViewProps & {
-    isOpen: boolean;
     triggerRef: MutableRefObject<ReactElement | null>;
-    onClose: () => void;
     setOverlayRef?: (overlayRef: any) => void;
-    children: ReactNode
-};
+}
 
+export type PopperProps = TPopperContext & {
+    children: ReactNode;
+};
 
 export type PopperArrowProps = ViewProps & {
-    height?: number,
-    width?: number,
-    actualPlacement: IPlacement,
-}
+    height?: number;
+    width?: number;
+    actualPlacement: IPlacement;
+};

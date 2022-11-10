@@ -31,7 +31,7 @@ export {
 export { VerticalDivider, verticalDividerStyles, VerticalDividerProps } from './VerticalDivider';
 export { Switch, switchStyles, SwitchProps } from './Switch';
 
-export { Popover, PopoverProps } from './Popover';
+export { Popover, PopoverProps, popoverStyles } from './Popover';
 export { Popper, PopperProps, PopperContent } from './Popper';
 export { Overlay, OverlayProps } from './Overlay';
 export { Backdrop, BackdropProps } from './Backdrop';
