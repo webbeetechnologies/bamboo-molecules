@@ -1,11 +1,11 @@
 import { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 
-type ReturnType<T> = [T | undefined, (value: T) => void];
+type ReturnType<T> = [T, (value: T) => void];
 
 type Args<T> = {
-    value?: T | undefined;
+    value?: T;
     defaultValue?: T;
-    onChange?: ((value: T) => any) | undefined;
+    onChange?: (value: T) => any;
     disabled?: boolean;
     manipulateValue?: (value: T | undefined, prevValue: T | undefined) => T;
 };
@@ -32,13 +32,13 @@ const useControlledValue = <T,>({
         (val: T) => {
             if (disabled) return;
 
-            if (isUncontrolled && !onChange) {
+            if (!onChange) {
                 setValue(manipulateValue(val, uncontrolledValue));
             }
 
             onChange?.(manipulateValue(val, valueProp));
         },
-        [disabled, isUncontrolled, manipulateValue, onChange, uncontrolledValue, valueProp],
+        [disabled, manipulateValue, onChange, uncontrolledValue, valueProp],
     );
 
     useEffect(() => {
@@ -50,7 +50,7 @@ const useControlledValue = <T,>({
     }, [uncontrolledValue, value]);
 
     return useMemo(
-        () => (isUncontrolled ? [uncontrolledValue, updateValue] : [value, updateValue]),
+        () => [isUncontrolled ? uncontrolledValue : value, updateValue],
         [isUncontrolled, uncontrolledValue, updateValue, value],
     );
 };
