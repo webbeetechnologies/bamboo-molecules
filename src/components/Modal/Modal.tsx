@@ -38,6 +38,7 @@ const Modal = (
         children,
         contentStyle: contentStyleProp,
         size = 'md',
+        elevation = 2,
         ...rest
     }: Props,
     ref: any,
@@ -80,7 +81,7 @@ const Modal = (
                     <View style={modalBackgroundStyle} />
                 </TouchableWithoutFeedback>
                 <View style={contentContainerStyle} pointerEvents="box-none">
-                    <Surface style={contentStyle} elevation={2}>
+                    <Surface style={contentStyle} elevation={elevation}>
                         {children}
                     </Surface>
                 </View>
