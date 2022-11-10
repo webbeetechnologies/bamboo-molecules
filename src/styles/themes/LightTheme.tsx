@@ -44,7 +44,6 @@ export const generateLightThemeColors = (
         backdrop: color(MD3Colors.neutralVariant20).alpha(0.4).rgb().string(),
         disabled: palette.neutral70,
         disabledOnBackground: color(palette.neutral0).alpha(0.12).rgb().string(),
-        onSurfaceNeutral: palette.neutral100,
         neutral1: palette.neutral100,
         onNeutral1: palette.neutral70,
         elevation: {
@@ -80,7 +79,7 @@ export const MD3LightTheme: MD3Theme = {
         '4': 16,
         '5': 20,
         '6': 24,
-        '4l': 18,
+        '7': 28,
     },
     letterSpacings: {
         xxs: -1.5,
