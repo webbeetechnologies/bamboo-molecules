@@ -36,6 +36,7 @@ const PopperContent = ({ children, style, showArrow, ...rest }: any, ref: any) =
         onClose,
         shouldOverlapWithTrigger,
         setOverlayRef,
+        arrowProps: popperArrowProps,
     } = usePopperContext();
 
     const overlayRef = useRef(null);
@@ -89,19 +90,22 @@ const PopperContent = ({ children, style, showArrow, ...rest }: any, ref: any) =
     let arrowWidth = 0;
 
     if (arrowElement !== null) {
+        console.log('arrowElement', arrowProps);
         const props = (arrowElement as ReactElement).props || {};
         arrowHeight = props.height ?? DEFAULT_ARROW_HEIGHT;
         arrowWidth = props.width ?? DEFAULT_ARROW_WIDTH;
     }
 
-    const containerStyle = useMemo(
-        () =>
-            getContainerStyle({
+    const { containerStyle, arrowStyle } = useMemo(
+        () => ({
+            arrowStyle: [popperArrowProps?.style, arrowProps.style],
+            containerStyle: getContainerStyle({
                 placement,
                 arrowHeight,
                 arrowWidth,
             }),
-        [arrowHeight, arrowWidth, placement],
+        }),
+        [arrowHeight, arrowWidth, placement, popperArrowProps, arrowProps],
     );
 
     const overlayStyle = useMemo(
@@ -126,6 +130,9 @@ const PopperContent = ({ children, style, showArrow, ...rest }: any, ref: any) =
                 {arrowElement ??
                     (showArrow && (
                         <PopperArrow
+                            {...popperArrowProps}
+                            {...arrowProps}
+                            style={arrowStyle}
                             width={DEFAULT_ARROW_WIDTH}
                             height={DEFAULT_ARROW_HEIGHT}
                             actualPlacement={placement as IPlacement}

@@ -1,4 +1,4 @@
-import { FC, forwardRef, memo, useCallback, useId, useRef } from 'react';
+import { FC, forwardRef, memo, useCallback, useId, useMemo, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
@@ -29,7 +29,18 @@ const Popover: FC<PopoverProps> = forwardRef(
         const triggerRef = useRef(null);
         const mergedRef = mergeRefs([triggerRef]);
 
-        const popoverStyles = useComponentStyles('Popover');
+        const styles = useComponentStyles('Popover');
+
+        const { arrowProps, ...popoverStyles } = useMemo(() => {
+            const { arrow, ...rest } = styles;
+
+            return {
+                ...rest,
+                arrowProps: {
+                    style: arrow,
+                },
+            };
+        }, [styles]);
 
         const [isOpen, setIsOpen] = useControlledValue({
             value: isOpenProp,
@@ -79,7 +90,13 @@ const Popover: FC<PopoverProps> = forwardRef(
                         visible={isOpen}
                         style={StyleSheet.absoluteFill}>
                         <Backdrop onPress={handleClose} />
-                        <Popper triggerRef={triggerRef} isOpen={isOpen as boolean} {...props}>
+                        <Popper
+                            crossOffset={8}
+                            offset={8}
+                            triggerRef={triggerRef}
+                            isOpen={isOpen as boolean}
+                            {...props}
+                            arrowProps={arrowProps}>
                             <PopoverContext.Provider
                                 value={{
                                     onClose: handleClose,
@@ -89,7 +106,10 @@ const Popover: FC<PopoverProps> = forwardRef(
                                     bodyId,
                                     headerId,
                                 }}>
-                                <PopperContent showArrow={showArrow}>
+                                <PopperContent
+                                    style={popoverStyles.content}
+                                    arrowProps={arrowProps}
+                                    showArrow={showArrow}>
                                     {/* <FocusScope contain={trapFocus} restoreFocus> */}
                                     {children}
                                     {/* </FocusScope> */}

@@ -1,5 +1,6 @@
 import type { MutableRefObject, ReactElement, ReactNode } from 'react';
 import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { View } from 'react-native';
 
 export type IPlacement =
     | 'top'
@@ -25,9 +26,10 @@ export interface TPopperContext {
     closeOnScroll?: boolean;
     scrollRef?: MutableRefObject<ReactElement | null>;
     shouldOverlapWithTrigger?: boolean;
+    arrowProps?: ViewProps;
     trigger?: ReactElement | MutableRefObject<ReactElement | null>;
     placement?: IPlacement;
-    triggerRef: MutableRefObject<ReactElement | null>;
+    triggerRef: MutableRefObject<View | null>;
     setOverlayRef?: (overlayRef: any) => void;
 }
 

@@ -4,6 +4,16 @@ export const getDiagonalLength = (height: number, width: number) => {
     return Math.pow(height * height + width * width, 0.5);
 };
 
+const getArrowLeft = (triggerMeasurements: number[]) => {
+    const [triggerX = 0, _triggerY, triggerWidth = 0, _triggerHeight] = triggerMeasurements || [];
+    return !triggerWidth ? null : triggerX + triggerWidth / 2;
+};
+
+const getArrowTop = (triggerMeasurements: number[]) => {
+    const [_triggerX, triggerY = 0, _triggerWidth, triggerHeight = 0] = triggerMeasurements || [];
+    return !triggerHeight ? null : triggerY + triggerHeight / 2;
+};
+
 export const getArrowStyles = (props: any) => {
     const defaultArrowHeight = DEFAULT_ARROW_HEIGHT;
 
@@ -16,33 +26,37 @@ export const getArrowStyles = (props: any) => {
     if (props.placement === 'top' && props.width) {
         additionalStyles.transform.push({ translateX: -props.width / 2 });
         additionalStyles.transform.push({ rotate: '45deg' });
-        additionalStyles.bottom = Math.ceil((diagonalLength - defaultArrowHeight) / 2);
+        additionalStyles.bottom = -Math.ceil((diagonalLength - defaultArrowHeight) * 0.75);
         additionalStyles.borderBottomWidth = 1;
         additionalStyles.borderRightWidth = 1;
+        additionalStyles.left = getArrowLeft(props.triggerMeasurements);
     }
 
     if (props.placement === 'bottom' && props.width) {
         additionalStyles.transform.push({ translateX: -props.width / 2 });
         additionalStyles.transform.push({ rotate: '45deg' });
-        additionalStyles.top = Math.ceil((diagonalLength - defaultArrowHeight) / 2);
+        additionalStyles.top = -Math.ceil((diagonalLength - defaultArrowHeight) * 0.75);
         additionalStyles.borderTopWidth = 1;
         additionalStyles.borderLeftWidth = 1;
+        additionalStyles.left = getArrowLeft(props.triggerMeasurements);
     }
 
     if (props.placement === 'left' && props.height) {
         additionalStyles.transform.push({ translateY: -props.height / 2 });
         additionalStyles.transform.push({ rotate: '45deg' });
-        additionalStyles.right = Math.ceil((diagonalLength - defaultArrowHeight) / 2);
+        additionalStyles.right = -Math.ceil((diagonalLength - defaultArrowHeight) * 0.75);
         additionalStyles.borderTopWidth = 1;
         additionalStyles.borderRightWidth = 1;
+        additionalStyles.top = getArrowTop(props.triggerMeasurements);
     }
 
     if (props.placement === 'right' && props.height) {
         additionalStyles.transform.push({ translateY: -props.height / 2 });
         additionalStyles.transform.push({ rotate: '45deg' });
-        additionalStyles.left = Math.ceil((diagonalLength - defaultArrowHeight) / 2);
+        additionalStyles.left = -Math.ceil((diagonalLength - defaultArrowHeight) * 0.75);
         additionalStyles.borderBottomWidth = 1;
         additionalStyles.borderLeftWidth = 1;
+        additionalStyles.top = getArrowTop(props.triggerMeasurements);
     }
 
     return additionalStyles;
