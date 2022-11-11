@@ -32,13 +32,13 @@ const useControlledValue = <T,>({
         (val: T) => {
             if (disabled) return;
 
-            if (!onChange) {
+            if (isUncontrolled && !onChange) {
                 setValue(manipulateValue(val, uncontrolledValue));
             }
 
             onChange?.(manipulateValue(val, valueProp));
         },
-        [disabled, manipulateValue, onChange, uncontrolledValue, valueProp],
+        [disabled, isUncontrolled, manipulateValue, onChange, uncontrolledValue, valueProp],
     );
 
     useEffect(() => {
