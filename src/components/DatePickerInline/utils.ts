@@ -214,7 +214,6 @@ export const datePickerHeaderStyles: ComponentStylePropWithVariants<
         right: 0,
         left: 0,
         zIndex: 10,
-        backgroundColor: 'colors.surface',
     },
     buttonContainer: {
         height: 56,
