@@ -32,11 +32,11 @@ const useControlledValue = <T,>({
         (val: T) => {
             if (disabled) return;
 
-            if (isUncontrolled && !onChange) {
+            if (isUncontrolled) {
                 setValue(manipulateValue(val, uncontrolledValue));
             }
 
-            onChange?.(manipulateValue(val, valueProp));
+            onChange?.(manipulateValue(val, isUncontrolled ? uncontrolledValue : valueProp));
         },
         [disabled, isUncontrolled, manipulateValue, onChange, uncontrolledValue, valueProp],
     );
