@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { View, ViewStyle } from 'react-native';
 
 import { useComponentStyles, useControlledValue } from '../../hooks';
@@ -21,9 +21,16 @@ const DatePickerInline = ({
     containerStyle: containerStyleProp,
     ...rest
 }: DatePickerInlineProps) => {
+    const onInnerChange = useCallback(
+        (params: any) => {
+            onChange?.(params);
+        },
+        [onChange],
+    );
+
     const [state, onStateChange] = useControlledValue<LocalState>({
         value: getStateValue({ date, dates, startDate, endDate }, mode),
-        onChange: onChange as any,
+        onChange: onInnerChange,
     });
 
     const componentStyles = useComponentStyles('DatePickerInline', containerStyleProp);
@@ -45,7 +52,7 @@ const DatePickerInline = ({
                 startDate={state?.startDate}
                 endDate={state?.endDate}
                 date={state?.date}
-                onChange={onStateChange as any}
+                onChange={onStateChange as typeof onInnerChange}
                 dates={state?.dates}
             />
         </View>

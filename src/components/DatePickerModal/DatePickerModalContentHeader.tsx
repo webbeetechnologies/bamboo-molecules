@@ -128,7 +128,7 @@ export default function DatePickerModalContentHeader(props: HeaderContentProps) 
                     <IconButton
                         name={collapsed ? editIcon : calendarIcon}
                         accessibilityLabel={collapsed ? 'Type in date' : 'Pick date from calendar'}
-                        style={iconButtonStyle as any}
+                        style={iconButtonStyle}
                         onPress={onToggle}
                     />
                 ) : null}

@@ -76,22 +76,22 @@ export type MultiChange = (params: {
 export type MultiConfirm = (params: { dates: Date[] }) => void;
 
 export interface DatePickerSingleProps extends BaseDatePickerProps {
-    mode: 'single';
-    date: CalendarDate;
-    onChange: SingleChange;
+    mode?: 'single';
+    date?: CalendarDate;
+    onChange?: SingleChange;
 }
 
 export interface DatePickerRangeProps extends BaseDatePickerProps {
-    mode: 'range';
-    startDate: CalendarDate;
-    endDate: CalendarDate;
-    onChange: RangeChange;
+    mode?: 'range';
+    startDate?: CalendarDate;
+    endDate?: CalendarDate;
+    onChange?: RangeChange;
 }
 
 export interface DatePickerMultiProps extends BaseDatePickerProps {
-    mode: 'multiple';
-    dates: CalendarDates;
-    onChange: MultiChange;
+    mode?: 'multiple';
+    dates?: CalendarDates;
+    onChange?: MultiChange;
 }
 
 export type DatePickerInlineBaseProps =

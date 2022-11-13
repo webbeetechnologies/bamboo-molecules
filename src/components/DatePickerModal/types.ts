@@ -7,7 +7,7 @@ import type {
     MultiConfirm,
     RangeChange,
     SingleChange,
-} from '../DatePickerInline/types';
+} from '../DatePickerInline';
 import type { HeaderPickProps } from './DatePickerModalContentHeader';
 
 export type LocalState = {
@@ -29,21 +29,21 @@ export interface DatePickerModalContentRangeProps
     extends HeaderPickProps,
         BaseDatePickerProps,
         DatePickerModalContentBaseProps {
-    mode: 'range';
-    startDate: CalendarDate;
-    endDate: CalendarDate;
+    mode?: 'range';
+    startDate?: CalendarDate;
+    endDate?: CalendarDate;
     onChange?: RangeChange;
-    onConfirm: RangeChange;
+    onConfirm?: RangeChange;
 }
 
 export interface DatePickerModalContentSingleProps
     extends HeaderPickProps,
         BaseDatePickerProps,
         DatePickerModalContentBaseProps {
-    mode: 'single';
+    mode?: 'single';
     date?: CalendarDate;
     onChange?: SingleChange;
-    onConfirm: SingleChange;
+    onConfirm?: SingleChange;
     dateMode?: 'start' | 'end';
 }
 
@@ -51,10 +51,10 @@ export interface DatePickerModalContentMultiProps
     extends HeaderPickProps,
         BaseDatePickerProps,
         DatePickerModalContentBaseProps {
-    mode: 'multiple';
+    mode?: 'multiple';
     dates?: CalendarDates;
     onChange?: MultiChange;
-    onConfirm: MultiConfirm;
+    onConfirm?: MultiConfirm;
 }
 
 interface BaseDatePickerModalProps {

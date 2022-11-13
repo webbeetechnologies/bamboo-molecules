@@ -19,7 +19,7 @@ import type {
 function DatePickerInlineBase(props: DatePickerInlineBaseProps) {
     const {
         locale = 'en',
-        mode,
+        mode = 'single',
         onChange,
         startDate,
         endDate,
@@ -51,7 +51,7 @@ function DatePickerInlineBase(props: DatePickerInlineBaseProps) {
     // latest version of the props and we don't want the useCallback to change
     const startDateRef = useLatest<CalendarDate>(startDate);
     const endDateRef = useLatest<CalendarDate>(endDate);
-    const onChangeRef = useLatest<RangeChange | SingleChange | MultiChange>(onChange);
+    const onChangeRef = useLatest<RangeChange | SingleChange | MultiChange | undefined>(onChange);
     const datesRef = useLatest<CalendarDates>(dates);
 
     const onPressDate = useCallback(

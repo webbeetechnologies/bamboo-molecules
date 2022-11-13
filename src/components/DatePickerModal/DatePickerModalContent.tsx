@@ -22,7 +22,7 @@ type Props =
 
 export function DatePickerModalContent(props: Props) {
     const {
-        mode,
+        mode = 'single',
         onChange,
         onConfirm,
         onDismiss,
@@ -39,6 +39,14 @@ export function DatePickerModalContent(props: Props) {
         dates,
     } = props;
     const [collapsed, setCollapsed] = useState<boolean>(true);
+
+    const onInnerChange = useCallback(
+        (params: any) => {
+            onChange?.(params);
+        },
+        [onChange],
+    );
+
     const [state, onStateChange] = useControlledValue<LocalState>({
         value: getStateValue(
             {
@@ -49,21 +57,21 @@ export function DatePickerModalContent(props: Props) {
             },
             mode,
         ),
-        onChange: onChange as any,
+        onChange: onInnerChange,
     });
 
     const onInnerConfirm = useCallback(() => {
         if (mode === 'single') {
-            (onConfirm as DatePickerModalContentSingleProps['onConfirm'])({
+            (onConfirm as DatePickerModalContentSingleProps['onConfirm'])?.({
                 date: state?.date,
             });
         } else if (mode === 'range') {
-            (onConfirm as DatePickerModalContentRangeProps['onConfirm'])({
+            (onConfirm as DatePickerModalContentRangeProps['onConfirm'])?.({
                 startDate: state?.startDate,
                 endDate: state?.endDate,
             });
         } else if (mode === 'multiple') {
-            (onConfirm as DatePickerModalContentMultiProps['onConfirm'])({
+            (onConfirm as DatePickerModalContentMultiProps['onConfirm'])?.({
                 dates: state?.dates || [],
             });
         }
@@ -112,7 +120,7 @@ export function DatePickerModalContent(props: Props) {
                         startDate={state?.startDate}
                         endDate={state?.endDate}
                         date={state?.date}
-                        onChange={onStateChange as any}
+                        onChange={onStateChange as typeof onInnerChange}
                         disableWeekDays={disableWeekDays}
                         dates={state?.dates}
                         validRange={validRange}
