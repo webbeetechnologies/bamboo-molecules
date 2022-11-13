@@ -77,7 +77,6 @@ const Example = () => {
                 </TouchableRipple>
             </Surface>
 
-            {/*@ts-ignore*/}
             <DatePickerInline mode="single" />
 
             <HorizontalDivider spacing={30} />
@@ -95,7 +94,6 @@ const Example = () => {
                 onConfirm={() => setPickTime(false)}
             />
 
-            {/*@ts-ignore*/}
             <DatePickerModal
                 mode={'range'}
                 visible={pickDate}
