@@ -8,7 +8,7 @@ import { useComponentStyles } from '../../hooks';
 /**
  * Neutral component. Doesn't have platform specific styles
  */
-const Icon = ({ type = 'material', style, ...rest }: IconProps) => {
+const Icon = ({ type = 'material-community', style, ...rest }: IconProps) => {
     const IconComponent = iconFactory(type);
     const componentStyles = useComponentStyles('Icon', style);
 

@@ -150,7 +150,7 @@ const Button = (
     {
         disabled: disabledProp,
         variant = 'text',
-        size = 'md',
+        size = 'lg',
         loading,
         iconType,
         iconName,
@@ -355,11 +355,7 @@ const Button = (
                             style={iconStyle}
                         />
                     ) : null}
-                    <Text
-                        variant="labelLarge"
-                        selectable={false}
-                        numberOfLines={1}
-                        style={textStyle}>
+                    <Text selectable={false} numberOfLines={1} style={textStyle}>
                         {children}
                     </Text>
                 </View>

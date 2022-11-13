@@ -151,16 +151,16 @@ const ListItem = (
                         <Text
                             style={titleStyles}
                             selectable={false}
-                            titleEllipsizeMode={titleEllipsizeMode}
-                            titleNumberOfLines={titleNumberOfLines}>
+                            ellipsizeMode={titleEllipsizeMode}
+                            numberOfLines={titleNumberOfLines}>
                             {title}
                         </Text>
                         {description ? (
                             <Text
                                 style={descriptionStyles}
                                 selectable={false}
-                                titleEllipsizeMode={descriptionEllipsizeMode}
-                                titleNumberOfLines={descriptionNumberOfLines}>
+                                ellipsizeMode={descriptionEllipsizeMode}
+                                numberOfLines={descriptionNumberOfLines}>
                                 {description}
                             </Text>
                         ) : null}

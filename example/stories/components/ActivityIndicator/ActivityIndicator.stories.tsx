@@ -1,5 +1,5 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ProvideMolecules } from 'bamboo-molecules';
+import { ProvideMolecules } from '../../common';
 
 import { Example } from './ActivityIndicator';
 
@@ -27,7 +27,7 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<Icon name="share" type="material-community" {...rest} />
+<ActivityIndicator color="colors.primary" size={30} animating {...rest} />
 `,
             language: 'tsx',
             type: 'auto',

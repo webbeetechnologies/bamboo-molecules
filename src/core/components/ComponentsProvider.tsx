@@ -12,7 +12,6 @@ import {
     HorizontalDivider,
     VerticalDivider,
     TouchableRipple,
-    TouchableRippleProps,
     Button,
     Surface,
     Switch,
@@ -20,6 +19,19 @@ import {
     Checkbox,
     FlatList,
     SectionList,
+    TextInput,
+    TextInputProps,
+    NumberInput,
+    FilePicker,
+    HelperText,
+    Modal,
+    DatePickerInline,
+    DatePickerModal,
+    DatePickerInput,
+    TimePicker,
+    TimePickerModal,
+    TextInputWithMask,
+    TextInputWithMaskProps,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -34,7 +46,7 @@ import type { DefaultComponents, ProvideComponentsProps } from './types';
 const defaultComponents: DefaultComponents = {
     Icon,
     IconButton,
-    TouchableRipple: TouchableRipple as ComponentType<TouchableRippleProps>, // ts-error
+    TouchableRipple,
     ActivityIndicator,
     HorizontalDivider,
     VerticalDivider,
@@ -45,6 +57,17 @@ const defaultComponents: DefaultComponents = {
     Checkbox,
     FlatList,
     SectionList,
+    TextInput: TextInput as ComponentType<TextInputProps>,
+    NumberInput,
+    FilePicker,
+    HelperText,
+    Modal,
+    DatePickerInline,
+    DatePickerModal,
+    DatePickerInput,
+    TimePicker,
+    TimePickerModal,
+    TextInputWithMask: TextInputWithMask as ComponentType<TextInputWithMaskProps>,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

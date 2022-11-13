@@ -14,6 +14,17 @@ import type {
     Checkbox,
     FlatListProps,
     SectionListProps,
+    TextInputProps,
+    NumberInputProps,
+    FilePickerProps,
+    HelperTextProps,
+    ModalProps,
+    DatePickerInlineProps,
+    DatePickerModalProps,
+    DatePickerInputProps,
+    TimePickerProps,
+    TimePickerModalProps,
+    TextInputWithMaskProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -35,6 +46,17 @@ export interface DefaultComponents {
     Checkbox: typeof Checkbox;
     FlatList: ComponentType<FlatListProps>;
     SectionList: ComponentType<SectionListProps>;
+    TextInput: ComponentType<TextInputProps>;
+    NumberInput: ComponentType<NumberInputProps>;
+    FilePicker: ComponentType<FilePickerProps>;
+    HelperText: ComponentType<HelperTextProps>;
+    Modal: ComponentType<ModalProps>;
+    DatePickerInline: ComponentType<DatePickerInlineProps>;
+    DatePickerModal: ComponentType<DatePickerModalProps>;
+    DatePickerInput: ComponentType<DatePickerInputProps>;
+    TimePicker: ComponentType<TimePickerProps>;
+    TimePickerModal: ComponentType<TimePickerModalProps>;
+    TextInputWithMask: ComponentType<TextInputWithMaskProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
