@@ -12,6 +12,7 @@ function EmptyDayPure() {
 }
 export const EmptyDay = memo(EmptyDayPure);
 
+// TODO hover state
 function Day(props: {
     day: number;
     month: number;
