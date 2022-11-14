@@ -1,7 +1,7 @@
 import { useMolecules, PopoverProps, ButtonProps } from 'bamboo-molecules';
-import { forwardRef } from 'react';
+import { FC, forwardRef } from 'react';
 
-export const Example = (props: PopoverProps) => {
+export const Example: FC<PopoverProps> = props => {
     const { Popover, View } = useMolecules();
 
     return (
