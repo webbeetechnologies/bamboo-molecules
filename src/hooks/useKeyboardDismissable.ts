@@ -1,22 +1,19 @@
-import React, {useEffect} from 'react';
-import {BackHandler} from 'react-native';
+import React, { useEffect } from 'react';
+import { BackHandler } from 'react-native';
 
 type TKeyboardDismissableParams = {
     enabled?: boolean;
     callback: Function;
 };
 
-type TBackHandler = TKeyboardDismissableParams
-
+type TBackHandler = TKeyboardDismissableParams;
 
 let keyboardDismissHandlers: Array<Function> = [];
 export const keyboardDismissHandlerManager = {
     push: (handler: Function) => {
         keyboardDismissHandlers.push(handler);
         return () => {
-            keyboardDismissHandlers = keyboardDismissHandlers.filter(
-                (h) => h !== handler
-            );
+            keyboardDismissHandlers = keyboardDismissHandlers.filter(h => h !== handler);
         };
     },
 
@@ -27,51 +24,41 @@ export const keyboardDismissHandlerManager = {
     },
 };
 
-
 /**
  * Handles attaching callback for Escape key listener on web and Back button listener on Android
  */
-export const useKeyboardDismissable = ({enabled, callback}: TKeyboardDismissableParams) => {
-    React.useEffect(
-        () => {
-            let cleanupFn = () => {
-            };
-            if (enabled) {
-                cleanupFn = keyboardDismissHandlerManager.push(callback);
-            } else {
-                cleanupFn();
-            }
-            return () => {
-                cleanupFn();
-            };
-        },
-        [enabled, callback]
-    );
+export const useKeyboardDismissable = ({ enabled, callback }: TKeyboardDismissableParams) => {
+    React.useEffect(() => {
+        let cleanupFn = () => {};
+        if (enabled) {
+            cleanupFn = keyboardDismissHandlerManager.push(callback);
+        } else {
+            cleanupFn();
+        }
+        return () => {
+            cleanupFn();
+        };
+    }, [enabled, callback]);
 
-    useBackHandler({enabled, callback});
+    useBackHandler({ enabled, callback });
 };
 
-
 /**
  * Handles attaching callback for Escape key listener on web and Back button listener on Android
  */
-export function useBackHandler({enabled, callback}: TBackHandler) {
-    useEffect(
-        () => {
-            let backHandler = () => {
-                callback();
-                return true;
-            };
+export function useBackHandler({ enabled, callback }: TBackHandler) {
+    useEffect(() => {
+        const backHandler = () => {
+            callback();
+            return true;
+        };
 
-            if (enabled) {
-                BackHandler.addEventListener('hardwareBackPress', backHandler);
-            } else {
-                BackHandler.removeEventListener('hardwareBackPress', backHandler);
-            }
+        if (enabled) {
+            BackHandler.addEventListener('hardwareBackPress', backHandler);
+        } else {
+            BackHandler.removeEventListener('hardwareBackPress', backHandler);
+        }
 
-            return () =>
-                BackHandler.removeEventListener('hardwareBackPress', backHandler);
-        },
-        [enabled, callback]
-    );
+        return () => BackHandler.removeEventListener('hardwareBackPress', backHandler);
+    }, [enabled, callback]);
 }

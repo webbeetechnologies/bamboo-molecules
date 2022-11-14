@@ -30,8 +30,7 @@ Default.args = {
     },
     children: (
         <View>
-            <Text style={{ fontSize: 16 }}>I'm a popover</Text>
-            <Text>I'm the text inside a popover</Text>
+            <Text>I'm a popover</Text>
         </View>
     ),
 };
