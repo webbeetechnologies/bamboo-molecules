@@ -1,4 +1,6 @@
 import { AccessibilityInfo } from 'react-native';
+import '@testing-library/jest-dom/extend-expect';
+
 // eslint-disable-next-line no-undef
 jest.useFakeTimers();
 // eslint-disable-next-line no-undef
