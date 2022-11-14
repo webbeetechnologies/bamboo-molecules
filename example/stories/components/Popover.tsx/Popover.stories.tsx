@@ -24,10 +24,7 @@ Default.args = {
     shouldFlip: true,
     offset: 0,
     crossOffset: 0,
-    trigger: props => {
-        console.log('Trigger Button:', { props });
-        return <Button {...props}>Show popover</Button>;
-    },
+    trigger: props => <Button {...props}>Show popover</Button>,
     children: (
         <View>
             <Text>I'm a popover</Text>

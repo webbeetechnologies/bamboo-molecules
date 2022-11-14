@@ -1,4 +1,4 @@
-import type {ViewStyle} from "react-native";
+import type { ViewStyle } from 'react-native';
 
 export type OverlayProps = {
     isOpen?: boolean;
@@ -9,4 +9,4 @@ export type OverlayProps = {
     isKeyboardDismissable?: boolean;
     animationPreset?: 'fade' | 'slide' | 'none';
     style?: ViewStyle;
-}
+};

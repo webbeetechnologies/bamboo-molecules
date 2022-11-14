@@ -2,7 +2,7 @@ import { useMolecules, PopoverProps, ButtonProps } from 'bamboo-molecules';
 import { forwardRef } from 'react';
 
 export const Example = (props: PopoverProps) => {
-    const { Popover, Button, View } = useMolecules();
+    const { Popover, View } = useMolecules();
 
     return (
         <View style={{ padding: 100 }}>
@@ -12,7 +12,7 @@ export const Example = (props: PopoverProps) => {
 };
 
 export const Button = forwardRef<any, ButtonProps>((props: ButtonProps, ref) => {
-    const { Button } = useMolecules();
+    const { Button: ButtonComponent } = useMolecules();
 
-    return <Button {...props} ref={ref} />;
+    return <ButtonComponent {...props} ref={ref} />;
 });

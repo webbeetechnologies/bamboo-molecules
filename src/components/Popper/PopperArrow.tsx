@@ -38,7 +38,7 @@ const PopperArrow = (
 
     useEffect(() => {
         triggerRef.current?.measureInWindow((...args) => setTriggerMeasurments(args));
-    }, []);
+    }, [triggerRef]);
 
     const arrowStyles = useMemo(
         () => [triangleStyle, additionalStyles, style],

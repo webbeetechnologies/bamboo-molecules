@@ -40,19 +40,20 @@ const withPopper = <T,>(Component: ComponentType<T>) =>
         } = props;
 
         // Dynamic keys are skipped
+        // @ts-ignore. Caches the keys once.
         const cachedKeys = useMemo(() => Object.keys(rest), []);
 
         const triggerFunc = useCallback(
-            (props: TriggerProps, state: { open: boolean }) => {
-                const mergedRef = mergeRefs([ref, props.ref]);
+            (triggerProps: TriggerProps, state: { open: boolean }) => {
+                const mergedRef = mergeRefs([ref, triggerProps.ref]);
 
                 // @ts-ignore
-                if (trigger) return trigger({ ...props, ref: mergedRef }, state);
+                if (trigger) return trigger({ ...triggerProps, ref: mergedRef }, state);
 
                 // @ts-ignore
-                return <Component {...rest} {...props} ref={mergeRefs([ref, mergedRef])} />;
+                return <Component {...rest} {...triggerProps} ref={mergedRef} />;
             },
-            cachedKeys.map(key => (rest as any)[key]),
+            [ref, trigger, ...cachedKeys.map(key => (rest as any)[key])],
         );
 
         return (

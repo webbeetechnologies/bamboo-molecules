@@ -1,5 +1,5 @@
-import type {ComponentStylePropWithVariants} from '../../types';
-import {StyleSheet, ViewStyle} from 'react-native';
+import type { ComponentStylePropWithVariants } from '../../types';
+import { StyleSheet, ViewStyle } from 'react-native';
 
 type States = ''; // 'disabled' | 'hovered' | 'pressed';
 type CustomProps = {

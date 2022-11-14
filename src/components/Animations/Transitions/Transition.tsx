@@ -12,7 +12,7 @@ const transformStylesMap = {
     rotate: true,
 };
 
-const defaultStyles = {
+const DefaultStyles = {
     opacity: 1,
     translateY: 0,
     translateX: 0,
@@ -25,7 +25,7 @@ const defaultStyles = {
 const getAnimatedStyles =
     (animateValue: any) =>
     (
-        defaultStyles: ISupportedTransitions,
+        defaultStyles: ISupportedTransitions = DefaultStyles,
         initial: ISupportedTransitions,
         to: ISupportedTransitions,
     ) => {
@@ -137,7 +137,7 @@ const Transition = forwardRef(
                               useNativeDriver: true,
                               ...defaultTransition,
                           }),
-                ]).start(({ finished }) => {
+                ]).start(() => {
                     if (animationState === 'entering') {
                         setAnimationState('entered');
                     } else if (animationState === 'exiting') {

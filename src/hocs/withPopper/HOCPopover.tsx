@@ -38,15 +38,15 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
 
         const [isOpen, setIsOpen] = useControlledValue({
             value: isOpenProp,
-            defaultValue: false,
-            onChange: isOpen => {
-                isOpen ? onOpen?.() : onClose?.();
+            defaultValue: defaultIsOpen,
+            onChange: isPopoverOpen => {
+                isPopoverOpen ? onOpen?.() : onClose?.();
             },
         });
 
         const handleClose = useCallback(() => {
             setIsOpen(false);
-        }, []);
+        }, [setIsOpen]);
 
         const popoverId = useId();
 

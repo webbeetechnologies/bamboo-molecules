@@ -1,5 +1,6 @@
 import type { ViewProps } from '@webbee/bamboo-atoms';
-import React, { ReactNode, useMemo, useRef } from 'react';
+import React, { forwardRef, ReactNode, useMemo, useRef } from 'react';
+import type { ButtonProps } from '../../src/components';
 import { useMolecules } from '../../src/hooks';
 
 const PopoverContent: React.FC<ViewProps & { message?: string | ReactNode }> = ({
@@ -29,16 +30,18 @@ const PopoverContent: React.FC<ViewProps & { message?: string | ReactNode }> = (
     );
 };
 
+const trigger = (message: string) => (args: any) => {
+    return <Button {...args} children={message} variant="contained" />;
+};
+
+const Button = forwardRef<any, ButtonProps>((props, ref) => {
+    const { Button: ButtonComponent } = useMolecules();
+    return <ButtonComponent {...props} ref={ref} />;
+});
+
 export const Popover = () => {
     const [closeOnScroll, setCloseOnScroll] = React.useState(true);
-    const { Button, Popover, H4, View } = useMolecules();
-
-    const trigger = React.useCallback(
-        (message: string) => (props: any) => {
-            return <Button {...props} children={message} variant="contained" />;
-        },
-        [Button],
-    );
+    const { Button: ButtonComponent, Popover: PopoverComponent, H4, View } = useMolecules();
 
     const { content1Styles, content2Styles, content3Styles, wrapperStyles } = useMemo(
         () => ({
@@ -58,7 +61,7 @@ export const Popover = () => {
 
     return (
         <View style={useRef({ flexDirection: 'row' as 'row' }).current}>
-            <Button
+            <ButtonComponent
                 style={useRef({ marginRight: 'spacings.2' }).current}
                 variant="contained"
                 children={`Close on scroll: ${JSON.stringify(closeOnScroll)}`}
@@ -66,17 +69,17 @@ export const Popover = () => {
                 size="lg"
             />
             <View style={wrapperStyles}>
-                <Popover
+                <PopoverComponent
                     showArrow
-                    trigger={trigger('Button: 1')}
+                    trigger={useMemo(() => trigger('Button: 1'), [])}
                     placement="top"
                     shouldFlip
                     closeOnScroll={closeOnScroll}>
                     <PopoverContent style={content1Styles} message="I'm only 300px wide" />
-                </Popover>
-                <Popover
+                </PopoverComponent>
+                <PopoverComponent
                     showArrow
-                    trigger={trigger('Button: 2')}
+                    trigger={useMemo(() => trigger('Button: 2'), [])}
                     placement="top"
                     shouldFlip
                     closeOnScroll={closeOnScroll}>
@@ -84,23 +87,23 @@ export const Popover = () => {
                         style={content2Styles}
                         message="I'm only smaller than Button 1"
                     />
-                </Popover>
-                <Popover
+                </PopoverComponent>
+                <PopoverComponent
                     showArrow
-                    trigger={trigger('Button: 3')}
+                    trigger={useMemo(() => trigger('Button: 3'), [])}
                     placement="top"
                     shouldFlip
                     closeOnScroll={closeOnScroll}>
                     <PopoverContent style={content3Styles} message="I'm only wider than Button 1" />
-                </Popover>
-                <Popover
+                </PopoverComponent>
+                <PopoverComponent
                     showArrow
-                    trigger={trigger('Button: 4')}
+                    trigger={useMemo(() => trigger('Button: 4'), [])}
                     placement="top"
                     shouldFlip
                     closeOnScroll={closeOnScroll}>
                     <PopoverContent message={<H4>I'm free sized</H4>} />
-                </Popover>
+                </PopoverComponent>
             </View>
         </View>
     );

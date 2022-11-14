@@ -63,7 +63,7 @@ const PopperContent = ({ children, style, showArrow, ...rest }: any, ref: any) =
         if (isOpen) {
             updatePosition();
         }
-    }, [isOpen]);
+    }, [isOpen, updatePosition]);
 
     useEffect(() => {
         setOverlayRef && setOverlayRef(overlayRef);
@@ -90,7 +90,6 @@ const PopperContent = ({ children, style, showArrow, ...rest }: any, ref: any) =
     let arrowWidth = 0;
 
     if (arrowElement !== null) {
-        console.log('arrowElement', arrowProps);
         const props = (arrowElement as ReactElement).props || {};
         arrowHeight = props.height ?? DEFAULT_ARROW_HEIGHT;
         arrowWidth = props.width ?? DEFAULT_ARROW_WIDTH;

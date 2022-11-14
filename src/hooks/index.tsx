@@ -11,6 +11,6 @@ export { default as useControlledValue } from './useControlledValue';
 export { default as useFilePicker } from './useFilePicker';
 export { default as useLatest } from './useLatest';
 
-export * from "./useKeyboardDismissable"
+export * from './useKeyboardDismissable';
 
 export const useTheme: <T extends ITheme>() => T = useThemeAtoms;

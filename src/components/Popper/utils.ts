@@ -5,12 +5,12 @@ export const getDiagonalLength = (height: number, width: number) => {
 };
 
 const getArrowLeft = (triggerMeasurements: number[]) => {
-    const [triggerX = 0, _triggerY, triggerWidth = 0, _triggerHeight] = triggerMeasurements || [];
+    const [triggerX = 0, , triggerWidth = 0] = triggerMeasurements || [];
     return !triggerWidth ? null : triggerX + triggerWidth / 2;
 };
 
 const getArrowTop = (triggerMeasurements: number[]) => {
-    const [_triggerX, triggerY = 0, _triggerWidth, triggerHeight = 0] = triggerMeasurements || [];
+    const [, triggerY = 0, , triggerHeight = 0] = triggerMeasurements || [];
     return !triggerHeight ? null : triggerY + triggerHeight / 2;
 };
 

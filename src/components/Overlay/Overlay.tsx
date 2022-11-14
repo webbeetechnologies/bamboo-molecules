@@ -27,16 +27,16 @@ const Overlay = ({
     }, [exited, setExited]);
 
     const styleObj = useMemo(() => {
-        const styleObj = { ...style };
+        const styles = { ...style };
         if (animationPreset === 'slide') {
-            styleObj.overflow = 'hidden';
-            styleObj.display = 'flex';
+            styles.overflow = 'hidden';
+            styles.display = 'flex';
         } else {
-            styleObj.display = exited && !isOpen ? 'none' : 'flex';
+            styles.display = exited && !isOpen ? 'none' : 'flex';
         }
 
-        return style;
-    }, [style, animationPreset]);
+        return styles;
+    }, [style, animationPreset, exited, isOpen]);
 
     if (Platform.OS === 'android' && useRNModalOnAndroid) {
         return (
