@@ -13,7 +13,7 @@
     "prestart": "yarn update-stories",
     "storybook-watcher": "sb-rn-watcher --config-path .ondevice",
     "test-storybook": "test-storybook",
-    "chromatic": "npx chromatic --project-token=6b460fdb3508",
+    "chromatic": "npx chromatic --project-token=934368a7f6c9",
     "test": "jest"
   },
   "jest": {
@@ -79,7 +79,7 @@
     "@types/react-test-renderer": "^18.0.0",
     "babel-loader": "^8.2.5",
     "babel-plugin-react-native-web": "^0.18.9",
-    "chromatic": "^6.9.0",
+    "chromatic": "^6.11.4",
     "jest": "27",
     "jest-transform-stub": "^2.0.0",
     "react-test-renderer": "^18.2.0",
