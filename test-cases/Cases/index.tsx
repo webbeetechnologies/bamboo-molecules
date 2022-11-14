@@ -3,7 +3,7 @@ import { Card, Headline } from 'react-native-paper';
 import DesignTokens from './DesignTokens';
 import { ComponentsDemo } from './ComponentsDemo';
 import { Popover } from './Popover';
-import { extendTheme, ProvideMolecules } from '../../src/core';
+import { ProvideMolecules } from '../../src/core';
 
 const style = StyleSheet.create({
     wrap: {

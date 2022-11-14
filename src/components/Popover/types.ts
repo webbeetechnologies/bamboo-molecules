@@ -8,4 +8,6 @@ export type PopoverProps = Omit<
     | 'initialTransition,'
     | 'animateTransition,'
     | 'exitTransition'
-> & { trigger: TriggerFunc };
+> & {
+    trigger: TriggerFunc;
+};

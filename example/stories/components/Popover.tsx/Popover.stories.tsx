@@ -1,7 +1,8 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Example } from './Popover';
+import { Button, Example } from './Popover';
 import { ProvideMolecules } from 'bamboo-molecules';
+import { Text, View } from 'react-native';
 
 export default {
     title: 'components/Popover',
@@ -18,18 +19,41 @@ export default {
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 Default.args = {
-    name: 'robot-angry-outline',
-    type: 'material-community',
-    size: 50,
-    color: '#333',
+    showArrow: true,
+    placement: 'top',
+    shouldFlip: true,
+    offset: 0,
+    crossOffset: 0,
+    trigger: props => {
+        console.log('Trigger Button:', { props });
+        return <Button {...props}>Show popover</Button>;
+    },
+    children: (
+        <View>
+            <Text style={{ fontSize: 16 }}>I'm a popover</Text>
+            <Text>I'm the text inside a popover</Text>
+        </View>
+    ),
 };
 
 Default.parameters = {
     docs: {
         source: {
             code: `
-<Popover name="share" type="material-community" {...rest} />
-`,
+const {Button, H4, Popover, Text, View} = useMolecules();
+<Popover
+    showArrow
+    trigger={(props) => <Button { ...props }>Show popover</Button>}
+    placement="top"
+    shouldFlip={true}
+    offset={4}
+    closeOnScroll={true}>
+    <View>
+        <H4>I'm a popover</H4>
+        <Text>I'm the text inside a popover</Text>
+    </View>
+</Popover>
+            `,
             language: 'tsx',
             type: 'auto',
         },
