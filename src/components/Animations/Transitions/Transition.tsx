@@ -12,7 +12,7 @@ const transformStylesMap = {
     rotate: true,
 };
 
-const DefaultStyles = {
+const transitionDefaultStyles = {
     opacity: 1,
     translateY: 0,
     translateX: 0,
@@ -25,7 +25,7 @@ const DefaultStyles = {
 const getAnimatedStyles =
     (animateValue: any) =>
     (
-        defaultStyles: ISupportedTransitions = DefaultStyles,
+        defaultStyles: ISupportedTransitions,
         initial: ISupportedTransitions,
         to: ISupportedTransitions,
     ) => {
@@ -180,16 +180,16 @@ const Transition = forwardRef(
         // If exit animation is present and state is exiting, we replace 'initial' with 'exit' animation
 
         const initialState = exit
-            ? { ...defaultStyles, ...exit }
-            : { ...defaultStyles, ...initial };
+            ? { ...transitionDefaultStyles, ...exit }
+            : { ...transitionDefaultStyles, ...initial };
 
-        const animateState = { ...defaultStyles, ...animate };
+        const animateState = { ...transitionDefaultStyles, ...animate };
 
         const styles = React.useMemo(() => {
             // console.log('display state here', initial);
             return [
                 getAnimatedStyles(animateValue)(
-                    { ...defaultStyles, opacity: 0 },
+                    { ...transitionDefaultStyles, opacity: 0 },
                     initialState as ISupportedTransitions,
                     animateState as ISupportedTransitions,
                 ),
