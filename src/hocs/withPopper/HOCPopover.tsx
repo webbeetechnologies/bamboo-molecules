@@ -1,4 +1,4 @@
-import { FC, forwardRef, memo, useCallback, useId, useRef } from 'react';
+import { FC, forwardRef, memo, useCallback, useId, useMemo, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useControlledValue, useMolecules } from '../../hooks';
@@ -27,13 +27,14 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
             initialTransition,
             animateTransition,
             exitTransition,
+            triggerRef: triggerRefProp,
             ...props
         },
         ref: any,
     ) => {
         const { View, Overlay, PresenceTransition, Backdrop } = useMolecules();
         const triggerRef = useRef(null);
-        const mergedRef = mergeRefs([triggerRef]);
+        const mergedRef = mergeRefs([triggerRef, triggerRefProp]);
 
         const [isOpen, setIsOpen] = useControlledValue({
             value: isOpenProp,
@@ -43,9 +44,24 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
             },
         });
 
-        const popoverContentId = `${useId()}-content`;
-        const headerId = `${popoverContentId}-header`;
-        const bodyId = `${popoverContentId}-body`;
+        const handleClose = useCallback(() => {
+            setIsOpen(false);
+        }, []);
+
+        const popoverId = useId();
+
+        const popoverContextValue = useMemo(() => {
+            const popoverContentId = `${popoverId}-content`;
+
+            return {
+                onClose: handleClose,
+                initialFocusRef,
+                finalFocusRef,
+                popoverContentId,
+                bodyId: `${popoverContentId}-body`,
+                headerId: `${popoverContentId}-header`,
+            };
+        }, [handleClose, initialFocusRef, finalFocusRef, popoverId]);
 
         const handleOpen = useCallback(() => {
             setIsOpen(true);
@@ -57,16 +73,12 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
                     ref: mergedRef,
                     onPress: handleOpen,
                     'aria-expanded': isOpen ? true : false,
-                    'aria-controls': isOpen ? popoverContentId : undefined,
+                    'aria-controls': isOpen ? popoverContextValue.popoverContentId : undefined,
                     'aria-haspopup': true,
                 },
                 { open: isOpen as boolean },
             );
         };
-
-        const handleClose = useCallback(() => {
-            setIsOpen(false);
-        }, []);
 
         return (
             <View ref={ref}>
@@ -86,19 +98,11 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
                         <Popper
                             crossOffset={8}
                             offset={8}
-                            triggerRef={triggerRef}
                             isOpen={isOpen as boolean}
+                            triggerRef={triggerRef}
                             {...props}
                             arrowProps={arrowProps}>
-                            <PopoverContext.Provider
-                                value={{
-                                    onClose: handleClose,
-                                    initialFocusRef,
-                                    finalFocusRef,
-                                    popoverContentId,
-                                    bodyId,
-                                    headerId,
-                                }}>
+                            <PopoverContext.Provider value={popoverContextValue}>
                                 <PopperContent
                                     style={contentStyles}
                                     arrowProps={arrowProps}
