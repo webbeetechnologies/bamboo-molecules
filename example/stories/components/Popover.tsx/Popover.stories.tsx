@@ -21,7 +21,6 @@ export default {
 const Template: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 export const Default = Template.bind({});
-
 Default.args = {
     showArrow: true,
     placement: 'top',
