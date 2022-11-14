@@ -4,7 +4,8 @@ import type { ComponentStylePropWithVariants } from 'src/types';
 export type ListItemStylesProp = {
     color?: string;
     titleStyle?: StyleProp<TextStyle>;
-    descriptionStyle?: StyleProp<TextStyle>;
+    leftElement?: StyleProp<ViewStyle>;
+    rightElement?: StyleProp<ViewStyle>;
 };
 
 type States = 'disabled' | 'hovered' | 'focused' | 'pressed';
@@ -13,27 +14,23 @@ export const listItemStyles: ComponentStylePropWithVariants<ViewStyle, States, L
     {
         color: 'colors.surface',
         titleStyle: { color: 'colors.onSurface' },
-        descriptionStyle: { color: 'colors.onSurfaceVariants' },
+
+        leftElement: {
+            marginRight: 'spacings.3',
+            marginLeft: 'spacings._1',
+        },
+        rightElement: {
+            marginRight: 'spacings._1',
+            marginLeft: 'spacings.3',
+        },
+
         states: {
             disabled: {
                 titleStyle: {
                     color: 'colors.surfaceDisabled',
                 },
-                descriptionStyle: {
-                    color: 'colors.surfaceDisabled',
-                },
             },
             hovered: {
-                titleStyle: {
-                    color: 'colors.surfaceDisabled',
-                },
-            },
-            focused: {
-                titleStyle: {
-                    color: 'colors.onSurface',
-                },
-            },
-            pressed: {
                 titleStyle: {
                     color: 'colors.surfaceDisabled',
                 },
@@ -43,7 +40,4 @@ export const listItemStyles: ComponentStylePropWithVariants<ViewStyle, States, L
 
 export const flatListStyles: ComponentStylePropWithVariants<TextStyle> = {};
 
-export const sectionListStyles: ComponentStylePropWithVariants<TextStyle> = {
-    color: 'colors.onSurface',
-    fontSize: 32,
-};
+export const sectionListStyles: ComponentStylePropWithVariants<TextStyle> = {};

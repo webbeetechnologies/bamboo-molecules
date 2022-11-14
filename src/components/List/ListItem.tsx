@@ -5,27 +5,17 @@ import { useMolecules, useComponentStyles } from '../../hooks';
 import type { TouchableRippleProps } from '../TouchableRipple';
 import { CallbackActionState, withActionState } from '../../hocs';
 
-type Title = ReactNode;
-
-type Description = ReactNode;
-
-type Element = ReactNode;
-
 export type Props = Omit<TouchableRippleProps, 'children'> &
-    WithElements<Element> &
+    WithElements<ReactNode> &
     CallbackActionState & {
         /**
          * Title text for the list item.
          */
-        title: Title;
+        title?: string;
         /**
          * Description text for the list item or callback which returns a React element to display the description.
          */
-        description?: Description;
-        /**
-         * Function to execute on press.
-         */
-        onPress?: () => void;
+        children?: ReactNode;
         /**
          * Style that is passed to the wrapping TouchableRipple element.
          */
@@ -44,26 +34,11 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          */
         titleNumberOfLines?: number;
         /**
-         * Truncate Description text such that the total number of lines does not
-         * exceed this number.
-         */
-        descriptionNumberOfLines?: number;
-        /**
          * Ellipsize Mode for the Title.  One of `'head'`, `'middle'`, `'tail'`, `'clip'`.
          *
          * See [`ellipsizeMode`](https://reactnative.dev/docs/text#ellipsizemode)
          */
         titleEllipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
-        /**
-         * Ellipsize Mode for the Description.  One of `'head'`, `'middle'`, `'tail'`, `'clip'`.
-         *
-         * See [`ellipsizeMode`](https://reactnative.dev/docs/text#ellipsizemode)
-         */
-        descriptionEllipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
-        /**
-         * Whether the item is disabled.
-         */
-        disabled?: boolean;
         /**
          * Whether the divider shows or not.
          */
@@ -102,15 +77,12 @@ const ListItem = (
         left,
         right,
         title,
-        description,
-        onPress,
+        children,
         style: styleProp,
         titleStyle: titleStyleProp,
         descriptionStyle: descriptionStyleProp,
         titleNumberOfLines = 1,
-        descriptionNumberOfLines = 2,
         titleEllipsizeMode,
-        descriptionEllipsizeMode,
         disabled = false,
         hovered,
         focused,
@@ -128,47 +100,40 @@ const ListItem = (
         { states: { disabled, hovered: !!hovered, focused: !!focused, pressed: !!pressed } },
     );
 
-    const { titleStyles, descriptionStyles, containerStyles } = useMemo(() => {
-        const { titleStyle, descriptionStyle, ...itemStyles } = componentStyles;
+    const { titleStyles, containerStyles, leftElementStyle, rightElementStyle } = useMemo(() => {
+        const { titleStyle, leftElement, rightElement, ...itemStyles } = componentStyles;
         return {
             containerStyles: itemStyles,
             titleStyles: titleStyle,
-            descriptionStyles: descriptionStyle,
+            leftElementStyle: leftElement,
+            rightElementStyle: rightElement,
         };
     }, [componentStyles]);
 
     return (
-        <TouchableRipple
-            {...props}
-            style={containerStyles}
-            onPress={onPress}
-            disabled={disabled}
-            ref={ref}>
-            <View>
+        <TouchableRipple {...props} style={containerStyles} disabled={disabled} ref={ref}>
+            <>
                 <View style={styles.row}>
-                    {left ? <View>{left}</View> : null}
-                    <View style={[styles.content]}>
-                        <Text
-                            style={titleStyles}
-                            selectable={false}
-                            ellipsizeMode={titleEllipsizeMode}
-                            numberOfLines={titleNumberOfLines}>
-                            {title}
-                        </Text>
-                        {description ? (
-                            <Text
-                                style={descriptionStyles}
-                                selectable={false}
-                                ellipsizeMode={descriptionEllipsizeMode}
-                                numberOfLines={descriptionNumberOfLines}>
-                                {description}
-                            </Text>
-                        ) : null}
+                    {left ? <View style={leftElementStyle}>{left}</View> : null}
+                    <View style={styles.content}>
+                        <>
+                            {title && (
+                                <Text
+                                    style={titleStyles}
+                                    selectable={false}
+                                    ellipsizeMode={titleEllipsizeMode}
+                                    numberOfLines={titleNumberOfLines}>
+                                    {title}
+                                </Text>
+                            )}
+                        </>
+
+                        <Text>{children}</Text>
                     </View>
-                    {right ? <View>{right}</View> : null}
+                    {right ? <View style={rightElementStyle}>{right}</View> : null}
                 </View>
                 {divider && <HorizontalDivider leftInset={16} rightInset={24} />}
-            </View>
+            </>
         </TouchableRipple>
     );
 };

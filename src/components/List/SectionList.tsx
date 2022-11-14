@@ -1,121 +1,110 @@
-import { memo, forwardRef, useMemo, useCallback } from 'react';
-import type { FlashListProps } from '@shopify/flash-list';
-import type { StyleProp, TextStyle } from 'react-native';
+import {
+    memo,
+    forwardRef,
+    useMemo,
+    useCallback,
+    PropsWithoutRef,
+    RefAttributes,
+    ReactElement,
+} from 'react';
+import type { FlashList, FlashListProps, ListRenderItemInfo } from '@shopify/flash-list';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
-type NewItems = { item: Section; index: number };
+type DefaultSectionT = {
+    [key: string]: any;
+};
 
-type Item = {};
+export type Props<TItem, TSection = DefaultSectionT> = Omit<FlashListProps<TItem>, 'data'> & {
+    sections: TSection[];
+    renderSectionHeader?: (props: { section: TSection }) => any;
+};
 
-interface Section {
-    title: string;
-    data: Item[];
-}
+// To make a correct type inference
+export type ISectionList = <ItemType = any, TSectionType = DefaultSectionT>(
+    props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<FlashList<ItemType>>,
+) => ReactElement;
 
-export type Props = FlashListProps<{}> & {
-    headerStyle?: StyleProp<TextStyle>;
-    renderHeader?: Section;
-} & any;
-
-const SectionList = (
+const SectionList = <TItem, TSection = DefaultSectionT>(
     {
-        data,
+        sections,
         renderItem: renderItemProps,
-        renderHeader,
+        renderSectionHeader,
         style: styleProp,
-        headerStyle: headerStyleProp,
         contentContainerStyle: contentContainerStyleProp,
         ListHeaderComponentStyle: listHeaderComponentStyleProp,
         ListFooterComponentStyle: listFooterComponentStyleProp,
         ...props
-    }: Props,
+    }: Props<TItem, TSection>,
     ref: any,
 ) => {
-    const { FlatList, Text } = useMolecules();
+    const { FlatList } = useMolecules();
     const componentStyles = useComponentStyles('SectionList', [
         styleProp,
         {
-            headerStyleProp,
-            contentContainerStyleProp,
-            listFooterComponentStyleProp,
-            listHeaderComponentStyleProp,
+            contentContainerStyle: contentContainerStyleProp,
+            listHeaderComponentStyle: listFooterComponentStyleProp,
+            listFooterComponentStyle: listHeaderComponentStyleProp,
         },
     ]);
 
-    const {
-        contentContainerStyles,
-        listFooterComponentStyles,
-        listHeaderComponentStyles,
-        headerStyles,
-        styles,
-    } = useMemo(() => {
-        const {
-            headerStyleProp: headerStyle,
-            contentContainerStyleProp: contentContainerStyle,
-            listHeaderComponentStyleProp: listHeaderComponentStyle,
-            listFooterComponentStyleProp: listFooterComponentStyle,
-            styleProp: style,
-        } = componentStyles;
-        return {
-            contentContainerStyles: contentContainerStyle,
-            listFooterComponentStyles: listFooterComponentStyle,
-            listHeaderComponentStyles: listHeaderComponentStyle,
-            headerStyles: headerStyle,
-            styles: style,
-        };
-    }, [componentStyles]);
+    const { contentContainerStyles, listFooterComponentStyles, listHeaderComponentStyles, styles } =
+        useMemo(() => {
+            const {
+                contentContainerStyle,
+                listHeaderComponentStyle,
+                listFooterComponentStyle,
+                styleProp: style,
+            } = componentStyles;
+            return {
+                contentContainerStyles: contentContainerStyle,
+                listFooterComponentStyles: listFooterComponentStyle,
+                listHeaderComponentStyles: listHeaderComponentStyle,
+                styles: style,
+            };
+        }, [componentStyles]);
 
-    // const render = useCallback(
-    //     ({ rowItems, rowIndex }: NewItems) => {
-    //         if (typeof rowItems === 'string') {
-    //             // Rendering header
-    //             return <Text style={headerStyleProp}>{rowItems}</Text>;
-    //         } else {
-    //             // Render item
-    //             return renderItem({ item: rowItems, index: rowIndex, target: 'Cell' });
-    //         }
-    //     },
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    //     [renderItem],
-    // );
+    const normalizedData = useMemo(() => {
+        const newData: any[] = [];
 
-    // const stickyHeaderIndices = data
-    //     .map((item: any, index: number) => {
-    //         if (typeof item === 'string') {
-    //             return index;
-    //         } else {
-    //             return null;
-    //         }
-    //     })
-    //     .filter((item: any) => item !== null) as number[];
-
-    const render = useCallback(
-        ({ item, index }: NewItems) => {
-            const newData = [...Object.values(item)].flat();
-            return newData.map(val => {
-                if (typeof val === 'object') {
-                    return renderItemProps({ item: val, index, target: 'Cell' });
-                } else {
-                    return renderHeader ? (
-                        renderHeader({ item })
-                    ) : (
-                        <Text style={headerStyles}>{val}</Text>
-                    );
-                }
+        sections.forEach(section => {
+            newData.push(section);
+            // @ts-ignore
+            section?.data?.forEach(d => {
+                // @ts-ignore
+                newData.push({ item: d, section: section });
             });
+        });
+
+        return newData;
+    }, [sections]);
+
+    // TODO fix ts issues
+    const renderItem = useCallback(
+        ({ item, index, target, extraData }: ListRenderItemInfo<TItem>) => {
+            // @ts-ignore
+            if (item?.item) {
+                return renderItemProps?.({
+                    // @ts-ignore
+                    item: item?.item,
+                    // @ts-ignore
+                    section: item?.section,
+                    index,
+                    target,
+                    extraData,
+                });
+            } else {
+                // @ts-ignore
+                return renderSectionHeader?.({ section: item });
+            }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [renderItemProps],
+        [renderSectionHeader, renderItemProps],
     );
 
     return (
         <FlatList
-            data={data}
             style={styles}
-            // renderItem={({ item, index }) => render({ rowItems: item, rowIndex: index })}
-            renderItem={render}
-            // getItemType={item => (typeof item === 'string' ? 'sectionHeader' : 'row')}
-            // stickyHeaderIndices={stickyHeaderIndices}
+            data={normalizedData}
+            renderItem={renderItem}
             contentContainerStyle={contentContainerStyles}
             ListHeaderComponentStyle={listHeaderComponentStyles}
             ListFooterComponentStyle={listFooterComponentStyles}
@@ -125,4 +114,4 @@ const SectionList = (
     );
 };
 
-export default memo(forwardRef(SectionList));
+export default memo(forwardRef(SectionList)) as ISectionList;

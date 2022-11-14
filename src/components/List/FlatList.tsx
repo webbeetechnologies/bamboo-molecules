@@ -1,28 +1,15 @@
-import { memo, useMemo, forwardRef } from 'react';
-import type { StyleProp, ViewStyle } from 'react-native';
+import { memo, useMemo, forwardRef, PropsWithoutRef, RefAttributes, ReactElement } from 'react';
 import { FlashList, FlashListProps } from '@shopify/flash-list';
 import { useComponentStyles } from '../../hooks';
 
-export type Props = FlashListProps<{}> & {
-    /**
-     * You can use `contentContainerStyle` to apply padding that will be applied to the whole content itself.
-     * For example, you can apply this padding, so that all of your items have leading and trailing space.
-     * Note: horizontal padding is ignored on vertical lists and vertical padding on horizontal ones.
-     */
-    contentContainerStyle?: StyleProp<ViewStyle>;
+export type Props<TItem> = FlashListProps<TItem>;
 
-    /**
-     * Styling for internal View for `ListHeaderComponent`.
-     */
-    ListHeaderComponentStyle?: StyleProp<ViewStyle>;
+// To make a correct type inference
+export type IFlatList = <ItemType = any>(
+    props: PropsWithoutRef<FlashListProps<ItemType>> & RefAttributes<FlashList<ItemType>>,
+) => ReactElement;
 
-    /**
-     * Styling for internal View for `ListFooterComponent`.
-     */
-    ListFooterComponentStyle?: StyleProp<ViewStyle>;
-};
-
-const FlatList = (
+function FlatList<T = any>(
     {
         style: styleProp,
         contentContainerStyle: contentContainerStyleProps,
@@ -31,29 +18,31 @@ const FlatList = (
         data,
         renderItem,
         ...props
-    }: Props,
+    }: Props<T>,
     ref: any,
-) => {
+) {
     const componentStyles = useComponentStyles('FlatList', [
         styleProp,
-        contentContainerStyleProps,
-        listHeaderComponentStyleProps,
-        listFooterComponentStyleProps,
+        {
+            contentContainerStyle: contentContainerStyleProps,
+            listHeaderComponentStyle: listHeaderComponentStyleProps,
+            listFooterComponentStyle: listFooterComponentStyleProps,
+        },
     ]);
 
     const { contentContainerStyles, listFooterComponentStyles, listHeaderComponentStyles, style } =
         useMemo(() => {
             const {
                 contentContainerStyle,
-                ListHeaderComponentStyle,
-                ListFooterComponentStyle,
-                ...styles
+                listHeaderComponentStyle,
+                listFooterComponentStyle,
+                ...restStyles
             } = componentStyles;
             return {
-                style: styles,
+                style: restStyles,
                 contentContainerStyles: contentContainerStyle,
-                listFooterComponentStyles: ListFooterComponentStyle,
-                listHeaderComponentStyles: ListHeaderComponentStyle,
+                listFooterComponentStyles: listHeaderComponentStyle,
+                listHeaderComponentStyles: listFooterComponentStyle,
             };
         }, [componentStyles]);
 
@@ -69,6 +58,6 @@ const FlatList = (
             ref={ref}
         />
     );
-};
+}
 
-export default memo(forwardRef(FlatList));
+export default memo(forwardRef(FlatList)) as IFlatList;
