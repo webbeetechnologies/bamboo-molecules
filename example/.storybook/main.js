@@ -6,5 +6,8 @@ module.exports = {
         '@storybook/addon-interactions',
         '@storybook/addon-react-native-web',
     ],
+    features: {
+        interactionsDebugger: true,
+    },
     framework: '@storybook/react',
 };
