@@ -7,6 +7,7 @@ import {
     StyleSheet,
     ViewStyle,
 } from 'react-native';
+import type { SurfaceProps } from '../Surface';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
 export type Props = ModalProps & {
@@ -24,6 +25,10 @@ export type Props = ModalProps & {
      * lg - maxWidth:600, maxHeight:800
      */
     size?: 'md' | 'lg';
+    /**
+     * content elevation
+     */
+    elevation?: SurfaceProps['elevation'];
 };
 
 const Modal = (
@@ -33,11 +38,12 @@ const Modal = (
         children,
         contentStyle: contentStyleProp,
         size = 'md',
+        elevation = 2,
         ...rest
     }: Props,
     ref: any,
 ) => {
-    const { View } = useMolecules();
+    const { View, Surface } = useMolecules();
     const componentStyles = useComponentStyles('Modal', styleProp, {
         size,
     });
@@ -75,7 +81,9 @@ const Modal = (
                     <View style={modalBackgroundStyle} />
                 </TouchableWithoutFeedback>
                 <View style={contentContainerStyle} pointerEvents="box-none">
-                    <View style={contentStyle}>{children}</View>
+                    <Surface style={contentStyle} elevation={elevation}>
+                        {children}
+                    </Surface>
                 </View>
             </>
         </NativeModal>

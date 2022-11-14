@@ -22,6 +22,29 @@ import {
     helperTextStyles,
     modalStyles,
     popoverStyles,
+    datePickerStyles,
+    datePickerYearPickerStyles,
+    datePickerMonthStyles,
+    datePickerDayStyles,
+    datePickerHeaderStyles,
+    dateDayNameStyles,
+    datePickerDayEmptyStyles,
+    datePickerWeekStyles,
+    datePickerDayRangeStyles,
+    datePickerModalStyles,
+    datePickerModalHeaderStyles,
+    datePickerModalContentHeaderStyles,
+    datePickerModalHeaderBackgroundStyles,
+    datePickerModalEditStyles,
+    datePickerInputStyles,
+    timePickerModalStyles,
+    timePickerStyles,
+    timePickerInputStyles,
+    timePickerInputsStyles,
+    timePickerClockStyles,
+    timePickerClockHoursStyles,
+    timePickerClockMinutesStyles,
+    timePickerAmPmSwitcherStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -48,6 +71,34 @@ const defaultThemeValue: Partial<ITheme> = {
     HelperText: helperTextStyles,
     Modal: modalStyles,
     Popover: popoverStyles,
+
+    DatePickerInline: datePickerStyles,
+    DatePicker_YearPicker: datePickerYearPickerStyles,
+    DatePicker_Month: datePickerMonthStyles,
+    DatePicker_Day: datePickerDayStyles,
+    DatePicker_DayEmpty: datePickerDayEmptyStyles,
+    DatePicker_Header: datePickerHeaderStyles,
+    DatePicker_DayName: dateDayNameStyles,
+    DatePicker_DayRange: datePickerDayRangeStyles,
+    DatePicker_Week: datePickerWeekStyles,
+
+    DatePickerModal: datePickerModalStyles,
+    DatePickerModal_Header: datePickerModalHeaderStyles,
+    DatePickerModal_ContentHeader: datePickerModalContentHeaderStyles,
+    DatePickerModal_HeaderBackground: datePickerModalHeaderBackgroundStyles,
+    DatePickerModal_Edit: datePickerModalEditStyles,
+
+    DatePickerInput: datePickerInputStyles,
+
+    TimePickerModal: timePickerModalStyles,
+
+    TimePicker: timePickerStyles,
+    TimePicker_Input: timePickerInputStyles,
+    TimePicker_Inputs: timePickerInputsStyles,
+    TimePicker_Clock: timePickerClockStyles,
+    TimePicker_ClockHours: timePickerClockHoursStyles,
+    TimePicker_ClockMinutes: timePickerClockMinutesStyles,
+    TimePicker_AmPmSwitcher: timePickerAmPmSwitcherStyles,
 };
 
 const defaultExtractStyles = memoize(

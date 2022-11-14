@@ -150,7 +150,7 @@ const Button = (
     {
         disabled: disabledProp,
         variant = 'text',
-        size = 'md',
+        size = 'lg',
         loading,
         iconType,
         iconName,
