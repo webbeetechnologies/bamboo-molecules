@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import {
     extendTheme,
     ProvideMolecules,
@@ -10,6 +11,7 @@ import {
     documentTypes,
     useColorMode,
 } from 'bamboo-molecules';
+import FlatGrid from '../../src/components/Grid/FlatGrid';
 
 const theme = extendTheme({
     colorMode: 'light',
@@ -262,7 +264,7 @@ const Example = () => {
                 rippleColor="pink"
                 disabled={true}
                 title="This is my title with description"
-                description="This is my description"
+                children="This is my description"
                 style={{ borderColor: 'colors.primary', borderWidth: 2, marginBottom: 10 }}
                 titleStyle={{ fontWeight: '800', fontSize: 16, color: 'colors.primary' }}
                 left={
@@ -298,10 +300,32 @@ const Example = () => {
             />
 
             <FlatList
-                renderItem={({ item }: any) => (
+                renderItem={({ item }) => (
                     <ListItem
                         title={item.title}
-                        description={item.description}
+                        children={item.description}
+                        style={{ marginBottom: 5 }}
+                        titleStyle={{ fontWeight: '800', fontSize: 16 }}
+                        divider={true}
+                        right={
+                            <Checkbox
+                                status={isSwitchOn ? 'checked' : 'unchecked'}
+                                onChange={toggleSwitch}
+                            />
+                        }
+                    />
+                )}
+                data={[
+                    { title: 'First item title', description: 'First item description' },
+                    { title: 'Second item title', description: 'Second item description' },
+                ]}
+            />
+
+            <FlashList
+                renderItem={({ item }) => (
+                    <ListItem
+                        title={item.title}
+                        children={item.description}
                         style={{ marginBottom: 5 }}
                         titleStyle={{ fontWeight: '800', fontSize: 16 }}
                         divider={true}
@@ -320,12 +344,11 @@ const Example = () => {
             />
 
             <SectionList
-                data={sectionData}
-                renderItem={({ item }: any) => (
+                sections={sectionData}
+                renderItem={({ item }) => (
                     <ListItem
                         onPress={() => {}}
                         title={item.firstname}
-                        description={item.lastname}
                         style={{ marginBottom: 5 }}
                         titleStyle={{ fontWeight: '800', fontSize: 16 }}
                         right={
@@ -339,10 +362,12 @@ const Example = () => {
                         }
                     />
                 )}
-                // renderHeader={({ item: { title } }) => (
-                //     <Text style={{ color: 'red' }}>{title}</Text>
-                // )}
-                headerStyle={{ color: 'colors.error' }}
+                renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
+            />
+            <FlatGrid
+                itemDimension={130}
+                data={[1, 2, 3, 4, 5, 6]}
+                renderItem={({ item }) => <Text>{item}</Text>}
             />
         </View>
     );
