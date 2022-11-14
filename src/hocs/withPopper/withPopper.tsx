@@ -23,6 +23,7 @@ const withPopper = <T,>(Component: ComponentType<T>) =>
             animateTransition,
             arrowProps,
             contentStyles,
+            contentTextStyles,
             exitTransition,
             trigger,
 
@@ -68,6 +69,7 @@ const withPopper = <T,>(Component: ComponentType<T>) =>
                 finalFocusRef={finalFocusRef}
                 trapFocus={trapFocus}
                 contentStyles={contentStyles}
+                contentTextStyles={contentTextStyles}
                 overlayStyles={overlayStyles}
                 initialTransition={initialTransition}
                 animateTransition={animateTransition}

@@ -1,8 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Button, Example } from './Popover';
+import { Button, Example, PopoverContent } from './Popover';
 import { ProvideMolecules } from 'bamboo-molecules';
-import { Text, View } from 'react-native';
 import { within, userEvent } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 
@@ -32,11 +31,7 @@ Default.args = {
             Show popover
         </Button>
     ),
-    children: (
-        <View testID="popover-body">
-            <Text testID="popover-text">I'm a popover</Text>
-        </View>
-    ),
+    children: <PopoverContent />,
 };
 
 Default.parameters = {

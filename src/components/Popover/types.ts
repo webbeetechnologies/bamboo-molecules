@@ -3,10 +3,11 @@ import type { PopoverProps as HOCPopoverProps, TriggerFunc } from '../../hocs/wi
 export type PopoverProps = Omit<
     HOCPopoverProps,
     | 'arrowProps'
-    | 'overlayStyles,'
-    | 'contentStyles,'
-    | 'initialTransition,'
-    | 'animateTransition,'
+    | 'overlayStyles'
+    | 'contentStyles'
+    | 'contentTextStyles'
+    | 'initialTransition'
+    | 'animateTransition'
     | 'exitTransition'
 > & {
     trigger: TriggerFunc;

@@ -21,8 +21,11 @@ import { useMolecules } from '../../hooks';
 import PopperArrow from './PopperArrow';
 import type { IPlacement } from './types';
 
-const PopperContent = ({ children, style, showArrow, ...rest }: any, ref: any) => {
-    const { View } = useMolecules();
+const PopperContent = (
+    { children, style, showArrow, contentTextStyles, ...rest }: any,
+    ref: any,
+) => {
+    const { Text, View } = useMolecules();
 
     const {
         isOpen,
@@ -139,7 +142,7 @@ const PopperContent = ({ children, style, showArrow, ...rest }: any, ref: any) =
                     ))}
                 <ScrollView>
                     <View style={StyleSheet.flatten([containerStyle, style])} {...rest} ref={ref}>
-                        {restElements}
+                        <Text style={contentTextStyles}>{restElements}</Text>
                     </View>
                 </ScrollView>
             </View>

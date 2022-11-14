@@ -23,6 +23,7 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
             showArrow = true,
             overlayStyles,
             contentStyles,
+            contentTextStyles,
             arrowProps,
             initialTransition,
             animateTransition,
@@ -105,6 +106,7 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
                             <PopoverContext.Provider value={popoverContextValue}>
                                 <PopperContent
                                     style={contentStyles}
+                                    contentTextStyles={contentTextStyles}
                                     arrowProps={arrowProps}
                                     showArrow={showArrow}>
                                     {/* <FocusScope contain={trapFocus} restoreFocus> */}

@@ -16,3 +16,13 @@ export const Button = forwardRef<any, ButtonProps>((props: ButtonProps, ref) => 
 
     return <ButtonComponent {...props} ref={ref} />;
 });
+
+export const PopoverContent = () => {
+    const { View, Text } = useMolecules();
+
+    return (
+        <View testID="popover-body">
+            <Text testID="popover-text">I'm a popover</Text>
+        </View>
+    );
+};

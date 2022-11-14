@@ -20,6 +20,8 @@ const Popover: FC<PopoverProps> = forwardRef(
             };
         }, [styles]);
 
+        console.log({ popoverStyles });
+
         return (
             <Popper
                 ref={ref}
@@ -28,6 +30,7 @@ const Popover: FC<PopoverProps> = forwardRef(
                 crossOffset={crossOffset}
                 arrowProps={arrowProps}
                 contentStyles={popoverStyles.content}
+                contentTextStyles={popoverStyles.contentText}
                 overlayStyles={popoverStyles.overlay}
                 initialTransition={popoverStyles.initialTransition}
                 animateTransition={popoverStyles.animateTransition}
