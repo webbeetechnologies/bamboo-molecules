@@ -36,11 +36,22 @@ export {
     listItemStyles,
     FlatList,
     FlatListProps,
+    IFlatList,
     flatListStyles,
     SectionList,
     SectionListProps,
+    ISectionList,
     sectionListStyles,
 } from './List';
+
+export {
+    FlatGrid,
+    IFlatGrid,
+    SectionGrid,
+    ISectionGrid,
+    sectionGridStyles,
+    flatGridStyles,
+} from './Grid';
 
 export { IconButton, IconButtonProps, iconButtonStyles } from './IconButton';
 export { default as Checkbox, CheckboxProps, checkboxStyles } from './Checkbox';

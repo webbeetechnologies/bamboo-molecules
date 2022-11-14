@@ -21,6 +21,8 @@ import {
     checkboxStyles,
     flatListStyles,
     sectionListStyles,
+    flatGridStyles,
+    sectionGridStyles,
     textInputStyles,
     helperTextStyles,
     modalStyles,
@@ -75,6 +77,9 @@ const defaultThemeValue: Partial<ITheme> = {
     TextInput: textInputStyles,
     HelperText: helperTextStyles,
     Modal: modalStyles,
+
+    FlatGrid: flatGridStyles,
+    SectionGrid: sectionGridStyles,
 
     DatePickerInline: datePickerStyles,
     DatePicker_YearPicker: datePickerYearPickerStyles,

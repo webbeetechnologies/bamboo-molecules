@@ -38,6 +38,7 @@
     "lodash.memoize": "^4.1.2",
     "react-native-document-picker": "^8.1.2",
     "react-native-mask-input": "^1.2.2",
+    "react-native-super-grid": "^4.6.1",
     "ts-deepmerge": "^4.0.0"
   },
   "devDependencies": {

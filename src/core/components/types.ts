@@ -12,8 +12,7 @@ import type {
     VerticalDividerProps,
     ListItemProps,
     Checkbox,
-    FlatListProps,
-    SectionListProps,
+    IFlatList,
     TextInputProps,
     NumberInputProps,
     FilePickerProps,
@@ -25,6 +24,9 @@ import type {
     TimePickerProps,
     TimePickerModalProps,
     TextInputWithMaskProps,
+    ISectionList,
+    IFlatGrid,
+    ISectionGrid,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -44,8 +46,10 @@ export interface DefaultComponents {
     Switch: ComponentType<SwitchProps>;
     ListItem: ComponentType<ListItemProps>;
     Checkbox: typeof Checkbox;
-    FlatList: ComponentType<FlatListProps>;
-    SectionList: ComponentType<SectionListProps>;
+    FlatList: IFlatList;
+    SectionList: ISectionList;
+    FlatGrid: IFlatGrid;
+    SectionGrid: ISectionGrid;
     TextInput: ComponentType<TextInputProps>;
     NumberInput: ComponentType<NumberInputProps>;
     FilePicker: ComponentType<FilePickerProps>;
