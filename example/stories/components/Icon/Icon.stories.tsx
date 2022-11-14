@@ -1,7 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import { ProvideMolecules } from '../../common';
 
 import { Example } from './Icon';
-import { ProvideMolecules } from 'bamboo-molecules';
 
 export default {
     title: 'components/Icon',

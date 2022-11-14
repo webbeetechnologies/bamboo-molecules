@@ -1,5 +1,5 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ProvideMolecules } from 'bamboo-molecules';
+import { ProvideMolecules } from '../../common';
 
 import { Example } from './Surface';
 

@@ -22,6 +22,13 @@ import {
     FilePicker,
     HelperText,
     Modal,
+    DatePickerInline,
+    DatePickerModal,
+    DatePickerInput,
+    TimePicker,
+    TimePickerModal,
+    TextInputWithMask,
+    TextInputWithMaskProps,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -49,6 +56,12 @@ const defaultComponents: DefaultComponents = {
     FilePicker,
     HelperText,
     Modal,
+    DatePickerInline,
+    DatePickerModal,
+    DatePickerInput,
+    TimePicker,
+    TimePickerModal,
+    TextInputWithMask: TextInputWithMask as ComponentType<TextInputWithMaskProps>,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

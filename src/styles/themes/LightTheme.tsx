@@ -79,7 +79,7 @@ export const MD3LightTheme: MD3Theme = {
         '4': 16,
         '5': 20,
         '6': 24,
-        '4l': 18,
+        '7': 28,
     },
     letterSpacings: {
         xxs: -1.5,

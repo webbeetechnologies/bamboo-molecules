@@ -1,7 +1,7 @@
-import React, { ComponentType } from 'react';
+import React, { ComponentType, ReactNode } from 'react';
 import {
     extendTheme,
-    ProvideMolecules,
+    ProvideMolecules as DefaultProvideMolecules,
     useMolecules as useAtomsMolecules,
     useComponentStyles,
     TextProps,
@@ -10,6 +10,7 @@ import { linkTo } from '@storybook/addon-links';
 
 // creating theme styles similar to mdx
 export const theme = extendTheme({
+    colorMode: 'light',
     H1: {
         marginTop: 20,
         marginBottom: 8,
@@ -87,8 +88,16 @@ const components = { Code, Link };
 
 export const withDocsWrapper = (Component: () => JSX.Element) => (props: typeof Component) => {
     return (
-        <ProvideMolecules components={components} theme={theme}>
+        <DefaultProvideMolecules components={components} theme={theme}>
             <Component {...props} />
-        </ProvideMolecules>
+        </DefaultProvideMolecules>
     );
+};
+
+const storyTheme = extendTheme({
+    colorMode: 'light',
+});
+
+export const ProvideMolecules = ({ children }: { children: ReactNode }) => {
+    return <DefaultProvideMolecules theme={storyTheme}>{children}</DefaultProvideMolecules>;
 };
