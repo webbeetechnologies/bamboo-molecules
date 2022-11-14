@@ -42,6 +42,19 @@ const withPopper = <T,>(Component: ComponentType<T>) =>
         // Dynamic keys are skipped
         const cachedKeys = useMemo(() => Object.keys(rest), []);
 
+        const triggerFunc = useCallback(
+            (props: TriggerProps, state: { open: boolean }) => {
+                const mergedRef = mergeRefs([ref, props.ref]);
+
+                // @ts-ignore
+                if (trigger) return trigger({ ...props, ref: mergedRef }, state);
+
+                // @ts-ignore
+                return <Component {...rest} {...props} ref={mergeRefs([ref, mergedRef])} />;
+            },
+            cachedKeys.map(key => (rest as any)[key]),
+        );
+
         return (
             <Popover
                 showArrow={showArrow}
@@ -67,18 +80,7 @@ const withPopper = <T,>(Component: ComponentType<T>) =>
                 placement={placement}
                 triggerRef={triggerRef}
                 setOverlayRef={setOverlayRef}
-                trigger={useCallback(
-                    (props: TriggerProps, state: { open: boolean }) => {
-                        const mergedRef = mergeRefs([ref, props.ref]);
-
-                        // @ts-ignore
-                        if (trigger) return trigger({ ...props, ref: mergedRef }, state);
-
-                        // @ts-ignore
-                        return <Component {...rest} {...props} ref={mergeRefs([ref, mergedRef])} />;
-                    },
-                    cachedKeys.map(key => (rest as any)[key]),
-                )}>
+                trigger={triggerFunc}>
                 {children}
             </Popover>
         );
