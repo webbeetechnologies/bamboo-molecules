@@ -41,7 +41,13 @@ Default.args = {
 Default.parameters = {
     docs: {
         source: {
-            code: `<SectionList {...props} sections={data} renderItem={({ item }) => (
+            code: `
+<SectionList {...props} 
+    sections={[
+        { title: 'Numbers', data: ['1', '2', '3', '4'] },
+        { title: 'Letters', data: ['A', 'B', 'C', 'D'] },
+    ]} 
+    renderItem={({ item }) => (
         <ListItem>
             <ListItem.Title>{item}</ListItem.Title>
         </ListItem>

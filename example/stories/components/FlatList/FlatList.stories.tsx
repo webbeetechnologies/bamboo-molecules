@@ -38,7 +38,18 @@ Default.args = {
 Default.parameters = {
     docs: {
         source: {
-            code: `<FlatList {...props} data={data} renderItem={renderItem} />`,
+            code: `
+<FlatList {...props} 
+    data={[
+        { title: 'First item title', description: 'First item description' },
+        { title: 'Second item title', description: 'Second item description' },
+    ]}
+    renderItem={({ item }: any) => (
+        <ListItem>
+            <ListItemTitle>{item.title}</ListItemTitle>
+        </ListItem>
+    )}
+ />`,
             language: 'tsx',
             type: 'auto',
         },
