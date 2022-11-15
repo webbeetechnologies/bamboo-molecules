@@ -1,7 +1,5 @@
 // @component ./ListItem.tsx
-export { default as ListItem, Props as ListItemProps } from './ListItem';
-
-export { listItemStyles, flatListStyles, sectionListStyles } from './utils';
+export { flatListStyles, sectionListStyles } from './utils';
 
 export { default as FlatList, Props as FlatListProps, IFlatList } from './FlatList';
 

@@ -1,7 +1,7 @@
 import { memo, ReactElement, PropsWithoutRef, RefAttributes, useMemo, forwardRef } from 'react';
 import { SectionGrid as SuperSectionGrid, SectionGridProps } from 'react-native-super-grid';
-import { useComponentStyles, useMolecules } from '../../hooks';
 import type { SectionList } from 'react-native';
+import { useComponentStyles } from '../../hooks';
 
 export type ISectionGrid = <ItemType = any>(
     props: PropsWithoutRef<SectionGridProps<ItemType>> & RefAttributes<SectionList<ItemType>>,
@@ -17,7 +17,6 @@ const SectionGrid = (
     }: SectionGridProps,
     ref: any,
 ) => {
-    const { SectionList } = useMolecules();
     const componentStyles = useComponentStyles('SectionGrid', [
         styleProp,
         {
@@ -43,7 +42,6 @@ const SectionGrid = (
     return (
         <SuperSectionGrid
             {...rest}
-            customSectionList={SectionList as any}
             style={style}
             contentContainerStyle={contentContainerStyles}
             itemContainerStyle={itemContainerStyles}
