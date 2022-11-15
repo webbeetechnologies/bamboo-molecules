@@ -11,7 +11,7 @@ import {
     documentTypes,
     useColorMode,
 } from 'bamboo-molecules';
-import FlatGrid from '../../src/components/Grid/FlatGrid';
+import FlatGrid from '../../src/components/FlatGrid/FlatGrid';
 
 const theme = extendTheme({
     colorMode: 'light',
@@ -49,6 +49,7 @@ const Example = () => {
         DatePickerInput,
         TimePickerModal,
         Icon,
+        SectionGrid,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
@@ -260,50 +261,9 @@ const Example = () => {
 
             <Switch value={isSwitchOn} onValueChange={toggleSwitch} color="rgba(125, 82, 96, 1)" />
 
-            <ListItem
-                rippleColor="pink"
-                disabled={true}
-                title="This is my title with description"
-                children="This is my description"
-                style={{ borderColor: 'colors.primary', borderWidth: 2, marginBottom: 10 }}
-                titleStyle={{ fontWeight: '800', fontSize: 16, color: 'colors.primary' }}
-                left={
-                    <Icon
-                        style={styles.listIcon}
-                        type="material-community"
-                        name="robot-angry-outline"
-                    />
-                }
-                right={
-                    <Icon
-                        style={styles.listIcon}
-                        type="material-community"
-                        name="account-plus-outline"
-                        size={20}
-                    />
-                }
-            />
-            <ListItem
-                onPress={() => {}}
-                title="This is my title without description"
-                style={{ borderColor: 'colors.primary', borderWidth: 1 }}
-                divider={true}
-                titleStyle={{ fontWeight: '800', fontSize: 16 }}
-                right={
-                    <Icon
-                        style={styles.listIcon}
-                        type="material-community"
-                        name="account-plus-outline"
-                        size={20}
-                    />
-                }
-            />
-
             <FlatList
                 renderItem={({ item }) => (
                     <ListItem
-                        title={item.title}
-                        children={item.description}
                         style={{ marginBottom: 5 }}
                         titleStyle={{ fontWeight: '800', fontSize: 16 }}
                         divider={true}
@@ -312,8 +272,9 @@ const Example = () => {
                                 status={isSwitchOn ? 'checked' : 'unchecked'}
                                 onChange={toggleSwitch}
                             />
-                        }
-                    />
+                        }>
+                        <ListItem.Description>{item.description}</ListItem.Description>
+                    </ListItem>
                 )}
                 data={[
                     { title: 'First item title', description: 'First item description' },
@@ -324,18 +285,13 @@ const Example = () => {
             <FlashList
                 renderItem={({ item }) => (
                     <ListItem
-                        title={item.title}
-                        children={item.description}
                         style={{ marginBottom: 5 }}
                         titleStyle={{ fontWeight: '800', fontSize: 16 }}
                         divider={true}
-                        right={
-                            <Checkbox
-                                status={isSwitchOn ? 'checked' : 'unchecked'}
-                                onChange={toggleSwitch}
-                            />
-                        }
-                    />
+                        left={<Icon name="account" size={30} />}>
+                        <ListItem.Title>{item.title}</ListItem.Title>
+                        <ListItem.Description>{item.description}</ListItem.Description>
+                    </ListItem>
                 )}
                 data={[
                     { title: 'First item title', description: 'First item description' },
@@ -343,31 +299,52 @@ const Example = () => {
                 ]}
             />
 
-            <SectionList
-                sections={sectionData}
-                renderItem={({ item }) => (
-                    <ListItem
-                        onPress={() => {}}
-                        title={item.firstname}
-                        style={{ marginBottom: 5 }}
-                        titleStyle={{ fontWeight: '800', fontSize: 16 }}
-                        right={
-                            <IconButton
-                                name={isSwitchOn ? 'chevron-right' : 'chevron-left'}
-                                onPress={() => {}}
-                                variant="outlined"
-                                style={{ backgroundColor: 'colors.primary', color: '#fff' }}
-                                animated
-                            />
-                        }
-                    />
-                )}
-                renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
-            />
+            <View style={{ height: 250 }}>
+                <SectionList
+                    sections={sectionData}
+                    renderItem={({ item }) => (
+                        <ListItem
+                            onPress={() => {}}
+                            style={{ marginBottom: 5 }}
+                            titleStyle={{ fontWeight: '800', fontSize: 16 }}
+                            right={
+                                <IconButton
+                                    name={isSwitchOn ? 'chevron-right' : 'chevron-left'}
+                                    onPress={() => {}}
+                                    variant="outlined"
+                                    style={{ backgroundColor: 'colors.primary', color: '#fff' }}
+                                    animated
+                                />
+                            }>
+                            <ListItem.Title>{item.firstname}</ListItem.Title>
+                        </ListItem>
+                    )}
+                    renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
+                />
+            </View>
+
             <FlatGrid
                 itemDimension={130}
                 data={[1, 2, 3, 4, 5, 6]}
                 renderItem={({ item }) => <Text>{item}</Text>}
+            />
+
+            <SectionGrid
+                itemDimension={130}
+                sections={[
+                    {
+                        title: 'Numbers',
+                        data: ['1', '2', '3', '4', '5', '6'],
+                    },
+                    {
+                        title: 'Alphabets',
+                        data: ['A', 'B', 'C', 'D', 'E'],
+                    },
+                ]}
+                renderItem={({ item }) => <Text>{item}</Text>}
+                renderSectionHeader={({ section }) => (
+                    <Text style={{ fontSize: 20 }}>{section.title}</Text>
+                )}
             />
         </View>
     );
