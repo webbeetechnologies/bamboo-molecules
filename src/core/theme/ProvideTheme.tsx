@@ -18,6 +18,8 @@ import {
     switchStyles,
     verticalDividerStyles,
     listItemStyles,
+    listItemTitleStyles,
+    listItemDescriptionStyles,
     checkboxStyles,
     flatListStyles,
     sectionListStyles,
@@ -70,7 +72,11 @@ const defaultThemeValue: Partial<ITheme> = {
     TouchableRipple: touchableRippleStyles,
     Surface: surfaceStyles,
     Switch: switchStyles,
+
     ListItem: listItemStyles,
+    ListItemTitle: listItemTitleStyles,
+    ListItemDescription: listItemDescriptionStyles,
+
     Checkbox: checkboxStyles,
     FlatList: flatListStyles,
     SectionList: sectionListStyles,

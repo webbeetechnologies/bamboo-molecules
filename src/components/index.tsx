@@ -30,28 +30,21 @@ export {
 } from './HorizontalDivider';
 export { VerticalDivider, verticalDividerStyles, VerticalDividerProps } from './VerticalDivider';
 export { Switch, switchStyles, SwitchProps } from './Switch';
-export {
-    ListItem,
-    ListItemProps,
-    listItemStyles,
-    FlatList,
-    FlatListProps,
-    IFlatList,
-    flatListStyles,
-    SectionList,
-    SectionListProps,
-    ISectionList,
-    sectionListStyles,
-} from './List';
+export { FlatList, FlatListProps, IFlatList, flatListStyles } from './FlatList';
+
+export { SectionList, SectionListProps, ISectionList, sectionListStyles } from './SectionList';
 
 export {
-    FlatGrid,
-    IFlatGrid,
-    SectionGrid,
-    ISectionGrid,
-    sectionGridStyles,
-    flatGridStyles,
-} from './Grid';
+    default as ListItem,
+    ListItemProps,
+    listItemStyles,
+    listItemTitleStyles,
+    listItemDescriptionStyles,
+} from './ListItem';
+
+export { FlatGrid, IFlatGrid, flatGridStyles, FlatGridProps } from './FlatGrid';
+
+export { SectionGrid, ISectionGrid, sectionGridStyles, SectionGridProps } from './SectionGrid';
 
 export { IconButton, IconButtonProps, iconButtonStyles } from './IconButton';
 export { default as Checkbox, CheckboxProps, checkboxStyles } from './Checkbox';

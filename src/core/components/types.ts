@@ -10,8 +10,8 @@ import type {
     ButtonProps,
     SwitchProps,
     VerticalDividerProps,
-    ListItemProps,
     Checkbox,
+    ListItem,
     IFlatList,
     TextInputProps,
     NumberInputProps,
@@ -44,7 +44,7 @@ export interface DefaultComponents {
     Button: ComponentType<ButtonProps>;
     Surface: ComponentType<SurfaceProps>;
     Switch: ComponentType<SwitchProps>;
-    ListItem: ComponentType<ListItemProps>;
+    ListItem: typeof ListItem;
     Checkbox: typeof Checkbox;
     FlatList: IFlatList;
     SectionList: ISectionList;
