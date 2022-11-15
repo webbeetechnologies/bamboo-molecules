@@ -1,13 +1,9 @@
 import { useMolecules, FlatListProps } from 'bamboo-molecules';
 
-export type Props = FlatListProps & {};
+export type Props<T> = FlatListProps<T> & {};
 
-export const Example = (props: Props) => {
+export const Example = <T,>(props: Props<T>) => {
     const { FlatList } = useMolecules();
-    const data = [
-        { title: 'First item title', description: 'First item description' },
-        { title: 'Second item title', description: 'Second item description' },
-    ];
-    const renderItem = ({ item }: any) => <h1>{item.title}</h1>;
-    return <FlatList {...props} data={data} renderItem={renderItem} />;
+
+    return <FlatList {...props} />;
 };

@@ -1,7 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ProvideMolecules } from 'bamboo-molecules';
+import { ProvideMolecules } from '../../common';
 
-import { Example } from './ListItem';
+import { Example, ListItemTitle, ListItemDescription } from './ListItem';
 import { Example as Icon } from '../Icon/Icon';
 
 export default {
@@ -19,15 +19,24 @@ export default {
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 Default.args = {
-    title: 'Headline',
-    description: 'Supporting text',
+    children: (
+        <>
+            <ListItemTitle>This is the title</ListItemTitle>
+            <ListItemDescription>This is the description</ListItemDescription>
+        </>
+    ),
 };
 
 Default.parameters = {
     docs: {
         source: {
             code: `
-<ListItem title="Headline" description="Supporting text" />
+<ListItem>
+         <>
+            <ListItem.Title>This is the title</ListItem.Title>
+            <ListItem.Description>This is the description</ListItem.Description>
+        </>
+</ListItem>
 `,
             language: 'tsx',
             type: 'auto',
@@ -35,19 +44,28 @@ Default.parameters = {
     },
 };
 
-export const Left: ComponentStory<typeof Example> = args => <Example {...args} />;
+export const WithLeftElement: ComponentStory<typeof Example> = args => <Example {...args} />;
 
-Left.args = {
-    left: <Icon name="robot-angry-outline" type="material-community" />,
-    title: 'Headline',
-    description: 'Supporting text',
+WithLeftElement.args = {
+    left: <Icon name="robot-angry-outline" type="material-community" size={30} />,
+    children: (
+        <>
+            <ListItemTitle>ListItem with Left Element</ListItemTitle>
+            <ListItemDescription>Supporting Text</ListItemDescription>
+        </>
+    ),
 };
 
-Left.parameters = {
+WithLeftElement.parameters = {
     docs: {
         source: {
             code: `
-<ListItem title="Headline" description="Supporting text" />
+<ListItem left={<Icon name="robot-angry-outline" type="material-community" size={30} />}>
+        <>
+            <ListItem.Title>ListItem with Left Element</ListItem.Title>
+            <ListItem.Description>Supporting Text</ListItem.Description>
+        </>
+<ListItem>
 `,
             language: 'tsx',
             type: 'auto',
@@ -55,19 +73,28 @@ Left.parameters = {
     },
 };
 
-export const Right: ComponentStory<typeof Example> = args => <Example {...args} />;
+export const WithRightElement: ComponentStory<typeof Example> = args => <Example {...args} />;
 
-Right.args = {
-    right: <Icon name="account-plus-outline" type="material-community" />,
-    title: 'Headline',
-    description: 'Supporting text',
+WithRightElement.args = {
+    right: <Icon name="account-plus-outline" type="material-community" size={30} />,
+    children: (
+        <>
+            <ListItemTitle>ListItem with Right Element</ListItemTitle>
+            <ListItemDescription>Supporting Text</ListItemDescription>
+        </>
+    ),
 };
 
-Right.parameters = {
+WithRightElement.parameters = {
     docs: {
         source: {
             code: `
-<ListItem title="Headline" description="Supporting text" />
+<ListItem right={<Icon name="account-plus-outline" type="material-community" size={30} />}>
+        <>
+            <ListItem.Title>ListItem with Right Element</ListItem.Title>
+            <ListItem.Description>Supporting Text</ListItem.Description>
+        </>
+<ListItem>
 `,
             language: 'tsx',
             type: 'auto',
@@ -75,19 +102,28 @@ Right.parameters = {
     },
 };
 
-export const Divider: ComponentStory<typeof Example> = args => <Example {...args} />;
+export const WithDivider: ComponentStory<typeof Example> = args => <Example {...args} />;
 
-Divider.args = {
+WithDivider.args = {
     divider: true,
-    title: 'Headline',
-    description: 'Supporting text',
+    children: (
+        <>
+            <ListItemTitle>ListItem with Divider</ListItemTitle>
+            <ListItemDescription>Supporting Text</ListItemDescription>
+        </>
+    ),
 };
 
-Divider.parameters = {
+WithDivider.parameters = {
     docs: {
         source: {
             code: `
-<ListItem title="Headline" description="Supporting text" />
+<ListItem divider={true}>
+     <>
+        <ListItem.Title>ListItem with Divider</ListItem.Title>
+        <ListItem.Description>Supporting Text</ListItem.Description>
+     </>
+<ListItem>
 `,
             language: 'tsx',
             type: 'auto',

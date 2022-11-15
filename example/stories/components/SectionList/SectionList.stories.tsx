@@ -2,11 +2,11 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ProvideMolecules } from '../../common';
 import { Example as ListItem, ListItemTitle } from '../ListItem/ListItem';
 
-import { Example } from './FlatList';
-import { View } from 'react-native';
+import { Example } from './SectionList';
+import { Text, View } from 'react-native';
 
 export default {
-    title: 'components/FlatList',
+    title: 'components/SectionList',
     component: Example,
     decorators: [
         Story => (
@@ -24,21 +24,31 @@ export const Default: ComponentStory<typeof Example> = args => (
 );
 
 Default.args = {
-    data: [
-        { title: 'First item title', description: 'First item description' },
-        { title: 'Second item title', description: 'Second item description' },
+    sections: [
+        { title: 'Numbers', data: ['1', '2', '3', '4'] },
+        { title: 'Letters', data: ['A', 'B', 'C', 'D'] },
     ],
     renderItem: ({ item }: any) => (
         <ListItem>
-            <ListItemTitle>{item.title}</ListItemTitle>
+            <ListItemTitle>{item}</ListItemTitle>
         </ListItem>
+    ),
+    renderSectionHeader: ({ section }: any) => (
+        <Text style={{ fontSize: 25 }}>{section.title}</Text>
     ),
 };
 
 Default.parameters = {
     docs: {
         source: {
-            code: `<FlatList {...props} data={data} renderItem={renderItem} />`,
+            code: `<SectionList {...props} sections={data} renderItem={({ item }) => (
+        <ListItem>
+            <ListItem.Title>{item}</ListItem.Title>
+        </ListItem>
+    )}
+    renderSectionHeader={({ section }) => (
+        <Text style={{ fontSize: 25 }}>{section.title}</Text>
+    )} />`,
             language: 'tsx',
             type: 'auto',
         },
