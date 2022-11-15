@@ -1,4 +1,4 @@
-import {
+import React, {
     memo,
     forwardRef,
     useMemo,
@@ -14,8 +14,14 @@ type DefaultSectionT = {
     [key: string]: any;
 };
 
-export type Props<TItem, TSection = DefaultSectionT> = Omit<FlashListProps<TItem>, 'data'> & {
+export type Props<TItem, TSection = DefaultSectionT> = Omit<
+    FlashListProps<TItem>,
+    'data' | 'renderItem'
+> & {
     sections: TSection[];
+    renderItem: (
+        info: ListRenderItemInfo<TItem> & { section?: TSection },
+    ) => React.ReactElement | null;
     renderSectionHeader?: (props: { section: TSection }) => any;
 };
 
@@ -64,36 +70,34 @@ const SectionList = <TItem, TSection = DefaultSectionT>(
         }, [componentStyles]);
 
     const normalizedData = useMemo(() => {
-        const newData: any[] = [];
-
-        sections.forEach(section => {
-            newData.push(section);
-            // @ts-ignore
-            section?.data?.forEach(d => {
+        return sections.reduce((acc: TSection[], current: TSection) => {
+            return acc.concat([
+                current,
                 // @ts-ignore
-                newData.push({ item: d, section: section });
-            });
-        });
-
-        return newData;
+                ...(current?.data?.map((item: TItem) => ({
+                    item: item,
+                    section: current,
+                })) || []),
+            ]);
+        }, []);
     }, [sections]);
 
-    // TODO fix ts issues
     const renderItem = useCallback(
-        ({ item, index, target, extraData }: ListRenderItemInfo<TItem>) => {
-            // @ts-ignore
+        ({
+            item,
+            index,
+            target,
+            extraData,
+        }: ListRenderItemInfo<TSection & { item?: TItem; section?: TSection }>) => {
             if (item?.item) {
                 return renderItemProps?.({
-                    // @ts-ignore
-                    item: item?.item,
-                    // @ts-ignore
+                    item: item?.item as TItem,
                     section: item?.section,
                     index,
                     target,
                     extraData,
                 });
             } else {
-                // @ts-ignore
                 return renderSectionHeader?.({ section: item });
             }
         },
@@ -103,8 +107,8 @@ const SectionList = <TItem, TSection = DefaultSectionT>(
     return (
         <FlatList
             style={styles}
-            data={normalizedData}
-            renderItem={renderItem}
+            data={normalizedData as any}
+            renderItem={renderItem as any}
             contentContainerStyle={contentContainerStyles}
             ListHeaderComponentStyle={listHeaderComponentStyles}
             ListFooterComponentStyle={listFooterComponentStyles}
