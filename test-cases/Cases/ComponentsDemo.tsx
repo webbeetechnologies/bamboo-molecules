@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
 import {
     extendTheme,
     ProvideMolecules,
@@ -11,10 +10,8 @@ import {
     documentTypes,
     useColorMode,
 } from 'bamboo-molecules';
-import FlatGrid from '../../src/components/FlatGrid/FlatGrid';
 
 const theme = extendTheme({
-    colorMode: 'light',
     Text: {
         color: 'colors.onSurface',
     },
@@ -39,6 +36,7 @@ const Example = () => {
         Checkbox,
         FlatList,
         SectionList,
+        FlatGrid,
         TextInput,
         NumberInput,
         FilePicker,
@@ -48,7 +46,6 @@ const Example = () => {
         DatePickerModal,
         DatePickerInput,
         TimePickerModal,
-        Icon,
         SectionGrid,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
@@ -265,7 +262,6 @@ const Example = () => {
                 renderItem={({ item }) => (
                     <ListItem
                         style={{ marginBottom: 5 }}
-                        titleStyle={{ fontWeight: '800', fontSize: 16 }}
                         divider={true}
                         right={
                             <Checkbox
@@ -282,23 +278,6 @@ const Example = () => {
                 ]}
             />
 
-            <FlashList
-                renderItem={({ item }) => (
-                    <ListItem
-                        style={{ marginBottom: 5 }}
-                        titleStyle={{ fontWeight: '800', fontSize: 16 }}
-                        divider={true}
-                        left={<Icon name="account" size={30} />}>
-                        <ListItem.Title>{item.title}</ListItem.Title>
-                        <ListItem.Description>{item.description}</ListItem.Description>
-                    </ListItem>
-                )}
-                data={[
-                    { title: 'First item title', description: 'First item description' },
-                    { title: 'Second item title', description: 'Second item description' },
-                ]}
-            />
-
             <View style={{ height: 250 }}>
                 <SectionList
                     sections={sectionData}
@@ -306,7 +285,6 @@ const Example = () => {
                         <ListItem
                             onPress={() => {}}
                             style={{ marginBottom: 5 }}
-                            titleStyle={{ fontWeight: '800', fontSize: 16 }}
                             right={
                                 <IconButton
                                     name={isSwitchOn ? 'chevron-right' : 'chevron-left'}
@@ -320,12 +298,13 @@ const Example = () => {
                         </ListItem>
                     )}
                     renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
+                    stickySectionHeadersEnabled
                 />
             </View>
 
             <FlatGrid
                 itemDimension={130}
-                data={[1, 2, 3, 4, 5, 6]}
+                data={['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth']}
                 renderItem={({ item }) => <Text>{item}</Text>}
             />
 
