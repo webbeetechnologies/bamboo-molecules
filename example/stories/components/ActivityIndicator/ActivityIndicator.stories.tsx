@@ -24,6 +24,7 @@ Default.args = {
 };
 
 Default.parameters = {
+    chromatic: { disableSnapshot: true },
     docs: {
         source: {
             code: `
