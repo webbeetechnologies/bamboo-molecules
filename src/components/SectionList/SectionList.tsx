@@ -1,44 +1,21 @@
-import React, {
-    memo,
-    forwardRef,
-    useMemo,
-    useCallback,
-    PropsWithoutRef,
-    RefAttributes,
-    ReactElement,
-} from 'react';
-import type { FlashList, FlashListProps, ListRenderItemInfo } from '@shopify/flash-list';
+import { memo, forwardRef, useMemo, useCallback } from 'react';
+import omit from 'lodash.omit';
+import type { ListRenderItemInfo } from '@shopify/flash-list';
 import { useComponentStyles, useMolecules } from '../../hooks';
+import { Props, SectionItem, ISectionList, SectionItemType } from './types';
 
-type DefaultSectionT = {
-    [key: string]: any;
-};
-
-export type Props<TItem, TSection = DefaultSectionT> = Omit<
-    FlashListProps<TItem>,
-    'data' | 'renderItem'
-> & {
-    sections: TSection[];
-    renderItem: (
-        info: ListRenderItemInfo<TItem> & { section?: TSection },
-    ) => React.ReactElement | null;
-    renderSectionHeader?: (props: { section: TSection }) => any;
-};
-
-// To make a correct type inference
-export type ISectionList = <ItemType = any, TSectionType = DefaultSectionT>(
-    props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<FlashList<ItemType>>,
-) => ReactElement;
-
-const SectionList = <TItem, TSection = DefaultSectionT>(
+const SectionList = <TItem, TSection>(
     {
         sections,
         renderItem: renderItemProps,
         renderSectionHeader,
+        renderSectionFooter,
         style: styleProp,
         contentContainerStyle: contentContainerStyleProp,
         ListHeaderComponentStyle: listHeaderComponentStyleProp,
         ListFooterComponentStyle: listFooterComponentStyleProp,
+        stickySectionHeadersEnabled,
+        stickyHeaderIndices: stickyHeaderIndicesProp,
         ...props
     }: Props<TItem, TSection>,
     ref: any,
@@ -70,48 +47,95 @@ const SectionList = <TItem, TSection = DefaultSectionT>(
         }, [componentStyles]);
 
     const normalizedData = useMemo(() => {
-        return sections.reduce((acc: TSection[], current: TSection) => {
+        return sections.reduce((acc: SectionItem<TItem, TSection>[], current: TSection) => {
             return acc.concat([
-                current,
+                {
+                    ...(current || {}),
+                    _type: 'sectionHeader',
+                },
                 // @ts-ignore
                 ...(current?.data?.map((item: TItem) => ({
                     item: item,
                     section: current,
+                    _type: 'row',
                 })) || []),
+                {
+                    ...(current || {}),
+                    _type: 'sectionFooter',
+                },
             ]);
         }, []);
     }, [sections]);
 
     const renderItem = useCallback(
-        ({
-            item,
-            index,
-            target,
-            extraData,
-        }: ListRenderItemInfo<TSection & { item?: TItem; section?: TSection }>) => {
-            if (item?.item) {
-                return renderItemProps?.({
-                    item: item?.item as TItem,
-                    section: item?.section,
-                    index,
-                    target,
-                    extraData,
-                });
-            } else {
-                return renderSectionHeader?.({ section: item });
+        ({ item, index, target, extraData }: ListRenderItemInfo<SectionItem<TItem, TSection>>) => {
+            const section = omit(item, '_type') as unknown as TSection; // removing _type property
+
+            switch (item._type) {
+                case SectionItemType.Header:
+                    return renderSectionHeader?.({
+                        section,
+                    });
+
+                case SectionItemType.Row:
+                    // @ts-ignore
+                    return item?.section?.renderItem
+                        ? // @ts-ignore
+                          item.section?.renderItem({
+                              item: item.item,
+                              section,
+                              index,
+                              target,
+                              extraData,
+                          })
+                        : renderItemProps?.({
+                              item: item.item,
+                              section,
+                              index,
+                              target,
+                              extraData,
+                          });
+
+                case SectionItemType.Footer:
+                    return renderSectionFooter?.({
+                        section,
+                    });
+
+                default:
+                    return null;
             }
         },
-        [renderSectionHeader, renderItemProps],
+        [renderSectionHeader, renderItemProps, renderSectionFooter],
     );
+
+    // if stickySectionHeaderEnabled we push sectionHeader indices to the stickyHeaderIndices array
+    // in both cases we still want to add the array from stickyHeaderIndices prop
+    const stickyHeaderIndices = useMemo((): number[] => {
+        const defaultStickyHeaderIndices = stickyHeaderIndicesProp || [];
+
+        return stickySectionHeadersEnabled
+            ? [
+                  ...normalizedData.reduce(
+                      (acc: number[], current, index: number) =>
+                          current._type === SectionItemType.Header
+                              ? acc.concat([index])
+                              : acc.concat([]),
+                      [],
+                  ),
+                  ...defaultStickyHeaderIndices,
+              ]
+            : defaultStickyHeaderIndices;
+    }, [normalizedData, stickyHeaderIndicesProp, stickySectionHeadersEnabled]);
 
     return (
         <FlatList
             style={styles}
-            data={normalizedData as any}
-            renderItem={renderItem as any}
+            data={normalizedData}
+            renderItem={renderItem}
             contentContainerStyle={contentContainerStyles}
             ListHeaderComponentStyle={listHeaderComponentStyles}
             ListFooterComponentStyle={listFooterComponentStyles}
+            stickyHeaderIndices={stickyHeaderIndices}
             {...props}
             ref={ref}
         />
