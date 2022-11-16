@@ -1,5 +1,5 @@
 import { Example as VerticalDivider } from '../stories/components/VerticalDivider/VerticalDivider';
-import { renderWithWrapper } from '../testHelper';
+import { renderWithWrapper } from '../testHelpers';
 
 it('should render VerticalDivider', () => {
     const tree = renderWithWrapper(<VerticalDivider />).toJSON();

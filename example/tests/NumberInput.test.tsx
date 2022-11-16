@@ -1,4 +1,4 @@
-import { renderWithWrapper } from '../testHelper';
+import { renderWithWrapper } from '../testHelpers';
 import { NumberInput } from '../../src/components/NumberInput';
 
 const mockedOnChangeText = jest.fn();

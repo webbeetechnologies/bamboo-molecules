@@ -1,5 +1,5 @@
 import { Example as ActivityIndicator } from '../stories/components/ActivityIndicator/ActivityIndicator';
-import { renderWithWrapper } from '../testHelper';
+import { renderWithWrapper } from '../testHelpers';
 
 it('renders indicator', () => {
     const tree = renderWithWrapper(<ActivityIndicator animating />).toJSON();

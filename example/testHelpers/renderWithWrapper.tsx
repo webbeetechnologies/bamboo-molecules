@@ -13,5 +13,3 @@ export const renderWithWrapper = (
 
     return render(component, { wrapper: Wrapper, ...options });
 };
-
-export * from '@testing-library/react-native';

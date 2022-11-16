@@ -2,7 +2,7 @@ import { Example as DatePickerInline } from '../stories/components/DatePickerInl
 import { Example as DatePickerModal } from '../stories/components/DatePickerModal/DatePickerModal';
 import { Example as TimePicker } from '../stories/components/TimePicker/TimePicker';
 import { Example as TimePickerModal } from '../stories/components/TimePickerModal/TimePickerModal';
-import { renderWithWrapper } from '../testHelper';
+import { renderWithWrapper } from '../testHelpers';
 
 const onChangeMock = jest.fn();
 const onDismissMock = jest.fn();
