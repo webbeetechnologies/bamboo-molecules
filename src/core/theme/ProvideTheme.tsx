@@ -28,6 +28,7 @@ import {
     textInputStyles,
     helperTextStyles,
     modalStyles,
+    popoverStyles,
     datePickerStyles,
     datePickerYearPickerStyles,
     datePickerMonthStyles,
@@ -83,6 +84,7 @@ const defaultThemeValue: Partial<ITheme> = {
     TextInput: textInputStyles,
     HelperText: helperTextStyles,
     Modal: modalStyles,
+    Popover: popoverStyles,
 
     FlatGrid: flatGridStyles,
     SectionGrid: sectionGridStyles,

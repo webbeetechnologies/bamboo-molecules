@@ -46,6 +46,11 @@ export { FlatGrid, IFlatGrid, flatGridStyles, FlatGridProps } from './FlatGrid';
 
 export { SectionGrid, ISectionGrid, sectionGridStyles, SectionGridProps } from './SectionGrid';
 
+export { Popover, PopoverProps, popoverStyles } from './Popover';
+export { Overlay, OverlayProps } from './Overlay';
+export { Backdrop, BackdropProps } from './Backdrop';
+export * from './Animations';
+
 export { IconButton, IconButtonProps, iconButtonStyles } from './IconButton';
 export { default as Checkbox, CheckboxProps, checkboxStyles } from './Checkbox';
 export { TextInput, TextInputProps, textInputStyles } from './TextInput';

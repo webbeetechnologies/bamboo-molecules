@@ -14,6 +14,7 @@ export {
     ItalicProps,
     ViewProps,
     IconProps,
+    PopoverProps,
     IconButtonProps,
     ActivityIndicatorProps,
     HorizontalDividerProps,

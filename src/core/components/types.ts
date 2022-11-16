@@ -10,6 +10,11 @@ import type {
     ButtonProps,
     SwitchProps,
     VerticalDividerProps,
+    PresenceTransitionProps,
+    OverlayProps,
+    PopoverProps,
+    BackdropProps,
+    TransitionProps,
     Checkbox,
     ListItem,
     IFlatList,
@@ -45,6 +50,11 @@ export interface DefaultComponents {
     Surface: ComponentType<SurfaceProps>;
     Switch: ComponentType<SwitchProps>;
     ListItem: typeof ListItem;
+    Overlay: ComponentType<OverlayProps>;
+    PresenceTransition: ComponentType<PresenceTransitionProps>;
+    Transition: ComponentType<TransitionProps>;
+    Backdrop: ComponentType<BackdropProps>;
+    Popover: ComponentType<PopoverProps>;
     Checkbox: typeof Checkbox;
     FlatList: IFlatList;
     SectionList: ISectionList;

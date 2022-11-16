@@ -3,8 +3,10 @@
 ## Examples
 
 ## User stories
-- As a developer I want to provide data to a component
+- As a developer I want to provide records to a component in a simple way like `data={{records,setRecords, filters, setFilters}}}` and I expect it to work just like props
+- As a developer I want to provide a async function to a component in a simple way like `data={props.loadingFoo}` and I expect it to work just like props
 - As a component developer I want a standardized way on how to get data 
+- 
 - As a component developer I want to implement infinite scrolling so I need pagination support on my data
 - As a component developer I want to offer my component users a way to filter down data so the data source needs to support filtering
 - As a component developer I want to offer my component users the possibility to sort the data so I need the data source to support sorting

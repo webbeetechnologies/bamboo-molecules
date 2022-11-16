@@ -4,6 +4,7 @@ import type { IExtractStylesFuncArgs } from '@webbee/bamboo-atoms';
 import { IComponentsProviderContext, ProvideComponents } from './components';
 import { ProvidePlatformType, PlatformType } from './platform';
 import { extendTheme, ITheme, ProvideTheme, ResolveComponentStylesArgs } from './theme';
+import { PortalProvider } from './portal';
 
 export type ProvideMoleculesProps = {
     platformType?: PlatformType;
@@ -30,7 +31,9 @@ export const ProvideMolecules = ({
                 theme={theme}
                 extractStyles={extractStyles}
                 resolveComponentStyles={resolveComponentStyles}>
-                <ProvideComponents components={components}>{children}</ProvideComponents>
+                <PortalProvider>
+                    <ProvideComponents components={components}>{children}</ProvideComponents>
+                </PortalProvider>
             </ProvideTheme>
         </ProvidePlatformType>
     );
