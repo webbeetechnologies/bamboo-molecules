@@ -1,5 +1,5 @@
 import { ReactNode, memo, useMemo, forwardRef, createContext } from 'react';
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { WithElements } from '../../types';
 import { useMolecules, useComponentStyles } from '../../hooks';
@@ -18,14 +18,6 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          */
         style?: StyleProp<ViewStyle>;
         /**
-         * Style that is passed to Title element.
-         */
-        titleStyle?: StyleProp<TextStyle>;
-        /**
-         * Style that is passed to Description element.
-         */
-        descriptionStyle?: StyleProp<TextStyle>;
-        /**
          * Whether the divider shows or not.
          */
         divider?: boolean;
@@ -42,15 +34,16 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
  *
  * ## Usage
  * ```js
- * import * as React from 'react';
- * import { List } from 'react-native-paper';
+ * import { useMolecules } from 'bamboo-molecule';
  *
  * const MyComponent = () => (
- *   <List.Item
- *     title="First Item"
- *     description="Item description"
- *     left={props => <List.Icon {...props} icon="folder" />}
- *   />
+ *   const { ListItem } = useMolecules();
+ *   <ListItem
+ *     left={<Icon icon="folder" />}
+ *   >
+ *       <ListItem.Title>Headline</ListItem.Title>
+ *       <ListItem.Description>Supporting Text</ListItem.Description>
+ *   </ListItem>
  * );
  *
  * export default MyComponent;
@@ -64,8 +57,6 @@ const ListItem = (
         right,
         children,
         style: styleProp,
-        titleStyle: titleStyleProp,
-        descriptionStyle: descriptionStyleProp,
         disabled = false,
         hovered,
         divider = false,
@@ -75,11 +66,9 @@ const ListItem = (
 ) => {
     const { TouchableRipple, View, HorizontalDivider } = useMolecules();
 
-    const componentStyles = useComponentStyles(
-        'ListItem',
-        [styleProp, { titleStyle: titleStyleProp, descriptionStyle: descriptionStyleProp }],
-        { states: { disabled, hovered: !!hovered } },
-    );
+    const componentStyles = useComponentStyles('ListItem', styleProp, {
+        states: { disabled, hovered: !!hovered },
+    });
 
     const {
         containerStyles,
