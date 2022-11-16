@@ -30,7 +30,7 @@ import { Data, SectionData } from 'SectionList';
 import type { UseSearchableProps } from 'useSearchable';
 type OptionListProps = UseSearchableProps & UseDataSourceProps &
     SectionListProps & {
-        multiple?: boolean;
+        onPress?: (item: Data) => void;
         renderItem?: (item: Data, index: number, onPress: () => void) => ReactNode;
     };
 ```
