@@ -58,7 +58,7 @@ Dropdown list can be attached to a wide variety of interactible elements. It cou
 
 ```ts
 import type { Option, OptionListProps } from 'OptionList';
-import type { UseSearchableProps } from 'useSearchable';
+
 
 enum DropdownListMode {
     auto,
@@ -68,8 +68,7 @@ enum DropdownListMode {
     dialog, // large screen only
 }
 
-type DropdownListProps = UseSearchableProps &
-    OptionListProps & {
+type DropdownListProps = OptionListProps & {
         mode: DropdownListMode;
 
         // optionsThreshhold: configuration to show maximum number of options in popover/actionsheet when mode == DropdownListMode.auto (default: 5).

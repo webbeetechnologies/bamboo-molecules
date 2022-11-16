@@ -27,7 +27,8 @@ Molecules exposes a highly performant memoized OptionList hook that can support 
 
 ```ts
 import { Data, SectionData } from 'SectionList';
-type OptionListProps = UseDataSourceProps &
+import type { UseSearchableProps } from 'useSearchable';
+type OptionListProps = UseSearchableProps & UseDataSourceProps &
     SectionListProps & {
         multiple?: boolean;
         renderItem?: (item: Data, index: number, onPress: () => void) => ReactNode;
