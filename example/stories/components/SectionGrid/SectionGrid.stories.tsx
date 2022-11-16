@@ -1,5 +1,5 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { ProvideMolecules } from '../../common';
 
 import { Example } from './SectionGrid';
@@ -16,21 +16,51 @@ export default {
     ],
 } as ComponentMeta<typeof Example>;
 
-export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
+export const Default: ComponentStory<typeof Example> = args => (
+    <View style={{ minWidth: 300 }}>
+        <Example {...args} />
+    </View>
+);
 
 Default.args = {
     maxItemsPerRow: 3,
     sections: [
         {
             title: 'Numbers',
-            data: ['1', '2', '3', '4', '5', '6'],
+            data: [
+                {
+                    text: '1',
+                },
+                {
+                    text: '2',
+                },
+                {
+                    text: '3',
+                },
+                {
+                    text: '4',
+                },
+            ],
         },
         {
-            title: 'Alphabets',
-            data: ['A', 'B', 'C', 'D', 'E'],
+            title: 'Letters',
+            data: [
+                {
+                    text: 'A',
+                },
+                {
+                    text: 'B',
+                },
+                {
+                    text: 'C',
+                },
+                {
+                    text: 'D',
+                },
+            ],
         },
     ],
-    renderItem: ({ item }: any) => <Text>{item}</Text>,
+    renderItem: ({ item }: any) => <Text>{item.text}</Text>,
     renderSectionHeader: ({ section }) => <Text style={{ fontSize: 20 }}>{section.title}</Text>,
 };
 
@@ -38,14 +68,40 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<SectionGrid {...props} itemDimension={130} data={[
+<SectionGrid {...props} itemDimension={130} sections={[
         {
             title: 'Numbers',
-            data: ['1', '2', '3', '4', '5', '6'],
+            data: [
+                {
+                    text: '1',
+                },
+                {
+                    text: '2',
+                },
+                {
+                    text: '3',
+                },
+                {
+                    text: '4',
+                },
+            ],
         },
         {
-            title: 'Alphabets',
-            data: ['A', 'B', 'C', 'D', 'E'],
+            title: 'Letters',
+            data: [
+                {
+                    text: 'A',
+                },
+                {
+                    text: 'B',
+                },
+                {
+                    text: 'C',
+                },
+                {
+                    text: 'D',
+                },
+            ],
         },
     ]} 
     renderItem={({ item }: any) => <Text>{item}</Text>}

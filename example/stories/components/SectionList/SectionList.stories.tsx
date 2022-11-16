@@ -25,12 +25,44 @@ export const Default: ComponentStory<typeof Example> = args => (
 
 Default.args = {
     sections: [
-        { title: 'Numbers', data: ['1', '2', '3', '4'] },
-        { title: 'Letters', data: ['A', 'B', 'C', 'D'] },
+        {
+            title: 'Numbers',
+            data: [
+                {
+                    text: '1',
+                },
+                {
+                    text: '2',
+                },
+                {
+                    text: '3',
+                },
+                {
+                    text: '4',
+                },
+            ],
+        },
+        {
+            title: 'Letters',
+            data: [
+                {
+                    text: 'A',
+                },
+                {
+                    text: 'B',
+                },
+                {
+                    text: 'C',
+                },
+                {
+                    text: 'D',
+                },
+            ],
+        },
     ],
     renderItem: ({ item }: any) => (
         <ListItem>
-            <ListItemTitle>{item}</ListItemTitle>
+            <ListItemTitle>{item.text}</ListItemTitle>
         </ListItem>
     ),
     renderSectionHeader: ({ section }: any) => (
@@ -44,9 +76,41 @@ Default.parameters = {
             code: `
 <SectionList {...props} 
     sections={[
-        { title: 'Numbers', data: ['1', '2', '3', '4'] },
-        { title: 'Letters', data: ['A', 'B', 'C', 'D'] },
-    ]} 
+        {
+            title: 'Numbers',
+            data: [
+                {
+                    text: '1',
+                },
+                {
+                    text: '2',
+                },
+                {
+                    text: '3',
+                },
+                {
+                    text: '4',
+                },
+            ],
+        },
+        {
+            title: 'Letters',
+            data: [
+                {
+                    text: 'A',
+                },
+                {
+                    text: 'B',
+                },
+                {
+                    text: 'C',
+                },
+                {
+                    text: 'D',
+                },
+            ],
+        },
+]} 
     renderItem={({ item }) => (
         <ListItem>
             <ListItem.Title>{item}</ListItem.Title>

@@ -24,14 +24,54 @@ export const Default: ComponentStory<typeof Example> = args => (
 
 Default.args = {
     itemDimension: 130,
-    data: [1, 2, 3, 4, 5, 6],
-    renderItem: ({ item }: any) => <Text>{item}</Text>,
+    data: [
+        {
+            text: 'A',
+        },
+        {
+            text: 'B',
+        },
+        {
+            text: 'C',
+        },
+        {
+            text: 'D',
+        },
+        {
+            text: 'E',
+        },
+        {
+            text: 'D',
+        },
+    ],
+    renderItem: ({ item }: any) => <Text>{item.text}</Text>,
 };
 
 Default.parameters = {
     docs: {
         source: {
-            code: `<FlatGrid {...props} itemDimension={130} data={[1, 2, 3, 4, 5, 6]} renderItem={({ item }: any) => <Text>{item}</Text>} />`,
+            code: `
+<FlatGrid {...props} itemDimension={130} data={[
+        {
+            text: 'A',
+        },
+        {
+            text: 'B',
+        },
+        {
+            text: 'C',
+        },
+        {
+            text: 'D',
+        },
+        {
+            text: 'E',
+        },
+        {
+            text: 'D',
+        },
+    ]} renderItem={({ item }: any) => <Text>{item}</Text>} />
+`,
             language: 'tsx',
             type: 'auto',
         },
