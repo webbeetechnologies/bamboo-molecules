@@ -26,19 +26,20 @@ const OptionList = <TItem, TSection>({
     style: styleProp,
     ...rest
 }: Props<TItem, TSection>) => {
-    const { SectionList, View } = useMolecules();
+    const { SectionList, View, Text } = useMolecules();
     const SearchField = useSearchable({ query, onQueryChange, searchable, searchInputProps });
 
     const componentStyles = useComponentStyles('OptionList', [
         { container: containerStyle, searchInputContainer: searchInputContainerStyle },
     ]);
 
-    const { containerStyles, searchInputContainerStyles, style } = useMemo(() => {
-        const { container, searchInputContainer, ...restStyle } = componentStyles;
+    const { containerStyles, searchInputContainerStyles, emptyTextStyles, style } = useMemo(() => {
+        const { container, searchInputContainer, emptyText, ...restStyle } = componentStyles;
 
         return {
             containerStyles: container,
             searchInputContainerStyles: searchInputContainer,
+            emptyTextStyles: emptyText,
             style: [restStyle, styleProp],
         };
     }, [componentStyles, styleProp]);
@@ -46,7 +47,11 @@ const OptionList = <TItem, TSection>({
     return (
         <View style={containerStyles}>
             <View style={searchInputContainerStyles}>{SearchField}</View>
-            <SectionList {...rest} style={style} />
+            <SectionList
+                ListEmptyComponent={<Text style={emptyTextStyles}>No options to display</Text>}
+                {...rest}
+                style={style}
+            />
         </View>
     );
 };
