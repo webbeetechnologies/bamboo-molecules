@@ -12,14 +12,7 @@ Menus, dropdowns, Drawers, Selects/Typeaheads are some of the simplest examples 
 1. End User
 2. Component Consumer
 
-### End User
-
--   As a user I want to see my items records/optons a list.
--   As a user I want that the List follows the MaterialYou guidelines.
--   As a user I want to have smooth performance for 1000 list entries
--   As a user I want be able to scroll long lists.
-
-### Component Consumer
+## Developer stories
 
 -   As a component consumer I want to display items in a flat list or a grouped list.
 -   As a component consumer I expect that the list component renders a virtualised list.
@@ -40,4 +33,25 @@ Menus, dropdowns, Drawers, Selects/Typeaheads are some of the simplest examples 
 -   As a developer I want add elements to the left and/or right of the List item.
 -   As a developer I want to be give the user ability to swipe left or right to reveal item actions.
 -   As a developer I want use different/mixed flavors of list items: with checkbox, drag, icons, avatars.
--   As a developer I want compose different flavors of list items using [WithElements Interface](../interfaces/WithElementsInterface.md).
+-   As a developer I want compose different flavors of list items using [WithElements HOC](./HOC/WithElements.md).
+
+## Flavours
+
+-   Orderable
+-   Selectable
+-   Checkbox Item
+-   Icons
+-   Avatars
+-   With Description
+-   With Actions
+-   Collapsible Item
+-   Badges
+
+---
+
+# List v2
+
+## User stories
+
+-   As a user I want to reorder items in the list
+-   As a user I want a select item flavor that uses [TODO: Speak to Tobias]

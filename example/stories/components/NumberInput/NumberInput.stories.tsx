@@ -1,18 +1,11 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ProvideMolecules } from 'bamboo-molecules';
 
 import { Example } from './NumberInput';
 
 export default {
     title: 'components/NumberInput',
     component: Example,
-    decorators: [
-        Story => (
-            <ProvideMolecules>
-                <Story />
-            </ProvideMolecules>
-        ),
-    ],
+
     argTypes: {},
 } as ComponentMeta<typeof Example>;
 

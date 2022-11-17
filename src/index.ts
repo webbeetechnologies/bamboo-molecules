@@ -14,6 +14,7 @@ export {
     ItalicProps,
     ViewProps,
     IconProps,
+    PopoverProps,
     IconButtonProps,
     ActivityIndicatorProps,
     HorizontalDividerProps,
@@ -23,9 +24,23 @@ export {
     SurfaceProps,
     SwitchProps,
     CheckboxProps,
+    ListItemProps,
+    FlatListProps,
+    SectionListProps,
+    FlatGridProps,
+    SectionGridProps,
     TextInputProps,
     NumberInputProps,
     FilePickerProps,
+    ModalProps,
+    DatePickerInlineProps,
+    DatePickerModalProps,
+    DatePickerInputProps,
+    CalendarDate,
+    CalendarDates,
+    TimePickerModalProps,
+    TimePickerProps,
+    TextInputWithMaskProps,
 } from './components';
 
 export {
@@ -56,6 +71,7 @@ export {
     useMediaQuery,
     useControlledValue,
     useFilePicker,
+    useLatest,
 } from './hooks';
 
 export {
@@ -64,6 +80,8 @@ export {
     tokens,
     generateLightThemeColors,
     generateDarkThemeColors,
+    lightenBy,
+    darkenBy,
 } from './styles';
 
 export {

@@ -108,7 +108,7 @@ exports[`renders button with an accessibility hint 1`] = `
                 Object {
                   "color": "",
                   "fontFamily": "System",
-                  "fontSize": undefined,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -236,7 +236,7 @@ exports[`renders button with an accessibility label 1`] = `
                 Object {
                   "color": "",
                   "fontFamily": "System",
-                  "fontSize": undefined,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -363,7 +363,7 @@ exports[`renders button with color 1`] = `
                 Object {
                   "color": "",
                   "fontFamily": "System",
-                  "fontSize": undefined,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -490,7 +490,7 @@ exports[`renders button with custom background color 1`] = `
                 Object {
                   "color": "",
                   "fontFamily": "System",
-                  "fontSize": undefined,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -618,7 +618,7 @@ exports[`renders button with custom testID 1`] = `
                 Object {
                   "color": "",
                   "fontFamily": "System",
-                  "fontSize": undefined,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -745,7 +745,7 @@ exports[`renders contained contained with variant 1`] = `
                 Object {
                   "color": "",
                   "fontFamily": "System",
-                  "fontSize": undefined,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -872,7 +872,7 @@ exports[`renders disabled button 1`] = `
                 Object {
                   "color": "",
                   "fontFamily": "System",
-                  "fontSize": undefined,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -1013,9 +1013,9 @@ exports[`renders loading button 1`] = `
                 collapsable={false}
                 style={
                   Object {
-                    "height": 24,
+                    "height": 26,
                     "opacity": 1,
-                    "width": 24,
+                    "width": 26,
                   }
                 }
               >
@@ -1037,13 +1037,13 @@ exports[`renders loading button 1`] = `
                     collapsable={false}
                     style={
                       Object {
-                        "height": 24,
+                        "height": 26,
                         "transform": Array [
                           Object {
                             "rotate": "45deg",
                           },
                         ],
-                        "width": 24,
+                        "width": 26,
                       }
                     }
                   >
@@ -1051,9 +1051,9 @@ exports[`renders loading button 1`] = `
                       collapsable={false}
                       style={
                         Object {
-                          "height": 12,
+                          "height": 13,
                           "overflow": "hidden",
-                          "width": 24,
+                          "width": 26,
                         }
                       }
                     >
@@ -1061,7 +1061,7 @@ exports[`renders loading button 1`] = `
                         collapsable={false}
                         style={
                           Object {
-                            "height": 24,
+                            "height": 26,
                             "transform": Array [
                               Object {
                                 "translateY": 0,
@@ -1070,7 +1070,7 @@ exports[`renders loading button 1`] = `
                                 "rotate": "-165deg",
                               },
                             ],
-                            "width": 24,
+                            "width": 26,
                           }
                         }
                       >
@@ -1078,9 +1078,9 @@ exports[`renders loading button 1`] = `
                           collapsable={false}
                           style={
                             Object {
-                              "height": 12,
+                              "height": 13,
                               "overflow": "hidden",
-                              "width": 24,
+                              "width": 26,
                             }
                           }
                         >
@@ -1089,10 +1089,10 @@ exports[`renders loading button 1`] = `
                             style={
                               Object {
                                 "borderColor": "rgba(103, 80, 164, 1)",
-                                "borderRadius": 12,
-                                "borderWidth": 2.4,
-                                "height": 24,
-                                "width": 24,
+                                "borderRadius": 13,
+                                "borderWidth": 2.6,
+                                "height": 26,
+                                "width": 26,
                               }
                             }
                           />
@@ -1119,13 +1119,13 @@ exports[`renders loading button 1`] = `
                     collapsable={false}
                     style={
                       Object {
-                        "height": 24,
+                        "height": 26,
                         "transform": Array [
                           Object {
                             "rotate": "45deg",
                           },
                         ],
-                        "width": 24,
+                        "width": 26,
                       }
                     }
                   >
@@ -1133,10 +1133,10 @@ exports[`renders loading button 1`] = `
                       collapsable={false}
                       style={
                         Object {
-                          "height": 12,
+                          "height": 13,
                           "overflow": "hidden",
-                          "top": 12,
-                          "width": 24,
+                          "top": 13,
+                          "width": 26,
                         }
                       }
                     >
@@ -1144,16 +1144,16 @@ exports[`renders loading button 1`] = `
                         collapsable={false}
                         style={
                           Object {
-                            "height": 24,
+                            "height": 26,
                             "transform": Array [
                               Object {
-                                "translateY": -12,
+                                "translateY": -13,
                               },
                               Object {
                                 "rotate": "345deg",
                               },
                             ],
-                            "width": 24,
+                            "width": 26,
                           }
                         }
                       >
@@ -1161,9 +1161,9 @@ exports[`renders loading button 1`] = `
                           collapsable={false}
                           style={
                             Object {
-                              "height": 12,
+                              "height": 13,
                               "overflow": "hidden",
-                              "width": 24,
+                              "width": 26,
                             }
                           }
                         >
@@ -1172,10 +1172,10 @@ exports[`renders loading button 1`] = `
                             style={
                               Object {
                                 "borderColor": "rgba(103, 80, 164, 1)",
-                                "borderRadius": 12,
-                                "borderWidth": 2.4,
-                                "height": 24,
-                                "width": 24,
+                                "borderRadius": 13,
+                                "borderWidth": 2.6,
+                                "height": 26,
+                                "width": 26,
                               }
                             }
                           />
@@ -1193,7 +1193,7 @@ exports[`renders loading button 1`] = `
                 Object {
                   "color": "",
                   "fontFamily": "System",
-                  "fontSize": undefined,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -1322,7 +1322,7 @@ exports[`renders outlined button with variant 1`] = `
                 Object {
                   "color": "",
                   "fontFamily": "System",
-                  "fontSize": undefined,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -1449,7 +1449,7 @@ exports[`renders text button by default 1`] = `
                 Object {
                   "color": "",
                   "fontFamily": "System",
-                  "fontSize": undefined,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -1576,7 +1576,7 @@ exports[`renders text button with variant 1`] = `
                 Object {
                   "color": "",
                   "fontFamily": "System",
-                  "fontSize": undefined,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,

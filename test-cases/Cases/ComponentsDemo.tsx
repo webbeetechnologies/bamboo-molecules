@@ -12,16 +12,12 @@ import {
 } from 'bamboo-molecules';
 
 const theme = extendTheme({
-    colorMode: 'light',
     Text: {
         color: 'colors.onSurface',
     },
     Label: {
         color: 'colors.onSurface',
         fontSize: 18,
-    },
-    Button: {
-        marginBottom: 10,
     },
 });
 
@@ -35,18 +31,29 @@ const Example = () => {
         HorizontalDivider,
         Switch,
         VerticalDivider,
+        ListItem,
         IconButton,
         Checkbox,
+        FlatList,
+        SectionList,
+        FlatGrid,
         TextInput,
         NumberInput,
         FilePicker,
         Label,
         HelperText,
+        DatePickerInline,
+        DatePickerModal,
+        DatePickerInput,
+        TimePickerModal,
+        SectionGrid,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
     const [files, setFiles] = useState<any>(null);
     const [number, setNumber] = useState('222.a');
+    const [pickTime, setPickTime] = useState(false);
+    const [pickDate, setPickDate] = useState(false);
 
     const { colorMode, toggleColorMode } = useColorMode();
 
@@ -73,6 +80,33 @@ const Example = () => {
                     </View>
                 </TouchableRipple>
             </Surface>
+
+            <DatePickerInline mode="single" />
+
+            <HorizontalDivider spacing={30} />
+
+            <DatePickerInput
+                locale={'en'}
+                value={undefined}
+                onChange={() => {}}
+                inputMode="start"
+            />
+
+            <TimePickerModal
+                visible={pickTime}
+                onDismiss={() => setPickTime(false)}
+                onConfirm={() => setPickTime(false)}
+            />
+
+            <DatePickerModal
+                mode={'range'}
+                visible={pickDate}
+                onDismiss={() => setPickDate(false)}
+            />
+
+            <Button onPress={() => setPickTime(true)}>Pick Time</Button>
+
+            <Button onPress={() => setPickDate(true)}>Pick Date Range</Button>
 
             <HorizontalDivider spacing={30} />
 
@@ -223,6 +257,74 @@ const Example = () => {
             </Button>
 
             <Switch value={isSwitchOn} onValueChange={toggleSwitch} color="rgba(125, 82, 96, 1)" />
+
+            <FlatList
+                renderItem={({ item }) => (
+                    <ListItem
+                        style={{ marginBottom: 5 }}
+                        divider={true}
+                        right={
+                            <Checkbox
+                                status={isSwitchOn ? 'checked' : 'unchecked'}
+                                onChange={toggleSwitch}
+                            />
+                        }>
+                        <ListItem.Description>{item.description}</ListItem.Description>
+                    </ListItem>
+                )}
+                data={[
+                    { title: 'First item title', description: 'First item description' },
+                    { title: 'Second item title', description: 'Second item description' },
+                ]}
+            />
+
+            <View style={{ height: 250 }}>
+                <SectionList
+                    sections={sectionData}
+                    renderItem={({ item }) => (
+                        <ListItem
+                            onPress={() => {}}
+                            style={{ marginBottom: 5 }}
+                            right={
+                                <IconButton
+                                    name={isSwitchOn ? 'chevron-right' : 'chevron-left'}
+                                    onPress={() => {}}
+                                    variant="outlined"
+                                    style={{ backgroundColor: 'colors.primary', color: '#fff' }}
+                                    animated
+                                />
+                            }>
+                            <ListItem.Title>{item.firstname}</ListItem.Title>
+                        </ListItem>
+                    )}
+                    renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
+                    stickySectionHeadersEnabled
+                />
+            </View>
+
+            <FlatGrid
+                itemDimension={130}
+                data={['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth']}
+                renderItem={({ item }) => <Text>{item}</Text>}
+            />
+
+            <SectionGrid
+                itemDimension={130}
+                sections={[
+                    {
+                        title: 'Numbers',
+                        data: ['1', '2', '3', '4', '5', '6'],
+                    },
+                    {
+                        title: 'Alphabets',
+                        data: ['A', 'B', 'C', 'D', 'E'],
+                    },
+                ]}
+                renderItem={({ item }) => <Text>{item}</Text>}
+                renderSectionHeader={({ section }) => (
+                    <Text style={{ fontSize: 20 }}>{section.title}</Text>
+                )}
+            />
         </View>
     );
 };
@@ -254,4 +356,38 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 50,
     },
+    listIcon: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+    },
 });
+
+const sectionData = [
+    {
+        title: 'Title First',
+        data: [
+            {
+                firstname: 'Ola',
+                lastname: 'Asiko',
+            },
+            {
+                firstname: 'eddy',
+                lastname: 'Hydro',
+            },
+        ],
+    },
+    {
+        title: 'Title Second',
+        data: [
+            {
+                firstname: 'Whales',
+                lastname: 'Teju',
+            },
+            {
+                firstname: '12',
+                lastname: 'USA',
+            },
+        ],
+    },
+];

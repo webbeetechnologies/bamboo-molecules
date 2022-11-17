@@ -1,15 +1,19 @@
-import React, { ComponentType } from 'react';
+import React, { ComponentType, ReactNode } from 'react';
 import {
     extendTheme,
-    ProvideMolecules,
+    ProvideMolecules as DefaultProvideMolecules,
     useMolecules as useAtomsMolecules,
     useComponentStyles,
     TextProps,
 } from 'bamboo-molecules';
 import { linkTo } from '@storybook/addon-links';
 
+import { addDecorator } from '@storybook/react';
+import { withPerformance } from 'storybook-addon-performance';
+
 // creating theme styles similar to mdx
 export const theme = extendTheme({
+    colorMode: 'light',
     H1: {
         marginTop: 20,
         marginBottom: 8,
@@ -69,6 +73,24 @@ export interface InjectedComponentTypes {
 
 export const useMolecules = () => useAtomsMolecules<InjectedComponentTypes>();
 
+addDecorator(Story => (
+    <ProvideMolecules>
+        <Story />
+    </ProvideMolecules>
+));
+
+addDecorator(((getStory, context) => {
+    return withPerformance(getStory, {
+        ...context,
+        parameters: {
+            ...context?.parameters,
+            performance: {
+                allowedGroups: ['client'],
+            },
+        },
+    });
+}) as typeof withPerformance);
+
 const Code = ({ style, ...rest }: TextProps) => {
     const { Text } = useMolecules();
     const codeStyles = useComponentStyles('Code', style);
@@ -87,8 +109,16 @@ const components = { Code, Link };
 
 export const withDocsWrapper = (Component: () => JSX.Element) => (props: typeof Component) => {
     return (
-        <ProvideMolecules components={components} theme={theme}>
+        <DefaultProvideMolecules components={components} theme={theme}>
             <Component {...props} />
-        </ProvideMolecules>
+        </DefaultProvideMolecules>
     );
+};
+
+const storyTheme = extendTheme({
+    colorMode: 'light',
+});
+
+export const ProvideMolecules = ({ children }: { children: ReactNode }) => {
+    return <DefaultProvideMolecules theme={storyTheme}>{children}</DefaultProvideMolecules>;
 };

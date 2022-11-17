@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { ProvideMolecules } from 'bamboo-molecules';
+
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {

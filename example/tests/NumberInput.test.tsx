@@ -1,4 +1,4 @@
-import { renderWithWrapper } from '../testHelper';
+import { renderWithWrapper } from '../testHelpers';
 import { NumberInput } from '../../src/components/NumberInput';
 
 const mockedOnChangeText = jest.fn();
@@ -15,7 +15,7 @@ it('should render correctly with the default mask', () => {
 
 it('should correctly mask default value', () => {
     const { getByDisplayValue } = renderWithWrapper(
-        <NumberInput defaultValue="+123.22abc" onChangeText={mockedOnChangeText} />,
+        <NumberInput defaultValue="-123.22abc" onChangeText={mockedOnChangeText} />,
     );
-    expect(getByDisplayValue('+123.22')).toBeTruthy();
+    expect(getByDisplayValue('-123.22')).toBeTruthy();
 });

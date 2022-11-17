@@ -10,11 +10,28 @@ import type {
     ButtonProps,
     SwitchProps,
     VerticalDividerProps,
+    PresenceTransitionProps,
+    OverlayProps,
+    PopoverProps,
+    BackdropProps,
+    TransitionProps,
     Checkbox,
+    ListItem,
+    IFlatList,
     TextInputProps,
     NumberInputProps,
     FilePickerProps,
     HelperTextProps,
+    ModalProps,
+    DatePickerInlineProps,
+    DatePickerModalProps,
+    DatePickerInputProps,
+    TimePickerProps,
+    TimePickerModalProps,
+    TextInputWithMaskProps,
+    ISectionList,
+    IFlatGrid,
+    ISectionGrid,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -32,11 +49,28 @@ export interface DefaultComponents {
     Button: ComponentType<ButtonProps>;
     Surface: ComponentType<SurfaceProps>;
     Switch: ComponentType<SwitchProps>;
+    Overlay: ComponentType<OverlayProps>;
+    PresenceTransition: ComponentType<PresenceTransitionProps>;
+    Transition: ComponentType<TransitionProps>;
+    Backdrop: ComponentType<BackdropProps>;
+    Popover: ComponentType<PopoverProps>;
+    ListItem: typeof ListItem;
     Checkbox: typeof Checkbox;
+    FlatList: IFlatList;
+    SectionList: ISectionList;
+    FlatGrid: IFlatGrid;
+    SectionGrid: ISectionGrid;
     TextInput: ComponentType<TextInputProps>;
     NumberInput: ComponentType<NumberInputProps>;
     FilePicker: ComponentType<FilePickerProps>;
     HelperText: ComponentType<HelperTextProps>;
+    Modal: ComponentType<ModalProps>;
+    DatePickerInline: ComponentType<DatePickerInlineProps>;
+    DatePickerModal: ComponentType<DatePickerModalProps>;
+    DatePickerInput: ComponentType<DatePickerInputProps>;
+    TimePicker: ComponentType<TimePickerProps>;
+    TimePickerModal: ComponentType<TimePickerModalProps>;
+    TextInputWithMask: ComponentType<TextInputWithMaskProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
