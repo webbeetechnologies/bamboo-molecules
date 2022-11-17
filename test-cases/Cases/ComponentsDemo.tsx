@@ -12,6 +12,7 @@ import {
 } from 'bamboo-molecules';
 
 const theme = extendTheme({
+    colorMode: 'light',
     Text: {
         color: 'colors.onSurface',
     },
@@ -121,7 +122,8 @@ const Example = () => {
             <HorizontalDivider spacing={30} />
 
             <OptionList
-                sections={sectionData}
+                records={sectionData}
+                onQueryChange={() => {}}
                 renderItem={({ item }) => (
                     <ListItem
                         onPress={() => {}}
