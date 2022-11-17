@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import type { TextInputProps } from '../components';
 import { useMolecules } from './index';
 import useControlledValue from './useControlledValue';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export interface UseSearchableProps {
     searchable?: boolean;
@@ -29,14 +29,32 @@ const useSearchable = ({
         onValueChange('');
     }, [onValueChange]);
 
-    return searchable ? (
-        <TextInput
-            right={value && <IconButton name="close-circle-outline" onPress={onPressClear} />}
-            {...searchInputProps}
-            value={value}
-            onChangeText={onValueChange}
-        />
-    ) : null;
+    return useMemo(
+        () =>
+            searchable && onQueryChange ? (
+                <TextInput
+                    right={({ forceFocus }) => (
+                        <IconButton
+                            name={value ? 'close-circle-outline' : 'magnify'}
+                            onPress={value ? onPressClear : forceFocus}
+                        />
+                    )}
+                    {...searchInputProps}
+                    value={value}
+                    onChangeText={onValueChange}
+                />
+            ) : null,
+        [
+            IconButton,
+            TextInput,
+            onPressClear,
+            onQueryChange,
+            onValueChange,
+            searchInputProps,
+            searchable,
+            value,
+        ],
+    );
 };
 
 export default useSearchable;
