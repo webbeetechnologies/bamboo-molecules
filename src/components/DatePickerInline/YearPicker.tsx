@@ -1,5 +1,6 @@
 import { useRef, useEffect, memo, useMemo } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import type { FlashList } from '@shopify/flash-list';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { range } from '../../utils/dateTimePicker';
 
@@ -18,20 +19,21 @@ export default function YearPicker({
     startYear: number;
     endYear: number;
 }) {
+    const { FlatList } = useMolecules();
     const yearPickerStyles = useComponentStyles('DatePicker_YearPicker');
-    const flatList = useRef<FlatList<number> | null>(null);
+    const flatList = useRef<FlashList<number> | null>(null);
     const years = range(isNaN(startYear) ? 1800 : startYear, isNaN(endYear) ? 2200 : endYear);
 
     // scroll to selected year
     useEffect(() => {
-        if (flatList.current && selectedYear) {
+        if (flatList.current && selectingYear && selectedYear) {
             const indexToGo = selectedYear - startYear;
             flatList.current.scrollToOffset({
                 offset: (indexToGo / 3) * ITEM_HEIGHT - ITEM_HEIGHT,
                 animated: false,
             });
         }
-    }, [flatList, selectedYear, startYear]);
+    }, [flatList, selectedYear, selectingYear, startYear]);
 
     const { containerStyle, yearStyle } = useMemo(() => {
         const { backgroundColor, ...rest } = yearPickerStyles;
@@ -47,7 +49,6 @@ export default function YearPicker({
         };
     }, [selectingYear, yearPickerStyles]);
 
-    // TODO replace with FlatList Component
     return (
         <>
             {selectingYear && (
