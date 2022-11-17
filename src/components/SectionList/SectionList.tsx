@@ -113,15 +113,13 @@ const SectionList = <TItem, TSection>(
     // in both cases we still want to add the array from stickyHeaderIndices prop
     const stickyHeaderIndices = useMemo((): number[] | undefined => {
         return stickySectionHeadersEnabled
-            ? [
-                  ...normalizedData.reduce(
-                      (acc: number[], current, index: number) =>
-                          current._type === SectionItemType.Header
-                              ? acc.concat([index])
-                              : acc.concat([]),
-                      [],
-                  ),
-              ]
+            ? normalizedData.reduce(
+                  (acc: number[], current, index: number) =>
+                      current._type === SectionItemType.Header
+                          ? acc.concat([index])
+                          : acc.concat([]),
+                  [],
+              )
             : undefined;
     }, [normalizedData, stickySectionHeadersEnabled]);
 
