@@ -10,6 +10,7 @@ export { default as useToggle } from './useToggle';
 export { default as useControlledValue } from './useControlledValue';
 export { default as useFilePicker } from './useFilePicker';
 export { default as useLatest } from './useLatest';
+export { default as useSearchable, UseSearchableProps } from './useSearchable';
 
 export * from './useKeyboardDismissable';
 
