@@ -103,3 +103,5 @@ export {
 export { TimePickerModal, TimePickerModalProps, timePickerModalStyles } from './TimePickerModal';
 
 export { TextInputWithMask, TextInputWithMaskProps } from './TextInputWithMask';
+
+export { InputGroup, inputGroupStyles, InputGroupProps } from './InputGroup';

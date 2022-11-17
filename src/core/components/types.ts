@@ -32,6 +32,7 @@ import type {
     ISectionList,
     IFlatGrid,
     ISectionGrid,
+    InputGroupProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -71,6 +72,7 @@ export interface DefaultComponents {
     TimePicker: ComponentType<TimePickerProps>;
     TimePickerModal: ComponentType<TimePickerModalProps>;
     TextInputWithMask: ComponentType<TextInputWithMaskProps>;
+    InputGroup: ComponentType<InputGroupProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
