@@ -19,6 +19,9 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
             defaultIsOpen,
             initialFocusRef,
             finalFocusRef,
+
+            // TODO: Implement trap focus functionality
+            // eslint-disable-next-line
             trapFocus = true,
             showArrow = true,
             overlayStyles,

@@ -20,8 +20,6 @@ const Popover: FC<PopoverProps> = forwardRef(
             };
         }, [styles]);
 
-        console.log({ popoverStyles });
-
         return (
             <Popper
                 ref={ref}
