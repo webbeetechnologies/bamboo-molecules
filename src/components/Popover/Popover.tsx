@@ -7,18 +7,37 @@ import { withPopper } from '../../hocs/withPopper';
 
 const Popover: FC<PopoverProps> = forwardRef(
     ({ children, offset = 4, crossOffset = 0, ...props }, ref: any) => {
-        const styles = useComponentStyles('Popover');
+        const {
+            arrowProps,
+            overlayStyles,
+            contentStyles,
+            contentTextStyles,
+            initialTransition,
+            animateTransition,
+            exitTransition,
+        } = props;
 
-        const { arrowProps, ...popoverStyles } = useMemo(() => {
+        const styles = useComponentStyles('Popover', {
+            arrow: arrowProps?.style,
+            overlayStyles,
+            contentStyles,
+            contentTextStyles,
+            initialTransition,
+            animateTransition,
+            exitTransition,
+        });
+
+        const { arrowPropsWithStyle, ...popoverStyles } = useMemo(() => {
             const { arrow, ...rest } = styles;
 
             return {
                 ...rest,
-                arrowProps: {
+                arrowPropsWithStyle: {
+                    ...arrowProps,
                     style: arrow,
                 },
             };
-        }, [styles]);
+        }, [arrowProps, styles]);
 
         return (
             <Popper
@@ -26,7 +45,7 @@ const Popover: FC<PopoverProps> = forwardRef(
                 {...props}
                 offset={offset}
                 crossOffset={crossOffset}
-                arrowProps={arrowProps}
+                arrowProps={arrowPropsWithStyle}
                 contentStyles={popoverStyles.content}
                 contentTextStyles={popoverStyles.contentText}
                 overlayStyles={popoverStyles.overlay}
