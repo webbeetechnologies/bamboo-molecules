@@ -298,7 +298,6 @@ const Example = () => {
                         </ListItem>
                     )}
                     renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
-                    stickySectionHeadersEnabled
                 />
             </View>
 

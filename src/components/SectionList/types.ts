@@ -32,7 +32,6 @@ export type Props<TItem, TSection = DefaultSectionT> = Omit<
     renderItem: (info: SectionListRenderItemInfo<TItem, TSection>) => ReactElement | null;
     renderSectionHeader?: (props: { section: TSection }) => any;
     renderSectionFooter?: (props: { section: TSection }) => any;
-    stickySectionHeadersEnabled?: boolean;
 };
 
 // To make a correct type inference // TODO - ItemType is always any

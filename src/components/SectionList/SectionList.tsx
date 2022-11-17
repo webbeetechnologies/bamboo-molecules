@@ -14,8 +14,6 @@ const SectionList = <TItem, TSection>(
         contentContainerStyle: contentContainerStyleProp,
         ListHeaderComponentStyle: listHeaderComponentStyleProp,
         ListFooterComponentStyle: listFooterComponentStyleProp,
-        stickySectionHeadersEnabled,
-        stickyHeaderIndices: stickyHeaderIndicesProp,
         ...props
     }: Props<TItem, TSection>,
     ref: any,
@@ -110,23 +108,6 @@ const SectionList = <TItem, TSection>(
         [renderSectionHeader, renderItemProps, renderSectionFooter],
     );
 
-    // if stickySectionHeaderEnabled we push sectionHeader indices to the stickyHeaderIndices array
-    // in both cases we still want to add the array from stickyHeaderIndices prop
-    const stickyHeaderIndices = useMemo((): number[] | undefined => {
-        return stickySectionHeadersEnabled
-            ? [
-                  ...normalizedData.reduce(
-                      (acc: number[], current, index: number) =>
-                          current._type === SectionItemType.Header
-                              ? acc.concat([index])
-                              : acc.concat([]),
-                      [],
-                  ),
-                  ...(stickyHeaderIndicesProp || []),
-              ]
-            : stickyHeaderIndicesProp;
-    }, [normalizedData, stickyHeaderIndicesProp, stickySectionHeadersEnabled]);
-
     return (
         <FlatList
             style={styles}
@@ -135,7 +116,6 @@ const SectionList = <TItem, TSection>(
             contentContainerStyle={contentContainerStyles}
             ListHeaderComponentStyle={listHeaderComponentStyles}
             ListFooterComponentStyle={listFooterComponentStyles}
-            stickyHeaderIndices={stickyHeaderIndices}
             {...props}
             ref={ref}
         />
