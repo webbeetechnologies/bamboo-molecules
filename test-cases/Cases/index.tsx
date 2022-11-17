@@ -2,6 +2,8 @@ import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Platform } from 'react
 import { Card, Headline } from 'react-native-paper';
 import DesignTokens from './DesignTokens';
 import { ComponentsDemo } from './ComponentsDemo';
+import { Popover } from './Popover';
+import { ProvideMolecules } from '../../src/core';
 
 const style = StyleSheet.create({
     wrap: {
@@ -24,21 +26,29 @@ const CardHeader: typeof Headline = props => {
 
 export default () => {
     return (
-        <SafeAreaView style={style.wrap}>
-            <ScrollView>
-                <Card>
-                    <CardHeader children="Design Tokens" />
-                    <Card.Content>
-                        <DesignTokens />
-                    </Card.Content>
-                </Card>
-                <Card>
-                    <CardHeader children="Components Demo" />
-                    <Card.Content>
-                        <ComponentsDemo />
-                    </Card.Content>
-                </Card>
-            </ScrollView>
-        </SafeAreaView>
+        <ProvideMolecules>
+            <SafeAreaView style={style.wrap}>
+                <ScrollView>
+                    <Card>
+                        <CardHeader children="Design Tokens" />
+                        <Card.Content>
+                            <DesignTokens />
+                        </Card.Content>
+                    </Card>
+                    <Card>
+                        <CardHeader children="Components Demo" />
+                        <Card.Content>
+                            <ComponentsDemo />
+                        </Card.Content>
+                    </Card>
+                    <Card>
+                        <CardHeader children="Popover" />
+                        <Card.Content>
+                            <Popover />
+                        </Card.Content>
+                    </Card>
+                </ScrollView>
+            </SafeAreaView>
+        </ProvideMolecules>
     );
 };
