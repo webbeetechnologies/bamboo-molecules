@@ -26,7 +26,7 @@ export type SectionListRenderItemInfo<TItem, TSection> = ListRenderItemInfo<TIte
 // SectionList Props
 export type Props<TItem, TSection = DefaultSectionT> = Omit<
     FlashListProps<SectionItem<TItem, TSection>>,
-    'data' | 'renderItem'
+    'data' | 'renderItem' | 'stickyHeaderIndices'
 > & {
     sections: TSection[];
     renderItem: (info: SectionListRenderItemInfo<TItem, TSection>) => ReactElement | null;
@@ -35,7 +35,7 @@ export type Props<TItem, TSection = DefaultSectionT> = Omit<
     stickySectionHeadersEnabled?: boolean;
 };
 
-// To make a correct type inference
+// To make a correct type inference // TODO - ItemType is always any
 export type ISectionList = <ItemType = any, TSectionType = DefaultSectionT>(
     props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<FlashList<ItemType>>,
 ) => ReactElement;

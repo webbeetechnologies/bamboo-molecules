@@ -50,12 +50,12 @@ export interface DefaultComponents {
     Button: ComponentType<ButtonProps>;
     Surface: ComponentType<SurfaceProps>;
     Switch: ComponentType<SwitchProps>;
-    ListItem: typeof ListItem;
     Overlay: ComponentType<OverlayProps>;
     PresenceTransition: ComponentType<PresenceTransitionProps>;
     Transition: ComponentType<TransitionProps>;
     Backdrop: ComponentType<BackdropProps>;
     Popover: ComponentType<PopoverProps>;
+    ListItem: typeof ListItem;
     Checkbox: typeof Checkbox;
     FlatList: IFlatList;
     SectionList: ISectionList;

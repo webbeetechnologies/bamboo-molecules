@@ -15,7 +15,6 @@ const SectionList = <TItem, TSection>(
         ListHeaderComponentStyle: listHeaderComponentStyleProp,
         ListFooterComponentStyle: listFooterComponentStyleProp,
         stickySectionHeadersEnabled,
-        stickyHeaderIndices: stickyHeaderIndicesProp,
         ...props
     }: Props<TItem, TSection>,
     ref: any,
@@ -53,6 +52,7 @@ const SectionList = <TItem, TSection>(
                     ...(current || {}),
                     _type: 'sectionHeader',
                 },
+                // TODO - resolve this later
                 // @ts-ignore
                 ...(current?.data?.map((item: TItem) => ({
                     item: item,
@@ -78,6 +78,7 @@ const SectionList = <TItem, TSection>(
                     });
 
                 case SectionItemType.Row:
+                    // TODO - resolve this later
                     // @ts-ignore
                     return item?.section?.renderItem
                         ? // @ts-ignore
@@ -110,22 +111,17 @@ const SectionList = <TItem, TSection>(
 
     // if stickySectionHeaderEnabled we push sectionHeader indices to the stickyHeaderIndices array
     // in both cases we still want to add the array from stickyHeaderIndices prop
-    const stickyHeaderIndices = useMemo((): number[] => {
-        const defaultStickyHeaderIndices = stickyHeaderIndicesProp || [];
-
+    const stickyHeaderIndices = useMemo((): number[] | undefined => {
         return stickySectionHeadersEnabled
-            ? [
-                  ...normalizedData.reduce(
-                      (acc: number[], current, index: number) =>
-                          current._type === SectionItemType.Header
-                              ? acc.concat([index])
-                              : acc.concat([]),
-                      [],
-                  ),
-                  ...defaultStickyHeaderIndices,
-              ]
-            : defaultStickyHeaderIndices;
-    }, [normalizedData, stickyHeaderIndicesProp, stickySectionHeadersEnabled]);
+            ? normalizedData.reduce(
+                  (acc: number[], current, index: number) =>
+                      current._type === SectionItemType.Header
+                          ? acc.concat([index])
+                          : acc.concat([]),
+                  [],
+              )
+            : undefined;
+    }, [normalizedData, stickySectionHeadersEnabled]);
 
     return (
         <FlatList

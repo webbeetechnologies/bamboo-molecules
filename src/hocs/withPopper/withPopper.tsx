@@ -41,6 +41,7 @@ const withPopper = <T,>(Component: ComponentType<T>) =>
         } = props;
 
         // Dynamic keys are skipped
+        // TODO: Handle eslit issue gracefully
         // @ts-ignore. Caches the keys once.
         // eslint-disable-next-line
         const cachedKeys = useMemo(() => Object.keys(rest), []);
@@ -55,6 +56,7 @@ const withPopper = <T,>(Component: ComponentType<T>) =>
                 // @ts-ignore
                 return <Component {...rest} {...triggerProps} ref={mergedRef} />;
             },
+            // TODO: Handle eslit issue gracefully
             // eslint-disable-next-line
             [ref, trigger, ...cachedKeys.map(key => (rest as any)[key])],
         );
