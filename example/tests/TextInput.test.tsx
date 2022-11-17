@@ -1,5 +1,5 @@
 import { Example as TextInput } from '../stories/components/TextInput/TextInput';
-import { renderWithWrapper } from '../testHelper';
+import { renderWithWrapper } from '../testHelpers';
 import { Platform } from 'react-native';
 
 it('renders text button by default', () => {

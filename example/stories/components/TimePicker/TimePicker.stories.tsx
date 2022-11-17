@@ -1,18 +1,10 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ProvideMolecules } from '../../common';
 
 import { Example } from './TimePicker';
 
 export default {
     title: 'components/TimePicker',
     component: Example,
-    decorators: [
-        Story => (
-            <ProvideMolecules>
-                <Story />
-            </ProvideMolecules>
-        ),
-    ],
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;

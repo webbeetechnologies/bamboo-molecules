@@ -8,6 +8,9 @@ import {
 } from 'bamboo-molecules';
 import { linkTo } from '@storybook/addon-links';
 
+import { addDecorator } from '@storybook/react';
+import { withPerformance } from 'storybook-addon-performance';
+
 // creating theme styles similar to mdx
 export const theme = extendTheme({
     colorMode: 'light',
@@ -69,6 +72,24 @@ export interface InjectedComponentTypes {
 }
 
 export const useMolecules = () => useAtomsMolecules<InjectedComponentTypes>();
+
+addDecorator(Story => (
+    <ProvideMolecules>
+        <Story />
+    </ProvideMolecules>
+));
+
+addDecorator(((getStory, context) => {
+    return withPerformance(getStory, {
+        ...context,
+        parameters: {
+            ...context?.parameters,
+            performance: {
+                allowedGroups: ['client'],
+            },
+        },
+    });
+}) as typeof withPerformance);
 
 const Code = ({ style, ...rest }: TextProps) => {
     const { Text } = useMolecules();
