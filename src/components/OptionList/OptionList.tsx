@@ -1,9 +1,9 @@
 import { memo, PropsWithoutRef, ReactElement, RefAttributes, useMemo } from 'react';
+import type { ViewStyle } from 'react-native';
 import type { FlashList } from '@shopify/flash-list';
 import { useComponentStyles, useMolecules, useSearchable, UseSearchableProps } from '../../hooks';
 import type { DefaultSectionT } from '../SectionList/types';
 import type { SectionListProps } from '../SectionList';
-import type { ViewStyle } from 'react-native';
 
 // To make a correct type inference
 export type IOptionList = <ItemType = any, TSectionType = DefaultSectionT>(
