@@ -1,20 +1,13 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Button, Example, PopoverContent } from './Popover';
-import { ProvideMolecules } from 'bamboo-molecules';
+
 import { within, userEvent } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 
 export default {
     title: 'components/Popover',
     component: Example,
-    decorators: [
-        Story => (
-            <ProvideMolecules>
-                <Story />
-            </ProvideMolecules>
-        ),
-    ],
 } as ComponentMeta<typeof Example>;
 
 const Template: ComponentStory<typeof Example> = args => <Example {...args} />;

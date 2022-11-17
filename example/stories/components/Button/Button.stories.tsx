@@ -1,18 +1,10 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ProvideMolecules } from '../../common';
 
 import { Example } from './Button';
 
 export default {
     title: 'components/Button',
     component: Example,
-    decorators: [
-        Story => (
-            <ProvideMolecules>
-                <Story />
-            </ProvideMolecules>
-        ),
-    ],
 } as ComponentMeta<typeof Example>;
 
 export const Text: ComponentStory<typeof Example> = args => <Example {...args} />;
@@ -107,5 +99,29 @@ Elevated.parameters = {
             language: 'tsx',
             type: 'auto',
         },
+    },
+};
+
+export const ButtonPerformance: ComponentStory<typeof Example> = args => {
+    return <Example {...args} />;
+};
+
+ButtonPerformance.args = {
+    children: 'Performance Button',
+    variant: 'elevated',
+};
+
+ButtonPerformance.parameters = {
+    docs: {
+        source: {
+            code: `
+<Button variant="elevated">Performance Button</Button>
+`,
+            language: 'tsx',
+            type: 'auto',
+        },
+    },
+    performance: {
+        allowedGroups: ['client'],
     },
 };

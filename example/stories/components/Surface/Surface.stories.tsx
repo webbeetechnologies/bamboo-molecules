@@ -1,18 +1,11 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ProvideMolecules } from '../../common';
 
 import { Example } from './Surface';
 
 export default {
     title: 'components/Surface',
     component: Example,
-    decorators: [
-        Story => (
-            <ProvideMolecules>
-                <Story />
-            </ProvideMolecules>
-        ),
-    ],
+
     argTypes: {
         elevation: { control: { type: 'number' } },
     },

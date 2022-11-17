@@ -1,4 +1,4 @@
-import { renderWithWrapper } from '../testHelper';
+import { renderWithWrapper } from '../testHelpers';
 import { Example as Switch } from '../stories/components/Switch/Switch';
 
 it('renders on switch', () => {
