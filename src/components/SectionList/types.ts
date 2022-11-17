@@ -35,7 +35,7 @@ export type Props<TItem, TSection = DefaultSectionT> = Omit<
     stickySectionHeadersEnabled?: boolean;
 };
 
-// To make a correct type inference
+// To make a correct type inference // TODO - ItemType is always any
 export type ISectionList = <ItemType = any, TSectionType = DefaultSectionT>(
     props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<FlashList<ItemType>>,
 ) => ReactElement;
