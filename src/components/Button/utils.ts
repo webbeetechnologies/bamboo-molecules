@@ -1,4 +1,4 @@
-import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
+import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
 type CustomProps = {
@@ -153,37 +153,3 @@ export const defaultStyles: ComponentStylePropWithVariants<
         },
     },
 };
-
-// TODO Revisit to match MD3 guideline
-export const styles = StyleSheet.create({
-    button: {
-        borderStyle: 'solid',
-    },
-    content: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    icon: {
-        marginLeft: 'spacings.4',
-        marginRight: 'spacings._4',
-    },
-    iconTextMode: {
-        marginLeft: 'spacings.3',
-        marginRight: 'spacings._2',
-    },
-    label: {
-        textAlign: 'center',
-        marginVertical: 'spacings.2l',
-        marginHorizontal: 'spacings.6',
-    },
-    uppercaseLabel: {
-        textTransform: 'uppercase',
-    },
-    labelText: {
-        marginHorizontal: 'spacings.3',
-    },
-    labelTextAddons: {
-        marginHorizontal: 'spacings.4',
-    },
-});
