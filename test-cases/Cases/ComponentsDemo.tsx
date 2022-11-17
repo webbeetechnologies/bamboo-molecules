@@ -47,6 +47,7 @@ const Example = () => {
         DatePickerInput,
         TimePickerModal,
         SectionGrid,
+        OptionList,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
@@ -118,6 +119,31 @@ const Example = () => {
             />
             <HelperText>Helper Text</HelperText>
             <HorizontalDivider spacing={30} />
+
+            <OptionList
+                sections={sectionData}
+                renderItem={({ item }) => (
+                    <ListItem
+                        onPress={() => {}}
+                        style={{ marginBottom: 5 }}
+                        right={
+                            <IconButton
+                                name={isSwitchOn ? 'chevron-right' : 'chevron-left'}
+                                onPress={() => {}}
+                                variant="outlined"
+                                style={{ backgroundColor: 'colors.primary', color: '#fff' }}
+                                animated
+                            />
+                        }>
+                        <ListItem.Title>{item.firstname}</ListItem.Title>
+                    </ListItem>
+                )}
+                renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
+                searchable
+                searchInputProps={{
+                    label: 'Search Options',
+                }}
+            />
 
             <TextInput
                 variant="flat"
