@@ -11,7 +11,8 @@ export type IOptionList = <ItemType = any, TSectionType = DefaultSectionT>(
 ) => ReactElement;
 
 export type Props<TItem, TSection> = UseSearchableProps &
-    SectionListProps<TItem, TSection> & {
+    Omit<SectionListProps<TItem, TSection>, 'sections'> & {
+        records: TSection[];
         containerStyle?: ViewStyle;
         searchInputContainerStyle?: ViewStyle;
     };
@@ -24,34 +25,30 @@ const OptionList = <TItem, TSection>({
     containerStyle = {},
     searchInputContainerStyle = {},
     style: styleProp,
+    records,
     ...rest
 }: Props<TItem, TSection>) => {
-    const { SectionList, View, Text } = useMolecules();
+    const { SectionList, View } = useMolecules();
     const SearchField = useSearchable({ query, onQueryChange, searchable, searchInputProps });
 
     const componentStyles = useComponentStyles('OptionList', [
         { container: containerStyle, searchInputContainer: searchInputContainerStyle },
     ]);
 
-    const { containerStyles, searchInputContainerStyles, emptyTextStyles, style } = useMemo(() => {
-        const { container, searchInputContainer, emptyText, ...restStyle } = componentStyles;
+    const { containerStyles, searchInputContainerStyles, style } = useMemo(() => {
+        const { container, searchInputContainer, ...restStyle } = componentStyles;
 
         return {
             containerStyles: container,
             searchInputContainerStyles: searchInputContainer,
-            emptyTextStyles: emptyText,
             style: [restStyle, styleProp],
         };
     }, [componentStyles, styleProp]);
 
     return (
         <View style={containerStyles}>
-            <View style={searchInputContainerStyles}>{SearchField}</View>
-            <SectionList
-                ListEmptyComponent={<Text style={emptyTextStyles}>No options to display</Text>}
-                {...rest}
-                style={style}
-            />
+            <>{SearchField && <View style={searchInputContainerStyles}>{SearchField}</View>}</>
+            <SectionList {...rest} sections={records} style={style} />
         </View>
     );
 };
