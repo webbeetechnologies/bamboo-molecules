@@ -119,11 +119,13 @@ export const defaultStyles: ComponentStylePropWithVariants<
 export const styles = StyleSheet.create({
     button: {
         borderStyle: 'solid',
+        flex: 1,
     },
     content: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        flex: 1,
     },
     icon: {
         marginLeft: 'spacings.4',
