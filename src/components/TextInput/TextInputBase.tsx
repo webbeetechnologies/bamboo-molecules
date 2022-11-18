@@ -12,7 +12,7 @@ import { useMolecules } from '../../hooks';
 import InputLabel from './InputLabel';
 import type { InputBaseProps, RenderProps } from './types';
 import { styles as defaultStyles } from './utils';
-import { normalizeBorderRadiuses, normalizeSpacings } from '../../utils/normalizeSpacings';
+import { normalizeBorderRadiuses, normalizeSpacings } from '../../utils';
 
 const TextInputBase = ({
     componentStyles,
