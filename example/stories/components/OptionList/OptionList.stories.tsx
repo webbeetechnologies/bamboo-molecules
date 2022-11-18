@@ -25,6 +25,7 @@ export const Default: ComponentStory<typeof Example> = args => (
 
 Default.args = {
     searchable: true,
+    onQueryChange: () => {},
     records: [
         {
             title: 'Numbers',
