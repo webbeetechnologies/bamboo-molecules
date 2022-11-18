@@ -18,7 +18,7 @@ export type Props<TItem, TSection> = UseSearchableProps &
     };
 
 const OptionList = <TItem, TSection>({
-    query,
+    query = '',
     onQueryChange,
     searchInputProps,
     searchable,

@@ -25,7 +25,7 @@ export const Default: ComponentStory<typeof Example> = args => (
 
 Default.args = {
     searchable: true,
-    sections: [
+    records: [
         {
             title: 'Numbers',
             data: [
