@@ -53,6 +53,7 @@ import {
     timePickerClockMinutesStyles,
     timePickerAmPmSwitcherStyles,
     inputGroupStyles,
+    inputAddonStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -119,6 +120,7 @@ const defaultThemeValue: Partial<ITheme> = {
     TimePicker_AmPmSwitcher: timePickerAmPmSwitcherStyles,
 
     InputGroup: inputGroupStyles,
+    InputAddon: inputAddonStyles,
 };
 
 const defaultExtractStyles = memoize(
