@@ -12,7 +12,7 @@ import { useMolecules } from '../../hooks';
 import InputLabel from './InputLabel';
 import type { InputBaseProps, RenderProps } from './types';
 import { styles as defaultStyles } from './utils';
-import { normalizeSpacings } from '../../utils/normalizeSpacings';
+import { normalizeBorderRadiuses, normalizeSpacings } from '../../utils/normalizeSpacings';
 
 const TextInputBase = ({
     componentStyles,
@@ -84,6 +84,11 @@ const TextInputBase = ({
             height,
             textAlign,
             activeColor,
+            borderRadius,
+            borderTopRightRadius,
+            borderTopLeftRadius,
+            borderBottomRightRadius,
+            borderBottomLeftRadius,
 
             // custom props
             selectionColor,
@@ -119,8 +124,18 @@ const TextInputBase = ({
 
         const backgroundColor = viewStyle?.backgroundColor || container?.backgroundColor; // to give the opportunity to change the backgroundColor of the TextInput with the StyleProp
 
+        const extractedBorderRadiuses: Record<string, any> = {
+            borderTopLeftRadius,
+            borderTopRightRadius,
+            borderBottomLeftRadius,
+            borderBottomRightRadius,
+            borderRadius,
+        };
+
+        const viableRadiuses = normalizeBorderRadiuses(extractedBorderRadiuses); // to only extract the ones that are defined
+
         return {
-            container: [container, viewStyle],
+            container: [container, viewStyle, viableRadiuses],
             leftElement,
             rightElement,
             activeIndicator,
@@ -184,6 +199,7 @@ const TextInputBase = ({
                         outline.borderColor,
                 },
                 backgroundColor ? { backgroundColor } : {},
+                viableRadiuses,
             ],
             patchContainer: [
                 StyleSheet.absoluteFill,
