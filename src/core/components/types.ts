@@ -33,6 +33,7 @@ import type {
     IFlatGrid,
     ISectionGrid,
     IOptionList,
+    DropdownListProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -73,6 +74,7 @@ export interface DefaultComponents {
     TimePickerModal: ComponentType<TimePickerModalProps>;
     TextInputWithMask: ComponentType<TextInputWithMaskProps>;
     OptionList: IOptionList;
+    DropdownList: ComponentType<DropdownListProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

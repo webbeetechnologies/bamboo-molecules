@@ -19,7 +19,7 @@ const useSearchable = ({
 }: UseSearchableProps = {}): ReactElement<TextInputProps> | null => {
     const { TextInput, IconButton } = useMolecules();
     const [value, onValueChange] = useControlledValue({
-        value: query,
+        value: query || '',
         defaultValue: '', // to disable the useControlledValue inside TextInput
         onChange: onQueryChange,
         disabled: !searchable,

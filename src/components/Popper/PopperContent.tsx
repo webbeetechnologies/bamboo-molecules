@@ -1,4 +1,4 @@
-import {
+import React, {
     Children,
     cloneElement,
     forwardRef,
@@ -20,6 +20,8 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { useMolecules } from '../../hooks';
 import PopperArrow from './PopperArrow';
 import type { IPlacement } from './types';
+
+const ProvideMolecules = React.lazy(() => import('../../core/ProvideMolecules'));
 
 const PopperContent = (
     { children, style, showArrow, contentTextStyles, ...rest }: any,
@@ -127,7 +129,7 @@ const PopperContent = (
     if (!isOpen) return <Fragment />;
 
     return (
-        <Fragment>
+        <ProvideMolecules>
             <View ref={overlayRef} collapsable={false} style={overlayStyle.overlay}>
                 {arrowElement ??
                     (showArrow && (
@@ -146,7 +148,7 @@ const PopperContent = (
                     </View>
                 </ScrollView>
             </View>
-        </Fragment>
+        </ProvideMolecules>
     );
 };
 

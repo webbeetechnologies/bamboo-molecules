@@ -1,12 +1,14 @@
-import { FC, forwardRef, memo, useCallback, useId, useMemo, useRef } from 'react';
+import { FC, forwardRef, memo, useCallback, useId, useMemo, useRef, Suspense, lazy } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useControlledValue, useMolecules } from '../../hooks';
 import { mergeRefs } from '../../utils';
 
 import type { PopoverPropsTriggerRequired } from './types';
-import { Popper, PopperContent } from '../../components/Popper';
+import { Popper } from '../../components/Popper';
 import { PopoverContext } from './HOCPopoverContext';
+
+const PopperContent = lazy(() => import('../../components/Popper/PopperContent'));
 
 const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
     (
@@ -107,15 +109,17 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
                             {...props}
                             arrowProps={arrowProps}>
                             <PopoverContext.Provider value={popoverContextValue}>
-                                <PopperContent
-                                    style={contentStyles}
-                                    contentTextStyles={contentTextStyles}
-                                    arrowProps={arrowProps}
-                                    showArrow={showArrow}>
-                                    {/* <FocusScope contain={trapFocus} restoreFocus> */}
-                                    {children}
-                                    {/* </FocusScope> */}
-                                </PopperContent>
+                                <Suspense>
+                                    <PopperContent
+                                        style={contentStyles}
+                                        contentTextStyles={contentTextStyles}
+                                        arrowProps={arrowProps}
+                                        showArrow={showArrow}>
+                                        {/* <FocusScope contain={trapFocus} restoreFocus> */}
+                                        {children}
+                                        {/* </FocusScope> */}
+                                    </PopperContent>
+                                </Suspense>
                             </PopoverContext.Provider>
                         </Popper>
                     </PresenceTransition>
