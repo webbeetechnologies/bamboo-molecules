@@ -1,5 +1,5 @@
 import type { ComponentStylePropWithVariants } from '../../types';
-import { TextStyle, ViewStyle } from 'react-native';
+import type { TextStyle, ViewStyle } from 'react-native';
 
 type CustomProps = {
     overlay?: ViewStyle;

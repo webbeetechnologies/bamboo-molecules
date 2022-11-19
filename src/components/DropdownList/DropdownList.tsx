@@ -59,7 +59,7 @@ const DropdownList = <TItem, TSection>({
     setOverlayRef,
     ...optionListProps
 }: Props<TItem, TSection>) => {
-    const { View, OptionList, Button, Modal } = useMolecules();
+    const { OptionList, Modal } = useMolecules();
 
     const WrapperComponent = mode === DropdownListMode.Modal ? Modal : PopoverWrapper;
 
