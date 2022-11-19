@@ -49,6 +49,7 @@ const Example = () => {
         TimePickerModal,
         SectionGrid,
         OptionList,
+        DropdownList,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
@@ -86,6 +87,95 @@ const Example = () => {
             <DatePickerInline mode="single" />
 
             <HorizontalDivider spacing={30} />
+
+            <DropdownList
+                trigger={props => <Button {...props}>Trigger</Button>}
+                records={[
+                    {
+                        title: 'Numbers',
+                        data: [
+                            {
+                                text: '1',
+                            },
+                            {
+                                text: '2',
+                            },
+                            {
+                                text: '3',
+                            },
+                            {
+                                text: '4',
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Letters',
+                        data: [
+                            {
+                                text: 'A',
+                            },
+                            {
+                                text: 'B',
+                            },
+                            {
+                                text: 'C',
+                            },
+                            {
+                                text: 'D',
+                            },
+                        ],
+                    },
+                ]}
+                renderItem={({ item }: any) => (
+                    <ListItem>
+                        <ListItem.Title>{item.text}</ListItem.Title>
+                    </ListItem>
+                )}
+            />
+
+            {/*<OptionList*/}
+            {/*    records={[*/}
+            {/*        {*/}
+            {/*            title: 'Numbers',*/}
+            {/*            data: [*/}
+            {/*                {*/}
+            {/*                    text: '1',*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    text: '2',*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    text: '3',*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    text: '4',*/}
+            {/*                },*/}
+            {/*            ],*/}
+            {/*        },*/}
+            {/*        {*/}
+            {/*            title: 'Letters',*/}
+            {/*            data: [*/}
+            {/*                {*/}
+            {/*                    text: 'A',*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    text: 'B',*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    text: 'C',*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    text: 'D',*/}
+            {/*                },*/}
+            {/*            ],*/}
+            {/*        },*/}
+            {/*    ]}*/}
+            {/*    renderItem={({ item }) => (*/}
+            {/*        <ListItem>*/}
+            {/*            <ListItem.Title>{item.text}</ListItem.Title>*/}
+            {/*        </ListItem>*/}
+            {/*    )}*/}
+            {/*/>*/}
 
             <DatePickerInput
                 locale={'en'}
