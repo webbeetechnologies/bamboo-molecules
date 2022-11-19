@@ -1,11 +1,24 @@
-export const normalizeBorderRadiuses = (borderRadiuses: Record<string, any>) => {
-    const viableBorderRadiuses: Record<string, any> = {};
+import type { ViewStyle } from 'react-native';
 
-    Object.keys(borderRadiuses).forEach(key => {
+export const normalizeBorderRadiuses = ({
+    borderTopLeftRadius,
+    borderTopRightRadius,
+    borderBottomLeftRadius,
+    borderBottomRightRadius,
+    borderRadius,
+}: ViewStyle) => {
+    const borderRadiuses: Record<string, any> = {
+        borderTopLeftRadius,
+        borderTopRightRadius,
+        borderBottomLeftRadius,
+        borderBottomRightRadius,
+        borderRadius,
+    };
+
+    return Object.keys(borderRadiuses).reduce((acc: Record<string, any>, key) => {
         if (borderRadiuses[key] !== undefined && borderRadiuses[key] !== null) {
-            viableBorderRadiuses[key] = borderRadiuses[key];
+            acc[key] = borderRadiuses[key];
         }
-    });
-
-    return viableBorderRadiuses;
+        return acc;
+    }, {});
 };

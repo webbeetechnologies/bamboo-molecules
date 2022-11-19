@@ -84,11 +84,6 @@ const TextInputBase = ({
             height,
             textAlign,
             activeColor,
-            borderRadius,
-            borderTopRightRadius,
-            borderTopLeftRadius,
-            borderBottomRightRadius,
-            borderBottomLeftRadius,
 
             // custom props
             selectionColor,
@@ -124,15 +119,7 @@ const TextInputBase = ({
 
         const backgroundColor = viewStyle?.backgroundColor || container?.backgroundColor; // to give the opportunity to change the backgroundColor of the TextInput with the StyleProp
 
-        const extractedBorderRadiuses: Record<string, any> = {
-            borderTopLeftRadius,
-            borderTopRightRadius,
-            borderBottomLeftRadius,
-            borderBottomRightRadius,
-            borderRadius,
-        };
-
-        const viableRadiuses = normalizeBorderRadiuses(extractedBorderRadiuses); // to only extract the ones that are defined
+        const viableRadiuses = normalizeBorderRadiuses(viewStyle); // to only extract the ones that are defined
 
         return {
             container: [container, viewStyle, viableRadiuses],
