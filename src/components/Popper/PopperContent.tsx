@@ -16,15 +16,16 @@ import { useOverlayPosition } from '@react-native-aria/overlays';
 import { usePopperContext } from './PopperContext';
 import { DEFAULT_ARROW_HEIGHT, DEFAULT_ARROW_WIDTH } from './constants';
 import { getContainerStyle } from './utils';
-import { ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useMolecules } from '../../hooks';
 import PopperArrow from './PopperArrow';
 import type { IPlacement } from './types';
+import { extendTheme } from '../../core';
 
 const ProvideMolecules = React.lazy(() => import('../../core/ProvideMolecules'));
 
 const PopperContent = (
-    { children, style, showArrow, contentTextStyles, ...rest }: any,
+    { children, style, showArrow, contentTextStyles, context, ...rest }: any,
     ref: any,
 ) => {
     const { Text, View } = useMolecules();
@@ -113,24 +114,24 @@ const PopperContent = (
     );
 
     const overlayStyle = useMemo(
-        () =>
-            StyleSheet.create({
-                overlay: {
-                    ...overlayProps.style,
-                    // To handle translucent android StatusBar
-                    // marginTop: Platform.select({ android: top, default: 0 }),
-                    opacity: rendered ? 1 : 0,
-                    position: 'absolute',
-                },
-            }),
+        () => ({
+            ...overlayProps.style,
+            // To handle translucent android StatusBar
+            // marginTop: Platform.select({ android: top, default: 0 }),
+            opacity: rendered ? 1 : 0,
+            position: 'absolute' as 'absolute',
+        }),
         [rendered, overlayProps.style],
     );
+
+    const { theme: contextTheme, ...restContext } = context;
+    const theme = useMemo(() => extendTheme(contextTheme), [contextTheme]);
 
     if (!isOpen) return <Fragment />;
 
     return (
-        <ProvideMolecules>
-            <View ref={overlayRef} collapsable={false} style={overlayStyle.overlay}>
+        <ProvideMolecules theme={theme} {...restContext}>
+            <View ref={overlayRef} collapsable={false} style={overlayStyle}>
                 {arrowElement ??
                     (showArrow && (
                         <PopperArrow
@@ -142,11 +143,9 @@ const PopperContent = (
                             actualPlacement={placement as IPlacement}
                         />
                     ))}
-                <ScrollView>
-                    <View style={StyleSheet.flatten([containerStyle, style])} {...rest} ref={ref}>
-                        <Text style={contentTextStyles}>{restElements}</Text>
-                    </View>
-                </ScrollView>
+                <View style={StyleSheet.flatten([containerStyle, style])} {...rest} ref={ref}>
+                    <Text style={contentTextStyles}>{restElements}</Text>
+                </View>
             </View>
         </ProvideMolecules>
     );

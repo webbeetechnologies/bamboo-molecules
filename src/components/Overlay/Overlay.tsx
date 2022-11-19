@@ -1,6 +1,6 @@
 import { OverlayContainer } from '@react-native-aria/overlays';
 import { memo, useMemo, useState } from 'react';
-import { Platform } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { Modal } from 'react-native';
 import { useKeyboardDismissable } from '../../hooks';
 import { ExitAnimationContext } from '../Animations';
@@ -27,7 +27,7 @@ const Overlay = ({
     }, [exited, setExited]);
 
     const styleObj = useMemo(() => {
-        const styles = { ...style };
+        const styles = { ...StyleSheet.absoluteFillObject, ...style };
         if (animationPreset === 'slide') {
             styles.overflow = 'hidden';
             styles.display = 'flex';

@@ -90,6 +90,9 @@ const Example = () => {
 
             <DropdownList
                 trigger={props => <Button {...props}>Trigger</Button>}
+                containerStyle={{
+                    width: 300,
+                }}
                 records={[
                     {
                         title: 'Numbers',

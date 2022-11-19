@@ -32,7 +32,7 @@ export type Props<
 const DropdownList = <TItem, TSection>({
     mode,
     trigger,
-    showArrow,
+    showArrow = false,
     onClose,
     onOpen,
     isOpen,
@@ -92,9 +92,7 @@ const DropdownList = <TItem, TSection>({
             placement={placement}
             triggerRef={triggerRef}
             setOverlayRef={setOverlayRef}>
-            <View>
-                <OptionList {...optionListProps} />
-            </View>
+            <OptionList {...optionListProps} />
         </WrapperComponent>
     );
 };

@@ -1,7 +1,7 @@
 import { FC, forwardRef, memo, useCallback, useId, useMemo, useRef, Suspense, lazy } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { useControlledValue, useMolecules } from '../../hooks';
+import { useControlledValue, useMolecules, usePlatformType, useTheme } from '../../hooks';
 import { mergeRefs } from '../../utils';
 
 import type { PopoverPropsTriggerRequired } from './types';
@@ -86,6 +86,15 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
             );
         };
 
+        const components = useMolecules();
+        const platformType = usePlatformType();
+        const themeContext = useTheme();
+
+        const context = useMemo(() => {
+            const { resolveComponentStyles, extractStyles, ...theme } = themeContext;
+            return { resolveComponentStyles, extractStyles, theme, platformType, components };
+        }, [themeContext, components, platformType]);
+
         return (
             <View ref={ref}>
                 {updatedTrigger()}
@@ -111,6 +120,7 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
                             <PopoverContext.Provider value={popoverContextValue}>
                                 <Suspense>
                                     <PopperContent
+                                        context={context}
                                         style={contentStyles}
                                         contentTextStyles={contentTextStyles}
                                         arrowProps={arrowProps}
