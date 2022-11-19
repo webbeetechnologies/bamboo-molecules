@@ -107,3 +107,7 @@ export { TextInputWithMask, TextInputWithMaskProps } from './TextInputWithMask';
 export { OptionList, OptionListProps, IOptionList, optionListStyles } from './OptionList';
 
 export { DropdownList, DropdownListProps } from './DropdownList';
+
+export { InputGroup, inputGroupStyles, InputGroupProps } from './InputGroup';
+
+export { InputAddon, inputAddonStyles, InputAddonProps } from './InputAddon';

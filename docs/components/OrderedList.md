@@ -1,7 +1,7 @@
 # OrderedList - Phase 2
 
 Simply copy and improve on the functionality for ordered lists from 
-https://github.com/xiqi/react-native-unordered-list/blob/master/index.js
+https://github.com/xiqi/react-native-unordered-list/blob/master/index.tsx
 
 ## User Stories
 - As a user, I want to see list of ordered items.
