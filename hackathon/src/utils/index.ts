@@ -1,0 +1,1 @@
+export { normalizeMachines } from './normalizeMachines';

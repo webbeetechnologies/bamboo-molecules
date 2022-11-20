@@ -9,7 +9,8 @@
   "workspaces": {
     "packages": [
       "example",
-      "test-cases"
+      "test-cases",
+      "hackathon"
     ],
     "nohoist": [
       "**/react-native-web",
