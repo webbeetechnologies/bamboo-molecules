@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { StyleSheet, ViewStyle, SafeAreaView, useWindowDimensions } from 'react-native';
+import { StyleSheet, ViewStyle, SafeAreaView, useWindowDimensions, ScrollView } from 'react-native';
 import { useMolecules } from 'bamboo-molecules';
 import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 
@@ -17,31 +17,35 @@ const CustomDrawer = ({ navigation }: Props) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Button style={styles.button} onPress={() => navigation.navigate(ROUTE_KEYS.DASHBOARD)}>
-                Dashboard
-            </Button>
-            <Button
-                style={styles.button}
-                onPress={() => navigation.navigate(ROUTE_KEYS.MANAGE_MACHINE_TYPES)}>
-                Manage Machine Types
-            </Button>
-            <HorizontalDivider spacing={10} />
+            <ScrollView>
+                <Button
+                    style={styles.button}
+                    onPress={() => navigation.navigate(ROUTE_KEYS.DASHBOARD)}>
+                    Dashboard
+                </Button>
+                <Button
+                    style={styles.button}
+                    onPress={() => navigation.navigate(ROUTE_KEYS.MANAGE_MACHINE_TYPES)}>
+                    Manage Machine Types
+                </Button>
+                <HorizontalDivider spacing={10} />
 
-            <View style={{ minHeight: dimensions.height - 140 }}>
-                <FlatList
-                    collapsable={false}
-                    data={machineTypes}
-                    renderItem={({ item }) => (
-                        <Button
-                            style={styles.button}
-                            onPress={() =>
-                                navigation.navigate(ROUTE_KEYS.DASHBOARD, { id: item.id })
-                            }>
-                            {item.name}
-                        </Button>
-                    )}
-                />
-            </View>
+                <View style={{ minHeight: dimensions.height - 200 }}>
+                    <FlatList
+                        collapsable={false}
+                        data={machineTypes}
+                        renderItem={({ item }) => (
+                            <Button
+                                style={styles.button}
+                                onPress={() =>
+                                    navigation.navigate(ROUTE_KEYS.DASHBOARD, { id: item.id })
+                                }>
+                                {item.name}
+                            </Button>
+                        )}
+                    />
+                </View>
+            </ScrollView>
         </SafeAreaView>
     );
 };

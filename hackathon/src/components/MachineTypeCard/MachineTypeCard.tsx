@@ -148,7 +148,9 @@ const MachineTypeCard: FC<MachineTypeCardProps> = ({ machineType }) => {
                         )}
                         records={[{ data: fields }]}
                         renderItem={({ item }) => (
-                            <ListItem onPress={() => onTitleChange(item.id)}>{item.label}</ListItem>
+                            <ListItem onPress={() => onTitleChange(item.id)}>
+                                <ListItem.Title>{item.label}</ListItem.Title>
+                            </ListItem>
                         )}
                     />
                 </View>
@@ -178,7 +180,7 @@ const MachineTypeCard: FC<MachineTypeCardProps> = ({ machineType }) => {
                                 records={inputOptions}
                                 renderItem={({ item }) => (
                                     <ListItem onPress={() => onInputAttrChange(item.type, field)}>
-                                        {item.type}
+                                        <ListItem.Title>{item.type}</ListItem.Title>
                                     </ListItem>
                                 )}
                             />
@@ -252,10 +254,12 @@ const styles = StyleSheet.create({
     btnPopover: {
         minWidth: 150,
         backgroundColor: '#fff',
+        minHeight: 160,
     },
     titlePopover: {
         minWidth: 200,
         backgroundColor: '#fff',
+        minHeight: 160,
     },
     selectInput: {},
     label: {

@@ -1,4 +1,4 @@
-package test.cases.org.newarchitecture.components;
+package hack.athon.org.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

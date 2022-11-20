@@ -25,7 +25,7 @@ const ManageMachineTypesScreen = () => {
             ))}
 
             <Button style={styles.btn} variant="contained" onPress={onCreateMachineType}>
-                Add type
+                Add Machine Type
             </Button>
         </ScrollView>
     );

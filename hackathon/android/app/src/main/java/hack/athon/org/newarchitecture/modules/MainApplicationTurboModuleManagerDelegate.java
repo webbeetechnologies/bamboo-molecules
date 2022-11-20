@@ -1,4 +1,4 @@
-package test.cases.org.newarchitecture.modules;
+package hack.athon.org.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

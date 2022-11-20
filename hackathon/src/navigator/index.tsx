@@ -13,7 +13,7 @@ export default function Navigator() {
     return (
         <Drawer.Navigator
             initialRouteName={ROUTE_KEYS.DASHBOARD}
-            drawerContent={CustomDrawer}
+            drawerContent={props => <CustomDrawer {...props} />}
             screenOptions={defaultScreenOptions}>
             <Stack.Screen name={ROUTE_KEYS.DASHBOARD} component={DashboardScreen} />
             <Stack.Screen

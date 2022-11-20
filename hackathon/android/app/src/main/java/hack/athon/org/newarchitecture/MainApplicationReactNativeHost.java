@@ -1,4 +1,4 @@
-package test.cases.org.newarchitecture;
+package hack.athon.org.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -20,9 +20,9 @@ import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import test.cases.org.BuildConfig;
-import test.cases.org.newarchitecture.components.MainComponentsRegistry;
-import test.cases.org.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import hack.athon.org.BuildConfig;
+import hack.athon.org.newarchitecture.components.MainComponentsRegistry;
+import hack.athon.org.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

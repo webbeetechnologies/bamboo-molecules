@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     btnContainer: {
         marginTop: 10,
     },
-    popoverContainer: { minWidth: 150, backgroundColor: '#fff' },
+    popoverContainer: { minWidth: 150, backgroundColor: '#fff', minHeight: 160 },
 });
 
 export default memo(withDashboardLayout(DashboardScreen));
