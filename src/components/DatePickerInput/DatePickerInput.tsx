@@ -6,7 +6,13 @@ import type { DatePickerInputProps } from './types';
 import DatePickerInputWithoutModal from './DatePickerInputWithoutModal';
 
 function DatePickerInput(
-    { withModal = true, calendarIcon = 'calendar', locale = 'en', ...rest }: DatePickerInputProps,
+    {
+        withModal = true,
+        calendarIcon = 'calendar',
+        locale = 'en',
+        onChange,
+        ...rest
+    }: DatePickerInputProps,
     ref: any,
 ) {
     const { IconButton, DatePickerModal } = useMolecules();
@@ -16,7 +22,7 @@ function DatePickerInput(
         setVisible(false);
     }, [setVisible]);
 
-    const onChangeRef = useLatest(rest.onChange);
+    const onChangeRef = useLatest(onChange);
 
     const onInnerConfirm = useCallback(
         ({ date }: any) => {
@@ -30,6 +36,7 @@ function DatePickerInput(
         <DatePickerInputWithoutModal
             ref={ref}
             {...rest}
+            onChange={onChange}
             locale={locale}
             inputButtons={
                 <>
@@ -46,6 +53,7 @@ function DatePickerInput(
                 <>
                     {withModal ? (
                         <DatePickerModal
+                            onChange={({ date }) => onChange(date)}
                             date={value}
                             mode="single"
                             visible={visible}
