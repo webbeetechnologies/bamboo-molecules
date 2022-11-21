@@ -111,3 +111,5 @@ export { DropdownList, DropdownListProps } from './DropdownList';
 export { InputGroup, inputGroupStyles, InputGroupProps } from './InputGroup';
 
 export { InputAddon, inputAddonStyles, InputAddonProps } from './InputAddon';
+
+export * from './ActionSheet';

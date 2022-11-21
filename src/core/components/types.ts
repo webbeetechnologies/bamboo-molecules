@@ -36,6 +36,7 @@ import type {
     DropdownListProps,
     InputGroupProps,
     InputAddonProps,
+    IActionSheet,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -79,6 +80,7 @@ export interface DefaultComponents {
     DropdownList: ComponentType<DropdownListProps>;
     InputGroup: ComponentType<InputGroupProps>;
     InputAddon: ComponentType<InputAddonProps>;
+    ActionSheet: IActionSheet;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

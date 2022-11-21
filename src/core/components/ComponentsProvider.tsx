@@ -43,6 +43,7 @@ import {
     DropdownList,
     InputGroup,
     InputAddon,
+    ActionSheet,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -90,6 +91,7 @@ const defaultComponents: DefaultComponents = {
     DropdownList,
     InputGroup,
     InputAddon,
+    ActionSheet,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

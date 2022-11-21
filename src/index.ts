@@ -44,6 +44,14 @@ export {
     OptionListProps,
     InputGroupProps,
     InputAddonProps,
+    ActionSheetProps,
+    IActionSheet,
+    ActionSheetRef,
+    ActionSheetManagerSheetProps,
+    ActionSheetManager,
+    ActionSheetProvider,
+    useActionSheetScrollHandlers,
+    registerActionSheet,
 } from './components';
 
 export {
