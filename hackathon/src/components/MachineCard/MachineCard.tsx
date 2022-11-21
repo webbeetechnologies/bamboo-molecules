@@ -49,7 +49,7 @@ const MachineCard: FC<MachineCardProps> = ({ machine }) => {
             <View style={styles.header}>
                 <Text style={styles.headerTexts}>
                     {machineType?.name} -{' '}
-                    {typeof title !== 'string' ? (title as Date).toJSON() : title}
+                    {typeof title !== 'string' ? (title ? (title as Date)?.toJSON() : '') : title}
                 </Text>
                 <IconButton name="delete" onPress={onDeleteMachine} />
             </View>
