@@ -42,6 +42,8 @@ export {
     TimePickerProps,
     TextInputWithMaskProps,
     OptionListProps,
+    InputGroupProps,
+    InputAddonProps,
 } from './components';
 
 export {

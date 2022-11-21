@@ -34,6 +34,8 @@ import type {
     ISectionGrid,
     IOptionList,
     DropdownListProps,
+    InputGroupProps,
+    InputAddonProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -75,6 +77,8 @@ export interface DefaultComponents {
     TextInputWithMask: ComponentType<TextInputWithMaskProps>;
     OptionList: IOptionList;
     DropdownList: ComponentType<DropdownListProps>;
+    InputGroup: ComponentType<InputGroupProps>;
+    InputAddon: ComponentType<InputAddonProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

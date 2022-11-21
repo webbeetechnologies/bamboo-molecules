@@ -41,6 +41,8 @@ import {
     TextInputWithMaskProps,
     OptionList,
     DropdownList,
+    InputGroup,
+    InputAddon,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -86,6 +88,8 @@ const defaultComponents: DefaultComponents = {
     TextInputWithMask: TextInputWithMask as ComponentType<TextInputWithMaskProps>,
     OptionList,
     DropdownList,
+    InputGroup,
+    InputAddon,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
