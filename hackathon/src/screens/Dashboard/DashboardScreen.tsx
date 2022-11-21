@@ -6,7 +6,7 @@ import { useRoute } from '@react-navigation/core';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { withDashboardLayout } from '../../hocs';
 import { MachineCard } from '../../components';
-import { createMachine } from '../../features';
+import { createMachine } from '../../store';
 import { normalizeMachines } from '../../utils';
 
 const DashboardScreen = () => {

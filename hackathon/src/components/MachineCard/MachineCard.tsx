@@ -2,7 +2,7 @@ import { FC, useCallback, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { useMolecules } from 'bamboo-molecules';
 
-import { deleteMachine, updateMachine, Machine, MachinesAttributeValues } from '../../features';
+import { deleteMachine, updateMachine, Machine, MachinesAttributeValues } from '../../store';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import AttributeValueInput from '../AttributeValueInput/AttributeValueInput';
 

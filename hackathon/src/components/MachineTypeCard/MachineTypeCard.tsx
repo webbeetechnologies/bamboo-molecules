@@ -16,7 +16,7 @@ import {
     updateAttribute,
     updateMachineTypeName,
     updateMachineTypeTitle,
-} from '../../features';
+} from '../../store';
 
 interface MachineTypeCardProps {
     machineType: MachineType;

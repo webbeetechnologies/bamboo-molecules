@@ -1,4 +1,4 @@
-import type { Machine, MachineType } from '../features/machines/types';
+import type { Machine, MachineType } from '../store/features/machines/types';
 
 export const normalizeMachines = (
     machines: Machine[],

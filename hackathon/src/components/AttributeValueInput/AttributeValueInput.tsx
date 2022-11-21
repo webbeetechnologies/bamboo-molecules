@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { nanoid } from 'nanoid';
 import { useMolecules } from 'bamboo-molecules';
 import { format } from 'date-fns';
-import type { Machine, MachinesAttributeValues, MachineTypeField } from '../../features';
+import type { Machine, MachinesAttributeValues, MachineTypeField } from '../../store';
 
 export type AttributeInputProps = {
     field: MachineTypeField;

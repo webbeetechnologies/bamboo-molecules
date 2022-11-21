@@ -5,7 +5,7 @@ import { useMolecules } from 'bamboo-molecules';
 import { withDashboardLayout } from '../../hocs';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { MachineTypeCard } from '../../components';
-import { createMachineType } from '../../features';
+import { createMachineType } from '../../store/features';
 
 const ManageMachineTypesScreen = () => {
     const { Button } = useMolecules();

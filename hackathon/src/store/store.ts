@@ -9,7 +9,7 @@ import {
     REGISTER,
     persistStore,
 } from 'redux-persist';
-import machinesReducer from '../features/machines/machinesReducer';
+import { machinesReducer } from './features';
 import storage from '@react-native-async-storage/async-storage';
 
 const persistConfig = {
