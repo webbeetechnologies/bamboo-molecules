@@ -13,7 +13,7 @@ enum DropdownListMode {
 
 type DefaultSectionT<TItem> = {
     [key: string]: any;
-    data?: TItem;
+    data: TItem[];
 };
 
 export type Props<
@@ -29,7 +29,7 @@ export type Props<
         isOpen?: boolean;
     };
 
-const DropdownList = <TItem, TSection>({
+const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>>({
     mode,
     trigger,
     showArrow = false,

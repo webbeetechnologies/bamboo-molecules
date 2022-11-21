@@ -1,6 +1,5 @@
 import { memo, PropsWithoutRef, ReactElement, RefAttributes, useCallback, useMemo } from 'react';
-import type { ViewStyle } from 'react-native';
-import type { FlashList } from '@shopify/flash-list';
+import type { ViewStyle, SectionList } from 'react-native';
 import {
     useComponentStyles,
     useControlledValue,
@@ -8,11 +7,10 @@ import {
     useSearchable,
     UseSearchableProps,
 } from '../../hooks';
-import type { SectionListProps } from '../SectionList';
-import type { SectionListRenderItemInfo } from '../SectionList/types';
+import type { SectionListProps, SectionListRenderItemInfo } from '../SectionList';
 
 type DefaultSectionT<TItem> = {
-    data?: TItem[];
+    data: TItem[];
     [key: string]: any;
 };
 
@@ -25,10 +23,13 @@ export type IOptionList = <
     ItemType extends DefaultItemT = DefaultItemT,
     TSectionType extends DefaultSectionT<ItemType> = DefaultSectionT<ItemType>,
 >(
-    props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<FlashList<ItemType>>,
+    props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<SectionList<ItemType>>,
 ) => ReactElement;
 
-export type Props<TItem, TSection> = UseSearchableProps &
+export type Props<
+    TItem = any,
+    TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
+> = UseSearchableProps &
     Omit<SectionListProps<TItem, TSection>, 'sections'> & {
         records: TSection[];
         containerStyle?: ViewStyle;
@@ -43,7 +44,7 @@ const OptionList = <
     TItem extends DefaultItemT = DefaultItemT,
     TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
 >({
-    query = '',
+    query,
     onQueryChange,
     searchInputProps,
     searchable,
@@ -90,6 +91,8 @@ const OptionList = <
 
     const renderItem = useCallback(
         (info: SectionListRenderItemInfo<TItem, TSection>) => {
+            if (!renderItemProp) return null;
+
             return selectable && info.item?.selectable !== false ? (
                 <TouchableRipple onPress={() => onPressItem(info.item)}>
                     {renderItemProp(info)}

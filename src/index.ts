@@ -27,6 +27,8 @@ export {
     ListItemProps,
     FlatListProps,
     SectionListProps,
+    SectionListRenderItemInfo,
+    SectionListRenderItem,
     FlatGridProps,
     SectionGridProps,
     TextInputProps,
