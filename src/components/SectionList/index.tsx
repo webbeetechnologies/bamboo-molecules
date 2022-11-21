@@ -1,3 +1,2 @@
-export { default as SectionList } from './SectionList';
-export { Props as SectionListProps, ISectionList } from './types';
+export { default as SectionList, ISectionList, Props as SectionListProps } from './SectionList';
 export { sectionListStyles } from './utils';
