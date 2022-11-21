@@ -1,5 +1,5 @@
 import { memo, PropsWithoutRef, ReactElement, RefAttributes, useCallback, useMemo } from 'react';
-import { Text, ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
 import type { FlashList } from '@shopify/flash-list';
 import {
     useComponentStyles,
