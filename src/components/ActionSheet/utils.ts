@@ -10,9 +10,11 @@ type CustomProps = {
 export const actionSheetStyles: ComponentStylePropWithVariants<{}, '', CustomProps> = {
     containerStyle: {
         backgroundColor: 'colors.surface',
+        paddingTop: 'spacings.1',
     },
     indicatorStyle: {
         backgroundColor: 'colors.onSurfaceVariant',
+        opacity: 0.4,
     },
     overlayColor: 'colors.scrim',
 };
