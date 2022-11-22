@@ -15,7 +15,7 @@ const ListItemTitle = ({ style, ...rest }: Props) => {
         },
     });
 
-    return <Text {...rest} style={componentStyles} />;
+    return <Text {...rest} style={componentStyles} selectable={false} />;
 };
 
 export default memo(ListItemTitle);
