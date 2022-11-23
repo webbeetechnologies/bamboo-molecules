@@ -9,3 +9,5 @@ export {
     DocumentResult,
     documentTypes,
 } from './DocumentPicker';
+
+export { normalizeBorderRadiuses } from './normalizeBorderRadiuses';

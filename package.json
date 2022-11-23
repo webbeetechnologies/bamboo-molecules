@@ -1,10 +1,9 @@
 {
   "name": "@webbee/bamboo-molecules",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "repository": "git@github.com:webbeetechnologies/bamboo-molecules.git",
-  "author": "Thet Aung <thetaung.dev@gmail.com>",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "packageManager": "yarn@3.1.1",
   "workspaces": {
     "packages": [
@@ -27,8 +26,11 @@
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "prepare:husky": "husky install",
+    "prepare": "bob build",
     "run:example": "yarn --cwd ./example start",
-    "run:storybook": "yarn --cwd ./example storybook"
+    "run:storybook": "yarn --cwd ./example storybook",
+    "bundle": "yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
+    "release": "yarn bundle && yarn publish dist/webbee-bamboo-molecules-$npm_package_version.tgz --access=public"
   },
   "dependencies": {
     "@react-native-aria/overlays": "^0.3.2",

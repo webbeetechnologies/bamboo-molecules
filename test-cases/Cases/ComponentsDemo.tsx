@@ -31,12 +31,8 @@ const Example = () => {
         HorizontalDivider,
         Switch,
         VerticalDivider,
-        ListItem,
         IconButton,
         Checkbox,
-        FlatList,
-        SectionList,
-        FlatGrid,
         TextInput,
         NumberInput,
         FilePicker,
@@ -46,7 +42,6 @@ const Example = () => {
         DatePickerModal,
         DatePickerInput,
         TimePickerModal,
-        SectionGrid,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
@@ -257,74 +252,6 @@ const Example = () => {
             </Button>
 
             <Switch value={isSwitchOn} onValueChange={toggleSwitch} color="rgba(125, 82, 96, 1)" />
-
-            <FlatList
-                renderItem={({ item }) => (
-                    <ListItem
-                        style={{ marginBottom: 5 }}
-                        divider={true}
-                        right={
-                            <Checkbox
-                                status={isSwitchOn ? 'checked' : 'unchecked'}
-                                onChange={toggleSwitch}
-                            />
-                        }>
-                        <ListItem.Description>{item.description}</ListItem.Description>
-                    </ListItem>
-                )}
-                data={[
-                    { title: 'First item title', description: 'First item description' },
-                    { title: 'Second item title', description: 'Second item description' },
-                ]}
-            />
-
-            <View style={{ height: 250 }}>
-                <SectionList
-                    sections={sectionData}
-                    renderItem={({ item }) => (
-                        <ListItem
-                            onPress={() => {}}
-                            style={{ marginBottom: 5 }}
-                            right={
-                                <IconButton
-                                    name={isSwitchOn ? 'chevron-right' : 'chevron-left'}
-                                    onPress={() => {}}
-                                    variant="outlined"
-                                    style={{ backgroundColor: 'colors.primary', color: '#fff' }}
-                                    animated
-                                />
-                            }>
-                            <ListItem.Title>{item.firstname}</ListItem.Title>
-                        </ListItem>
-                    )}
-                    renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
-                    stickySectionHeadersEnabled
-                />
-            </View>
-
-            <FlatGrid
-                itemDimension={130}
-                data={['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth']}
-                renderItem={({ item }) => <Text>{item}</Text>}
-            />
-
-            <SectionGrid
-                itemDimension={130}
-                sections={[
-                    {
-                        title: 'Numbers',
-                        data: ['1', '2', '3', '4', '5', '6'],
-                    },
-                    {
-                        title: 'Alphabets',
-                        data: ['A', 'B', 'C', 'D', 'E'],
-                    },
-                ]}
-                renderItem={({ item }) => <Text>{item}</Text>}
-                renderSectionHeader={({ section }) => (
-                    <Text style={{ fontSize: 20 }}>{section.title}</Text>
-                )}
-            />
         </View>
     );
 };
@@ -362,32 +289,3 @@ const styles = StyleSheet.create({
         display: 'flex',
     },
 });
-
-const sectionData = [
-    {
-        title: 'Title First',
-        data: [
-            {
-                firstname: 'Ola',
-                lastname: 'Asiko',
-            },
-            {
-                firstname: 'eddy',
-                lastname: 'Hydro',
-            },
-        ],
-    },
-    {
-        title: 'Title Second',
-        data: [
-            {
-                firstname: 'Whales',
-                lastname: 'Teju',
-            },
-            {
-                firstname: '12',
-                lastname: 'USA',
-            },
-        ],
-    },
-];
