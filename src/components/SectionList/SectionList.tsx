@@ -2,7 +2,7 @@ import { forwardRef, memo, PropsWithoutRef, ReactElement, RefAttributes, useMemo
 import { SectionList as RNSectionList, SectionListProps } from 'react-native';
 import { useComponentStyles } from '../../hooks';
 
-type DefaultSectionT<TItem> = {
+export type DefaultSectionT<TItem> = {
     [key: string]: any;
     data?: TItem[];
 };
