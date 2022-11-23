@@ -56,6 +56,7 @@ import {
     inputGroupStyles,
     inputAddonStyles,
     actionSheetStyles,
+    dropdownListStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -126,6 +127,8 @@ const defaultThemeValue: Partial<ITheme> = {
     InputAddon: inputAddonStyles,
 
     ActionSheet: actionSheetStyles,
+
+    DropdownList: dropdownListStyles,
 };
 
 const defaultExtractStyles = memoize(

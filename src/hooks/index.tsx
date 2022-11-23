@@ -1,6 +1,16 @@
 import { useTheme as useThemeAtoms } from '@webbee/bamboo-atoms';
-export { useColorMode, useMediaQuery } from '@webbee/bamboo-atoms';
 import type { ITheme } from '../core';
+
+export { useColorMode, useMediaQuery } from '@webbee/bamboo-atoms';
+export {
+    useActive,
+    useFocus,
+    useHover,
+    useDimensions,
+    useLayout,
+    useREM,
+    useScaledSize,
+} from 'react-native-web-hooks';
 
 export { default as useMolecules } from './useMolecules';
 export { default as usePlatformType } from './usePlatformType';

@@ -54,6 +54,8 @@ export {
     ActionSheetProvider,
     useActionSheetScrollHandlers,
     registerActionSheet,
+    DropdownListProps,
+    DefaultSectionT,
 } from './components';
 
 export {
@@ -87,6 +89,14 @@ export {
     useLatest,
     useSearchable,
     UseSearchableProps,
+    // react-native-web-hooks
+    useActive,
+    useFocus,
+    useHover,
+    useREM,
+    useLayout,
+    useDimensions,
+    useScaledSize,
 } from './hooks';
 
 export {

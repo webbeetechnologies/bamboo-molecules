@@ -38,6 +38,7 @@ export {
     ISectionList,
     SectionListRenderItem,
     SectionListRenderItemInfo,
+    DefaultSectionT,
     sectionListStyles,
 } from './SectionList';
 
@@ -113,7 +114,7 @@ export { TextInputWithMask, TextInputWithMaskProps } from './TextInputWithMask';
 
 export { OptionList, OptionListProps, IOptionList, optionListStyles } from './OptionList';
 
-export { DropdownList, DropdownListProps } from './DropdownList';
+export { DropdownList, DropdownListProps, dropdownListStyles } from './DropdownList';
 
 export { InputGroup, inputGroupStyles, InputGroupProps } from './InputGroup';
 
