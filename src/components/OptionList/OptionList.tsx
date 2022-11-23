@@ -32,11 +32,22 @@ export type Props<
 > = UseSearchableProps &
     Omit<SectionListProps<TItem, TSection>, 'sections'> & {
         records: TSection[];
-        containerStyle?: ViewStyle;
         searchInputContainerStyle?: ViewStyle;
-        multiple?: boolean;
+        /*
+         * when set to true, the items will be selectable. Each item will be wrapped around by TouchableRipple component. Whenever they're pressed, onSelectedItem function will trigger
+         * */
         selectable?: boolean;
+        /*
+         * when set to true, multiple items can be selected and selectedItem will be an array. onSelectItem's argument will be an array.
+         * */
+        multiple?: boolean;
+        /*
+         * Expects an array of TItem in multiple mode. If the item already exists in the array, it will be removed.
+         * */
         selectedItem?: TItem | TItem[];
+        /*
+         * passes the current selectedItem. Will be an array in multiple mode
+         * */
         onSelectItemChange?: (item: TItem | TItem[]) => void;
     };
 
@@ -48,7 +59,6 @@ const OptionList = <
     onQueryChange,
     searchInputProps,
     searchable,
-    containerStyle = {},
     searchInputContainerStyle = {},
     style: styleProp,
     records,
@@ -67,14 +77,13 @@ const OptionList = <
     });
 
     const componentStyles = useComponentStyles('OptionList', [
-        { container: containerStyle, searchInputContainer: searchInputContainerStyle },
+        { searchInputContainer: searchInputContainerStyle },
     ]);
 
-    const { containerStyles, searchInputContainerStyles, style } = useMemo(() => {
-        const { container, searchInputContainer, ...restStyle } = componentStyles;
+    const { searchInputContainerStyles, style } = useMemo(() => {
+        const { searchInputContainer, ...restStyle } = componentStyles;
 
         return {
-            containerStyles: container,
             searchInputContainerStyles: searchInputContainer,
             style: [restStyle, styleProp],
         };
@@ -83,7 +92,12 @@ const OptionList = <
     const onPressItem = useCallback(
         (item: TItem) => {
             onSelectItemChange(
-                multiple ? [...(Array.isArray(selectedItem) ? selectedItem : []), item] : item,
+                // if multiple we push the item into an array and if it's already exists we filter them
+                multiple
+                    ? Array.isArray(selectedItem)
+                        ? selectedItem.filter(sItem => sItem !== item)
+                        : [item]
+                    : item,
             );
         },
         [multiple, onSelectItemChange, selectedItem],
@@ -105,10 +119,10 @@ const OptionList = <
     );
 
     return (
-        <View style={containerStyles}>
+        <>
             <>{SearchField && <View style={searchInputContainerStyles}>{SearchField}</View>}</>
             <SectionList {...rest} sections={records} renderItem={renderItem} style={style} />
-        </View>
+        </>
     );
 };
 
