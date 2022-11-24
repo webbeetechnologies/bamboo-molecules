@@ -57,6 +57,12 @@ import {
     inputAddonStyles,
     actionSheetStyles,
     dropdownListStyles,
+    dialogStyles,
+    dialogActionsStyles,
+    dialogTitleStyles,
+    dialogIconStyles,
+    dialogContentStyles,
+    dialogScrollAreaStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -129,6 +135,13 @@ const defaultThemeValue: Partial<ITheme> = {
     ActionSheet: actionSheetStyles,
 
     DropdownList: dropdownListStyles,
+
+    Dialog: dialogStyles,
+    Dialog_Content: dialogContentStyles,
+    Dialog_Title: dialogTitleStyles,
+    Dialog_Actions: dialogActionsStyles,
+    Dialog_Icon: dialogIconStyles,
+    Dialog_ScrollArea: dialogScrollAreaStyles,
 };
 
 const defaultExtractStyles = memoize(

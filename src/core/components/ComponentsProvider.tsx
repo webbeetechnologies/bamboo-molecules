@@ -44,6 +44,7 @@ import {
     InputGroup,
     InputAddon,
     ActionSheet,
+    Dialog,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -92,6 +93,7 @@ const defaultComponents: DefaultComponents = {
     InputGroup,
     InputAddon,
     ActionSheet,
+    Dialog,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

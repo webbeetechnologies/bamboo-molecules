@@ -56,6 +56,12 @@ export {
     registerActionSheet,
     DropdownListProps,
     DefaultSectionT,
+    DialogProps,
+    DialogContentProps,
+    DialogActionsProps,
+    DialogIconProps,
+    DialogTitleProps,
+    DialogScrollAreaProps,
 } from './components';
 
 export {

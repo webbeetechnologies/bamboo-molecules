@@ -37,6 +37,7 @@ import type {
     InputGroupProps,
     InputAddonProps,
     IActionSheet,
+    Dialog,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -81,6 +82,7 @@ export interface DefaultComponents {
     InputGroup: ComponentType<InputGroupProps>;
     InputAddon: ComponentType<InputAddonProps>;
     ActionSheet: IActionSheet;
+    Dialog: typeof Dialog;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
