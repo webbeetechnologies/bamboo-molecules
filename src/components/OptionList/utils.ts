@@ -7,9 +7,7 @@ type CustomProps = {
 };
 
 export const optionListStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
-    container: {
-        backgroundColor: 'colors.surface',
-    },
+    container: {},
     searchInputContainer: {
         marginBottom: 'spacings.2',
     },
