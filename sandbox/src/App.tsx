@@ -1,45 +1,39 @@
 import * as React from 'react';
-import UsingArraySource from "./UsingArrayDataSource";
+import UsingArraySource from './UsingArrayDataSource';
 // import UsingAsyncSource from './UsingAsyncDataSource';
 
-
 export default function App({ coworkers = [] as string[] }) {
-  // const [workers, setWorkers] = React.useState(coworkers);
+    // const [workers, setWorkers] = React.useState(coworkers);
 
+    // const sortSource = useSortableDataSource({ records: workers as string[], setRecords: () => {}, sort: { }, searchKey: "test" });
+    // const searchSource = useFilterableDataSource({ ...sortSource, searchKey: "test", setRecords: () => {}, sort: { },  });
 
-  // const sortSource = useSortableDataSource({ records: workers as string[], setRecords: () => {}, sort: { }, searchKey: "test" });
-  // const searchSource = useFilterableDataSource({ ...sortSource, searchKey: "test", setRecords: () => {}, sort: { },  });
+    // searchSource.
 
-  // searchSource.
+    // const { useArraySource, useAsyncSource } = require('bamboo-datasource').state;
+    // const { useArraySource, useAsyncSource } = require('bamboo-datasource').redux;
 
-  // const { useArraySource, useAsyncSource } = require('bamboo-datasource').state;
-  // const { useArraySource, useAsyncSource } = require('bamboo-datasource').redux;
+    // const = [model, setModel] useState();
 
-  // const = [model, setModel] useState();
+    // const {records, pagination,} = useArrayStateSource([] , {filter: (filters) => {}});
+    // const asyncSource = useAsyncStateSource<Filterable&Sortable>(async ({filters}, {}) => {
+    //   model
 
-  // const {records, pagination,} = useArrayStateSource([] , {filter: (filters) => {}});
-  // const asyncSource = useAsyncStateSource<Filterable&Sortable>(async ({filters}, {}) => {
-  //   model
+    //   return {
+    //     results: await axios.get(''),
+    //     pagination: await axios.get('')
+    //   };
+    // });
 
-  //   return {
-  //     results: await axios.get(''),
-  //     pagination: await axios.get('')
-  //   };
-  // });
+    // React.useEffect(() => {
+    //   (async () => {
+    //     const customers = await findAllCustomerData();
+    //     setWorkers(customers as any[]);
+    //   })();
+    // }, []);
 
-  // React.useEffect(() => {
-  //   (async () => {
-  //     const customers = await findAllCustomerData();
-  //     setWorkers(customers as any[]);
-  //   })();
-  // }, []);
-
-
-
-  return (
-    <>
+    return (
         <UsingArraySource />
-        {/* <UsingAsyncSource /> */}
-    </>
-  );
+        // <UsingAsyncSource />
+    );
 }

@@ -1,40 +1,48 @@
 import * as React from 'react';
 import { ESortDirection } from './DataSource/SortableDatasource/types';
-import { DataSourceReturnType } from './DataSource/types';
+import { DataSourceReturnType } from './DataSource/__types';
 import { RecordType } from './types';
 
 const getPaginatedProps = (props: DataSourceReturnType<RecordType>) => {
-  if (!props.isPaginated) {
-      return { isPaginated: props.isPaginated }
-  }
-  
-  const {isPaginated, pagination, goToStart, goToEnd, goToNext, goToPrev, setPerPage, } = props;
-  return {isPaginated, pagination, goToStart, goToEnd, goToNext, goToPrev, setPerPage, }
-}
+    if (!props.isPaginated) {
+        return { isPaginated: props.isPaginated };
+    }
+
+    const { isPaginated, pagination, goToStart, goToEnd, goToNext, goToPrev, setPerPage } = props;
+    return { isPaginated, pagination, goToStart, goToEnd, goToNext, goToPrev, setPerPage };
+};
 
 const getSortableProps = (props: DataSourceReturnType<RecordType>) => {
-  if (!props.isSortable) {
-      return { isSortable: props.isSortable }
-  }
-  
-  const {isSortable, sorting, applySort, removeSort, reorderSort, updateSort, } = props;
-  return {isSortable, sorting, applySort, removeSort, reorderSort, updateSort, }
-}
+    if (!props.isSortable) {
+        return { isSortable: props.isSortable };
+    }
 
+    const { isSortable, sorting, applySort, removeSort, reorderSort, updateSort } = props;
+    return { isSortable, sorting, applySort, removeSort, reorderSort, updateSort };
+};
 
-const RenderJSON = (props: {json: Object}) => {
-  return (
-      <pre style={{ width: 500, maxWidth: "100%", flex: 10, flexBasis: 100, background: "#f5f5f5", border: "1px solid #eee", borderRadius: "4px", padding: 8 }}>
-        {JSON.stringify(props.json, null, 4)}
-      </pre>
-  )
-}
+const RenderJSON = (props: { json: Object }) => {
+    return (
+        <pre
+            style={{
+                width: 500,
+                maxWidth: '100%',
+                flex: 10,
+                flexBasis: 100,
+                background: '#f5f5f5',
+                border: '1px solid #eee',
+                borderRadius: '4px',
+                padding: 8,
+            }}>
+            {JSON.stringify(props.json, null, 4)}
+        </pre>
+    );
+};
 
 const RenderRecords: React.FC<DataSourceReturnType<RecordType>> = props => {
     const paginatedProps = getPaginatedProps(props);
-        props;
+    props;
     const sortableProps = getSortableProps(props);
-    
 
     // const sortSource = useSortableDataSource({ records: workers as string[], setRecords: () => {}, sort: { }, searchKey: "test" });
     // const searchSource = useFilterableDataSource({ ...sortSource, searchKey: "test", setRecords: () => {}, sort: { },  });
@@ -93,28 +101,27 @@ const RenderRecords: React.FC<DataSourceReturnType<RecordType>> = props => {
     };
 
     const handleSetPerPage: React.ChangeEventHandler<HTMLInputElement> = e => {
-        paginatedProps.setPerPage?.({ perPage: +e.target.value || 1});
+        paginatedProps.setPerPage?.({ perPage: +e.target.value || 1 });
     };
 
     const handleApplySort = (column: string, direction?: ESortDirection) => {
         sortableProps.applySort?.({ column, direction });
     };
 
-    const handleMoveSort= (newIndex: string, i: number) => {
+    const handleMoveSort = (newIndex: string, i: number) => {
         sortableProps.reorderSort?.({
-          newIndex: newIndex === "" ? i : +newIndex,
-          prevIndex: i,
+            newIndex: newIndex === '' ? i : +newIndex,
+            prevIndex: i,
         });
     };
 
     const handleRemoveSort = (column: string) => {
-        sortableProps.removeSort?.({column});
+        sortableProps.removeSort?.({ column });
     };
 
     const handleUpdateSortDirection = (index: number, direction: ESortDirection) => {
         sortableProps.updateSort?.({ direction, index });
     };
-
 
     // NOTE:: Don't judge the code below; it's meant to be a demo only :D
 
@@ -151,7 +158,7 @@ const RenderRecords: React.FC<DataSourceReturnType<RecordType>> = props => {
                             End &gt;&gt;
                         </button>
                         <input
-                            style={{ flex: 0, flexBasis: 100, width: 100, boxSizing: "border-box" }}
+                            style={{ flex: 0, flexBasis: 100, width: 100, boxSizing: 'border-box' }}
                             value={paginatedProps.pagination.perPage}
                             onChange={handleSetPerPage}
                         />
@@ -160,67 +167,82 @@ const RenderRecords: React.FC<DataSourceReturnType<RecordType>> = props => {
                 </div>
             )}
 
-            <div style={{ display: "flex", alignItems: 'flex-start' }}>
-        {
-           !sortableProps.isSortable ? null :
-          <div>
-            <h1>Sorting</h1>
-              <table width="300" style={{ marginBlockEnd: 15 }}>
-                {
-                  sortableProps.sorting.sort.length > 0 &&
-                  <thead style={{ textAlign: "left" }}>
-                    <tr>
-                      <th>Column</th>
-                      <th>Order</th>
-                    </tr>
-                  </thead>
-                }
-                {
-                  sortableProps.sorting.sort.map(({ column, ...rest }, i) => {
-                    return (
-                      <tbody key={ column }>
-                        <tr>
-                          <td>{column}</td>
-                          <td>
-                            <select key={ column + "sort"} value={rest.direction + ""} onChange={(e) => {
-                              if (e.target.value === '') handleRemoveSort(column)
-                              else handleUpdateSortDirection(i, +e.target.value as unknown as ESortDirection)
-                            }}>
-                              <option value="">Remove</option>
-                              <option value={ESortDirection.Asc}>asc</option>
-                              <option value={ESortDirection.Desc}>desc</option>
-                            </select>
-                          </td>
-                          {
-                            sortableProps.sorting.isNestedSort && 
-                            <td>
-                              <input value={i} type="number" onChange={(e) => handleMoveSort(e.target.value, i)} />
-                            </td>
-                          }
-                        </tr>
-                      </tbody>
-                    )
-                  })
-                }
-                </table>
+            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                {!sortableProps.isSortable ? null : (
+                    <div>
+                        <h1>Sorting</h1>
+                        <table width="300" style={{ marginBlockEnd: 15 }}>
+                            {sortableProps.sorting.sort.length > 0 && (
+                                <thead style={{ textAlign: 'left' }}>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Order</th>
+                                    </tr>
+                                </thead>
+                            )}
+                            {sortableProps.sorting.sort.map(({ column, ...rest }, i) => {
+                                return (
+                                    <tbody key={column}>
+                                        <tr>
+                                            <td>{column}</td>
+                                            <td>
+                                                <select
+                                                    key={column + 'sort'}
+                                                    value={rest.direction + ''}
+                                                    onChange={e => {
+                                                        if (e.target.value === '')
+                                                            handleRemoveSort(column);
+                                                        else
+                                                            handleUpdateSortDirection(
+                                                                i,
+                                                                +e.target
+                                                                    .value as unknown as ESortDirection,
+                                                            );
+                                                    }}>
+                                                    <option value="">Remove</option>
+                                                    <option value={ESortDirection.Asc}>asc</option>
+                                                    <option value={ESortDirection.Desc}>
+                                                        desc
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            {sortableProps.sorting.isNestedSort && (
+                                                <td>
+                                                    <input
+                                                        value={i}
+                                                        type="number"
+                                                        onChange={e =>
+                                                            handleMoveSort(e.target.value, i)
+                                                        }
+                                                    />
+                                                </td>
+                                            )}
+                                        </tr>
+                                    </tbody>
+                                );
+                            })}
+                        </table>
 
+                        <select onChange={e => handleApplySort(e.target.value)} value={column}>
+                            <option>Select a column to Filter on</option>
+                            {['id', 'first_name', 'last_name'].map(val => (
+                                <option key={val} value={val}>
+                                    {val}
+                                </option>
+                            ))}
+                        </select>
+                        <RenderJSON json={sortableProps.sorting} />
+                    </div>
+                )}
 
-                <select onChange={(e) => handleApplySort(e.target.value)} value={column}>
-                  <option>Select a column to Filter on</option>
-                  {["id", "first_name", "last_name"].map((val) => <option key={val} value={val}>{val}</option>)}
-                </select>
-                <RenderJSON json={sortableProps.sorting} />
-            </div>
-        }
-
-        {/* {
+                {/* {
           filters &&
             <div>
               <h1>Filters</h1>
               <button onClick={ handleApplyFilter }>Filter</button>
             </div>
         } */}
-        </div>
+            </div>
         </>
     );
 };

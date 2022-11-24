@@ -1,26 +1,33 @@
-import { DataSourceType } from "../types";
+import { DataSourceActions, EDataSourceActions } from '../createDataSource';
+import { DataSourceInternalState, DataSourceType } from '../types';
 
-// Pagination Base type
+// Paginate methods.
+export enum EPageableActions {
+    Page = 'GOTO_PAGE',
+    Start = 'GOTO_START',
+    End = 'GOTO_END',
+    Next = 'GOTO_NEXT',
+    Prev = 'GOTO_PREV',
+    SetPerPage = 'SET_PER_PAGE',
+}
+
 export interface Pagination {
     pageNumber: number;
     perPage: number;
     disabled?: boolean;
 }
 
+type OnPaginate = <T extends {}>(
+    dataSource: PaginationDataSource<T> & DataSourceType<T>,
+    args: OnPaginateAction,
+) => Omit<Pagination, 'disabled'>;
 
-// Define type of arguments for GoToMethods
-export type PaginateAction = { type: EPageableActions }
-export type GoToArbitrary = { type: EPageableActions.Page, payload: { pageNumber: number } }
-export type SetPerPage = { type: EPageableActions.SetPerPage, payload: {perPage: number} }
-export type OnPaginateAction = PaginateAction | GoToArbitrary | SetPerPage
+export interface PaginationDataSource<T extends {}> extends DataSourceType<T> {
+    isPaginated: boolean;
+    pagination: Pagination;
+    onPaginate?: OnPaginate;
+}
 
-// Data Source Supported/ NotSupported
-export type NotPageable = { isPaginated: false };
-export type Pageable = { isPaginated: true, pagination: Pagination } ;
-export type PageableWithInfo<T extends {}> = { isPaginated: true, pagination: Pagination & PaginationInfo<T> } ;
-
-
-// Added Props for Pagination.
 export interface PaginationInfo<T extends {}> {
     // count of records on current page
     count: number;
@@ -31,60 +38,18 @@ export interface PaginationInfo<T extends {}> {
     page: T[];
 }
 
-
-
-// Add Support for custom pagination handler.
-export type OnPaginate = <T extends {}>(
-    dataSource: PaginatedDataSourcePropsWithoutOnPaginate<T>,
-    args: OnPaginateAction,
-
-    // In case, the developer wants to extend the default behavior.
-    onPaginate?: OnPaginate,
-) => Pagination;
-
-type PaginatedDataSourcePropsWithoutOnPaginate<T extends {}> = Omit<PaginatedDataSourcePropsEnabled<T>, keyof DataSourceGetStateReturnOmits>
-
-
-
-// DataSource InputProps
-export interface PaginatedDataSourcePropsEnabled<T extends {}> extends DataSourceType<T>, Pageable {
-    onPaginate?: OnPaginate;
+export interface PaginationDataSourceResult<T extends {}> {
+    isPaginated: boolean;
+    pagination?: Pagination & PaginationInfo<T>;
 }
 
-export type PaginatedDataSourceProps<T extends {}> = PaginatedDataSourcePropsEnabled<T> | NotPageableReturnProps<T>;
+// Define type of arguments for GoToMethods
+export type PaginateAction = { type: `${EPageableActions}` | `${EDataSourceActions}` };
+export type GoToArbitrary = { type: EPageableActions.Page; payload: { pageNumber: number } };
+export type SetPerPage = { type: EPageableActions.SetPerPage; payload: { perPage: number } };
+export type OnPaginateAction = PaginateAction | GoToArbitrary | SetPerPage | DataSourceActions;
 
-
-
-// Return for a paginated dataSource with pagination switched off.
-export type NotPageableReturnProps<T> = (Required<NotPageable> & DataSourceType<T>);
-
-// Return type for a paginated datasource when pagination is turned on.
-export type PageableReturnProps<T extends {}> = PaginatedDataSourcePropsWithoutOnPaginate<T> & PageableWithInfo<T> & {
-    setPerPage(args: SetPerPage["payload"]): void;
-    goTo(args: GoToArbitrary["payload"]): void,
-    goToPrev(): void,
-    goToNext(): void,
-    goToStart(): void,
-    goToEnd(): void,
-}
-
-
-// Paginated DataSource
-export type PageableDataSource<T extends {}>  = NotPageableReturnProps<T> | PageableReturnProps<T>
-
-
-// Extends Omitted Props
-export interface DataSourceGetStateReturnOmits {
-    onPaginate: true;
-}
-
-// Paginate methods.
-export enum EPageableActions {
-    INIT = "PAGINATION_INIT",
-    Page = "GOTO_PAGE",
-    Start = "GOTO_START",
-    End = "GOTO_END",
-    Next = "GOTO_NEXT",
-    Prev = "GOTO_PREV",
-    SetPerPage = "SET_PER_PAGE"
-}
+export type PaginationReducer = <T extends {}>(
+    dataSource: PaginationDataSource<T> & DataSourceInternalState<T>,
+    args: any,
+) => PaginationDataSource<T>;

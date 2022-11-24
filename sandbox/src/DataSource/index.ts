@@ -1,2 +1,2 @@
-export * from "./createDataSourceHook";
-export * from "./PageableDatasource";
+export * from './createDataSource';
+export * from './PageableDatasource';
