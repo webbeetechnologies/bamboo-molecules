@@ -6,14 +6,14 @@ import { useComponentStyles, useControlledValue, useMolecules } from '../../hook
 import type { PopoverProps } from '../Popover';
 import type { OptionListProps } from '../OptionList';
 import type { ActionSheetProps } from '../ActionSheet';
-import type { ModalProps } from '../Modal';
+import type { DialogProps } from '../Dialog';
 
 enum DropdownListMode {
     Auto = 'auto',
     Popover = 'popover', // mobile only
     Fullscreen = 'fullscreen', // mobile only
     ActionSheet = 'actionsheet', // mobile only
-    Modal = 'modal', // large screen only
+    Dialog = 'dialog', // large screen only
 }
 
 type DefaultSectionT<TItem> = {
@@ -35,14 +35,14 @@ export type Props<
 
     popoverProps?: Omit<PopoverProps, 'trigger' | 'onOpen' | 'onClose' | 'isOpen'>;
     actionSheetProps?: Omit<ActionSheetProps, 'children' | 'isOpen' | 'onClose' | 'onOpen'>;
-    modalProps?: Omit<ModalProps, 'visible'>;
+    dialogProps?: Omit<DialogProps, 'isOpen' | 'children'>;
 };
 
 const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>>({
     mode = 'auto',
     popoverProps,
     actionSheetProps,
-    modalProps = {},
+    dialogProps = {},
     isOpen: isOpenProp,
     setIsOpen: setIsOpenProp,
     onSelectItemChange: onSelectItemChangeProp,
@@ -52,7 +52,7 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
     TriggerComponent,
     ...optionListProps
 }: Props<TItem, TSection>) => {
-    const { OptionList, ActionSheet, Modal } = useMolecules();
+    const { OptionList, ActionSheet, Dialog } = useMolecules();
     const componentStyles = useComponentStyles('DropdownList');
 
     const resolvedMode = useResolveMode(mode, records, optionsThreshold);
@@ -97,8 +97,8 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
         switch (resolvedMode) {
             case DropdownListMode.ActionSheet:
                 return [ActionSheet, { ...actionSheetProps, isOpen, onClose, onOpen }];
-            case DropdownListMode.Modal:
-                return [Modal, { ...modalProps, visible: isOpen, onClose }];
+            case DropdownListMode.Dialog:
+                return [Dialog, { ...dialogProps, isOpen, onClose }];
             default:
                 return [
                     PopoverWrapper,
@@ -112,8 +112,8 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
         isOpen,
         onClose,
         onOpen,
-        Modal,
-        modalProps,
+        Dialog,
+        dialogProps,
         popoverProps,
         TriggerComponent,
     ]);
@@ -151,7 +151,7 @@ const useResolveMode = (
     }
 
     // to avoid looping over all the items, we check if the length of the sections is greater than threshold
-    if (options.length > optionsThreshold) return DropdownListMode.Modal;
+    if (options.length > optionsThreshold) return DropdownListMode.Dialog;
 
     let itemsLength = 0;
 
@@ -162,7 +162,7 @@ const useResolveMode = (
         itemsLength += t?.data.length;
     }
 
-    if (itemsLength > optionsThreshold) return DropdownListMode.Modal;
+    if (itemsLength > optionsThreshold) return DropdownListMode.Dialog;
 
     // if less than threshold
     if (Platform.OS === 'ios') return DropdownListMode.ActionSheet;
