@@ -20,8 +20,6 @@ export type Props = ModalProps & {
     confirmLabel?: string;
     hours?: number | undefined;
     minutes?: number | undefined;
-    visible: boolean | undefined;
-    onDismiss: () => any;
     onConfirm: (hoursAndMinutes: { hours: number; minutes: number }) => any;
     animationType?: 'slide' | 'fade' | 'none';
     keyboardIcon?: string;
@@ -29,8 +27,8 @@ export type Props = ModalProps & {
 };
 
 export function TimePickerModal({
-    visible,
-    onDismiss,
+    isOpen,
+    onClose,
     onConfirm,
     hours,
     minutes,
@@ -75,11 +73,11 @@ export function TimePickerModal({
 
     return (
         <Modal
+            {...rest}
             animationType={animationType}
-            visible={visible}
+            isOpen={isOpen}
             contentStyle={componentStyles.modalContent}
-            onClose={onDismiss}
-            {...rest}>
+            onClose={onClose}>
             <KeyboardAvoidingView style={componentStyles.keyboardView} behavior={'padding'}>
                 <View style={componentStyles.labelContainer}>
                     <Text style={componentStyles.label}>
@@ -108,7 +106,7 @@ export function TimePickerModal({
                         accessibilityLabel="toggle keyboard"
                     />
                     <View style={componentStyles.fill} />
-                    <Button onPress={onDismiss}>{cancelLabel}</Button>
+                    <Button onPress={onClose}>{cancelLabel}</Button>
                     <Button
                         onPress={() => onConfirm({ hours: localHours, minutes: localMinutes })}
                         uppercase={uppercase}>

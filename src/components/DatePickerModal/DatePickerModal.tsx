@@ -11,7 +11,7 @@ export function DatePickerModal(props: DatePickerModalProps) {
     const dimensions = useWindowDimensions();
 
     const {
-        visible,
+        isOpen,
         animationType,
         disableStatusBar,
         disableStatusBarPadding,
@@ -54,8 +54,8 @@ export function DatePickerModal(props: DatePickerModalProps) {
                 size={dimensions.width > 650 ? 'lg' : 'md'}
                 animationType={animationTypeCalculated}
                 transparent={true}
-                visible={visible}
-                onClose={rest.onDismiss}
+                isOpen={isOpen}
+                onClose={rest.onClose}
                 presentationStyle="overFullScreen"
                 supportedOrientations={supportedOrientations}
                 elevation={0}
