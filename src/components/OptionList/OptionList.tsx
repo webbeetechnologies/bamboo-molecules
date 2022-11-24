@@ -32,6 +32,7 @@ export type Props<
 > = UseSearchableProps &
     Omit<SectionListProps<TItem, TSection>, 'sections'> & {
         records: TSection[];
+        containerStyle?: ViewStyle;
         searchInputContainerStyle?: ViewStyle;
         /*
          * when set to true, the items will be selectable. Each item will be wrapped around by TouchableRipple component. Whenever they're pressed, onSelectedItem function will trigger
@@ -59,6 +60,7 @@ const OptionList = <
     onQueryChange,
     searchInputProps,
     searchable,
+    containerStyle = {},
     searchInputContainerStyle = {},
     style: styleProp,
     records,
@@ -77,13 +79,14 @@ const OptionList = <
     });
 
     const componentStyles = useComponentStyles('OptionList', [
-        { searchInputContainer: searchInputContainerStyle },
+        { container: containerStyle, searchInputContainer: searchInputContainerStyle },
     ]);
 
-    const { searchInputContainerStyles, style } = useMemo(() => {
-        const { searchInputContainer, ...restStyle } = componentStyles;
+    const { containerStyles, searchInputContainerStyles, style } = useMemo(() => {
+        const { container, searchInputContainer, ...restStyle } = componentStyles;
 
         return {
+            containerStyles: container,
             searchInputContainerStyles: searchInputContainer,
             style: [restStyle, styleProp],
         };
@@ -119,10 +122,10 @@ const OptionList = <
     );
 
     return (
-        <>
+        <View style={containerStyles}>
             <>{SearchField && <View style={searchInputContainerStyles}>{SearchField}</View>}</>
             <SectionList {...rest} sections={records} renderItem={renderItem} style={style} />
-        </>
+        </View>
     );
 };
 

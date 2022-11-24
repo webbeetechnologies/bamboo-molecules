@@ -1,5 +1,5 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
-import { Platform, useWindowDimensions } from 'react-native';
+import { Platform, StyleSheet, useWindowDimensions } from 'react-native';
 import type { ActionSheetRef } from 'react-native-actions-sheet';
 
 import { TriggerProps, withPopper } from '../../hocs/withPopper';
@@ -35,7 +35,7 @@ export type Props<
     TriggerComponent: (props: TriggerProps | { onPress: () => void }) => JSX.Element;
 
     popoverProps?: Omit<PopoverProps, 'trigger' | 'onOpen' | 'onClose'>;
-    actionSheetProps?: ActionSheetProps;
+    actionSheetProps?: Omit<ActionSheetProps, 'children' | 'onClose' | 'onOpen'>;
     modalProps?: Omit<ModalProps, 'visible'>;
 };
 
@@ -49,7 +49,7 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
     onSelectItemChange: onSelectItemChangeProp,
     records,
     optionsThreshold,
-    contentContainerStyle,
+    containerStyle,
     TriggerComponent,
     ...optionListProps
 }: Props<TItem, TSection>) => {
@@ -65,13 +65,14 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
     );
 
     const listStyles = useMemo(() => {
-        const { popoverContainer } = componentStyles;
+        const { popoverContainer, ...restStyles } = componentStyles;
 
-        return [
+        return StyleSheet.flatten([
             resolvedMode === DropdownListMode.Popover ? popoverContainer : {},
-            contentContainerStyle,
-        ];
-    }, [componentStyles, resolvedMode, contentContainerStyle]);
+            restStyles,
+            containerStyle,
+        ]);
+    }, [componentStyles, resolvedMode, containerStyle]);
 
     const [WrapperComponent, props] = useMemo(() => {
         switch (resolvedMode) {
@@ -143,7 +144,7 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
                     {...optionListProps}
                     records={records}
                     onSelectItemChange={onSelectItemChange}
-                    contentContainerStyle={listStyles}
+                    containerStyle={listStyles}
                 />
             </WrapperComponent>
         </>

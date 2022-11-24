@@ -5,7 +5,9 @@ type CustomProps = {
     popoverContainer: ViewStyle;
 };
 
-export const dropdownListStyles: ComponentStylePropWithVariants<{}, '', CustomProps> = {
+export const dropdownListStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
+    paddingHorizontal: 'spacings.3',
+
     popoverContainer: {
         minWidth: 112,
     },
