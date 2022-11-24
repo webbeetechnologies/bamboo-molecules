@@ -1,13 +1,13 @@
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ProvideMolecules } from '../../common';
 import { Example as ListItem, ListItemTitle } from '../ListItem/ListItem';
 
-import { Example } from './OptionList';
+import { ExampleWithToggle } from './DropdownList';
 
 export default {
-    title: 'components/OptionList',
-    component: Example,
+    title: 'components/DropdownList',
+    component: ExampleWithToggle,
     decorators: [
         Story => (
             <ProvideMolecules>
@@ -15,12 +15,10 @@ export default {
             </ProvideMolecules>
         ),
     ],
-} as ComponentMeta<typeof Example>;
+} as ComponentMeta<typeof ExampleWithToggle>;
 
-export const Default: ComponentStory<typeof Example> = args => (
-    <View style={{ minWidth: 300 }}>
-        <Example {...args} />
-    </View>
+export const Default: ComponentStory<typeof ExampleWithToggle> = args => (
+    <ExampleWithToggle {...args} />
 );
 
 Default.args = {
@@ -70,8 +68,9 @@ Default.args = {
     renderSectionHeader: ({ section }: any) => (
         <Text style={{ fontSize: 25 }}>{section.title}</Text>
     ),
-    searchInputProps: {
-        label: 'Search . . .',
+    actionSheetProps: {
+        gestureEnabled: true,
+        snapPoints: [30, 50, 100],
     },
 };
 
