@@ -78,7 +78,7 @@ export function TimePickerModal({
             animationType={animationType}
             visible={visible}
             contentStyle={componentStyles.modalContent}
-            onDismiss={onDismiss}
+            onClose={onDismiss}
             {...rest}>
             <KeyboardAvoidingView style={componentStyles.keyboardView} behavior={'padding'}>
                 <View style={componentStyles.labelContainer}>

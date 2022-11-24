@@ -55,7 +55,7 @@ export function DatePickerModal(props: DatePickerModalProps) {
                 animationType={animationTypeCalculated}
                 transparent={true}
                 visible={visible}
-                onDismiss={rest.onDismiss}
+                onClose={rest.onDismiss}
                 presentationStyle="overFullScreen"
                 supportedOrientations={supportedOrientations}
                 elevation={0}
