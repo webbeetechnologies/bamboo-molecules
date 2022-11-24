@@ -1,9 +1,8 @@
-import { forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import { forwardRef, memo, useCallback, useMemo } from 'react';
 import { Platform, StyleSheet, useWindowDimensions } from 'react-native';
-import type { ActionSheetRef } from 'react-native-actions-sheet';
 
 import { TriggerProps, withPopper } from '../../hocs/withPopper';
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { PopoverProps } from '../Popover';
 import type { OptionListProps } from '../OptionList';
 import type { ActionSheetProps } from '../ActionSheet';
@@ -30,12 +29,12 @@ export type Props<
     // optionsThreshhold: configuration to show maximum number of options in popover/actionsheet when mode == DropdownListMode.auto (default: 5).
     // on reaching threshold, switches to a full screen view in smaller devices.
     optionsThreshold?: number;
-    isOpen: boolean;
-    onDropdownToggle: (isOpen?: boolean) => void;
+    isOpen?: boolean;
+    setIsOpen?: (isOpen: boolean) => void;
     TriggerComponent: (props: TriggerProps | { onPress: () => void }) => JSX.Element;
 
-    popoverProps?: Omit<PopoverProps, 'trigger' | 'onOpen' | 'onClose'>;
-    actionSheetProps?: Omit<ActionSheetProps, 'children' | 'onClose' | 'onOpen'>;
+    popoverProps?: Omit<PopoverProps, 'trigger' | 'onOpen' | 'onClose' | 'isOpen'>;
+    actionSheetProps?: Omit<ActionSheetProps, 'children' | 'isOpen' | 'onClose' | 'onOpen'>;
     modalProps?: Omit<ModalProps, 'visible'>;
 };
 
@@ -44,8 +43,8 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
     popoverProps,
     actionSheetProps,
     modalProps = {},
-    isOpen,
-    onDropdownToggle,
+    isOpen: isOpenProp,
+    setIsOpen: setIsOpenProp,
     onSelectItemChange: onSelectItemChangeProp,
     records,
     optionsThreshold,
@@ -56,13 +55,7 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
     const { OptionList, ActionSheet, Modal } = useMolecules();
     const componentStyles = useComponentStyles('DropdownList');
 
-    const ref = useRef<ActionSheetRef>(null);
-    const dimensions = useWindowDimensions();
-
-    const resolvedMode = useMemo(
-        () => resolveMode(mode, records, optionsThreshold, dimensions.width),
-        [dimensions.width, mode, optionsThreshold, records],
-    );
+    const resolvedMode = useResolveMode(mode, records, optionsThreshold);
 
     const listStyles = useMemo(() => {
         const { popoverContainer, ...restStyles } = componentStyles;
@@ -74,72 +67,63 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
         ]);
     }, [componentStyles, resolvedMode, containerStyle]);
 
-    const [WrapperComponent, props] = useMemo(() => {
-        switch (resolvedMode) {
-            case DropdownListMode.ActionSheet:
-                return [ActionSheet, actionSheetProps];
-            case DropdownListMode.Modal:
-                return [Modal, modalProps];
-            default:
-                return [PopoverWrapper, popoverProps];
-        }
-    }, [resolvedMode, ActionSheet, actionSheetProps, Modal, modalProps, popoverProps]);
+    const [isOpen, setIsOpen] = useControlledValue({
+        value: isOpenProp,
+        onChange: setIsOpenProp,
+    });
+
+    const onToggleDropdownList = useCallback(() => {
+        setIsOpen(!isOpen);
+    }, [isOpen, setIsOpen]);
 
     const onClose = useCallback(() => {
-        if (isOpen) onDropdownToggle(true);
-    }, [isOpen, onDropdownToggle]);
+        if (isOpen) setIsOpen(false);
+    }, [isOpen, setIsOpen]);
 
     const onOpen = useCallback(() => {
-        if (!isOpen) onDropdownToggle(false);
-    }, [isOpen, onDropdownToggle]);
+        if (!isOpen) setIsOpen(true);
+    }, [isOpen, setIsOpen]);
 
     const onSelectItemChange = useCallback(
         (item: TItem | TItem[]) => {
             onSelectItemChangeProp?.(item);
 
-            if (resolvedMode === DropdownListMode.ActionSheet) {
-                ref?.current?.hide();
-                return; // because hide() will run onClose which will trigger onDropdownToggle
-            }
-
-            onDropdownToggle(true);
+            setIsOpen(false);
         },
-        [onDropdownToggle, onSelectItemChangeProp, resolvedMode],
+        [setIsOpen, onSelectItemChangeProp],
     );
 
-    const onToggleDropdownList = useCallback(() => {
-        onDropdownToggle(isOpen);
-    }, [isOpen, onDropdownToggle]);
-
-    useEffect(() => {
-        if (resolvedMode !== DropdownListMode.ActionSheet) return;
-
-        if (isOpen && !ref?.current?.isOpen()) {
-            ref?.current?.show();
-            return;
+    const [WrapperComponent, props] = useMemo(() => {
+        switch (resolvedMode) {
+            case DropdownListMode.ActionSheet:
+                return [ActionSheet, { ...actionSheetProps, isOpen, onClose, onOpen }];
+            case DropdownListMode.Modal:
+                return [Modal, { ...modalProps, visible: isOpen, onClose }];
+            default:
+                return [
+                    PopoverWrapper,
+                    { ...popoverProps, trigger: TriggerComponent, isOpen, onOpen, onClose },
+                ];
         }
-
-        ref?.current?.hide();
-    }, [isOpen, resolvedMode]);
+    }, [
+        resolvedMode,
+        ActionSheet,
+        actionSheetProps,
+        isOpen,
+        onClose,
+        onOpen,
+        Modal,
+        modalProps,
+        popoverProps,
+        TriggerComponent,
+    ]);
 
     return (
         <>
             {resolvedMode !== DropdownListMode.Popover && (
                 <TriggerComponent onPress={onToggleDropdownList} />
             )}
-            <WrapperComponent
-                {...(props as any)}
-                // for Popover
-                trigger={TriggerComponent}
-                isOpen={isOpen}
-                onOpen={onOpen}
-                // for ActionSheet and Popover
-                onClose={onClose}
-                // for modal
-                visible={isOpen}
-                onDismiss={onClose}
-                onRequestClose={onClose}
-                ref={ref}>
+            <WrapperComponent {...(props as any)}>
                 <OptionList
                     {...optionListProps}
                     records={records}
@@ -151,15 +135,18 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
     );
 };
 
-const resolveMode = (
+const PopoverWrapper = withPopper<PopoverProps>(() => null);
+
+const useResolveMode = (
     mode: `${DropdownListMode}`,
     options: { data: any[] }[],
     optionsThreshold: number | undefined,
-    screenWidth: number,
 ) => {
+    const { width } = useWindowDimensions();
+
     if (mode !== DropdownListMode.Auto) return mode;
 
-    if (screenWidth > 920 || optionsThreshold === undefined) {
+    if (width > 920 || optionsThreshold === undefined) {
         return DropdownListMode.Popover;
     }
 
@@ -182,7 +169,5 @@ const resolveMode = (
 
     return DropdownListMode.Popover;
 };
-
-const PopoverWrapper = withPopper<PopoverProps>(() => null);
 
 export default memo(forwardRef(DropdownList));
