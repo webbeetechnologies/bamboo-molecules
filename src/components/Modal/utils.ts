@@ -19,6 +19,8 @@ export const defaultStyles: ComponentStylePropWithVariants<
 > = {
     modalBackground: {
         flex: 1,
+        backgroundColor: 'colors.scrim',
+        opacity: 0.3,
     },
     contentContainer: {
         justifyContent: 'center',
@@ -26,8 +28,6 @@ export const defaultStyles: ComponentStylePropWithVariants<
         flex: 1,
     },
     modalContent: {
-        flex: 1,
-        width: '100%',
         backgroundColor: 'colors.surface',
     },
 

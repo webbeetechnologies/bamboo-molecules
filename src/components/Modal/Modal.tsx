@@ -10,7 +10,7 @@ import {
 import type { SurfaceProps } from '../Surface';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
-export type Props = Omit<ModalProps, 'onDismiss' | 'onRequestClose'> & {
+export type Props = Omit<ModalProps, 'visible' | 'onDismiss' | 'onRequestClose'> & {
     /**
      * style for the contentContainer
      */
@@ -30,6 +30,10 @@ export type Props = Omit<ModalProps, 'onDismiss' | 'onRequestClose'> & {
      */
     elevation?: SurfaceProps['elevation'];
     /**
+     * to determine whether the modal is visible or not
+     */
+    isOpen: boolean | undefined;
+    /**
      * onClose function will be trigger when the modal is dismissed
      */
     onClose?: () => void;
@@ -43,6 +47,7 @@ const Modal = (
         contentStyle: contentStyleProp,
         size = 'md',
         elevation = 2,
+        isOpen,
         onClose,
         ...rest
     }: Props,
@@ -79,6 +84,7 @@ const Modal = (
             transparent={true}
             statusBarTranslucent={true}
             {...rest}
+            visible={!!isOpen}
             ref={ref}
             onRequestClose={onClose}>
             <>
