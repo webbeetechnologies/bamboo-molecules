@@ -1,32 +1,29 @@
-import { useEffect, useRef } from 'react';
-import { useMolecules } from 'bamboo-molecules';
-import type { ActionSheetProps, ActionSheetRef } from 'react-native-actions-sheet';
+import { useCallback, useState } from 'react';
+import { useMolecules, ActionSheetProps } from 'bamboo-molecules';
 
 export type Props = ActionSheetProps & {};
 
 export const Example = (props: ActionSheetProps) => {
     const { ActionSheet } = useMolecules();
-    const actionSheetRef = useRef<ActionSheetRef>(null);
 
-    useEffect(() => {
-        // to display on render
-        actionSheetRef.current?.show();
-    }, []);
-
-    return <ActionSheet {...props} ref={actionSheetRef} />;
+    return <ActionSheet {...props} />;
 };
 
 export const ExampleWithTrigger = (props: ActionSheetProps) => {
     const { ActionSheet, Button } = useMolecules();
-    const actionSheetRef = useRef<ActionSheetRef>(null);
-    const onOpen = () => {
-        actionSheetRef.current?.show();
-    };
+    const [isOpen, setIsOpen] = useState(false);
+    const onOpen = useCallback(() => {
+        setIsOpen(true);
+    }, []);
+
+    const onClose = useCallback(() => {
+        setIsOpen(false);
+    }, []);
 
     return (
         <>
             <Button onPress={onOpen}>Show Action Sheet</Button>
-            <ActionSheet {...props} ref={actionSheetRef} />
+            <ActionSheet {...props} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
         </>
     );
 };

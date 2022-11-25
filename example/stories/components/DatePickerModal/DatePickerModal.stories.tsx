@@ -11,7 +11,7 @@ export const Default: ComponentStory<typeof Example> = args => <Example {...args
 
 Default.args = {
     locale: 'en',
-    visible: true,
+    isOpen: true,
 };
 
 Default.parameters = {

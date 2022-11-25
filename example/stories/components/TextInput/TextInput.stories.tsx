@@ -12,7 +12,7 @@ export default {
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 Default.args = {
-    placeholder: 'Placeholder',
+    label: 'Placeholder',
     multiline: false,
 };
 

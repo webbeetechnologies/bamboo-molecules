@@ -12,6 +12,7 @@ export default {
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 Default.args = {
+    isOpen: true,
     gestureEnabled: true,
     snapPoints: [50, 80, 100],
     closable: false,
