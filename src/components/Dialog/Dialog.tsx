@@ -1,4 +1,4 @@
-import { memo, ReactNode } from 'react';
+import { memo, ReactNode, Children, isValidElement, cloneElement, useMemo } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
@@ -69,9 +69,29 @@ const Dialog = ({ children, onClose, contentStyle = {}, ...rest }: Props) => {
     const { Modal } = useMolecules();
     const componentStyles = useComponentStyles('Dialog', { container: contentStyle });
 
+    const { containerStyle, childStyle } = useMemo(() => {
+        const { spacing, container } = componentStyles;
+
+        return {
+            childStyle: {
+                marginTop: spacing,
+            },
+            containerStyle: container,
+        };
+    }, [componentStyles]);
+
     return (
-        <Modal elevation={4} {...rest} onClose={onClose} contentStyle={componentStyles.container}>
-            {children}
+        <Modal elevation={2} {...rest} onClose={onClose} contentStyle={containerStyle}>
+            {Children.toArray(children)
+                .filter(child => child != null && typeof child !== 'boolean')
+                .map((child, i) => {
+                    if (i === 0 && isValidElement(child)) {
+                        return cloneElement(child, {
+                            style: [childStyle, child.props.style],
+                        });
+                    }
+                    return child;
+                })}
         </Modal>
     );
 };

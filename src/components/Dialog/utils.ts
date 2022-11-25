@@ -5,9 +5,12 @@ type States = '';
 
 type CustomProps = {
     container?: ViewStyle;
+    spacing?: string;
 };
 
 export const dialogStyles: ComponentStylePropWithVariants<TextStyle, States, CustomProps> = {
+    spacing: 'spacings.6',
+
     container: {
         justifyContent: 'flex-start',
         borderRadius: 'roundness.7' as unknown as number,
@@ -48,13 +51,12 @@ export const dialogIconStyles: ComponentStylePropWithVariants<
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingTop: 'spacings.6',
     },
 };
 
 export const dialogContentStyles: ComponentStylePropWithVariants<TextStyle, ''> = {
-    paddingBottom: 24,
-    paddingHorizontal: 24,
+    paddingBottom: 'spacings.6',
+    paddingHorizontal: 'spacings.6',
 };
 
 export const dialogActionsStyles: ComponentStylePropWithVariants<
