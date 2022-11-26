@@ -71,19 +71,17 @@ const DialogActions = (
 
     const { spacing, containerStyle, childrenProps } = useMemo(() => {
         const { spacing: _spacing, container } = componentStyles;
-        const actionsLength = Children.toArray(children).length;
 
         return {
             spacing: _spacing,
             containerStyle: container,
             childrenProps: (i: number) => ({
-                compact: true,
                 style: {
-                    paddingRight: i + 1 === actionsLength ? 0 : spacing,
+                    marginLeft: i === 0 ? 0 : spacing,
                 },
             }),
         };
-    }, [children, componentStyles]);
+    }, [componentStyles]);
 
     return (
         <View {...rest} style={containerStyle} ref={ref}>

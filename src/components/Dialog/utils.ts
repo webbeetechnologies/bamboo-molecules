@@ -35,7 +35,6 @@ export const dialogScrollAreaStyles: ComponentStylePropWithVariants<ViewStyle, '
     flexGrow: 1,
     flexShrink: 1,
     marginBottom: 'spacings.6',
-    paddingHorizontal: 'spacings.6',
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: 'colors.surfaceVariant',
@@ -47,6 +46,7 @@ export const dialogIconStyles: ComponentStylePropWithVariants<
     { container: ViewStyle }
 > = {
     color: 'colors.secondary',
+    paddingTop: 'spacings.6',
 
     container: {
         alignItems: 'center',
@@ -57,6 +57,7 @@ export const dialogIconStyles: ComponentStylePropWithVariants<
 export const dialogContentStyles: ComponentStylePropWithVariants<TextStyle, ''> = {
     paddingBottom: 'spacings.6',
     paddingHorizontal: 'spacings.6',
+    flex: 1,
 };
 
 export const dialogActionsStyles: ComponentStylePropWithVariants<

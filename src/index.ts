@@ -59,7 +59,6 @@ export {
     DialogProps,
     DialogContentProps,
     DialogActionsProps,
-    DialogIconProps,
     DialogTitleProps,
     DialogScrollAreaProps,
 } from './components';

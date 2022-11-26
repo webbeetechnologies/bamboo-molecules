@@ -3,6 +3,8 @@ import type { StyleProp, ViewStyle } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { ModalProps } from '../Modal';
+import type { IconProps } from '../Icon';
+import DialogIcon from './DialogIcon';
 
 export type Props = ModalProps & {
     /**
@@ -17,6 +19,7 @@ export type Props = ModalProps & {
      * Content of the `Dialog`.
      */
     children: ReactNode;
+    Icon?: IconProps;
     style?: StyleProp<ViewStyle>;
 };
 
@@ -65,7 +68,7 @@ export type Props = ModalProps & {
  * export default MyComponent;
  * ```
  */
-const Dialog = ({ children, onClose, contentStyle = {}, ...rest }: Props) => {
+const Dialog = ({ children, onClose, Icon, contentStyle = {}, ...rest }: Props) => {
     const { Modal } = useMolecules();
     const componentStyles = useComponentStyles('Dialog', { container: contentStyle });
 
@@ -82,16 +85,19 @@ const Dialog = ({ children, onClose, contentStyle = {}, ...rest }: Props) => {
 
     return (
         <Modal elevation={2} {...rest} onClose={onClose} contentStyle={containerStyle}>
-            {Children.toArray(children)
-                .filter(child => child != null && typeof child !== 'boolean')
-                .map((child, i) => {
-                    if (i === 0 && isValidElement(child)) {
-                        return cloneElement(child, {
-                            style: [childStyle, child.props.style],
-                        });
-                    }
-                    return child;
-                })}
+            <>
+                {Icon ? <DialogIcon {...Icon} /> : null}
+                {Children.toArray(children)
+                    .filter(child => child != null && typeof child !== 'boolean')
+                    .map((child, i) => {
+                        if (i === 0 && isValidElement(child) && !Icon) {
+                            return cloneElement(child, {
+                                style: [childStyle, child.props.style],
+                            });
+                        }
+                        return child;
+                    })}
+            </>
         </Modal>
     );
 };
