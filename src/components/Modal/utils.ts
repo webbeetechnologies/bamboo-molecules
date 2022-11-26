@@ -29,17 +29,23 @@ export const defaultStyles: ComponentStylePropWithVariants<
     },
     modalContent: {
         backgroundColor: 'colors.surface',
+        width: '100%',
+        overflow: 'hidden',
     },
 
     sizes: {
-        md: {},
+        md: {
+            modalContent: {
+                maxWidth: 400,
+                maxHeight: 600,
+                borderRadius: 10,
+            },
+        },
         lg: {
             modalContent: {
                 maxWidth: 600,
                 maxHeight: 800,
                 borderRadius: 10,
-                width: '100%',
-                overflow: 'hidden',
             },
         },
     },
