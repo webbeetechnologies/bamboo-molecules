@@ -12,7 +12,8 @@ export default {
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 Default.args = {
-    label: 'Placeholder',
+    label: 'Label',
+    placeholder: 'Placeholder',
     multiline: false,
 };
 
