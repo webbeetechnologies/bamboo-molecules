@@ -13,8 +13,7 @@ export const ExampleWithContent = (props: Props) => {
     const { Dialog, Text, Button } = useMolecules();
 
     return (
-        <Dialog {...props}>
-            <Dialog.Icon name="cellphone-check" />
+        <Dialog Icon={{ name: 'cellphone-check' }} {...props}>
             <Dialog.Title>Dialog with Hero Icon</Dialog.Title>
             <Dialog.Content>
                 <Text>

@@ -15,7 +15,6 @@ Default.args = {
     isOpen: true,
     gestureEnabled: true,
     snapPoints: [50, 80, 100],
-    closable: false,
     children: (
         <>
             <ListItem right={<Icon name="account" size={26} />} onPress={() => {}}>
@@ -38,28 +37,22 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-    const { ActionSheet } = useMolecules();
-    const actionSheetRef = useRef<ActionSheetRef>(null);
+    const { ActionSheet, Button } = useMolecules();
+    const [isOpen, setIsOpen] = useState(false);
+    const onOpen = useCallback(() => {
+        setIsOpen(true);
+    }, []);
 
-    useEffect(() => { // to display on render
-        actionSheetRef.current?.show();
+    const onClose = useCallback(() => {
+        setIsOpen(false);
     }, []);
 
     return (
-        <ActionSheet gestureEnabled={true} snapPoints={[50, 80, 100]} closable={false} ref={actionSheetRef}>
-            <>
-                <ListItem right={<Icon name="account" size={26} />} onPress={() => {}}>
-                    <ListItemTitle>First Item</ListItemTitle>
-                </ListItem>
-                <ListItem right={<Icon name="account" size={26} />} onPress={() => {}}>
-                    <ListItemTitle>Second Item</ListItemTitle>
-                </ListItem>
-                <ListItem right={<Icon name="account" size={26} />} onPress={() => {}}>
-                    <ListItemTitle>Third Item</ListItemTitle>
-                </ListItem>
-            </>
-        </ActionSheet>
-);
+        <>
+            <Button onPress={onOpen}>Show Action Sheet</Button>
+            <ActionSheet {...props} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+        </>
+    );
 `,
             language: 'tsx',
             type: 'auto',
