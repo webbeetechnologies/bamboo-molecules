@@ -108,17 +108,17 @@ const RadioButtonItem = (
     }: Props,
     ref: any,
 ) => {
-    const { value: contextValue, onValueChange } = useContext(RadioButtonContext);
+    const context = useContext(RadioButtonContext);
     const { TouchableRipple, View, Text } = useMolecules();
 
     const checked = useMemo(
         () =>
             isChecked({
-                contextValue: contextValue,
+                contextValue: context?.value,
                 status,
                 value,
             }) === 'checked',
-        [contextValue, status, value],
+        [context?.value, status, value],
     );
 
     const componentStyles = useComponentStyles('RadioButton', styleProp, {
@@ -179,10 +179,10 @@ const RadioButtonItem = (
         () =>
             handlePress({
                 onPress: onPress,
-                onValueChange: onValueChange,
+                onValueChange: context?.onValueChange,
                 value,
             }),
-        [onPress, onValueChange, value],
+        [onPress, context?.onValueChange, value],
     );
 
     return (

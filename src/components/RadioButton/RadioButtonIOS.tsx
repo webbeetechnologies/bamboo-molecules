@@ -55,16 +55,16 @@ const RadioButtonIOS = (
     ref: any,
 ) => {
     const { TouchableRipple, Icon } = useMolecules();
-    const { value: contextValue, onValueChange } = useContext(RadioButtonContext);
+    const context = useContext(RadioButtonContext);
 
     const checked = useMemo(
         () =>
             isChecked({
-                contextValue,
+                contextValue: context?.value,
                 status,
                 value,
             }) === 'checked',
-        [contextValue, status, value],
+        [context?.value, status, value],
     );
 
     const componentStyles = useComponentStyles(
@@ -98,10 +98,10 @@ const RadioButtonIOS = (
                   handlePress({
                       onPress,
                       value,
-                      onValueChange,
+                      onValueChange: context?.onValueChange,
                   });
               };
-    }, [disabled, onPress, onValueChange, value]);
+    }, [disabled, onPress, context?.onValueChange, value]);
 
     return (
         <TouchableRipple

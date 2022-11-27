@@ -71,7 +71,7 @@ const RadioButtonAndroid = (
     ref: any,
 ) => {
     const { TouchableRipple } = useMolecules();
-    const { value: contextValue, onValueChange } = useContext(RadioButtonContext);
+    const context = useContext(RadioButtonContext);
 
     const { current: borderAnim } = useRef<Animated.Value>(new Animated.Value(BORDER_WIDTH));
 
@@ -82,11 +82,11 @@ const RadioButtonAndroid = (
     const checked = useMemo(
         () =>
             isChecked({
-                contextValue: contextValue,
+                contextValue: context?.value,
                 status,
                 value,
             }) === 'checked',
-        [contextValue, status, value],
+        [context?.value, status, value],
     );
 
     const componentStyles = useComponentStyles('RadioButton', style, {
@@ -178,11 +178,11 @@ const RadioButtonAndroid = (
                 : () => {
                       handlePress({
                           onPress,
-                          onValueChange,
+                          onValueChange: context?.onValueChange,
                           value,
                       });
                   },
-        [disabled, onPress, onValueChange, value],
+        [disabled, onPress, context?.onValueChange, value],
     );
 
     return (
