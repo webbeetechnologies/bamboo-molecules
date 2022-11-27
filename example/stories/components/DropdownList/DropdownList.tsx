@@ -23,7 +23,7 @@ export const ExampleWithToggle = <T,>(props: Props<T>) => {
         <DropdownList
             {...props}
             isOpen={isOpen}
-            onDropdownToggle={onToggle}
+            setIsOpen={onToggle}
             TriggerComponent={TriggerComponent}
         />
     );

@@ -8,5 +8,6 @@ type CustomProps = {
 export const dropdownListStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
     popoverContainer: {
         minWidth: 112,
+        backgroundColor: 'colors.surface',
     },
 };
