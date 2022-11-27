@@ -38,6 +38,7 @@ import type {
     InputAddonProps,
     IActionSheet,
     Dialog,
+    RadioButton,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -83,6 +84,7 @@ export interface DefaultComponents {
     InputAddon: ComponentType<InputAddonProps>;
     ActionSheet: IActionSheet;
     Dialog: typeof Dialog;
+    RadioButton: typeof RadioButton;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
