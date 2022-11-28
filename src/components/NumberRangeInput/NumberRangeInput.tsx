@@ -1,7 +1,8 @@
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import type { ViewProps } from '@webbee/bamboo-atoms';
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { NumberInputProps } from '../NumberInput';
+import { isNil } from '../../utils';
 
 export type Props = ViewProps & {
     inputsContainerStyle?: ViewProps;
@@ -12,21 +13,33 @@ export type Props = ViewProps & {
     minInputProps?: Omit<NumberInputProps, 'variant' | 'value' | 'onChangeText' | 'onChange'>;
     maxInputProps?: Omit<NumberInputProps, 'variant' | 'value' | 'onChangeText' | 'onChange'>;
     variant?: NumberInputProps['variant'];
+    errorMessage?: string;
 };
 
 const NumberRangeInput = ({
     variant = 'flat',
     inputsContainerStyle: inputsContainerStyleProp = {},
     dividerStyle: dividerStyleProp = {},
-    minInputProps: { style: minInputStyleProp = {}, ...minInputProps } = {},
-    maxInputProps: { style: maxInputStyleProp = {}, ...maxInputProps } = {},
+    minInputProps: {
+        style: minInputStyleProp = {},
+        onFocus: onFocusMinInput,
+        onBlur: onBlurMinInput,
+        ...minInputProps
+    } = {},
+    maxInputProps: {
+        style: maxInputStyleProp = {},
+        onFocus: onFocusMaxInput,
+        onBlur: onBlurMaxInput,
+        ...maxInputProps
+    } = {},
     min,
     max,
     onChange,
+    errorMessage = 'Invalid number range.',
     style,
     ...rest
 }: Props) => {
-    const { View, Text, NumberInput, HelperText } = useMolecules();
+    const { View, InputGroup, NumberInput, HelperText } = useMolecules();
     const componentStyles = useComponentStyles('NumberRangeInput', [
         style,
         {
@@ -40,40 +53,22 @@ const NumberRangeInput = ({
         value: min === undefined || max === undefined ? undefined : { min, max },
         onChange,
     });
-    const timeout = useRef<any>(null);
-    const [error, setError] = useState('');
+    const [error, setError] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
 
-    const {
-        containerStyle,
-        inputsContainerStyle,
-        minInputStyle,
-        maxInputStyle,
-        dividerStyle,
-        errorTextStyle,
-    } = useMemo(() => {
-        const { inputsContainer, minInput, maxInput, divider, errorText, ...restStyle } =
-            componentStyles;
+    const { containerStyle, inputsContainerStyle, minInputStyle, maxInputStyle, errorTextStyle } =
+        useMemo(() => {
+            const { inputsContainer, minInput, maxInput, errorText, ...restStyle } =
+                componentStyles;
 
-        return {
-            containerStyle: restStyle,
-            inputsContainerStyle: inputsContainer,
-            minInputStyle: minInput,
-            maxInputStyle: maxInput,
-            dividerStyle: divider,
-            errorTextStyle: errorText,
-        };
-    }, [componentStyles]);
-
-    const onDoneTyping = useCallback(
-        ({ min: minValue, max: maxValue }: { min: string; max: string }) => {
-            if (Number(minValue) > Number(maxValue)) {
-                setError('Error');
-            } else {
-                setError('');
-            }
-        },
-        [],
-    );
+            return {
+                containerStyle: restStyle,
+                inputsContainerStyle: inputsContainer,
+                minInputStyle: minInput,
+                maxInputStyle: maxInput,
+                errorTextStyle: errorText,
+            };
+        }, [componentStyles]);
 
     const onInputChange = useCallback(
         (type: 'min' | 'max', text: string) => {
@@ -83,16 +78,54 @@ const NumberRangeInput = ({
             };
 
             onValueChange(newValue);
-
-            clearTimeout(timeout?.current);
-            timeout.current = setTimeout(() => onDoneTyping(newValue), 2000);
         },
-        [onDoneTyping, onValueChange, value],
+        [onValueChange, value],
     );
+
+    const onFocus = useCallback(
+        (args: any, type: 'min' | 'max') => {
+            if (!isFocused) setIsFocused(true);
+
+            if (type === 'min') {
+                onFocusMinInput?.(args);
+                return;
+            }
+
+            onFocusMaxInput?.(args);
+        },
+        [isFocused, onFocusMaxInput, onFocusMinInput],
+    );
+
+    const onBlur = useCallback(
+        (args: any, type: 'min' | 'max') => {
+            if (isFocused) setIsFocused(false);
+
+            if (type === 'min') {
+                onBlurMinInput?.(args);
+                return;
+            }
+
+            onBlurMaxInput?.(args);
+        },
+        [isFocused, onBlurMaxInput, onBlurMinInput],
+    );
+
+    useEffect(() => {
+        if (
+            isFocused ||
+            value?.min === '' ||
+            value?.max === '' ||
+            isNil(value?.min) ||
+            isNil(value?.max)
+        )
+            return;
+
+        setError(Number(value?.min) > Number(value?.max));
+    }, [isFocused, value?.max, value?.min]);
 
     return (
         <View style={containerStyle}>
-            <View style={inputsContainerStyle} {...rest}>
+            <InputGroup style={inputsContainerStyle} {...rest}>
                 <NumberInput
                     label="min"
                     {...minInputProps}
@@ -100,8 +133,9 @@ const NumberRangeInput = ({
                     containerStyle={minInputStyle}
                     value={value?.min}
                     onChangeText={text => onInputChange('min', text)}
+                    onFocus={(args: any) => onFocus(args, 'min')}
+                    onBlur={(args: any) => onBlur(args, 'min')}
                 />
-                <Text style={dividerStyle}>-</Text>
                 <NumberInput
                     label="max"
                     {...maxInputProps}
@@ -109,9 +143,11 @@ const NumberRangeInput = ({
                     containerStyle={maxInputStyle}
                     value={value?.max}
                     onChangeText={text => onInputChange('max', text)}
+                    onFocus={(args: any) => onFocus(args, 'max')}
+                    onBlur={(args: any) => onBlur(args, 'max')}
                 />
-            </View>
-            {error && <HelperText style={errorTextStyle}>{error}</HelperText>}
+            </InputGroup>
+            {error && <HelperText style={errorTextStyle}>{errorMessage}</HelperText>}
         </View>
     );
 };

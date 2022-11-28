@@ -11,3 +11,5 @@ export {
 } from './DocumentPicker';
 
 export { normalizeBorderRadiuses } from './normalizeBorderRadiuses';
+
+export { default as isNil } from './isNil';

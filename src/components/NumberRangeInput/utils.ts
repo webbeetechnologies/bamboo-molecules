@@ -10,19 +10,12 @@ type CustomProps = {
 };
 
 export const numberRangeInputStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
-    inputsContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
+    inputsContainer: {},
     minInput: {
         flex: 1,
     },
     maxInput: {
         flex: 1,
-    },
-    divider: {
-        marginHorizontal: 10,
-        fontSize: 18,
     },
     errorText: {
         color: 'colors.error',
