@@ -2,6 +2,7 @@ import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
 type CustomProps = {
+    inputsContainer?: ViewStyle;
     minInput?: ViewStyle;
     maxInput?: ViewStyle;
     divider?: TextStyle;
@@ -9,9 +10,10 @@ type CustomProps = {
 };
 
 export const numberRangeInputStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
-    flexDirection: 'row',
-    alignItems: 'center',
-
+    inputsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     minInput: {
         flex: 1,
     },

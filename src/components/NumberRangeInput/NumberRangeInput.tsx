@@ -4,20 +4,22 @@ import { useComponentStyles, useControlledValue, useMolecules } from '../../hook
 import type { NumberInputProps } from '../NumberInput';
 
 export type Props = ViewProps & {
-    minInputStyle?: ViewProps;
-    maxInputStyle?: ViewProps;
+    inputsContainerStyle?: ViewProps;
     dividerStyle?: ViewProps;
     min?: string;
     max?: string;
     onChange?: (args: { min: string; max: string }) => void;
-    minInputProps?: Omit<NumberInputProps, 'value' | 'onChangeText' | 'onChange'>;
-    maxInputProps?: Omit<NumberInputProps, 'value' | 'onChangeText' | 'onChange'>;
+    minInputProps?: Omit<NumberInputProps, 'variant' | 'value' | 'onChangeText' | 'onChange'>;
+    maxInputProps?: Omit<NumberInputProps, 'variant' | 'value' | 'onChangeText' | 'onChange'>;
+    variant?: NumberInputProps['variant'];
 };
 
 const NumberRangeInput = ({
+    variant = 'flat',
+    inputsContainerStyle: inputsContainerStyleProp = {},
     dividerStyle: dividerStyleProp = {},
-    minInputProps: { style: minInputStyleProp, ...minInputProps } = {},
-    maxInputProps: { style: maxInputStyleProp, ...maxInputProps } = {},
+    minInputProps: { style: minInputStyleProp = {}, ...minInputProps } = {},
+    maxInputProps: { style: maxInputStyleProp = {}, ...maxInputProps } = {},
     min,
     max,
     onChange,
@@ -28,6 +30,7 @@ const NumberRangeInput = ({
     const componentStyles = useComponentStyles('NumberRangeInput', [
         style,
         {
+            inputsContainer: inputsContainerStyleProp,
             minInput: minInputStyleProp,
             maxInput: maxInputStyleProp,
             divider: dividerStyleProp,
@@ -40,18 +43,26 @@ const NumberRangeInput = ({
     const timeout = useRef<any>(null);
     const [error, setError] = useState('');
 
-    const { containerStyle, minInputStyle, maxInputStyle, dividerStyle, errorTextStyle } =
-        useMemo(() => {
-            const { minInput, maxInput, divider, errorText, ...restStyle } = componentStyles;
+    const {
+        containerStyle,
+        inputsContainerStyle,
+        minInputStyle,
+        maxInputStyle,
+        dividerStyle,
+        errorTextStyle,
+    } = useMemo(() => {
+        const { inputsContainer, minInput, maxInput, divider, errorText, ...restStyle } =
+            componentStyles;
 
-            return {
-                containerStyle: restStyle,
-                minInputStyle: minInput,
-                maxInputStyle: maxInput,
-                dividerStyle: divider,
-                errorTextStyle: errorText,
-            };
-        }, [componentStyles]);
+        return {
+            containerStyle: restStyle,
+            inputsContainerStyle: inputsContainer,
+            minInputStyle: minInput,
+            maxInputStyle: maxInput,
+            dividerStyle: divider,
+            errorTextStyle: errorText,
+        };
+    }, [componentStyles]);
 
     const onDoneTyping = useCallback(
         ({ min: minValue, max: maxValue }: { min: string; max: string }) => {
@@ -80,11 +91,12 @@ const NumberRangeInput = ({
     );
 
     return (
-        <>
-            <View style={containerStyle} {...rest}>
+        <View style={containerStyle}>
+            <View style={inputsContainerStyle} {...rest}>
                 <NumberInput
                     label="min"
                     {...minInputProps}
+                    variant={variant}
                     containerStyle={minInputStyle}
                     value={value?.min}
                     onChangeText={text => onInputChange('min', text)}
@@ -93,13 +105,14 @@ const NumberRangeInput = ({
                 <NumberInput
                     label="max"
                     {...maxInputProps}
+                    variant={variant}
                     containerStyle={maxInputStyle}
                     value={value?.max}
                     onChangeText={text => onInputChange('max', text)}
                 />
             </View>
             {error && <HelperText style={errorTextStyle}>{error}</HelperText>}
-        </>
+        </View>
     );
 };
 
