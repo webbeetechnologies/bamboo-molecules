@@ -125,3 +125,5 @@ export * from './ActionSheet';
 export * from './Dialog';
 
 export * from './RadioButton';
+
+export * from './NumberRangeInput';

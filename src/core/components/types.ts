@@ -39,6 +39,7 @@ import type {
     IActionSheet,
     Dialog,
     RadioButton,
+    NumberRangeInputProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -85,6 +86,7 @@ export interface DefaultComponents {
     ActionSheet: IActionSheet;
     Dialog: typeof Dialog;
     RadioButton: typeof RadioButton;
+    NumberRangeInput: ComponentType<NumberRangeInputProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
