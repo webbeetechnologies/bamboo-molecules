@@ -15,7 +15,10 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<NumberRangeInput />
+    const { NumberRangeInput } = useMolecules();
+    const [value, setValue] = useState({ min: '', max: '' });
+
+    return <NumberRangeInput {...props} min={value.min} max={value.max} onChange={setValue} />;
 `,
             language: 'tsx',
             type: 'auto',
