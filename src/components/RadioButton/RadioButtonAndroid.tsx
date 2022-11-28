@@ -1,17 +1,11 @@
-import { forwardRef, memo, useContext, useEffect, useMemo, useRef } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { forwardRef, memo, useEffect, useMemo, useRef } from 'react';
+import { Animated, StyleSheet } from 'react-native';
 
-import { RadioButtonContext } from './RadioButtonGroup';
-import { handlePress, isChecked } from './utils';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { TouchableRippleProps } from '../TouchableRipple';
 import setColor from 'color';
 
 export type Props = Omit<TouchableRippleProps, 'children'> & {
-    /**
-     * Value of the radio button
-     */
-    value: string;
     /**
      * Status of radio button.
      */
@@ -20,10 +14,6 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
      * Whether radio is disabled.
      */
     disabled?: boolean;
-    /**
-     * Function to execute on press.
-     */
-    onPress?: (param?: any) => void;
     /**
      * Custom color for unchecked radio.
      */
@@ -36,6 +26,11 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
      * testID to be used on tests.
      */
     testID?: string;
+    /**
+     * passed from RadioButton component
+     */
+    checked: boolean;
+    onPress: (() => void) | undefined;
 };
 
 const BORDER_WIDTH = 2;
@@ -59,35 +54,24 @@ const BORDER_WIDTH = 2;
 const RadioButtonAndroid = (
     {
         disabled,
-        onPress,
-        value,
         status,
         testID,
         color: colorProp,
         uncheckedColor: uncheckedColorProp,
         style,
+        checked,
+        onPress,
         ...rest
     }: Props,
     ref: any,
 ) => {
-    const { TouchableRipple } = useMolecules();
-    const context = useContext(RadioButtonContext);
+    const { TouchableRipple, View } = useMolecules();
 
     const { current: borderAnim } = useRef<Animated.Value>(new Animated.Value(BORDER_WIDTH));
 
     const { current: radioAnim } = useRef<Animated.Value>(new Animated.Value(1));
 
     const isFirstRendering = useRef<boolean>(true);
-
-    const checked = useMemo(
-        () =>
-            isChecked({
-                contextValue: context?.value,
-                status,
-                value,
-            }) === 'checked',
-        [context?.value, status, value],
-    );
 
     const componentStyles = useComponentStyles('RadioButton', style, {
         states: {
@@ -104,7 +88,6 @@ const RadioButtonAndroid = (
         radioStyles,
         dotStyles,
         dotContainerStyles,
-        accessibilityState,
     } = useMemo(() => {
         const {
             color: checkedColor,
@@ -141,9 +124,8 @@ const RadioButtonAndroid = (
                     transform: [{ scale: radioAnim }],
                 },
             ],
-            accessibilityState: { disabled, checked },
         };
-    }, [borderAnim, checked, colorProp, componentStyles, disabled, radioAnim, uncheckedColorProp]);
+    }, [borderAnim, checked, colorProp, componentStyles, radioAnim, uncheckedColorProp]);
 
     useEffect(() => {
         // Do not run animation on very first rendering
@@ -171,30 +153,12 @@ const RadioButtonAndroid = (
         }
     }, [status, borderAnim, radioAnim, scale, animationDuration]);
 
-    const onRadioPress = useMemo(
-        () =>
-            disabled
-                ? undefined
-                : () => {
-                      handlePress({
-                          onPress,
-                          onValueChange: context?.onValueChange,
-                          value,
-                      });
-                  },
-        [disabled, onPress, context?.onValueChange, value],
-    );
-
     return (
         <TouchableRipple
             {...rest}
             ref={ref}
-            borderless
             rippleColor={rippleColor}
-            onPress={onRadioPress}
-            accessibilityRole="radio"
-            accessibilityState={accessibilityState}
-            accessibilityLiveRegion="polite"
+            onPress={onPress}
             style={containerStyles}
             testID={testID}>
             <Animated.View style={radioStyles}>

@@ -1,8 +1,10 @@
-import { forwardRef, memo, useMemo } from 'react';
+import { forwardRef, memo, useContext, useMemo } from 'react';
 
 import { usePlatformType } from '../../hooks';
 import RadioButtonAndroid from './RadioButtonAndroid';
 import RadioButtonIOS from './RadioButtonIOS';
+import { handlePress, isChecked } from './utils';
+import { RadioButtonContext } from './RadioButtonGroup';
 
 export type Props = {
     /**
@@ -85,13 +87,54 @@ export type Props = {
  * export default MyComponent;
  * ```
  */
-const RadioButton = (props: Props, ref: any) => {
+const RadioButton = ({ value, status, disabled, onPress, testID, ...rest }: Props, ref: any) => {
     const platform = usePlatformType();
     const Button = useMemo(() => {
         return platform === 'ios' ? RadioButtonIOS : RadioButtonAndroid;
     }, [platform]);
 
-    return <Button {...props} ref={ref} />;
+    const context = useContext(RadioButtonContext);
+
+    const checked = useMemo(
+        () =>
+            isChecked({
+                contextValue: context?.value,
+                status,
+                value,
+            }) === 'checked',
+        [context?.value, status, value],
+    );
+    const onRadioPress = useMemo(
+        () =>
+            disabled
+                ? undefined
+                : () => {
+                      handlePress({
+                          onPress,
+                          onValueChange: context?.onValueChange,
+                          value,
+                      });
+                  },
+        [disabled, onPress, context?.onValueChange, value],
+    );
+
+    const accessibilityState = useMemo(() => ({ disabled, checked }), [checked, disabled]);
+
+    return (
+        <Button
+            {...rest}
+            checked={checked}
+            onPress={onRadioPress}
+            status={status}
+            disabled={disabled}
+            borderless
+            accessibilityRole="radio"
+            accessibilityState={accessibilityState}
+            accessibilityLiveRegion="polite"
+            testID={testID}
+            ref={ref}
+        />
+    );
 };
 
 export default memo(forwardRef(RadioButton));
