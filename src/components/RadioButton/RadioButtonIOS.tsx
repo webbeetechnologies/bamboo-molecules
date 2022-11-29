@@ -1,17 +1,11 @@
-import { forwardRef, memo, useContext, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { forwardRef, memo, useMemo } from 'react';
+import { StyleSheet } from 'react-native';
 import setColor from 'color';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { TouchableRippleProps } from '../TouchableRipple';
-import { RadioButtonContext } from './RadioButtonGroup';
-import { handlePress, isChecked } from './utils';
 
 export type Props = Omit<TouchableRippleProps, 'children'> & {
-    /**
-     * Value of the radio button
-     */
-    value: string;
     /**
      * Status of radio button.
      */
@@ -21,10 +15,6 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
      */
     disabled?: boolean;
     /**
-     * Function to execute on press.
-     */
-    onPress?: () => void;
-    /**
      * Custom color for radio.
      */
     color?: string;
@@ -32,6 +22,11 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
      * testID to be used on tests.
      */
     testID?: string;
+    /**
+     * passed from RadioButton component
+     */
+    checked: boolean;
+    onPress: (() => void) | undefined;
 };
 
 /**
@@ -51,21 +46,10 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
  * </div>
  */
 const RadioButtonIOS = (
-    { disabled, onPress, status, value, testID, style, color: colorProp, ...rest }: Props,
+    { disabled, style, color: colorProp, checked, onPress, ...rest }: Props,
     ref: any,
 ) => {
-    const { TouchableRipple, Icon } = useMolecules();
-    const context = useContext(RadioButtonContext);
-
-    const checked = useMemo(
-        () =>
-            isChecked({
-                contextValue: context?.value,
-                status,
-                value,
-            }) === 'checked',
-        [context?.value, status, value],
-    );
+    const { TouchableRipple, View, Icon } = useMolecules();
 
     const componentStyles = useComponentStyles(
         'RadioButton',
@@ -91,30 +75,13 @@ const RadioButtonIOS = (
             };
         }, [checked, componentStyles]);
 
-    const onRadioPress = useMemo(() => {
-        return disabled
-            ? undefined
-            : () => {
-                  handlePress({
-                      onPress,
-                      value,
-                      onValueChange: context?.onValueChange,
-                  });
-              };
-    }, [disabled, onPress, context?.onValueChange, value]);
-
     return (
         <TouchableRipple
             {...rest}
             ref={ref}
-            borderless
             rippleColor={rippleColor}
-            onPress={onRadioPress}
-            accessibilityRole="radio"
-            accessibilityState={{ disabled, checked }}
-            accessibilityLiveRegion="polite"
-            style={containerStyle}
-            testID={testID}>
+            onPress={onPress}
+            style={containerStyle}>
             <View style={iconContainerStyle}>
                 <Icon allowFontScaling={false} name="check" size={iconSize} color={checkedColor} />
             </View>

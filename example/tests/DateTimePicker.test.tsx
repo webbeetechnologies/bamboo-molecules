@@ -41,12 +41,12 @@ it('renders DatePickerInline component with multiple mode', () => {
 it('renders DatePickerModal component with range mode', () => {
     const tree = renderWithWrapper(
         <DatePickerModal
-            visible={false}
+            isOpen={false}
             mode="range"
             startDate={new Date()}
             endDate={undefined}
             onChange={onChangeMock}
-            onDismiss={onDismissMock}
+            onClose={onDismissMock}
             onConfirm={onConfirmMock}
         />,
     ).toJSON();
@@ -87,11 +87,11 @@ it('renders TimePicker component with picker mode, hours value 10 and minutes va
 it('renders TimePickerModal component with hours value 10 and minutes value 15', () => {
     const tree = renderWithWrapper(
         <TimePickerModal
-            visible={false}
+            isOpen={false}
             hours={10}
             minutes={15}
             onConfirm={onConfirmMock}
-            onDismiss={onDismissMock}
+            onClose={onDismissMock}
         />,
     ).toJSON();
 

@@ -1,5 +1,5 @@
 import { default as ListItem } from '../../src/components/ListItem';
-import { renderWithWrapper } from '../testHelper';
+import { renderWithWrapper } from '../testHelpers';
 
 it('should render ListItem', () => {
     const tree = renderWithWrapper(
@@ -17,5 +17,5 @@ it('should render ListItem with Headline text inside the ListItem.Title', () => 
             <ListItem.Description>Supporting Text</ListItem.Description>
         </ListItem>,
     );
-    expect(getByTestId('list-item-headline').children).toEqual('Headline');
+    expect(getByTestId('list-item-headline').children[0]).toEqual('Headline');
 });

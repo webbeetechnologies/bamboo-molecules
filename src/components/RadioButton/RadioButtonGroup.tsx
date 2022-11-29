@@ -1,15 +1,16 @@
-import { memo, createContext, ReactNode } from 'react';
-import { View } from 'react-native';
+import { memo, createContext, ReactNode, useMemo } from 'react';
+import type { ViewProps } from '@webbee/bamboo-atoms';
+import { useControlledValue, useMolecules } from '../../hooks';
 
-export type Props = {
+export type Props = ViewProps & {
     /**
      * Function to execute on selection change.
      */
-    onValueChange: (value: string) => void;
+    onValueChange?: (value: string) => void;
     /**
      * Value of the currently selected radio button.
      */
-    value: string;
+    value?: string;
     /**
      * React elements containing radio buttons.
      */
@@ -63,11 +64,28 @@ export const RadioButtonContext = createContext<RadioButtonContextType>(null as 
  * export default MyComponent;
  *```
  */
-const RadioButtonGroup = ({ value, onValueChange, children }: Props) => (
-    <RadioButtonContext.Provider value={{ value, onValueChange }}>
-        <View accessibilityRole="radiogroup">{children}</View>
-    </RadioButtonContext.Provider>
-);
+const RadioButtonGroup = ({
+    value: valueProp,
+    onValueChange: onValueChangeProp,
+    children,
+    ...rest
+}: Props) => {
+    const { View } = useMolecules();
+    const [value, onValueChange] = useControlledValue({
+        value: valueProp,
+        onChange: onValueChangeProp,
+    });
+
+    const contextValue = useMemo(() => ({ value, onValueChange }), [onValueChange, value]);
+
+    return (
+        <RadioButtonContext.Provider value={contextValue}>
+            <View accessibilityRole="radiogroup" {...rest}>
+                {children}
+            </View>
+        </RadioButtonContext.Provider>
+    );
+};
 
 RadioButtonGroup.displayName = 'RadioButton.Group';
 
