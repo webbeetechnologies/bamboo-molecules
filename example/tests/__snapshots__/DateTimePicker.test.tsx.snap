@@ -5,7 +5,6 @@ exports[`renders DatePickerInline component with multiple mode 1`] = `
   style={
     Array [
       Object {
-        "flex": 1,
         "minHeight": 360,
         "minWidth": 360,
       },
@@ -24,7 +23,6 @@ exports[`renders DatePickerInline component with multiple mode 1`] = `
         },
         Object {
           "container": Object {
-            "flex": 1,
             "minHeight": 360,
             "minWidth": 360,
           },
@@ -55,7 +53,6 @@ exports[`renders DatePickerInline component with range mode 1`] = `
   style={
     Array [
       Object {
-        "flex": 1,
         "minHeight": 360,
         "minWidth": 360,
       },
@@ -74,7 +71,6 @@ exports[`renders DatePickerInline component with range mode 1`] = `
         },
         Object {
           "container": Object {
-            "flex": 1,
             "minHeight": 360,
             "minWidth": 360,
           },
@@ -105,7 +101,6 @@ exports[`renders DatePickerInline component with single mode 1`] = `
   style={
     Array [
       Object {
-        "flex": 1,
         "minHeight": 360,
         "minWidth": 360,
       },
@@ -124,7 +119,6 @@ exports[`renders DatePickerInline component with single mode 1`] = `
         },
         Object {
           "container": Object {
-            "flex": 1,
             "minHeight": 360,
             "minWidth": 360,
           },
@@ -166,8 +160,6 @@ exports[`renders DatePickerModal component with range mode 1`] = `
   <Modal
     animationType="slide"
     hardwareAccelerated={false}
-    onDismiss={[MockFunction]}
-    onRequestClose={[MockFunction]}
     presentationStyle="overFullScreen"
     statusBarTranslucent={true}
     supportedOrientations={
@@ -1744,7 +1736,6 @@ exports[`renders TimePickerModal component with hours value 10 and minutes value
   animationType="none"
   hardwareAccelerated={false}
   onDismiss={[MockFunction]}
-  onRequestClose={[MockFunction]}
   presentationStyle="overFullScreen"
   statusBarTranslucent={true}
   supportedOrientations={
