@@ -1,13 +1,16 @@
 import { Text } from 'react-native';
-import { Example as OptionList } from '../stories/components/OptionList/OptionList';
+import { Example as SectionList } from '../stories/components/SectionList/SectionList';
 import { renderWithWrapper } from '../testHelpers';
 
 const renderItemMock = jest.fn(({ item }) => {
     return <Text>{item.text}</Text>;
 });
-const onQueryChangeMock = jest.fn();
-const onSelectItemChangeMock = jest.fn();
-const records = [
+
+const renderSectionHeaderMock = jest.fn(({ section }) => {
+    return <Text>{section?.title}</Text>;
+});
+
+const sections = [
     {
         title: 'Numbers',
         data: [
@@ -44,35 +47,21 @@ const records = [
     },
 ];
 
-describe('OptionList', () => {
-    it('renders default OptionList with records', () => {
+describe('SectionList', () => {
+    it('renders SectionsList with just items', () => {
         const tree = renderWithWrapper(
-            <OptionList records={records} renderItem={renderItemMock} />,
+            <SectionList sections={sections} renderItem={renderItemMock} />,
         ).toJSON();
 
         expect(tree).toMatchSnapshot();
     });
 
-    it('renders OptionList with SearchField', () => {
+    it('renders SectionsList with section header and items', () => {
         const tree = renderWithWrapper(
-            <OptionList
-                searchable
-                onQueryChange={onQueryChangeMock}
-                records={records}
+            <SectionList
+                sections={sections}
+                renderSectionHeader={renderSectionHeaderMock}
                 renderItem={renderItemMock}
-            />,
-        ).toJSON();
-
-        expect(tree).toMatchSnapshot();
-    });
-
-    it('renders OptionList with selectable items', () => {
-        const tree = renderWithWrapper(
-            <OptionList
-                records={records}
-                renderItem={renderItemMock}
-                selectable
-                onSelectItemChange={onSelectItemChangeMock}
             />,
         ).toJSON();
 

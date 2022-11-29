@@ -275,7 +275,35 @@ exports[`OptionList renders OptionList with SearchField 1`] = `
       <View
         onLayout={[Function]}
         style={null}
-      />
+      >
+        <Text>
+          1
+        </Text>
+      </View>
+      <View
+        onLayout={[Function]}
+        style={null}
+      >
+        <Text>
+          2
+        </Text>
+      </View>
+      <View
+        onLayout={[Function]}
+        style={null}
+      >
+        <Text>
+          3
+        </Text>
+      </View>
+      <View
+        onLayout={[Function]}
+        style={null}
+      >
+        <Text>
+          4
+        </Text>
+      </View>
       <View
         onLayout={[Function]}
         style={null}
@@ -287,27 +315,27 @@ exports[`OptionList renders OptionList with SearchField 1`] = `
       <View
         onLayout={[Function]}
         style={null}
-      />
+      >
+        <Text>
+          A
+        </Text>
+      </View>
       <View
         onLayout={[Function]}
         style={null}
-      />
+      >
+        <Text>
+          B
+        </Text>
+      </View>
       <View
         onLayout={[Function]}
         style={null}
-      />
-      <View
-        onLayout={[Function]}
-        style={null}
-      />
-      <View
-        onLayout={[Function]}
-        style={null}
-      />
-      <View
-        onLayout={[Function]}
-        style={null}
-      />
+      >
+        <Text>
+          C
+        </Text>
+      </View>
       <View
         style={
           Object {
@@ -395,7 +423,127 @@ exports[`OptionList renders OptionList with selectable items 1`] = `
       <View
         onLayout={[Function]}
         style={null}
-      />
+      >
+        <View
+          accessibilityState={
+            Object {
+              "disabled": false,
+            }
+          }
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              false,
+              Object {},
+            ]
+          }
+        >
+          <Text>
+            1
+          </Text>
+        </View>
+      </View>
+      <View
+        onLayout={[Function]}
+        style={null}
+      >
+        <View
+          accessibilityState={
+            Object {
+              "disabled": false,
+            }
+          }
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              false,
+              Object {},
+            ]
+          }
+        >
+          <Text>
+            2
+          </Text>
+        </View>
+      </View>
+      <View
+        onLayout={[Function]}
+        style={null}
+      >
+        <View
+          accessibilityState={
+            Object {
+              "disabled": false,
+            }
+          }
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              false,
+              Object {},
+            ]
+          }
+        >
+          <Text>
+            3
+          </Text>
+        </View>
+      </View>
+      <View
+        onLayout={[Function]}
+        style={null}
+      >
+        <View
+          accessibilityState={
+            Object {
+              "disabled": false,
+            }
+          }
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              false,
+              Object {},
+            ]
+          }
+        >
+          <Text>
+            4
+          </Text>
+        </View>
+      </View>
       <View
         onLayout={[Function]}
         style={null}
@@ -407,27 +555,96 @@ exports[`OptionList renders OptionList with selectable items 1`] = `
       <View
         onLayout={[Function]}
         style={null}
-      />
+      >
+        <View
+          accessibilityState={
+            Object {
+              "disabled": false,
+            }
+          }
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              false,
+              Object {},
+            ]
+          }
+        >
+          <Text>
+            A
+          </Text>
+        </View>
+      </View>
       <View
         onLayout={[Function]}
         style={null}
-      />
+      >
+        <View
+          accessibilityState={
+            Object {
+              "disabled": false,
+            }
+          }
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              false,
+              Object {},
+            ]
+          }
+        >
+          <Text>
+            B
+          </Text>
+        </View>
+      </View>
       <View
         onLayout={[Function]}
         style={null}
-      />
-      <View
-        onLayout={[Function]}
-        style={null}
-      />
-      <View
-        onLayout={[Function]}
-        style={null}
-      />
-      <View
-        onLayout={[Function]}
-        style={null}
-      />
+      >
+        <View
+          accessibilityState={
+            Object {
+              "disabled": false,
+            }
+          }
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              false,
+              Object {},
+            ]
+          }
+        >
+          <Text>
+            C
+          </Text>
+        </View>
+      </View>
       <View
         style={
           Object {
@@ -515,7 +732,35 @@ exports[`OptionList renders default OptionList with records 1`] = `
       <View
         onLayout={[Function]}
         style={null}
-      />
+      >
+        <Text>
+          1
+        </Text>
+      </View>
+      <View
+        onLayout={[Function]}
+        style={null}
+      >
+        <Text>
+          2
+        </Text>
+      </View>
+      <View
+        onLayout={[Function]}
+        style={null}
+      >
+        <Text>
+          3
+        </Text>
+      </View>
+      <View
+        onLayout={[Function]}
+        style={null}
+      >
+        <Text>
+          4
+        </Text>
+      </View>
       <View
         onLayout={[Function]}
         style={null}
@@ -527,27 +772,27 @@ exports[`OptionList renders default OptionList with records 1`] = `
       <View
         onLayout={[Function]}
         style={null}
-      />
+      >
+        <Text>
+          A
+        </Text>
+      </View>
       <View
         onLayout={[Function]}
         style={null}
-      />
+      >
+        <Text>
+          B
+        </Text>
+      </View>
       <View
         onLayout={[Function]}
         style={null}
-      />
-      <View
-        onLayout={[Function]}
-        style={null}
-      />
-      <View
-        onLayout={[Function]}
-        style={null}
-      />
-      <View
-        onLayout={[Function]}
-        style={null}
-      />
+      >
+        <Text>
+          C
+        </Text>
+      </View>
       <View
         style={
           Object {
