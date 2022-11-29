@@ -19,7 +19,7 @@ export type Props = ModalProps & {
      * Content of the `Dialog`.
      */
     children: ReactNode;
-    Icon?: IconProps;
+    iconProps?: IconProps;
     style?: StyleProp<ViewStyle>;
 };
 
@@ -68,7 +68,7 @@ export type Props = ModalProps & {
  * export default MyComponent;
  * ```
  */
-const Dialog = ({ children, onClose, Icon, contentStyle = {}, ...rest }: Props) => {
+const Dialog = ({ children, onClose, iconProps, contentStyle = {}, ...rest }: Props) => {
     const { Modal } = useMolecules();
     const componentStyles = useComponentStyles('Dialog', { container: contentStyle });
 
@@ -86,11 +86,11 @@ const Dialog = ({ children, onClose, Icon, contentStyle = {}, ...rest }: Props) 
     return (
         <Modal elevation={2} {...rest} onClose={onClose} contentStyle={containerStyle}>
             <>
-                {Icon ? <DialogIcon {...Icon} /> : null}
+                {iconProps ? <DialogIcon {...iconProps} /> : null}
                 {Children.toArray(children)
                     .filter(child => child != null && typeof child !== 'boolean')
                     .map((child, i) => {
-                        if (i === 0 && isValidElement(child) && !Icon) {
+                        if (i === 0 && isValidElement(child) && !iconProps) {
                             return cloneElement(child, {
                                 style: [childStyle, child.props.style],
                             });
