@@ -160,6 +160,7 @@ exports[`renders DatePickerModal component with range mode 1`] = `
   <Modal
     animationType="slide"
     hardwareAccelerated={false}
+    onRequestClose={[MockFunction]}
     presentationStyle="overFullScreen"
     statusBarTranslucent={true}
     supportedOrientations={
@@ -1735,7 +1736,7 @@ exports[`renders TimePickerModal component with hours value 10 and minutes value
 <Modal
   animationType="none"
   hardwareAccelerated={false}
-  onDismiss={[MockFunction]}
+  onRequestClose={[MockFunction]}
   presentationStyle="overFullScreen"
   statusBarTranslucent={true}
   supportedOrientations={
