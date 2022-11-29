@@ -1,4 +1,4 @@
-import { forwardRef, memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { Platform, StyleSheet, useWindowDimensions } from 'react-native';
 
 import { TriggerProps, withPopper } from '../../hocs/withPopper';
@@ -170,4 +170,4 @@ const useResolveMode = (
     return DropdownListMode.Popover;
 };
 
-export default memo(forwardRef(DropdownList));
+export default memo(DropdownList);
