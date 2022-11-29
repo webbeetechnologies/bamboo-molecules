@@ -40,6 +40,7 @@ const Button = forwardRef<any, ButtonProps>((props, ref) => {
 });
 
 export const Popover = () => {
+    const [isPopoverOpen, setIsOpen] = React.useState(false);
     const [closeOnScroll, setCloseOnScroll] = React.useState(true);
     const { Button: ButtonComponent, Popover: PopoverComponent, H4, View } = useMolecules();
 
@@ -103,6 +104,20 @@ export const Popover = () => {
                     shouldFlip
                     closeOnScroll={closeOnScroll}>
                     <PopoverContent message={<H4>I'm free sized</H4>} />
+                </PopoverComponent>
+                <PopoverComponent
+                    showArrow
+                    isOpen={isPopoverOpen}
+                    trigger={useMemo(() => trigger('Controlled Popover'), [])}
+                    setIsOpen={setIsOpen}
+                    placement="top"
+                    shouldFlip
+                    closeOnScroll={closeOnScroll}>
+                    <PopoverContent
+                        message={
+                            <H4>I'm a controlled Popover. My parent component controls me.</H4>
+                        }
+                    />
                 </PopoverComponent>
             </View>
         </View>
