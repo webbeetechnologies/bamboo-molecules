@@ -55,10 +55,8 @@ exports[`renders button with an accessibility hint 1`] = `
         style={
           Object {
             "backgroundColor": "transparent",
-            "borderColor": undefined,
             "borderRadius": 20,
             "borderStyle": "solid",
-            "borderWidth": undefined,
             "minWidth": 64,
           }
         }
@@ -99,7 +97,6 @@ exports[`renders button with an accessibility hint 1`] = `
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
-                Object {},
                 undefined,
               ]
             }
@@ -110,10 +107,8 @@ exports[`renders button with an accessibility hint 1`] = `
               style={
                 Object {
                   "color": "",
-                  "customButtonColor": undefined,
-                  "customTextColor": undefined,
                   "fontFamily": "System",
-                  "fontSize": 14,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -122,7 +117,6 @@ exports[`renders button with an accessibility hint 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Button with accessibility hint
             </Text>
@@ -189,10 +183,8 @@ exports[`renders button with an accessibility label 1`] = `
         style={
           Object {
             "backgroundColor": "transparent",
-            "borderColor": undefined,
             "borderRadius": 20,
             "borderStyle": "solid",
-            "borderWidth": undefined,
             "minWidth": 64,
           }
         }
@@ -233,7 +225,6 @@ exports[`renders button with an accessibility label 1`] = `
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
-                Object {},
                 undefined,
               ]
             }
@@ -244,10 +235,8 @@ exports[`renders button with an accessibility label 1`] = `
               style={
                 Object {
                   "color": "",
-                  "customButtonColor": undefined,
-                  "customTextColor": undefined,
                   "fontFamily": "System",
-                  "fontSize": 14,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -256,7 +245,6 @@ exports[`renders button with an accessibility label 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Button with accessibility label
             </Text>
@@ -323,10 +311,8 @@ exports[`renders button with color 1`] = `
         style={
           Object {
             "backgroundColor": "transparent",
-            "borderColor": undefined,
             "borderRadius": 20,
             "borderStyle": "solid",
-            "borderWidth": undefined,
             "minWidth": 64,
           }
         }
@@ -366,7 +352,6 @@ exports[`renders button with color 1`] = `
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
-                Object {},
                 undefined,
               ]
             }
@@ -377,10 +362,8 @@ exports[`renders button with color 1`] = `
               style={
                 Object {
                   "color": "",
-                  "customButtonColor": undefined,
-                  "customTextColor": undefined,
                   "fontFamily": "System",
-                  "fontSize": 14,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -389,7 +372,6 @@ exports[`renders button with color 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Custom Button
             </Text>
@@ -456,10 +438,8 @@ exports[`renders button with custom background color 1`] = `
         style={
           Object {
             "backgroundColor": "transparent",
-            "borderColor": undefined,
             "borderRadius": 20,
             "borderStyle": "solid",
-            "borderWidth": undefined,
             "minWidth": 64,
           }
         }
@@ -499,7 +479,6 @@ exports[`renders button with custom background color 1`] = `
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
-                Object {},
                 undefined,
               ]
             }
@@ -510,10 +489,8 @@ exports[`renders button with custom background color 1`] = `
               style={
                 Object {
                   "color": "",
-                  "customButtonColor": undefined,
-                  "customTextColor": undefined,
                   "fontFamily": "System",
-                  "fontSize": 14,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -522,7 +499,6 @@ exports[`renders button with custom background color 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Custom Button
             </Text>
@@ -589,10 +565,8 @@ exports[`renders button with custom testID 1`] = `
         style={
           Object {
             "backgroundColor": "transparent",
-            "borderColor": undefined,
             "borderRadius": 20,
             "borderStyle": "solid",
-            "borderWidth": undefined,
             "minWidth": 64,
           }
         }
@@ -633,7 +607,6 @@ exports[`renders button with custom testID 1`] = `
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
-                Object {},
                 undefined,
               ]
             }
@@ -644,10 +617,8 @@ exports[`renders button with custom testID 1`] = `
               style={
                 Object {
                   "color": "",
-                  "customButtonColor": undefined,
-                  "customTextColor": undefined,
                   "fontFamily": "System",
-                  "fontSize": 14,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -656,7 +627,6 @@ exports[`renders button with custom testID 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Button with custom testID
             </Text>
@@ -723,10 +693,8 @@ exports[`renders contained contained with variant 1`] = `
         style={
           Object {
             "backgroundColor": "transparent",
-            "borderColor": undefined,
             "borderRadius": 20,
             "borderStyle": "solid",
-            "borderWidth": undefined,
             "minWidth": 64,
           }
         }
@@ -766,7 +734,6 @@ exports[`renders contained contained with variant 1`] = `
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
-                Object {},
                 undefined,
               ]
             }
@@ -777,10 +744,8 @@ exports[`renders contained contained with variant 1`] = `
               style={
                 Object {
                   "color": "",
-                  "customButtonColor": undefined,
-                  "customTextColor": undefined,
                   "fontFamily": "System",
-                  "fontSize": 14,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -789,7 +754,6 @@ exports[`renders contained contained with variant 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Contained Button
             </Text>
@@ -856,10 +820,8 @@ exports[`renders disabled button 1`] = `
         style={
           Object {
             "backgroundColor": "transparent",
-            "borderColor": undefined,
             "borderRadius": 20,
             "borderStyle": "solid",
-            "borderWidth": undefined,
             "minWidth": 64,
           }
         }
@@ -899,7 +861,6 @@ exports[`renders disabled button 1`] = `
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
-                Object {},
                 undefined,
               ]
             }
@@ -910,10 +871,8 @@ exports[`renders disabled button 1`] = `
               style={
                 Object {
                   "color": "",
-                  "customButtonColor": undefined,
-                  "customTextColor": undefined,
                   "fontFamily": "System",
-                  "fontSize": 14,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -922,7 +881,6 @@ exports[`renders disabled button 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Disabled Button
             </Text>
@@ -989,10 +947,8 @@ exports[`renders loading button 1`] = `
         style={
           Object {
             "backgroundColor": "transparent",
-            "borderColor": undefined,
             "borderRadius": 20,
             "borderStyle": "solid",
-            "borderWidth": undefined,
             "minWidth": 64,
           }
         }
@@ -1032,7 +988,6 @@ exports[`renders loading button 1`] = `
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
-                Object {},
                 undefined,
               ]
             }
@@ -1048,8 +1003,6 @@ exports[`renders loading button 1`] = `
               style={
                 Object {
                   "alignItems": "center",
-                  "customButtonColor": undefined,
-                  "customTextColor": undefined,
                   "justifyContent": "center",
                   "marginLeft": 12,
                   "marginRight": -8,
@@ -1060,9 +1013,9 @@ exports[`renders loading button 1`] = `
                 collapsable={false}
                 style={
                   Object {
-                    "height": 18,
+                    "height": 26,
                     "opacity": 1,
-                    "width": 18,
+                    "width": 26,
                   }
                 }
               >
@@ -1084,13 +1037,13 @@ exports[`renders loading button 1`] = `
                     collapsable={false}
                     style={
                       Object {
-                        "height": 18,
+                        "height": 26,
                         "transform": Array [
                           Object {
                             "rotate": "45deg",
                           },
                         ],
-                        "width": 18,
+                        "width": 26,
                       }
                     }
                   >
@@ -1098,9 +1051,9 @@ exports[`renders loading button 1`] = `
                       collapsable={false}
                       style={
                         Object {
-                          "height": 9,
+                          "height": 13,
                           "overflow": "hidden",
-                          "width": 18,
+                          "width": 26,
                         }
                       }
                     >
@@ -1108,7 +1061,7 @@ exports[`renders loading button 1`] = `
                         collapsable={false}
                         style={
                           Object {
-                            "height": 18,
+                            "height": 26,
                             "transform": Array [
                               Object {
                                 "translateY": 0,
@@ -1117,7 +1070,7 @@ exports[`renders loading button 1`] = `
                                 "rotate": "-165deg",
                               },
                             ],
-                            "width": 18,
+                            "width": 26,
                           }
                         }
                       >
@@ -1125,9 +1078,9 @@ exports[`renders loading button 1`] = `
                           collapsable={false}
                           style={
                             Object {
-                              "height": 9,
+                              "height": 13,
                               "overflow": "hidden",
-                              "width": 18,
+                              "width": 26,
                             }
                           }
                         >
@@ -1136,10 +1089,10 @@ exports[`renders loading button 1`] = `
                             style={
                               Object {
                                 "borderColor": "rgba(103, 80, 164, 1)",
-                                "borderRadius": 9,
-                                "borderWidth": 1.8,
-                                "height": 18,
-                                "width": 18,
+                                "borderRadius": 13,
+                                "borderWidth": 2.6,
+                                "height": 26,
+                                "width": 26,
                               }
                             }
                           />
@@ -1166,13 +1119,13 @@ exports[`renders loading button 1`] = `
                     collapsable={false}
                     style={
                       Object {
-                        "height": 18,
+                        "height": 26,
                         "transform": Array [
                           Object {
                             "rotate": "45deg",
                           },
                         ],
-                        "width": 18,
+                        "width": 26,
                       }
                     }
                   >
@@ -1180,10 +1133,10 @@ exports[`renders loading button 1`] = `
                       collapsable={false}
                       style={
                         Object {
-                          "height": 9,
+                          "height": 13,
                           "overflow": "hidden",
-                          "top": 9,
-                          "width": 18,
+                          "top": 13,
+                          "width": 26,
                         }
                       }
                     >
@@ -1191,16 +1144,16 @@ exports[`renders loading button 1`] = `
                         collapsable={false}
                         style={
                           Object {
-                            "height": 18,
+                            "height": 26,
                             "transform": Array [
                               Object {
-                                "translateY": -9,
+                                "translateY": -13,
                               },
                               Object {
                                 "rotate": "345deg",
                               },
                             ],
-                            "width": 18,
+                            "width": 26,
                           }
                         }
                       >
@@ -1208,9 +1161,9 @@ exports[`renders loading button 1`] = `
                           collapsable={false}
                           style={
                             Object {
-                              "height": 9,
+                              "height": 13,
                               "overflow": "hidden",
-                              "width": 18,
+                              "width": 26,
                             }
                           }
                         >
@@ -1219,10 +1172,10 @@ exports[`renders loading button 1`] = `
                             style={
                               Object {
                                 "borderColor": "rgba(103, 80, 164, 1)",
-                                "borderRadius": 9,
-                                "borderWidth": 1.8,
-                                "height": 18,
-                                "width": 18,
+                                "borderRadius": 13,
+                                "borderWidth": 2.6,
+                                "height": 26,
+                                "width": 26,
                               }
                             }
                           />
@@ -1239,10 +1192,8 @@ exports[`renders loading button 1`] = `
               style={
                 Object {
                   "color": "",
-                  "customButtonColor": undefined,
-                  "customTextColor": undefined,
                   "fontFamily": "System",
-                  "fontSize": 14,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -1251,7 +1202,6 @@ exports[`renders loading button 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Loading Button
             </Text>
@@ -1361,7 +1311,6 @@ exports[`renders outlined button with variant 1`] = `
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
-                Object {},
                 undefined,
               ]
             }
@@ -1372,10 +1321,8 @@ exports[`renders outlined button with variant 1`] = `
               style={
                 Object {
                   "color": "",
-                  "customButtonColor": undefined,
-                  "customTextColor": undefined,
                   "fontFamily": "System",
-                  "fontSize": 14,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -1384,7 +1331,6 @@ exports[`renders outlined button with variant 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Outlined Button
             </Text>
@@ -1451,10 +1397,8 @@ exports[`renders text button by default 1`] = `
         style={
           Object {
             "backgroundColor": "transparent",
-            "borderColor": undefined,
             "borderRadius": 20,
             "borderStyle": "solid",
-            "borderWidth": undefined,
             "minWidth": 64,
           }
         }
@@ -1494,7 +1438,6 @@ exports[`renders text button by default 1`] = `
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
-                Object {},
                 undefined,
               ]
             }
@@ -1505,10 +1448,8 @@ exports[`renders text button by default 1`] = `
               style={
                 Object {
                   "color": "",
-                  "customButtonColor": undefined,
-                  "customTextColor": undefined,
                   "fontFamily": "System",
-                  "fontSize": 14,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -1517,7 +1458,6 @@ exports[`renders text button by default 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Text Button
             </Text>
@@ -1584,10 +1524,8 @@ exports[`renders text button with variant 1`] = `
         style={
           Object {
             "backgroundColor": "transparent",
-            "borderColor": undefined,
             "borderRadius": 20,
             "borderStyle": "solid",
-            "borderWidth": undefined,
             "minWidth": 64,
           }
         }
@@ -1627,7 +1565,6 @@ exports[`renders text button with variant 1`] = `
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
-                Object {},
                 undefined,
               ]
             }
@@ -1638,10 +1575,8 @@ exports[`renders text button with variant 1`] = `
               style={
                 Object {
                   "color": "",
-                  "customButtonColor": undefined,
-                  "customTextColor": undefined,
                   "fontFamily": "System",
-                  "fontSize": 14,
+                  "fontSize": 16,
                   "fontWeight": "500",
                   "letterSpacing": 0.1,
                   "lineHeight": 20,
@@ -1650,7 +1585,6 @@ exports[`renders text button with variant 1`] = `
                   "textAlign": "center",
                 }
               }
-              variant="labelLarge"
             >
               Text Button
             </Text>

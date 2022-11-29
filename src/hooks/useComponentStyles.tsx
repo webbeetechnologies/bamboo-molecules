@@ -1,9 +1,7 @@
-import type { StyleProp } from 'react-native';
-import { useColorMode } from '@webbee/bamboo-atoms';
+import { StyleProp, StyleSheet } from 'react-native';
 import type { ITheme } from '../core';
 import { normalizeStyles } from '../utils';
-import { useTheme } from './';
-import { StyleSheet } from 'react-native';
+import { useTheme, useColorMode } from './';
 
 const defaultStyleObject = {};
 
@@ -19,20 +17,22 @@ const useComponentStyles = (
     resolvers?: {
         variant?: string;
         states?: { [key: string]: boolean };
+        size?: string;
     },
 ) => {
-    const { variant, states } = resolvers || {};
+    const { variant, states, size } = resolvers || {};
     const theme = useTheme<ITheme>();
-    const colorMode = useColorMode();
+    const { colorMode } = useColorMode();
 
     const componentTheme = theme[componentName];
-    const currentTheme = theme[colorMode];
+    const currentTheme = theme[colorMode as string];
 
     return normalizeStyles(
         theme.resolveComponentStyles({
             componentTheme,
             variant,
             states,
+            size,
             style: StyleSheet.flatten(style),
         }),
         currentTheme,

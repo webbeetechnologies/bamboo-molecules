@@ -8,13 +8,19 @@ import { useComponentStyles } from '../../hooks';
 /**
  * Neutral component. Doesn't have platform specific styles
  */
-const Icon = ({ type = 'material', style, ...rest }: IconProps) => {
+const Icon = ({ type = 'material-community', style, ...rest }: IconProps) => {
     const IconComponent = iconFactory(type);
     const componentStyles = useComponentStyles('Icon', style);
 
     return <IconComponent style={componentStyles} {...rest} />;
 };
 
-export const defaultStyles: ComponentStylePropWithVariants<ViewStyle> = {};
+type CustomProps = {
+    animationScale: string;
+};
+
+export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
+    animationScale: 'animation.scale',
+};
 
 export default memo(Icon);

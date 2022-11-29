@@ -40,7 +40,7 @@ export default memoize((type: IconType): any =>
                 case IconPacks.Feather:
                     return require('react-native-vector-icons/Feather').default;
                 case IconPacks.AntDesign:
-                case 'ant-design':
+                case 'antdesign':
                     return require('react-native-vector-icons/AntDesign').default;
                 case IconPacks.Fontisto:
                     return require('react-native-vector-icons/Fontisto').default;

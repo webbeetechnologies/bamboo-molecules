@@ -19,11 +19,19 @@ Check:
 -   As a developer I want that this list consumes a [DataSource](../interfaces/DataSource.md)
 -   As a developer I want to implement any number of SelectItem flavors
 -   As a developer I want to add elements to the right or left side of an item using [WithElements Interface](../interfaces/WithElementsInterface.md)
--   As a developer I want to use
+-   As a developer I want to be updated about the change of selection.
+
 
 ## Implementation details
 
 -   Does FlatList cut it for 1000 elements? As far as I understand, it virtualizes under the hood
+
+## Minimum Viable Interface
+```typescript
+    interface ISelectList {
+        multiple: boolean;
+    }
+```
 
 # SelectList v2
 

@@ -14,6 +14,8 @@ export {
     ItalicProps,
     ViewProps,
     IconProps,
+    PopoverProps,
+    IconButtonProps,
     ActivityIndicatorProps,
     HorizontalDividerProps,
     VerticalDividerProps,
@@ -21,6 +23,26 @@ export {
     ButtonProps,
     SurfaceProps,
     SwitchProps,
+    CheckboxProps,
+    ListItemProps,
+    FlatListProps,
+    SectionListProps,
+    FlatGridProps,
+    SectionGridProps,
+    TextInputProps,
+    NumberInputProps,
+    FilePickerProps,
+    ModalProps,
+    DatePickerInlineProps,
+    DatePickerModalProps,
+    DatePickerInputProps,
+    CalendarDate,
+    CalendarDates,
+    TimePickerModalProps,
+    TimePickerProps,
+    TextInputWithMaskProps,
+    InputGroupProps,
+    InputAddonProps,
 } from './components';
 
 export {
@@ -49,6 +71,9 @@ export {
     useCurrentTheme,
     useToggle,
     useMediaQuery,
+    useControlledValue,
+    useFilePicker,
+    useLatest,
 } from './hooks';
 
 export {
@@ -57,8 +82,20 @@ export {
     tokens,
     generateLightThemeColors,
     generateDarkThemeColors,
+    lightenBy,
+    darkenBy,
 } from './styles';
 
-export { normalizeStyles, resolveComponentStyles } from './utils';
+export {
+    normalizeStyles,
+    resolveComponentStyles,
+    normalizeSpacings,
+    DocumentPicker,
+    SpacingType,
+    SpacingKey,
+    DocumentPickerOptions,
+    DocumentResult,
+    documentTypes,
+} from './utils';
 
-export { ComponentStylePropWithVariants } from './types';
+export { ComponentStylePropWithVariants, WithElements } from './types';

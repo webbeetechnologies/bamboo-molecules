@@ -1,5 +1,5 @@
 // import { Example as Icon } from '../stories/components/Icon/Icon';
-import { renderWithWrapper } from '../testHelper';
+import { renderWithWrapper } from '../testHelpers';
 
 beforeEach(() => {
     jest.resetModules();

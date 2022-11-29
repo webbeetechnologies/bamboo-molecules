@@ -12,11 +12,16 @@ export type MD3Theme = {
     dark: boolean;
     animation: {
         scale: number;
+        durations: Record<string, number>;
     };
     colors: MD3Colors;
     typescale: MD3Typescale;
-    roundness: number[];
-    spacing: (number | string)[];
+    roundness: Record<string, string | number>;
+    spacings: Record<string, string | number>;
+    letterSpacings: Record<string, string | number>;
+    fontSizes: Record<string, string | number>;
+    fontWeights: Record<string, string | number>;
+    lineHeights: Record<string, string | number>;
 };
 
 export type ResolveComponentStylesArgs = {
@@ -24,6 +29,7 @@ export type ResolveComponentStylesArgs = {
     style: StyleProp<any>;
     variant?: string;
     states?: { [key: string]: boolean };
+    size?: string;
 };
 
 export interface ProvideThemeArgs {

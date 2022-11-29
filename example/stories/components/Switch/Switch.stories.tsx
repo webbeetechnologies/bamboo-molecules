@@ -1,18 +1,11 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ProvideMolecules } from 'bamboo-molecules';
 
 import { Example } from './Switch';
 
 export default {
     title: 'components/Switch',
     component: Example,
-    decorators: [
-        Story => (
-            <ProvideMolecules>
-                <Story />
-            </ProvideMolecules>
-        ),
-    ],
+
     argTypes: {
         thumbTintColor: { control: { type: 'color' } },
         thumbColor: { control: { type: 'color' } },
