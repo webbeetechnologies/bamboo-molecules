@@ -18,8 +18,7 @@
   },
   "jest": {
     "preset": "react-native",
-    "setupFiles": [
-    ],
+    "setupFiles": [],
     "setupFilesAfterEnv": [
       "<rootDir>/testSetup.js",
       "@testing-library/jest-native/extend-expect"
@@ -36,7 +35,7 @@
       ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(@react-native|react-native|react-native-super-grid|react-native-vector-icons|react-native-iphone-x-helper)/)"
+      "node_modules/(?!(@react-native|react-native|react-native-super-grid|react-native-vector-icons|react-native-web-hooks|react-native-actions-sheet|@expo/vector-icons|expo-font|react-native-iphone-x-helper)/)"
     ]
   },
   "dependencies": {
