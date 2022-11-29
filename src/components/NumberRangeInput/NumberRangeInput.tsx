@@ -55,6 +55,7 @@ const NumberRangeInput = ({
     });
     const [error, setError] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
+    const [isTouched, setIsTouched] = useState(false); // TODO - create a hook
 
     const { containerStyle, inputsContainerStyle, minInputStyle, maxInputStyle, errorTextStyle } =
         useMemo(() => {
@@ -84,6 +85,8 @@ const NumberRangeInput = ({
 
     const onFocus = useCallback(
         (args: any, type: 'min' | 'max') => {
+            if (!isTouched) setIsTouched(true);
+
             if (!isFocused) setIsFocused(true);
 
             if (type === 'min') {
@@ -93,7 +96,7 @@ const NumberRangeInput = ({
 
             onFocusMaxInput?.(args);
         },
-        [isFocused, onFocusMaxInput, onFocusMinInput],
+        [isFocused, isTouched, onFocusMaxInput, onFocusMinInput],
     );
 
     const onBlur = useCallback(
@@ -112,6 +115,7 @@ const NumberRangeInput = ({
 
     useEffect(() => {
         if (
+            !isTouched ||
             isFocused ||
             value?.min === '' ||
             value?.max === '' ||
@@ -121,7 +125,7 @@ const NumberRangeInput = ({
             return;
 
         setError(Number(value?.min) > Number(value?.max));
-    }, [isFocused, value?.max, value?.min]);
+    }, [isFocused, isTouched, value?.max, value?.min]);
 
     return (
         <View style={containerStyle}>
