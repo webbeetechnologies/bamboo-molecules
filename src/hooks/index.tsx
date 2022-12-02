@@ -1,6 +1,4 @@
-import { useTheme as useThemeAtoms } from '@webbee/bamboo-atoms';
-export { useColorMode, useMediaQuery } from '@webbee/bamboo-atoms';
-import type { ITheme } from '../core';
+export * from './exports';
 
 export { default as useMolecules } from './useMolecules';
 export { default as usePlatformType } from './usePlatformType';
@@ -13,4 +11,4 @@ export { default as useLatest } from './useLatest';
 
 export * from './useKeyboardDismissable';
 
-export const useTheme: <T extends ITheme>() => T = useThemeAtoms;
+export { default as useTheme } from './useTheme';

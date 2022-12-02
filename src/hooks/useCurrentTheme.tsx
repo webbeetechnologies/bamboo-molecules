@@ -1,4 +1,5 @@
-import { useTheme, useColorMode } from './index';
+import { useColorMode } from './exports';
+import useTheme from './useTheme';
 
 const useCurrentTheme = () => {
     const { colorMode } = useColorMode();
