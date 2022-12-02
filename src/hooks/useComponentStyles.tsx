@@ -1,7 +1,9 @@
 import { StyleProp, StyleSheet } from 'react-native';
 import type { ITheme } from '../core';
 import { normalizeStyles } from '../utils';
-import { useTheme, useColorMode } from './';
+
+import useTheme from './useTheme';
+import { useColorMode } from './exports';
 
 const defaultStyleObject = {};
 
