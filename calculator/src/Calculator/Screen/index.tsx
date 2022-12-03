@@ -1,5 +1,6 @@
 import React, { memo, useMemo, useCallback } from 'react';
 import { useMolecules } from '../../../../src/hooks';
+import doMath from '../Logic';
 import type { ColorModeType } from '../utils';
 
 const screenFontSize = {
@@ -8,23 +9,33 @@ const screenFontSize = {
 };
 
 type Props = {
-    calc: number;
     history: string;
     setHistory: React.Dispatch<React.SetStateAction<string>>;
     colorMode: ColorModeType;
+    setCalc: React.Dispatch<React.SetStateAction<number>>;
+    calc: number;
 };
 
-const Screen = ({ calc, history, setHistory, colorMode }: Props) => {
+const Screen = ({ calc, history, setHistory, colorMode, setCalc }: Props) => {
     const { Text, View, TextInput } = useMolecules();
 
     const result = useMemo(() => {
-        console.log(`calc: ${calc} || hist: ${history}`);
-        console.log(calc.toString() === history);
-        if (calc.toString() === history) {
+        if (history === '') {
+            setCalc(0);
             return 0;
         }
-        return calc;
-    }, [calc, history]);
+
+        const result = doMath(history);
+        if (typeof result === 'string') {
+            return calc;
+        }
+
+        setCalc(() => result);
+        if (result.toString() === history) {
+            return 0;
+        }
+        return result;
+    }, [history]);
 
     const onChangeHistory = useCallback((input: string) => {
         setHistory(input);
@@ -58,8 +69,6 @@ const Screen = ({ calc, history, setHistory, colorMode }: Props) => {
         [colorMode],
     );
 
-    const textInputValue = useMemo(() => (history === '' ? '0' : history), [history]);
-
     const resultValue = useMemo(() => (result !== 0 ? result : ''), [result]);
 
     return (
@@ -70,7 +79,8 @@ const Screen = ({ calc, history, setHistory, colorMode }: Props) => {
                 keyboardType="decimal-pad"
                 numberOfLines={1}
                 style={someBasicStyleTextInput.style}
-                value={textInputValue}
+                placeholder={'0'}
+                value={history}
                 onChangeText={onChangeHistory}
                 underlineColor="rgba(0,0,0,0)"
             />

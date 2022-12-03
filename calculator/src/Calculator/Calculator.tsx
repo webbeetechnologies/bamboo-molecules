@@ -13,8 +13,6 @@ export type Props = {
     colorMode?: ColorModeType;
 };
 
-
-
 const Calculator = (props: Props) => {
     const { style, onChange, colorMode = 'light' } = props;
 
@@ -23,18 +21,7 @@ const Calculator = (props: Props) => {
     const [history, setHistory] = useState('');
     const [calc, setCalc] = useState(0);
 
-    useEffect(() => {
-        if (history === '') {
-            setCalc(0);
-            return;
-        }
-        const result = doMath(history);
-        if (typeof result === 'string') {
-            return;
-        }
-
-        setCalc(() => result);
-    }, [history]);
+    useEffect(() => {}, [history]);
 
     useEffect(() => {
         onChange?.(calc);
@@ -42,7 +29,13 @@ const Calculator = (props: Props) => {
 
     return (
         <View style={style}>
-            <Screen colorMode={colorMode} calc={calc} history={history} setHistory={setHistory} />
+            <Screen
+                setCalc={setCalc}
+                colorMode={colorMode}
+                history={history}
+                setHistory={setHistory}
+                calc={calc}
+            />
             <Numpad setHistory={setHistory} colorMode={colorMode} />
         </View>
     );

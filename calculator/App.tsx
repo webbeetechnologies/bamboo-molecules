@@ -12,7 +12,7 @@ const App = () => {
         <ProvideMolecules>
             <Calculator
                 colorMode="dark"
-                onChange={res => console.log(res)}
+                // onChange={res => console.log(res)}
                 style={{
                     maxWidth: 300,
                 }}
