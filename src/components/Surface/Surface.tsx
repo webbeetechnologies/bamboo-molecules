@@ -1,7 +1,7 @@
 import { ComponentPropsWithRef, ReactNode, memo, useMemo } from 'react';
 import { Animated, View, StyleProp, ViewStyle } from 'react-native';
 
-import { useComponentStyles, useCurrentTheme } from '../../hooks';
+import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
 import shadow from '../../styles/shadow';
 import { isAnimatedValue } from '../../styles/overlay';
 import { inputRange } from '../../styles/shadow';
@@ -73,6 +73,7 @@ export type Props = ComponentPropsWithRef<typeof View> & {
 
 // for Web
 const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) => {
+    const {View} = useMolecules();
     const theme = useCurrentTheme();
     const surfaceStyles = useComponentStyles('Surface', style);
     const backgroundColor = (() => {
@@ -94,6 +95,8 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
         [backgroundColor, elevation, surfaceStyles],
     );
 
+     console.log(typeof children);
+   
     return (
         <Animated.View {...props} testID={testID} style={memoizedStyles}>
             {children}

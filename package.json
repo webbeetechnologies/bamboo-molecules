@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "repository": "git@github.com:webbeetechnologies/bamboo-molecules.git",
   "license": "MIT",
-  "private": false,
+  "private": true,
   "packageManager": "yarn@3.1.1",
   "workspaces": {
     "packages": [

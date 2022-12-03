@@ -175,6 +175,7 @@ const Button = (
     }: Props,
     ref: any,
 ) => {
+    
     const disabled = disabledProp || !onPress;
     const { ActivityIndicator, TouchableRipple, Text, Icon, Surface } = useMolecules();
 
@@ -311,6 +312,7 @@ const Button = (
 
     const { color: customLabelColor, fontSize: customLabelSize } =
         StyleSheet.flatten(labelStyle) || {};
+
 
     return (
         <Surface {...rest} style={surfaceStyle} {...{ elevation: elevation }}>

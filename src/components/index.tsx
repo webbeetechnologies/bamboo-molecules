@@ -88,19 +88,19 @@ export {
 
 export { DatePickerInput, DatePickerInputProps, datePickerInputStyles } from './DatePickerInput';
 
-export {
-    TimePicker,
-    TimePickerProps,
-    timePickerStyles,
-    timePickerInputStyles,
-    timePickerInputsStyles,
-    timePickerClockStyles,
-    timePickerClockHoursStyles,
-    timePickerClockMinutesStyles,
-    timePickerAmPmSwitcherStyles,
-} from './TimePicker';
+// export {
+//     TimePicker,
+//     TimePickerProps,
+//     timePickerStyles,
+//     timePickerInputStyles,
+//     timePickerInputsStyles,
+//     timePickerClockStyles,
+//     timePickerClockHoursStyles,
+//     timePickerClockMinutesStyles,
+//     timePickerAmPmSwitcherStyles,
+// } from './TimePicker';
 
-export { TimePickerModal, TimePickerModalProps, timePickerModalStyles } from './TimePickerModal';
+// export { TimePickerModal, TimePickerModalProps, timePickerModalStyles } from './TimePickerModal';
 
 export { TextInputWithMask, TextInputWithMaskProps } from './TextInputWithMask';
 
