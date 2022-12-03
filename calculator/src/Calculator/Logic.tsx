@@ -1,5 +1,5 @@
 export default function doMath(s: string) {
-    const postfix = convertToPostfix(s);
+    const postfix = convertToPostfix('0' + s);
     return postfix_evaluation(postfix);
 }
 

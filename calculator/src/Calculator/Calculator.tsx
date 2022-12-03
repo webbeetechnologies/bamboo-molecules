@@ -1,8 +1,6 @@
 import React, { useState, useEffect, memo } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { useMolecules } from '../../../src/hooks';
-
-import doMath from './Logic';
 import Numpad from './Numpad';
 import Screen from './Screen';
 import type { ColorModeType } from './utils';
