@@ -1,3 +1,1 @@
-import type Calculator from './Calculator';
-
-export default Calculator;
+export { default as Calculator, Props as CalculatorProps } from './Calculator';

@@ -1,12 +1,26 @@
-import { TouchableOpacity } from 'react-native';
 import React, { memo, useMemo } from 'react';
-import { useMolecules } from 'bamboo-molecules';
-import { BtnTypes, NumpadButtonProps } from '../types';
+import { useCurrentTheme, useMolecules } from '../../../../src/hooks';
 
-const NumpadButton = memo(({ item, handleBtnClick }: NumpadButtonProps) => {
-    const { Text } = useMolecules();
+import { BtnTypes, ColorModeType } from '../utils';
 
-    const getBackgroundColor = () => {
+type Props = {
+    item: {
+        icon: string;
+        type: BtnTypes;
+        oper: string;
+    };
+    handleBtnClick: (val: string) => void;
+    colorMode: ColorModeType;
+};
+
+const NumpadButton = memo(({ item, handleBtnClick ,colorMode}: Props) => {
+    const { Button } = useMolecules();
+
+    const { colors } = useCurrentTheme();
+
+    
+    const getBtnColor = useMemo(() => {
+        
         switch (item.type) {
             case BtnTypes.OPERATOR:
                 return '#80d7ff';
@@ -16,33 +30,36 @@ const NumpadButton = memo(({ item, handleBtnClick }: NumpadButtonProps) => {
                 return '#80ffb4';
 
             default:
-                return '#80d7ff20';
+                return colors.primary ;
         }
-    };
-    const numpadButtonStyle: any = useMemo(() => {
+    }, [colorMode]);
+
+    const numpadButtonStyle: object = useMemo(() => {
         return {
-            flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            margin: 5,
             padding: 5,
             aspectRatio: 1,
             borderRadius: 1000,
-            backgroundColor: getBackgroundColor(),
+            backgroundColor: getBtnColor,
         };
     }, []);
 
+    const labelStyle: object = useMemo(() => {
+        return {
+            fontSize: 22,
+            fontWeight: '600',
+            color: colorMode === 'light' ? '#000000a0' : '#ffffff'  ,
+        };
+    }, [colorMode]);
     return (
-        <TouchableOpacity style={numpadButtonStyle} onPress={() => handleBtnClick(item.oper)}>
-            <Text
-                adjustsFontSizeToFit
-                style={{
-                    fontSize: 22,
-                    fontWeight: '600',
-                }}>
-                {item.icon}
-            </Text>
-        </TouchableOpacity>
+        <Button
+            variant="contained"
+            style={numpadButtonStyle}
+            onPress={() => handleBtnClick(item.oper)}
+            labelStyle={labelStyle}>
+            {item.icon}
+        </Button>
     );
 });
-export default NumpadButton;
+export default memo(NumpadButton);

@@ -1,114 +1,15 @@
-import { FlatList } from 'react-native';
 import React, { memo, useCallback, useMemo } from 'react';
-import { BtnTypes, NumpadButtonTypes, NumpadProps } from '../types';
+import { btnValues, ColorModeType } from '../utils';
 import doMath from '../Logic';
 import NumpadButton from './NumpadButton';
+import { useMolecules } from '../../../../src/hooks';
 
-const btnValues: NumpadButtonTypes[] = [
-    {
-        icon: 'AC',
-        type: BtnTypes.CLEAR,
-        oper: 'AC',
-    },
-    {
-        icon: '',
-        type: BtnTypes.NUMBER,
-        oper: '',
-    },
-    {
-        icon: '',
-        type: BtnTypes.NUMBER,
-        oper: '',
-    },
-    {
-        icon: '÷',
-        type: BtnTypes.OPERATOR,
-        oper: '/',
-    },
-    {
-        icon: '7',
-        type: BtnTypes.NUMBER,
-        oper: '7',
-    },
-    {
-        icon: '8',
-        type: BtnTypes.NUMBER,
-        oper: '8',
-    },
-    {
-        icon: '9',
-        type: BtnTypes.NUMBER,
-        oper: '9',
-    },
-    {
-        icon: 'x',
-        type: BtnTypes.OPERATOR,
-        oper: '*',
-    },
-    {
-        icon: '4',
-        type: BtnTypes.NUMBER,
-        oper: '4',
-    },
-    {
-        icon: '5',
-        type: BtnTypes.NUMBER,
-        oper: '5',
-    },
-    {
-        icon: '6',
-        type: BtnTypes.NUMBER,
-        oper: '6',
-    },
-    {
-        icon: '-',
-        type: BtnTypes.OPERATOR,
-        oper: '-',
-    },
-    {
-        icon: '1',
-        type: BtnTypes.NUMBER,
-        oper: '1',
-    },
-    {
-        icon: '2',
-        type: BtnTypes.NUMBER,
-        oper: '2',
-    },
-    {
-        icon: '3',
-        type: BtnTypes.NUMBER,
-        oper: '3',
-    },
-    {
-        icon: '+',
-        type: BtnTypes.OPERATOR,
-        oper: '+',
-    },
-    {
-        icon: '.',
-        type: BtnTypes.POINT,
-        oper: '.',
-    },
-    {
-        icon: '0',
-        type: BtnTypes.NUMBER,
-        oper: '0',
-    },
-    {
-        icon: '<-',
-        type: BtnTypes.BACK,
-        oper: '<-',
-    },
-    {
-        icon: '=',
-        type: BtnTypes.EQUAL,
-        oper: '=',
-    },
-];
-
-const Numpad = ({ setHistory }: NumpadProps) => {
-    // const { Button, FlatGrid, Text } = useMolecules();
+export type Props = {
+    setHistory: React.Dispatch<React.SetStateAction<string>>;
+    colorMode: ColorModeType;
+};
+const Numpad = ({ setHistory, colorMode }: Props) => {
+    const { FlatGrid, View } = useMolecules();
 
     const handleBtnClick = useCallback((val: string) => {
         if (val === '') return;
@@ -233,32 +134,35 @@ const Numpad = ({ setHistory }: NumpadProps) => {
         }
     }, []);
 
-    return (
-        <FlatList
-            numColumns={4}
-            data={btnValues}
-            renderItem={({ item, index }) => (
-                <NumpadButton item={item} handleBtnClick={handleBtnClick} />
-            )}
-            keyExtractor={(item, index) => `btn-${index}`}
-            contentContainerStyle={{
-                padding: 5,
-            }}
-        />
+    const viewStyle = useMemo(
+        () => ({
+            paddingTop: 10,
+            backgroundColor: colorMode === 'light' ? '#ffffff' : '#1b1b1b',
+        }),
+        [colorMode],
     );
 
-    // return (
-    //     <FlatGrid
-    //         numColumns={4}
-    //         data={btnValues}
-    //         renderItem={({ item, index }) => (
-    //             <Button variant="contained" key={index} onPress={() => handleBtnClick(item)}>
-    //                 {item}
-    //             </Button>
-    //         )}
-    //         keyExtractor={(item, index) => `btn-${index}`}
-    //     />
-    // );
+    return (
+        <View style={viewStyle}>
+            <FlatGrid
+                data={btnValues}
+                renderItem={({ item }) =>
+                    item.oper !== '' ? (
+                        <NumpadButton
+                            item={item}
+                            handleBtnClick={handleBtnClick}
+                            colorMode={colorMode}
+                        />
+                    ) : (
+                        <View />
+                    )
+                }
+                spacing={10}
+                maxItemsPerRow={4}
+                itemDimension={0}
+            />
+        </View>
+    );
 };
 
 export default memo(Numpad);

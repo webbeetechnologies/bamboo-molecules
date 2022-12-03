@@ -1,15 +1,21 @@
-import { StyleSheet, TextInput } from 'react-native';
 import React, { memo, useMemo, useCallback } from 'react';
-import type { ScreenProps } from '../types';
 import { useMolecules } from '../../../../src/hooks';
+import type { ColorModeType } from '../utils';
 
 const screenFontSize = {
     calc: 30,
     history: 40,
 };
 
-const Screen = ({ calc, history, setHistory }: ScreenProps) => {
-    const { Text, View } = useMolecules();
+type Props = {
+    calc: number;
+    history: string;
+    setHistory: React.Dispatch<React.SetStateAction<string>>;
+    colorMode: ColorModeType;
+};
+
+const Screen = ({ calc, history, setHistory, colorMode }: Props) => {
+    const { Text, View, TextInput } = useMolecules();
 
     const result = useMemo(() => {
         console.log(`calc: ${calc} || hist: ${history}`);
@@ -24,30 +30,53 @@ const Screen = ({ calc, history, setHistory }: ScreenProps) => {
         setHistory(input);
     }, []);
 
+    const style: any = useMemo(
+        () => ({
+            viewStyle: {
+                height: screenFontSize.history * 1.5 + screenFontSize.calc * 2,
+                backgroundColor: colorMode === 'light' ? '#71a9b921' : '#2b2b2b',
+                justifyContent: 'flex-end',
+                padding: 10,
+            },
+            calcStyle: {
+                fontSize: screenFontSize.calc,
+                fontWeight: '600',
+                textAlign: 'right',
+                color: colorMode === 'light' ? '#000000' : '#ffffff',
+                opacity: 0.6,
+            },
+            historyStyle: {
+                backgroundColor: 'transparent',
+                fontSize: screenFontSize.history,
+                textAlign: 'right',
+                color: colorMode === 'light' ? '#000000' : '#ffffff',
+
+                padding: 0,
+                flex: 1,
+            },
+        }),
+        [colorMode],
+    );
+
+    const textInputValue = useMemo(() => (history === '' ? '0' : history), [history]);
+
+    const resultValue = useMemo(() => (result !== 0 ? result : ''), [result]);
+
     return (
-        <View style={Style.screen}>
+        <View style={style.viewStyle}>
             <TextInput
+                inputStyle={style.historyStyle}
+                inputContainerStyle={someBasicStyleTextInput.inputContainerStyle}
                 keyboardType="decimal-pad"
                 numberOfLines={1}
-                style={{
-                    fontSize: screenFontSize.history,
-
-                    textAlign: 'right',
-                }}
-                value={history === '' ? '0' : history}
+                style={someBasicStyleTextInput.style}
+                value={textInputValue}
                 onChangeText={onChangeHistory}
+                underlineColor="rgba(0,0,0,0)"
             />
 
-            <Text
-                numberOfLines={1}
-                adjustsFontSizeToFit
-                style={{
-                    fontSize: screenFontSize.calc,
-                    fontWeight: '600',
-                    textAlign: 'right',
-                    opacity: 0.6,
-                }}>
-                {result !== 0 ? result : ''}
+            <Text numberOfLines={1} adjustsFontSizeToFit style={style.calcStyle}>
+                {resultValue}
             </Text>
         </View>
     );
@@ -55,11 +84,11 @@ const Screen = ({ calc, history, setHistory }: ScreenProps) => {
 
 export default memo(Screen);
 
-const Style = StyleSheet.create({
-    screen: {
-        height: screenFontSize.history * 1.5 + screenFontSize.calc * 2,
-        backgroundColor: '#71a9b921',
-        justifyContent: 'flex-end',
-        padding: 10,
+const someBasicStyleTextInput = {
+    inputContainerStyle: {
+        flex: 1,
     },
-});
+    style: {
+        backgroundColor: 'transparent',
+    },
+};
