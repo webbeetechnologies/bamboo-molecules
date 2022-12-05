@@ -7,6 +7,7 @@ import React, {
     memo,
     ReactElement,
     ReactNode,
+    useCallback,
     useEffect,
     useMemo,
     useRef,
@@ -39,7 +40,7 @@ const PopperContent = (
         scrollRef,
         closeOnScroll = true,
         placement: placementProp,
-        onClose,
+        setIsOpen,
         shouldOverlapWithTrigger,
         setOverlayRef,
         arrowProps: popperArrowProps,
@@ -47,6 +48,10 @@ const PopperContent = (
 
     const overlayRef = useRef(null);
     // const { top } = useSafeAreaInsets();
+
+    const onClose = useCallback(() => {
+        setIsOpen?.(false);
+    }, [setIsOpen]);
 
     const { overlayProps, rendered, arrowProps, placement, updatePosition } = useOverlayPosition({
         scrollRef,
