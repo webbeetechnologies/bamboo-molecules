@@ -83,20 +83,26 @@ const Dialog = ({ children, onClose, iconProps, contentStyle = {}, ...rest }: Pr
         };
     }, [componentStyles]);
 
+    const dialogChildren = useMemo(
+        () =>
+            Children.toArray(children)
+                .filter(child => child != null && typeof child !== 'boolean')
+                .map((child, i) => {
+                    if (i === 0 && isValidElement(child) && !iconProps) {
+                        return cloneElement(child, {
+                            style: [childStyle, child.props.style],
+                        });
+                    }
+                    return child;
+                }),
+        [childStyle, children, iconProps],
+    );
+
     return (
         <Modal elevation={2} {...rest} onClose={onClose} contentStyle={containerStyle}>
             <>
                 {iconProps ? <DialogIcon {...iconProps} /> : null}
-                {Children.toArray(children)
-                    .filter(child => child != null && typeof child !== 'boolean')
-                    .map((child, i) => {
-                        if (i === 0 && isValidElement(child) && !iconProps) {
-                            return cloneElement(child, {
-                                style: [childStyle, child.props.style],
-                            });
-                        }
-                        return child;
-                    })}
+                {dialogChildren}
             </>
         </Modal>
     );
