@@ -5,7 +5,7 @@ import {
     IExtractStylesFuncArgs,
 } from '@webbee/bamboo-atoms';
 import merge from 'ts-deepmerge';
-import memoize from 'lodash.memoize';
+import { memoize } from '../../utils';
 
 import {
     activityIndicatorStyles,
@@ -53,7 +53,7 @@ import {
     timePickerClockMinutesStyles,
     timePickerAmPmSwitcherStyles,
     optionListStyles,
-    inputGroupStyles,
+    elementGroupStyles,
     inputAddonStyles,
     actionSheetStyles,
     dropdownListStyles,
@@ -131,7 +131,7 @@ const defaultThemeValue: Partial<ITheme> = {
     TimePicker_AmPmSwitcher: timePickerAmPmSwitcherStyles,
 
     OptionList: optionListStyles,
-    InputGroup: inputGroupStyles,
+    ElementGroup: elementGroupStyles,
     InputAddon: inputAddonStyles,
 
     ActionSheet: actionSheetStyles,

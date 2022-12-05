@@ -1,5 +1,5 @@
 import { memo, forwardRef, useMemo, useCallback } from 'react';
-import omit from 'lodash.omit';
+import { omit } from '../../utils';
 import type { ListRenderItemInfo } from '@shopify/flash-list';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { Props, SectionItem, ISectionList, SectionItemType } from './types';

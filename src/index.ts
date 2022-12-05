@@ -44,7 +44,7 @@ export {
     TimePickerProps,
     TextInputWithMaskProps,
     OptionListProps,
-    InputGroupProps,
+    ElementGroupProps,
     InputAddonProps,
     ActionSheetProps,
     IActionSheet,

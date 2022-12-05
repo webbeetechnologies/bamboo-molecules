@@ -12,4 +12,4 @@ export {
 
 export { normalizeBorderRadiuses } from './normalizeBorderRadiuses';
 
-export { default as isNil } from './isNil';
+export * from './lodash';

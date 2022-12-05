@@ -116,7 +116,7 @@ export { OptionList, OptionListProps, IOptionList, optionListStyles } from './Op
 
 export { DropdownList, DropdownListProps, dropdownListStyles } from './DropdownList';
 
-export { InputGroup, inputGroupStyles, InputGroupProps } from './InputGroup';
+export { ElementGroup, elementGroupStyles, ElementGroupProps } from './ElementGroup';
 
 export { InputAddon, inputAddonStyles, InputAddonProps } from './InputAddon';
 

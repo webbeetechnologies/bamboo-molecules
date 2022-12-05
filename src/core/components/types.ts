@@ -34,7 +34,7 @@ import type {
     ISectionGrid,
     IOptionList,
     DropdownListProps,
-    InputGroupProps,
+    ElementGroupProps,
     InputAddonProps,
     IActionSheet,
     Dialog,
@@ -81,7 +81,7 @@ export interface DefaultComponents {
     TextInputWithMask: ComponentType<TextInputWithMaskProps>;
     OptionList: IOptionList;
     DropdownList: ComponentType<DropdownListProps>;
-    InputGroup: ComponentType<InputGroupProps>;
+    ElementGroup: ComponentType<ElementGroupProps>;
     InputAddon: ComponentType<InputAddonProps>;
     ActionSheet: IActionSheet;
     Dialog: typeof Dialog;
