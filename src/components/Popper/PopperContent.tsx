@@ -2,11 +2,11 @@ import React, {
     Children,
     cloneElement,
     forwardRef,
-    Fragment,
     isValidElement,
     memo,
     ReactElement,
     ReactNode,
+    useCallback,
     useEffect,
     useMemo,
     useRef,
@@ -39,7 +39,7 @@ const PopperContent = (
         scrollRef,
         closeOnScroll = true,
         placement: placementProp,
-        onClose,
+        setIsOpen,
         shouldOverlapWithTrigger,
         setOverlayRef,
         arrowProps: popperArrowProps,
@@ -47,6 +47,10 @@ const PopperContent = (
 
     const overlayRef = useRef(null);
     // const { top } = useSafeAreaInsets();
+
+    const onClose = useCallback(() => {
+        setIsOpen?.(false);
+    }, [setIsOpen]);
 
     const { overlayProps, rendered, arrowProps, placement, updatePosition } = useOverlayPosition({
         scrollRef,
@@ -127,7 +131,7 @@ const PopperContent = (
     const { theme: contextTheme, ...restContext } = context;
     const theme = useMemo(() => extendTheme(contextTheme), [contextTheme]);
 
-    if (!isOpen) return <Fragment />;
+    if (!isOpen) return <View ref={overlayRef} />;
 
     return (
         <ProvideMolecules theme={theme} {...restContext}>

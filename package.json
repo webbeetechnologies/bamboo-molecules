@@ -3,7 +3,6 @@
   "version": "0.1.1-alpha.1",
   "repository": "git@github.com:webbeetechnologies/bamboo-molecules.git",
   "license": "MIT",
-  "private": true,
   "packageManager": "yarn@3.3.0",
   "workspaces": {
     "packages": [
@@ -27,8 +26,9 @@
     "type-check": "tsc --noEmit",
     "prepare:husky": "husky install",
     "prepare": "bob build",
-    "run:example": "yarn --cwd ./example start",
-    "run:storybook": "yarn --cwd ./example storybook",
+    "run:example": "yarn workspace example start",
+    "run:storybook": "yarn workspace example storybook",
+    "run:testcases": "yarn workspace test-cases start",
     "bundle": "yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
     "release": "yarn bundle && yarn publish dist/webbee-bamboo-molecules-$npm_package_version.tgz --access=public"
   },

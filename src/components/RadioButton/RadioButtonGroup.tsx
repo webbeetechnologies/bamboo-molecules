@@ -12,6 +12,10 @@ export type Props = ViewProps & {
      */
     value?: string;
     /**
+     * Default selected radio button
+     */
+    defaultValue?: string;
+    /**
      * React elements containing radio buttons.
      */
     children: ReactNode;
@@ -66,13 +70,15 @@ export const RadioButtonContext = createContext<RadioButtonContextType>(null as 
  */
 const RadioButtonGroup = ({
     value: valueProp,
+    defaultValue,
     onValueChange: onValueChangeProp,
     children,
     ...rest
 }: Props) => {
     const { View } = useMolecules();
     const [value, onValueChange] = useControlledValue({
-        value: valueProp,
+        value: valueProp || defaultValue,
+        defaultValue,
         onChange: onValueChangeProp,
     });
 

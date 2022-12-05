@@ -70,3 +70,6 @@ example/.ondevice/storybook.requires.js
 dist
 
 example/cache
+
+.yarn/cache
+.yarn/install-state.gz

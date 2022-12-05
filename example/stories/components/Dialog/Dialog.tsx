@@ -42,7 +42,9 @@ export const ExampleWithTrigger = (props: Props) => {
 
     return (
         <>
-            <Button onPress={onOpen}>Show Dialog</Button>
+            <Button onPress={onOpen} testID="dialog-trigger">
+                Show Dialog
+            </Button>
             <ExampleWithContent {...props} isOpen={isOpen} onClose={onClose} />
         </>
     );

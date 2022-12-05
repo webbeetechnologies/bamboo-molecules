@@ -13,9 +13,8 @@ const PopperContent = lazy(() => import('../../components/Popper/PopperContent')
 const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
     (
         {
-            onOpen,
             trigger,
-            onClose,
+            setIsOpen: setIsOpenProp,
             isOpen: isOpenProp,
             children,
             defaultIsOpen,
@@ -45,9 +44,7 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
         const [isOpen, setIsOpen] = useControlledValue({
             value: isOpenProp,
             defaultValue: defaultIsOpen,
-            onChange: isPopoverOpen => {
-                isPopoverOpen ? onOpen?.() : onClose?.();
-            },
+            onChange: setIsOpenProp,
         });
 
         const handleClose = useCallback(() => {
