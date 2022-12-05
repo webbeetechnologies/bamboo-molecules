@@ -11,8 +11,7 @@ const withPopper = <T,>(Component: ComponentType<T>) =>
         const {
             children,
             showArrow,
-            onClose,
-            onOpen,
+            setIsOpen,
             isOpen,
             defaultIsOpen,
             initialFocusRef,
@@ -64,8 +63,7 @@ const withPopper = <T,>(Component: ComponentType<T>) =>
         return (
             <Popover
                 showArrow={showArrow}
-                onClose={onClose}
-                onOpen={onOpen}
+                setIsOpen={setIsOpen}
                 isOpen={isOpen}
                 arrowProps={arrowProps}
                 defaultIsOpen={defaultIsOpen}

@@ -10,7 +10,9 @@ export default {
     component: Example,
 } as ComponentMeta<typeof Example>;
 
-const Template: ComponentStory<typeof Example> = args => <Example {...args} />;
+const Template: ComponentStory<typeof Example> = args => {
+    return <Example {...args} />;
+};
 
 export const Default = Template.bind({});
 Default.args = {
@@ -28,6 +30,9 @@ Default.args = {
 };
 
 Default.parameters = {
+    controls: {
+        exclude: /(?:\b|')(isOpen|setIsOpen|defaultIsOpen)(?:\b|')/,
+    },
     docs: {
         source: {
             code: `
@@ -53,8 +58,57 @@ return (
     },
 };
 
+export const PopoverControlled: ComponentStory<typeof Example> = args => {
+    return <Example {...args} />;
+};
+PopoverControlled.args = {
+    showArrow: true,
+    placement: 'top',
+    isOpen: true,
+    shouldFlip: true,
+    offset: 0,
+    crossOffset: 0,
+    trigger: props => (
+        <Button testID="trigger" {...props}>
+            Show popover
+        </Button>
+    ),
+    children: <PopoverContent />,
+};
+
+PopoverControlled.parameters = {
+    docs: {
+        source: {
+            code: `
+const {Button, H4, Popover, Text, View} = useMolecules();
+const [isOpen, setIsOpen] = useState(false);
+
+return (
+    <Popover
+        showArrow
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        trigger={(props) => <Button { ...props }>Show popover</Button>}
+        placement="top"
+        shouldFlip={true}
+        offset={4}
+        closeOnScroll={true}>
+        <View>
+            <H4>I'm a popover</H4>
+            <Text>I'm the text inside a popover</Text>
+        </View>
+    </Popover>
+)
+            `,
+            language: 'tsx',
+            type: 'auto',
+        },
+    },
+};
+
 export const OpenPopover = Template.bind({});
 OpenPopover.args = { ...Default.args };
+OpenPopover.parameters = { ...Default.parameters };
 OpenPopover.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 

@@ -20,8 +20,7 @@ export interface TPopperContext {
     shouldFlip?: boolean;
     crossOffset?: number;
     offset?: number;
-    onClose?: () => void;
-    onOpen?: () => void;
+    setIsOpen?: (isOpen: boolean) => void;
     isOpen: boolean;
     closeOnScroll?: boolean;
     scrollRef?: MutableRefObject<ReactElement | null>;

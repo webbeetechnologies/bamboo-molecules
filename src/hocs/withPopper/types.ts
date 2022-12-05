@@ -16,8 +16,7 @@ export type PopoverProps = PropsWithChildren<
     Omit<TPopperContext, 'trigger'> & {
         showArrow?: boolean;
         trigger?: TriggerFunc;
-        onClose?: () => void;
-        onOpen?: () => void;
+        setIsOpen?: (isOpen: boolean) => void;
         isOpen?: boolean;
         defaultIsOpen?: boolean;
         initialFocusRef?: MutableRefObject<ReactElement | null>;
@@ -37,7 +36,7 @@ export type PopoverProps = PropsWithChildren<
 export type PopoverPropsTriggerRequired = PopoverProps & { trigger: TriggerFunc };
 
 export type TPopoverContext = {
-    onClose: () => void;
+    onClose: (isOpen: boolean) => void;
     initialFocusRef?: MutableRefObject<ReactElement | null>;
     finalFocusRef?: MutableRefObject<ReactElement | null>;
     popoverContentId?: string;
