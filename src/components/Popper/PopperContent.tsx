@@ -127,7 +127,7 @@ const PopperContent = (
     const { theme: contextTheme, ...restContext } = context;
     const theme = useMemo(() => extendTheme(contextTheme), [contextTheme]);
 
-    if (!isOpen) return <Fragment />;
+    if (!isOpen) return <View ref={overlayRef} />;
 
     return (
         <ProvideMolecules theme={theme} {...restContext}>
