@@ -1,9 +1,9 @@
-import { useMolecules, InputGroupProps } from 'bamboo-molecules';
+import { useMolecules, ElementGroupProps } from 'bamboo-molecules';
 
-export type Props = InputGroupProps & {};
+export type Props = ElementGroupProps & {};
 
 export const Example = (props: Props) => {
-    const { InputGroup } = useMolecules();
+    const { ElementGroup } = useMolecules();
 
-    return <InputGroup {...props} />;
+    return <ElementGroup {...props} />;
 };

@@ -3,10 +3,10 @@ import { Example as Button } from '../Button/Button';
 import { Example as TextInput } from '../TextInput/TextInput';
 import { Example as Icon } from '../Icon/Icon';
 
-import { Example } from './InputGroup';
+import { Example } from './ElementGroup';
 
 export default {
-    title: 'components/InputGroup',
+    title: 'components/ElementGroup',
     component: Example,
 } as ComponentMeta<typeof Example>;
 
@@ -27,14 +27,14 @@ ButtonGroup.parameters = {
     docs: {
         source: {
             code: `
-<InputGroup>
+<ElementGroup>
         <Button variant="contained" onPress={() => {}}>
             Button
         </Button>
         <Button variant="contained" onPress={() => {}}>
             <Icon name="chevron-down" size={26} />
         </Button>
-</InputGroup>
+</ElementGroup>
 `,
             language: 'tsx',
             type: 'auto',
@@ -42,9 +42,9 @@ ButtonGroup.parameters = {
     },
 };
 
-export const TextInputGroup: ComponentStory<typeof Example> = args => <Example {...args} />;
+export const TextElementGroup: ComponentStory<typeof Example> = args => <Example {...args} />;
 
-TextInputGroup.args = {
+TextElementGroup.args = {
     children: [
         <TextInput variant="outlined" />,
         <Button variant="contained" onPress={() => {}}>
@@ -53,16 +53,16 @@ TextInputGroup.args = {
     ],
 };
 
-TextInputGroup.parameters = {
+TextElementGroup.parameters = {
     docs: {
         source: {
             code: `
-<InputGroup>
+<ElementGroup>
         <TextInput variant="outlined" />
         <Button variant="contained" onPress={() => {}}>
             <Icon name="chevron-down" size={26} />
         </Button>
-</InputGroup>`,
+</ElementGroup>`,
             language: 'tsx',
             type: 'auto',
         },

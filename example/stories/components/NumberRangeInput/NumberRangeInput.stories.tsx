@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Example } from './NumberRangeInput';
+import { Example, ControlledExample } from './NumberRangeInput';
 
 export default {
     title: 'components/NumberRangeInput',
@@ -16,9 +16,27 @@ Default.parameters = {
         source: {
             code: `
     const { NumberRangeInput } = useMolecules();
-    const [value, setValue] = useState({ min: '', max: '' });
 
-    return <NumberRangeInput {...props} min={value.min} max={value.max} onChange={setValue} />;
+    return <NumberRangeInput />;
+`,
+            language: 'tsx',
+            type: 'auto',
+        },
+    },
+};
+
+export const Controlled: ComponentStory<typeof Example> = args => <ControlledExample {...args} />;
+
+Controlled.args = {};
+
+Controlled.parameters = {
+    docs: {
+        source: {
+            code: `
+    const { NumberRangeInput } = useMolecules();
+    const [value, setValue] = useState({ min: '10', max: '8' });
+
+    return <NumberRangeInput value={value} onChange={setValue} />;
 `,
             language: 'tsx',
             type: 'auto',
