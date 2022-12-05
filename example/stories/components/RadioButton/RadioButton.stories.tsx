@@ -17,7 +17,7 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<RadioButton {...rest} />
+<RadioButton />
 `,
             language: 'tsx',
             type: 'auto',
@@ -38,7 +38,7 @@ RadioItem.parameters = {
     docs: {
         source: {
             code: `
-<RadioButton.Item value="item" label="Radio Item Label" {...rest} />
+<RadioButton.Item value="item" label="Radio Item Label" />
 `,
             language: 'tsx',
             type: 'auto',
@@ -51,6 +51,7 @@ export const WithRadioGroup: ComponentStory<typeof ExampleWithRadioGroup> = args
 );
 
 WithRadioGroup.args = {
+    defaultValue: 'second',
     children: (
         <>
             <ExampleRadioItem value="first" label="First Item" />
@@ -67,7 +68,7 @@ WithRadioGroup.parameters = {
     const [value, onValueChange] = useState('');
     
     return (
-        <RadioButton.Group onValueChange={onValueChange} value={value} {...rest}>
+        <RadioButton.Group onValueChange={onValueChange} value={value} defaultValue="second">
             <RadioButton.Item value="first" label="First Item" />
             <RadioButton.Item value="second" label="Second Item" />
         </RadioButton.Group>
