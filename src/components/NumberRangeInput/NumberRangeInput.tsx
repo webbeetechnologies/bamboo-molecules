@@ -4,11 +4,15 @@ import { useComponentStyles, useControlledValue, useMolecules } from '../../hook
 import type { NumberInputProps } from '../NumberInput';
 import { isNil } from '../../utils';
 
+type Value = {
+    min: string;
+    max: string;
+};
+
 export type Props = ViewProps & {
     inputsContainerStyle?: ViewProps;
     dividerStyle?: ViewProps;
-    min?: string;
-    max?: string;
+    value?: Value;
     onChange?: (args: { min: string; max: string }) => void;
     minInputProps?: Omit<NumberInputProps, 'variant' | 'value' | 'onChangeText' | 'onChange'>;
     maxInputProps?: Omit<NumberInputProps, 'variant' | 'value' | 'onChangeText' | 'onChange'>;
@@ -32,14 +36,13 @@ const NumberRangeInput = ({
         onBlur: onBlurMaxInput,
         ...maxInputProps
     } = {},
-    min,
-    max,
+    value: valueProp,
     onChange,
     errorMessage = 'Invalid number range.',
     style,
     ...rest
 }: Props) => {
-    const { View, InputGroup, NumberInput, HelperText } = useMolecules();
+    const { View, ElementGroup, NumberInput, HelperText } = useMolecules();
     const componentStyles = useComponentStyles('NumberRangeInput', [
         style,
         {
@@ -50,11 +53,10 @@ const NumberRangeInput = ({
         },
     ]);
     const [value, onValueChange] = useControlledValue({
-        value: min === undefined || max === undefined ? undefined : { min, max },
+        value: valueProp,
         onChange,
     });
     const [error, setError] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
     const [isTouched, setIsTouched] = useState(false); // TODO - create a hook
 
     const { containerStyle, inputsContainerStyle, minInputStyle, maxInputStyle, errorTextStyle } =
@@ -87,8 +89,6 @@ const NumberRangeInput = ({
         (args: any, type: 'min' | 'max') => {
             if (!isTouched) setIsTouched(true);
 
-            if (!isFocused) setIsFocused(true);
-
             if (type === 'min') {
                 onFocusMinInput?.(args);
                 return;
@@ -96,13 +96,11 @@ const NumberRangeInput = ({
 
             onFocusMaxInput?.(args);
         },
-        [isFocused, isTouched, onFocusMaxInput, onFocusMinInput],
+        [isTouched, onFocusMaxInput, onFocusMinInput],
     );
 
     const onBlur = useCallback(
         (args: any, type: 'min' | 'max') => {
-            if (isFocused) setIsFocused(false);
-
             if (type === 'min') {
                 onBlurMinInput?.(args);
                 return;
@@ -110,13 +108,12 @@ const NumberRangeInput = ({
 
             onBlurMaxInput?.(args);
         },
-        [isFocused, onBlurMaxInput, onBlurMinInput],
+        [onBlurMaxInput, onBlurMinInput],
     );
 
     useEffect(() => {
         if (
             !isTouched ||
-            isFocused ||
             value?.min === '' ||
             value?.max === '' ||
             isNil(value?.min) ||
@@ -125,11 +122,11 @@ const NumberRangeInput = ({
             return;
 
         setError(Number(value?.min) > Number(value?.max));
-    }, [isFocused, isTouched, value?.max, value?.min]);
+    }, [isTouched, value?.max, value?.min]);
 
     return (
         <View style={containerStyle}>
-            <InputGroup style={inputsContainerStyle} {...rest}>
+            <ElementGroup style={inputsContainerStyle} {...rest}>
                 <NumberInput
                     label="min"
                     {...minInputProps}
@@ -150,7 +147,7 @@ const NumberRangeInput = ({
                     onFocus={(args: any) => onFocus(args, 'max')}
                     onBlur={(args: any) => onBlur(args, 'max')}
                 />
-            </InputGroup>
+            </ElementGroup>
             {error && <HelperText style={errorTextStyle}>{errorMessage}</HelperText>}
         </View>
     );
