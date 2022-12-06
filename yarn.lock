@@ -12349,6 +12349,8 @@ __metadata:
     expo-font: ^10.2.0
     expo-status-bar: ~1.4.0
     jest: 27
+    jest-environment-jsdom: 27
+    jest-environment-node: 27
     jest-transform-stub: ^2.0.0
     react: 18.2.0
     react-dom: 18.2.0
@@ -16222,7 +16224,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-jsdom@npm:^27.5.1":
+"jest-environment-jsdom@npm:27, jest-environment-jsdom@npm:^27.5.1":
   version: 27.5.1
   resolution: "jest-environment-jsdom@npm:27.5.1"
   dependencies:
@@ -16237,7 +16239,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-node@npm:^27.5.1":
+"jest-environment-node@npm:27, jest-environment-node@npm:^27.5.1":
   version: 27.5.1
   resolution: "jest-environment-node@npm:27.5.1"
   dependencies:

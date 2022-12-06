@@ -81,6 +81,8 @@
     "babel-plugin-react-native-web": "^0.18.9",
     "chromatic": "^6.11.4",
     "jest": "27",
+    "jest-environment-jsdom": "27",
+    "jest-environment-node": "27",
     "jest-transform-stub": "^2.0.0",
     "react-test-renderer": "^18.2.0",
     "storybook-addon-performance": "^0.16.1",
