@@ -55,7 +55,7 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
     const { OptionList, ActionSheet, Dialog } = useMolecules();
     const componentStyles = useComponentStyles('DropdownList');
 
-    const resolvedMode = useResolveMode(mode, records, optionsThreshold);
+    const resolvedMode = useResolvedMode(mode, records, optionsThreshold);
 
     const listStyles = useMemo(() => {
         const { popoverContainer, ...restStyles } = componentStyles;
@@ -102,7 +102,7 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
             default:
                 return [
                     PopoverWrapper,
-                    { ...popoverProps, trigger: TriggerComponent, isOpen, onOpen, onClose },
+                    { ...popoverProps, trigger: TriggerComponent, isOpen, setIsOpen },
                 ];
         }
     }, [
@@ -116,6 +116,7 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
         dialogProps,
         popoverProps,
         TriggerComponent,
+        setIsOpen,
     ]);
 
     return (
@@ -137,7 +138,7 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
 
 const PopoverWrapper = withPopper<PopoverProps>(() => null);
 
-const useResolveMode = (
+const useResolvedMode = (
     mode: `${DropdownListMode}`,
     options: { data: any[] }[],
     optionsThreshold: number | undefined,
