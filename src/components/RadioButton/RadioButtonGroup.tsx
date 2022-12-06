@@ -77,7 +77,7 @@ const RadioButtonGroup = ({
 }: Props) => {
     const { View } = useMolecules();
     const [value, onValueChange] = useControlledValue({
-        value: valueProp || defaultValue,
+        value: valueProp,
         defaultValue,
         onChange: onValueChangeProp,
     });
