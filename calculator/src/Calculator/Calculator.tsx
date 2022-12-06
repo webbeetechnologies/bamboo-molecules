@@ -1,18 +1,17 @@
 import React, { useState, useEffect, memo } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { useMolecules } from '../../../src/hooks';
+import { useColorMode, useMolecules } from '../../../src/hooks';
 import Numpad from './Numpad';
 import Screen from './Screen';
-import type { ColorModeType } from './utils';
 
 export type Props = {
     style?: StyleProp<ViewStyle>;
     onChange?: (calc: number) => void;
-    colorMode?: ColorModeType;
 };
 
 const Calculator = (props: Props) => {
-    const { style, onChange, colorMode = 'light' } = props;
+    const { style, onChange } = props;
+    const { colorMode } = useColorMode();
 
     const { View } = useMolecules();
 

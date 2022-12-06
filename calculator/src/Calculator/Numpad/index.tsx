@@ -1,12 +1,12 @@
 import React, { memo, useCallback, useMemo } from 'react';
-import { btnValues, ColorModeType } from '../utils';
+import { btnValues } from '../utils';
 import doMath from '../Logic';
 import NumpadButton from './NumpadButton';
 import { useMolecules } from '../../../../src/hooks';
 
 export type Props = {
     setHistory: React.Dispatch<React.SetStateAction<string>>;
-    colorMode: ColorModeType;
+    colorMode: string;
 };
 const Numpad = ({ setHistory, colorMode }: Props) => {
     const { FlatGrid, View } = useMolecules();
@@ -136,7 +136,7 @@ const Numpad = ({ setHistory, colorMode }: Props) => {
 
     const viewStyle = useMemo(
         () => ({
-            paddingTop: 10,
+            paddingTop: 15,
             backgroundColor: colorMode === 'light' ? '#ffffff' : '#1b1b1b',
         }),
         [colorMode],
@@ -148,11 +148,7 @@ const Numpad = ({ setHistory, colorMode }: Props) => {
                 data={btnValues}
                 renderItem={({ item }) =>
                     item.oper !== '' ? (
-                        <NumpadButton
-                            item={item}
-                            handleBtnClick={handleBtnClick}
-                            colorMode={colorMode}
-                        />
+                        <NumpadButton item={item} handleBtnClick={handleBtnClick} />
                     ) : (
                         <View />
                     )

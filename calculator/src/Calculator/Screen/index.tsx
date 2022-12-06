@@ -1,7 +1,6 @@
 import React, { memo, useMemo, useCallback } from 'react';
 import { useMolecules } from '../../../../src/hooks';
 import doMath from '../Logic';
-import type { ColorModeType } from '../utils';
 
 const screenFontSize = {
     calc: 30,
@@ -11,7 +10,7 @@ const screenFontSize = {
 type Props = {
     history: string;
     setHistory: React.Dispatch<React.SetStateAction<string>>;
-    colorMode: ColorModeType;
+    colorMode: string;
     setCalc: React.Dispatch<React.SetStateAction<number>>;
     calc: number;
 };
@@ -83,6 +82,7 @@ const Screen = ({ calc, history, setHistory, colorMode, setCalc }: Props) => {
                 value={history}
                 onChangeText={onChangeHistory}
                 underlineColor="rgba(0,0,0,0)"
+                activeUnderlineColor="rgba(0,0,0,0)"
             />
 
             <Text numberOfLines={1} adjustsFontSizeToFit style={style.calcStyle}>

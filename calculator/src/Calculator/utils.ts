@@ -1,8 +1,4 @@
 
-export type ColorModeType = 'dark' | 'light';
-
-
-
 export type NumpadButtonTypes = {
     icon: string;
     type: BtnTypes;

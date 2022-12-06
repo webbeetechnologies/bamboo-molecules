@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react';
 import { useCurrentTheme, useMolecules } from '../../../../src/hooks';
 
-import { BtnTypes, ColorModeType } from '../utils';
+import { BtnTypes } from '../utils';
 
 type Props = {
     item: {
@@ -10,54 +10,38 @@ type Props = {
         oper: string;
     };
     handleBtnClick: (val: string) => void;
-    colorMode: ColorModeType;
 };
 
-const NumpadButton = memo(({ item, handleBtnClick ,colorMode}: Props) => {
+const NumpadButton = memo(({ item, handleBtnClick }: Props) => {
     const { Button } = useMolecules();
 
-    const { colors } = useCurrentTheme();
-
-    
-    const getBtnColor = useMemo(() => {
-        
+    const variant = useMemo(() => {
         switch (item.type) {
             case BtnTypes.OPERATOR:
-                return '#80d7ff';
+                return 'secondary';
             case BtnTypes.CLEAR:
-                return '#ff8080';
+                return 'clear';
             case BtnTypes.EQUAL:
-                return '#80ffb4';
+                return 'equal';
 
             default:
-                return colors.primary ;
+                return 'primary';
         }
-    }, [colorMode]);
-
-    const numpadButtonStyle: object = useMemo(() => {
-        return {
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 5,
-            aspectRatio: 1,
-            borderRadius: 1000,
-            backgroundColor: getBtnColor,
-        };
     }, []);
 
-    const labelStyle: object = useMemo(() => {
-        return {
-            fontSize: 22,
-            fontWeight: '600',
-            color: colorMode === 'light' ? '#000000a0' : '#ffffff'  ,
-        };
-    }, [colorMode]);
     return (
         <Button
-            variant="contained"
-            style={numpadButtonStyle}
+            // @ts-ignore
+            size="xl"
+            // @ts-ignore
+            variant={variant}
             onPress={() => handleBtnClick(item.oper)}
-            labelStyle={labelStyle}>
+            style={{
+                aspectRatio: 1,
+            }}
+            labelStyle={{
+                marginHorizontal: 0,
+            }}>
             {item.icon}
         </Button>
     );
