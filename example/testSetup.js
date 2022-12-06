@@ -10,3 +10,6 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 jest.spyOn(AccessibilityInfo, 'isScreenReaderEnabled').mockImplementation(
     () => new Promise.resolve(false),
 );
+
+// eslint-disable-next-line no-undef
+jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'Icon');

@@ -45,6 +45,7 @@ import {
     InputAddon,
     ActionSheet,
     Dialog,
+    RadioButton,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -94,6 +95,7 @@ const defaultComponents: DefaultComponents = {
     InputAddon,
     ActionSheet,
     Dialog,
+    RadioButton,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
