@@ -1,14 +1,14 @@
 import { memo, forwardRef, cloneElement, Children } from 'react';
 import { StyleSheet } from 'react-native';
 import type { ViewProps } from '@webbee/bamboo-atoms';
-import memoize from 'lodash.memoize';
+import { memoize } from '../../utils';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
 export type Props = ViewProps & {};
 
-export const InputGroup = ({ children, style, ...props }: Props, ref: any) => {
+export const ElementGroup = ({ children, style, ...props }: Props, ref: any) => {
     const { View } = useMolecules();
-    const componentStyles = useComponentStyles('InputGroup', style);
+    const componentStyles = useComponentStyles('ElementGroup', style);
 
     return (
         <View {...props} style={componentStyles} ref={ref}>
@@ -44,4 +44,4 @@ const supplyPropsToChildren = memoize((children: any) => {
     });
 });
 
-export default memo(forwardRef(InputGroup));
+export default memo(forwardRef(ElementGroup));

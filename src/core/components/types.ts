@@ -34,11 +34,12 @@ import type {
     ISectionGrid,
     IOptionList,
     DropdownListProps,
-    InputGroupProps,
+    ElementGroupProps,
     InputAddonProps,
     IActionSheet,
     Dialog,
     RadioButton,
+    NumberRangeInputProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -80,11 +81,12 @@ export interface DefaultComponents {
     TextInputWithMask: ComponentType<TextInputWithMaskProps>;
     OptionList: IOptionList;
     DropdownList: ComponentType<DropdownListProps>;
-    InputGroup: ComponentType<InputGroupProps>;
+    ElementGroup: ComponentType<ElementGroupProps>;
     InputAddon: ComponentType<InputAddonProps>;
     ActionSheet: IActionSheet;
     Dialog: typeof Dialog;
     RadioButton: typeof RadioButton;
+    NumberRangeInput: ComponentType<NumberRangeInputProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

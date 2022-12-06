@@ -44,7 +44,7 @@ export {
     TimePickerProps,
     TextInputWithMaskProps,
     OptionListProps,
-    InputGroupProps,
+    ElementGroupProps,
     InputAddonProps,
     ActionSheetProps,
     IActionSheet,
@@ -64,6 +64,7 @@ export {
     RadioButtonProps,
     RadioButtonGroupProps,
     RadioButtonItemProps,
+    NumberRangeInputProps,
 } from './components';
 
 export {

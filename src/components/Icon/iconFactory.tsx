@@ -1,5 +1,5 @@
 import { textFactory } from '@webbee/bamboo-atoms';
-import memoize from 'lodash.memoize';
+import { memoize } from '../../utils';
 import { IconPacks, IconType } from './types';
 
 const customIcons: any = {};
