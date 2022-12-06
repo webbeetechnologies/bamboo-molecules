@@ -136,9 +136,12 @@ const NumberRangeInput = ({
                     variant={variant}
                     containerStyle={minInputStyle}
                     value={value?.min}
-                    onChangeText={text => onInputChange('min', text)}
-                    onFocus={(args: any) => onFocus(args, 'min')}
-                    onBlur={(args: any) => onBlur(args, 'min')}
+                    onChangeText={useCallback(
+                        (text: string) => onInputChange('min', text),
+                        [onInputChange],
+                    )}
+                    onFocus={useCallback((args: any) => onFocus(args, 'min'), [onFocus])}
+                    onBlur={useCallback((args: any) => onBlur(args, 'min'), [onBlur])}
                 />
                 <NumberInput
                     label="max"
@@ -146,9 +149,12 @@ const NumberRangeInput = ({
                     variant={variant}
                     containerStyle={maxInputStyle}
                     value={value?.max}
-                    onChangeText={text => onInputChange('max', text)}
-                    onFocus={(args: any) => onFocus(args, 'max')}
-                    onBlur={(args: any) => onBlur(args, 'max')}
+                    onChangeText={useCallback(
+                        (text: string) => onInputChange('max', text),
+                        [onInputChange],
+                    )}
+                    onFocus={useCallback((args: any) => onFocus(args, 'max'), [onFocus])}
+                    onBlur={useCallback((args: any) => onBlur(args, 'max'), [onBlur])}
                 />
             </ElementGroup>
             {error && <HelperText style={errorTextStyle}>{errorMessage}</HelperText>}
