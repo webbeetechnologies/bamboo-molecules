@@ -32,7 +32,15 @@ export { VerticalDivider, verticalDividerStyles, VerticalDividerProps } from './
 export { Switch, switchStyles, SwitchProps } from './Switch';
 export { FlatList, FlatListProps, IFlatList, flatListStyles } from './FlatList';
 
-export { SectionList, SectionListProps, ISectionList, sectionListStyles } from './SectionList';
+export {
+    SectionList,
+    SectionListProps,
+    ISectionList,
+    SectionListRenderItem,
+    SectionListRenderItemInfo,
+    DefaultSectionT,
+    sectionListStyles,
+} from './SectionList';
 
 export {
     default as ListItem,
@@ -104,6 +112,14 @@ export { TimePickerModal, TimePickerModalProps, timePickerModalStyles } from './
 
 export { TextInputWithMask, TextInputWithMaskProps } from './TextInputWithMask';
 
+export { OptionList, OptionListProps, IOptionList, optionListStyles } from './OptionList';
+
+export { DropdownList, DropdownListProps, dropdownListStyles } from './DropdownList';
+
 export { InputGroup, inputGroupStyles, InputGroupProps } from './InputGroup';
 
 export { InputAddon, inputAddonStyles, InputAddonProps } from './InputAddon';
+
+export * from './ActionSheet';
+
+export * from './Dialog';

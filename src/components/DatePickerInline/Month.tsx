@@ -132,6 +132,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
 
             {grid.map(({ weekIndex, generatedDays }) => (
                 <Week
+                    key={weekIndex}
                     weekIndex={weekIndex}
                     generatedDays={generatedDays}
                     disableWeekDays={disableWeekDays}

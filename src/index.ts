@@ -27,6 +27,8 @@ export {
     ListItemProps,
     FlatListProps,
     SectionListProps,
+    SectionListRenderItemInfo,
+    SectionListRenderItem,
     FlatGridProps,
     SectionGridProps,
     TextInputProps,
@@ -41,8 +43,24 @@ export {
     TimePickerModalProps,
     TimePickerProps,
     TextInputWithMaskProps,
+    OptionListProps,
     InputGroupProps,
     InputAddonProps,
+    ActionSheetProps,
+    IActionSheet,
+    ActionSheetRef,
+    ActionSheetManagerSheetProps,
+    ActionSheetManager,
+    ActionSheetProvider,
+    useActionSheetScrollHandlers,
+    registerActionSheet,
+    DropdownListProps,
+    DefaultSectionT,
+    DialogProps,
+    DialogContentProps,
+    DialogActionsProps,
+    DialogTitleProps,
+    DialogScrollAreaProps,
 } from './components';
 
 export {
@@ -74,6 +92,16 @@ export {
     useControlledValue,
     useFilePicker,
     useLatest,
+    useSearchable,
+    UseSearchableProps,
+    // react-native-web-hooks
+    useActive,
+    useFocus,
+    useHover,
+    useREM,
+    useLayout,
+    useDimensions,
+    useScaledSize,
 } from './hooks';
 
 export {

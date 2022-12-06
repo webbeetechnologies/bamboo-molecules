@@ -15,7 +15,7 @@ const ListItemDescription = ({ style, ...rest }: Props) => {
         },
     });
 
-    return <Text {...rest} style={componentStyles} />;
+    return <Text selectable={false} {...rest} style={componentStyles} />;
 };
 
 export default memo(ListItemDescription);

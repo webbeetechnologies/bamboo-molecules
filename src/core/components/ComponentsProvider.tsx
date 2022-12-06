@@ -39,8 +39,12 @@ import {
     TimePickerModal,
     TextInputWithMask,
     TextInputWithMaskProps,
+    OptionList,
+    DropdownList,
     InputGroup,
     InputAddon,
+    ActionSheet,
+    Dialog,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -84,8 +88,12 @@ const defaultComponents: DefaultComponents = {
     TimePicker,
     TimePickerModal,
     TextInputWithMask: TextInputWithMask as ComponentType<TextInputWithMaskProps>,
+    OptionList,
+    DropdownList,
     InputGroup,
     InputAddon,
+    ActionSheet,
+    Dialog,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

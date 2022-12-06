@@ -1,7 +1,5 @@
 import { Button } from '../../src/components';
-import { Contained as ButtonStory } from '../stories/components/Button/Button.stories';
-import type { Props } from '../stories/components/Button/Button';
-import { renderWithWrapper, fireEvent, runBenchmark } from '../testHelpers';
+import { renderWithWrapper, fireEvent } from '../testHelpers';
 
 describe('button', () => {
     it('renders text button by default', () => {
@@ -108,21 +106,5 @@ describe('button', () => {
         );
         fireEvent(getByTestId('button'), 'onPressOut');
         expect(onPressOutMock).toHaveBeenCalledTimes(1);
-    });
-
-    it.only('benchmark button', done => {
-        console.log('benchmark start');
-        const results: any = Promise.race([
-            runBenchmark({
-                component: ButtonStory,
-                props: ButtonStory.args as Props,
-                timeout: 500,
-            }),
-            new Promise((x, reject) => setTimeout(reject, 600)),
-        ]).then(() => {
-            console.log('benchmark done');
-            expect(results?.mean).toBeLessThan(4);
-            done();
-        });
     });
 });

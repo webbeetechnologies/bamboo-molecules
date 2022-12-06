@@ -3,11 +3,9 @@ import { Animated, View, ViewStyle, StyleSheet, StyleProp, TextStyle } from 'rea
 import setColor from 'color';
 
 import { withActionState, CallbackActionState } from '../../hocs';
-import { useMolecules, useComponentStyles, useCurrentTheme } from '../../hooks';
+import { useMolecules, useComponentStyles } from '../../hooks';
 import type { IconType } from '../Icon';
 import type { SurfaceProps } from '../Surface';
-import { styles } from './utils';
-import { normalizeStyles } from '../../utils';
 
 const initialElevation = 1;
 const activeElevation = 2;
@@ -178,10 +176,6 @@ const Button = (
     const disabled = disabledProp || !onPress;
     const { ActivityIndicator, TouchableRipple, Text, Icon, Surface } = useMolecules();
 
-    const currentTheme = useCurrentTheme();
-
-    const normalizedStyles = normalizeStyles(styles, currentTheme);
-
     const componentStyles = useComponentStyles(
         'Button',
         [styleProp, { customButtonColor, customTextColor }],
@@ -203,6 +197,8 @@ const Button = (
     );
 
     const {
+        customLabelColor,
+        customLabelSize,
         textColor,
         animationScale,
         iconSize,
@@ -224,38 +220,41 @@ const Button = (
             iconSize: _iconSize,
             customButtonColor: normalizedButtonColor,
             customTextColor: normalizedTextColor,
+            button,
+            content,
+            icon,
+            iconTextMode,
+            label,
+            uppercaseLabel,
+            labelText,
+            labelTextAddons,
             ..._buttonStyles
         } = componentStyles;
 
         const _textColor = normalizedTextColor && !disabled ? normalizedTextColor : color;
         const backgroundColor =
             normalizedButtonColor && !disabled ? normalizedButtonColor : _backgroundColor;
-        const _iconStyle = [
-            normalizedStyles.icon,
-            isVariant('text') && normalizedStyles.iconTextMode,
-        ];
+        const _iconStyle = [icon, isVariant('text') && iconTextMode];
+
+        const { color: labelColor, fontSize: labelFontSize } = StyleSheet.flatten(labelStyle) || {};
 
         return {
+            customLabelColor: labelColor,
+            customLabelSize: labelFontSize,
             textColor: _textColor,
             animationScale: _animationScale,
             iconSize: _iconSize,
             rippleColor: setColor(_textColor).alpha(0.12).rgb().string(),
             touchableStyle: { borderRadius, flex: 1 }, // TODO extract flex properties from style object
-            surfaceStyle: [
-                normalizedStyles.button,
-                { backgroundColor, borderRadius, ..._buttonStyles },
-            ],
+            surfaceStyle: [button, { backgroundColor, borderRadius, ..._buttonStyles }],
+
             iconStyle: _iconStyle,
-            viewStyle: [normalizedStyles.content, contentStyle],
+            viewStyle: [content, contentStyle],
             iconContainerStyle: [_iconStyle, iconContainerStyleProp],
             textStyle: [
-                normalizedStyles.label,
-                isVariant('text')
-                    ? iconName || loading
-                        ? normalizedStyles.labelTextAddons
-                        : normalizedStyles.labelText
-                    : normalizedStyles.label,
-                uppercase && normalizedStyles.uppercaseLabel,
+                label,
+                isVariant('text') ? (iconName || loading ? labelTextAddons : labelText) : label,
+                uppercase && uppercaseLabel,
                 {
                     color: _textColor,
                     ...typeScale,
@@ -273,7 +272,6 @@ const Button = (
         isVariant,
         labelStyle,
         loading,
-        normalizedStyles,
         uppercase,
     ]);
 
@@ -308,9 +306,6 @@ const Button = (
             }).start();
         }
     };
-
-    const { color: customLabelColor, fontSize: customLabelSize } =
-        StyleSheet.flatten(labelStyle) || {};
 
     return (
         <Surface {...rest} style={surfaceStyle} {...{ elevation: elevation }}>

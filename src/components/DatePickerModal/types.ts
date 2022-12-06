@@ -20,7 +20,7 @@ export type LocalState = {
 interface DatePickerModalContentBaseProps {
     inputFormat?: string;
     locale?: string;
-    onDismiss: () => any;
+    onClose: () => any;
     disableSafeTop?: boolean;
     saveLabelDisabled?: boolean;
 }
@@ -58,7 +58,7 @@ export interface DatePickerModalContentMultiProps
 }
 
 interface BaseDatePickerModalProps {
-    visible: boolean;
+    isOpen: boolean;
     animationType?: 'slide' | 'fade' | 'none';
     disableStatusBar?: boolean;
     disableStatusBarPadding?: boolean;

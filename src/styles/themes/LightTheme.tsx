@@ -57,6 +57,7 @@ export const generateLightThemeColors = (
             level4: color(palette.primary40).alpha(0.12).rgb().string(), // palette.primary40, alpha 0.12
             level5: color(palette.primary40).alpha(0.14).rgb().string(), // palette.primary40, alpha 0.14
         },
+        scrim: palette.neutral0,
     };
 };
 

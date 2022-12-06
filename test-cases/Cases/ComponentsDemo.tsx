@@ -12,6 +12,7 @@ import {
 } from 'bamboo-molecules';
 
 const theme = extendTheme({
+    colorMode: 'light',
     Text: {
         color: 'colors.onSurface',
     },
@@ -42,6 +43,9 @@ const Example = () => {
         DatePickerModal,
         DatePickerInput,
         TimePickerModal,
+        OptionList,
+        DropdownList,
+        ListItem,
     } = useMolecules();
     const [isSwitchOn, toggleSwitch] = useToggle(true);
     const buttonRef = useRef(null);
@@ -80,6 +84,98 @@ const Example = () => {
 
             <HorizontalDivider spacing={30} />
 
+            <DropdownList
+                trigger={props => <Button {...props}>Trigger</Button>}
+                containerStyle={{
+                    width: 300,
+                }}
+                records={[
+                    {
+                        title: 'Numbers',
+                        data: [
+                            {
+                                text: '1',
+                            },
+                            {
+                                text: '2',
+                            },
+                            {
+                                text: '3',
+                            },
+                            {
+                                text: '4',
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Letters',
+                        data: [
+                            {
+                                text: 'A',
+                            },
+                            {
+                                text: 'B',
+                            },
+                            {
+                                text: 'C',
+                            },
+                            {
+                                text: 'D',
+                            },
+                        ],
+                    },
+                ]}
+                renderItem={({ item }: any) => (
+                    <ListItem>
+                        <ListItem.Title>{item.text}</ListItem.Title>
+                    </ListItem>
+                )}
+            />
+
+            {/*<OptionList*/}
+            {/*    records={[*/}
+            {/*        {*/}
+            {/*            title: 'Numbers',*/}
+            {/*            data: [*/}
+            {/*                {*/}
+            {/*                    text: '1',*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    text: '2',*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    text: '3',*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    text: '4',*/}
+            {/*                },*/}
+            {/*            ],*/}
+            {/*        },*/}
+            {/*        {*/}
+            {/*            title: 'Letters',*/}
+            {/*            data: [*/}
+            {/*                {*/}
+            {/*                    text: 'A',*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    text: 'B',*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    text: 'C',*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    text: 'D',*/}
+            {/*                },*/}
+            {/*            ],*/}
+            {/*        },*/}
+            {/*    ]}*/}
+            {/*    renderItem={({ item }) => (*/}
+            {/*        <ListItem>*/}
+            {/*            <ListItem.Title>{item.text}</ListItem.Title>*/}
+            {/*        </ListItem>*/}
+            {/*    )}*/}
+            {/*/>*/}
+
             <DatePickerInput
                 locale={'en'}
                 value={undefined}
@@ -113,6 +209,32 @@ const Example = () => {
             />
             <HelperText>Helper Text</HelperText>
             <HorizontalDivider spacing={30} />
+
+            <OptionList
+                records={sectionData}
+                onQueryChange={() => {}}
+                renderItem={({ item }) => (
+                    <ListItem
+                        onPress={() => {}}
+                        style={{ marginBottom: 5 }}
+                        right={
+                            <IconButton
+                                name={isSwitchOn ? 'chevron-right' : 'chevron-left'}
+                                onPress={() => {}}
+                                variant="outlined"
+                                style={{ backgroundColor: 'colors.primary', color: '#fff' }}
+                                animated
+                            />
+                        }>
+                        <ListItem.Title>{item.firstname}</ListItem.Title>
+                    </ListItem>
+                )}
+                renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
+                searchable
+                searchInputProps={{
+                    label: 'Search Options',
+                }}
+            />
 
             <TextInput
                 variant="flat"
@@ -289,3 +411,32 @@ const styles = StyleSheet.create({
         display: 'flex',
     },
 });
+
+const sectionData = [
+    {
+        title: 'Title First',
+        data: [
+            {
+                firstname: 'Ola',
+                lastname: 'Asiko',
+            },
+            {
+                firstname: 'eddy',
+                lastname: 'Hydro',
+            },
+        ],
+    },
+    {
+        title: 'Title Second',
+        data: [
+            {
+                firstname: 'Whales',
+                lastname: 'Teju',
+            },
+            {
+                firstname: '12',
+                lastname: 'USA',
+            },
+        ],
+    },
+];

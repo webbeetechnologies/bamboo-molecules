@@ -25,6 +25,8 @@ const useControlledValue = <T,>({
         [defaultValue, manipulateValue, valueProp],
     );
 
+    const hasWarnedRef = useRef(false);
+
     const isUncontrolled = useRef(valueProp).current === undefined;
     const [uncontrolledValue, setValue] = useState(value);
 
@@ -42,12 +44,15 @@ const useControlledValue = <T,>({
     );
 
     useEffect(() => {
-        if (value === undefined && uncontrolledValue !== value) {
+        if (hasWarnedRef.current) return;
+        hasWarnedRef.current = true;
+
+        if (valueProp !== undefined && isUncontrolled) {
             console.warn(
                 'Trying to change the value from uncontrolled to controlled can lead to inconsistencies',
             );
         }
-    }, [uncontrolledValue, value]);
+    }, [isUncontrolled, valueProp]);
 
     return useMemo(
         () => [isUncontrolled ? uncontrolledValue : value, updateValue],
