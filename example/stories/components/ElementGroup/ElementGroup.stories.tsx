@@ -42,9 +42,9 @@ ButtonGroup.parameters = {
     },
 };
 
-export const TextElementGroup: ComponentStory<typeof Example> = args => <Example {...args} />;
+export const TextInputElementGroup: ComponentStory<typeof Example> = args => <Example {...args} />;
 
-TextElementGroup.args = {
+TextInputElementGroup.args = {
     children: [
         <TextInput variant="outlined" />,
         <Button variant="contained" onPress={() => {}}>
@@ -53,7 +53,7 @@ TextElementGroup.args = {
     ],
 };
 
-TextElementGroup.parameters = {
+TextInputElementGroup.parameters = {
     docs: {
         source: {
             code: `
