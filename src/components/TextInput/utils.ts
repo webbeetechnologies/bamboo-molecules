@@ -429,6 +429,7 @@ export const styles = StyleSheet.create({
         paddingTop: 0,
         paddingBottom: 0,
         flexGrow: 1,
+        flexShrink: 1,
     },
     patchContainer: {
         height: 24,
