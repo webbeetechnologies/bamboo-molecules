@@ -1,7 +1,3 @@
-// import Cases from './Cases';
-
-// export default () => <Cases />;
-
 import React, { ComponentType } from 'react';
 import Calculator from './src/Calculator/Calculator';
 
