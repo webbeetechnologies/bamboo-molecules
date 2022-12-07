@@ -1,8 +1,16 @@
-import { StyleSheet, TextStyle } from 'react-native';
+import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
 type CustomProps = {
     animationScale?: string; // because it's a design token
+    button?: ViewStyle;
+    content?: ViewStyle;
+    icon?: ViewStyle;
+    iconTextMode?: ViewStyle;
+    label?: TextStyle;
+    uppercaseLabel?: TextStyle;
+    labelText?: TextStyle;
+    labelTextAddons?: TextStyle;
 };
 
 type CustomSizeProps = {
@@ -17,6 +25,39 @@ export const defaultStyles: ComponentStylePropWithVariants<
     CustomSizeProps
 > = {
     animationScale: 'animation.scale',
+
+    button: {
+        borderStyle: 'solid',
+        flex: 1,
+    },
+    content: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+    },
+    icon: {
+        marginLeft: 'spacings.4',
+        marginRight: 'spacings._4',
+    },
+    iconTextMode: {
+        marginLeft: 'spacings.3',
+        marginRight: 'spacings._2',
+    },
+    label: {
+        textAlign: 'center',
+        marginVertical: 'spacings.2l',
+        marginHorizontal: 'spacings.6',
+    },
+    uppercaseLabel: {
+        textTransform: 'uppercase',
+    },
+    labelText: {
+        marginHorizontal: 'spacings.3',
+    },
+    labelTextAddons: {
+        marginHorizontal: 'spacings.4',
+    },
 
     sizes: {
         sm: {
@@ -114,39 +155,3 @@ export const defaultStyles: ComponentStylePropWithVariants<
         },
     },
 };
-
-// TODO Revisit to match MD3 guideline
-export const styles = StyleSheet.create({
-    button: {
-        borderStyle: 'solid',
-        flex: 1,
-    },
-    content: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 1,
-    },
-    icon: {
-        marginLeft: 'spacings.4',
-        marginRight: 'spacings._4',
-    },
-    iconTextMode: {
-        marginLeft: 'spacings.3',
-        marginRight: 'spacings._2',
-    },
-    label: {
-        textAlign: 'center',
-        marginVertical: 'spacings.2l',
-        marginHorizontal: 'spacings.6',
-    },
-    uppercaseLabel: {
-        textTransform: 'uppercase',
-    },
-    labelText: {
-        marginHorizontal: 'spacings.3',
-    },
-    labelTextAddons: {
-        marginHorizontal: 'spacings.4',
-    },
-});

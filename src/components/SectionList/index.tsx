@@ -1,3 +1,8 @@
-export { default as SectionList } from './SectionList';
-export { Props as SectionListProps, ISectionList } from './types';
+export { SectionListRenderItemInfo, SectionListRenderItem } from 'react-native';
+export {
+    default as SectionList,
+    ISectionList,
+    Props as SectionListProps,
+    DefaultSectionT,
+} from './SectionList';
 export { sectionListStyles } from './utils';

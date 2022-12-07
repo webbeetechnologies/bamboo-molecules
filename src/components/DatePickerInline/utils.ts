@@ -19,7 +19,6 @@ export const datePickerStyles: ComponentStylePropWithVariants<TextStyle, States,
 
     container: {
         minHeight: 360,
-        flex: 1,
         minWidth: 360,
     },
 };

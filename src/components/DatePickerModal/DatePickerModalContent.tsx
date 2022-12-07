@@ -25,7 +25,7 @@ export function DatePickerModalContent(props: Props) {
         mode = 'single',
         onChange,
         onConfirm,
-        onDismiss,
+        onClose,
         disableSafeTop,
         disableWeekDays,
         locale = 'en',
@@ -86,7 +86,7 @@ export function DatePickerModalContent(props: Props) {
             <DatePickerModalHeaderBackground>
                 <DatePickerModalHeader
                     onSave={onInnerConfirm}
-                    onDismiss={onDismiss}
+                    onClose={onClose}
                     saveLabel={props.saveLabel}
                     saveLabelDisabled={props.saveLabelDisabled || false}
                     uppercase={props.uppercase || true}

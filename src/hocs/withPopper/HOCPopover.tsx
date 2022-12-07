@@ -1,19 +1,20 @@
-import { FC, forwardRef, memo, useCallback, useId, useMemo, useRef } from 'react';
+import { FC, forwardRef, memo, useCallback, useId, useMemo, useRef, Suspense, lazy } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { useControlledValue, useMolecules } from '../../hooks';
+import { useControlledValue, useMolecules, usePlatformType, useTheme } from '../../hooks';
 import { mergeRefs } from '../../utils';
 
 import type { PopoverPropsTriggerRequired } from './types';
-import { Popper, PopperContent } from '../../components/Popper';
+import { Popper } from '../../components/Popper';
 import { PopoverContext } from './HOCPopoverContext';
+
+const PopperContent = lazy(() => import('../../components/Popper/PopperContent'));
 
 const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
     (
         {
-            onOpen,
             trigger,
-            onClose,
+            setIsOpen: setIsOpenProp,
             isOpen: isOpenProp,
             children,
             defaultIsOpen,
@@ -43,9 +44,7 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
         const [isOpen, setIsOpen] = useControlledValue({
             value: isOpenProp,
             defaultValue: defaultIsOpen,
-            onChange: isPopoverOpen => {
-                isPopoverOpen ? onOpen?.() : onClose?.();
-            },
+            onChange: setIsOpenProp,
         });
 
         const handleClose = useCallback(() => {
@@ -84,6 +83,15 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
             );
         };
 
+        const components = useMolecules();
+        const platformType = usePlatformType();
+        const themeContext = useTheme();
+
+        const context = useMemo(() => {
+            const { resolveComponentStyles, extractStyles, ...theme } = themeContext;
+            return { resolveComponentStyles, extractStyles, theme, platformType, components };
+        }, [themeContext, components, platformType]);
+
         return (
             <View ref={ref}>
                 {updatedTrigger()}
@@ -107,15 +115,18 @@ const Popover: FC<PopoverPropsTriggerRequired> = forwardRef(
                             {...props}
                             arrowProps={arrowProps}>
                             <PopoverContext.Provider value={popoverContextValue}>
-                                <PopperContent
-                                    style={contentStyles}
-                                    contentTextStyles={contentTextStyles}
-                                    arrowProps={arrowProps}
-                                    showArrow={showArrow}>
-                                    {/* <FocusScope contain={trapFocus} restoreFocus> */}
-                                    {children}
-                                    {/* </FocusScope> */}
-                                </PopperContent>
+                                <Suspense>
+                                    <PopperContent
+                                        context={context}
+                                        style={contentStyles}
+                                        contentTextStyles={contentTextStyles}
+                                        arrowProps={arrowProps}
+                                        showArrow={showArrow}>
+                                        {/* <FocusScope contain={trapFocus} restoreFocus> */}
+                                        {children}
+                                        {/* </FocusScope> */}
+                                    </PopperContent>
+                                </Suspense>
                             </PopoverContext.Provider>
                         </Popper>
                     </PresenceTransition>
