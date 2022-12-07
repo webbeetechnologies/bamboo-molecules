@@ -69,7 +69,6 @@ export const dialogActionsStyles: ComponentStylePropWithVariants<
 
     container: {
         flexDirection: 'row',
-        flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'flex-end',
         paddingBottom: 'spacings.6',
