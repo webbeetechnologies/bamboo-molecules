@@ -39,7 +39,7 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<SectionList {...props} 
+<SectionList
     records={[
     {
         id: 0,

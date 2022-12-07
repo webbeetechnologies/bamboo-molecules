@@ -36,7 +36,7 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<FlatList {...props} 
+<FlatList
     data={[
         {
             title: 'Item 0',

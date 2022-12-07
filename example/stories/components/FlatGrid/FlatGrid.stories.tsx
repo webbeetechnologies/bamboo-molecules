@@ -32,7 +32,9 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<FlatGrid {...props} itemDimension={130} data={[
+<FlatGrid 
+    itemDimension={130} 
+    data={[
         {
             title: 'Item 0',
         },
@@ -49,7 +51,8 @@ Default.parameters = {
             title: 'Item 4',
         },
         // ...
-    ]} renderItem={({ item }: any) => <Text>{item}</Text>} />
+    ]} 
+    renderItem={({ item }: any) => <Text>{item}</Text>} />
 `,
             language: 'tsx',
             type: 'auto',

@@ -44,7 +44,7 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<OptionList {...props} 
+<OptionList
     records={[
     {
         id: 0,

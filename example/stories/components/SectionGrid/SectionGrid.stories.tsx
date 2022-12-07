@@ -29,7 +29,7 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<SectionGrid {...props} itemDimension={130} sections={[
+<SectionGrid itemDimension={130} sections={[
         {
             id: 0,
             title: "section 0",
