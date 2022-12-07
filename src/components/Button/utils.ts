@@ -8,6 +8,7 @@ type CustomProps = {
     icon?: ViewStyle;
     iconTextMode?: ViewStyle;
     label?: TextStyle;
+    childrenContainer?: TextStyle;
     uppercaseLabel?: TextStyle;
     labelText?: TextStyle;
     labelTextAddons?: TextStyle;
@@ -48,6 +49,10 @@ export const defaultStyles: ComponentStylePropWithVariants<
         textAlign: 'center',
         marginVertical: 'spacings.2l',
         marginHorizontal: 'spacings.6',
+    },
+    childrenContainer: {
+        display: 'flex',
+        alignItems: 'center',
     },
     uppercaseLabel: {
         textTransform: 'uppercase',
