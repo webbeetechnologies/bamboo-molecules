@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import { useMolecules } from '../../../App';
 
 import { BtnTypes, NumpadButtonType } from '../utils';
@@ -25,21 +25,28 @@ const NumpadButton = memo(({ item, handleBtnClick }: Props) => {
         }
     }, []);
 
+    const handleClick = useCallback(() => handleBtnClick(item), [handleBtnClick]);
+
     return (
         <Button
             // @ts-ignore
             size="xl"
             // @ts-ignore
             variant={variant}
-            onPress={() => handleBtnClick(item)}
-            style={{
-                aspectRatio: 1,
-            }}
-            labelStyle={{
-                marginHorizontal: 0,
-            }}>
+            onPress={handleClick}
+            style={btnStyle.style}
+            labelStyle={btnStyle.labelStyle}>
             {item.icon}
         </Button>
     );
 });
 export default memo(NumpadButton);
+
+const btnStyle = {
+    style: {
+        aspectRatio: 1,
+    },
+    labelStyle: {
+        marginHorizontal: 0,
+    },
+};

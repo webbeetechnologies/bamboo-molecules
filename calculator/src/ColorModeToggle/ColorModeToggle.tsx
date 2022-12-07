@@ -5,13 +5,14 @@ import { useMolecules } from '../../App';
 const ColorModeToggle = () => {
     const { colorMode, toggleColorMode } = useColorMode();
     const { IconButton } = useMolecules();
+    
+    const IconName = React.useMemo(
+        () => (colorMode === 'light' ? 'white-balance-sunny' : 'weather-night'),
+        [colorMode],
+    );
+
     return (
-        <IconButton
-            size="lg"
-            type="material-community"
-            name={colorMode === 'light' ? 'white-balance-sunny' : 'weather-night'}
-            onPress={toggleColorMode}
-        />
+        <IconButton size="lg" type="material-community" name={IconName} onPress={toggleColorMode} />
     );
 };
 

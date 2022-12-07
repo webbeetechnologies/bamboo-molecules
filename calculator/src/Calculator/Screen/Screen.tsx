@@ -12,7 +12,7 @@ const Screen = ({ history, setHistory }: Props) => {
 
     const result = useMemo(() => {
         if (history === '') return '';
-        
+
         const calc = doMath(history);
 
         if (calc.toString() === history) {
@@ -21,9 +21,12 @@ const Screen = ({ history, setHistory }: Props) => {
         return calc;
     }, [history]);
 
-    const onChangeHistory = useCallback((input: string) => {
-        setHistory(input);
-    }, []);
+    const onChangeHistory = useCallback(
+        (input: string) => {
+            setHistory(input);
+        },
+        [setHistory],
+    );
 
     return (
         <ScreenContainer>

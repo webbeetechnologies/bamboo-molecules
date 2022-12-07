@@ -38,6 +38,7 @@ const theme = extendTheme({
 
             numpadBox: '#ffffff',
             screenContainer: '#e3f4f9',
+            transparent: 'rgba(0,0,0,0)',
         },
     },
     dark: {
@@ -57,6 +58,7 @@ const theme = extendTheme({
             numpadBox: '#1b1b1b',
 
             screenContainer: '#2b2b2b',
+            transparent: 'rgba(0,0,0,0)',
         },
     },
     Button: {
@@ -133,13 +135,16 @@ const theme = extendTheme({
         padding: 'spacings.3',
     },
     HistoryCalInput: {
-        backgroundColor: 'transparent',
-        fontSize: 'fontSizes.4xl',
-        textAlign: 'right',
-        color: 'colors.onTextNumpad',
+        style: {
+            backgroundColor: 'transparent',
+            fontSize: 'fontSizes.4xl',
+            textAlign: 'right',
+            color: 'colors.onTextNumpad',
 
-        padding: 0,
-        flex: 1,
+            padding: 0,
+            flex: 1,
+        },
+        activeUnderlineColor: 'colors.transparent',
     },
     ResultText: {
         fontSize: 'fontSizes.3xl',
@@ -178,18 +183,18 @@ const someBasicStyleTextInput = {
 const HistoryCalInput = ({ style, ...rest }: TextInputProps) => {
     const { TextInput } = useMolecules();
 
-    const Style = useComponentStyles('HistoryCalInput', style);
+    const HistoryCalInputTheme = useComponentStyles('HistoryCalInput', style);
 
     return (
         <TextInput
-            inputStyle={Style}
+            inputStyle={HistoryCalInputTheme.style}
             inputContainerStyle={someBasicStyleTextInput.inputContainerStyle}
             keyboardType="decimal-pad"
             numberOfLines={1}
             placeholder="0"
             style={someBasicStyleTextInput.style}
-            underlineColor="rgba(0,0,0,0)"
-            activeUnderlineColor="rgba(0,0,0,0)"
+            underlineColor={HistoryCalInputTheme.activeUnderlineColor}
+            activeUnderlineColor={HistoryCalInputTheme.activeUnderlineColor}
             {...rest}
         />
     );
@@ -217,11 +222,15 @@ export const useMolecules = () => useAtomsMolecules<InjectedComponentTypes>();
 
 const components = { NumpadContainer, ScreenContainer, HistoryCalInput, ResultText };
 
+const containerStyle = {
+    maxWidth: 300,
+};
+
 const App = () => {
     const { View } = useMolecules();
     return (
         <ProvideMolecules theme={theme} components={components}>
-            <View style={{ maxWidth: 300 }}>
+            <View style={containerStyle}>
                 <ColorModeToggle />
                 <Calculator />
             </View>

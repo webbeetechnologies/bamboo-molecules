@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { BtnTypes, btnValues, NumpadButtonType } from '../utils';
+import { BtnTypes, btnValues, NumpadButtonType, NumpadButtonTypes } from '../utils';
 import { valHistory } from '../Logic';
 import NumpadButton from './NumpadButton';
 import { useMolecules } from '../../../App';
@@ -19,17 +19,22 @@ const Numpad = ({ setHistory, history }: Props) => {
         [history, setHistory],
     );
 
+    const RenderNumPadBtn = useCallback(
+        ({ item }: { item: NumpadButtonTypes }) => {
+            return item.type !== BtnTypes.SPACE ? (
+                <NumpadButton item={item} handleBtnClick={handleBtnClick} />
+            ) : (
+                <View />
+            );
+        },
+        [handleBtnClick],
+    );
+
     return (
         <NumpadContainer>
             <FlatGrid
                 data={btnValues}
-                renderItem={({ item }) =>
-                    item.type !== BtnTypes.SPACE ? (
-                        <NumpadButton item={item} handleBtnClick={handleBtnClick} />
-                    ) : (
-                        <View />
-                    )
-                }
+                renderItem={RenderNumPadBtn}
                 spacing={10}
                 maxItemsPerRow={4}
                 itemDimension={0}
