@@ -1,12 +1,9 @@
-export type NumpadButtonTypes =
-    | {
-          icon: string;
-          type: BtnTypes;
-          oper: string;
-      }
-    | {
-          type: BtnTypes.SPACE;
-      };
+
+export type NumpadButtonType = { icon: string; type: BtnTypes; oper: string };
+
+export type NumpadButtonBlank = { type: BtnTypes.SPACE };
+ 
+export type NumpadButtonTypes = NumpadButtonType | NumpadButtonBlank;
 
 export const enum BtnTypes {
     NUMBER = 'NUMBER',

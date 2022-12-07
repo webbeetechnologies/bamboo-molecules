@@ -1,1 +1,1 @@
-export { default as Calculator, Props as CalculatorProps } from './Calculator';
+export { default as Calculator } from './Calculator';

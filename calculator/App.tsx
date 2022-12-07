@@ -20,7 +20,6 @@ const ref = tokens.md.ref;
 const lightColors = generateLightThemeColors(ref.palette, ref.opacity);
 const darkColors = generateDarkThemeColors(ref.palette, ref.opacity);
 
-
 const theme = extendTheme({
     light: {
         colors: {
@@ -128,7 +127,7 @@ const theme = extendTheme({
         backgroundColor: 'colors.numpadBox',
     },
     ScreenContainer: {
-        height:120,
+        height: 120,
         backgroundColor: 'colors.screenContainer',
         justifyContent: 'flex-end',
         padding: 'spacings.3',
@@ -150,7 +149,6 @@ const theme = extendTheme({
         opacity: 0.6,
     },
 });
-console.log(theme);
 
 const NumpadContainer = ({ style, ...rest }: ViewProps) => {
     const { View } = useMolecules();
@@ -188,7 +186,10 @@ const HistoryCalInput = ({ style, ...rest }: TextInputProps) => {
             inputContainerStyle={someBasicStyleTextInput.inputContainerStyle}
             keyboardType="decimal-pad"
             numberOfLines={1}
+            placeholder="0"
             style={someBasicStyleTextInput.style}
+            underlineColor="rgba(0,0,0,0)"
+            activeUnderlineColor="rgba(0,0,0,0)"
             {...rest}
         />
     );

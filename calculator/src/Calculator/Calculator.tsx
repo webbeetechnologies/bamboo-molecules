@@ -12,7 +12,7 @@ const Calculator = () => {
     return (
         <View>
             <Screen history={history} setHistory={setHistory} />
-            <Numpad setHistory={setHistory} />
+            <Numpad history={history} setHistory={setHistory} />
         </View>
     );
 };

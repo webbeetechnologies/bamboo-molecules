@@ -1,6 +1,6 @@
 import React from 'react';
 import { useColorMode } from '@webbee/bamboo-atoms';
-import { useMolecules } from 'bamboo-molecules';
+import { useMolecules } from '../../App';
 
 const ColorModeToggle = () => {
     const { colorMode, toggleColorMode } = useColorMode();

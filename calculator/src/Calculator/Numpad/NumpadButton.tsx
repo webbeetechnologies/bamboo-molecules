@@ -1,15 +1,11 @@
 import React, { memo, useMemo } from 'react';
-import { useMolecules } from '../../../../src/hooks';
+import { useMolecules } from '../../../App';
 
-import { BtnTypes } from '../utils';
+import { BtnTypes, NumpadButtonType } from '../utils';
 
 type Props = {
-    item: {
-        icon: string;
-        type: BtnTypes;
-        oper: string;
-    };
-    handleBtnClick: (val: string) => void;
+    item: NumpadButtonType;
+    handleBtnClick: (item: NumpadButtonType) => void;
 };
 
 const NumpadButton = memo(({ item, handleBtnClick }: Props) => {
@@ -35,7 +31,7 @@ const NumpadButton = memo(({ item, handleBtnClick }: Props) => {
             size="xl"
             // @ts-ignore
             variant={variant}
-            onPress={() => handleBtnClick(item.oper)}
+            onPress={() => handleBtnClick(item)}
             style={{
                 aspectRatio: 1,
             }}

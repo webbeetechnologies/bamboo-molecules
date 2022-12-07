@@ -1,3 +1,64 @@
+import { BtnTypes, NumpadButtonType } from "./utils";
+
+export function valHistory(prevHistory: string, btn: NumpadButtonType): string {
+    function checkBeforeChar(regex: RegExp) {
+        const a = prevHistory.split(regex);
+
+        if (a.length === 1) {
+            return true;
+        } else {
+            if (a[a.length - 1] === '') {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    switch (btn.type) {
+        case BtnTypes.CLEAR:
+            return '';
+
+        case BtnTypes.BACK:
+            return prevHistory.slice(0, -1);
+
+        case BtnTypes.POINT:
+            if (prevHistory === '') {
+                return '0.';
+            } else {
+                return `${prevHistory}.`;
+            }
+        case BtnTypes.EQUAL:
+            const calc = doMath(prevHistory);
+            if (typeof calc === 'string') {
+                return prevHistory;
+            }
+            return calc.toString();
+
+        case BtnTypes.OPERATOR:
+            if (prevHistory === '') return '';
+            const regex = btn.oper === ('/' || '*') ? /[*\-+%/()]+/g : /[\-+%/()]+/g;
+
+            if (checkBeforeChar(regex)) {
+                return `${prevHistory}${btn.oper}`;
+            } else {
+                return prevHistory;
+            }
+
+        case BtnTypes.NUMBER:
+            if (btn.oper === '0') {
+                return prevHistory === '' || prevHistory === '0'
+                    ? prevHistory
+                    : prevHistory + btn.oper;
+            } else {
+                return prevHistory + btn.oper;
+            }
+
+        default:
+            return prevHistory;
+    }
+}
+
 export default function doMath(s: string) {
     const postfix = convertToPostfix('0' + s);
     return postfix_evaluation(postfix);
