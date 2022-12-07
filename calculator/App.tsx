@@ -2,23 +2,28 @@
 
 // export default () => <Cases />;
 
-import React from 'react';
+import React, { ComponentType } from 'react';
 import Calculator from './src/Calculator/Calculator';
 
-import { ProvideMolecules } from '../src/core';
 import {
-    useColorMode,
-    useMolecules,
+    useMolecules as useAtomsMolecules,
     extendTheme,
     generateLightThemeColors,
     tokens,
     generateDarkThemeColors,
+    ProvideMolecules,
+    useComponentStyles,
+    ViewProps,
+    TextInputProps,
+    TextProps,
 } from 'bamboo-molecules';
+import { ColorModeToggle } from './src/ColorModeToggle';
 
 const ref = tokens.md.ref;
 
 const lightColors = generateLightThemeColors(ref.palette, ref.opacity);
 const darkColors = generateDarkThemeColors(ref.palette, ref.opacity);
+
 
 const theme = extendTheme({
     light: {
@@ -35,6 +40,9 @@ const theme = extendTheme({
             onTextNumpad: '#000000d0',
 
             primary: 'rgb(182, 157, 248)',
+
+            numpadBox: '#ffffff',
+            screenContainer: '#e3f4f9',
         },
     },
     dark: {
@@ -51,6 +59,9 @@ const theme = extendTheme({
             onTextNumpad: '#ffffffd0',
 
             primary: 'rgb(182, 157, 248)',
+            numpadBox: '#1b1b1b',
+
+            screenContainer: '#2b2b2b',
         },
     },
     Button: {
@@ -115,38 +126,110 @@ const theme = extendTheme({
             },
         },
     },
+    NumpadContainer: {
+        paddingTop: 'spacings.4',
+
+        backgroundColor: 'colors.numpadBox',
+    },
+    ScreenContainer: {
+        height:120,
+        backgroundColor: 'colors.screenContainer',
+        justifyContent: 'flex-end',
+        padding: 'spacings.3',
+    },
+    HistoryCalInput: {
+        backgroundColor: 'transparent',
+        fontSize: 'fontSizes.4xl',
+        textAlign: 'right',
+        color: 'colors.onTextNumpad',
+
+        padding: 0,
+        flex: 1,
+    },
+    ResultText: {
+        fontSize: 'fontSizes.3xl',
+        fontWeight: 'fontWeights.semibold',
+        textAlign: 'right',
+        color: 'colors.onTextNumpad',
+        opacity: 0.6,
+    },
 });
+console.log(theme);
+
+const NumpadContainer = ({ style, ...rest }: ViewProps) => {
+    const { View } = useMolecules();
+
+    const Style = useComponentStyles('NumpadContainer', style);
+
+    return <View style={Style}>{rest.children}</View>;
+};
+
+const ScreenContainer = ({ style, ...rest }: ViewProps) => {
+    const { View } = useMolecules();
+
+    const Style = useComponentStyles('ScreenContainer', style);
+
+    return <View style={Style}>{rest.children}</View>;
+};
+
+const someBasicStyleTextInput = {
+    inputContainerStyle: {
+        flex: 1,
+    },
+    style: {
+        backgroundColor: 'transparent',
+    },
+};
+
+const HistoryCalInput = ({ style, ...rest }: TextInputProps) => {
+    const { TextInput } = useMolecules();
+
+    const Style = useComponentStyles('HistoryCalInput', style);
+
+    return (
+        <TextInput
+            inputStyle={Style}
+            inputContainerStyle={someBasicStyleTextInput.inputContainerStyle}
+            keyboardType="decimal-pad"
+            numberOfLines={1}
+            style={someBasicStyleTextInput.style}
+            {...rest}
+        />
+    );
+};
+const ResultText = ({ style, ...rest }: TextProps) => {
+    const { Text } = useMolecules();
+
+    const Style = useComponentStyles('ResultText', style);
+
+    return (
+        <Text numberOfLines={1} adjustsFontSizeToFit style={Style}>
+            {rest.children}
+        </Text>
+    );
+};
+
+export interface InjectedComponentTypes {
+    NumpadContainer: ComponentType<ViewProps>;
+    ScreenContainer: ComponentType<ViewProps>;
+    HistoryCalInput: ComponentType<TextInputProps>;
+    ResultText: ComponentType<TextProps>;
+}
+
+export const useMolecules = () => useAtomsMolecules<InjectedComponentTypes>();
+
+const components = { NumpadContainer, ScreenContainer, HistoryCalInput, ResultText };
 
 const App = () => {
+    const { View } = useMolecules();
     return (
-        <ProvideMolecules theme={theme}>
-            <WrapCalculator />
+        <ProvideMolecules theme={theme} components={components}>
+            <View style={{ maxWidth: 300 }}>
+                <ColorModeToggle />
+                <Calculator />
+            </View>
         </ProvideMolecules>
     );
 };
 
 export default App;
-
-const WrapCalculator = () => {
-    const { View, Label, IconButton } = useMolecules();
-    const { colorMode, toggleColorMode } = useColorMode();
-    return (
-        <>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Label>ColorMode - {colorMode}</Label>
-                <IconButton
-                    size="lg"
-                    type="material-community"
-                    name={colorMode === 'light' ? 'white-balance-sunny' : 'weather-night'}
-                    onPress={toggleColorMode}
-                />
-            </View>
-            <Calculator
-                // onChange={res => console.log(res)}
-                style={{
-                    maxWidth: 300,
-                }}
-            />
-        </>
-    );
-};

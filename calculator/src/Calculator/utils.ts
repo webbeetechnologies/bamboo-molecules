@@ -1,9 +1,12 @@
-
-export type NumpadButtonTypes = {
-    icon: string;
-    type: BtnTypes;
-    oper: string;
-};
+export type NumpadButtonTypes =
+    | {
+          icon: string;
+          type: BtnTypes;
+          oper: string;
+      }
+    | {
+          type: BtnTypes.SPACE;
+      };
 
 export const enum BtnTypes {
     NUMBER = 'NUMBER',
@@ -12,9 +15,8 @@ export const enum BtnTypes {
     EQUAL = 'EQUAL',
     POINT = 'POINT',
     BACK = 'BACK',
+    SPACE = 'SPACE',
 }
-
-
 
 export const btnValues: NumpadButtonTypes[] = [
     {
@@ -23,14 +25,10 @@ export const btnValues: NumpadButtonTypes[] = [
         oper: 'AC',
     },
     {
-        icon: '',
-        type: BtnTypes.NUMBER,
-        oper: '',
+        type: BtnTypes.SPACE,
     },
     {
-        icon: '',
-        type: BtnTypes.NUMBER,
-        oper: '',
+        type: BtnTypes.SPACE,
     },
     {
         icon: '÷',

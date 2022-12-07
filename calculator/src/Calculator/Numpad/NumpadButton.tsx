@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react';
-import { useCurrentTheme, useMolecules } from '../../../../src/hooks';
+import { useMolecules } from '../../../../src/hooks';
 
 import { BtnTypes } from '../utils';
 
