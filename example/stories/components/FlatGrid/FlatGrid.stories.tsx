@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { View, Text } from 'react-native';
-import { ProvideMolecules } from '../../common';
+import { generateFlatListData, ProvideMolecules } from '../../common';
 
 import { Example } from './FlatGrid';
 
@@ -24,27 +24,8 @@ export const Default: ComponentStory<typeof Example> = args => (
 
 Default.args = {
     itemDimension: 130,
-    data: [
-        {
-            text: 'A',
-        },
-        {
-            text: 'B',
-        },
-        {
-            text: 'C',
-        },
-        {
-            text: 'D',
-        },
-        {
-            text: 'E',
-        },
-        {
-            text: 'D',
-        },
-    ],
-    renderItem: ({ item }: any) => <Text>{item.text}</Text>,
+    data: generateFlatListData(1000),
+    renderItem: ({ item }: any) => <Text>{item.title}</Text>,
 };
 
 Default.parameters = {
@@ -53,23 +34,21 @@ Default.parameters = {
             code: `
 <FlatGrid {...props} itemDimension={130} data={[
         {
-            text: 'A',
+            title: 'Item 0',
         },
-        {
-            text: 'B',
+         {
+            title: 'Item 1',
         },
-        {
-            text: 'C',
+         {
+            title: 'Item 2',
         },
-        {
-            text: 'D',
+         {
+            title: 'Item 3',
         },
-        {
-            text: 'E',
+         {
+            title: 'Item 4',
         },
-        {
-            text: 'D',
-        },
+        // ...
     ]} renderItem={({ item }: any) => <Text>{item}</Text>} />
 `,
             language: 'tsx',

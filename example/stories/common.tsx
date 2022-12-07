@@ -122,3 +122,58 @@ const storyTheme = extendTheme({
 export const ProvideMolecules = ({ children }: { children: ReactNode }) => {
     return <DefaultProvideMolecules theme={storyTheme}>{children}</DefaultProvideMolecules>;
 };
+
+export const generateSectionListData = (sectionsLength: number, dataLength: number) => {
+    // Create an empty array
+    const arr: { id: number; title: string; data: { title: string }[] }[] = [];
+
+    // Loop n times
+    for (let i = 0; i < sectionsLength; i++) {
+        // Create the title for the parent object
+        const title = `section ${i}`;
+
+        // Create an empty array for the data property
+        const data: { title: string }[] = [];
+
+        // Generate 10 objects for the data array
+        for (let j = 0; j < dataLength; j++) {
+            // Create the unique title for the object in the data array
+            const itemTitle = `item ${i * dataLength + j}`;
+
+            // Create an object with the title property
+            const obj = { title: itemTitle };
+
+            // Push the object into the data array
+            data.push(obj);
+        }
+
+        // Create an object with the unique id, title, and data properties
+        const obj = { id: i, title, data };
+
+        // Push the object into the array
+        arr.push(obj);
+    }
+
+    // Return the array
+    return arr;
+};
+
+export const generateFlatListData = (dataLength: number) => {
+    // Create an empty array
+    const arr: { id: number; title: string }[] = [];
+
+    // Loop n times
+    for (let i = 0; i < dataLength; i++) {
+        // Create the title for the parent object
+        const title = `item ${i}`;
+
+        // Create an object with the unique id, title, and data properties
+        const obj = { id: i, title };
+
+        // Push the object into the array
+        arr.push(obj);
+    }
+
+    // Return the array
+    return arr;
+};
