@@ -30,6 +30,9 @@ export const Controlled: ComponentStory<typeof Example> = args => <ControlledExa
 Controlled.args = {};
 
 Controlled.parameters = {
+    controls: {
+        exclude: /(?:\b|')(value|onChange)(?:\b|')/,
+    },
     docs: {
         source: {
             code: `

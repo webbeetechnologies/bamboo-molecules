@@ -13,6 +13,7 @@ export default {
 export const ButtonGroup: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 ButtonGroup.args = {
+    orientation: 'vertical',
     children: [
         <Button variant="contained" onPress={() => {}}>
             Button
