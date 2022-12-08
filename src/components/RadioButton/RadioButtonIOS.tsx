@@ -64,7 +64,26 @@ const RadioButtonIOS = (
 
     const { containerStyle, iconContainerStyle, checkedColor, iconSize, rippleColor } =
         useMemo(() => {
-            const { color, iconSize: _iconSize, ...checkboxStyles } = componentStyles;
+            const {
+                color,
+                iconSize: _iconSize,
+                // removing unwanted styles
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                uncheckedColor,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                animationScale,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                animationDuration,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                container,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                radio,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                radioContainer,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                dot,
+                ...checkboxStyles
+            } = componentStyles;
 
             return {
                 containerStyle: [styles.container, checkboxStyles],
