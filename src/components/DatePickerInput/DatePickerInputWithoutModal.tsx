@@ -15,6 +15,7 @@ function DatePickerInputWithoutModal(
         withDateFormatInLabel = true,
         modal,
         inputButtons,
+        dateFormat = 'dd/MM/yyyy',
         ...rest
     }: DatePickerInputProps & {
         modal?: (params: {
@@ -31,12 +32,13 @@ function DatePickerInputWithoutModal(
     const { container } = useComponentStyles('DatePickerInput');
 
     const theme = useCurrentTheme();
-    const { formattedValue, inputFormat, onChangeText, error } = useDateInput({
+    const { formattedValue, onChangeText, error } = useDateInput({
         locale,
         value,
         validRange,
         inputMode,
         onChange,
+        dateFormat,
     });
 
     return (
@@ -48,13 +50,13 @@ function DatePickerInputWithoutModal(
                     label={getLabel({
                         // TODO: support label components?
                         label: label as any,
-                        inputFormat,
+                        inputFormat: dateFormat,
                         withDateFormatInLabel,
                     })}
                     value={formattedValue}
                     keyboardType={'number-pad'}
-                    placeholder={inputFormat}
-                    mask={inputFormat}
+                    placeholder={dateFormat}
+                    mask={dateFormat}
                     onChangeText={onChangeText}
                     keyboardAppearance={theme.dark ? 'dark' : 'default'}
                     error={!!error}

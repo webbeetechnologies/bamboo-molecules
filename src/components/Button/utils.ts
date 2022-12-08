@@ -68,19 +68,19 @@ export const defaultStyles: ComponentStylePropWithVariants<
         sm: {
             minWidth: 64,
             iconSize: 22,
-            borderRadius: 'roundness.5',
+            borderRadius: 'shapes.corner.full',
             typeScale: 'typescale.labelMedium',
         },
         md: {
             minWidth: 64,
             iconSize: 24,
-            borderRadius: 'roundness.5',
+            borderRadius: 'shapes.corner.full',
             typeScale: 'typescale.labelLarge',
         },
         lg: {
             minWidth: 64,
             iconSize: 26,
-            borderRadius: 'roundness.5',
+            borderRadius: 'shapes.corner.full',
             typeScale: 'typescale.labelLarge',
             fontSize: 'fontSizes.md',
         },

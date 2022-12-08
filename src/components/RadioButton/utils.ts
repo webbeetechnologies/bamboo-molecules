@@ -26,7 +26,7 @@ export const radioButtonStyles: ComponentStylePropWithVariants<TextStyle, States
     paddingHorizontal: 'spacings.4',
 
     container: {
-        borderRadius: 'roundness.5' as unknown as number,
+        borderRadius: 'shapes.corner.full' as unknown as number,
     },
     radioContainer: {
         alignItems: 'center',

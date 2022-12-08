@@ -1,4 +1,5 @@
 import { useMemo, useCallback } from 'react';
+// import { format } from 'date-fns';
 import { useLatest } from '../../hooks';
 import type { CalendarDate, CalendarDates, ValidRangeType } from './types';
 
@@ -177,13 +178,9 @@ export function differenceInMonths(firstDate: Date, secondDate: Date) {
     return diffMonths;
 }
 
-export function useInputFormat({
-    formatter,
-    locale,
-}: {
-    formatter: Intl.DateTimeFormat;
-    locale: string | undefined;
-}) {
+export function useDateFormat({ locale }: { locale: string | undefined }) {
+    const formatter = useDateFormatter({ locale });
+
     return useMemo(() => {
         // TODO: something cleaner and more universal?
         const inputDate = formatter.format(new Date(2020, 10 - 1, 1));
@@ -194,7 +191,7 @@ export function useInputFormat({
     }, [formatter, locale]);
 }
 
-export function useInputFormatter({ locale }: { locale: string | undefined }) {
+export function useDateFormatter({ locale }: { locale: string | undefined }) {
     return useMemo(() => {
         return new Intl.DateTimeFormat(locale, {
             month: '2-digit',

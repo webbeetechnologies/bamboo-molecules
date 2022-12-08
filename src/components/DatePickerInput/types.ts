@@ -10,4 +10,9 @@ export type DatePickerInputProps = {
     withModal?: boolean;
     withDateFormatInLabel?: boolean;
     calendarIcon?: string;
+    /**
+     * date format of the input
+     * should be date-fns accepted format
+     * */
+    dateFormat?: string;
 } & Omit<TextInputProps, 'value' | 'onChange' | 'onChangeText'>;

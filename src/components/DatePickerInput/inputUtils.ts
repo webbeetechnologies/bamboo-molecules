@@ -1,5 +1,6 @@
-import { useInputFormat, useInputFormatter, useRangeChecker } from '../DatePickerInline/dateUtils';
 import { useState } from 'react';
+
+import { useDateFormatter, useRangeChecker } from '../DatePickerInline/dateUtils';
 import type { ValidRangeType } from '../DatePickerInline';
 
 export default function useDateInput({
@@ -8,30 +9,31 @@ export default function useDateInput({
     validRange,
     inputMode,
     onChange,
+    dateFormat,
 }: {
     onChange: (d: Date) => void;
     locale: undefined | string;
     value: Date | undefined;
     validRange: ValidRangeType | undefined;
     inputMode: 'start' | 'end';
+    dateFormat: string;
 }) {
     const { isDisabled, isWithinValidRange, validStart, validEnd } = useRangeChecker(validRange);
     const [error, setError] = useState<null | string>(null);
-    const formatter = useInputFormatter({ locale });
-    const inputFormat = useInputFormat({ formatter, locale });
+    const formatter = useDateFormatter({ locale });
     const formattedValue = value !== null ? formatter.format(value) : '';
+
     const onChangeText = (date: string) => {
-        const dayIndex = inputFormat.indexOf('DD');
-        const monthIndex = inputFormat.indexOf('MM');
-        const yearIndex =
-            locale === 'pt' ? inputFormat.indexOf('AAAA') : inputFormat.indexOf('YYYY');
+        const dayIndex = dateFormat.indexOf('dd');
+        const monthIndex = dateFormat.indexOf('MM');
+        const yearIndex = locale === 'pt' ? dateFormat.indexOf('AAAA') : dateFormat.indexOf('yyyy');
 
         const day = Number(date.slice(dayIndex, dayIndex + 2));
         const year = Number(date.slice(yearIndex, yearIndex + 4));
         const month = Number(date.slice(monthIndex, monthIndex + 2));
 
         if (Number.isNaN(day) || Number.isNaN(year) || Number.isNaN(month)) {
-            setError(`Date format must be ${inputFormat}`);
+            setError(`Date format must be ${dateFormat}`);
             return;
         }
 
@@ -72,6 +74,5 @@ export default function useDateInput({
         error,
         formattedValue,
         onChangeText,
-        inputFormat,
     };
 }
