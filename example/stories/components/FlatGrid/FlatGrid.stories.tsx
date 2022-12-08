@@ -17,7 +17,7 @@ export default {
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => (
-    <View style={{ minWidth: 300 }}>
+    <View style={{ minWidth: 300, maxHeight: 500 }}>
         <Example {...args} />
     </View>
 );

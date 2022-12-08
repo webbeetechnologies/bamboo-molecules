@@ -1,5 +1,5 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { generateSectionListData, ProvideMolecules } from '../../common';
 
 import { Example } from './SectionGrid';
@@ -16,7 +16,11 @@ export default {
     ],
 } as ComponentMeta<typeof Example>;
 
-export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
+export const Default: ComponentStory<typeof Example> = args => (
+    <View style={{ maxHeight: 500 }}>
+        <Example {...args} />
+    </View>
+);
 
 Default.args = {
     maxItemsPerRow: 3,
