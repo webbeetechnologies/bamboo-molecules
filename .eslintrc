@@ -5,7 +5,7 @@
     "prefer-const": "warn", // to avoid using let for variables that aren't reassigned
     "no-console": ["error", { "allow": ["warn", "error"] }],
     "react/react-in-jsx-scope": "off",
-    "@typescript-eslint/no-unused-vars": ["error", {  "varsIgnorePattern": "^_" }]
+    "@typescript-eslint/no-unused-vars": ["error", {  "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }]
   },
   "plugins": ["@typescript-eslint", "prettier"]
 }
