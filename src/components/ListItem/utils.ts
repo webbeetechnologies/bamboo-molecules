@@ -15,7 +15,7 @@ export const listItemStyles: ComponentStylePropWithVariants<ViewStyle, States, L
     {
         backgroundColor: 'colors.surface',
         paddingTop: 'spacings.2',
-        marginBottom: 'spacings.2',
+        paddingBottom: 'spacings.2',
         paddingLeft: 'spacings.4',
         paddingRight: 'spacings.6',
 

@@ -25,4 +25,5 @@ Default.parameters = {
             type: 'auto',
         },
     },
+    chromatic: { disableSnapshot: true },
 };

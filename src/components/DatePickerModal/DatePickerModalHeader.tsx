@@ -8,7 +8,7 @@ export interface DatePickerModalHeaderProps {
     saveLabel?: string;
     saveLabelDisabled?: boolean;
     uppercase?: boolean;
-    onDismiss: () => void;
+    onClose: () => void;
     onSave: () => void;
     closeIcon?: string;
 }
@@ -54,7 +54,7 @@ export default function DatePickerModalHeader(props: DatePickerModalHeaderProps)
                         <IconButton
                             name={closeIcon}
                             accessibilityLabel={'Close'}
-                            onPress={props.onDismiss}
+                            onPress={props.onClose}
                             style={iconButtonStyle as ViewStyle}
                             testID="date-picker-close"
                         />

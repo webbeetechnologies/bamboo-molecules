@@ -25,6 +25,7 @@ export const timePickerModalStyles: ComponentStylePropWithVariants<
     modalContent: {
         minWidth: 287,
         width: undefined,
+        maxWidth: undefined,
         flex: undefined,
         borderRadius: 'roundness.7' as unknown as number,
     },

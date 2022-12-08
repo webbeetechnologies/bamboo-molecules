@@ -19,6 +19,8 @@ export const defaultStyles: ComponentStylePropWithVariants<
 > = {
     modalBackground: {
         flex: 1,
+        backgroundColor: 'colors.scrim',
+        opacity: 0.3,
     },
     contentContainer: {
         justifyContent: 'center',
@@ -26,20 +28,24 @@ export const defaultStyles: ComponentStylePropWithVariants<
         flex: 1,
     },
     modalContent: {
-        flex: 1,
-        width: '100%',
         backgroundColor: 'colors.surface',
+        width: '100%',
+        overflow: 'hidden',
     },
 
     sizes: {
-        md: {},
+        md: {
+            modalContent: {
+                maxWidth: 400,
+                maxHeight: 600,
+                borderRadius: 10,
+            },
+        },
         lg: {
             modalContent: {
                 maxWidth: 600,
                 maxHeight: 800,
                 borderRadius: 10,
-                width: '100%',
-                overflow: 'hidden',
             },
         },
     },

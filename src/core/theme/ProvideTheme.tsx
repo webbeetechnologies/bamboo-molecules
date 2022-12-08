@@ -5,7 +5,7 @@ import {
     IExtractStylesFuncArgs,
 } from '@webbee/bamboo-atoms';
 import merge from 'ts-deepmerge';
-import memoize from 'lodash.memoize';
+import { memoize } from '../../utils';
 
 import {
     activityIndicatorStyles,
@@ -52,8 +52,19 @@ import {
     timePickerClockHoursStyles,
     timePickerClockMinutesStyles,
     timePickerAmPmSwitcherStyles,
-    inputGroupStyles,
+    optionListStyles,
+    elementGroupStyles,
     inputAddonStyles,
+    actionSheetStyles,
+    dropdownListStyles,
+    dialogStyles,
+    dialogActionsStyles,
+    dialogTitleStyles,
+    dialogIconStyles,
+    dialogContentStyles,
+    dialogScrollAreaStyles,
+    radioButtonStyles,
+    numberRangeInputStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -119,8 +130,23 @@ const defaultThemeValue: Partial<ITheme> = {
     TimePicker_ClockMinutes: timePickerClockMinutesStyles,
     TimePicker_AmPmSwitcher: timePickerAmPmSwitcherStyles,
 
-    InputGroup: inputGroupStyles,
+    OptionList: optionListStyles,
+    ElementGroup: elementGroupStyles,
     InputAddon: inputAddonStyles,
+
+    ActionSheet: actionSheetStyles,
+
+    DropdownList: dropdownListStyles,
+
+    Dialog: dialogStyles,
+    Dialog_Content: dialogContentStyles,
+    Dialog_Title: dialogTitleStyles,
+    Dialog_Actions: dialogActionsStyles,
+    Dialog_Icon: dialogIconStyles,
+    Dialog_ScrollArea: dialogScrollAreaStyles,
+
+    RadioButton: radioButtonStyles,
+    NumberRangeInput: numberRangeInputStyles,
 };
 
 const defaultExtractStyles = memoize(
