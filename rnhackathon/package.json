@@ -1,5 +1,5 @@
 {
-  "name": "calculator",
+  "name": "rnhackathon",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,11 @@
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^0.17.0",
+    "@react-native-async-storage/async-storage": "~1.17.3",
+    "@react-navigation/drawer": "^6.5.4",
+    "@react-navigation/native": "^6.1.0",
     "expo": "~46.0.16",
+    "expo-dev-client": "^2.0.1",
     "expo-font": "^10.2.0",
     "expo-modules-core": "^0.11.8",
     "expo-splash-screen": "~0.16.2",
@@ -21,7 +25,11 @@
     "react-native": "0.69.6",
     "react-native-document-picker": "^8.1.2",
     "react-native-paper": "5.0.0-rc.8",
-    "react-native-web": "~0.18.7"
+    "react-native-web": "~0.18.7",
+    "react-redux": "^8.0.5",
+    "redux": "^4.2.0",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
