@@ -13,7 +13,7 @@ import {
 import type { ModalProps } from '../Modal';
 
 export type Props = ModalProps & {
-    locale?: undefined | string;
+    is24Hour?: boolean;
     label?: string;
     uppercase?: boolean;
     cancelLabel?: string;
@@ -37,7 +37,7 @@ export function TimePickerModal({
     cancelLabel = 'Cancel',
     confirmLabel = 'Ok',
     animationType = 'none',
-    locale,
+    is24Hour,
     keyboardIcon = 'keyboard-outline',
     clockIcon = 'clock-outline',
     ...rest
@@ -86,7 +86,7 @@ export function TimePickerModal({
                 </View>
                 <View style={componentStyles.timePickerContainer}>
                     <TimePicker
-                        locale={locale}
+                        is24Hour={is24Hour}
                         inputType={inputType}
                         focused={focused}
                         hours={localHours}

@@ -3,13 +3,13 @@ import {
     Dispatch,
     SetStateAction,
     createContext,
-    useMemo,
     useState,
-    useEffect,
     useCallback,
+    useMemo,
 } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 
+import { useComponentStyles } from '../../hooks';
 import {
     inputTypes,
     PossibleClockTypes,
@@ -17,10 +17,8 @@ import {
     toHourInputFormat,
     toHourOutputFormat,
 } from './timeUtils';
-
 import AnalogClock from './AnalogClock';
 import TimeInputs from './TimeInputs';
-import { useComponentStyles } from '../../hooks';
 
 export const DisplayModeContext = createContext<{
     mode: 'AM' | 'PM' | undefined;
@@ -38,7 +36,7 @@ type onChangeFunc = ({
 }) => any;
 
 export type Props = {
-    locale?: undefined | string;
+    is24Hour?: boolean;
     inputType: PossibleInputTypes;
     focused: PossibleClockTypes;
     hours: number;
@@ -47,9 +45,22 @@ export type Props = {
     onChange: onChangeFunc;
 };
 
-function TimePicker({ hours, minutes, onFocusInput, focused, inputType, onChange, locale }: Props) {
+function TimePicker({
+    is24Hour = false,
+    hours,
+    minutes,
+    onFocusInput,
+    focused,
+    inputType,
+    onChange,
+}: Props) {
     const dimensions = useWindowDimensions();
-    const isLandscape = dimensions.width > dimensions.height;
+    const isLandscape = useMemo(() => dimensions.width > dimensions.height, [dimensions]);
+
+    // Initialize display Mode according the hours value
+    const [displayMode, setDisplayMode] = useState<'AM' | 'PM' | undefined>(() =>
+        !is24Hour ? (hours >= 12 ? 'PM' : 'AM') : undefined,
+    );
 
     const componentStyles = useComponentStyles(
         'TimePicker',
@@ -61,29 +72,6 @@ function TimePicker({ hours, minutes, onFocusInput, focused, inputType, onChange
         },
     );
 
-    const [displayMode, setDisplayMode] = useState<'AM' | 'PM' | undefined>(undefined);
-
-    // method to check whether we have 24 hours in clock or 12
-    const is24Hour = useMemo(() => {
-        const formatter = new Intl.DateTimeFormat(locale, {
-            hour: '2-digit',
-            minute: '2-digit',
-            timeZone: 'UTC',
-        });
-        const formatted = formatter.format(new Date(Date.UTC(2020, 1, 1, 23)));
-        return formatted.includes('23');
-    }, [locale]);
-
-    // Initialize display Mode according the hours value
-    useEffect(() => {
-        if (hours >= 12) {
-            setDisplayMode('PM');
-        } else {
-            setDisplayMode('AM');
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     const onInnerChange = useCallback<onChangeFunc>(
         params => {
             params.hours = toHourOutputFormat(params.hours, hours, is24Hour);
@@ -92,8 +80,13 @@ function TimePicker({ hours, minutes, onFocusInput, focused, inputType, onChange
         [onChange, hours, is24Hour],
     );
 
+    const memoizedValue = useMemo(
+        () => ({ mode: displayMode, setMode: setDisplayMode }),
+        [displayMode],
+    );
+
     return (
-        <DisplayModeContext.Provider value={{ mode: displayMode, setMode: setDisplayMode }}>
+        <DisplayModeContext.Provider value={memoizedValue}>
             <View style={componentStyles.container}>
                 <TimeInputs
                     inputType={inputType}

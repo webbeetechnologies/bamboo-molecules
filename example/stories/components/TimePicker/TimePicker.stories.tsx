@@ -10,7 +10,6 @@ export default {
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 Default.args = {
-    locale: 'en',
     hours: 10,
     minutes: 15,
 };
@@ -19,7 +18,7 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<TimePicker locale="en" hours={10} minutes={15} {...rest} />
+<TimePicker hours={10} minutes={15} />
 `,
             language: 'tsx',
             type: 'auto',
