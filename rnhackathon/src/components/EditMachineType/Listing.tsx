@@ -2,7 +2,7 @@ import React, { memo, useCallback } from 'react';
 
 import { ActionTypes, MachinesType, MachineTypesFields } from '../../store/types';
 import { useDispatch } from 'react-redux';
-import { useMolecules } from 'App';
+import { useMolecules } from '../../../App';
 import EditFieldItem from './EditFieldItem';
 
 interface Props {

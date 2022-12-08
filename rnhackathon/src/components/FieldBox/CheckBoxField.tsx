@@ -1,13 +1,10 @@
+import { useMolecules } from '../../../App';
 import React, { memo, useMemo, useCallback } from 'react';
-
-import { View } from 'react-native';
-
-import { Text, Checkbox } from 'react-native-paper';
-
 import styles from '../../styles';
 import type { FieldProps } from './types';
 
 const CheckboxField = ({ name, value, onChange }: FieldProps) => {
+    const {Text,Checkbox,View} = useMolecules();
     const label = useMemo(() => (name === '' ? 'Unnamed Field' : name), [name]);
 
     const status = useMemo(() => (value === 'true' ? 'checked' : 'unchecked'), [value]);
@@ -18,7 +15,7 @@ const CheckboxField = ({ name, value, onChange }: FieldProps) => {
 
     return (
         <View style={[styles.row, styles.itemsCenter, styles.spaceBetween, { paddingVertical: 5 }]}>
-            <Text variant="bodyLarge" style={{ fontSize: 20 }}>
+            <Text style={{ fontSize: 20 }}>
                 {label}
             </Text>
             <Checkbox status={status} onPress={onToggle} />

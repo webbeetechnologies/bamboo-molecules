@@ -2,8 +2,8 @@ import React from 'react';
 import styles, {colors} from '../../styles';
 import {View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {Text, Button} from 'react-native-paper';
 import {ActionTypes} from '../../store/types';
+import { useMolecules } from '../../../App';
 
 interface Props {
   machine_id: string;
@@ -18,6 +18,7 @@ const containerStyle = [
 ];
 
 const Header = ({title, machine_id}: Props) => {
+  const {Text, Button} = useMolecules()
   const dispatch = useDispatch();
 
   const onDelete = React.useCallback(() => {
@@ -30,17 +31,16 @@ const Header = ({title, machine_id}: Props) => {
   return (
     <View style={containerStyle}>
       <Text
-        variant="bodyLarge"
         style={{marginBottom: 5, fontWeight: '700', fontSize: 20}}>
         {title}
       </Text>
       <Button
-        icon="trash-can-outline"
-        mode="text"
+        iconName="trash-can-outline"
+        variant="text"
         onPress={onDelete}
         style={{alignSelf: 'flex-end'}}
         textColor={colors.red}
-        compact>
+        >
         DELETE
       </Button>
     </View>

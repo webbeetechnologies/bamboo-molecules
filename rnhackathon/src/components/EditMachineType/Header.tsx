@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import styles, { colors } from '../../styles';
 import { ActionTypes, MachinesType } from '../../store/types';
 import { useDispatch } from 'react-redux';
-import { useMolecules } from 'App';
+import { useMolecules } from '../../../App';
 
 interface Props {
     machine_type: MachinesType;

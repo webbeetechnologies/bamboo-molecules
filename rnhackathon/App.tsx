@@ -8,28 +8,18 @@ import { useSelector } from 'react-redux';
 import ManageCategories from './src/screens/ManageCategories';
 
 import MachineTypesMenu from './src/components/MachineType/MachineType';
-import type { MachineState, MachinesType, RootState } from './src/store/types';
+import type { MachinesType, RootState } from './src/store/types';
 import Container from './src/components/Container/Container';
-
-const Drawer = createDrawerNavigator();
-
-import {
-    useMolecules as useAtomsMolecules,
-    ProvideMolecules,
-    ViewProps,
-    TextInputProps,
-    TextProps,
-} from 'bamboo-molecules';
-
+import { useMolecules as useAtomsMolecules, ProvideMolecules, ViewProps } from 'bamboo-molecules';
 import { Provider } from 'react-redux';
 import { persistor, store } from './src/store';
 import { PersistGate } from 'redux-persist/integration/react';
-import { theme } from 'src/theme';
+import { theme } from './src/theme';
 
+const Drawer = createDrawerNavigator();
 export interface InjectedComponentTypes {
     Container: ComponentType<ViewProps>;
 }
-
 
 export const useMolecules = () => useAtomsMolecules<InjectedComponentTypes>();
 
@@ -52,7 +42,7 @@ const App = () => {
     const { Container } = useMolecules();
     return (
         <NavigationContainer>
-            <Drawer.Navigator initialRouteName="Dashboard">
+            <Drawer.Navigator initialRouteName="Manage Categories" useLegacyImplementation={true}>
                 <Drawer.Screen name="Dashboard" component={Dashboard} />
 
                 {machine_types.map((machine_type: MachinesType, index: number) => {

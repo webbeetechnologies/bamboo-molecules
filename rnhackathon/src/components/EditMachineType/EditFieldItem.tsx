@@ -5,7 +5,7 @@ import styles, { colors } from '../../styles';
 // import SelectDropdown from 'react-native-select-dropdown';
 import { ActionTypes, FieldTypes, MachineTypesFields } from '../../store/types';
 import { useDispatch } from 'react-redux';
-import { useMolecules } from 'App';
+import { useMolecules } from '../../../App';
 
 interface Props {
     machine_type_field: MachineTypesFields;

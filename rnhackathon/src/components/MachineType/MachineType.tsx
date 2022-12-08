@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import type { Machines, MachinesType, MachineTypesFields, RootState } from '../../store/types';
 import Header from './Header';
 import Listing from './Listing';
-import { useMolecules } from 'App';
+import { useMolecules } from '../../../App';
 
 interface Props {
     machine_type: MachinesType;

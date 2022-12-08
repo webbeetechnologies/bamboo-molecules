@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import type {MachinesType,RootState} from '../store/types';
 
 import {Container} from '../components/Container';
-import { MachineType } from 'src/components/MachineType';
+import { MachineType } from '../../src/components/MachineType';
 
 
 const Dashboard = () => {

@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { ActionTypes, MachinesType } from '../../store/types';
 import styles, { colors } from '../../styles';
 import { useDispatch } from 'react-redux';
-import { useMolecules } from 'App';
+import { useMolecules } from '../../../App';
 
 interface Props {
     machine_type: MachinesType;

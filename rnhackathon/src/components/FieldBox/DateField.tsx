@@ -1,6 +1,5 @@
+import { useMolecules } from '../../../App';
 import React, {useState, useCallback, useMemo, memo} from 'react';
-
-import {Button} from 'react-native-paper';
 
 // import DatePicker from 'react-native-date-picker';
 import {colors} from '../../styles';
@@ -9,6 +8,7 @@ import type {FieldProps} from './types';
 const btnStyle = {width: '100%'};
 
 const DateField = ({name, value, onChange}: FieldProps) => {
+  const {Button} = useMolecules();
   const [visibleDatePicker, setvisibleDatePicker] = useState(false);
 
   const label = useMemo(
@@ -42,8 +42,8 @@ const DateField = ({name, value, onChange}: FieldProps) => {
         onCancel={onToggle}
       /> */}
       <Button
-        icon="calendar-month"
-        mode="outlined"
+        iconName="calendar-month"
+        variant="outlined"
         onPress={onToggle}
         style={btnStyle}
         textColor={colors.primary}>

@@ -11,6 +11,7 @@ const lightColors = generateLightThemeColors(ref.palette, ref.opacity);
 const darkColors = generateDarkThemeColors(ref.palette, ref.opacity);
 
 export const theme = extendTheme({
+    colorMode:'light',
     light: {
         colors: {
             ...lightColors,

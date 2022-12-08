@@ -4,7 +4,7 @@ import { colors } from '../../styles';
 import type { Machines, MachineTypesFields, MachineTypesFieldsValue } from '../../store/types';
 
 import MachineItem from '../Machine/Machine';
-import { useMolecules } from 'App';
+import { useMolecules } from '../../../App';
 
 interface Props {
     title_id: string;
