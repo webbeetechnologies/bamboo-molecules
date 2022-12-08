@@ -53,7 +53,10 @@ export const ElementGroup = (
                     borderBottomRightRadius: 0,
                 },
                 middle: {
-                    borderRadius: 0,
+                    borderTopLeftRadius: 0,
+                    borderBottomRightRadius: 0,
+                    borderTopRightRadius: 0,
+                    borderBottomLeftRadius: 0,
                 },
                 last: {
                     borderTopLeftRadius: 0,
