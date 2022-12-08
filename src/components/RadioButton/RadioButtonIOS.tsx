@@ -68,20 +68,13 @@ const RadioButtonIOS = (
                 color,
                 iconSize: _iconSize,
                 // removing unwanted styles
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                uncheckedColor,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                animationScale,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                animationDuration,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                container,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                radio,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                radioContainer,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                dot,
+                uncheckedColor: _uncheckedColor,
+                animationScale: _animationScale,
+                animationDuration: _animationDuration,
+                container: _container,
+                radio: _radio,
+                radioContainer: _radioContainer,
+                dot: _dot,
                 ...checkboxStyles
             } = componentStyles;
 
