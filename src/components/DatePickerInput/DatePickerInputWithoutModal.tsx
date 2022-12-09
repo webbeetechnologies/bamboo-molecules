@@ -53,12 +53,12 @@ function DatePickerInputWithoutModal(
         <>
             <View style={container}>
                 <TextInputWithMask
+                    placeholder={dateFormat}
                     {...rest}
                     ref={ref}
                     label={label}
                     value={formattedValue}
                     keyboardType={'number-pad'}
-                    placeholder={dateFormat}
                     mask={dateFormat}
                     onChangeText={onChangeText}
                     keyboardAppearance={theme.dark ? 'dark' : 'default'}
