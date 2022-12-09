@@ -1,5 +1,4 @@
-import { useMemo, useCallback } from 'react';
-// import { format } from 'date-fns';
+import { useCallback } from 'react';
 import { useLatest } from '../../hooks';
 import type { CalendarDate, CalendarDates, ValidRangeType } from './types';
 
@@ -176,29 +175,6 @@ export function differenceInMonths(firstDate: Date, secondDate: Date) {
     diffMonths -= firstDate.getMonth();
     diffMonths += secondDate.getMonth();
     return diffMonths;
-}
-
-export function useDateFormat({ locale }: { locale: string | undefined }) {
-    const formatter = useDateFormatter({ locale });
-
-    return useMemo(() => {
-        // TODO: something cleaner and more universal?
-        const inputDate = formatter.format(new Date(2020, 10 - 1, 1));
-        return inputDate
-            .replace('2020', locale === 'pt' ? 'AAAA' : 'YYYY')
-            .replace('10', 'MM')
-            .replace('01', 'DD');
-    }, [formatter, locale]);
-}
-
-export function useDateFormatter({ locale }: { locale: string | undefined }) {
-    return useMemo(() => {
-        return new Intl.DateTimeFormat(locale, {
-            month: '2-digit',
-            day: '2-digit',
-            year: 'numeric',
-        });
-    }, [locale]);
 }
 
 type GenerateCalendarGridArgs = {

@@ -1,7 +1,8 @@
-import { useMemo, memo } from 'react';
+import { useMemo, memo, useCallback } from 'react';
 import { View } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
+import { format } from '../../utils';
 import {
     addMonths,
     daySize,
@@ -34,7 +35,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         onPressDate,
         scrollMode,
         disableWeekDays,
-        locale,
+        // locale,
         validRange,
     } = props;
     const { TouchableRipple, Text, IconButton } = useMolecules();
@@ -48,11 +49,9 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         const md = addMonths(new Date(), realIndex);
         const y = md.getFullYear();
         const m = md.getMonth();
-        const formatter = new Intl.DateTimeFormat(locale, {
-            month: 'long',
-        });
-        return { monthName: formatter.format(md), month: m, year: y };
-    }, [realIndex, locale]);
+
+        return { monthName: format(md, 'LLLL'), month: m, year: y };
+    }, [realIndex]);
 
     const grid = useMemo(
         () =>
@@ -107,12 +106,17 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         };
     }, [index, isHorizontal, monthStyles, scrollMode]);
 
+    const onPress = useCallback(
+        () => (isHorizontal ? () => onPressYear(year) : undefined),
+        [isHorizontal, onPressYear, year],
+    );
+
     return (
         <View style={monthStyle}>
             <View style={headerStyle}>
                 <TouchableRipple
                     disabled={!isHorizontal}
-                    onPress={isHorizontal ? () => onPressYear(year) : undefined}
+                    onPress={onPress}
                     accessibilityRole="button"
                     accessibilityLabel={`${monthName} ${year}`}
                     style={yearButtonStyle}>
@@ -122,7 +126,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
                         </Text>
                         <View style={iconContainerStyle}>
                             <IconButton
-                                onPress={isHorizontal ? () => onPressYear(year) : undefined}
+                                onPress={onPress}
                                 name={selectingYear ? 'chevron-up' : 'chevron-down'}
                             />
                         </View>

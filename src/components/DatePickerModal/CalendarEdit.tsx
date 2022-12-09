@@ -16,7 +16,7 @@ type Props = {
     collapsed: boolean;
     onChange: (s: LocalState) => any;
     validRange: ValidRangeType | undefined;
-    locale: string;
+    // locale: string;
 };
 
 function CalendarEdit({
@@ -28,8 +28,8 @@ function CalendarEdit({
     collapsed,
     onChange,
     validRange,
-    locale,
-}: Props) {
+}: // locale,
+Props) {
     const componentStyles = useComponentStyles('DatePickerModal_Edit');
 
     const dateInput = useRef<TextInputNative | null>(null);
@@ -72,6 +72,21 @@ function CalendarEdit({
         // TODO: close modal and persist range
     }, []);
 
+    const onSingleInputChange = useCallback(
+        (date: Date | undefined) => onChange({ ...state, date }),
+        [onChange, state],
+    );
+
+    const onStartDateChange = useCallback(
+        (startDate: Date | undefined) => onChange({ ...state, startDate }),
+        [onChange, state],
+    );
+
+    const onEndDateChange = useCallback(
+        (endDate: Date | undefined) => onChange({ ...state, endDate }),
+        [onChange, state],
+    );
+
     return (
         <View style={componentStyles.container}>
             <>
@@ -81,10 +96,10 @@ function CalendarEdit({
                         ref={dateInput}
                         label={label}
                         value={state.date}
-                        onChange={(date: Date | undefined) => onChange({ ...state, date })}
+                        onChange={onSingleInputChange}
                         onSubmitEditing={onSubmitInput}
                         validRange={validRange}
-                        locale={locale}
+                        // locale={locale}
                         withModal={false}
                         autoComplete={'off'}
                     />
@@ -99,13 +114,11 @@ function CalendarEdit({
                             ref={startInput}
                             label={startLabel}
                             value={state.startDate}
-                            onChange={(startDate: Date | undefined) =>
-                                onChange({ ...state, startDate })
-                            }
+                            onChange={onStartDateChange}
                             returnKeyType={'next'}
                             onSubmitEditing={onSubmitStartInput}
                             validRange={validRange}
-                            locale={locale}
+                            // locale={locale}
                             withModal={false}
                             autoComplete={'off'}
                         />
@@ -115,12 +128,10 @@ function CalendarEdit({
                             ref={endInput}
                             label={endLabel}
                             value={state.endDate}
-                            onChange={(endDate: Date | undefined) =>
-                                onChange({ ...state, endDate })
-                            }
+                            onChange={onEndDateChange}
                             onSubmitEditing={onSubmitEndInput}
                             validRange={validRange}
-                            locale={locale}
+                            // locale={locale}
                             withModal={false}
                             autoComplete="off"
                         />

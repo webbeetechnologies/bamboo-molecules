@@ -1,15 +1,21 @@
-import { useCallback, useState, forwardRef, memo } from 'react';
+import { useCallback, useState, forwardRef, memo, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useMolecules, useLatest } from '../../hooks';
-import type { DatePickerInputProps } from './types';
 import DatePickerInputWithoutModal from './DatePickerInputWithoutModal';
+import DatePickerInputModal from './DatePickerInputModal';
+import type { DatePickerInputModalParams, DatePickerInputProps } from './types';
 
 function DatePickerInput(
-    { withModal = true, calendarIcon = 'calendar', locale = 'en', ...rest }: DatePickerInputProps,
+    {
+        withModal = true,
+        calendarIcon = 'calendar',
+        //locale = 'en',
+        ...rest
+    }: DatePickerInputProps,
     ref: any,
 ) {
-    const { IconButton, DatePickerModal } = useMolecules();
+    const { IconButton } = useMolecules();
     const [visible, setVisible] = useState<boolean>(false);
 
     const onDismiss = useCallback(() => {
@@ -26,38 +32,50 @@ function DatePickerInput(
         [setVisible, onChangeRef],
     );
 
+    const onPressCalendarIcon = useCallback(() => setVisible(true), []);
+
+    const inputButtons = useMemo(
+        () => (
+            <>
+                {withModal ? (
+                    <IconButton
+                        style={styles.calendarButton}
+                        name={calendarIcon}
+                        onPress={onPressCalendarIcon}
+                    />
+                ) : null}
+            </>
+        ),
+        [IconButton, calendarIcon, onPressCalendarIcon, withModal],
+    );
+
+    const renderModalComponent = useCallback(
+        ({ value, locale, inputMode, validRange }: DatePickerInputModalParams) => (
+            <>
+                {withModal ? (
+                    <DatePickerInputModal
+                        date={value}
+                        mode="single"
+                        isOpen={visible}
+                        onClose={onDismiss}
+                        onConfirm={onInnerConfirm}
+                        locale={locale}
+                        dateMode={inputMode}
+                        validRange={validRange}
+                    />
+                ) : null}
+            </>
+        ),
+        [onDismiss, onInnerConfirm, visible, withModal],
+    );
+
     return (
         <DatePickerInputWithoutModal
             ref={ref}
             {...rest}
-            locale={locale}
-            inputButtons={
-                <>
-                    {withModal ? (
-                        <IconButton
-                            style={styles.calendarButton}
-                            name={calendarIcon}
-                            onPress={() => setVisible(true)}
-                        />
-                    ) : null}
-                </>
-            }
-            modal={({ value, locale, inputMode, validRange }) => (
-                <>
-                    {withModal ? (
-                        <DatePickerModal
-                            date={value}
-                            mode="single"
-                            isOpen={visible}
-                            onClose={onDismiss}
-                            onConfirm={onInnerConfirm}
-                            locale={locale}
-                            dateMode={inputMode}
-                            validRange={validRange}
-                        />
-                    ) : null}
-                </>
-            )}
+            // locale={locale}
+            inputButtons={inputButtons}
+            modal={renderModalComponent}
         />
     );
 }

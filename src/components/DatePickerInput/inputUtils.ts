@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
-import { useDateFormatter, useRangeChecker } from '../DatePickerInline/dateUtils';
+import { useRangeChecker } from '../DatePickerInline/dateUtils';
 import type { ValidRangeType } from '../DatePickerInline';
+import { format, isNil } from '../../utils';
 
 export default function useDateInput({
-    locale,
+    // locale,
     value,
     validRange,
     inputMode,
@@ -12,7 +13,7 @@ export default function useDateInput({
     dateFormat,
 }: {
     onChange: (d: Date) => void;
-    locale: undefined | string;
+    // locale: undefined | string;
     value: Date | undefined;
     validRange: ValidRangeType | undefined;
     inputMode: 'start' | 'end';
@@ -20,55 +21,63 @@ export default function useDateInput({
 }) {
     const { isDisabled, isWithinValidRange, validStart, validEnd } = useRangeChecker(validRange);
     const [error, setError] = useState<null | string>(null);
-    const formatter = useDateFormatter({ locale });
-    const formattedValue = value !== null ? formatter.format(value) : '';
 
-    const onChangeText = (date: string) => {
-        const dayIndex = dateFormat.indexOf('dd');
-        const monthIndex = dateFormat.indexOf('MM');
-        const yearIndex = locale === 'pt' ? dateFormat.indexOf('AAAA') : dateFormat.indexOf('yyyy');
+    const formattedValue = useMemo(
+        () => (!isNil(value) ? format(value, dateFormat) : ''),
+        [dateFormat, value],
+    );
 
-        const day = Number(date.slice(dayIndex, dayIndex + 2));
-        const year = Number(date.slice(yearIndex, yearIndex + 4));
-        const month = Number(date.slice(monthIndex, monthIndex + 2));
+    const onChangeText = useCallback(
+        (date: string) => {
+            const dayIndex = dateFormat.indexOf('dd');
+            const monthIndex = dateFormat.indexOf('MM');
+            const yearIndex = dateFormat.indexOf('yyyy');
 
-        if (Number.isNaN(day) || Number.isNaN(year) || Number.isNaN(month)) {
-            setError(`Date format must be ${dateFormat}`);
-            return;
-        }
+            const day = Number(date.slice(dayIndex, dayIndex + 2));
+            const year = Number(date.slice(yearIndex, yearIndex + 4));
+            const month = Number(date.slice(monthIndex, monthIndex + 2));
 
-        const finalDate =
-            inputMode === 'end'
-                ? new Date(year, month - 1, day, 23, 59, 59)
-                : new Date(year, month - 1, day);
+            if (Number.isNaN(day) || Number.isNaN(year) || Number.isNaN(month)) {
+                setError(`Date format must be ${dateFormat}`);
+                return;
+            }
 
-        if (isDisabled(finalDate)) {
-            setError('Day is not allowed');
-            return;
-        }
-        if (!isWithinValidRange(finalDate)) {
-            const errors =
-                validStart && validEnd
-                    ? [
-                          `${`Must be between ${formatter.format(validStart)} - ${formatter.format(
-                              validEnd,
-                          )})`}`,
-                      ]
-                    : [
-                          validStart ? `Must be later then ${validStart}` : '',
-                          validEnd ? `Must be earlier then ${validEnd}` : '',
-                      ];
-            setError(errors.filter(n => n).join(' '));
-            return;
-        }
+            const finalDate =
+                inputMode === 'end'
+                    ? new Date(year, month - 1, day, 23, 59, 59)
+                    : new Date(year, month - 1, day);
 
-        setError(null);
-        if (inputMode === 'end') {
-            onChange(finalDate);
-        } else {
-            onChange(finalDate);
-        }
-    };
+            if (isDisabled(finalDate)) {
+                setError('Day is not allowed');
+                return;
+            }
+            if (!isWithinValidRange(finalDate)) {
+                const errors =
+                    validStart && validEnd
+                        ? [
+                              `${`Must be between ${format(validStart, dateFormat)} - ${format(
+                                  validEnd,
+                                  dateFormat,
+                              )})`}`,
+                          ]
+                        : [
+                              validStart ? `Must be later then ${validStart}` : '',
+                              validEnd ? `Must be earlier then ${validEnd}` : '',
+                          ];
+                setError(errors.filter(n => n).join(' '));
+                return;
+            }
+
+            setError(null);
+            if (inputMode === 'end') {
+                onChange(finalDate);
+            } else {
+                onChange(finalDate);
+            }
+        },
+        [dateFormat, inputMode, isDisabled, isWithinValidRange, onChange, validEnd, validStart],
+    );
+
     return {
         onChange,
         error,

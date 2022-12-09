@@ -6665,6 +6665,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.omitby@npm:^4.6.7":
+  version: 4.6.7
+  resolution: "@types/lodash.omitby@npm:4.6.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 0ff20ffb94524d2c0714cb474b8b2723d88225a347d0c16f07d216122aa79dab40a826efeadd84d2b82f1ef00a6d1e311cc6844e06430e43c1d3cd587d4e6481
+  languageName: node
+  linkType: hard
+
 "@types/lodash@npm:*, @types/lodash@npm:^4.14.167":
   version: 4.14.185
   resolution: "@types/lodash@npm:4.14.185"
@@ -7513,12 +7522,14 @@ __metadata:
     "@types/lodash.isnil": ^4.0.7
     "@types/lodash.memoize": ^4.1.7
     "@types/lodash.omit": ^4.5.7
+    "@types/lodash.omitby": ^4.6.7
     "@types/react": ^18.0.20
     "@types/react-native": ^0.70.0
     "@types/react-native-vector-icons": ^6.4.12
     "@types/uuid": ^8.3.4
     "@webbee/bamboo-atoms": ^0.0.18
     color: ^4.2.3
+    date-fns: ^2.29.3
     eslint: ^8.23.1
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
@@ -7527,6 +7538,7 @@ __metadata:
     lodash.isnil: ^4.0.0
     lodash.memoize: ^4.1.2
     lodash.omit: ^4.5.0
+    lodash.omitby: ^4.6.0
     prettier: ^2.7.1
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -10910,6 +10922,13 @@ __metadata:
     whatwg-mimetype: ^2.3.0
     whatwg-url: ^8.0.0
   checksum: 97caf828aac25e25e04ba6869db0f99c75e6859bb5b424ada28d3e7841941ebf08ddff3c1b1bb4585986bd507a5d54c2a716853ea6cb98af877400e637393e71
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^2.29.3":
+  version: 2.29.3
+  resolution: "date-fns@npm:2.29.3"
+  checksum: e01cf5b62af04e05dfff921bb9c9933310ed0e1ae9a81eb8653452e64dc841acf7f6e01e1a5ae5644d0337e9a7f936175fd2cb6819dc122fdd9c5e86c56be484
   languageName: node
   linkType: hard
 
@@ -17829,6 +17848,13 @@ __metadata:
   version: 4.5.0
   resolution: "lodash.omit@npm:4.5.0"
   checksum: 434645e49fe84ab315719bd5a9a3a585a0f624aa4160bc09157dd041a414bcc287c15840365c1379476a3f3eda41fbe838976c3f7bdecbbf4c5478e86c471a30
+  languageName: node
+  linkType: hard
+
+"lodash.omitby@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "lodash.omitby@npm:4.6.0"
+  checksum: 46b0bb8fcadfa36d2ceb04a1052bc409257a7b960e98c7bdd8a7274a81ddabea098fec57884533bb6f808df2492ff0edc5881d4922cca98a38480a18844ea311
   languageName: node
   linkType: hard
 

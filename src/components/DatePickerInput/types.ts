@@ -13,6 +13,19 @@ export type DatePickerInputProps = {
     /**
      * date format of the input
      * should be date-fns accepted format
+     * We currently only accept the variations of dd MM yyyy
      * */
     dateFormat?: string;
 } & Omit<TextInputProps, 'value' | 'onChange' | 'onChangeText'>;
+
+export type DatePickerInputWithoutModalProps = DatePickerInputProps & {
+    modal?: (params: DatePickerInputModalParams) => any;
+    inputButtons?: any;
+};
+
+export type DatePickerInputModalParams = {
+    value: DatePickerInputProps['value'];
+    locale: DatePickerInputProps['locale'];
+    inputMode: DatePickerInputProps['inputMode'];
+    validRange: DatePickerInputProps['validRange'];
+};
