@@ -132,4 +132,3 @@ export const theme = extendTheme({
     }
 });
 
-console.log(theme.Button);
