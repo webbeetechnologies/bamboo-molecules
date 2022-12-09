@@ -2,7 +2,7 @@ import React, { ComponentType, ReactNode } from 'react';
 import {
     extendTheme,
     ProvideMolecules as DefaultProvideMolecules,
-    useMolecules as useAtomsMolecules,
+    useMolecules as useMoleculesDefault,
     useComponentStyles,
     TextProps,
 } from 'bamboo-molecules';
@@ -71,7 +71,7 @@ export interface InjectedComponentTypes {
     Link: ComponentType<LinkProps>;
 }
 
-export const useMolecules = () => useAtomsMolecules<InjectedComponentTypes>();
+export const useMolecules = () => useMoleculesDefault<InjectedComponentTypes>();
 
 addDecorator(Story => (
     <ProvideMolecules>
