@@ -128,27 +128,18 @@ export const generateSectionListData = (sectionsLength: number, dataLength: numb
     const arr: { id: number; title: string; data: { title: string }[] }[] = [];
 
     // Loop n times
-    for (let i = 0; i < sectionsLength; i++) {
+    for (let sectionIndex = 0; sectionIndex < sectionsLength; sectionIndex++) {
         // Create the title for the parent object
-        const title = `section ${i}`;
+        const title = `section ${sectionIndex}`;
 
         // Create an empty array for the data property
-        const data: { title: string }[] = [];
-
-        // Generate 10 objects for the data array
-        for (let j = 0; j < dataLength; j++) {
-            // Create the unique title for the object in the data array
-            const itemTitle = `item ${i * dataLength + j}`;
-
-            // Create an object with the title property
-            const obj = { title: itemTitle };
-
-            // Push the object into the data array
-            data.push(obj);
-        }
+        const data: { title: string }[] = generateFlatListData(
+            dataLength,
+            itemIndex => `item ${sectionIndex * dataLength + itemIndex}`,
+        );
 
         // Create an object with the unique id, title, and data properties
-        const obj = { id: i, title, data };
+        const obj = { id: sectionIndex, title, data };
 
         // Push the object into the array
         arr.push(obj);
@@ -158,14 +149,17 @@ export const generateSectionListData = (sectionsLength: number, dataLength: numb
     return arr;
 };
 
-export const generateFlatListData = (dataLength: number) => {
+export const generateFlatListData = (
+    dataLength: number,
+    manipulateTitle: (itemIndex: number) => string = i => `item ${i}`,
+) => {
     // Create an empty array
     const arr: { id: number; title: string }[] = [];
 
     // Loop n times
     for (let i = 0; i < dataLength; i++) {
         // Create the title for the parent object
-        const title = `item ${i}`;
+        const title = manipulateTitle(i);
 
         // Create an object with the unique id, title, and data properties
         const obj = { id: i, title };
