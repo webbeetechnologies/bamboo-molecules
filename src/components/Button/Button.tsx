@@ -205,7 +205,7 @@ const Button = (
         rippleColor,
         surfaceStyle,
         touchableStyle,
-        childrenContainerStyle,
+        textStyle,
         iconStyle,
         viewStyle,
         iconContainerStyle,
@@ -252,7 +252,7 @@ const Button = (
             iconStyle: _iconStyle,
             viewStyle: [content, contentStyle],
             iconContainerStyle: [_iconStyle, iconContainerStyleProp],
-            childrenContainerStyle: [
+            textStyle: [
                 label,
                 childrenContainer,
                 isVariant('text') ? (iconName || loading ? labelTextAddons : labelText) : label,
@@ -352,7 +352,7 @@ const Button = (
                             style={iconStyle}
                         />
                     ) : null}
-                    <Text selectable={false} numberOfLines={1} style={childrenContainerStyle}>
+                    <Text selectable={false} numberOfLines={1} style={textStyle}>
                         {children}
                     </Text>
                 </View>
