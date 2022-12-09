@@ -12,7 +12,9 @@ export const timePickerStyles: ComponentStylePropWithVariants<
     'landScape',
     TimePickerCustomProps
 > = {
-    container: {},
+    container: {
+        alignItems: 'center',
+    },
     clockContainer: {
         paddingTop: 36,
         paddingLeft: 12,
@@ -99,7 +101,7 @@ export const timePickerInputStyles: ComponentStylePropWithVariants<
         textAlignVertical: 'center',
         width: 96,
         height: 80,
-        backgroundColor: 'colors.surface',
+        backgroundColor: 'colors.surfaceVariant',
         color: 'colors.onSurface',
         borderRadius: 'shapes.corner.small' as unknown as number,
     },
