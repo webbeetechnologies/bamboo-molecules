@@ -15,15 +15,19 @@ import { Provider } from 'react-redux';
 import { persistor, store } from './src/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { theme } from './src/theme';
+import { SuperText, SuperTextProps } from './src/components/SuperText';
+import { useComponentStyles } from '@webbee/bamboo-atoms';
 
 const Drawer = createDrawerNavigator();
 export interface InjectedComponentTypes {
     Container: ComponentType<ViewProps>;
+    SuperText: ComponentType<SuperTextProps>;
 }
 
 export const useMolecules = () => useAtomsMolecules<InjectedComponentTypes>();
 
-const components = { Container };
+const components = { Container, SuperText };
+
 const RNRedux = () => {
     return (
         <Provider store={store}>
@@ -40,9 +44,15 @@ const App = () => {
     const { machine_types } = useSelector((state: RootState) => state.machinesReducer);
 
     const { Container } = useMolecules();
+
+    const DrawerStyle = useComponentStyles('Drawer');
+
     return (
         <NavigationContainer>
-            <Drawer.Navigator initialRouteName="Manage Categories" useLegacyImplementation={true}>
+            <Drawer.Navigator
+                screenOptions={DrawerStyle}
+                initialRouteName="Dashboard"
+                useLegacyImplementation={true}>
                 <Drawer.Screen name="Dashboard" component={Dashboard} />
 
                 {machine_types.map((machine_type: MachinesType, index: number) => {

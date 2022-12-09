@@ -1,33 +1,40 @@
 import React, { memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { colors } from '../styles';
 
 import { ActionTypes, MachinesType, MachineTypesFields, RootState } from '../store/types';
-import MachineType from '../components/EditMachineType/EditMachineType';
+import { EditMachineType } from '../components/EditMachineType';
 import Container from '../components/Container/Container';
 import { useMolecules } from '../../App';
+
+const viewStyle = {
+    flexDirection: 'row' as 'row',
+    flexWrap: 'wrap' as 'wrap',
+    flex: 1,
+};
 
 const ManageCategories = () => {
     const { machine_types, machine_types_fields } = useSelector(
         (state: RootState) => state.machinesReducer,
     );
+    const { View } = useMolecules();
 
     return (
         <Container>
-            {machine_types.map((machine_type: MachinesType) => {
-                const filtered_machine_types_fields = machine_types_fields.filter(
-                    (e: MachineTypesFields) => e.machine_type_id === machine_type.id,
-                );
+            <View style={viewStyle}>
+                {machine_types.map((machine_type: MachinesType) => {
+                    const filtered_machine_types_fields = machine_types_fields.filter(
+                        (e: MachineTypesFields) => e.machine_type_id === machine_type.id,
+                    );
 
-                return (
-                    <MachineType
-                        key={machine_type.id}
-                        machine_type={machine_type}
-                        filtered_machine_types_fields={filtered_machine_types_fields}
-                    />
-                );
-            })}
-
+                    return (
+                        <EditMachineType
+                            key={machine_type.id}
+                            machine_type={machine_type}
+                            filtered_machine_types_fields={filtered_machine_types_fields}
+                        />
+                    );
+                })}
+            </View>
             <AddNewCategoryBtn />
         </Container>
     );
@@ -54,5 +61,5 @@ const AddNewCategoryBtn = memo(() => {
 });
 
 const btnStyle = {
-    marginTop: 'spacings.2',
+    margin: 'spacings.3',
 };

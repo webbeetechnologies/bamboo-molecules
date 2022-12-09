@@ -8,7 +8,12 @@ import { useMolecules } from '../../../App';
 interface Props {
     machine_type: MachinesType;
 }
-const containerStyle = { marginBottom: 20 };
+const containerStyle = {
+    marginBottom: 'spacings.5',
+    padding: 'spacings.3',
+    minWidth: 320,
+    flexGrow: 1,
+};
 
 const MachineType = ({ machine_type }: Props) => {
     const { View } = useMolecules();

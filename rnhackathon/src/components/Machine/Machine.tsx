@@ -1,11 +1,10 @@
 import React, { memo, useMemo } from 'react';
-import { colors } from '../../styles';
-import { View } from 'react-native';
 
 import type { Machines, MachineTypesFields, MachineTypesFieldsValue } from '../../store/types';
 import type { getFieldValueType } from '../MachineType/Listing';
 import Listing from './Listing';
 import Header from './Header';
+import { useMolecules } from '../../../App';
 
 type Props = {
     machine: Machines;
@@ -16,10 +15,10 @@ type Props = {
     getFieldValue: getFieldValueType;
 }
 
-const style = {
-    backgroundColor: colors.white,
-    padding: 10,
-    marginVertical: 5,
+const containerStyle = {
+    backgroundColor: 'colors.bg700',
+    padding: 'spacings.3',
+    marginVertical: 'spacings.2',
     borderRadius: 5,
 };
 
@@ -30,6 +29,7 @@ const Machine = ({
     machine_types_fields_value,
     getFieldValue,
 }: Props) => {
+    const {View} = useMolecules();
     const getTitle = useMemo(() => {
         const field = machine_types_fields.find((mtf: MachineTypesFields) => mtf.id === title_id);
 
@@ -46,7 +46,7 @@ const Machine = ({
     }, [machine_types_fields_value, machine_types_fields, title_id]);
 
     return (
-        <View style={style}>
+        <View style={containerStyle}>
             <Header title={getTitle} machine_id={machine.id} />
 
             <Listing

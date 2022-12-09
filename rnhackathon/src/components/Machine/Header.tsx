@@ -1,50 +1,43 @@
 import React from 'react';
-import styles, {colors} from '../../styles';
-import {View} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {ActionTypes} from '../../store/types';
+import { useDispatch } from 'react-redux';
+import { ActionTypes } from '../../store/types';
 import { useMolecules } from '../../../App';
 
 interface Props {
-  machine_id: string;
-  title: string;
+    machine_id: string;
+    title: string;
 }
 
-const containerStyle = [
-  styles.row,
-  styles.spaceBetween,
-  styles.itemsCenter,
-  {paddingBottom: 10},
-];
+const containerStyle = {
+    flexDirection: 'row' as 'row',
+    justifyContent: 'space-between' as 'space-between',
+    alignItems: 'center' as 'center',
+    marginBottom: 15,
+};
 
-const Header = ({title, machine_id}: Props) => {
-  const {Text, Button} = useMolecules()
-  const dispatch = useDispatch();
+const Header = ({ title, machine_id }: Props) => {
+    const { Button, SuperText ,View} = useMolecules();
+    const dispatch = useDispatch();
 
-  const onDelete = React.useCallback(() => {
-    dispatch({
-      type: ActionTypes.DELETE_MACHINE,
-      payload: {id: machine_id},
-    });
-  }, [machine_id]);
+    const onDelete = React.useCallback(() => {
+        dispatch({
+            type: ActionTypes.DELETE_MACHINE,
+            payload: { id: machine_id },
+        });
+    }, [machine_id]);
 
-  return (
-    <View style={containerStyle}>
-      <Text
-        style={{marginBottom: 5, fontWeight: '700', fontSize: 20}}>
-        {title}
-      </Text>
-      <Button
-        iconName="trash-can-outline"
-        variant="text"
-        onPress={onDelete}
-        style={{alignSelf: 'flex-end'}}
-        textColor={colors.red}
-        >
-        DELETE
-      </Button>
-    </View>
-  );
+    return (
+        <View style={containerStyle}>
+            <SuperText sizes='h6'>{title}</SuperText>
+            <Button
+                iconName="trash-can-outline"
+                variant="text"
+                onPress={onDelete}
+                textColor={'colors.error'}>
+                DELETE
+            </Button>
+        </View>
+    );
 };
 
 export default Header;

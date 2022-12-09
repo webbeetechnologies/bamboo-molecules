@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import { ActionTypes, MachinesType } from '../../store/types';
-import styles, { colors } from '../../styles';
 import { useDispatch } from 'react-redux';
 import { useMolecules } from '../../../App';
 
@@ -8,20 +7,21 @@ interface Props {
     machine_type: MachinesType;
 }
 
-const containerStyle = [
-    styles.row,
-    styles.spaceBetween,
-    {
-        paddingVertical: 10,
-        marginBottom: 5,
-        borderBottomWidth: 1,
-        borderColor: colors.black + '10',
-    },
-];
-const titleStyle = { color: colors.black };
+
+const containerStyle = {
+    flexDirection:'row' as 'row',
+    justifyContent:'space-between' as 'space-between',
+    alignItems:'center' as 'center',
+    paddingBottom:'spacings.1',
+    marginBottom: 'spacings.1',
+   
+}
+
+
+
 
 const Header = ({ machine_type }: Props) => {
-    const { View, Button, Text } = useMolecules();
+    const { View, Button,SuperText } = useMolecules();
     const dispatch = useDispatch();
 
     const onAdd = React.useCallback(() => {
@@ -35,7 +35,7 @@ const Header = ({ machine_type }: Props) => {
 
     return (
         <View style={containerStyle}>
-            <Text style={titleStyle}>{machine_type.name}</Text>
+            <SuperText sizes='h3'>{machine_type.name}</SuperText>
             <Button iconName="plus" variant="contained" onPress={onAdd}>
                 ADD
             </Button>

@@ -1,1 +1,1 @@
-export {default as EditMachineType} from './EditMachineType'
+export { default as EditMachineType } from './EditMachineType';

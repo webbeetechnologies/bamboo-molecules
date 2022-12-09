@@ -1,5 +1,4 @@
 import React, { memo, useCallback } from 'react';
-import { colors } from '../../styles';
 
 import type { Machines, MachineTypesFields, MachineTypesFieldsValue } from '../../store/types';
 
@@ -55,12 +54,17 @@ const Listing = ({
 export default Listing;
 
 const NoItemMessage = memo(() => {
-    const { Text,View } = useMolecules();
+    const { Text, View } = useMolecules();
     return (
-        <View style={{ padding: 10 }}>
-            <Text style={{ color: colors.black + '80', textAlign: 'center' }}>
-                No items to display
-            </Text>
+        <View style={noItemMessageStyle.container}>
+            <Text style={noItemMessageStyle.text}>No items to display</Text>
         </View>
     );
 });
+
+const noItemMessageStyle = {
+    container: {
+        padding: 10,
+    },
+    text: { color: 'colors.bg', textAlign: 'center' as 'center' },
+};

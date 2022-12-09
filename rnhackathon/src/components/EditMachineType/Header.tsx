@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import styles, { colors } from '../../styles';
 import { ActionTypes, MachinesType } from '../../store/types';
 import { useDispatch } from 'react-redux';
 import { useMolecules } from '../../../App';
@@ -7,8 +6,16 @@ import { useMolecules } from '../../../App';
 interface Props {
     machine_type: MachinesType;
 }
+
+const containerStyle = {
+    flexDirection: 'row' as 'row',
+    justifyContent: 'space-between' as 'space-between',
+    alignItems: 'center' as 'center',
+    marginBottom: 15,
+};
+
 const Header = ({ machine_type }: Props) => {
-    const { View, Text, Button } = useMolecules();
+    const { View, SuperText, Button } = useMolecules();
     const dispatch = useDispatch();
 
     const label = React.useMemo(
@@ -26,13 +33,12 @@ const Header = ({ machine_type }: Props) => {
     }, [machine_type.id]);
 
     return (
-        <View style={[styles.row, styles.spaceBetween, styles.itemsCenter, { paddingBottom: 10 }]}>
-            <Text style={{ marginBottom: 5, fontWeight: '700' }}>{label}</Text>
+        <View style={containerStyle}>
+            <SuperText sizes='h4'>{label}</SuperText>
             <Button
                 iconName="trash-can-outline"
                 variant="text"
-                style={{ alignSelf: 'flex-end' }}
-                textColor={colors.red}
+                textColor="colors.error"
                 onPress={onDelete}>
                 DELETE
             </Button>

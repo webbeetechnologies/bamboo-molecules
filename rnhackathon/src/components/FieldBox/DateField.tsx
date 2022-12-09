@@ -1,56 +1,56 @@
 import { useMolecules } from '../../../App';
-import React, {useState, useCallback, useMemo, memo} from 'react';
+import React, { useState, useCallback, useMemo, memo } from 'react';
+import type { FieldProps } from './types';
 
-// import DatePicker from 'react-native-date-picker';
-import {colors} from '../../styles';
-import type {FieldProps} from './types';
+const containerStyle = {
+    marginBottom: 'spacings.4',
+};
 
-const btnStyle = {width: '100%'};
+const DateField = ({ name, value, onChange }: FieldProps) => {
+    const { Button, DatePickerModal, View } = useMolecules();
+    const [visibleDatePicker, setvisibleDatePicker] = useState(false);
 
-const DateField = ({name, value, onChange}: FieldProps) => {
-  const {Button} = useMolecules();
-  const [visibleDatePicker, setvisibleDatePicker] = useState(false);
-
-  const label = useMemo(
-    () => (name === '' ? `Unnamed Field: ${value}` : `${name}: ${value}`),
-    [name, value],
-  );
-
-  const onConfirm = useCallback((date: Date) => {
-    setvisibleDatePicker(false);
-    onChange(
-      date.getFullYear() +
-        '-' +
-        (date.getMonth() + 1).toString().padStart(2, '0') +
-        '-' +
-        date.getDate().toString().padStart(2, '0'),
+    const label = useMemo(
+        () => (name === '' ? `Unnamed Field: ${value}` : `${name}: ${value}`),
+        [name, value],
     );
-  }, []);
 
-  const onToggle = useCallback(() => {
-    setvisibleDatePicker(prev => !prev);
-  }, []);
+    const onConfirm = useCallback(({ date }: { date: Date | undefined }) => {
+        setvisibleDatePicker(false);
+        if (date) {
+            onChange(
+                date.getFullYear() +
+                    '-' +
+                    (date.getMonth() + 1).toString().padStart(2, '0') +
+                    '-' +
+                    date.getDate().toString().padStart(2, '0'),
+            );
+        }
+    }, []);
 
-  return (
-    <>
-      {/* <DatePicker
-        modal
-        mode="date"
-        open={visibleDatePicker}
-        date={value ? new Date(value) : new Date()}
-        onConfirm={onConfirm}
-        onCancel={onToggle}
-      /> */}
-      <Button
-        iconName="calendar-month"
-        variant="outlined"
-        onPress={onToggle}
-        style={btnStyle}
-        textColor={colors.primary}>
-        {label}
-      </Button>
-    </>
-  );
+    const onToggle = useCallback(() => {
+        setvisibleDatePicker(prev => !prev);
+    }, []);
+
+    return (
+        <View style={containerStyle}>
+            <DatePickerModal
+                mode="single"
+                isOpen={visibleDatePicker}
+                onConfirm={onConfirm}
+                onClose={onToggle}
+            />
+
+            <Button
+                iconName="calendar-month"
+                variant="outlined"
+                onPress={onToggle}
+                style={btnStyle}>
+                {label}
+            </Button>
+        </View>
+    );
 };
 
 export default memo(DateField);
+const btnStyle = { backgroundColor: 'colors.bg800', paddingVertical: 'spacings.1' };

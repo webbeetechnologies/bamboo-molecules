@@ -30,7 +30,7 @@ const Listing = ({ filtered_machine_types_fields, machine_type }: Props) => {
 
     return (
         <>
-            <View style={{ marginBottom: 15 }}>
+            <View style={{ marginBottom: 'spacings.4' }}>
                 <TextInput
                     variant="outlined"
                     label="Category Name"

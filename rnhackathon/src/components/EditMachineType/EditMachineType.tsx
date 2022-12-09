@@ -1,12 +1,11 @@
 import React, { memo, useCallback, useMemo } from 'react';
 
-import { colors } from '../../styles';
-// import SelectDropdown from 'react-native-select-dropdown';
 import { ActionTypes, MachinesType, MachineTypesFields } from '../../store/types';
 import { useDispatch } from 'react-redux';
 import Header from './Header';
 import Listing from './Listing';
 import { useMolecules } from '../../../App';
+import SelectTitleDropdown from './SelectTitleDropdown';
 
 interface Props {
     machine_type: MachinesType;
@@ -14,11 +13,16 @@ interface Props {
     filtered_machine_types_fields: MachineTypesFields[];
 }
 
-const style = {
-    backgroundColor: colors.white,
-    padding: 10,
-    marginVertical: 5,
+const containerStyle = {
+    backgroundColor: 'colors.bg700',
+
+    marginVertical: 'spacings.2',
     borderRadius: 5,
+    margin: 'spacings.3',
+    marginBottom: 'spacings.5',
+    padding: 'spacings.3',
+    minWidth: 320,
+    flexGrow: 1,
 };
 
 const EditMachineType = ({
@@ -40,13 +44,13 @@ const EditMachineType = ({
     }, [machine_type.title_id, filtered_machine_types_fields]);
 
     return (
-        <View style={style}>
+        <View style={containerStyle}>
             <Header machine_type={machine_type} />
             <Listing
                 filtered_machine_types_fields={filtered_machine_types_fields}
                 machine_type={machine_type}
             />
-            <SelectTitleField
+            <SelectTitleDropdown
                 filtered_machine_types_fields={filtered_machine_types_fields}
                 getTitle={getTitle}
                 machine_type_id={machine_type.id}
@@ -58,55 +62,6 @@ const EditMachineType = ({
 };
 
 export default memo(EditMachineType);
-
-interface SelectTitleFieldProps {
-    filtered_machine_types_fields: MachineTypesFields[];
-    getTitle: string;
-    machine_type_id: string;
-}
-
-const SelectTitleField = memo(
-    ({ filtered_machine_types_fields, getTitle, machine_type_id }: SelectTitleFieldProps) => {
-        const { View } = useMolecules();
-        const dispatch = useDispatch();
-
-        const fields = useMemo(() => {
-            return filtered_machine_types_fields.map((fmtf: MachineTypesFields) => ({
-                id: fmtf.id,
-                name: fmtf.name,
-            }));
-        }, [filtered_machine_types_fields]);
-
-        return (
-            <View style={{ marginBottom: 20 }}>
-                {/* <SelectDropdown
-          buttonStyle={{
-            borderColor: colors.primary,
-            borderBottomWidth: 1,
-          }}
-          rowTextStyle={{fontSize: 16}}
-          buttonTextStyle={{fontSize: 14}}
-          defaultButtonText={getTitle}
-          data={filtered_machine_types_fields}
-          buttonTextAfterSelection={(selectedItem, index) => getTitle}
-          rowTextForSelection={(item, index) => {
-            return item.name;
-          }}
-          onSelect={(selectedItem, index) => {
-            dispatch({
-              type: ActionTypes.UPDATE_MACHINE_TYPE,
-              payload: {
-                id: machine_type_id,
-                property: 'title_id',
-                value: selectedItem.id,
-              },
-            });
-          }}
-        /> */}
-            </View>
-        );
-    },
-);
 
 interface AddFieldBtnProps {
     machine_type_id: string;
@@ -127,13 +82,9 @@ const AddFieldBtn = memo(({ machine_type_id }: AddFieldBtnProps) => {
     }, [machine_type_id]);
 
     return (
-        <Button
-            iconName="plus"
-            variant="text"
-            style={{ alignSelf: 'center' }}
-            textColor={colors.primary}
-            onPress={onAdd}>
+        <Button  iconName="plus" variant="text" onPress={onAdd}>
             ADD NEW FIELD
         </Button>
     );
 });
+
