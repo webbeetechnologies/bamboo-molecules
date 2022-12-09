@@ -5,15 +5,17 @@ import type { TriggerProps } from '../../../../src/hocs/withPopper';
 import type { ButtonVariant } from '../../../../src/components/Button/Button';
 import type { StyleProp, ViewStyle } from 'react-native';
 
-export type Props<T> = {
+type Data = { text: string | number };
+
+export type Props = {
     label?: string;
-    data: T[];
-    onChange: (item: T) => void;
+    data: Data[];
+    onChange: (item: Data) => void;
     variant?: ButtonVariant;
     style?: StyleProp<ViewStyle>;
 };
 
-const SelectDropdown = memo(<T extends {}>(props: Props<T>) => {
+const SelectDropdown = memo((props: Props) => {
     const { label = 'Select Dropdown', data, onChange, variant = 'text', style } = props;
 
     const { DropdownList, Button, Icon, Text } = useMolecules();
@@ -42,12 +44,12 @@ const SelectDropdown = memo(<T extends {}>(props: Props<T>) => {
         [label],
     );
 
-    const onSelect = useCallback((item: T) => {
+    const onSelect = useCallback((item: Data) => {
         onChange(item);
     }, []);
 
     const renderItem = useCallback(
-        ({ item }: { item: T }) => <Item item={item} onPress={onSelect} />,
+        ({ item }: { item: Data }) => <Item item={item} onPress={onSelect} />,
         [],
     );
 
@@ -62,12 +64,12 @@ const SelectDropdown = memo(<T extends {}>(props: Props<T>) => {
 
 export default SelectDropdown;
 
-type ItemProps<I> = {
-    item: I;
-    onPress: (item: { item: I }) => void;
+type ItemProps = {
+    item: Data;
+    onPress: (item: Data) => void;
 };
 
-const Item = memo(<I extends {}>({ item, onPress }: ItemProps<I>) => {
+const Item = memo(({ item, onPress }: ItemProps) => {
     const { Button } = useMolecules();
 
     const onSelect = useCallback(() => {
