@@ -12,8 +12,9 @@ export const Default: ComponentStory<typeof ControlledExample> = args => (
 );
 
 Default.args = {
-    locale: 'en',
+    label: 'date',
     inputMode: 'start',
+    dateFormat: 'MM/dd/yyyy',
 };
 
 Default.parameters = {
