@@ -45,12 +45,11 @@ type ItemProps = {
 };
 
 const Item = memo(({ machine_type_field, field, machine_id }: ItemProps) => {
-    const {View} = useMolecules();
+    const { View } = useMolecules();
     const dispatch = useDispatch();
 
     const onChange = useCallback(
         (text: string) => {
-           
             if (field) {
                 dispatch({
                     type: ActionTypes.UPDATE_MACHINE_TYPES_FIELD_VALUE,

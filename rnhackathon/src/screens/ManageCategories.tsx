@@ -10,6 +10,7 @@ const viewStyle = {
     flexDirection: 'row' as 'row',
     flexWrap: 'wrap' as 'wrap',
     flex: 1,
+    justifyContent:'center'  as 'center'
 };
 
 const ManageCategories = () => {

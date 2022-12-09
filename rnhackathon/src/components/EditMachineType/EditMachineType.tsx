@@ -22,6 +22,7 @@ const containerStyle = {
     marginBottom: 'spacings.5',
     padding: 'spacings.3',
     minWidth: 320,
+    maxWidth: 600,
     flexGrow: 1,
 };
 
@@ -82,9 +83,8 @@ const AddFieldBtn = memo(({ machine_type_id }: AddFieldBtnProps) => {
     }, [machine_type_id]);
 
     return (
-        <Button  iconName="plus" variant="text" onPress={onAdd}>
+        <Button iconName="plus" variant="text" onPress={onAdd}>
             ADD NEW FIELD
         </Button>
     );
 });
-

@@ -12,6 +12,7 @@ const containerStyle = {
     marginBottom: 'spacings.5',
     padding: 'spacings.3',
     minWidth: 320,
+    maxWidth:600,
     flexGrow: 1,
 };
 
