@@ -2,13 +2,13 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { useRangeChecker } from '../DatePickerInline/dateUtils';
 import type { ValidRangeType } from '../DatePickerInline';
-import { format, isNil } from '../../utils';
+import { format, isNil, parse, isValid } from '../../utils';
 
 export default function useDateInput({
     // locale,
     value,
     validRange,
-    inputMode,
+    // inputMode,
     onChange,
     dateFormat,
 }: {
@@ -16,7 +16,7 @@ export default function useDateInput({
     // locale: undefined | string;
     value: Date | undefined;
     validRange: ValidRangeType | undefined;
-    inputMode: 'start' | 'end';
+    // inputMode: 'start' | 'end';
     dateFormat: string;
 }) {
     const { isDisabled, isWithinValidRange, validStart, validEnd } = useRangeChecker(validRange);
@@ -29,29 +29,19 @@ export default function useDateInput({
 
     const onChangeText = useCallback(
         (date: string) => {
-            const dayIndex = dateFormat.indexOf('dd');
-            const monthIndex = dateFormat.indexOf('MM');
-            const yearIndex = dateFormat.indexOf('yyyy');
+            const parsedDate = parse(date, dateFormat, new Date());
 
-            const day = Number(date.slice(dayIndex, dayIndex + 2));
-            const year = Number(date.slice(yearIndex, yearIndex + 4));
-            const month = Number(date.slice(monthIndex, monthIndex + 2));
-
-            if (Number.isNaN(day) || Number.isNaN(year) || Number.isNaN(month)) {
+            if (!isValid(parsedDate)) {
                 setError(`Date format must be ${dateFormat}`);
+
                 return;
             }
 
-            const finalDate =
-                inputMode === 'end'
-                    ? new Date(year, month - 1, day, 23, 59, 59)
-                    : new Date(year, month - 1, day);
-
-            if (isDisabled(finalDate)) {
+            if (isDisabled(parsedDate)) {
                 setError('Day is not allowed');
                 return;
             }
-            if (!isWithinValidRange(finalDate)) {
+            if (!isWithinValidRange(parsedDate)) {
                 const errors =
                     validStart && validEnd
                         ? [
@@ -68,14 +58,10 @@ export default function useDateInput({
                 return;
             }
 
+            onChange(parsedDate);
             setError(null);
-            if (inputMode === 'end') {
-                onChange(finalDate);
-            } else {
-                onChange(finalDate);
-            }
         },
-        [dateFormat, inputMode, isDisabled, isWithinValidRange, onChange, validEnd, validStart],
+        [dateFormat, isDisabled, isWithinValidRange, onChange, validEnd, validStart],
     );
 
     return {

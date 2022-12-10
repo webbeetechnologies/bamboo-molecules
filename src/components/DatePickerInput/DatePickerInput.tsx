@@ -12,7 +12,7 @@ function DatePickerInput(
         calendarIcon = 'calendar',
         value,
         locale,
-        inputMode,
+        // inputMode,
         validRange,
         //locale = 'en',
         ...rest
@@ -56,7 +56,7 @@ function DatePickerInput(
                             onClose={onDismiss}
                             onConfirm={onInnerConfirm}
                             locale={locale}
-                            dateMode={inputMode}
+                            // dateMode={inputMode}
                             validRange={validRange}
                         />
                     </>
@@ -66,7 +66,6 @@ function DatePickerInput(
         [
             IconButton,
             calendarIcon,
-            inputMode,
             locale,
             onDismiss,
             onInnerConfirm,
@@ -83,7 +82,7 @@ function DatePickerInput(
             ref={ref}
             {...rest}
             value={value}
-            inputMode={inputMode}
+            // inputMode={inputMode}
             validRange={validRange}
             // locale={locale}
             inputButtons={rightElement}
