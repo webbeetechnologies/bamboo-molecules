@@ -127,3 +127,5 @@ export * from './Dialog';
 export * from './RadioButton';
 
 export * from './NumberRangeInput';
+
+export { Bar as ProgressBar, BarProps as ProgressBarProps ,progressIndicatorStyles} from './ProgressIndicator';

@@ -65,6 +65,7 @@ import {
     dialogScrollAreaStyles,
     radioButtonStyles,
     numberRangeInputStyles,
+    progressIndicatorStyles
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -147,6 +148,8 @@ const defaultThemeValue: Partial<ITheme> = {
 
     RadioButton: radioButtonStyles,
     NumberRangeInput: numberRangeInputStyles,
+
+    ProgressIndicator:progressIndicatorStyles
 };
 
 const defaultExtractStyles = memoize(

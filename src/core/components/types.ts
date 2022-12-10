@@ -40,6 +40,7 @@ import type {
     Dialog,
     RadioButton,
     NumberRangeInputProps,
+    ProgressBarProps
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -87,6 +88,7 @@ export interface DefaultComponents {
     Dialog: typeof Dialog;
     RadioButton: typeof RadioButton;
     NumberRangeInput: ComponentType<NumberRangeInputProps>;
+    ProgressBar: ComponentType<ProgressBarProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

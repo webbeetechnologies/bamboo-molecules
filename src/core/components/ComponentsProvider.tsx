@@ -47,6 +47,7 @@ import {
     Dialog,
     RadioButton,
     NumberRangeInput,
+    ProgressBar
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -98,6 +99,7 @@ const defaultComponents: DefaultComponents = {
     Dialog,
     RadioButton,
     NumberRangeInput,
+    ProgressBar
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
