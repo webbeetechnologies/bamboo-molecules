@@ -12629,7 +12629,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-modules-core@npm:0.11.8, expo-modules-core@npm:^0.11.8":
+"expo-modules-core@npm:0.11.9":
+  version: 0.11.9
+  resolution: "expo-modules-core@npm:0.11.9"
+  dependencies:
+    compare-versions: ^3.4.0
+    invariant: ^2.2.4
+  checksum: af130f8dd82967a0bde598cd109d44a2feec5692e0990f0e0eb1157a6a88419d52f0cbae09902fb6eddc2ed633d7cf10bf458ce43bbcd3372035d6bc9469813d
+  languageName: node
+  linkType: hard
+
+"expo-modules-core@npm:^0.11.8":
   version: 0.11.8
   resolution: "expo-modules-core@npm:0.11.8"
   dependencies:
@@ -12674,9 +12684,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo@npm:~46.0.16":
-  version: 46.0.16
-  resolution: "expo@npm:46.0.16"
+"expo@npm:~46.0.17":
+  version: 46.0.17
+  resolution: "expo@npm:46.0.17"
   dependencies:
     "@babel/runtime": ^7.14.0
     "@expo/cli": 0.3.2
@@ -12691,7 +12701,7 @@ __metadata:
     expo-font: ~10.2.1
     expo-keep-awake: ~10.2.0
     expo-modules-autolinking: 0.10.3
-    expo-modules-core: 0.11.8
+    expo-modules-core: 0.11.9
     fbemitter: ^3.0.0
     getenv: ^1.0.0
     invariant: ^2.2.4
@@ -12704,7 +12714,7 @@ __metadata:
       optional: true
   bin:
     expo: bin/cli.js
-  checksum: bddf54f4e0fdd72fb4f6dcf257a1494d02a484d4b161912d69125c0dc4eb90858cd08aa6b1ec0b8d32b34323edd64ccaeae4f251f95f46e90c3684c52a3c098b
+  checksum: 86c92de6359ae9fcc1c515934a173319104887c3706e4b80d77354a93d4d12c0ff2f9fd5133469c559fe92887f935a122a8b8240e545ae4758c196dab9e34c56
   languageName: node
   linkType: hard
 
@@ -24931,7 +24941,7 @@ __metadata:
     "@types/react-native": ~0.69.1
     babel-loader: ^8.2.5
     babel-plugin-react-native-web: ^0.18.9
-    expo: ~46.0.16
+    expo: ~46.0.17
     expo-font: ^10.2.0
     expo-modules-core: ^0.11.8
     expo-splash-screen: ~0.16.2
