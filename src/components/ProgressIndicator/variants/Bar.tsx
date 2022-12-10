@@ -140,9 +140,10 @@ const Bar = (props: Props) => {
             : Math.min(Math.max(progress / 100, 0), 1);
 
         if (animated) {
-            Animated.spring(progressCalc, {
+            Animated[animationType](progressCalc, {
                 toValue: newProgress,
                 useNativeDriver: useNativeDriver,
+                velocity: 0,
                 ...animationConfig,
             }).start();
         } else {

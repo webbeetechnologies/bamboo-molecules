@@ -23,7 +23,7 @@ const CheckComponent = () => {
     }, []);
 
     return (
-        <View style={{width:500}}>
+        <View style={{ width: 500 }}>
             <ProgressBar color="colors.primary" progress={progress} />
         </View>
     );
