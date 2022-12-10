@@ -138,6 +138,7 @@ export default function DatePickerModalContentHeader(props: HeaderContentProps) 
     );
 }
 
+// TODO add translations
 export function HeaderContentSingle({
     state,
     emptyLabel = ' ',

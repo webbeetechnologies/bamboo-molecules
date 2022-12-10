@@ -1,7 +1,7 @@
 // @typescript-eslint/no-unused-vars
 // WORK IN PROGRESS
 
-import { memo, useCallback, useMemo, useRef } from 'react';
+import { memo, useCallback, useRef } from 'react';
 import { View, useWindowDimensions, TextInput as TextInputNative } from 'react-native';
 import { useComponentStyles, useLatest } from '../../hooks';
 
@@ -39,10 +39,7 @@ function TimeInputs({
     is24Hour,
 }: Props) {
     const dimensions = useWindowDimensions();
-    const isLandscape = useMemo(
-        () => dimensions.width > dimensions.height,
-        [dimensions.height, dimensions.width],
-    );
+    const isLandscape = dimensions.width > dimensions.height;
 
     const componentStyles = useComponentStyles(
         'TimePicker_Inputs',

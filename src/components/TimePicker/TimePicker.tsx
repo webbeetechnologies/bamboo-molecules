@@ -81,7 +81,7 @@ function TimePicker({
         },
     );
 
-    const onInnerChange = useCallback<onChangeFunc>(
+    const onChange = useCallback<onChangeFunc>(
         params => {
             params.hours = toHourOutputFormat(params.hours, hours, is24Hour);
 
@@ -103,7 +103,7 @@ function TimePicker({
                     hours={hours}
                     minutes={minutes}
                     is24Hour={is24Hour}
-                    onChange={onInnerChange}
+                    onChange={onChange}
                     onFocusInput={onFocusInput}
                     focused={focused}
                 />
@@ -115,7 +115,7 @@ function TimePicker({
                                 minutes={minutes}
                                 focused={focused}
                                 is24Hour={is24Hour}
-                                onChange={onInnerChange}
+                                onChange={onChange}
                             />
                         </View>
                     ) : null}
