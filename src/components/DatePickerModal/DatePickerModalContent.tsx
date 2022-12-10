@@ -89,7 +89,6 @@ export function DatePickerModalContent(props: Props) {
                     onClose={onClose}
                     saveLabel={props.saveLabel}
                     saveLabelDisabled={props.saveLabelDisabled || false}
-                    uppercase={props.uppercase || true}
                     disableSafeTop={disableSafeTop}
                     closeIcon={props.closeIcon}
                 />
