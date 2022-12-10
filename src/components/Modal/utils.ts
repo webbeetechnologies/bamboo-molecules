@@ -1,5 +1,6 @@
 import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
+import { Dimensions } from 'react-native';
 
 type States = '';
 type CustomProps = {
@@ -29,7 +30,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
     },
     modalContent: {
         backgroundColor: 'colors.surface',
-        width: '100%',
+        width: Dimensions.get('window').width,
         overflow: 'hidden',
     },
 
