@@ -6,7 +6,7 @@ import {
     StyleProp,
     ViewStyle,
 } from 'react-native';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMolecules, useComponentStyles } from '../../../hooks';
 
 const INDETERMINATE_WIDTH_FACTOR = 0.3;
@@ -18,7 +18,6 @@ export type Props = {
     color?: string;
     indeterminate?: boolean;
     indeterminateAnimationDuration?: number;
-    onLayout?: Function;
     progress: number;
     style?: StyleProp<ViewStyle>;
     useNativeDriver?: boolean;
@@ -95,13 +94,11 @@ const Bar = (props: Props) => {
         };
     }, [widthBar, rest.color]);
 
-    const handleLayout = (event: LayoutChangeEvent) => {
+    const handleLayout = useCallback((event: LayoutChangeEvent) => {
         setWidthBar(event.nativeEvent.layout.width);
+    }, []);
 
-        rest.onLayout?.(event);
-    };
-
-    const animate = () => {
+    const animate = useCallback(() => {
         animationValue.setValue(0);
 
         Animated.timing(animationValue, {
@@ -115,7 +112,7 @@ const Bar = (props: Props) => {
                 animate();
             }
         });
-    };
+    }, [indeterminateAnimationDuration, useNativeDriver]);
 
     useEffect(() => {
         if (indeterminate) {
