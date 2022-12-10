@@ -100,7 +100,6 @@ Props) {
                         onSubmitEditing={onSubmitInput}
                         validRange={validRange}
                         // locale={locale}
-                        withModal={false}
                         autoComplete={'off'}
                     />
                 ) : null}
@@ -119,7 +118,6 @@ Props) {
                             onSubmitEditing={onSubmitStartInput}
                             validRange={validRange}
                             // locale={locale}
-                            withModal={false}
                             autoComplete={'off'}
                         />
                         <View style={componentStyles.separator} />
@@ -132,7 +130,6 @@ Props) {
                             onSubmitEditing={onSubmitEndInput}
                             validRange={validRange}
                             // locale={locale}
-                            withModal={false}
                             autoComplete="off"
                         />
                     </View>

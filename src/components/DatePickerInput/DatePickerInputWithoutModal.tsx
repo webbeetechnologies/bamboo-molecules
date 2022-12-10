@@ -9,11 +9,10 @@ function DatePickerInputWithoutModal(
         label: labelProp,
         value,
         onChange,
-        locale = 'en',
+        // locale = 'en',
         validRange,
         inputMode,
         withDateFormatInLabel = true,
-        modal,
         inputButtons,
         dateFormat = 'dd/MM/yyyy',
         ...rest
@@ -44,31 +43,23 @@ function DatePickerInputWithoutModal(
         [dateFormat, labelProp, withDateFormatInLabel],
     );
 
-    const modalParams = useMemo(
-        () => ({ value, locale, inputMode, validRange }),
-        [inputMode, locale, validRange, value],
-    );
-
     return (
-        <>
-            <View style={container}>
-                <TextInputWithMask
-                    placeholder={dateFormat}
-                    {...rest}
-                    ref={ref}
-                    label={label}
-                    value={formattedValue}
-                    keyboardType={'number-pad'}
-                    mask={dateFormat}
-                    onChangeText={onChangeText}
-                    keyboardAppearance={theme.dark ? 'dark' : 'default'}
-                    error={!!error}
-                    right={inputButtons}
-                    supportingText={error || undefined}
-                />
-            </View>
-            {modal?.(modalParams)}
-        </>
+        <View style={container}>
+            <TextInputWithMask
+                placeholder={dateFormat}
+                {...rest}
+                ref={ref}
+                label={label}
+                value={formattedValue}
+                keyboardType={'number-pad'}
+                mask={dateFormat}
+                onChangeText={onChangeText}
+                keyboardAppearance={theme.dark ? 'dark' : 'default'}
+                error={!!error}
+                right={inputButtons}
+                supportingText={error || undefined}
+            />
+        </View>
     );
 }
 

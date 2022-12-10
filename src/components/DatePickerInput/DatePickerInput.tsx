@@ -4,12 +4,16 @@ import { StyleSheet } from 'react-native';
 import { useMolecules, useLatest } from '../../hooks';
 import DatePickerInputWithoutModal from './DatePickerInputWithoutModal';
 import DatePickerInputModal from './DatePickerInputModal';
-import type { DatePickerInputModalParams, DatePickerInputProps } from './types';
+import type { DatePickerInputProps } from './types';
 
 function DatePickerInput(
     {
         withModal = true,
         calendarIcon = 'calendar',
+        value,
+        locale,
+        inputMode,
+        validRange,
         //locale = 'en',
         ...rest
     }: DatePickerInputProps,
@@ -34,48 +38,55 @@ function DatePickerInput(
 
     const onPressCalendarIcon = useCallback(() => setVisible(true), []);
 
-    const inputButtons = useMemo(
+    const rightElement = useMemo(
         () => (
             <>
                 {withModal ? (
-                    <IconButton
-                        style={styles.calendarButton}
-                        name={calendarIcon}
-                        onPress={onPressCalendarIcon}
-                    />
-                ) : null}
-            </>
-        ),
-        [IconButton, calendarIcon, onPressCalendarIcon, withModal],
-    );
+                    <>
+                        <IconButton
+                            style={styles.calendarButton}
+                            name={calendarIcon}
+                            onPress={onPressCalendarIcon}
+                        />
 
-    const renderModalComponent = useCallback(
-        ({ value, locale, inputMode, validRange }: DatePickerInputModalParams) => (
-            <>
-                {withModal ? (
-                    <DatePickerInputModal
-                        date={value}
-                        mode="single"
-                        isOpen={visible}
-                        onClose={onDismiss}
-                        onConfirm={onInnerConfirm}
-                        locale={locale}
-                        dateMode={inputMode}
-                        validRange={validRange}
-                    />
+                        <DatePickerInputModal
+                            date={value}
+                            mode="single"
+                            isOpen={visible}
+                            onClose={onDismiss}
+                            onConfirm={onInnerConfirm}
+                            locale={locale}
+                            dateMode={inputMode}
+                            validRange={validRange}
+                        />
+                    </>
                 ) : null}
             </>
         ),
-        [onDismiss, onInnerConfirm, visible, withModal],
+        [
+            IconButton,
+            calendarIcon,
+            inputMode,
+            locale,
+            onDismiss,
+            onInnerConfirm,
+            onPressCalendarIcon,
+            validRange,
+            value,
+            visible,
+            withModal,
+        ],
     );
 
     return (
         <DatePickerInputWithoutModal
             ref={ref}
             {...rest}
+            value={value}
+            inputMode={inputMode}
+            validRange={validRange}
             // locale={locale}
-            inputButtons={inputButtons}
-            modal={renderModalComponent}
+            inputButtons={rightElement}
         />
     );
 }

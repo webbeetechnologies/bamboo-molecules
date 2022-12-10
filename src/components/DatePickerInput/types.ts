@@ -18,14 +18,6 @@ export type DatePickerInputProps = {
     dateFormat?: string;
 } & Omit<TextInputProps, 'value' | 'onChange' | 'onChangeText'>;
 
-export type DatePickerInputWithoutModalProps = DatePickerInputProps & {
-    modal?: (params: DatePickerInputModalParams) => any;
+export type DatePickerInputWithoutModalProps = Omit<DatePickerInputProps, 'withModal'> & {
     inputButtons?: any;
-};
-
-export type DatePickerInputModalParams = {
-    value: DatePickerInputProps['value'];
-    locale: DatePickerInputProps['locale'];
-    inputMode: DatePickerInputProps['inputMode'];
-    validRange: DatePickerInputProps['validRange'];
 };
