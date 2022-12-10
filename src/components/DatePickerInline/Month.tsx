@@ -106,8 +106,8 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         };
     }, [index, isHorizontal, monthStyles, scrollMode]);
 
-    const onPress = useCallback(
-        () => (isHorizontal ? () => onPressYear(year) : undefined),
+    const onPressDropdown = useCallback(
+        () => (isHorizontal ? onPressYear(year) : undefined),
         [isHorizontal, onPressYear, year],
     );
 
@@ -116,7 +116,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
             <View style={headerStyle}>
                 <TouchableRipple
                     disabled={!isHorizontal}
-                    onPress={onPress}
+                    onPress={onPressDropdown}
                     accessibilityRole="button"
                     accessibilityLabel={`${monthName} ${year}`}
                     style={yearButtonStyle}>
@@ -126,7 +126,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
                         </Text>
                         <View style={iconContainerStyle}>
                             <IconButton
-                                onPress={onPress}
+                                onPress={onPressDropdown}
                                 name={selectingYear ? 'chevron-up' : 'chevron-down'}
                             />
                         </View>
