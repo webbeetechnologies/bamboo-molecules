@@ -12,7 +12,7 @@ function DatePickerInput(
         calendarIcon = 'calendar',
         value,
         locale,
-        // inputMode,
+        inputMode,
         validRange,
         //locale = 'en',
         ...rest
@@ -82,7 +82,7 @@ function DatePickerInput(
             ref={ref}
             {...rest}
             value={value}
-            // inputMode={inputMode}
+            inputMode={inputMode}
             validRange={validRange}
             // locale={locale}
             inputButtons={rightElement}

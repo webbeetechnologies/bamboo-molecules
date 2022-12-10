@@ -2,13 +2,13 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { useRangeChecker } from '../DatePickerInline/dateUtils';
 import type { ValidRangeType } from '../DatePickerInline';
-import { format, isNil, parse, isValid } from '../../utils';
+import { format, isNil, parse, isValid, add } from '../../utils';
 
 export default function useDateInput({
     // locale,
     value,
     validRange,
-    // inputMode,
+    inputMode = 'start',
     onChange,
     dateFormat,
 }: {
@@ -16,7 +16,7 @@ export default function useDateInput({
     // locale: undefined | string;
     value: Date | undefined;
     validRange: ValidRangeType | undefined;
-    // inputMode: 'start' | 'end';
+    inputMode: 'start' | 'end';
     dateFormat: string;
 }) {
     const { isDisabled, isWithinValidRange, validStart, validEnd } = useRangeChecker(validRange);
@@ -37,11 +37,16 @@ export default function useDateInput({
                 return;
             }
 
-            if (isDisabled(parsedDate)) {
+            const finalDate =
+                inputMode === 'end'
+                    ? add(parsedDate, { hours: 23, minutes: 59, seconds: 59 })
+                    : parsedDate;
+
+            if (isDisabled(finalDate)) {
                 setError('Day is not allowed');
                 return;
             }
-            if (!isWithinValidRange(parsedDate)) {
+            if (!isWithinValidRange(finalDate)) {
                 const errors =
                     validStart && validEnd
                         ? [
@@ -58,10 +63,10 @@ export default function useDateInput({
                 return;
             }
 
-            onChange(parsedDate);
+            onChange(finalDate);
             setError(null);
         },
-        [dateFormat, isDisabled, isWithinValidRange, onChange, validEnd, validStart],
+        [dateFormat, inputMode, isDisabled, isWithinValidRange, onChange, validEnd, validStart],
     );
 
     return {
