@@ -16,6 +16,7 @@ export type DocumentPickerOptions = Omit<
     multiple?: boolean;
     /**
      * runs when the DocumentPicker is cancelled
+     *  currently, only supported on IOS and Android
      */
     onCancel?: () => void;
 };
