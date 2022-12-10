@@ -10,6 +10,7 @@ import {
 import { View, useWindowDimensions } from 'react-native';
 
 import { useComponentStyles } from '../../hooks';
+import { format } from '../../utils';
 import {
     inputTypes,
     PossibleClockTypes,
@@ -36,26 +37,34 @@ type onChangeFunc = ({
 }) => any;
 
 export type Props = {
+    /**
+     * hh:mm format
+     * */
+    time: string;
+    onTimeChange: (params: { time: string; focused?: undefined | PossibleClockTypes }) => any;
+
     is24Hour?: boolean;
-    inputType: PossibleInputTypes;
-    focused: PossibleClockTypes;
-    hours: number;
-    minutes: number;
-    onFocusInput: (type: PossibleClockTypes) => any;
-    onChange: onChangeFunc;
+    inputType?: PossibleInputTypes;
+    focused?: PossibleClockTypes;
+
+    onFocusInput?: (type: PossibleClockTypes) => any;
 };
 
 function TimePicker({
     is24Hour = false,
-    hours,
-    minutes,
-    onFocusInput,
-    focused,
-    inputType,
-    onChange,
+    time,
+    onFocusInput = () => {},
+    focused = 'hours',
+    inputType = 'picker',
+    onTimeChange,
 }: Props) {
     const dimensions = useWindowDimensions();
     const isLandscape = useMemo(() => dimensions.width > dimensions.height, [dimensions]);
+    const { hours, minutes } = useMemo(() => {
+        const date = new Date(`10/12/2022 ${time || format(new Date(), 'k:mm')}`); // to validate the time
+
+        return { hours: +format(date, 'k'), minutes: +format(date, 'mm') };
+    }, [time]);
 
     // Initialize display Mode according the hours value
     const [displayMode, setDisplayMode] = useState<'AM' | 'PM' | undefined>(() =>
@@ -75,9 +84,10 @@ function TimePicker({
     const onInnerChange = useCallback<onChangeFunc>(
         params => {
             params.hours = toHourOutputFormat(params.hours, hours, is24Hour);
-            onChange(params);
+
+            onTimeChange({ time: `${params.hours}:${params.minutes}`, focused: params.focused });
         },
-        [onChange, hours, is24Hour],
+        [onTimeChange, hours, is24Hour],
     );
 
     const memoizedValue = useMemo(
@@ -93,7 +103,7 @@ function TimePicker({
                     hours={hours}
                     minutes={minutes}
                     is24Hour={is24Hour}
-                    onChange={onChange}
+                    onChange={onInnerChange}
                     onFocusInput={onFocusInput}
                     focused={focused}
                 />

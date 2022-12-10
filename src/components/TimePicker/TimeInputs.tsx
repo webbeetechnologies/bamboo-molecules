@@ -1,7 +1,7 @@
 // @typescript-eslint/no-unused-vars
 // WORK IN PROGRESS
 
-import { memo, useCallback, useRef } from 'react';
+import { memo, useCallback, useMemo, useRef } from 'react';
 import { View, useWindowDimensions, TextInput as TextInputNative } from 'react-native';
 import { useComponentStyles, useLatest } from '../../hooks';
 
@@ -39,7 +39,10 @@ function TimeInputs({
     is24Hour,
 }: Props) {
     const dimensions = useWindowDimensions();
-    const isLandscape = dimensions.width > dimensions.height;
+    const isLandscape = useMemo(
+        () => dimensions.width > dimensions.height,
+        [dimensions.height, dimensions.width],
+    );
 
     const componentStyles = useComponentStyles(
         'TimePicker_Inputs',
@@ -76,6 +79,34 @@ function TimeInputs({
         [onChange, minutesRef],
     );
 
+    const onHourChange = useCallback(
+        (newHoursFromInput: number) => {
+            let newHours = toHourOutputFormat(newHoursFromInput, hours, is24Hour);
+            if (newHoursFromInput > 24) {
+                newHours = 24;
+            }
+            onChange({
+                hours: newHours,
+                minutes,
+            });
+        },
+        [hours, is24Hour, minutes, onChange],
+    );
+
+    const onMinuteChange = useCallback(
+        (newMinutesFromInput: number) => {
+            let newMinutes = newMinutesFromInput;
+            if (newMinutesFromInput > 59) {
+                newMinutes = 59;
+            }
+            onChange({
+                hours,
+                minutes: newMinutes,
+            });
+        },
+        [hours, onChange],
+    );
+
     return (
         <View style={componentStyles.inputContainer}>
             <TimeInput
@@ -89,16 +120,7 @@ function TimeInputs({
                 returnKeyType={'next'}
                 onSubmitEditing={onSubmitStartInput}
                 blurOnSubmit={false}
-                onChanged={newHoursFromInput => {
-                    let newHours = toHourOutputFormat(newHoursFromInput, hours, is24Hour);
-                    if (newHoursFromInput > 24) {
-                        newHours = 24;
-                    }
-                    onChange({
-                        hours: newHours,
-                        minutes,
-                    });
-                }}
+                onChanged={onHourChange}
                 // onChangeText={onChangeStartInput}
             />
             <View style={componentStyles.hoursAndMinutesSeparator}>
@@ -117,16 +139,7 @@ function TimeInputs({
                 onPress={onFocusInput}
                 inputType={inputType}
                 onSubmitEditing={onSubmitEndInput}
-                onChanged={newMinutesFromInput => {
-                    let newMinutes = newMinutesFromInput;
-                    if (newMinutesFromInput > 59) {
-                        newMinutes = 59;
-                    }
-                    onChange({
-                        hours,
-                        minutes: newMinutes,
-                    });
-                }}
+                onChanged={onMinuteChange}
             />
             {!is24Hour && (
                 <>

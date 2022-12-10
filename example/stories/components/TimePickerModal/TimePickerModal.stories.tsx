@@ -11,15 +11,14 @@ export const Default: ComponentStory<typeof Example> = args => <Example {...args
 
 Default.args = {
     isOpen: true,
-    hours: 10,
-    minutes: 15,
+    time: '10:15',
 };
 
 Default.parameters = {
     docs: {
         source: {
             code: `
-<TimePickerModal hours={10} minutes={15} />
+<TimePickerModal time="10:15" />
 `,
             language: 'tsx',
             type: 'auto',
