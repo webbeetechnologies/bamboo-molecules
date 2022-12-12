@@ -11,8 +11,8 @@ export const Example = (props: Props) => {
 
 export const ControlledExample = (props: Props) => {
     const { DatePickerInput } = useMolecules();
-    const [date, setDate] = useState<Date | undefined>(new Date(2022, 11, 5));
-    const onChange = useCallback((d: Date | undefined) => setDate(d), []);
+    const [date, setDate] = useState<Date | null>(new Date(2022, 11, 5));
+    const onChange = useCallback((d: Date | null) => setDate(d), []);
 
     return <DatePickerInput {...props} value={date} onChange={onChange} />;
 };
