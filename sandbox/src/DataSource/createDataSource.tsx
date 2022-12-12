@@ -16,7 +16,6 @@ import { DataSourceType } from './types';
 export enum EDataSourceActions {
     INIT_SOURCE = 'INIT_SOURCE',
     SET_RESOLVED_RECORDS = 'SET_RESOLVED_RECORDS',
-    SET_RECORDS = 'SET_RECORDS',
     UPDATE_PAYLOAD = 'UPDATE_PAYLOAD',
 }
 
@@ -52,7 +51,6 @@ export const createDataSource = (
     const initialStateExtractor: ExtractInitialState = dataSource => ({
         records: dataSource.records,
         lastAction: EDataSourceActions.INIT_SOURCE,
-        originalRecords: [...dataSource.records],
     });
 
     const { reducers, actionCreators, defaultResolvers, extractInitialStates, initialState } =
@@ -102,12 +100,6 @@ export const createDataSource = (
                     ...action.payload,
                     lastAction: action.type,
                 };
-            case EDataSourceActions.SET_RECORDS:
-                dataSource = {
-                    ...dataSource,
-                    originalRecords: action.payload.records,
-                };
-                break;
         }
 
         /**
@@ -195,6 +187,7 @@ export const createDataSource = (
          *
          */
         const propsRef = useRef(rest);
+        propsRef.current = rest;
 
         /**
          *
@@ -208,10 +201,11 @@ export const createDataSource = (
             if (dataSource.lastAction === EDataSourceActions.UPDATE_PAYLOAD) return;
 
             (async () => {
+                const recordsProp = propsRef.current.records;
                 const records = await recordsResolver(
                     {
                         ...dataSource,
-                        records: dataSource.originalRecords,
+                        records: recordsProp,
                     },
                     combinedResolvers,
                 );
@@ -220,7 +214,7 @@ export const createDataSource = (
                     payload: { records },
                 });
             })();
-        }, [dataSource, recordsResolver]);
+        }, [dataSource, recordsResolver, propsRef]);
 
         /**
          *
@@ -260,20 +254,26 @@ export const createDataSource = (
     const useDataSourceHook = () => {
         const { dataSource, propsRef, dispatch } = useDataSourceContext();
 
-        // defaultResolvers;
+        // to temporary store the result of the previous data source.
+        // records could be updated and updated records need to be passed down..
+        let tempDS = { ...dataSource, records: propsRef.current.records };
+        const dataSourceResults = actionCreators.map(actionCreator => {
+            const result = actionCreator(propsRef.current, tempDS, dispatch);
+            tempDS = {
+                ...dataSource,
+                ...result,
+            };
 
-        // console.log({ dataSource });
-        const dataSources = actionCreators.map(actionCreator =>
-            actionCreator(propsRef.current, dataSource, dispatch),
-        );
+            return result;
+        });
 
         return useMemo(
             () =>
-                dataSources.reduce(
+                dataSourceResults.reduce(
                     (combinedResults, result) => ({ ...combinedResults, ...result }),
                     dataSource,
                 ),
-            [dataSource, ...dataSources],
+            [dataSource, ...dataSourceResults],
         );
     };
 

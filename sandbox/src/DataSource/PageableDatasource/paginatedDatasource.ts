@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import omitBy from 'lodash.omitby';
 
 import { createDataSource } from '../createDataSource';
@@ -63,7 +63,10 @@ const usePaginatedActionCreator = <
     dispatch: (action: A) => void,
 ) => {
     const { onPaginate = null } = props;
-    const { isPaginated, originalRecords, pagination } = dataSource;
+    const { isPaginated, records, pagination } = dataSource;
+
+    const dataSourceRef = useRef(dataSource);
+    dataSourceRef.current = dataSource;
 
     const handlePaginate = useCallback(
         (args: OnPaginateAction) => {
@@ -81,15 +84,13 @@ const usePaginatedActionCreator = <
                 return;
             }
 
-            const { originalRecords: o, ...rest } = dataSource;
-
             // @ts-ignore
             dispatch({
                 type: 'UPDATE_PAYLOAD',
-                payload: onPaginate({ ...rest, records: o }, args),
+                payload: onPaginate(dataSourceRef.current, args),
             });
         },
-        [isPaginated, dispatch, onPaginate, dataSource, pagination],
+        [isPaginated, dispatch, onPaginate, records, pagination],
     );
 
     return useMemo(
@@ -97,7 +98,7 @@ const usePaginatedActionCreator = <
             !isPaginated
                 ? null
                 : {
-                      ...getPaginatedValue({ isPaginated, pagination, records: originalRecords }),
+                      ...getPaginatedValue({ isPaginated, pagination, records }),
                       setPerPage: (payload: SetPerPage['payload']) => {
                           handlePaginate({ type: EPageableActions.SetPerPage, payload });
                       },
@@ -117,7 +118,7 @@ const usePaginatedActionCreator = <
                           handlePaginate({ type: EPageableActions.Next });
                       },
                   },
-        [isPaginated, pagination, originalRecords, handlePaginate],
+        [isPaginated, pagination, records, handlePaginate],
     );
 };
 
