@@ -12,6 +12,7 @@ enum Orientation {
 
 export type Props = ViewProps & {
     orientation?: `${Orientation}`;
+    borderRadius?: number | string;
 };
 
 export const ElementGroup = (
@@ -21,13 +22,18 @@ export const ElementGroup = (
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('ElementGroup', style);
 
-    const styles = useMemo(() => {
-        return [
-            orientation === Orientation.Vertical
-                ? defaultStyles.vertical
-                : defaultStyles.horizontal,
-            componentStyles,
-        ];
+    const { containerStyle, borderRadius } = useMemo(() => {
+        const { borderRadius: _borderRadius, ...restStyles } = componentStyles;
+
+        return {
+            containerStyle: [
+                orientation === Orientation.Vertical
+                    ? defaultStyles.vertical
+                    : defaultStyles.horizontal,
+                restStyles,
+            ],
+            borderRadius: _borderRadius,
+        };
     }, [componentStyles, orientation]);
 
     const modifiedChildren = useMemo(() => {
@@ -49,7 +55,9 @@ export const ElementGroup = (
 
             const borderRadiusStyles = {
                 first: {
+                    borderTopLeftRadius: borderRadius,
                     [firstBorderProp]: 0,
+                    [lastBorderProp]: borderRadius,
                     borderBottomRightRadius: 0,
                 },
                 middle: {
@@ -60,6 +68,8 @@ export const ElementGroup = (
                 },
                 last: {
                     borderTopLeftRadius: 0,
+                    borderBottomRightRadius: borderRadius,
+                    [firstBorderProp]: borderRadius,
                     [lastBorderProp]: 0,
                 },
             };
@@ -69,10 +79,10 @@ export const ElementGroup = (
                 style: [StyleSheet.flatten(child.props.style || []), borderRadiusStyles[prop]],
             });
         });
-    }, [children, orientation]);
+    }, [borderRadius, children, orientation]);
 
     return (
-        <View {...props} style={styles} ref={ref}>
+        <View {...props} style={containerStyle} ref={ref}>
             {modifiedChildren}
         </View>
     );
