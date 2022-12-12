@@ -140,7 +140,12 @@ const PaginatedDataSource = {
             },
             value => value === null,
         ),
-    defaultResolver: <T extends {}>({ records, pagination }: PaginationDataSource<T>) => {
+    defaultResolver: <T extends {}>({
+        isPaginated,
+        records,
+        pagination,
+    }: PaginationDataSource<T>) => {
+        if (!isPaginated) return records;
         return getPage({ records, pagination });
     },
     initialState: {

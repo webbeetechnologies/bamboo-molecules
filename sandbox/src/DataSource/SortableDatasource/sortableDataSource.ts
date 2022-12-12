@@ -148,7 +148,8 @@ const sortableDataSource = {
             },
             value => value === null,
         ),
-    defaultResolver: <T extends {}>({ records, sort }: SortableDataSource<T>) => {
+    defaultResolver: <T extends {}>({ isSortable, records, sort }: SortableDataSource<T>) => {
+        if (!isSortable) return records;
         return getSortedRecords({ records, sort });
     },
     initialState: {
