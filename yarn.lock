@@ -12705,7 +12705,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo@npm:~46.0.17":
+"expo@npm:~46.0.16":
   version: 46.0.17
   resolution: "expo@npm:46.0.17"
   dependencies:
@@ -24986,7 +24986,7 @@ __metadata:
     "@types/react-native": ~0.69.1
     babel-loader: ^8.2.5
     babel-plugin-react-native-web: ^0.18.9
-    expo: ~46.0.17
+    expo: ~46.0.16
     expo-font: ^10.2.0
     expo-modules-core: ^0.11.8
     expo-splash-screen: ~0.16.2
