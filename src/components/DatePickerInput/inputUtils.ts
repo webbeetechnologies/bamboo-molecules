@@ -14,7 +14,7 @@ export default function useDateInput({
 }: {
     onChange?: (d: Date) => void;
     // locale: undefined | string;
-    value: Date | undefined;
+    value: Date | null | undefined;
     validRange: ValidRangeType | undefined;
     inputMode: 'start' | 'end';
     dateFormat: string;
@@ -26,7 +26,7 @@ export default function useDateInput({
         try {
             return !isNil(value) ? format(value, dateFormat) : '';
         } catch (e) {
-            return null;
+            return '';
         }
     }, [dateFormat, value]);
 

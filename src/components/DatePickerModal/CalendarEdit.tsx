@@ -73,17 +73,17 @@ Props) {
     }, []);
 
     const onSingleInputChange = useCallback(
-        (date: Date | undefined) => onChange({ ...state, date }),
+        (date: Date | null) => onChange({ ...state, date }),
         [onChange, state],
     );
 
     const onStartDateChange = useCallback(
-        (startDate: Date | undefined) => onChange({ ...state, startDate }),
+        (startDate: Date | null) => onChange({ ...state, startDate }),
         [onChange, state],
     );
 
     const onEndDateChange = useCallback(
-        (endDate: Date | undefined) => onChange({ ...state, endDate }),
+        (endDate: Date | null) => onChange({ ...state, endDate }),
         [onChange, state],
     );
 
