@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ESortDirection } from './DataSource/SortableDatasource/types';
+import { ESortDirection } from './DataSource/SortableDatasource';
 import { DataSourceReturnType } from './DataSource/__types';
 import { RecordType } from './types';
 
@@ -17,8 +17,8 @@ const getSortableProps = (props: DataSourceReturnType<RecordType>) => {
         return { isSortable: props.isSortable };
     }
 
-    const { isSortable, sorting, applySort, removeSort, reorderSort, updateSort } = props;
-    return { isSortable, sorting, applySort, removeSort, reorderSort, updateSort };
+    const { isSortable, sort, applySort, removeSort, reorderSort, updateSort } = props;
+    return { isSortable, sort, applySort, removeSort, reorderSort, updateSort };
 };
 
 const RenderJSON = (props: { json: Object }) => {
@@ -127,7 +127,7 @@ const RenderRecords: React.FC<DataSourceReturnType<RecordType>> = props => {
 
     return (
         <>
-            {paginatedProps.isPaginated && (
+            {props.records && (
                 <ul>
                     {props.records.map(worker => (
                         <Coworker worker={worker} key={worker.id} />
@@ -172,7 +172,7 @@ const RenderRecords: React.FC<DataSourceReturnType<RecordType>> = props => {
                     <div>
                         <h1>Sorting</h1>
                         <table width="300" style={{ marginBlockEnd: 15 }}>
-                            {sortableProps.sorting.sort.length > 0 && (
+                            {sortableProps.sort.order.length > 0 && (
                                 <thead style={{ textAlign: 'left' }}>
                                     <tr>
                                         <th>Column</th>
@@ -180,7 +180,7 @@ const RenderRecords: React.FC<DataSourceReturnType<RecordType>> = props => {
                                     </tr>
                                 </thead>
                             )}
-                            {sortableProps.sorting.sort.map(({ column, ...rest }, i) => {
+                            {sortableProps.sort.order.map(({ column, ...rest }, i) => {
                                 return (
                                     <tbody key={column}>
                                         <tr>
@@ -206,7 +206,7 @@ const RenderRecords: React.FC<DataSourceReturnType<RecordType>> = props => {
                                                     </option>
                                                 </select>
                                             </td>
-                                            {sortableProps.sorting.isNestedSort && (
+                                            {sortableProps.sort.isNestedSort && (
                                                 <td>
                                                     <input
                                                         value={i}

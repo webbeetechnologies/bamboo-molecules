@@ -1,9 +1,13 @@
 import * as React from 'react';
-import {
-    PaginatedDataSourceProvider,
-    usePaginatedDataSource,
-} from './DataSource/PageableDatasource/paginatedDatasource';
-// import { usePageableDatasource } from './DataSource';
+import { DataSourceProvider, useDataSource } from './DataSource';
+// import {
+//     // PaginatedDataSourceProvider,
+//     usePaginatedDataSource,
+// } from './DataSource/PageableDatasource/paginatedDatasource';
+// import {
+//     DataSourceProvider,
+//     useSortableDataSource,
+// } from './DataSource/SortableDatasource';
 // import { PageableReturnProps } from './DataSource/PageableDatasource/types';
 // import { useSortableDataSource } from './DataSource/SortableDatasource';
 // import { SortableReturnProps } from './DataSource/SortableDatasource/types';
@@ -72,20 +76,14 @@ function findAllCustomerData() {
 }
 
 const WrappedComponent = () => {
-    const pageable = usePaginatedDataSource();
+    const ds = useDataSource();
 
-    return (
-        <RenderRecords
-            {...{
-                ...pageable,
-            }}
-        />
-    );
+    return <RenderRecords {...ds} />;
 };
 
-const pagination = {
-    pageNumber: 1,
-    perPage: 10,
+const sort = {
+    isNestedSort: true,
+    order: [],
 };
 
 export default function UsingArraySource() {
@@ -104,8 +102,13 @@ export default function UsingArraySource() {
     // }) as PageableReturnProps<RecordType> & SortableReturnProps<RecordType>;
 
     return (
-        <PaginatedDataSourceProvider records={workers} isPaginated={true} pagination={pagination}>
+        <DataSourceProvider
+            records={workers}
+            isPaginated={true}
+            pagination={{ pageNumber: 1, perPage: 10 }}
+            isSortable={true}
+            sort={sort}>
             <WrappedComponent />
-        </PaginatedDataSourceProvider>
+        </DataSourceProvider>
     );
 }

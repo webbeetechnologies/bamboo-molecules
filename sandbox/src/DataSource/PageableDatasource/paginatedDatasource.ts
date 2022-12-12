@@ -49,6 +49,8 @@ const paginatedReducer: PaginationReducer = (dataSource, args: any) => {
     };
 };
 
+const notPaginated = { isPaginated: false };
+
 const usePaginatedActionCreator = <
     T extends {},
     S extends Omit<PaginationDataSource<T>, 'onPaginate'> = Omit<
@@ -63,7 +65,7 @@ const usePaginatedActionCreator = <
     dispatch: (action: A) => void,
 ) => {
     const { onPaginate = null } = props;
-    const { isPaginated, records, pagination } = dataSource;
+    const { isPaginated, records, pagination, shouldResolveRecords } = dataSource;
 
     const dataSourceRef = useRef(dataSource);
     dataSourceRef.current = dataSource;
@@ -96,9 +98,14 @@ const usePaginatedActionCreator = <
     return useMemo(
         () =>
             !isPaginated
-                ? null
+                ? notPaginated
                 : {
-                      ...getPaginatedValue({ isPaginated, pagination, records }),
+                      ...getPaginatedValue({
+                          isPaginated,
+                          pagination,
+                          shouldResolveRecords,
+                          records,
+                      }),
                       setPerPage: (payload: SetPerPage['payload']) => {
                           handlePaginate({ type: EPageableActions.SetPerPage, payload });
                       },

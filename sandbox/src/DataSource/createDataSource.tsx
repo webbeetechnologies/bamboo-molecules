@@ -3,6 +3,7 @@ import React, {
     PropsWithChildren,
     ReducerAction,
     ReducerState,
+    useCallback,
     useContext,
     useMemo,
     useReducer,
@@ -115,7 +116,7 @@ export const createDataSource = (
             }),
             {
                 ...dataSource,
-                records: dataSource.originalRecords,
+                records: action.payload.records,
                 lastAction: action.type,
             },
         );
@@ -138,10 +139,7 @@ export const createDataSource = (
                 ...ds,
                 records: resolver(ds),
             }),
-            {
-                ...dataSource,
-                records: dataSource.originalRecords,
-            },
+            dataSource,
         ).records;
 
         return records;
@@ -164,12 +162,14 @@ export const createDataSource = (
     ) => {
         const { children, recordsResolver = combinedResolvers, ...rest } = props;
 
+        const shouldResolveRecords = React.useRef(recordsResolver === combinedResolvers).current;
+
         /***
          *
          * Reduce Data
          *
          * */
-        const [dataSource, dispatch] = useReducer(combinedReducer, null, initial => {
+        const [dataSource, handleDispatch] = useReducer(combinedReducer, null, initial => {
             return extractInitialStates.reduce(
                 (state: any, extractInitialState) => ({
                     ...state,
@@ -178,6 +178,16 @@ export const createDataSource = (
                 initial as any,
             ) as { action: string };
         }) as [ReducerState<any>, Dispatch<ReducerAction<any>>];
+
+        const dispatch = useCallback(
+            ({ type, payload }) => {
+                handleDispatch({
+                    type,
+                    payload: { records: propsRef.current.records, ...payload },
+                });
+            },
+            [handleDispatch],
+        );
 
         /***
          *
@@ -214,14 +224,17 @@ export const createDataSource = (
                     payload: { records },
                 });
             })();
-        }, [dataSource, recordsResolver, propsRef]);
+        }, [dataSource, recordsResolver, propsRef, dispatch]);
 
         /**
          *
          * Memoize context value to avoid rerenders
          *
          */
-        const value = useMemo(() => ({ dataSource, dispatch, propsRef }), [dataSource, dispatch]);
+        const value = useMemo(
+            () => ({ dataSource, dispatch, propsRef, shouldResolveRecords }),
+            [dataSource, dispatch, shouldResolveRecords],
+        );
 
         return <DataSourceContext.Provider value={value}>{children}</DataSourceContext.Provider>;
     };
@@ -252,15 +265,15 @@ export const createDataSource = (
      *
      */
     const useDataSourceHook = () => {
-        const { dataSource, propsRef, dispatch } = useDataSourceContext();
+        const { shouldResolveRecords, dataSource, propsRef, dispatch } = useDataSourceContext();
 
         // to temporary store the result of the previous data source.
         // records could be updated and updated records need to be passed down..
-        let tempDS = { ...dataSource, records: propsRef.current.records };
+        let tempDS = { ...dataSource, shouldResolveRecords, records: propsRef.current.records };
         const dataSourceResults = actionCreators.map(actionCreator => {
             const result = actionCreator(propsRef.current, tempDS, dispatch);
             tempDS = {
-                ...dataSource,
+                ...tempDS,
                 ...result,
             };
 

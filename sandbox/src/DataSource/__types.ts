@@ -1,5 +1,4 @@
-import { PageableDataSource, PaginatedDataSourceProps } from "./PageableDatasource/types";
-import { SortableDataSource, SortableDataSourceProps } from "./SortableDatasource/types";
+import { PageableDataSource, PaginatedDataSourceProps } from './PageableDatasource/types';
 
 /**
  *
@@ -60,7 +59,6 @@ interface DataSourceGetStateReturnOmits {}
 
 export type DataSource<T extends {} = {}> = DataSourceType<T> &
     LoadableDataSource &
-    SortableDataSourceProps<T> &
     PaginatedDataSourceProps<T> &
     FilterableDataSource & {
         getState(): Omit<
@@ -69,6 +67,4 @@ export type DataSource<T extends {} = {}> = DataSourceType<T> &
         >;
     };
 
-export type DataSourceReturnType<T extends {} = {}> = DataSourceType<T> &
-    PageableDataSource<T> &
-    SortableDataSource<T>
+export type DataSourceReturnType<T extends {} = {}> = DataSourceType<T> & PageableDataSource<T>;
