@@ -4,7 +4,7 @@ export type Props = SwitchProps & {};
 
 export const Example = (props: Props) => {
     const { Switch } = useMolecules();
-    const [isOn, toggle] = useToggle();
+    const { state: isOn, onToggle } = useToggle();
 
-    return <Switch value={isOn} onValueChange={toggle} {...props} />;
+    return <Switch value={isOn} onValueChange={onToggle} {...props} />;
 };
