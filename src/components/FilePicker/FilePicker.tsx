@@ -44,13 +44,13 @@ const FilePicker = (
         progressIndicator,
         type,
         multiple,
-        allowMultiSelection,
         transitionStyle,
         mode,
         copyTo,
         presentationStyle,
         value,
         onChange = () => {},
+        onCancel,
         ...rest
     }: Props,
     ref: any,
@@ -62,10 +62,10 @@ const FilePicker = (
         type,
         copyTo,
         mode,
-        allowMultiSelection,
         multiple,
         transitionStyle,
         presentationStyle,
+        onCancel,
     });
 
     const onSetInputValue = useCallback(
@@ -85,13 +85,17 @@ const FilePicker = (
         [],
     );
 
-    const onPress = useCallback(() => {
-        onTriggerFilePicker(response => {
-            onSetInputValue(response);
+    const onPress = useCallback(async () => {
+        try {
+            await onTriggerFilePicker(response => {
+                onSetInputValue(response);
 
-            onChange?.(response);
-        });
-    }, [onChange, onSetInputValue, onTriggerFilePicker]);
+                onChange?.(response);
+            });
+        } catch (e) {
+            onCancel?.();
+        }
+    }, [onCancel, onChange, onSetInputValue, onTriggerFilePicker]);
 
     const rightElement = useMemo(() => {
         if (!loading) {
