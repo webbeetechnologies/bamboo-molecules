@@ -1,6 +1,11 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Example, ExampleRadioItem, ExampleWithRadioGroup } from './RadioButton';
+import {
+    Example,
+    ExampleRadioItem,
+    ExampleWithRadioGroup,
+    ExampleWithUncontrolledRadioGroup,
+} from './RadioButton';
 
 export default {
     title: 'components/RadioButton',
@@ -51,7 +56,6 @@ export const WithRadioGroup: ComponentStory<typeof ExampleWithRadioGroup> = args
 );
 
 WithRadioGroup.args = {
-    defaultValue: 'second',
     children: (
         <>
             <ExampleRadioItem value="first" label="First Item" />
@@ -61,6 +65,9 @@ WithRadioGroup.args = {
 };
 
 WithRadioGroup.parameters = {
+    controls: {
+        exclude: /(?:\b|')(value|onValueChange)(?:\b|')/,
+    },
     docs: {
         source: {
             code: `
@@ -69,6 +76,39 @@ WithRadioGroup.parameters = {
     
     return (
         <RadioButton.Group onValueChange={onValueChange} value={value}>
+            <RadioButton.Item value="first" label="First Item" />
+            <RadioButton.Item value="second" label="Second Item" />
+        </RadioButton.Group>
+    )
+`,
+            language: 'tsx',
+            type: 'auto',
+        },
+    },
+};
+
+export const WithRadioGroupUncontrolled: ComponentStory<
+    typeof ExampleWithUncontrolledRadioGroup
+> = args => <ExampleWithUncontrolledRadioGroup {...args} />;
+
+WithRadioGroupUncontrolled.args = {
+    defaultValue: 'second',
+    children: (
+        <>
+            <ExampleRadioItem value="first" label="First Item" />
+            <ExampleRadioItem value="second" label="Second Item" />
+        </>
+    ),
+};
+
+WithRadioGroupUncontrolled.parameters = {
+    docs: {
+        source: {
+            code: `
+    const { RadioButton } = useMolecules();
+    
+    return (
+        <RadioButton.Group>
             <RadioButton.Item value="first" label="First Item" />
             <RadioButton.Item value="second" label="Second Item" />
         </RadioButton.Group>
