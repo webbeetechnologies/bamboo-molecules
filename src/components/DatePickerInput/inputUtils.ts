@@ -12,7 +12,7 @@ export default function useDateInput({
     onChange,
     dateFormat,
 }: {
-    onChange: (d: Date) => void;
+    onChange?: (d: Date) => void;
     // locale: undefined | string;
     value: Date | undefined;
     validRange: ValidRangeType | undefined;
@@ -22,17 +22,22 @@ export default function useDateInput({
     const { isDisabled, isWithinValidRange, validStart, validEnd } = useRangeChecker(validRange);
     const [error, setError] = useState<null | string>(null);
 
-    const formattedValue = useMemo(
-        () => (!isNil(value) ? format(value, dateFormat) : ''),
-        [dateFormat, value],
-    );
+    const formattedValue = useMemo(() => {
+        try {
+            return !isNil(value) ? format(value, dateFormat) : '';
+        } catch (e) {
+            return null;
+        }
+    }, [dateFormat, value]);
 
     const onChangeText = useCallback(
         (date: string) => {
             const parsedDate = parse(date, dateFormat, new Date());
 
             if (!isValid(parsedDate)) {
+                // TODO: Translate
                 setError(`Date format must be ${dateFormat}`);
+                onChange?.(new Date('Invalid Date'));
 
                 return;
             }
@@ -43,10 +48,14 @@ export default function useDateInput({
                     : parsedDate;
 
             if (isDisabled(finalDate)) {
+                // TODO: Translate
                 setError('Day is not allowed');
+                onChange?.(new Date('Invalid Date'));
+
                 return;
             }
             if (!isWithinValidRange(finalDate)) {
+                // TODO: Translate
                 const errors =
                     validStart && validEnd
                         ? [
@@ -59,11 +68,14 @@ export default function useDateInput({
                               validStart ? `Must be later then ${validStart}` : '',
                               validEnd ? `Must be earlier then ${validEnd}` : '',
                           ];
+
                 setError(errors.filter(n => n).join(' '));
+                onChange?.(new Date('Invalid Date'));
+
                 return;
             }
 
-            onChange(finalDate);
+            onChange?.(finalDate);
             setError(null);
         },
         [dateFormat, inputMode, isDisabled, isWithinValidRange, onChange, validEnd, validStart],

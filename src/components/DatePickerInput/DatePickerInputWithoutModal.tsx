@@ -1,4 +1,4 @@
-import { forwardRef, memo, useMemo } from 'react';
+import { forwardRef, memo } from 'react';
 
 import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
 import useDateInput from './inputUtils';
@@ -6,13 +6,12 @@ import type { DatePickerInputWithoutModalProps } from './types';
 
 function DatePickerInputWithoutModal(
     {
-        label: labelProp,
+        label,
         value,
         onChange,
         // locale = 'en',
         validRange,
         inputMode,
-        withDateFormatInLabel = true,
         inputButtons,
         dateFormat = 'dd/MM/yyyy',
         ...rest
@@ -32,24 +31,13 @@ function DatePickerInputWithoutModal(
         dateFormat,
     });
 
-    const label = useMemo(
-        () =>
-            getLabel({
-                // TODO: support label components?
-                label: labelProp as any,
-                inputFormat: dateFormat,
-                withDateFormatInLabel,
-            }),
-        [dateFormat, labelProp, withDateFormatInLabel],
-    );
-
     return (
         <View style={container}>
             <TextInputWithMask
                 placeholder={dateFormat}
                 {...rest}
                 ref={ref}
-                label={label}
+                label={label || dateFormat}
                 value={formattedValue}
                 keyboardType={'number-pad'}
                 mask={dateFormat}
@@ -61,21 +49,6 @@ function DatePickerInputWithoutModal(
             />
         </View>
     );
-}
-
-function getLabel({
-    withDateFormatInLabel,
-    inputFormat,
-    label,
-}: {
-    withDateFormatInLabel: boolean;
-    inputFormat: string;
-    label: string | undefined;
-}) {
-    if (withDateFormatInLabel) {
-        return label ? `${label} (${inputFormat})` : inputFormat;
-    }
-    return label || '';
 }
 
 export default memo(forwardRef(DatePickerInputWithoutModal));

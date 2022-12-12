@@ -9,8 +9,8 @@ import {
 } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 
-import { useComponentStyles } from '../../hooks';
-import { format } from '../../utils';
+import { useComponentStyles, useControlledValue } from '../../hooks';
+import { format, parse } from '../../utils';
 import {
     inputTypes,
     PossibleClockTypes,
@@ -53,18 +53,24 @@ export type Props = {
 function TimePicker({
     is24Hour = false,
     time,
-    onFocusInput = () => {},
-    focused = 'hours',
+    focused: focusedProp,
+    onFocusInput: onFocusInputProp,
     inputType = 'picker',
     onTimeChange,
 }: Props) {
     const dimensions = useWindowDimensions();
     const isLandscape = useMemo(() => dimensions.width > dimensions.height, [dimensions]);
     const { hours, minutes } = useMemo(() => {
-        const date = new Date(`10/12/2022 ${time || format(new Date(), 'k:mm')}`); // to validate the time
+        const date = time ? parse(time, 'HH:mm', new Date()) : new Date();
 
-        return { hours: +format(date, 'k'), minutes: +format(date, 'mm') };
+        return { hours: +format(date, 'HH'), minutes: +format(date, 'mm') };
     }, [time]);
+
+    const [focused, onFocusInput] = useControlledValue({
+        value: focusedProp,
+        defaultValue: 'hours',
+        onChange: onFocusInputProp,
+    });
 
     // Initialize display Mode according the hours value
     const [displayMode, setDisplayMode] = useState<'AM' | 'PM' | undefined>(() =>
@@ -85,7 +91,7 @@ function TimePicker({
         params => {
             params.hours = toHourOutputFormat(params.hours, hours, is24Hour);
 
-            onTimeChange({ time: `${params.hours}:${params.minutes}`, focused: params.focused });
+            onTimeChange?.({ time: `${params.hours}:${params.minutes}`, focused: params.focused });
         },
         [onTimeChange, hours, is24Hour],
     );

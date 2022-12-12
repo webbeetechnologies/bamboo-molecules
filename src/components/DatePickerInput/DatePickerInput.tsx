@@ -14,6 +14,7 @@ function DatePickerInput(
         locale,
         inputMode,
         validRange,
+        onChange = () => {},
         //locale = 'en',
         ...rest
     }: DatePickerInputProps,
@@ -26,7 +27,7 @@ function DatePickerInput(
         setVisible(false);
     }, [setVisible]);
 
-    const onChangeRef = useLatest(rest.onChange);
+    const onChangeRef = useLatest(onChange);
 
     const onInnerConfirm = useCallback(
         ({ date }: any) => {
@@ -84,6 +85,7 @@ function DatePickerInput(
             value={value}
             inputMode={inputMode}
             validRange={validRange}
+            onChange={onChange}
             // locale={locale}
             inputButtons={rightElement}
         />

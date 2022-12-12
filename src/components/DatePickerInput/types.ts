@@ -4,11 +4,10 @@ import type { ValidRangeType } from '../DatePickerInline';
 export type DatePickerInputProps = {
     inputMode: 'start' | 'end';
     locale?: string;
-    onChange: (date: Date | undefined) => void;
-    value: Date | undefined;
+    onChange?: (date: Date | null) => void;
+    value?: Date | null;
     validRange?: ValidRangeType | undefined;
     withModal?: boolean;
-    withDateFormatInLabel?: boolean;
     calendarIcon?: string;
     /**
      * date format of the input

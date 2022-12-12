@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 import type { TextStyle } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
+import { format } from '../../utils';
 import type { ModeType } from '../DatePickerInline';
 import type { LocalState } from './types';
-import { format } from '../../utils';
 
 export interface HeaderPickProps {
     moreLabel?: string;
@@ -146,10 +146,15 @@ export function HeaderContentSingle({
     textStyle,
 }: HeaderContentProps) {
     const { Text } = useMolecules();
+    const label = useMemo(
+        () => (state.date ? format(state.date, 'LLL dd') : emptyLabel),
+        [emptyLabel, state.date],
+    );
 
-    return <Text style={textStyle}>{state.date ? format(state.date, 'LLL dd') : emptyLabel}</Text>;
+    return <Text style={textStyle}>{label}</Text>;
 }
 
+// TODO add translations
 export function HeaderContentMulti({
     state,
     emptyLabel = ' ',
@@ -176,6 +181,7 @@ HeaderContentProps & { moreLabel: string | undefined }) {
     return <Text style={textStyle}>{label}</Text>;
 }
 
+// TODO add translations
 export function HeaderContentRange({
     // locale,
     state,
@@ -186,16 +192,20 @@ export function HeaderContentRange({
     separatorStyle,
 }: HeaderContentProps) {
     const { Text } = useMolecules();
+    const startDateLabel = useMemo(
+        () => (state.startDate ? format(state.startDate, 'LLL dd') : startLabel),
+        [startLabel, state.startDate],
+    );
+    const endDateLabel = useMemo(
+        () => (state.endDate ? format(state.endDate, 'LLL dd') : endLabel),
+        [endLabel, state.endDate],
+    );
 
     return (
         <>
-            <Text style={textStyle}>
-                {state.startDate ? format(state.startDate, 'LLL dd') : startLabel}
-            </Text>
+            <Text style={textStyle}>{startDateLabel}</Text>
             <Text style={separatorStyle}>{headerSeparator}</Text>
-            <Text style={textStyle}>
-                {state.endDate ? format(state.endDate, 'LLL dd') : endLabel}
-            </Text>
+            <Text style={textStyle}>{endDateLabel}</Text>
         </>
     );
 }
