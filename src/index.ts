@@ -60,7 +60,6 @@ export {
     DialogContentProps,
     DialogActionsProps,
     DialogTitleProps,
-    DialogScrollAreaProps,
     RadioButtonProps,
     RadioButtonGroupProps,
     RadioButtonItemProps,
