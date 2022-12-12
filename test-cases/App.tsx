@@ -12,7 +12,7 @@ const App = () => {
 export default App;
 
 const CheckComponent = () => {
-    const { ProgressBar, View } = useMolecules();
+    const { ProgressBar, View, ProgressCircle } = useMolecules();
 
     const [progress, setProgress] = useState(0);
 
@@ -24,7 +24,10 @@ const CheckComponent = () => {
 
     return (
         <View style={{ width: 500 }}>
-            <ProgressBar color="colors.primary" progress={progress} />
+            <ProgressBar progress={progress}   />
+            <ProgressBar progress={progress} indeterminate />
+            <ProgressCircle progress={progress} style={{ width: 100 }} showText />
+            <ProgressCircle progress={progress} style={{ width: 100 }} indeterminate />
         </View>
     );
 };

@@ -128,4 +128,4 @@ export * from './RadioButton';
 
 export * from './NumberRangeInput';
 
-export { Bar as ProgressBar, BarProps as ProgressBarProps ,progressIndicatorStyles} from './ProgressIndicator';
+export { Bar as ProgressBar, BarProps as ProgressBarProps ,Circle as ProgressCircle,CircleProps as ProgressCircleProps ,progressIndicatorStyles} from './ProgressIndicator';
