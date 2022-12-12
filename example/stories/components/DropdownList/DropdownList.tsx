@@ -12,7 +12,7 @@ export const Example = <T,>(props: Props<T>) => {
 
 export const ExampleWithToggle = <T,>(props: Props<T>) => {
     const { DropdownList, Button } = useMolecules();
-    const [isOpen, onToggle] = useToggle();
+    const { state: isOpen, onToggle } = useToggle();
 
     const TriggerComponent = useMemo(
         () => (props: any) => <Button {...props}>Toggle DropdownList</Button>,

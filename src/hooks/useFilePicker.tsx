@@ -1,10 +1,8 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { DocumentPicker, DocumentPickerOptions, DocumentResult, isNil, omitBy } from '../utils';
 
-const useFilePicker = ({ multiple, onCancel, ...options }: DocumentPickerOptions) => {
-    const [error, setError] = useState(false);
-
-    const onTriggerFilePicker = useCallback(
+const useFilePicker = ({ multiple, onCancel, onError, ...options }: DocumentPickerOptions) => {
+    const openFilePicker = useCallback(
         async (callback: (response: DocumentResult | DocumentResult[]) => void): Promise<void> => {
             const omittedOptions = omitBy(options, isNil);
 
@@ -27,13 +25,13 @@ const useFilePicker = ({ multiple, onCancel, ...options }: DocumentPickerOptions
                     return;
                 }
                 // It might result in an error.
-                setError(true);
+                onError?.(e);
             }
         },
-        [multiple, onCancel, options],
+        [multiple, onCancel, onError, options],
     );
 
-    return useMemo(() => ({ onTriggerFilePicker, error }), [error, onTriggerFilePicker]);
+    return useMemo(() => ({ openFilePicker }), [openFilePicker]);
 };
 
 export default useFilePicker;
