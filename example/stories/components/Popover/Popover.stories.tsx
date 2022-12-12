@@ -33,7 +33,7 @@ Default.parameters = {
             code: `
 const { Popover, View, Button } = useMolecules();
 const triggerRef = useRef(null);
-const { state: isOpen, onToggle } = useToggle(false);
+const [isOpen, onToggle] = useToggle(false);
 
 return (
     <>
@@ -71,7 +71,7 @@ PopoverControlled.parameters = {
             code: `
 const { Popover, View, Button } = useMolecules();
 const triggerRef = useRef(null);
-const { state: isOpen, onToggle } = useToggle(false);
+const [isOpen, onToggle] = useToggle(false);
 
 return (
     <>

@@ -4,7 +4,7 @@ import { useMolecules, PopoverProps, useToggle } from 'bamboo-molecules';
 export const Example: FC<PopoverProps> = props => {
     const { Popover, View, Button } = useMolecules();
     const triggerRef = useRef(null);
-    const { state: isOpen, onToggle } = useToggle(false);
+    const [isOpen, onToggle] = useToggle(false);
 
     return (
         <>
