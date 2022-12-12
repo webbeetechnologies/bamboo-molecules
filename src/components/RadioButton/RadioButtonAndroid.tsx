@@ -103,8 +103,6 @@ const RadioButtonAndroid = (
 
         const _color = checked ? colorProp || checkedColor : uncheckedColorProp || uncheckedColor;
 
-        console.log({ uncheckedColorProp, uncheckedColor });
-
         return {
             containerStyles: [container, radioButtonStyles],
             color: _color,
