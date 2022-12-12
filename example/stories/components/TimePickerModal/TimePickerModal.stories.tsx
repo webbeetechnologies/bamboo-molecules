@@ -10,6 +10,7 @@ export default {
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 Default.args = {
+    isOpen: true,
     locale: 'en',
     hours: 10,
     minutes: 15,

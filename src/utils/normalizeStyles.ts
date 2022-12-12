@@ -1,7 +1,6 @@
 import type { StyleProp } from 'react-native';
-import get from 'lodash.get';
-import memoize from 'lodash.memoize';
 import type { MD3Theme } from '../core/theme/types';
+import { get, memoize } from './lodash';
 
 // normalize tokens inside the styles object and the subsequent objects inside it
 const normalizeStyles: StyleProp<any> | StyleProp<any>[] = memoize(

@@ -38,3 +38,5 @@ export const ProvideMolecules = ({
         </ProvidePlatformType>
     );
 };
+
+export default ProvideMolecules;

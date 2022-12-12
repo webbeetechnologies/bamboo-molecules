@@ -48,8 +48,8 @@ function DatePickerInput(
                         <DatePickerModal
                             date={value}
                             mode="single"
-                            visible={visible}
-                            onDismiss={onDismiss}
+                            isOpen={visible}
+                            onClose={onDismiss}
                             onConfirm={onInnerConfirm}
                             locale={locale}
                             dateMode={inputMode}

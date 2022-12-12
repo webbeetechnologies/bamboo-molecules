@@ -1,20 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders button with an accessibility hint 1`] = `
-<View
-  accessible={true}
-  collapsable={false}
-  focusable={true}
-  onBlur={[Function]}
-  onClick={[Function]}
-  onFocus={[Function]}
-  onResponderGrant={[Function]}
-  onResponderMove={[Function]}
-  onResponderRelease={[Function]}
-  onResponderTerminate={[Function]}
-  onResponderTerminationRequest={[Function]}
-  onStartShouldSetResponder={[Function]}
->
+exports[`button renders button with an accessibility hint 1`] = `
+<View>
   <View
     collapsable={false}
     style={
@@ -51,12 +38,14 @@ exports[`renders button with an accessibility hint 1`] = `
     >
       <View
         collapsable={false}
+        focused={false}
         pressed={false}
         style={
           Object {
             "backgroundColor": "transparent",
             "borderRadius": 20,
             "borderStyle": "solid",
+            "flex": 1,
             "minWidth": 64,
           }
         }
@@ -85,6 +74,7 @@ exports[`renders button with an accessibility hint 1`] = `
               },
               Object {
                 "borderRadius": 20,
+                "flex": 1,
               },
             ]
           }
@@ -94,6 +84,7 @@ exports[`renders button with an accessibility hint 1`] = `
               Array [
                 Object {
                   "alignItems": "center",
+                  "flex": 1,
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
@@ -128,21 +119,8 @@ exports[`renders button with an accessibility hint 1`] = `
 </View>
 `;
 
-exports[`renders button with an accessibility label 1`] = `
-<View
-  accessible={true}
-  collapsable={false}
-  focusable={true}
-  onBlur={[Function]}
-  onClick={[Function]}
-  onFocus={[Function]}
-  onResponderGrant={[Function]}
-  onResponderMove={[Function]}
-  onResponderRelease={[Function]}
-  onResponderTerminate={[Function]}
-  onResponderTerminationRequest={[Function]}
-  onStartShouldSetResponder={[Function]}
->
+exports[`button renders button with an accessibility label 1`] = `
+<View>
   <View
     collapsable={false}
     style={
@@ -179,12 +157,14 @@ exports[`renders button with an accessibility label 1`] = `
     >
       <View
         collapsable={false}
+        focused={false}
         pressed={false}
         style={
           Object {
             "backgroundColor": "transparent",
             "borderRadius": 20,
             "borderStyle": "solid",
+            "flex": 1,
             "minWidth": 64,
           }
         }
@@ -213,6 +193,7 @@ exports[`renders button with an accessibility label 1`] = `
               },
               Object {
                 "borderRadius": 20,
+                "flex": 1,
               },
             ]
           }
@@ -222,6 +203,7 @@ exports[`renders button with an accessibility label 1`] = `
               Array [
                 Object {
                   "alignItems": "center",
+                  "flex": 1,
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
@@ -256,21 +238,8 @@ exports[`renders button with an accessibility label 1`] = `
 </View>
 `;
 
-exports[`renders button with color 1`] = `
-<View
-  accessible={true}
-  collapsable={false}
-  focusable={true}
-  onBlur={[Function]}
-  onClick={[Function]}
-  onFocus={[Function]}
-  onResponderGrant={[Function]}
-  onResponderMove={[Function]}
-  onResponderRelease={[Function]}
-  onResponderTerminate={[Function]}
-  onResponderTerminationRequest={[Function]}
-  onStartShouldSetResponder={[Function]}
->
+exports[`button renders button with color 1`] = `
+<View>
   <View
     collapsable={false}
     style={
@@ -307,12 +276,14 @@ exports[`renders button with color 1`] = `
     >
       <View
         collapsable={false}
+        focused={false}
         pressed={false}
         style={
           Object {
             "backgroundColor": "transparent",
             "borderRadius": 20,
             "borderStyle": "solid",
+            "flex": 1,
             "minWidth": 64,
           }
         }
@@ -340,6 +311,7 @@ exports[`renders button with color 1`] = `
               },
               Object {
                 "borderRadius": 20,
+                "flex": 1,
               },
             ]
           }
@@ -349,6 +321,7 @@ exports[`renders button with color 1`] = `
               Array [
                 Object {
                   "alignItems": "center",
+                  "flex": 1,
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
@@ -383,21 +356,8 @@ exports[`renders button with color 1`] = `
 </View>
 `;
 
-exports[`renders button with custom background color 1`] = `
-<View
-  accessible={true}
-  collapsable={false}
-  focusable={true}
-  onBlur={[Function]}
-  onClick={[Function]}
-  onFocus={[Function]}
-  onResponderGrant={[Function]}
-  onResponderMove={[Function]}
-  onResponderRelease={[Function]}
-  onResponderTerminate={[Function]}
-  onResponderTerminationRequest={[Function]}
-  onStartShouldSetResponder={[Function]}
->
+exports[`button renders button with custom background color 1`] = `
+<View>
   <View
     collapsable={false}
     style={
@@ -434,12 +394,14 @@ exports[`renders button with custom background color 1`] = `
     >
       <View
         collapsable={false}
+        focused={false}
         pressed={false}
         style={
           Object {
             "backgroundColor": "transparent",
             "borderRadius": 20,
             "borderStyle": "solid",
+            "flex": 1,
             "minWidth": 64,
           }
         }
@@ -467,6 +429,7 @@ exports[`renders button with custom background color 1`] = `
               },
               Object {
                 "borderRadius": 20,
+                "flex": 1,
               },
             ]
           }
@@ -476,6 +439,7 @@ exports[`renders button with custom background color 1`] = `
               Array [
                 Object {
                   "alignItems": "center",
+                  "flex": 1,
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
@@ -510,21 +474,8 @@ exports[`renders button with custom background color 1`] = `
 </View>
 `;
 
-exports[`renders button with custom testID 1`] = `
-<View
-  accessible={true}
-  collapsable={false}
-  focusable={true}
-  onBlur={[Function]}
-  onClick={[Function]}
-  onFocus={[Function]}
-  onResponderGrant={[Function]}
-  onResponderMove={[Function]}
-  onResponderRelease={[Function]}
-  onResponderTerminate={[Function]}
-  onResponderTerminationRequest={[Function]}
-  onStartShouldSetResponder={[Function]}
->
+exports[`button renders button with custom testID 1`] = `
+<View>
   <View
     collapsable={false}
     style={
@@ -561,12 +512,14 @@ exports[`renders button with custom testID 1`] = `
     >
       <View
         collapsable={false}
+        focused={false}
         pressed={false}
         style={
           Object {
             "backgroundColor": "transparent",
             "borderRadius": 20,
             "borderStyle": "solid",
+            "flex": 1,
             "minWidth": 64,
           }
         }
@@ -594,6 +547,7 @@ exports[`renders button with custom testID 1`] = `
               },
               Object {
                 "borderRadius": 20,
+                "flex": 1,
               },
             ]
           }
@@ -604,6 +558,7 @@ exports[`renders button with custom testID 1`] = `
               Array [
                 Object {
                   "alignItems": "center",
+                  "flex": 1,
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
@@ -638,21 +593,8 @@ exports[`renders button with custom testID 1`] = `
 </View>
 `;
 
-exports[`renders contained contained with variant 1`] = `
-<View
-  accessible={true}
-  collapsable={false}
-  focusable={true}
-  onBlur={[Function]}
-  onClick={[Function]}
-  onFocus={[Function]}
-  onResponderGrant={[Function]}
-  onResponderMove={[Function]}
-  onResponderRelease={[Function]}
-  onResponderTerminate={[Function]}
-  onResponderTerminationRequest={[Function]}
-  onStartShouldSetResponder={[Function]}
->
+exports[`button renders contained contained with variant 1`] = `
+<View>
   <View
     collapsable={false}
     style={
@@ -689,12 +631,14 @@ exports[`renders contained contained with variant 1`] = `
     >
       <View
         collapsable={false}
+        focused={false}
         pressed={false}
         style={
           Object {
             "backgroundColor": "transparent",
             "borderRadius": 20,
             "borderStyle": "solid",
+            "flex": 1,
             "minWidth": 64,
           }
         }
@@ -722,6 +666,7 @@ exports[`renders contained contained with variant 1`] = `
               },
               Object {
                 "borderRadius": 20,
+                "flex": 1,
               },
             ]
           }
@@ -731,6 +676,7 @@ exports[`renders contained contained with variant 1`] = `
               Array [
                 Object {
                   "alignItems": "center",
+                  "flex": 1,
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
@@ -765,21 +711,8 @@ exports[`renders contained contained with variant 1`] = `
 </View>
 `;
 
-exports[`renders disabled button 1`] = `
-<View
-  accessible={true}
-  collapsable={false}
-  focusable={true}
-  onBlur={[Function]}
-  onClick={[Function]}
-  onFocus={[Function]}
-  onResponderGrant={[Function]}
-  onResponderMove={[Function]}
-  onResponderRelease={[Function]}
-  onResponderTerminate={[Function]}
-  onResponderTerminationRequest={[Function]}
-  onStartShouldSetResponder={[Function]}
->
+exports[`button renders disabled button 1`] = `
+<View>
   <View
     collapsable={false}
     style={
@@ -816,12 +749,14 @@ exports[`renders disabled button 1`] = `
     >
       <View
         collapsable={false}
+        focused={false}
         pressed={false}
         style={
           Object {
             "backgroundColor": "transparent",
             "borderRadius": 20,
             "borderStyle": "solid",
+            "flex": 1,
             "minWidth": 64,
           }
         }
@@ -849,6 +784,7 @@ exports[`renders disabled button 1`] = `
               },
               Object {
                 "borderRadius": 20,
+                "flex": 1,
               },
             ]
           }
@@ -858,6 +794,7 @@ exports[`renders disabled button 1`] = `
               Array [
                 Object {
                   "alignItems": "center",
+                  "flex": 1,
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
@@ -892,21 +829,8 @@ exports[`renders disabled button 1`] = `
 </View>
 `;
 
-exports[`renders loading button 1`] = `
-<View
-  accessible={true}
-  collapsable={false}
-  focusable={true}
-  onBlur={[Function]}
-  onClick={[Function]}
-  onFocus={[Function]}
-  onResponderGrant={[Function]}
-  onResponderMove={[Function]}
-  onResponderRelease={[Function]}
-  onResponderTerminate={[Function]}
-  onResponderTerminationRequest={[Function]}
-  onStartShouldSetResponder={[Function]}
->
+exports[`button renders loading button 1`] = `
+<View>
   <View
     collapsable={false}
     style={
@@ -943,12 +867,14 @@ exports[`renders loading button 1`] = `
     >
       <View
         collapsable={false}
+        focused={false}
         pressed={false}
         style={
           Object {
             "backgroundColor": "transparent",
             "borderRadius": 20,
             "borderStyle": "solid",
+            "flex": 1,
             "minWidth": 64,
           }
         }
@@ -976,6 +902,7 @@ exports[`renders loading button 1`] = `
               },
               Object {
                 "borderRadius": 20,
+                "flex": 1,
               },
             ]
           }
@@ -985,6 +912,7 @@ exports[`renders loading button 1`] = `
               Array [
                 Object {
                   "alignItems": "center",
+                  "flex": 1,
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
@@ -1213,21 +1141,8 @@ exports[`renders loading button 1`] = `
 </View>
 `;
 
-exports[`renders outlined button with variant 1`] = `
-<View
-  accessible={true}
-  collapsable={false}
-  focusable={true}
-  onBlur={[Function]}
-  onClick={[Function]}
-  onFocus={[Function]}
-  onResponderGrant={[Function]}
-  onResponderMove={[Function]}
-  onResponderRelease={[Function]}
-  onResponderTerminate={[Function]}
-  onResponderTerminationRequest={[Function]}
-  onStartShouldSetResponder={[Function]}
->
+exports[`button renders outlined button with variant 1`] = `
+<View>
   <View
     collapsable={false}
     style={
@@ -1264,6 +1179,7 @@ exports[`renders outlined button with variant 1`] = `
     >
       <View
         collapsable={false}
+        focused={false}
         pressed={false}
         style={
           Object {
@@ -1272,6 +1188,7 @@ exports[`renders outlined button with variant 1`] = `
             "borderRadius": 20,
             "borderStyle": "solid",
             "borderWidth": 1,
+            "flex": 1,
             "minWidth": 64,
           }
         }
@@ -1299,6 +1216,7 @@ exports[`renders outlined button with variant 1`] = `
               },
               Object {
                 "borderRadius": 20,
+                "flex": 1,
               },
             ]
           }
@@ -1308,6 +1226,7 @@ exports[`renders outlined button with variant 1`] = `
               Array [
                 Object {
                   "alignItems": "center",
+                  "flex": 1,
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
@@ -1342,21 +1261,8 @@ exports[`renders outlined button with variant 1`] = `
 </View>
 `;
 
-exports[`renders text button by default 1`] = `
-<View
-  accessible={true}
-  collapsable={false}
-  focusable={true}
-  onBlur={[Function]}
-  onClick={[Function]}
-  onFocus={[Function]}
-  onResponderGrant={[Function]}
-  onResponderMove={[Function]}
-  onResponderRelease={[Function]}
-  onResponderTerminate={[Function]}
-  onResponderTerminationRequest={[Function]}
-  onStartShouldSetResponder={[Function]}
->
+exports[`button renders text button by default 1`] = `
+<View>
   <View
     collapsable={false}
     style={
@@ -1393,12 +1299,14 @@ exports[`renders text button by default 1`] = `
     >
       <View
         collapsable={false}
+        focused={false}
         pressed={false}
         style={
           Object {
             "backgroundColor": "transparent",
             "borderRadius": 20,
             "borderStyle": "solid",
+            "flex": 1,
             "minWidth": 64,
           }
         }
@@ -1426,6 +1334,7 @@ exports[`renders text button by default 1`] = `
               },
               Object {
                 "borderRadius": 20,
+                "flex": 1,
               },
             ]
           }
@@ -1435,6 +1344,7 @@ exports[`renders text button by default 1`] = `
               Array [
                 Object {
                   "alignItems": "center",
+                  "flex": 1,
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },
@@ -1469,21 +1379,8 @@ exports[`renders text button by default 1`] = `
 </View>
 `;
 
-exports[`renders text button with variant 1`] = `
-<View
-  accessible={true}
-  collapsable={false}
-  focusable={true}
-  onBlur={[Function]}
-  onClick={[Function]}
-  onFocus={[Function]}
-  onResponderGrant={[Function]}
-  onResponderMove={[Function]}
-  onResponderRelease={[Function]}
-  onResponderTerminate={[Function]}
-  onResponderTerminationRequest={[Function]}
-  onStartShouldSetResponder={[Function]}
->
+exports[`button renders text button with variant 1`] = `
+<View>
   <View
     collapsable={false}
     style={
@@ -1520,12 +1417,14 @@ exports[`renders text button with variant 1`] = `
     >
       <View
         collapsable={false}
+        focused={false}
         pressed={false}
         style={
           Object {
             "backgroundColor": "transparent",
             "borderRadius": 20,
             "borderStyle": "solid",
+            "flex": 1,
             "minWidth": 64,
           }
         }
@@ -1553,6 +1452,7 @@ exports[`renders text button with variant 1`] = `
               },
               Object {
                 "borderRadius": 20,
+                "flex": 1,
               },
             ]
           }
@@ -1562,6 +1462,7 @@ exports[`renders text button with variant 1`] = `
               Array [
                 Object {
                   "alignItems": "center",
+                  "flex": 1,
                   "flexDirection": "row",
                   "justifyContent": "center",
                 },

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, Fragment } from 'react';
 import { View, ViewProps } from 'react-native';
 import { DisableWeekDaysType, showWeekDay } from './dateUtils';
 import Day, { EmptyDay } from './Day';
@@ -41,12 +41,11 @@ const Week = ({
                 .filter(gd => showWeekDay(gd.dayIndex, disableWeekDays))
                 .map(gd => {
                     return (
-                        <>
+                        <Fragment key={gd.dayIndex + weekIndex}>
                             {gd.beforeWeekDay || gd.afterWeekDay ? (
-                                <EmptyDay key={gd.dayIndex} />
+                                <EmptyDay />
                             ) : (
                                 <Day
-                                    key={gd.dayIndex + weekIndex}
                                     day={gd.dayOfMonth}
                                     month={gd.month}
                                     year={gd.year}
@@ -59,7 +58,7 @@ const Week = ({
                                     disabled={gd.disabled}
                                 />
                             )}
-                        </>
+                        </Fragment>
                     );
                 })}
         </View>

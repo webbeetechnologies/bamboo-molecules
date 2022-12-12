@@ -62,8 +62,8 @@ export default function DateRangeInput({
             <DatePickerModal
                 locale={locale}
                 mode="range"
-                visible={visible}
-                onDismiss={onDismiss}
+                isOpen={visible}
+                onClose={onDismiss}
                 onConfirm={onConfirm}
                 startDate={undefined}
                 endDate={undefined}
