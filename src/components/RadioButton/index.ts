@@ -17,4 +17,4 @@ export { Props as RadioButtonProps } from './RadioButton';
 export { Props as RadioButtonGroupProps } from './RadioButtonGroup';
 export { Props as RadioButtonItemProps } from './RadioButtonItem';
 
-export { radioButtonStyles } from './utils';
+export { radioButtonStyles, radioButtonItemStyles } from './utils';

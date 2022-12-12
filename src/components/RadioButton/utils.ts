@@ -22,8 +22,6 @@ export const radioButtonStyles: ComponentStylePropWithVariants<TextStyle, States
     animationScale: 'animation.scale',
     animationDuration: 'animation.durations.1',
     iconSize: 24,
-    paddingVertical: 'spacings.2',
-    paddingHorizontal: 'spacings.4',
 
     container: {
         borderRadius: 'shapes.corner.full' as unknown as number,
@@ -55,6 +53,12 @@ export const radioButtonStyles: ComponentStylePropWithVariants<TextStyle, States
         },
     },
 };
+
+export const radioButtonItemStyles: ComponentStylePropWithVariants<TextStyle, States, CustomProps> =
+    {
+        paddingVertical: 'spacings.2',
+        paddingHorizontal: 'spacings.4',
+    };
 
 export const handlePress = ({
     onPress,

@@ -68,7 +68,7 @@ WithRadioGroup.parameters = {
     const [value, onValueChange] = useState('');
     
     return (
-        <RadioButton.Group onValueChange={onValueChange} value={value} defaultValue="second">
+        <RadioButton.Group onValueChange={onValueChange} value={value}>
             <RadioButton.Item value="first" label="First Item" />
             <RadioButton.Item value="second" label="Second Item" />
         </RadioButton.Group>
