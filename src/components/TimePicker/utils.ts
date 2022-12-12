@@ -7,18 +7,19 @@ type TimePickerCustomProps = {
     clockContainer?: ViewStyle;
 };
 
+// TODO: cleanup hardcoded values
 export const timePickerStyles: ComponentStylePropWithVariants<
     ViewStyle,
-    'landScape',
+    'landScape' | 'landScapeWithoutClock',
     TimePickerCustomProps
 > = {
     container: {
         alignItems: 'center',
     },
     clockContainer: {
-        paddingTop: 36,
-        paddingLeft: 12,
-        paddingRight: 12,
+        paddingTop: 'spacings.9',
+        paddingLeft: 'spacings.3',
+        paddingRight: 'spacings.3',
         alignItems: 'center',
     },
     states: {
@@ -28,6 +29,14 @@ export const timePickerStyles: ComponentStylePropWithVariants<
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: 24 * 3 + 96 * 2 + 52 + circleSize,
+            },
+        },
+        landScapeWithoutClock: {
+            container: {
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 24 * 3 + 96 * 2 + 12,
             },
         },
     },

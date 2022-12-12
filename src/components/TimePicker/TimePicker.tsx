@@ -7,7 +7,7 @@ import {
     useCallback,
     useMemo,
 } from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import { View } from 'react-native';
 
 import { useComponentStyles, useControlledValue } from '../../hooks';
 import { format, parse } from '../../utils';
@@ -48,6 +48,7 @@ export type Props = {
     focused?: PossibleClockTypes;
 
     onFocusInput?: (type: PossibleClockTypes) => any;
+    isLandscape?: boolean;
 };
 
 function TimePicker({
@@ -55,11 +56,10 @@ function TimePicker({
     time,
     focused: focusedProp,
     onFocusInput: onFocusInputProp,
-    inputType = 'picker',
+    inputType = 'keyboard',
     onTimeChange,
+    isLandscape = false,
 }: Props) {
-    const dimensions = useWindowDimensions();
-    const isLandscape = useMemo(() => dimensions.width > dimensions.height, [dimensions]);
     const { hours, minutes } = useMemo(() => {
         const date = time ? parse(time, 'HH:mm', new Date()) : new Date();
 
@@ -82,6 +82,7 @@ function TimePicker({
         {},
         {
             states: {
+                landScapeWithoutClock: isLandscape && inputType === 'keyboard',
                 landScape: isLandscape,
             },
         },

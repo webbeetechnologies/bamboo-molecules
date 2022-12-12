@@ -63,6 +63,7 @@ import {
     dialogIconStyles,
     dialogContentStyles,
     radioButtonStyles,
+    radioButtonItemStyles,
     numberRangeInputStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
@@ -144,6 +145,7 @@ const defaultThemeValue: Partial<ITheme> = {
     Dialog_Icon: dialogIconStyles,
 
     RadioButton: radioButtonStyles,
+    RadioButton_Item: radioButtonItemStyles,
     NumberRangeInput: numberRangeInputStyles,
 };
 
