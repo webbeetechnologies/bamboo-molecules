@@ -1,4 +1,4 @@
-import type { TextStyle, ViewStyle } from 'react-native';
+import type { ViewStyle, TextStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
 type CustomProps = {
@@ -15,17 +15,4 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, '', Custom
     initialTransition: { opacity: 0 },
     animateTransition: { opacity: 1, transition: { duration: 150 as unknown as number } },
     exitTransition: { opacity: 0, scale: 0.95, transition: { duration: 100 } },
-    contentText: {
-        color: 'colors.onSurface',
-    },
-    content: {
-        backgroundColor: 'colors.surface',
-        padding: 'spacings.2',
-        borderRadius: 'shapes.corner.small' as unknown as number,
-    },
-    arrow: {
-        backgroundColor: 'colors.surface',
-        borderColor: 'colors.surface',
-        elevation: 1,
-    },
 };
