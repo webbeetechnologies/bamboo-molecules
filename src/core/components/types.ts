@@ -87,6 +87,7 @@ export interface DefaultComponents {
     Dialog: typeof Dialog;
     RadioButton: typeof RadioButton;
     NumberRangeInput: ComponentType<NumberRangeInputProps>;
+    DropdownListPopover: ComponentType<PopoverProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Button, Example, PopoverContent } from './Popover';
+import { Example, PopoverContent } from './Popover';
 
 import { within, userEvent } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
@@ -21,11 +21,6 @@ Default.args = {
     shouldFlip: true,
     offset: 0,
     crossOffset: 0,
-    trigger: props => (
-        <Button testID="trigger" {...props}>
-            Show popover
-        </Button>
-    ),
     children: <PopoverContent />,
 };
 
@@ -36,21 +31,20 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-const {Button, H4, Popover, Text, View} = useMolecules();
+const { Popover, View, Button } = useMolecules();
+const triggerRef = useRef(null);
+const [isOpen, onToggle] = useToggle(false);
+
 return (
-    <Popover
-        showArrow
-        trigger={(props) => <Button { ...props }>Show popover</Button>}
-        placement="top"
-        shouldFlip={true}
-        offset={4}
-        closeOnScroll={true}>
-        <View>
-            <H4>I'm a popover</H4>
-            <Text>I'm the text inside a popover</Text>
+    <>
+        <Button ref={triggerRef} onPress={onToggle}>
+            Show Popover
+        </Button>
+        <View style={{ padding: 100, backgroundColor: 'colors.surface' }}>
+            <Popover {...props} triggerRef={triggerRef} isOpen={isOpen} onClose={onToggle} />
         </View>
-    </Popover>
-)
+    </>
+);
             `,
             language: 'tsx',
             type: 'auto',
@@ -68,11 +62,6 @@ PopoverControlled.args = {
     shouldFlip: true,
     offset: 0,
     crossOffset: 0,
-    trigger: props => (
-        <Button testID="trigger" {...props}>
-            Show popover
-        </Button>
-    ),
     children: <PopoverContent />,
 };
 
@@ -80,25 +69,20 @@ PopoverControlled.parameters = {
     docs: {
         source: {
             code: `
-const {Button, H4, Popover, Text, View} = useMolecules();
-const [isOpen, setIsOpen] = useState(false);
+const { Popover, View, Button } = useMolecules();
+const triggerRef = useRef(null);
+const [isOpen, onToggle] = useToggle(false);
 
 return (
-    <Popover
-        showArrow
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        trigger={(props) => <Button { ...props }>Show popover</Button>}
-        placement="top"
-        shouldFlip={true}
-        offset={4}
-        closeOnScroll={true}>
-        <View>
-            <H4>I'm a popover</H4>
-            <Text>I'm the text inside a popover</Text>
+    <>
+        <Button ref={triggerRef} onPress={onToggle}>
+            Show Popover
+        </Button>
+        <View style={{ padding: 100, backgroundColor: 'colors.surface' }}>
+            <Popover {...props} triggerRef={triggerRef} isOpen={isOpen} onClose={onToggle} />
         </View>
-    </Popover>
-)
+    </>
+);
             `,
             language: 'tsx',
             type: 'auto',

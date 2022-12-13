@@ -13,13 +13,18 @@ Default.args = {
     type: ['image/*'],
     label: 'Choose image',
     multiple: false,
+    /**
+     * currently, only supported on IOS and Android
+     */
+    // eslint-disable-next-line no-console
+    onCancel: () => console.log('cancelled!'),
 };
 
 Default.parameters = {
     docs: {
         source: {
             code: `
-<FilePicker type={['image/*']} label="Choose image" multiple={false} {...rest} />
+<FilePicker type={['image/*']} label="Choose image" multiple={false} />
 `,
             language: 'tsx',
             type: 'auto',

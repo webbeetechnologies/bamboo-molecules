@@ -3,7 +3,7 @@ import { Source } from '@storybook/addon-docs';
 import { withDocsWrapper, useMolecules } from '../../common';
 
 const DocsPage = () => {
-    const { View, H1, Text } = useMolecules();
+    const { View, H1, Text, Code } = useMolecules();
 
     return (
         <View>
@@ -12,8 +12,9 @@ const DocsPage = () => {
                 useToggle is a simple hook that can make our lives easier when dealing with
                 toggleable components like Checkbox, Switch, Modal, etc.
                 {'\n'}
-                It returns an array with 2 values, current state and the toggle function. The state
-                can be toggled with the toggle function.
+                It returns an object with 3 properties, current <Code>state</Code>, the{' '}
+                <Code>onToggle</Code> function, the
+                <Code>setState</Code> function. The state can be toggled with the toggle function.
             </Text>
 
             <Source language="tsx" code={firstCodeBlock} />
@@ -26,12 +27,12 @@ import { ProvideMolecules, useMolecules, useToggle } from 'bamboo-molecules';
 
 export const Components = () => {
     const { View, Text, Switch } = useMolecules();
-    const [isToggled, toggleSwitch] = useToggle();
+    const { state: isToggled, onToggle } = useToggle();
 
     return (
         <View>
             <Text>Toggleable Switch</Text>
-            <Switch value={isToggled} onValueChange={toggleSwitch} />
+            <Switch value={isToggled} onValueChange={onToggle} />
         </View>
     );
 };
