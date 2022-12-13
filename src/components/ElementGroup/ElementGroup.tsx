@@ -16,11 +16,20 @@ export type Props = ViewProps & {
 };
 
 export const ElementGroup = (
-    { orientation = Orientation.Horizontal, children, style, ...props }: Props,
+    {
+        orientation = Orientation.Horizontal,
+        children,
+        style,
+        borderRadius: borderRadiusProp = 'shapes.corner.extraSmall',
+        ...props
+    }: Props,
     ref: any,
 ) => {
     const { View } = useMolecules();
-    const componentStyles = useComponentStyles('ElementGroup', style);
+    const componentStyles = useComponentStyles('ElementGroup', [
+        style,
+        { borderRadius: borderRadiusProp },
+    ]);
 
     const { containerStyle, borderRadius } = useMemo(() => {
         const { borderRadius: _borderRadius, ...restStyles } = componentStyles;
