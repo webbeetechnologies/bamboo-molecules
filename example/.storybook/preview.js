@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { mockDateDecorator } from 'storybook-mock-date-decorator';
 
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
@@ -8,6 +9,7 @@ export const parameters = {
             date: /Date$/,
         },
     },
+    date: new Date('December 10, 2022 10:00:00'),
 };
 
 export const decorators = [
@@ -16,4 +18,5 @@ export const decorators = [
             <Story />
         </View>
     ),
+    mockDateDecorator,
 ];
