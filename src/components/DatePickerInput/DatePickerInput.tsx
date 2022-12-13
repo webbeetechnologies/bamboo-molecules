@@ -2,6 +2,7 @@ import { useCallback, useState, forwardRef, memo, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useMolecules, useLatest } from '../../hooks';
+import { noop } from '../../utils';
 import DatePickerInputWithoutModal from './DatePickerInputWithoutModal';
 import DatePickerInputModal from './DatePickerInputModal';
 import type { DatePickerInputProps } from './types';
@@ -14,7 +15,7 @@ function DatePickerInput(
         locale,
         inputMode,
         validRange,
-        onChange = () => {},
+        onChange = noop,
         //locale = 'en',
         ...rest
     }: DatePickerInputProps,

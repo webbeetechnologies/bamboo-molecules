@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { useRangeChecker } from '../DatePickerInline/dateUtils';
 import type { ValidRangeType } from '../DatePickerInline';
-import { format, isNil, parse, isValid, add } from '../../utils';
+import { format, isNil, parse, isValid, endOfDay } from '../../utils';
 
 export default function useDateInput({
     // locale,
@@ -14,8 +14,8 @@ export default function useDateInput({
 }: {
     onChange?: (d: Date) => void;
     // locale: undefined | string;
-    value: Date | null | undefined;
-    validRange: ValidRangeType | undefined;
+    value?: Date | null;
+    validRange?: ValidRangeType;
     inputMode: 'start' | 'end';
     dateFormat: string;
 }) {
@@ -42,10 +42,7 @@ export default function useDateInput({
                 return;
             }
 
-            const finalDate =
-                inputMode === 'end'
-                    ? add(parsedDate, { hours: 23, minutes: 59, seconds: 59 })
-                    : parsedDate;
+            const finalDate = inputMode === 'end' ? endOfDay(parsedDate) : parsedDate;
 
             if (isDisabled(finalDate)) {
                 // TODO: Translate

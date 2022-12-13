@@ -6767,6 +6767,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.noop@npm:^3.0.7":
+  version: 3.0.7
+  resolution: "@types/lodash.noop@npm:3.0.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: e398b98ba88bec1b127c9dfd723c1b2952f8d6bc60d2e797333e55a805038858593b2acd2fa099f5dfba79e8fe5d5c142e2a9c58ecb04210dd24cb2c2d8d88e4
+  languageName: node
+  linkType: hard
+
 "@types/lodash.omit@npm:^4.5.7":
   version: 4.5.7
   resolution: "@types/lodash.omit@npm:4.5.7"
@@ -7632,6 +7641,7 @@ __metadata:
     "@types/lodash.get": ^4.4.7
     "@types/lodash.isnil": ^4.0.7
     "@types/lodash.memoize": ^4.1.7
+    "@types/lodash.noop": ^3.0.7
     "@types/lodash.omit": ^4.5.7
     "@types/lodash.omitby": ^4.6.7
     "@types/react": ^18.0.20
@@ -7648,6 +7658,7 @@ __metadata:
     lodash.get: ^4.4.2
     lodash.isnil: ^4.0.0
     lodash.memoize: ^4.1.2
+    lodash.noop: ^3.0.1
     lodash.omit: ^4.5.0
     lodash.omitby: ^4.6.0
     prettier: ^2.7.1
@@ -17963,6 +17974,13 @@ __metadata:
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: ad580b4bdbb7ca1f7abf7e1bce63a9a0b98e370cf40194b03380a46b4ed799c9573029599caebc1b14e3f24b111aef72b96674a56cfa105e0f5ac70546cdc005
+  languageName: node
+  linkType: hard
+
+"lodash.noop@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "lodash.noop@npm:3.0.1"
+  checksum: 4525f763ee62f746197779ed1937d430145d039f8a5700d86bf509f02f9fc7302454423623bf1c32f1b9cded9d4f74a2f05d6e54686c40e9511a422254749f7f
   languageName: node
   linkType: hard
 
