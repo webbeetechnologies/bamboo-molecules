@@ -5,6 +5,9 @@ import { ControlledExample } from './DatePickerModal';
 export default {
     title: 'components/DatePickerModal',
     component: ControlledExample,
+    parameters: {
+        date: new Date('2022-12-10T10:04:22.146'),
+    },
 } as ComponentMeta<typeof ControlledExample>;
 
 export const Controlled: ComponentStory<typeof ControlledExample> = args => (

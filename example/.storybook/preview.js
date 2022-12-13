@@ -9,7 +9,6 @@ export const parameters = {
             date: /Date$/,
         },
     },
-    date: new Date('2022-12-10T10:04:22.146'),
 };
 
 export const decorators = [

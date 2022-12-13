@@ -5,6 +5,9 @@ import { ControlledExample } from './DatePickerInput';
 export default {
     title: 'components/DatePickerInput',
     component: ControlledExample,
+    parameters: {
+        date: new Date('2022-12-10T10:04:22.146'),
+    },
 } as ComponentMeta<typeof ControlledExample>;
 
 export const Default: ComponentStory<typeof ControlledExample> = args => (
