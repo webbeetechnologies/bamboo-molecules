@@ -22,7 +22,9 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<Switch value={isOn} onValueChange={toggle} {...props} />
+const { state: isOn, onToggle } = useToggle();
+
+<Switch value={isOn} onValueChange={onToggle} />
 `,
             language: 'tsx',
             type: 'auto',

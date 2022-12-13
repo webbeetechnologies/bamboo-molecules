@@ -19,6 +19,10 @@ export type DocumentPickerOptions = Omit<
      *  currently, only supported on IOS and Android
      */
     onCancel?: () => void;
+    /**
+     * runs when the DocumentPicker is errored
+     */
+    onError?: (e: any) => void;
 };
 
 export type DocumentResult = Partial<DocumentPickerResponse> & {

@@ -1,7 +1,7 @@
 import { forwardRef, memo, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useMolecules, useFilePicker } from '../../hooks';
-import type { TextInputProps } from '../TextInput';
 import type { DocumentResult, DocumentPickerOptions } from '../../utils';
+import type { TextInputProps } from '../TextInput';
 
 export type OmitProp =
     | 'editable'
@@ -51,6 +51,7 @@ const FilePicker = (
         value,
         onChange = () => {},
         onCancel,
+        onError,
         ...rest
     }: Props,
     ref: any,
@@ -58,7 +59,7 @@ const FilePicker = (
     const { TextInput, IconButton, ActivityIndicator } = useMolecules();
     const [displayText, setDisplayText] = useState('');
 
-    const { onTriggerFilePicker, error } = useFilePicker({
+    const { openFilePicker } = useFilePicker({
         type,
         copyTo,
         mode,
@@ -66,6 +67,7 @@ const FilePicker = (
         transitionStyle,
         presentationStyle,
         onCancel,
+        onError,
     });
 
     const onSetInputValue = useCallback(
@@ -85,17 +87,13 @@ const FilePicker = (
         [],
     );
 
-    const onPress = useCallback(async () => {
-        try {
-            await onTriggerFilePicker(response => {
-                onSetInputValue(response);
+    const onPress = useCallback(() => {
+        openFilePicker(response => {
+            onSetInputValue(response);
 
-                onChange?.(response);
-            });
-        } catch (e) {
-            onCancel?.();
-        }
-    }, [onCancel, onChange, onSetInputValue, onTriggerFilePicker]);
+            onChange?.(response);
+        });
+    }, [onChange, onSetInputValue, openFilePicker]);
 
     const rightElement = useMemo(() => {
         if (!loading) {
@@ -119,7 +117,6 @@ const FilePicker = (
     return (
         <TextInput
             label="Choose file"
-            error={error}
             {...rest}
             value={displayText}
             editable={false}
