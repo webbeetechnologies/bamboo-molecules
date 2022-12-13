@@ -4269,6 +4269,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@shopify/flash-list@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@shopify/flash-list@npm:1.4.0"
+  dependencies:
+    recyclerlistview: 4.2.0
+    tslib: 2.4.0
+  peerDependencies:
+    "@babel/runtime": "*"
+    react: "*"
+    react-native: "*"
+  checksum: c6510b0d6ae6404fe92ede0c918ba184bc2b27ed39c627eebad16a6542792cb34e750e2004e1a9ce165f9d729f1af0555cba1e4c224fd52bfd2a600fdc9e2a65
+  languageName: node
+  linkType: hard
+
 "@sideway/address@npm:^4.1.3":
   version: 4.1.4
   resolution: "@sideway/address@npm:4.1.4"
@@ -6665,6 +6679,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.omitby@npm:^4.6.7":
+  version: 4.6.7
+  resolution: "@types/lodash.omitby@npm:4.6.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 0ff20ffb94524d2c0714cb474b8b2723d88225a347d0c16f07d216122aa79dab40a826efeadd84d2b82f1ef00a6d1e311cc6844e06430e43c1d3cd587d4e6481
+  languageName: node
+  linkType: hard
+
 "@types/lodash@npm:*, @types/lodash@npm:^4.14.167":
   version: 4.14.185
   resolution: "@types/lodash@npm:4.14.185"
@@ -7513,6 +7536,7 @@ __metadata:
     "@types/lodash.isnil": ^4.0.7
     "@types/lodash.memoize": ^4.1.7
     "@types/lodash.omit": ^4.5.7
+    "@types/lodash.omitby": ^4.6.7
     "@types/react": ^18.0.20
     "@types/react-native": ^0.70.0
     "@types/react-native-vector-icons": ^6.4.12
@@ -7527,6 +7551,7 @@ __metadata:
     lodash.isnil: ^4.0.0
     lodash.memoize: ^4.1.2
     lodash.omit: ^4.5.0
+    lodash.omitby: ^4.6.0
     prettier: ^2.7.1
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -17840,6 +17865,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.omitby@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "lodash.omitby@npm:4.6.0"
+  checksum: 46b0bb8fcadfa36d2ceb04a1052bc409257a7b960e98c7bdd8a7274a81ddabea098fec57884533bb6f808df2492ff0edc5881d4922cca98a38480a18844ea311
+  languageName: node
+  linkType: hard
+
 "lodash.throttle@npm:^4.1.1":
   version: 4.1.1
   resolution: "lodash.throttle@npm:4.1.1"
@@ -22601,6 +22633,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"recyclerlistview@npm:4.2.0":
+  version: 4.2.0
+  resolution: "recyclerlistview@npm:4.2.0"
+  dependencies:
+    lodash.debounce: 4.0.8
+    prop-types: 15.8.1
+    ts-object-utils: 0.0.5
+  peerDependencies:
+    react: ">= 15.2.1"
+    react-native: ">= 0.30.0"
+  checksum: 6cba6a99fb487067c509112b94e3d4d3905d782bbcb7af2cffbd57c601a4650d670e4eee5fec18d195d58ff6ec01a47288c5510379a2f37da3c5fc0a58860441
+  languageName: node
+  linkType: hard
+
 "redent@npm:^1.0.0":
   version: 1.0.0
   resolution: "redent@npm:1.0.0"
@@ -24937,6 +24983,7 @@ __metadata:
     "@babel/core": ^7.18.10
     "@expo/vector-icons": ^13.0.0
     "@expo/webpack-config": ^0.17.0
+    "@shopify/flash-list": ^1.4.0
     "@types/react": ~18.0.14
     "@types/react-native": ~0.69.1
     babel-loader: ^8.2.5
