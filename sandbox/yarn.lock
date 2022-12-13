@@ -2364,6 +2364,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.clone@npm:^4.5.7":
+  version: 4.5.7
+  resolution: "@types/lodash.clone@npm:4.5.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 3c9b89854afde0b5e5d03eb3427b649222f3a8d46121b0483573ccc44659946ae154d96761b4ce89eff64ee5ee235aa6135dcde5506b6ceb4f4d28713743cd8a
+  languageName: node
+  linkType: hard
+
+"@types/lodash.isfunction@npm:^3.0.7":
+  version: 3.0.7
+  resolution: "@types/lodash.isfunction@npm:3.0.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 20cf10ee331b56d9ef9e083872e0f78b2f1acbe4bbd5e7a29daacf8c523d255314c2376fa5095c49bd6114ad9ca7766b4e08e223f7b8a942643c92ae360b6b52
+  languageName: node
+  linkType: hard
+
 "@types/lodash.omitby@npm:^4.6.7":
   version: 4.6.7
   resolution: "@types/lodash.omitby@npm:4.6.7"
@@ -2379,6 +2397,15 @@ __metadata:
   dependencies:
     "@types/lodash": "*"
   checksum: 116c5ae8973114508e75112a181b5c00c223cbc797981f353fe193ce7e061a0c52bfb3f3e72339dceeadda96edcaae31245e65377bf50b5e38f04d2d0be82917
+  languageName: node
+  linkType: hard
+
+"@types/lodash.set@npm:^4.3.7":
+  version: 4.3.7
+  resolution: "@types/lodash.set@npm:4.3.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 18bedc56ff2ed38b4efbeefef3b5bc0edfa24c821e5242d2c6180875cf890f4b98b325179ce71dd2e412e719d5a497857a9a494ce1be3245a69a97f2e17a624b
   languageName: node
   linkType: hard
 
@@ -5791,10 +5818,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.clone@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "lodash.clone@npm:4.5.0"
+  checksum: 5839f22acf3a43c026ac4325f7bcd378f34967415cd0b9fd7efa9bbbf38dc665900d36e040944c5afab94a51ff8a24f6cfc3781fe439705cbad5c722e9506b16
+  languageName: node
+  linkType: hard
+
 "lodash.debounce@npm:^4.0.8":
   version: 4.0.8
   resolution: "lodash.debounce@npm:4.0.8"
   checksum: a3f527d22c548f43ae31c861ada88b2637eb48ac6aa3eb56e82d44917971b8aa96fbb37aa60efea674dc4ee8c42074f90f7b1f772e9db375435f6c83a19b3bc6
+  languageName: node
+  linkType: hard
+
+"lodash.isfunction@npm:^3.0.9":
+  version: 3.0.9
+  resolution: "lodash.isfunction@npm:3.0.9"
+  checksum: 99e54c34b1e8a9ba75c034deb39cedbd2aca7af685815e67a2a8ec4f73ec9748cda6ebee5a07d7de4b938e90d421fd280e9c385cc190f903ac217ac8aff30314
   languageName: node
   linkType: hard
 
@@ -5809,6 +5850,13 @@ __metadata:
   version: 4.6.0
   resolution: "lodash.orderby@npm:4.6.0"
   checksum: 2e0430b07eb575e9cef9c0a8937db82857bb741d0680baf58f99d4731092c11b103f95cbeeb9cdd207514701bd925b5c71eb81044df97b7e36a3735a3484fb8f
+  languageName: node
+  linkType: hard
+
+"lodash.set@npm:^4.3.2":
+  version: 4.3.2
+  resolution: "lodash.set@npm:4.3.2"
+  checksum: a9122f49eef9f2d0fc9061a33d87f8e5b8c6b23d46e8b9e9ce1529d3588d79741bd1145a3abdfa3b13082703e65af27ff18d8a07bfc22b9be32f3fc36f763f70
   languageName: node
   linkType: hard
 
@@ -7923,15 +7971,21 @@ __metadata:
   resolution: "sandbox_ts@workspace:."
   dependencies:
     "@babel/core": ^7.12.9
+    "@types/lodash.clone": ^4.5.7
+    "@types/lodash.isfunction": ^3.0.7
     "@types/lodash.omitby": ^4.6.7
     "@types/lodash.orderby": ^4.6.7
+    "@types/lodash.set": ^4.3.7
     "@types/lodash.zip": ^4.2.7
     "@types/react": ~18.0.14
     "@types/react-native": ~0.70.6
     expo: ~47.0.3
     expo-status-bar: ~1.4.2
+    lodash.clone: ^4.5.0
+    lodash.isfunction: ^3.0.9
     lodash.omitby: ^4.6.0
     lodash.orderby: ^4.6.0
+    lodash.set: ^4.3.2
     lodash.zip: ^4.2.0
     react: 18.1.0
     react-dom: 18.1.0
