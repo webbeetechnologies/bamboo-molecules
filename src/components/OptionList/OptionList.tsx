@@ -15,6 +15,7 @@ type DefaultSectionT<TItem> = {
 };
 
 type DefaultItemT = {
+    id: string | number;
     [key: string]: any;
 };
 
@@ -27,7 +28,7 @@ export type IOptionList = <
 ) => ReactElement;
 
 export type Props<
-    TItem = any,
+    TItem extends DefaultItemT = DefaultItemT,
     TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
 > = UseSearchableProps &
     Omit<SectionListProps<TItem, TSection>, 'sections'> & {
@@ -98,7 +99,7 @@ const OptionList = <
                 // if multiple we push the item into an array and if it's already exists we filter them
                 multiple
                     ? Array.isArray(selectedItem)
-                        ? selectedItem.filter(sItem => sItem !== item)
+                        ? selectedItem.filter(sItem => sItem.id !== item.id)
                         : [item]
                     : item,
             );

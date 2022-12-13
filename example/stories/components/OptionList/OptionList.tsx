@@ -1,8 +1,8 @@
 import { useMolecules, OptionListProps } from 'bamboo-molecules';
 
-export type Props<TItem> = OptionListProps<TItem> & {};
+export type Props = OptionListProps & {};
 
-export const Example = <TItem,>(props: Props<TItem>) => {
+export const Example = (props: Props) => {
     const { OptionList } = useMolecules();
 
     return <OptionList {...props} />;

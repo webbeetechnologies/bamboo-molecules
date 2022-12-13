@@ -15,21 +15,19 @@ enum DropdownListMode {
     Dialog = 'dialog', // large screen only
 }
 
-type DefaultSectionT<TItem> = {
+type DefaultItemT = {
+    id: string | number;
     [key: string]: any;
-    data: TItem[];
 };
 
-export type Props<
-    TItem = any,
-    TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
-> = OptionListProps<TItem, TSection> & {
+export type Props<TItem extends DefaultItemT = DefaultItemT> = OptionListProps<TItem> & {
     mode?: `${DropdownListMode}`;
     // optionsThreshhold: configuration to show maximum number of options in popover/actionsheet when mode == DropdownListMode.auto (default: 5).
     // on reaching threshold, switches to a full screen view in smaller devices.
     optionsThreshold?: number;
     isOpen?: boolean;
     setIsOpen?: (isOpen: boolean) => void;
+    hideOnSelect?: boolean;
 
     popoverProps?: Omit<PopoverProps, 'triggerRef' | 'onOpen' | 'onClose' | 'isOpen'>;
     actionSheetProps?: Omit<ActionSheetProps, 'children' | 'isOpen' | 'onClose' | 'onOpen'>;
@@ -37,7 +35,7 @@ export type Props<
     triggerRef: any;
 };
 
-const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>>({
+const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     mode = 'auto',
     popoverProps,
     actionSheetProps,
@@ -49,8 +47,9 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
     optionsThreshold,
     containerStyle,
     triggerRef,
+    hideOnSelect = true,
     ...optionListProps
-}: Props<TItem, TSection>) => {
+}: Props<TItem>) => {
     const { OptionList, ActionSheet, Dialog, DropdownListPopover } = useMolecules();
     const componentStyles = useComponentStyles('DropdownList');
 
@@ -83,9 +82,11 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
         (item: TItem | TItem[]) => {
             onSelectItemChangeProp?.(item);
 
-            setIsOpen(false);
+            if (hideOnSelect) {
+                setIsOpen(false);
+            }
         },
-        [setIsOpen, onSelectItemChangeProp],
+        [onSelectItemChangeProp, hideOnSelect, setIsOpen],
     );
 
     const [WrapperComponent, props] = useMemo(() => {

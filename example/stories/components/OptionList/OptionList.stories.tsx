@@ -31,15 +31,19 @@ Default.args = {
             title: 'Numbers',
             data: [
                 {
+                    id: 11,
                     text: '1',
                 },
                 {
+                    id: 12,
                     text: '2',
                 },
                 {
+                    id: 13,
                     text: '3',
                 },
                 {
+                    id: 14,
                     text: '4',
                 },
             ],
@@ -48,15 +52,19 @@ Default.args = {
             title: 'Letters',
             data: [
                 {
+                    id: 21,
                     text: 'A',
                 },
                 {
+                    id: 22,
                     text: 'B',
                 },
                 {
+                    id: 23,
                     text: 'C',
                 },
                 {
+                    id: 24,
                     text: 'D',
                 },
             ],
