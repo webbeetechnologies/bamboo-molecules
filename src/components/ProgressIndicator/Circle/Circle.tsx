@@ -1,4 +1,13 @@
-import * as React from 'react';
+import {
+    memo,
+    useState,
+    useCallback,
+    useMemo,
+    useRef,
+    useEffect,
+    forwardRef,
+    ReactNode,
+} from 'react';
 import {
     StyleSheet,
     ViewStyle,
@@ -7,7 +16,7 @@ import {
     Easing,
     TextStyle,
 } from 'react-native';
-import Svg, { Defs, LinearGradient, Stop, Circle as CircleSvg } from 'react-native-svg';
+import Svg, { Circle as CircleSvg } from 'react-native-svg';
 import { Animated } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../../hooks';
 
@@ -16,12 +25,15 @@ const { multiply } = Animated;
 const AnimatedCircle = Animated.createAnimatedComponent(CircleSvg);
 const { PI } = Math;
 
+type ProgressTextRefProps = {
+    setProgress: (progress: number) => void;
+};
+
 export type Props = {
     progress: number;
     animated?: boolean;
     indeterminate?: boolean;
-    indeterminateAnimationDuration?: number;
-    strokeWidth?: number;
+    thickness?: number;
     trackColor?: string;
     useNativeDriver?: boolean;
     animationType?: 'decay' | 'spring' | 'timing';
@@ -39,33 +51,58 @@ const Circle = (props: Props) => {
         animated = true,
         progress,
         indeterminate = false,
-        indeterminateAnimationDuration = 1000,
-        strokeWidth = 6,
-        color = 'colors.primary',
         useNativeDriver = true,
         animationType = 'spring',
-        trackColor = 'colors.surfaceVariant',
         animationConfig = { bounciness: 0 },
         style: styleProp,
         formatText = (progress: number) => `${Math.round(progress)}%`,
         showText = false,
         allowFontScaling = true,
-        textStyle,
+        ...rest
     } = props;
-    const { View, Text } = useMolecules();
+    const { View } = useMolecules();
 
-    const [size, setSize] = React.useState(-1);
+    const [size, setSize] = useState(48);
+    const progressAnim = useRef(new Animated.Value(1)).current;
+    const progressTextRef = useRef<ProgressTextRefProps>();
 
-    const componentStyle = useComponentStyles(
-        'ProgressIndicator',
-        [styleProp, { strokeColor: color, trackColor: trackColor }],
-        {
-            variant: 'circle',
-        },
-    );
-    const showTextStyle = React.useMemo(() => {
+    const componentStyle = useComponentStyles('ProgressCircle', [
+        styleProp,
+        rest.color ? { color: rest.color } : {},
+        rest.trackColor ? { trackColor: rest.trackColor } : {},
+        rest.textStyle ? { text: rest.textStyle } : {},
+        rest.thickness ? { thickness: rest.thickness } : {},
+    ]);
+    const {
+        containerStyle,
+        progressStyle,
+        strokeColor,
+        strokeTrackColor,
+        animationScale,
+        thickness,
+    } = useMemo(() => {
+        const { trackColor, color, width, animationScale, thickness, ...restStyle } =
+            componentStyle;
+
+        return {
+            strokeTrackColor: trackColor,
+            strokeColor: color,
+            animationScale,
+            thickness,
+            containerStyle: {
+                width: width,
+                height: width,
+                ...styles.container,
+                ...restStyle,
+            },
+            progressStyle: styles.svg,
+        };
+    }, [componentStyle]);
+
+    const showTextStyle = useMemo(() => {
+        const { text, thickness } = componentStyle;
         const border = 0;
-        const textOffset = border + strokeWidth;
+        const textOffset = border + thickness;
         const textSize = size - textOffset * 2;
         return {
             container: [
@@ -80,56 +117,38 @@ const Circle = (props: Props) => {
             ],
             text: [
                 {
-                    color,
-                    fontSize: textSize / 4.5,
+                    fontSize: textSize / 3.5,
                 },
-                textStyle,
+                text,
             ],
-        };
-    }, [strokeWidth, size, textStyle]);
-    const { containerStyle, progressStyle, strokeColor, strokeTrackColor } = React.useMemo(() => {
-        const { trackColor, strokeColor, ...restStyle } = componentStyle;
-
-        const width = size === -1 ? '100%' : size;
-        return {
-            strokeTrackColor: trackColor,
-            strokeColor,
-            containerStyle: {
-                width: width,
-                height: width,
-                ...styles.container,
-                ...restStyle,
-            },
-            progressStyle: {
-                ...styles.svg,
-            },
         };
     }, [size, componentStyle]);
 
-    const progressAnim = React.useRef(new Animated.Value(1)).current;
-    const [progressValue, setProgressValue] = React.useState(0);
+    const { r, cx, cy, circumference, strokeDashoffset } = useMemo(() => {
+        const r = (size - thickness) / 2;
+        const alpha = progressAnim.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, PI * 2],
+        });
+        return {
+            r,
+            cx: size / 2,
+            cy: size / 2,
+            circumference: r * 2 * PI,
+            strokeDashoffset: multiply(alpha, r),
+        };
+    }, [size, thickness]);
 
-    const { r, cx, cy } = React.useMemo(() => {
-        const sizeCalc = size === -1 ? 150 : size;
-        return { r: (sizeCalc - strokeWidth) / 2, cx: sizeCalc / 2, cy: sizeCalc / 2 };
-    }, [size, strokeWidth]);
-
-    const circumference = r * 2 * PI;
-    const α = progressAnim.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, PI * 2],
-    });
-
-    const handleLayout = React.useCallback((event: LayoutChangeEvent) => {
+    const handleLayout = useCallback((event: LayoutChangeEvent) => {
         setSize(event.nativeEvent.layout.width);
     }, []);
 
-    const animate = React.useCallback(() => {
+    const indeterminateAnim = useCallback(() => {
         progressAnim.setValue(1);
         Animated.sequence([
             Animated.timing(progressAnim, {
                 toValue: 0,
-                duration: indeterminateAnimationDuration,
+                duration: 1000 * animationScale,
                 easing: Easing.circle,
                 isInteraction: false,
 
@@ -137,7 +156,7 @@ const Circle = (props: Props) => {
             }),
             Animated.timing(progressAnim, {
                 toValue: -1,
-                duration: indeterminateAnimationDuration,
+                duration: 1000 * animationScale,
                 easing: Easing.circle,
                 isInteraction: false,
 
@@ -145,20 +164,25 @@ const Circle = (props: Props) => {
             }),
         ]).start(endState => {
             if (endState.finished) {
-                animate();
+                indeterminateAnim();
             }
         });
-    }, [indeterminateAnimationDuration, useNativeDriver]);
+    }, [animationScale, useNativeDriver]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (indeterminate) {
-            animate();
+            indeterminateAnim();
         } else {
-            progressAnim.addListener(event => setProgressValue(100 - event.value * 100));
+            progressAnim.addListener(event =>
+                progressTextRef?.current?.setProgress(100 - event.value * 100),
+            );
         }
+        return () => {
+            // progressAnim.removeListener();
+        };
     }, [indeterminate]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!indeterminate) {
             const newProgress = Math.min(Math.max(progress / 100, 0), 1) / 1;
             if (animated) {
@@ -174,33 +198,26 @@ const Circle = (props: Props) => {
         }
     }, [progress]);
 
-    const strokeDashoffset = multiply(α, r);
     return (
         <View style={containerStyle} onLayout={handleLayout}>
             <Svg width="100%" height="100%" style={progressStyle}>
-                <Defs>
-                    {/* @ts-ignore */}
-                    <LinearGradient id="grad" x1="0" y1="0" x2="100%" y2="0">
-                        <Stop offset="0" stopColor={strokeColor} />
-                    </LinearGradient>
-                </Defs>
                 <CircleSvg
                     stroke={strokeTrackColor}
                     fill="none"
                     {...{
-                        strokeWidth,
+                        strokeWidth: thickness,
                         cx,
                         cy,
                         r,
                     }}
                 />
                 <AnimatedCircle
-                    stroke="url(#grad)"
+                    stroke={strokeColor}
                     fill="none"
                     strokeDasharray={`${circumference}, ${circumference}`}
                     {...{
                         strokeDashoffset,
-                        strokeWidth,
+                        strokeWidth: thickness,
                         cx,
                         cy,
                         r,
@@ -209,9 +226,12 @@ const Circle = (props: Props) => {
             </Svg>
             {!indeterminate && showText ? (
                 <View style={showTextStyle.container}>
-                    <Text style={showTextStyle.text} allowFontScaling={allowFontScaling}>
-                        {formatText(progressValue)}
-                    </Text>
+                    <TextComponent
+                        ref={progressTextRef}
+                        style={showTextStyle.text}
+                        allowFontScaling={allowFontScaling}>
+                        {value => formatText(value)}
+                    </TextComponent>
                 </View>
             ) : (
                 false
@@ -220,7 +240,39 @@ const Circle = (props: Props) => {
     );
 };
 
-export default React.memo(Circle);
+export default memo(Circle);
+
+type TextComponentProps = {
+    children?: (progress: number) => React.ReactNode | string;
+    style?: StyleProp<TextStyle>;
+    allowFontScaling: boolean;
+};
+type Ref = any;
+
+const TextComponent = memo(
+    forwardRef((props: TextComponentProps, ref: Ref) => {
+        const { children = (progress: number) => progress, ...rest } = props;
+        const { Text } = useMolecules();
+        const [progress, setProgress] = useState(0);
+
+        const updateProgress = useCallback((value: number) => setProgress(value), []);
+
+        const setRef = useCallback(
+            (node: ReactNode) => {
+                ref.current = node;
+                if (ref.current) ref.current.setProgress = updateProgress;
+            },
+            [ref, updateProgress],
+        );
+
+        return (
+            // @ts-ignore
+            <Text {...rest} ref={setRef}>
+                {children(progress)}
+            </Text>
+        );
+    }),
+);
 
 const styles = StyleSheet.create({
     container: {

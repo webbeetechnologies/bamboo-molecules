@@ -23,10 +23,12 @@ const CheckComponent = () => {
     }, []);
 
     return (
-        <View style={{ width: 500 }}>
-            <ProgressBar progress={progress}   />
+        <View style={{alignSelf:'center',width:400,alignItems:'center'}}>
+            <ProgressBar progress={progress} />
             <ProgressBar progress={progress} indeterminate />
-            <ProgressCircle progress={progress} style={{ width: 100 }} showText />
+            <ProgressCircle progress={progress} style={{ width: 100 }} showText thickness={10} />
+            <ProgressCircle progress={progress} showText />
+            <ProgressCircle progress={progress} indeterminate />
             <ProgressCircle progress={progress} style={{ width: 100 }} indeterminate />
         </View>
     );

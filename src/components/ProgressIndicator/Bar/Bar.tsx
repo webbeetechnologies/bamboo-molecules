@@ -10,16 +10,12 @@ import {
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMolecules, useComponentStyles } from '../../../hooks';
 
-const INDETERMINATE_WIDTH_FACTOR = 0.3;
-const BAR_WIDTH_ZERO_POSITION = INDETERMINATE_WIDTH_FACTOR / (1 + INDETERMINATE_WIDTH_FACTOR);
-
 export type Props = {
     trackColor?: string;
     animated?: boolean;
     children?: React.ReactNode;
     color?: string;
     indeterminate?: boolean;
-    indeterminateAnimationDuration?: number;
     progress: number;
     style?: StyleProp<ViewStyle>;
     useNativeDriver?: boolean;
@@ -31,7 +27,6 @@ const Bar = (props: Props) => {
     const {
         animated = true,
         indeterminate = false,
-        indeterminateAnimationDuration = 1000,
         progress = 0,
         useNativeDriver = false,
         animationConfig = { bounciness: 0 },
@@ -42,45 +37,33 @@ const Bar = (props: Props) => {
 
     const { View } = useMolecules();
 
-    const componentStyle = useComponentStyles(
-        'ProgressIndicator',
-        [
-            styleProp,
-            rest.color ? { color: rest.color } : {},
-            rest.trackColor ? { backgroundColor: rest.trackColor } : {},
-        ],
-        {
-            variant: 'bar',
-        },
-    );
+    const componentStyle = useComponentStyles('ProgressBar', [
+        styleProp,
+        rest.color ? { color: rest.color } : {},
+        rest.trackColor ? { backgroundColor: rest.trackColor } : {},
+    ]);
 
     const [widthBar, setWidthBar] = useState(0);
 
     const progressCalc = useRef(new Animated.Value(0)).current;
 
-    const animationValue = useRef(new Animated.Value(BAR_WIDTH_ZERO_POSITION)).current;
-
-    const { containerStyle, progressStyle } = useMemo(() => {
+    const { containerStyle, progressStyle, animationScale } = useMemo(() => {
         const innerWidth = Math.max(0, widthBar);
-        const { color, trackColor, ...restStyle } = componentStyle;
-
+        const { color, trackColor, animationScale, height, ...restStyle } = componentStyle;
+        const progressColor = restStyle.color ? restStyle.color : color;
         return {
+            animationScale,
             containerStyle: {
                 ...Styles.containerStyle,
+                height,
                 backgroundColor: trackColor,
                 ...restStyle,
             },
 
             progressStyle: {
                 ...Styles.progressStyle,
-                backgroundColor: restStyle.color ? restStyle.color : color,
+                backgroundColor: progressColor,
                 transform: [
-                    {
-                        translateX: animationValue.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [innerWidth * -INDETERMINATE_WIDTH_FACTOR, innerWidth],
-                        }),
-                    },
                     {
                         translateX: progressCalc.interpolate({
                             inputRange: [0, 1],
@@ -102,49 +85,44 @@ const Bar = (props: Props) => {
         setWidthBar(event.nativeEvent.layout.width);
     }, []);
 
-    const animate = useCallback(() => {
-        animationValue.setValue(0);
+    const indeterminateAnim = useCallback(() => {
+        progressCalc.setValue(0);
 
-        Animated.timing(animationValue, {
+        Animated.timing(progressCalc, {
             toValue: 1,
-            duration: indeterminateAnimationDuration,
+            duration: 1000 * animationScale,
             easing: Easing.linear,
             isInteraction: false,
             useNativeDriver: useNativeDriver,
         }).start(endState => {
             if (endState.finished) {
-                animate();
+                indeterminateAnim();
             }
         });
-    }, [indeterminateAnimationDuration, useNativeDriver]);
+    }, [useNativeDriver, animationScale]);
 
     useEffect(() => {
         if (indeterminate) {
-            animate();
-        } else {
-            Animated.spring(animationValue, {
-                toValue: BAR_WIDTH_ZERO_POSITION,
-                useNativeDriver: useNativeDriver,
-            }).start();
+            indeterminateAnim();
         }
-    }, [indeterminate, useNativeDriver]);
+    }, [indeterminate]);
 
     useEffect(() => {
-        const newProgress = indeterminate
-            ? INDETERMINATE_WIDTH_FACTOR
-            : Math.min(Math.max(progress / 100, 0), 1);
+        if (!indeterminate) {
+            const newProgress = Math.min(Math.max(progress / 100, 0), 1);
 
-        if (animated) {
-            Animated[animationType](progressCalc, {
-                toValue: newProgress,
-                useNativeDriver: useNativeDriver,
-                velocity: 0,
-                ...animationConfig,
-            }).start();
-        } else {
-            progressCalc.setValue(newProgress);
+            if (animated) {
+                Animated[animationType](progressCalc, {
+                    toValue: newProgress,
+                    useNativeDriver: useNativeDriver,
+                    velocity: 0,
+                    ...animationConfig,
+                }).start();
+            } else {
+                progressCalc.setValue(newProgress);
+            }
         }
-    }, [indeterminate, progress]);
+    }, [progress]);
 
     return (
         <View style={containerStyle} {...rest} onLayout={handleLayout}>
@@ -159,7 +137,6 @@ export default memo(Bar);
 const Styles = StyleSheet.create({
     containerStyle: {
         width: '100%',
-        height: 6,
         overflow: 'hidden' as 'hidden',
     },
     progressStyle: {
