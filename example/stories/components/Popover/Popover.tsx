@@ -11,7 +11,7 @@ export const Example: FC<PopoverProps> = props => {
             <Button ref={triggerRef} onPress={onToggle} testID={'trigger'}>
                 Show Popover
             </Button>
-            <View>
+            <View style={{ padding: 100 }}>
                 <Popover {...props} triggerRef={triggerRef} isOpen={isOpen} onClose={onToggle} />
             </View>
         </>
