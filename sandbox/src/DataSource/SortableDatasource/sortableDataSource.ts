@@ -16,7 +16,7 @@ import {
 } from './types';
 import { getSortedRecords, getSortedValue } from './utils';
 
-const sortableReducer: SortableReducer = (dataSource, args: any) => {
+const sortableReducer: SortableReducer = (dataSource, args) => {
     let { order } = dataSource.sort;
     const { isNestedSort } = dataSource.sort;
 
@@ -40,14 +40,14 @@ const sortableReducer: SortableReducer = (dataSource, args: any) => {
             order.splice(args.payload.newIndex, 0, oldItem);
             break;
         case ESortableActions.UpdateSort:
-            const { index, ...patch } = args.payload;
+            const { index, column = order[index].column, direction = order[index].direction } = args.payload;
             if (index > order.length - 1)
                 throw new Error(`Sort doesn't exist at position ${index}`);
 
             order = [...order];
             order[index] = {
                 ...order[index],
-                ...patch,
+                column, direction
             };
             break;
         default:

@@ -44,12 +44,12 @@ export interface SortableDataSourceResult {
 
 // Sort Actions interfaces
 export interface SortAction {
-    type: ESortableActions;
+    type: `${EDataSourceActions}`;
     payload: unknown;
 }
 
 export interface ApplySortAction {
-    type: { type: `${ESortableActions}` | `${EDataSourceActions}` };
+    type: ESortableActions.ApplySort;
     payload: { column: string; direction?: ESortDirection };
 }
 
@@ -65,7 +65,7 @@ export interface RemoveSortAction {
 
 export interface UpdateSortAction {
     type: ESortableActions.UpdateSort;
-    payload: Partial<Sort> & { index: number };
+    payload: Partial<ColumnSort> & { index: number };
 }
 
 export type OnSortAction =
@@ -78,5 +78,5 @@ export type OnSortAction =
 
 export type SortableReducer = <T extends {}>(
     dataSource: SortableDataSource<T> & DataSourceInternalState<T>,
-    args: any,
+    args: OnSortAction,
 ) => SortableDataSource<T>;
