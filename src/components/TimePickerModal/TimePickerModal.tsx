@@ -24,6 +24,7 @@ export type Props = ModalProps & {
     animationType?: 'slide' | 'fade' | 'none';
     keyboardIcon?: string;
     clockIcon?: string;
+    isLandscape?: boolean;
 };
 
 export function TimePickerModal({
@@ -39,6 +40,7 @@ export function TimePickerModal({
     is24Hour,
     keyboardIcon = 'keyboard-outline',
     clockIcon = 'clock-outline',
+    isLandscape = false,
     ...rest
 }: Props) {
     const { IconButton, Button, Modal, TimePicker, View, Text } = useMolecules();
@@ -88,6 +90,7 @@ export function TimePickerModal({
                         time={time}
                         onTimeChange={onChange}
                         onFocusInput={onFocusInput}
+                        isLandscape={isLandscape}
                     />
                 </View>
                 <View style={componentStyles.footer}>

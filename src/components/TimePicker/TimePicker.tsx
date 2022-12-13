@@ -81,10 +81,11 @@ function TimePicker({
         'TimePicker',
         {},
         {
-            states: {
-                landScapeWithoutClock: isLandscape && inputType === 'keyboard',
-                landScape: isLandscape,
-            },
+            variant: isLandscape
+                ? inputType === 'keyboard'
+                    ? 'landScapeWithoutClock'
+                    : 'landScape'
+                : 'default',
         },
     );
 
