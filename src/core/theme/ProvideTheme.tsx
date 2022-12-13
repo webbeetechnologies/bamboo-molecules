@@ -64,6 +64,7 @@ import {
     dialogContentStyles,
     radioButtonStyles,
     numberRangeInputStyles,
+    dropdownListPopoverStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -145,6 +146,8 @@ const defaultThemeValue: Partial<ITheme> = {
 
     RadioButton: radioButtonStyles,
     NumberRangeInput: numberRangeInputStyles,
+
+    DropdownListPopover: dropdownListPopoverStyles,
 };
 
 const defaultExtractStyles = memoize(

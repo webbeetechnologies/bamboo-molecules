@@ -127,3 +127,5 @@ export * from './Dialog';
 export * from './RadioButton';
 
 export * from './NumberRangeInput';
+
+export * from './DropdownListPopover';
