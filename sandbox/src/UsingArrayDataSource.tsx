@@ -105,6 +105,8 @@ export default function UsingArraySource() {
         <DataSourceProvider
             records={workers}
             isPaginated={true}
+            isFilterable={true}
+            filters={[]}
             pagination={{ pageNumber: 1, perPage: 10 }}
             isSortable={true}
             sort={sort}>

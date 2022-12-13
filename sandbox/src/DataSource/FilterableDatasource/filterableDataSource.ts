@@ -3,15 +3,16 @@ import omitBy from 'lodash.omitby';
 
 import {createDataSource} from '../createDataSource';
 import {
+    AddGroupAction,
     ApplyFilterAction,
     EFilterActions, EFilterOperators,
-    FilterableDataSource,
+    FilterableDataSource, FilterableDataSourceResult,
     FilterReducer, GroupedFilter,
     MoveFilterAction,
     OnFilterAction,
     RemoveFilterAction,
     SingleFilter,
-    UpdateFilterAction,
+    UpdateFilterAction, UpdateGroupAction,
 } from './types';
 import {getOrFail, modify} from "../../utils/objects";
 import {move} from "./utils";
@@ -169,7 +170,7 @@ const usePaginatedActionCreator = <
     props: P,
     dataSource: S,
     dispatch: (action: A) => void,
-) => {
+): { isFilterable: boolean } | { addFilterGroup: (payload: AddGroupAction["payload"]) => void; moveFilter: (payload: MoveFilterAction["payload"]) => void; removeFilter: (payload: RemoveFilterAction["payload"]) => void; updateFilter: (payload: UpdateFilterAction["payload"]) => void; filters: GroupedFilter | SingleFilter[]; updateFilterGroup: (payload: UpdateGroupAction["payload"]) => void; applyFilter: (payload: ApplyFilterAction["payload"]) => void } => {
     const { onFilter = null } = props;
     const { isFilterable, records, filters, filterConfig } = dataSource;
 
@@ -215,12 +216,31 @@ const usePaginatedActionCreator = <
                     moveFilter: (payload: MoveFilterAction['payload']) => {
                         handleFilter({ type: EFilterActions.MOVE_FILTER, payload });
                     },
+                    addFilterGroup: (payload: AddGroupAction["payload"]) => {
+                        handleFilter({ type: EFilterActions.ADD_GROUP, payload });
+                    },
+                    updateFilterGroup: (payload: UpdateGroupAction["payload"]) => {
+                        handleFilter({ type: EFilterActions.UPDATE_GROUP, payload });
+                    }
                   },
         [isFilterable, filters, records, filterConfig, handleFilter],
     );
 };
 
-const FilterableDataSource = {
+const defaultResolver = <T extends {}>({ isFilterable, records, filterConfig, filters }: FilterableDataSource<T>) => {
+    if (!isFilterable) { return records; }
+    if (filterConfig?.hasNestedFilter) {
+        // TODO: Apply nested filters.
+        console.warn("TODO: Implement custom logic nested filters to resolve nested filters");
+        return records;
+    }
+
+    // TODO: Apply filters.
+    console.warn("TODO: Implement custom logic nested filters to resolve filters");
+    return records;
+}
+
+const filterableDataSource = {
     reducer: filteredReducer,
     actionCreator: usePaginatedActionCreator,
     extractInitialState: <T extends {}>(props: FilterableDataSource<T>) =>
@@ -232,18 +252,7 @@ const FilterableDataSource = {
             },
             value => value === null,
         ),
-    defaultResolver: <T extends {}>({ isFilterable, records, filterConfig, filters }: FilterableDataSource<T>) => {
-        if (!isFilterable) { return records; }
-        if (filterConfig?.hasNestedFilter) {
-            // TODO: Apply nested filters.
-            console.warn("TODO: Nested Filters");
-            return records;
-        }
-
-        // TODO: Apply filters.
-        console.warn("TODO: Filters");
-        return records;
-    },
+    defaultResolver,
     initialState: {
         isFilterable: true,
         filterConfig: { hasNestedFilter: false },
@@ -252,10 +261,10 @@ const FilterableDataSource = {
 };
 
 const { DataSourceProvider, useDataSourceHook, useDataSourceDispatch } = createDataSource([
-    FilterableDataSource,
+    filterableDataSource,
 ]);
 
-export default FilterableDataSource;
+export default filterableDataSource;
 export const FilterableDataSourceProvider = DataSourceProvider;
 export const useFilterableDataSource = useDataSourceHook;
 export const useFilterableDispatch = useDataSourceDispatch;

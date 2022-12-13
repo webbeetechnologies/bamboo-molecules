@@ -91,7 +91,13 @@ export interface FilterableDataSource<T extends {}> extends DataSourceInternalSt
 
 export interface FilterableDataSourceResult<T extends {}> {
     isFilterable: boolean;
-    filters: Filters
+    filters: Filters;
+    applyFilter: (payload: ApplyFilterAction["payload"]) => void,
+    removeFilter: (payload: RemoveFilterAction["payload"]) => void,
+    updateFilter: (payload: UpdateFilterAction["payload"]) => void,
+    moveFilter: (payload: MoveFilterAction["payload"]) => void,
+    addFilterGroup: (payload: AddGroupAction["payload"]) => void,
+    updateFilterGroup: (payload: UpdateGroupAction["payload"]) => void,
 }
 
 export type FilterReducer = <T extends {}>(
