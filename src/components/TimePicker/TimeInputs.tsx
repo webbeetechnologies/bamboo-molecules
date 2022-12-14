@@ -76,6 +76,37 @@ function TimeInputs({
         [onChange, minutesRef],
     );
 
+    const onHourChange = useCallback(
+        (newHoursFromInput: number) => {
+            let newHours = toHourOutputFormat(newHoursFromInput, hours, is24Hour);
+            if (newHoursFromInput >= 24) {
+                newHours = 0;
+            }
+            onChange({
+                hours: newHours,
+                minutes,
+            });
+        },
+        [hours, is24Hour, minutes, onChange],
+    );
+
+    const onMinuteChange = useCallback(
+        (newMinutesFromInput: number) => {
+            let newMinutes = newMinutesFromInput;
+            let newHours = hours;
+
+            if (newMinutesFromInput > 59) {
+                newHours = hours + 1;
+                newMinutes = 0;
+            }
+            onChange({
+                hours: newHours,
+                minutes: newMinutes,
+            });
+        },
+        [hours, onChange],
+    );
+
     return (
         <View style={componentStyles.inputContainer}>
             <TimeInput
@@ -89,16 +120,7 @@ function TimeInputs({
                 returnKeyType={'next'}
                 onSubmitEditing={onSubmitStartInput}
                 blurOnSubmit={false}
-                onChanged={newHoursFromInput => {
-                    let newHours = toHourOutputFormat(newHoursFromInput, hours, is24Hour);
-                    if (newHoursFromInput > 24) {
-                        newHours = 24;
-                    }
-                    onChange({
-                        hours: newHours,
-                        minutes,
-                    });
-                }}
+                onChanged={onHourChange}
                 // onChangeText={onChangeStartInput}
             />
             <View style={componentStyles.hoursAndMinutesSeparator}>
@@ -117,16 +139,7 @@ function TimeInputs({
                 onPress={onFocusInput}
                 inputType={inputType}
                 onSubmitEditing={onSubmitEndInput}
-                onChanged={newMinutesFromInput => {
-                    let newMinutes = newMinutesFromInput;
-                    if (newMinutesFromInput > 59) {
-                        newMinutes = 59;
-                    }
-                    onChange({
-                        hours,
-                        minutes: newMinutes,
-                    });
-                }}
+                onChanged={onMinuteChange}
             />
             {!is24Hour && (
                 <>

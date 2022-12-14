@@ -177,7 +177,7 @@ const thirdCodeBlock = `
 const unnormalizedStyles = {
     color: 'colors.onPrimary',
     containerColor: 'colors.primary',
-    borderRadius: 'roundness.1'
+    borderRadius: 'shapes.corner.extraSmall',
 }
 
 // here we create a hook that'll normalize the style objects

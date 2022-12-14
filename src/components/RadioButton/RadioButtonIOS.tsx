@@ -64,7 +64,19 @@ const RadioButtonIOS = (
 
     const { containerStyle, iconContainerStyle, checkedColor, iconSize, rippleColor } =
         useMemo(() => {
-            const { color, iconSize: _iconSize, ...checkboxStyles } = componentStyles;
+            const {
+                color,
+                iconSize: _iconSize,
+                // removing unwanted styles
+                uncheckedColor: _uncheckedColor,
+                animationScale: _animationScale,
+                animationDuration: _animationDuration,
+                container: _container,
+                radio: _radio,
+                radioContainer: _radioContainer,
+                dot: _dot,
+                ...checkboxStyles
+            } = componentStyles;
 
             return {
                 containerStyle: [styles.container, checkboxStyles],

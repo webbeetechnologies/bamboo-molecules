@@ -27,7 +27,7 @@ export const timePickerModalStyles: ComponentStylePropWithVariants<
         width: undefined,
         maxWidth: undefined,
         flex: undefined,
-        borderRadius: 'roundness.7' as unknown as number,
+        borderRadius: 'shapes.corner.extraLarge' as unknown as number,
     },
     labelContainer: {
         height: 28,

@@ -26,3 +26,9 @@ export const ExampleWithRadioGroup = (props: RadioButtonGroupProps) => {
 
     return <RadioButton.Group {...props} onValueChange={onValueChange} value={value} />;
 };
+
+export const ExampleWithUncontrolledRadioGroup = (props: RadioButtonGroupProps) => {
+    const { RadioButton } = useMolecules();
+
+    return <RadioButton.Group {...props} />;
+};

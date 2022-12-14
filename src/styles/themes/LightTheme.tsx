@@ -65,22 +65,13 @@ export const MD3LightTheme: MD3Theme = {
     dark: false,
     colors: generateLightThemeColors(ref.palette, ref.opacity),
     typescale,
+    shapes: ref.shapes,
     animation: {
         scale: 1.0,
         durations: {
             '0': 0,
             '1': 100,
         },
-    },
-    roundness: {
-        '0': 0,
-        '1': 4,
-        '2': 8,
-        '3': 12,
-        '4': 16,
-        '5': 20,
-        '6': 24,
-        '7': 28,
     },
     letterSpacings: {
         xxs: -1.5,

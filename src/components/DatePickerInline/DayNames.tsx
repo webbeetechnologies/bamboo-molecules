@@ -1,39 +1,27 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 
 import { useMolecules, useComponentStyles } from '../../hooks';
+import { format, startOfWeek, addDays } from '../../utils';
 import { DisableWeekDaysType, showWeekDay } from './dateUtils';
 import DayName from './DayName';
 
 // TODO make it flexible
 export const dayNamesHeight = 44;
 
-// TODO: wait for a better Intl api ;-)
-const weekdays = [
-    new Date(2020, 7, 2),
-    new Date(2020, 7, 3),
-    new Date(2020, 7, 4),
-    new Date(2020, 7, 5),
-    new Date(2020, 7, 6),
-    new Date(2020, 7, 7),
-    new Date(2020, 7, 8),
-];
+const shortDayNames = (() => {
+    const firstDOW = startOfWeek(new Date());
+    return Array.from(Array(7)).map((_, i) => format(addDays(firstDOW, i), 'EEEEE'));
+})();
 
 function DayNames({
     disableWeekDays,
-    locale,
-}: {
+}: // locale,
+{
     disableWeekDays?: DisableWeekDaysType;
     locale?: string;
 }) {
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePicker_DayName');
-
-    const shortDayNames = useMemo<string[]>(() => {
-        const formatter = new Intl.DateTimeFormat(locale, {
-            weekday: 'narrow',
-        });
-        return weekdays.map(date => formatter.format(date));
-    }, [locale]);
 
     return (
         <View style={componentStyles?.container} pointerEvents={'none'}>

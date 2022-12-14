@@ -1,77 +1,87 @@
-import { useInputFormat, useInputFormatter, useRangeChecker } from '../DatePickerInline/dateUtils';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+
+import { useRangeChecker } from '../DatePickerInline/dateUtils';
 import type { ValidRangeType } from '../DatePickerInline';
+import { format, isNil, parse, isValid, endOfDay } from '../../utils';
 
 export default function useDateInput({
-    locale,
+    // locale,
     value,
     validRange,
-    inputMode,
+    inputMode = 'start',
     onChange,
+    dateFormat,
 }: {
-    onChange: (d: Date) => void;
-    locale: undefined | string;
-    value: Date | undefined;
-    validRange: ValidRangeType | undefined;
+    onChange?: (d: Date) => void;
+    // locale: undefined | string;
+    value?: Date | null;
+    validRange?: ValidRangeType;
     inputMode: 'start' | 'end';
+    dateFormat: string;
 }) {
     const { isDisabled, isWithinValidRange, validStart, validEnd } = useRangeChecker(validRange);
     const [error, setError] = useState<null | string>(null);
-    const formatter = useInputFormatter({ locale });
-    const inputFormat = useInputFormat({ formatter, locale });
-    const formattedValue = value !== null ? formatter.format(value) : '';
-    const onChangeText = (date: string) => {
-        const dayIndex = inputFormat.indexOf('DD');
-        const monthIndex = inputFormat.indexOf('MM');
-        const yearIndex =
-            locale === 'pt' ? inputFormat.indexOf('AAAA') : inputFormat.indexOf('YYYY');
 
-        const day = Number(date.slice(dayIndex, dayIndex + 2));
-        const year = Number(date.slice(yearIndex, yearIndex + 4));
-        const month = Number(date.slice(monthIndex, monthIndex + 2));
-
-        if (Number.isNaN(day) || Number.isNaN(year) || Number.isNaN(month)) {
-            setError(`Date format must be ${inputFormat}`);
-            return;
+    const formattedValue = useMemo(() => {
+        try {
+            return !isNil(value) ? format(value, dateFormat) : '';
+        } catch (e) {
+            return '';
         }
+    }, [dateFormat, value]);
 
-        const finalDate =
-            inputMode === 'end'
-                ? new Date(year, month - 1, day, 23, 59, 59)
-                : new Date(year, month - 1, day);
+    const onChangeText = useCallback(
+        (date: string) => {
+            const parsedDate = parse(date, dateFormat, new Date());
 
-        if (isDisabled(finalDate)) {
-            setError('Day is not allowed');
-            return;
-        }
-        if (!isWithinValidRange(finalDate)) {
-            const errors =
-                validStart && validEnd
-                    ? [
-                          `${`Must be between ${formatter.format(validStart)} - ${formatter.format(
-                              validEnd,
-                          )})`}`,
-                      ]
-                    : [
-                          validStart ? `Must be later then ${validStart}` : '',
-                          validEnd ? `Must be earlier then ${validEnd}` : '',
-                      ];
-            setError(errors.filter(n => n).join(' '));
-            return;
-        }
+            if (!isValid(parsedDate)) {
+                // TODO: Translate
+                setError(`Date format must be ${dateFormat}`);
+                onChange?.(new Date('Invalid Date'));
 
-        setError(null);
-        if (inputMode === 'end') {
-            onChange(finalDate);
-        } else {
-            onChange(finalDate);
-        }
-    };
+                return;
+            }
+
+            const finalDate = inputMode === 'end' ? endOfDay(parsedDate) : parsedDate;
+
+            if (isDisabled(finalDate)) {
+                // TODO: Translate
+                setError('Day is not allowed');
+                onChange?.(new Date('Invalid Date'));
+
+                return;
+            }
+            if (!isWithinValidRange(finalDate)) {
+                // TODO: Translate
+                const errors =
+                    validStart && validEnd
+                        ? [
+                              `${`Must be between ${format(validStart, dateFormat)} - ${format(
+                                  validEnd,
+                                  dateFormat,
+                              )})`}`,
+                          ]
+                        : [
+                              validStart ? `Must be later then ${validStart}` : '',
+                              validEnd ? `Must be earlier then ${validEnd}` : '',
+                          ];
+
+                setError(errors.filter(n => n).join(' '));
+                onChange?.(new Date('Invalid Date'));
+
+                return;
+            }
+
+            onChange?.(finalDate);
+            setError(null);
+        },
+        [dateFormat, inputMode, isDisabled, isWithinValidRange, onChange, validEnd, validStart],
+    );
+
     return {
         onChange,
         error,
         formattedValue,
         onChangeText,
-        inputFormat,
     };
 }
