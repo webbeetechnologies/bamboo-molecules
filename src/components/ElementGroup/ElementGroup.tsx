@@ -20,7 +20,7 @@ export const ElementGroup = (
         orientation = Orientation.Horizontal,
         children,
         style,
-        borderRadius: borderRadiusProp = 'shapes.corner.extraSmall',
+        borderRadius: borderRadiusProp,
         ...props
     }: Props,
     ref: any,
@@ -28,7 +28,7 @@ export const ElementGroup = (
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('ElementGroup', [
         style,
-        { borderRadius: borderRadiusProp },
+        borderRadiusProp ? { borderRadius: borderRadiusProp } : {},
     ]);
 
     const { containerStyle, borderRadius } = useMemo(() => {
