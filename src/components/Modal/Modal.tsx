@@ -6,6 +6,7 @@ import {
     ModalProps,
     StyleSheet,
     ViewStyle,
+    useWindowDimensions,
 } from 'react-native';
 import type { SurfaceProps } from '../Surface';
 import { useComponentStyles, useMolecules } from '../../hooks';
@@ -57,6 +58,7 @@ const Modal = (
     const componentStyles = useComponentStyles('Modal', styleProp, {
         size,
     });
+    const dimensions = useWindowDimensions();
 
     const { modalBackgroundStyle, contentContainerStyle, contentStyle } = useMemo(() => {
         const { modalBackground, contentContainer, modalContent, ...restStyle } = componentStyles;
@@ -64,10 +66,10 @@ const Modal = (
         return {
             modalBackgroundStyle: [StyleSheet.absoluteFill, modalBackground],
             contentContainerStyle: [StyleSheet.absoluteFill, contentContainer, restStyle],
-            contentStyle: [modalContent, contentStyleProp],
+            contentStyle: [modalContent, { width: dimensions.width }, contentStyleProp],
             style: restStyle,
         };
-    }, [componentStyles, contentStyleProp]);
+    }, [componentStyles, contentStyleProp, dimensions.width]);
 
     const animationTypeCalculated =
         animationType ||

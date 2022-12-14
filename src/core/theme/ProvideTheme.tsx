@@ -63,6 +63,7 @@ import {
     dialogIconStyles,
     dialogContentStyles,
     radioButtonStyles,
+    radioButtonItemStyles,
     numberRangeInputStyles,
     dropdownListPopoverStyles,
 } from '../../components';
@@ -145,6 +146,7 @@ const defaultThemeValue: Partial<ITheme> = {
     Dialog_Icon: dialogIconStyles,
 
     RadioButton: radioButtonStyles,
+    RadioButton_Item: radioButtonItemStyles,
     NumberRangeInput: numberRangeInputStyles,
 
     DropdownListPopover: dropdownListPopoverStyles,

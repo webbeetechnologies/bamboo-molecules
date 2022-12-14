@@ -28,7 +28,7 @@ export function DatePickerModalContent(props: Props) {
         onClose,
         disableSafeTop,
         disableWeekDays,
-        locale = 'en',
+        // locale = 'en',
         validRange,
         dateMode,
         startYear,
@@ -89,7 +89,6 @@ export function DatePickerModalContent(props: Props) {
                     onClose={onClose}
                     saveLabel={props.saveLabel}
                     saveLabelDisabled={props.saveLabelDisabled || false}
-                    uppercase={props.uppercase || true}
                     disableSafeTop={disableSafeTop}
                     closeIcon={props.closeIcon}
                 />
@@ -105,7 +104,7 @@ export function DatePickerModalContent(props: Props) {
                     startLabel={props.startLabel}
                     endLabel={props.endLabel}
                     uppercase={props.uppercase || true}
-                    locale={locale}
+                    // locale={locale}
                     editIcon={props.editIcon}
                     calendarIcon={props.calendarIcon}
                 />
@@ -115,7 +114,7 @@ export function DatePickerModalContent(props: Props) {
                 collapsed={collapsed}
                 calendar={
                     <DatePickerInlineBase
-                        locale={locale}
+                        // locale={locale}
                         mode={mode}
                         startDate={state?.startDate}
                         endDate={state?.endDate}
@@ -139,7 +138,7 @@ export function DatePickerModalContent(props: Props) {
                         collapsed={collapsed}
                         onChange={onStateChange}
                         validRange={validRange}
-                        locale={locale}
+                        // locale={locale}
                     />
                 }
             />

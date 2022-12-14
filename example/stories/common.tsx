@@ -2,7 +2,7 @@ import React, { ComponentType, ReactNode } from 'react';
 import {
     extendTheme,
     ProvideMolecules as DefaultProvideMolecules,
-    useMolecules as useAtomsMolecules,
+    useMolecules as useMoleculesDefault,
     useComponentStyles,
     TextProps,
 } from 'bamboo-molecules';
@@ -71,7 +71,7 @@ export interface InjectedComponentTypes {
     Link: ComponentType<LinkProps>;
 }
 
-export const useMolecules = () => useAtomsMolecules<InjectedComponentTypes>();
+export const useMolecules = () => useMoleculesDefault<InjectedComponentTypes>();
 
 addDecorator(Story => (
     <ProvideMolecules>
@@ -121,4 +121,53 @@ const storyTheme = extendTheme({
 
 export const ProvideMolecules = ({ children }: { children: ReactNode }) => {
     return <DefaultProvideMolecules theme={storyTheme}>{children}</DefaultProvideMolecules>;
+};
+
+export const generateSectionListData = (sectionsLength: number, dataLength: number) => {
+    // Create an empty array
+    const arr: { id: number; title: string; data: { title: string }[] }[] = [];
+
+    // Loop n times
+    for (let sectionIndex = 0; sectionIndex < sectionsLength; sectionIndex++) {
+        // Create the title for the parent object
+        const title = `section ${sectionIndex}`;
+
+        // Create an empty array for the data property
+        const data: { title: string }[] = generateFlatListData(
+            dataLength,
+            itemIndex => `item ${sectionIndex * dataLength + itemIndex}`,
+        );
+
+        // Create an object with the unique id, title, and data properties
+        const obj = { id: sectionIndex, title, data };
+
+        // Push the object into the array
+        arr.push(obj);
+    }
+
+    // Return the array
+    return arr;
+};
+
+export const generateFlatListData = (
+    dataLength: number,
+    manipulateTitle: (itemIndex: number) => string = i => `item ${i}`,
+) => {
+    // Create an empty array
+    const arr: { id: number; title: string }[] = [];
+
+    // Loop n times
+    for (let i = 0; i < dataLength; i++) {
+        // Create the title for the parent object
+        const title = manipulateTitle(i);
+
+        // Create an object with the unique id, title, and data properties
+        const obj = { id: i, title };
+
+        // Push the object into the array
+        arr.push(obj);
+    }
+
+    // Return the array
+    return arr;
 };

@@ -15,18 +15,20 @@ export function DatePickerModal(props: DatePickerModalProps) {
         animationType,
         disableStatusBar,
         disableStatusBarPadding,
-        locale = 'en',
         mode = 'single',
         style: styleProp,
         ...rest
     } = props;
 
-    const animationTypeCalculated =
-        animationType ||
-        Platform.select({
-            web: 'none',
-            default: 'slide',
-        });
+    const animationTypeCalculated = useMemo<typeof animationType>(
+        () =>
+            animationType ||
+            Platform.select({
+                web: 'none',
+                default: 'slide',
+            }),
+        [animationType],
+    );
 
     const componentStyles = useComponentStyles('DatePickerModal', styleProp);
 
@@ -39,7 +41,7 @@ export function DatePickerModal(props: DatePickerModalProps) {
             headerStyle: [
                 header,
                 {
-                    height: StatusBar.currentHeight,
+                    height: Platform.OS === 'android' ? StatusBar.currentHeight : 0, // on IOS StatusBar.currentHeight isn't available
                 },
             ],
             barStyle: (isHeaderBackgroundLight
@@ -75,7 +77,6 @@ export function DatePickerModal(props: DatePickerModalProps) {
 
                     <DatePickerModalContent
                         {...rest}
-                        locale={locale}
                         mode={mode as any}
                         disableSafeTop={disableStatusBar}
                     />

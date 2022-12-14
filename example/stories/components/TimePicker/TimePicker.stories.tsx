@@ -1,25 +1,32 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Example } from './TimePicker';
+import { ControlledExample } from './TimePicker';
 
 export default {
     title: 'components/TimePicker',
-    component: Example,
-} as ComponentMeta<typeof Example>;
+    component: ControlledExample,
+} as ComponentMeta<typeof ControlledExample>;
 
-export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
+export const Default: ComponentStory<typeof ControlledExample> = args => (
+    <ControlledExample {...args} />
+);
 
 Default.args = {
-    locale: 'en',
-    hours: 10,
-    minutes: 15,
+    time: '10:15',
 };
 
 Default.parameters = {
     docs: {
         source: {
             code: `
-<TimePicker locale="en" hours={10} minutes={15} {...rest} />
+    const { TimePicker } = useMolecules();
+    const [time, setTime] = useState('10:15');
+
+    const onTimeChange = useCallback(({ time: newTime }: { time: string }) => {
+        setTime(newTime);
+    }, []);
+
+    return <TimePicker {...props} time={time} onTimeChange={onTimeChange} />;
 `,
             language: 'tsx',
             type: 'auto',

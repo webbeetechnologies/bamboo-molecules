@@ -29,7 +29,6 @@ export const defaultStyles: ComponentStylePropWithVariants<
     },
     modalContent: {
         backgroundColor: 'colors.surface',
-        width: '100%',
         overflow: 'hidden',
     },
 

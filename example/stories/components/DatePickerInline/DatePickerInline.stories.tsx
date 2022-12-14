@@ -1,24 +1,41 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Example } from './DatePickerInline';
+import { ControlledExample } from './DatePickerInline';
 
 export default {
     title: 'components/DatePickerInline',
-    component: Example,
-} as ComponentMeta<typeof Example>;
+    component: ControlledExample,
+    parameters: {
+        date: new Date('2022-12-10T10:04:22.146'),
+    },
+} as ComponentMeta<typeof ControlledExample>;
 
-export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
+export const Controlled: ComponentStory<typeof ControlledExample> = args => (
+    <ControlledExample {...args} />
+);
 
-Default.args = {
+Controlled.args = {
     mode: 'single',
     locale: 'en',
 };
 
-Default.parameters = {
+Controlled.parameters = {
+    controls: {
+        exclude: /(?:\b|')(date|dates|startDate|endDate|onChange)(?:\b|')/,
+    },
     docs: {
         source: {
             code: `
-<DatePickerInline mode="single" {...rest} />
+    const { DatePickerInline } = useMolecules();
+    const [data, setData] = useState({
+        date: new Date(2022, 11, 5),
+        dates: [new Date(2022, 11, 5)],
+        startDate: new Date(2022, 11, 5),
+        endDate: undefined,
+    });
+    const onChange = useCallback((params: any) => setData(params), []);
+
+    return <DatePickerInline mode="single" locale="en" {...data} onChange={onChange} />;
 `,
             language: 'tsx',
             type: 'auto',

@@ -3,13 +3,14 @@ import {
     Dispatch,
     SetStateAction,
     createContext,
-    useMemo,
     useState,
-    useEffect,
     useCallback,
+    useMemo,
 } from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import { View } from 'react-native';
 
+import { useComponentStyles, useControlledValue } from '../../hooks';
+import { format, parse } from '../../utils';
 import {
     inputTypes,
     PossibleClockTypes,
@@ -17,10 +18,8 @@ import {
     toHourInputFormat,
     toHourOutputFormat,
 } from './timeUtils';
-
 import AnalogClock from './AnalogClock';
 import TimeInputs from './TimeInputs';
-import { useComponentStyles } from '../../hooks';
 
 export const DisplayModeContext = createContext<{
     mode: 'AM' | 'PM' | undefined;
@@ -38,62 +37,74 @@ type onChangeFunc = ({
 }) => any;
 
 export type Props = {
-    locale?: undefined | string;
-    inputType: PossibleInputTypes;
-    focused: PossibleClockTypes;
-    hours: number;
-    minutes: number;
-    onFocusInput: (type: PossibleClockTypes) => any;
-    onChange: onChangeFunc;
+    /**
+     * hh:mm format
+     * */
+    time: string;
+    onTimeChange: (params: { time: string; focused?: undefined | PossibleClockTypes }) => any;
+
+    is24Hour?: boolean;
+    inputType?: PossibleInputTypes;
+    focused?: PossibleClockTypes;
+
+    onFocusInput?: (type: PossibleClockTypes) => any;
+    isLandscape?: boolean;
 };
 
-function TimePicker({ hours, minutes, onFocusInput, focused, inputType, onChange, locale }: Props) {
-    const dimensions = useWindowDimensions();
-    const isLandscape = dimensions.width > dimensions.height;
+function TimePicker({
+    is24Hour = false,
+    time,
+    focused: focusedProp,
+    onFocusInput: onFocusInputProp,
+    inputType = 'keyboard',
+    onTimeChange,
+    isLandscape = false,
+}: Props) {
+    const { hours, minutes } = useMemo(() => {
+        const date = time ? parse(time, 'HH:mm', new Date()) : new Date();
+
+        return { hours: +format(date, 'HH'), minutes: +format(date, 'mm') };
+    }, [time]);
+
+    const [focused, onFocusInput] = useControlledValue({
+        value: focusedProp,
+        defaultValue: 'hours',
+        onChange: onFocusInputProp,
+    });
+
+    // Initialize display Mode according the hours value
+    const [displayMode, setDisplayMode] = useState<'AM' | 'PM' | undefined>(() =>
+        !is24Hour ? (hours >= 12 ? 'PM' : 'AM') : undefined,
+    );
 
     const componentStyles = useComponentStyles(
         'TimePicker',
         {},
         {
-            states: {
-                landScape: isLandscape,
-            },
+            variant: isLandscape
+                ? inputType === 'keyboard'
+                    ? 'landScapeWithoutClock'
+                    : 'landScape'
+                : 'default',
         },
     );
 
-    const [displayMode, setDisplayMode] = useState<'AM' | 'PM' | undefined>(undefined);
-
-    // method to check whether we have 24 hours in clock or 12
-    const is24Hour = useMemo(() => {
-        const formatter = new Intl.DateTimeFormat(locale, {
-            hour: '2-digit',
-            minute: '2-digit',
-            timeZone: 'UTC',
-        });
-        const formatted = formatter.format(new Date(Date.UTC(2020, 1, 1, 23)));
-        return formatted.includes('23');
-    }, [locale]);
-
-    // Initialize display Mode according the hours value
-    useEffect(() => {
-        if (hours >= 12) {
-            setDisplayMode('PM');
-        } else {
-            setDisplayMode('AM');
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const onInnerChange = useCallback<onChangeFunc>(
+    const onChange = useCallback<onChangeFunc>(
         params => {
             params.hours = toHourOutputFormat(params.hours, hours, is24Hour);
-            onChange(params);
+
+            onTimeChange?.({ time: `${params.hours}:${params.minutes}`, focused: params.focused });
         },
-        [onChange, hours, is24Hour],
+        [onTimeChange, hours, is24Hour],
+    );
+
+    const memoizedValue = useMemo(
+        () => ({ mode: displayMode, setMode: setDisplayMode }),
+        [displayMode],
     );
 
     return (
-        <DisplayModeContext.Provider value={{ mode: displayMode, setMode: setDisplayMode }}>
+        <DisplayModeContext.Provider value={memoizedValue}>
             <View style={componentStyles.container}>
                 <TimeInputs
                     inputType={inputType}
@@ -112,7 +123,7 @@ function TimePicker({ hours, minutes, onFocusInput, focused, inputType, onChange
                                 minutes={minutes}
                                 focused={focused}
                                 is24Hour={is24Hour}
-                                onChange={onInnerChange}
+                                onChange={onChange}
                             />
                         </View>
                     ) : null}

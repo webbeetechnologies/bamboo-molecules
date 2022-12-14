@@ -46,11 +46,16 @@ function TimeInput(
         },
     );
 
-    let formattedValue = controlledValue;
-    if (!inputFocused) {
-        formattedValue =
-            controlledValue.length === 1 ? `0${controlledValue}` : `${controlledValue}`;
-    }
+    const formattedValue = useMemo(() => {
+        let _formattedValue = controlledValue;
+
+        if (!inputFocused) {
+            _formattedValue =
+                controlledValue.length === 1 ? `0${controlledValue}` : `${controlledValue}`;
+        }
+
+        return _formattedValue;
+    }, [controlledValue, inputFocused]);
 
     const { rippleColor, containerStyle, textInputStyle, buttonStyle } = useMemo(() => {
         const { rippleColor: _rippleColor, container, input, button } = componentStyles;
