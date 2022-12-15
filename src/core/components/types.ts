@@ -40,6 +40,7 @@ import type {
     Dialog,
     RadioButton,
     NumberRangeInputProps,
+    SelectProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -88,6 +89,7 @@ export interface DefaultComponents {
     RadioButton: typeof RadioButton;
     NumberRangeInput: ComponentType<NumberRangeInputProps>;
     DropdownListPopover: ComponentType<PopoverProps>;
+    Select: ComponentType<SelectProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
