@@ -38,7 +38,9 @@ export const listItemStyles: ComponentStylePropWithVariants<ViewStyle, States, L
             disabled: {
                 opacity: 0.38,
             },
-            hovered: {},
+            hovered: {
+                backgroundColor: 'colors.stateLayer.hover.onSurface',
+            },
 
             selected: {
                 backgroundColor: 'colors.surfaceVariant',
