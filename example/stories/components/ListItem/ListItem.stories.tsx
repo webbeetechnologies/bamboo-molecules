@@ -25,6 +25,8 @@ Default.args = {
             <ListItemDescription>This is the description</ListItemDescription>
         </>
     ),
+    variant: 'default',
+    selected: false,
 };
 
 Default.parameters = {

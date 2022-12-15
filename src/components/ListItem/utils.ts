@@ -9,15 +9,11 @@ type ListItemStylesProp = {
     rightElement?: StyleProp<ViewStyle>;
 };
 
-type States = 'disabled' | 'hovered' | 'pressable';
+type States = 'disabled' | 'hovered' | 'pressable' | 'selected';
 
 export const listItemStyles: ComponentStylePropWithVariants<ViewStyle, States, ListItemStylesProp> =
     {
         backgroundColor: 'colors.surface',
-        paddingTop: 'spacings.2',
-        paddingBottom: 'spacings.2',
-        paddingLeft: 'spacings.4',
-        paddingRight: 'spacings.6',
 
         innerContainer: {
             flexDirection: 'row',
@@ -43,6 +39,24 @@ export const listItemStyles: ComponentStylePropWithVariants<ViewStyle, States, L
                 opacity: 0.38,
             },
             hovered: {},
+
+            selected: {
+                backgroundColor: 'colors.surfaceVariant',
+            },
+        },
+        variants: {
+            default: {
+                paddingTop: 'spacings.2',
+                paddingBottom: 'spacings.2',
+                paddingLeft: 'spacings.4',
+                paddingRight: 'spacings.6',
+            },
+            menuItem: {
+                paddingVertical: 'spacings.2',
+                paddingHorizontal: 'spacings.3',
+                minHeight: 48,
+                justifyContent: 'center',
+            },
         },
     };
 
@@ -51,6 +65,14 @@ export const listItemTitleStyles: ComponentStylePropWithVariants<TextStyle> = {
     fontSize: 'typescale.bodyLarge.fontSize' as unknown as number,
     fontWeight: 'typescale.bodyLarge.fontWeight' as unknown as TextStyle['fontWeight'],
     lineHeight: 'typescale.bodyLarge.lineHeight' as unknown as number,
+
+    variants: {
+        menuItem: {
+            fontSize: 'typescale.labelLarge.fontSize' as unknown as number,
+            fontWeight: 'typescale.labelLarge.fontWeight' as unknown as TextStyle['fontWeight'],
+            lineHeight: 'typescale.labelLarge.lineHeight' as unknown as number,
+        },
+    },
 };
 
 export const listItemDescriptionStyles: ComponentStylePropWithVariants<TextStyle> = {
@@ -58,4 +80,12 @@ export const listItemDescriptionStyles: ComponentStylePropWithVariants<TextStyle
     fontSize: 'typescale.bodyMedium.fontSize' as unknown as number,
     fontWeight: 'typescale.bodyMedium.fontWeight' as unknown as TextStyle['fontWeight'],
     lineHeight: 'typescale.bodyMedium.lineHeight' as unknown as number,
+
+    variants: {
+        menuItem: {
+            fontSize: 'typescale.bodySmall.fontSize' as unknown as number,
+            fontWeight: 'typescale.bodySmall.fontWeight' as unknown as TextStyle['fontWeight'],
+            lineHeight: 'typescale.bodySmall.lineHeight' as unknown as number,
+        },
+    },
 };
