@@ -1,6 +1,7 @@
 import React, {
     Children,
     cloneElement,
+    ComponentType,
     forwardRef,
     isValidElement,
     memo,
@@ -11,24 +12,32 @@ import React, {
     useMemo,
     useRef,
 } from 'react';
+import type { TextStyle, ViewProps } from 'react-native';
 import { useOverlayPosition } from '@react-native-aria/overlays';
 
-import { usePopperContext } from './PopperContext';
-import { DEFAULT_ARROW_HEIGHT, DEFAULT_ARROW_WIDTH } from './constants';
-import { getContainerStyle } from './utils';
-import { StyleSheet } from 'react-native';
 import { useMolecules } from '../../hooks';
-import PopperArrow from './PopperArrow';
-import type { IPlacement } from './types';
 import { extendTheme } from '../../core';
+import type { SurfaceProps } from '../Surface';
+import PopperArrow from './PopperArrow';
+import { usePopperContext } from './PopperContext';
+import { getContainerStyle } from './utils';
+import type { IPlacement } from './types';
+import { DEFAULT_ARROW_HEIGHT, DEFAULT_ARROW_WIDTH } from './constants';
 
 const ProvideMolecules = React.lazy(() => import('../../core/ProvideMolecules'));
 
+type PopperContentProps = SurfaceProps & {
+    arrowProps?: ViewProps;
+    showArrow?: boolean;
+    contentTextStyles?: TextStyle;
+    context: any;
+};
+
 const PopperContent = (
-    { children, style, showArrow, contentTextStyles, context, ...rest }: any,
+    { children, style, showArrow, contentTextStyles, ...rest }: PopperContentProps,
     ref: any,
 ) => {
-    const { Text, View } = useMolecules();
+    const { Text, View, Surface } = useMolecules();
 
     const {
         isOpen,
@@ -108,13 +117,16 @@ const PopperContent = (
     const { containerStyle, arrowStyle } = useMemo(
         () => ({
             arrowStyle: [popperArrowProps?.style, arrowProps.style],
-            containerStyle: getContainerStyle({
-                placement,
-                arrowHeight,
-                arrowWidth,
-            }),
+            containerStyle: [
+                getContainerStyle({
+                    placement,
+                    arrowHeight,
+                    arrowWidth,
+                }),
+                style,
+            ],
         }),
-        [arrowHeight, arrowWidth, placement, popperArrowProps, arrowProps],
+        [style, arrowHeight, arrowWidth, placement, popperArrowProps, arrowProps],
     );
 
     const overlayStyle = useMemo(
@@ -128,31 +140,37 @@ const PopperContent = (
         [rendered, overlayProps.style],
     );
 
-    const { theme: contextTheme, ...restContext } = context;
-    const theme = useMemo(() => extendTheme(contextTheme), [contextTheme]);
-
     if (!isOpen) return <View ref={overlayRef} />;
 
     return (
-        <ProvideMolecules theme={theme} {...restContext}>
-            <View ref={overlayRef} collapsable={false} style={overlayStyle}>
-                {arrowElement ??
-                    (showArrow && (
-                        <PopperArrow
-                            {...popperArrowProps}
-                            {...arrowProps}
-                            style={arrowStyle}
-                            width={DEFAULT_ARROW_WIDTH}
-                            height={DEFAULT_ARROW_HEIGHT}
-                            actualPlacement={placement as IPlacement}
-                        />
-                    ))}
-                <View style={StyleSheet.flatten([containerStyle, style])} {...rest} ref={ref}>
-                    <Text style={contentTextStyles}>{restElements}</Text>
-                </View>
-            </View>
-        </ProvideMolecules>
+        <View ref={overlayRef} collapsable={false} style={overlayStyle}>
+            {arrowElement ??
+                (showArrow && (
+                    <PopperArrow
+                        {...popperArrowProps}
+                        {...arrowProps}
+                        style={arrowStyle}
+                        width={DEFAULT_ARROW_WIDTH}
+                        height={DEFAULT_ARROW_HEIGHT}
+                        actualPlacement={placement as IPlacement}
+                    />
+                ))}
+            <Surface elevation={2} style={containerStyle} {...rest} ref={ref}>
+                <Text style={contentTextStyles}>{restElements}</Text>
+            </Surface>
+        </View>
     );
 };
 
-export default memo(forwardRef(PopperContent));
+const withProvider = <P,>(Component: ComponentType<P>) =>
+    forwardRef((props: P, ref: any) => {
+        const { theme: contextTheme, ...restContext } = (props as any)?.context;
+        const theme = useMemo(() => extendTheme(contextTheme), [contextTheme]);
+
+        return (
+            <ProvideMolecules theme={theme} {...restContext}>
+                <Component {...props} ref={ref} />
+            </ProvideMolecules>
+        );
+    });
+export default memo(withProvider(forwardRef(PopperContent)));
