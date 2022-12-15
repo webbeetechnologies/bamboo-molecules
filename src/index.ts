@@ -64,6 +64,7 @@ export {
     RadioButtonGroupProps,
     RadioButtonItemProps,
     NumberRangeInputProps,
+    CardProps,
 } from './components';
 
 export {
