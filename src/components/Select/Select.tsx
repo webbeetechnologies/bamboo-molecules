@@ -21,21 +21,23 @@ type SelectRenderItem<TItem> = (info: SelectRenderItemInfo<TItem>) => ReactEleme
 
 export type SelectProps<TItem extends DefaultItemT = DefaultItemT> = Omit<
     DropdownListProps<TItem>,
-    'triggerRef' | 'renderItem'
+    'triggerRef' | 'renderItem' | 'isOpen' | 'setIsOpen' | 'selectable'
 > & {
     inputProps?: Omit<TextInputProps, 'editable'>;
     containerStyle?: ViewStyle;
     renderItem?: SelectRenderItem<TItem>;
+    dropdownTestID?: string;
 };
 
 const Select = <TItem extends DefaultItemT = DefaultItemT>({
     inputProps = {},
     popoverProps: _popoverProps,
     style,
-    multiple,
     renderItem: renderItemProp,
     selectedItem: selectedItemProp,
     onSelectItemChange: onSelectedItemChangeProp,
+    testID,
+    dropdownTestID,
     ...rest
 }: SelectProps<TItem>) => {
     const { TextInput, IconButton, DropdownList, ListItem } = useMolecules();
@@ -126,7 +128,8 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
                 ref={triggerRef}
                 onPress={onOpen}
                 onLayout={onInputLayout}
-                style={componentStyles}>
+                style={componentStyles}
+                testID={testID}>
                 <TextInput
                     label={'Select Item'}
                     {...inputProps}
@@ -141,12 +144,12 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
                 renderItem={renderItem as any}
                 {...(rest as any)}
                 selectedItem={selectedItem}
-                multiple={multiple}
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
                 triggerRef={triggerRef}
                 onSelectItemChange={onSelectItemChange as any}
                 selectable
+                testID={dropdownTestID}
             />
         </>
     );
