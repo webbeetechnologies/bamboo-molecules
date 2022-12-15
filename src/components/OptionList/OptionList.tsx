@@ -95,11 +95,17 @@ const OptionList = <
 
     const onPressItem = useCallback(
         (item: TItem) => {
+            const isSelected = Array.isArray(selectedItem)
+                ? selectedItem.find(sItem => sItem.id === item.id)
+                : selectedItem.id === item.id;
+
             onSelectItemChange(
                 // if multiple we push the item into an array and if it's already exists we filter them
                 multiple
                     ? Array.isArray(selectedItem)
-                        ? selectedItem.filter(sItem => sItem.id !== item.id)
+                        ? isSelected
+                            ? selectedItem.filter(sItem => sItem.id !== item.id)
+                            : [...selectedItem, item]
                         : [item]
                     : item,
             );
