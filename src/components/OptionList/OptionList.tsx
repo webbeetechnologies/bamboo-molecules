@@ -46,11 +46,11 @@ export type Props<
         /*
          * Expects an array of TItem in multiple mode. If the item already exists in the array, it will be removed.
          * */
-        selectedItem?: TItem | TItem[];
+        selection?: TItem | TItem[];
         /*
          * passes the current selectedItem. Will be an array in multiple mode
          * */
-        onSelectItemChange?: (item: TItem | TItem[]) => void;
+        onSelectionChange?: (item: TItem | TItem[]) => void;
     };
 
 const OptionList = <
@@ -67,16 +67,16 @@ const OptionList = <
     records,
     multiple = false,
     selectable,
-    selectedItem: selectedItemProp,
-    onSelectItemChange: onSelectItemChangeProp,
+    selection: selectionProp,
+    onSelectionChange: onSelectionChangeProp,
     renderItem: renderItemProp,
     ...rest
 }: Props<TItem, TSection>) => {
     const { SectionList, View, TouchableRipple } = useMolecules();
     const SearchField = useSearchable({ query, onQueryChange, searchable, searchInputProps });
-    const [selectedItem, onSelectItemChange] = useControlledValue<TItem | TItem[]>({
-        value: selectedItemProp,
-        onChange: onSelectItemChangeProp,
+    const [selection, onSelectionChange] = useControlledValue<TItem | TItem[]>({
+        value: selectionProp,
+        onChange: onSelectionChangeProp,
     });
 
     const componentStyles = useComponentStyles('OptionList', [
@@ -95,22 +95,22 @@ const OptionList = <
 
     const onPressItem = useCallback(
         (item: TItem) => {
-            const isSelected = Array.isArray(selectedItem)
-                ? selectedItem.find(sItem => sItem.id === item.id)
-                : selectedItem.id === item.id;
+            const isSelected = Array.isArray(selection)
+                ? selection.find(sItem => sItem?.id === item.id)
+                : selection?.id === item.id;
 
-            onSelectItemChange(
+            onSelectionChange(
                 // if multiple we push the item into an array and if it's already exists we filter them
                 multiple
-                    ? Array.isArray(selectedItem)
+                    ? Array.isArray(selection)
                         ? isSelected
-                            ? selectedItem.filter(sItem => sItem.id !== item.id)
-                            : [...selectedItem, item]
+                            ? selection.filter(sItem => sItem.id !== item.id)
+                            : [...selection, item]
                         : [item]
                     : item,
             );
         },
-        [multiple, onSelectItemChange, selectedItem],
+        [multiple, onSelectionChange, selection],
     );
 
     const renderItem = useCallback(

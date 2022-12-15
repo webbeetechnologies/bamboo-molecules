@@ -29,6 +29,7 @@ import {
     helperTextStyles,
     modalStyles,
     popoverStyles,
+    backdropStyles,
     datePickerStyles,
     datePickerYearPickerStyles,
     datePickerMonthStyles,
@@ -100,6 +101,7 @@ const defaultThemeValue: Partial<ITheme> = {
     HelperText: helperTextStyles,
     Modal: modalStyles,
     Popover: popoverStyles,
+    Backdrop: backdropStyles,
 
     FlatGrid: flatGridStyles,
     SectionGrid: sectionGridStyles,

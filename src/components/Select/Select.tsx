@@ -1,5 +1,15 @@
-import { memo, ReactElement, ReactNode, useCallback, useMemo, useRef, useState } from 'react';
-import { LayoutChangeEvent, Pressable, ViewStyle } from 'react-native';
+import {
+    memo,
+    PropsWithoutRef,
+    ReactElement,
+    ReactNode,
+    RefAttributes,
+    useCallback,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
+import { LayoutChangeEvent, Pressable, SectionList, ViewStyle } from 'react-native';
 import { useComponentStyles, useControlledValue, useMolecules, useToggle } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 import type { DropdownListProps } from '../DropdownList';
@@ -17,38 +27,69 @@ type SelectRenderItemInfo<TItem> = SectionListRenderItemInfo<TItem> & {
     selected?: boolean;
 };
 
+type DefaultSectionT<TItem> = {
+    data: TItem[];
+    [key: string]: any;
+};
+
 type SelectRenderItem<TItem> = (info: SelectRenderItemInfo<TItem>) => ReactElement | null;
 
-export type SelectProps<TItem extends DefaultItemT = DefaultItemT> = Omit<
-    DropdownListProps<TItem>,
-    'triggerRef' | 'renderItem' | 'isOpen' | 'setIsOpen' | 'selectable'
+export type ISelect = <
+    ItemType extends DefaultItemT = DefaultItemT,
+    TSectionType extends DefaultSectionT<ItemType> = DefaultSectionT<ItemType>,
+>(
+    props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<SectionList<ItemType>>,
+) => ReactElement;
+
+export type Props<
+    TItem extends DefaultItemT = DefaultItemT,
+    TSectionType extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
+> = Omit<
+    DropdownListProps<TItem, TSectionType>,
+    | 'triggerRef'
+    | 'renderItem'
+    | 'isOpen'
+    | 'setIsOpen'
+    | 'selectable'
+    | 'selectedItem'
+    | 'onSelectItemChange'
 > & {
     inputProps?: Omit<TextInputProps, 'editable'>;
     containerStyle?: ViewStyle;
     renderItem?: SelectRenderItem<TItem>;
     dropdownTestID?: string;
+    /*
+     * Expects an array of TItem in multiple mode. If the item already exists in the array, it will be removed.
+     * */
+    value?: TItem | TItem[];
+    /*
+     * passes the current selectedItem. Will be an array in multiple mode
+     * */
+    onChange?: (item: TItem | TItem[]) => void;
 };
 
 const Select = <TItem extends DefaultItemT = DefaultItemT>({
-    inputProps = {},
+    inputProps,
     popoverProps: _popoverProps,
     style,
     renderItem: renderItemProp,
-    selectedItem: selectedItemProp,
-    onSelectItemChange: onSelectedItemChangeProp,
+    value: valueProp,
+    onChange: onChangeProp,
     testID,
     dropdownTestID,
+    searchable,
+    onQueryChange,
     ...rest
-}: SelectProps<TItem>) => {
+}: Props<TItem>) => {
     const { TextInput, IconButton, DropdownList, ListItem } = useMolecules();
     const componentStyles = useComponentStyles('Select', style);
 
     const triggerRef = useRef(null);
 
-    const [selectedItem, onSelectedItemChange] = useControlledValue({
-        value: selectedItemProp,
+    const [selectionValue, onSelectionValueChange] = useControlledValue({
+        value: valueProp,
         defaultValue: [],
-        onChange: onSelectedItemChangeProp,
+        onChange: onChangeProp,
     });
 
     const { state: isOpen, onToggle, setState: setIsOpen } = useToggle(false);
@@ -68,9 +109,13 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
 
     const onSelectItemChange = useCallback(
         (item: TItem | TItem[]) => {
-            onSelectedItemChange(item);
+            onSelectionValueChange(item);
 
-            if (!Array.isArray(item)) setValue(item.label);
+            if (!Array.isArray(item)) {
+                setValue(item.label);
+
+                return;
+            }
 
             setValue(
                 item.reduce(
@@ -80,7 +125,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
                 ),
             );
         },
-        [onSelectedItemChange],
+        [onSelectionValueChange],
     );
 
     const onInputLayout = useCallback((e: LayoutChangeEvent) => {
@@ -94,17 +139,17 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
         () => ({
             contentStyles: { width: inputLayout.width },
             showArrow: false,
-            offset: -inputLayout.height,
+            offset: searchable && onQueryChange ? -inputLayout.height : 0,
             ..._popoverProps,
         }),
-        [inputLayout, _popoverProps],
+        [inputLayout.width, inputLayout.height, searchable, onQueryChange, _popoverProps],
     );
 
     const renderItem = useCallback(
-        (info: SelectRenderItemInfo<TItem>) => {
-            const selected = Array.isArray(selectedItem)
-                ? !!selectedItem.find(item => item.id === info.item.id)
-                : selectedItem.id === info.item.id;
+        (info: SectionListRenderItemInfo<TItem>) => {
+            const selected = Array.isArray(selectionValue)
+                ? !!selectionValue.find(item => item.id === info.item.id)
+                : selectionValue.id === info.item.id;
 
             if (renderItemProp) renderItemProp({ ...info, selected });
 
@@ -118,10 +163,9 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
                 </ListItem>
             );
         },
-        [ListItem, renderItemProp, selectedItem],
+        [ListItem, renderItemProp, selectionValue],
     );
 
-    // TODO fix TS issues and Popover issues
     return (
         <>
             <Pressable
@@ -132,7 +176,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
                 testID={testID}>
                 <TextInput
                     label={'Select Item'}
-                    {...inputProps}
+                    {...(inputProps || {})}
                     right={<IconButton name="chevron-down" onPress={onToggle} />}
                     value={value}
                     editable={false}
@@ -141,14 +185,16 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
 
             <DropdownList
                 popoverProps={popoverProps}
-                renderItem={renderItem as any}
-                {...(rest as any)}
-                selectedItem={selectedItem}
+                {...rest}
+                renderItem={renderItem}
+                selection={selectionValue}
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
                 triggerRef={triggerRef}
-                onSelectItemChange={onSelectItemChange as any}
+                onSelectionChange={onSelectItemChange}
                 selectable
+                searchable={searchable}
+                onQueryChange={onQueryChange}
                 testID={dropdownTestID}
             />
         </>

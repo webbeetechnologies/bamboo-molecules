@@ -1,5 +1,5 @@
-import { memo, useCallback, useMemo } from 'react';
-import { Platform, StyleSheet, useWindowDimensions } from 'react-native';
+import { memo, PropsWithoutRef, ReactElement, RefAttributes, useCallback, useMemo } from 'react';
+import { Platform, SectionList, StyleSheet, useWindowDimensions } from 'react-native';
 
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { PopoverProps } from '../Popover';
@@ -20,7 +20,22 @@ type DefaultItemT = {
     [key: string]: any;
 };
 
-export type Props<TItem extends DefaultItemT = DefaultItemT> = OptionListProps<TItem> & {
+type DefaultSectionT<TItem> = {
+    data: TItem[];
+    [key: string]: any;
+};
+
+export type IDropdownList = <
+    ItemType extends DefaultItemT = DefaultItemT,
+    TSectionType extends DefaultSectionT<ItemType> = DefaultSectionT<ItemType>,
+>(
+    props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<SectionList<ItemType>>,
+) => ReactElement;
+
+export type Props<
+    TItem extends DefaultItemT = DefaultItemT,
+    TSectionType extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
+> = OptionListProps<TItem, TSectionType> & {
     mode?: `${DropdownListMode}`;
     // optionsThreshhold: configuration to show maximum number of options in popover/actionsheet when mode == DropdownListMode.auto (default: 5).
     // on reaching threshold, switches to a full screen view in smaller devices.
@@ -42,7 +57,7 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     dialogProps = {},
     isOpen: isOpenProp,
     setIsOpen: setIsOpenProp,
-    onSelectItemChange: onSelectItemChangeProp,
+    onSelectionChange: onSelectionChangeProp,
     records,
     optionsThreshold,
     containerStyle,
@@ -78,15 +93,15 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
         if (!isOpen) setIsOpen(true);
     }, [isOpen, setIsOpen]);
 
-    const onSelectItemChange = useCallback(
+    const onSelectionChange = useCallback(
         (item: TItem | TItem[]) => {
-            onSelectItemChangeProp?.(item);
+            onSelectionChangeProp?.(item);
 
             if (hideOnSelect) {
                 setIsOpen(false);
             }
         },
-        [onSelectItemChangeProp, hideOnSelect, setIsOpen],
+        [onSelectionChangeProp, hideOnSelect, setIsOpen],
     );
 
     const [WrapperComponent, props] = useMemo(() => {
@@ -117,7 +132,7 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
             <OptionList
                 {...optionListProps}
                 records={records}
-                onSelectItemChange={onSelectItemChange}
+                onSelectionChange={onSelectionChange}
                 containerStyle={listStyles}
             />
         </WrapperComponent>
