@@ -201,4 +201,4 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
     );
 };
 
-export default memo(Select);
+export default memo(Select) as ISelect;

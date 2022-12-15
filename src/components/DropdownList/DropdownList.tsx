@@ -172,4 +172,4 @@ const useResolvedMode = (
     return DropdownListMode.Popover;
 };
 
-export default memo(DropdownList);
+export default memo(DropdownList) as IDropdownList;
