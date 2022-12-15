@@ -1,15 +1,17 @@
-import React from 'react';
-import { Pressable } from 'react-native';
+import React, { useMemo } from 'react';
+import { Pressable, StyleSheet } from 'react-native';
 import { styles } from './utils';
 import type { BackdropProps } from './types';
 
-const Backdrop: React.FC<BackdropProps> = props => {
+const Backdrop: React.FC<BackdropProps> = ({ style, ...rest }) => {
+    const memoizedStyles = useMemo(() => StyleSheet.flatten([styles.backdrop, style]), [style]);
+
     return (
         <Pressable
-            style={styles.backdrop}
             accessible={false}
             importantForAccessibility="no"
-            {...props}
+            {...rest}
+            style={memoizedStyles}
         />
     );
 };
