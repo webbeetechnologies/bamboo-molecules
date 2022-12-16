@@ -20,6 +20,7 @@ const Card = (
         disabled,
         style,
         elevation: elevationProp,
+        children,
         ...rest
     }: Props,
     ref: any,
@@ -61,12 +62,9 @@ const Card = (
 
     return (
         <Surface style={styles.container} elevation={elevation}>
-            <TouchableRipple
-                style={styles.innerContainer}
-                {...rest}
-                disabled={disabled}
-                ref={ref}
-            />
+            <TouchableRipple style={styles.innerContainer} {...rest} disabled={disabled} ref={ref}>
+                <>{children}</>
+            </TouchableRipple>
         </Surface>
     );
 };

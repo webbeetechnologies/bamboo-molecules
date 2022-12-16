@@ -15,7 +15,6 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
             width: 30,
             height: 30,
             borderRadius: 'shapes.corner.full',
-            margin: 4,
             // @ts-ignore
             iconSize: 20,
         },
@@ -23,7 +22,6 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
             width: 34,
             height: 34,
             borderRadius: 'shapes.corner.full',
-            margin: 6,
             // @ts-ignore
             iconSize: 24,
         },
@@ -31,7 +29,6 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
             width: 38,
             height: 38,
             borderRadius: 'shapes.corner.full',
-            margin: 8,
             // @ts-ignore
             iconSize: 28,
         },

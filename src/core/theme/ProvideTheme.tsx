@@ -67,6 +67,7 @@ import {
     numberRangeInputStyles,
     dropdownListPopoverStyles,
     cardStyles,
+    cardHeaderStyles,
     cardContentStyles,
     cardTextStyles,
     cardMediaStyles,
@@ -157,6 +158,7 @@ const defaultThemeValue: Partial<ITheme> = {
     DropdownListPopover: dropdownListPopoverStyles,
 
     Card: cardStyles,
+    Card_Header: cardHeaderStyles,
     Card_Content: cardContentStyles,
     Card_Text: cardTextStyles,
     Card_Media: cardMediaStyles,

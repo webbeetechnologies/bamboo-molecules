@@ -7,31 +7,29 @@ export const Example = (props: CardProps) => {
 };
 
 export const BasicCard = (props: CardProps) => {
-    const { Card, Button } = useMolecules();
+    const { Card, Button, IconButton } = useMolecules();
 
     return (
         <Card style={{ maxWidth: 400 }} variant="outlined" onPress={() => {}} {...props}>
-            <>
-                <Card.Content>
-                    <Card.Text variant="title">Headline</Card.Text>
-                    <Card.Text variant={'subtitle'}>SubHead</Card.Text>
-                    <Card.Text>
-                        Explain more about the topic shown and headline subhead through supporting
-                        text
-                    </Card.Text>
-                </Card.Content>
-                <Card.Actions>
-                    <Button
-                        variant="outlined"
-                        onPress={() => {}}
-                        style={{ marginRight: 'spacings.2' }}>
-                        Action
-                    </Button>
-                    <Button variant="contained" onPress={() => {}}>
-                        Action
-                    </Button>
-                </Card.Actions>
-            </>
+            <Card.Header>
+                <IconButton name="account-circle-outline" size="lg" onPress={() => {}} />
+                <IconButton name="dots-vertical" size="sm" onPress={() => {}} />
+            </Card.Header>
+            <Card.Content>
+                <Card.Text variant="title">Headline</Card.Text>
+                <Card.Text variant={'subtitle'}>SubHead</Card.Text>
+                <Card.Text>
+                    Explain more about the topic shown and headline subhead through supporting text
+                </Card.Text>
+            </Card.Content>
+            <Card.Actions>
+                <Button variant="outlined" onPress={() => {}} style={{ marginRight: 'spacings.2' }}>
+                    Action
+                </Button>
+                <Button variant="contained" onPress={() => {}}>
+                    Action
+                </Button>
+            </Card.Actions>
         </Card>
     );
 };
@@ -41,28 +39,22 @@ export const CardWithMedia = (props: CardProps) => {
 
     return (
         <Card style={{ maxWidth: 400 }} variant="outlined" {...props}>
-            <>
-                <Card.Media source={{ uri: 'https://picsum.photos/700' }} />
-                <Card.Content>
-                    <Card.Text variant="title">Headline</Card.Text>
-                    <Card.Text variant={'subtitle'}>SubHead</Card.Text>
-                    <Card.Text>
-                        Explain more about the topic shown and headline subhead through supporting
-                        text
-                    </Card.Text>
-                </Card.Content>
-                <Card.Actions>
-                    <Button
-                        variant="outlined"
-                        onPress={() => {}}
-                        style={{ marginRight: 'spacings.2' }}>
-                        Action
-                    </Button>
-                    <Button variant="contained" onPress={() => {}}>
-                        Action
-                    </Button>
-                </Card.Actions>
-            </>
+            <Card.Media source={{ uri: 'https://picsum.photos/700' }} />
+            <Card.Content>
+                <Card.Text variant="title">Headline</Card.Text>
+                <Card.Text variant={'subtitle'}>SubHead</Card.Text>
+                <Card.Text>
+                    Explain more about the topic shown and headline subhead through supporting text
+                </Card.Text>
+            </Card.Content>
+            <Card.Actions>
+                <Button variant="outlined" onPress={() => {}} style={{ marginRight: 'spacings.2' }}>
+                    Action
+                </Button>
+                <Button variant="contained" onPress={() => {}}>
+                    Action
+                </Button>
+            </Card.Actions>
         </Card>
     );
 };

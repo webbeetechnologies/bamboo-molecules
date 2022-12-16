@@ -147,6 +147,16 @@ export const cardContentStyles: ComponentStylePropWithVariants<ViewStyle> = {
 };
 
 export const cardActionsStyles: ComponentStylePropWithVariants<ViewStyle> = {
-    padding: 'spacings.4',
+    paddingHorizontal: 'spacings.4',
+    paddingBottom: 'spacings.4',
     flexDirection: 'row',
+    alignItems: 'center',
+};
+
+export const cardHeaderStyles: ComponentStylePropWithVariants<ViewStyle> = {
+    paddingHorizontal: 'spacings.4',
+    paddingTop: 'spacings.4',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
 };
