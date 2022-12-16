@@ -65,6 +65,9 @@ export {
     RadioButtonItemProps,
     NumberRangeInputProps,
     CardProps,
+    CardContentProps,
+    CardMediaProps,
+    CardTextProps,
 } from './components';
 
 export {

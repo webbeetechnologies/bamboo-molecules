@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type { ImageStyle, TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
 type States = 'hovered' | 'focused' | 'pressed' | 'disabled';
@@ -51,4 +51,102 @@ export const cardStyles: ComponentStylePropWithVariants<ViewStyle, States, Custo
             },
         },
     },
+};
+
+export const cardTextStyles: ComponentStylePropWithVariants<TextStyle> = {
+    variants: {
+        title: {
+            marginBottom: 'spacings.3',
+
+            sizes: {
+                sm: {
+                    lineHeight: 'typescale.headlineSmall.lineHeight',
+                    fontSize: 'typescale.headlineSmall.fontSize',
+                    fontWeight: 'typescale.headlineSmall.fontWeight',
+                },
+                md: {
+                    lineHeight: 'typescale.headlineMedium.lineHeight',
+                    fontSize: 'typescale.headlineMedium.fontSize',
+                    fontWeight: 'typescale.headlineMedium.fontWeight',
+                },
+                lg: {
+                    lineHeight: 'typescale.headlineLarge.lineHeight',
+                    fontSize: 'typescale.headlineLarge.fontSize',
+                    fontWeight: 'typescale.headlineLarge.fontWeight',
+                },
+            },
+        },
+        subtitle: {
+            marginBottom: 'spacings.3',
+
+            sizes: {
+                sm: {
+                    lineHeight: 'typescale.titleSmall.lineHeight',
+                    fontSize: 'typescale.titleSmall.fontSize',
+                    fontWeight: 'typescale.titleSmall.fontWeight',
+                },
+                md: {
+                    lineHeight: 'typescale.titleMedium.lineHeight',
+                    fontSize: 'typescale.titleMedium.fontSize',
+                    fontWeight: 'typescale.titleMedium.fontWeight',
+                },
+                lg: {
+                    lineHeight: 'typescale.titleLarge.lineHeight',
+                    fontSize: 'typescale.titleLarge.fontSize',
+                    fontWeight: 'typescale.titleLarge.fontWeight',
+                },
+            },
+        },
+        description: {
+            marginBottom: 'spacings.1',
+
+            sizes: {
+                sm: {
+                    lineHeight: 'typescale.bodySmall.lineHeight',
+                    fontSize: 'typescale.bodySmall.fontSize',
+                    fontWeight: 'typescale.bodySmall.fontWeight',
+                },
+                md: {
+                    lineHeight: 'typescale.bodyMedium.lineHeight',
+                    fontSize: 'typescale.bodyMedium.fontSize',
+                    fontWeight: 'typescale.bodyMedium.fontWeight',
+                },
+                lg: {
+                    lineHeight: 'typescale.bodyLarge.lineHeight',
+                    fontSize: 'typescale.bodyLarge.fontSize',
+                    fontWeight: 'typescale.bodyLarge.fontWeight',
+                },
+            },
+        },
+    },
+};
+
+export const cardMediaStyles: ComponentStylePropWithVariants<
+    ViewStyle,
+    '',
+    {
+        container: ViewStyle;
+        image: ImageStyle;
+    }
+> = {
+    container: {
+        height: 195,
+        borderTopLeftRadius: 'shapes.corner.medium' as unknown as number,
+        borderTopRightRadius: 'shapes.corner.medium' as unknown as number,
+        borderBottomLeftRadius: 'shapes.corner.medium' as unknown as number,
+        borderBottomRightRadius: 'shapes.corner.medium' as unknown as number,
+        overflow: 'hidden',
+    },
+    image: {
+        flex: 1,
+    },
+};
+
+export const cardContentStyles: ComponentStylePropWithVariants<ViewStyle> = {
+    padding: 'spacings.4',
+};
+
+export const cardActionsStyles: ComponentStylePropWithVariants<ViewStyle> = {
+    padding: 'spacings.4',
+    flexDirection: 'row',
 };

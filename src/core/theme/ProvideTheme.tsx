@@ -67,6 +67,10 @@ import {
     numberRangeInputStyles,
     dropdownListPopoverStyles,
     cardStyles,
+    cardContentStyles,
+    cardTextStyles,
+    cardMediaStyles,
+    cardActionsStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -153,6 +157,10 @@ const defaultThemeValue: Partial<ITheme> = {
     DropdownListPopover: dropdownListPopoverStyles,
 
     Card: cardStyles,
+    Card_Content: cardContentStyles,
+    Card_Text: cardTextStyles,
+    Card_Media: cardMediaStyles,
+    Card_Actions: cardActionsStyles,
 };
 
 const defaultExtractStyles = memoize(

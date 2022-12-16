@@ -40,7 +40,7 @@ import type {
     Dialog,
     RadioButton,
     NumberRangeInputProps,
-    CardProps,
+    Card,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -89,7 +89,7 @@ export interface DefaultComponents {
     RadioButton: typeof RadioButton;
     NumberRangeInput: ComponentType<NumberRangeInputProps>;
     DropdownListPopover: ComponentType<PopoverProps>;
-    Card: ComponentType<CardProps>;
+    Card: typeof Card;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

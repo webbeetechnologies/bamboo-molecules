@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef } from 'react';
+import { forwardRef, memo, useEffect, useMemo, useRef } from 'react';
 import { ViewStyle, Animated } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { CallbackActionState, withActionState } from '../../hocs';
@@ -12,16 +12,18 @@ export type Props = TouchableRippleProps &
         elevation?: MD3Elevation;
     };
 
-const Card = ({
-    variant = 'elevated',
-    hovered,
-    pressed,
-    disabled,
-    style,
-    children,
-    elevation: elevationProp,
-    ...rest
-}: Props) => {
+const Card = (
+    {
+        variant = 'elevated',
+        hovered,
+        pressed,
+        disabled,
+        style,
+        elevation: elevationProp,
+        ...rest
+    }: Props,
+    ref: any,
+) => {
     const { Surface, TouchableRipple } = useMolecules();
     const componentStyles = useComponentStyles('Card', style, {
         variant,
@@ -59,11 +61,14 @@ const Card = ({
 
     return (
         <Surface style={styles.container} elevation={elevation}>
-            <TouchableRipple style={styles.innerContainer} {...rest} disabled={disabled}>
-                {children}
-            </TouchableRipple>
+            <TouchableRipple
+                style={styles.innerContainer}
+                {...rest}
+                disabled={disabled}
+                ref={ref}
+            />
         </Surface>
     );
 };
 
-export default memo(withActionState(Card));
+export default memo(withActionState(forwardRef(Card)));
