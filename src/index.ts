@@ -65,6 +65,7 @@ export {
     RadioButtonItemProps,
     NumberRangeInputProps,
     SelectProps,
+    ChipProps,
 } from './components';
 
 export {

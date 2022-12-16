@@ -49,6 +49,7 @@ import {
     NumberRangeInput,
     DropdownListPopover,
     Select,
+    Chip,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -102,6 +103,7 @@ const defaultComponents: DefaultComponents = {
     NumberRangeInput,
     DropdownListPopover,
     Select,
+    Chip,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

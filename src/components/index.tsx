@@ -131,3 +131,5 @@ export * from './NumberRangeInput';
 export * from './DropdownListPopover';
 
 export * from './Select';
+
+export * from './Chip';

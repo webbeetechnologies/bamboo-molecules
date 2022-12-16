@@ -26,7 +26,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
      * Size of the icon.
      * Should be a number or a Design Token
      */
-    size?: 'sm' | 'md' | 'lg';
+    size?: 'xs' | 'sm' | 'md' | 'lg';
     /**
      * Type of the icon. Default is material
      * Should be a number or a Design Token

@@ -68,6 +68,7 @@ import {
     numberRangeInputStyles,
     dropdownListPopoverStyles,
     selectStyles,
+    chipStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -154,6 +155,8 @@ const defaultThemeValue: Partial<ITheme> = {
 
     DropdownListPopover: dropdownListPopoverStyles,
     Select: selectStyles,
+
+    Chip: chipStyles,
 };
 
 const defaultExtractStyles = memoize(
