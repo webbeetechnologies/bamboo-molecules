@@ -6,6 +6,7 @@ type CustomProps = {
     initialTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
     animateTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
     exitTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
+    content?: ViewStyle;
     contentText?: TextStyle;
     backdrop?: ViewStyle;
     arrow?: ViewStyle;
@@ -27,6 +28,9 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, '', Custom
         transition: {
             duration: 100,
         },
+    },
+    content: {
+        borderRadius: 'shapes.corner.extraSmall' as unknown as number,
     },
     contentText: {
         display: 'flex',

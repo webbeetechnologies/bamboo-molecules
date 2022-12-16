@@ -133,7 +133,7 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
                 {...optionListProps}
                 records={records}
                 onSelectionChange={onSelectionChange}
-                containerStyle={listStyles}
+                style={listStyles}
             />
         </WrapperComponent>
     );
