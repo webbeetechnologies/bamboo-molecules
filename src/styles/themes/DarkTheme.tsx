@@ -58,6 +58,11 @@ export const generateDarkThemeColors = (
             level4: color(palette.primary80).alpha(0.12).rgb().string(), // palette.primary80, alpha 0.12
             level5: color(palette.primary80).alpha(0.14).rgb().string(), // palette.primary80, alpha 0.14
         },
+        stateLayer: {
+            hover: {
+                onSurface: color(palette.neutral90).alpha(opacity.level1).rgb().string(),
+            },
+        },
     };
 };
 

@@ -9,5 +9,6 @@ export const dropdownListStyles: ComponentStylePropWithVariants<ViewStyle, '', C
     popoverContainer: {
         minWidth: 112,
         backgroundColor: 'colors.surface',
+        borderRadius: 'shapes.corner.extraSmall' as unknown as number,
     },
 };

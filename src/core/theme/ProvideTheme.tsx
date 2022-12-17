@@ -29,6 +29,7 @@ import {
     helperTextStyles,
     modalStyles,
     popoverStyles,
+    backdropStyles,
     datePickerStyles,
     datePickerYearPickerStyles,
     datePickerMonthStyles,
@@ -72,6 +73,7 @@ import {
     cardTextStyles,
     cardMediaStyles,
     cardActionsStyles,
+    selectStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -105,6 +107,7 @@ const defaultThemeValue: Partial<ITheme> = {
     HelperText: helperTextStyles,
     Modal: modalStyles,
     Popover: popoverStyles,
+    Backdrop: backdropStyles,
 
     FlatGrid: flatGridStyles,
     SectionGrid: sectionGridStyles,
@@ -163,6 +166,8 @@ const defaultThemeValue: Partial<ITheme> = {
     Card_Text: cardTextStyles,
     Card_Media: cardMediaStyles,
     Card_Actions: cardActionsStyles,
+
+    Select: selectStyles,
 };
 
 const defaultExtractStyles = memoize(

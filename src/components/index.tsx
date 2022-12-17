@@ -56,7 +56,7 @@ export { SectionGrid, ISectionGrid, sectionGridStyles, SectionGridProps } from '
 
 export { Popover, PopoverProps, popoverStyles } from './Popover';
 export { Overlay, OverlayProps } from './Overlay';
-export { Backdrop, BackdropProps } from './Backdrop';
+export { Backdrop, BackdropProps, backdropStyles } from './Backdrop';
 export * from './Animations';
 
 export { IconButton, IconButtonProps, iconButtonStyles } from './IconButton';
@@ -114,7 +114,7 @@ export { TextInputWithMask, TextInputWithMaskProps } from './TextInputWithMask';
 
 export { OptionList, OptionListProps, IOptionList, optionListStyles } from './OptionList';
 
-export { DropdownList, DropdownListProps, dropdownListStyles } from './DropdownList';
+export { DropdownList, DropdownListProps, IDropdownList, dropdownListStyles } from './DropdownList';
 
 export { ElementGroup, elementGroupStyles, ElementGroupProps } from './ElementGroup';
 
@@ -131,3 +131,5 @@ export * from './NumberRangeInput';
 export * from './DropdownListPopover';
 
 export * from './Card';
+
+export * from './Select';

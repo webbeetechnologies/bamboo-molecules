@@ -33,7 +33,7 @@ import type {
     IFlatGrid,
     ISectionGrid,
     IOptionList,
-    DropdownListProps,
+    IDropdownList,
     ElementGroupProps,
     InputAddonProps,
     IActionSheet,
@@ -41,6 +41,7 @@ import type {
     RadioButton,
     NumberRangeInputProps,
     Card,
+    ISelect,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -81,7 +82,7 @@ export interface DefaultComponents {
     TimePickerModal: ComponentType<TimePickerModalProps>;
     TextInputWithMask: ComponentType<TextInputWithMaskProps>;
     OptionList: IOptionList;
-    DropdownList: ComponentType<DropdownListProps>;
+    DropdownList: IDropdownList;
     ElementGroup: ComponentType<ElementGroupProps>;
     InputAddon: ComponentType<InputAddonProps>;
     ActionSheet: IActionSheet;
@@ -90,6 +91,7 @@ export interface DefaultComponents {
     NumberRangeInput: ComponentType<NumberRangeInputProps>;
     DropdownListPopover: ComponentType<PopoverProps>;
     Card: typeof Card;
+    Select: ISelect;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

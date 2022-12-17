@@ -7,12 +7,13 @@ type Props = TextProps & {};
 
 const ListItemDescription = ({ style, ...rest }: Props) => {
     const { Text } = useMolecules();
-    const { disabled, hovered } = useContext(ListItemContext);
+    const { disabled, hovered, variant } = useContext(ListItemContext);
     const componentStyles = useComponentStyles('ListItemDescription', style, {
         states: {
             disabled,
             hovered,
         },
+        variant,
     });
 
     return <Text selectable={false} {...rest} style={componentStyles} />;

@@ -68,6 +68,9 @@ export {
     CardContentProps,
     CardMediaProps,
     CardTextProps,
+    CardActionsProps,
+    CardHeaderProps,
+    SelectProps,
 } from './components';
 
 export {
