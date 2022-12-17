@@ -6,14 +6,11 @@ export enum ELoadableActions {
     FETCH_RECORDS = 'FETCH_RECORDS',
 }
 
-
 export type Loading = {
-    startedAt: null | number,
-    finishedAt: null | number,
-    erroredAt: null | number,
-}
-
-
+    startedAt: null | number;
+    finishedAt: null | number;
+    erroredAt: null | number;
+};
 
 // Define type of arguments for GoToMethods
 export type ApplyFilterAction = {
@@ -23,7 +20,7 @@ export type ApplyFilterAction = {
 export type OnLoadableAction = ApplyFilterAction;
 
 export type OnLoad = <T extends {}>(
-    dataSource: Omit<LoadableDataSource<T>, "onLoad"> & DataSourceType<T>,
+    dataSource: Omit<LoadableDataSource<T>, 'onLoad'> & DataSourceType<T>,
     args: OnLoadableAction,
 ) => Loading;
 

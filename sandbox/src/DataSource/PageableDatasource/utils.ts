@@ -17,20 +17,14 @@ export const getPage = <T>({ pagination, records }: Args<T>) => {
     return getPages({ pagination, records })[pageNumber - 1];
 };
 
-export const getPaginatedValue = <T extends {}>({
-    isPaginated,
-    pagination,
-    records,
-    shouldResolveRecords = true,
-}: Args<T>) => {
+export const getPaginatedValue = <T extends {}>({ isPaginated, pagination, records }: Args<T>) => {
     if (!isPaginated) {
         return { isPaginated: false };
     }
 
     const page = getPage({ pagination, records });
-    const resolvedWithRecords = shouldResolveRecords ? { records: page } : {};
     return {
-        ...resolvedWithRecords,
+        records: page,
         isPaginated,
         pagination: {
             ...pagination,
