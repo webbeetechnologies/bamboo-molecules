@@ -1,27 +1,20 @@
-import { memo, ComponentPropsWithRef, forwardRef, useMemo } from 'react';
-import { Image, ImageProps, StyleProp, View, ViewStyle } from 'react-native';
-import { useComponentStyles } from '../../hooks';
+import { memo, forwardRef, ReactNode } from 'react';
+import type { StyleProp, ViewStyle } from 'react-native';
+import type { ViewProps } from '@webbee/bamboo-atoms';
+import { useComponentStyles, useMolecules } from '../../hooks';
 
-export type Props = ImageProps &
-    ComponentPropsWithRef<typeof Image> & {
-        style?: StyleProp<ViewStyle>;
-    };
+export type Props = ViewProps & {
+    style?: StyleProp<ViewStyle>;
+    children: ReactNode;
+};
 
-const CardMedia = ({ style, ...rest }: Props, ref: any) => {
+const CardMedia = ({ style, children, ...rest }: Props) => {
+    const { View } = useMolecules();
     const componentStyles = useComponentStyles('Card_Media', style);
 
-    const { containerStyle, imageStyle } = useMemo(() => {
-        const { container, image, ...restStyle } = componentStyles;
-
-        return {
-            containerStyle: [container, restStyle],
-            imageStyle: image,
-        };
-    }, [componentStyles]);
-
     return (
-        <View style={containerStyle}>
-            <Image {...rest} style={imageStyle} accessibilityIgnoresInvertColors ref={ref} />
+        <View style={componentStyles} {...rest}>
+            {children}
         </View>
     );
 };

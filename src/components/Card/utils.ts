@@ -1,4 +1,4 @@
-import type { ImageStyle, TextStyle, ViewStyle } from 'react-native';
+import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
 type States = 'hovered' | 'focused' | 'pressed' | 'disabled';
@@ -53,9 +53,9 @@ export const cardStyles: ComponentStylePropWithVariants<ViewStyle, States, Custo
     },
 };
 
-export const cardTextStyles: ComponentStylePropWithVariants<TextStyle> = {
+export const cardTypograhyStyles: ComponentStylePropWithVariants<TextStyle> = {
     variants: {
-        title: {
+        headline: {
             marginBottom: 'spacings.3',
 
             sizes: {
@@ -76,7 +76,7 @@ export const cardTextStyles: ComponentStylePropWithVariants<TextStyle> = {
                 },
             },
         },
-        subtitle: {
+        subhead: {
             marginBottom: 'spacings.3',
 
             sizes: {
@@ -97,7 +97,7 @@ export const cardTextStyles: ComponentStylePropWithVariants<TextStyle> = {
                 },
             },
         },
-        description: {
+        text: {
             marginBottom: 'spacings.1',
 
             sizes: {
@@ -121,25 +121,13 @@ export const cardTextStyles: ComponentStylePropWithVariants<TextStyle> = {
     },
 };
 
-export const cardMediaStyles: ComponentStylePropWithVariants<
-    ViewStyle,
-    '',
-    {
-        container: ViewStyle;
-        image: ImageStyle;
-    }
-> = {
-    container: {
-        height: 195,
-        borderTopLeftRadius: 'shapes.corner.medium' as unknown as number,
-        borderTopRightRadius: 'shapes.corner.medium' as unknown as number,
-        borderBottomLeftRadius: 'shapes.corner.medium' as unknown as number,
-        borderBottomRightRadius: 'shapes.corner.medium' as unknown as number,
-        overflow: 'hidden',
-    },
-    image: {
-        flex: 1,
-    },
+export const cardMediaStyles: ComponentStylePropWithVariants<ViewStyle> = {
+    height: 195,
+    borderTopLeftRadius: 'shapes.corner.medium' as unknown as number,
+    borderTopRightRadius: 'shapes.corner.medium' as unknown as number,
+    borderBottomLeftRadius: 'shapes.corner.medium' as unknown as number,
+    borderBottomRightRadius: 'shapes.corner.medium' as unknown as number,
+    overflow: 'hidden',
 };
 
 export const cardContentStyles: ComponentStylePropWithVariants<ViewStyle> = {

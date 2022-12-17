@@ -1,22 +1,10 @@
 import { memo } from 'react';
-import type { TextProps } from '@webbee/bamboo-atoms';
-import { useComponentStyles, useMolecules } from '../../hooks';
+import CardTypography, { Props as TypographyProps } from './CardTypography';
 
-export type Props = TextProps & {
-    variant?: 'title' | 'subtitle' | 'description';
-    size?: 'sm' | 'md' | 'lg';
+export type Props = Omit<TypographyProps, 'variant'>;
+
+const CardText = ({ size = 'md', ...rest }: Props) => {
+    return <CardTypography selectable={false} size={size} {...rest} variant="text" />;
 };
-
-const CardText = ({ style, variant = 'description', size = 'md', ...rest }: Props) => {
-    const { Text } = useMolecules();
-    const componentStyles = useComponentStyles('Card_Text', style, {
-        variant,
-        size,
-    });
-
-    return <Text selectable={false} {...rest} style={componentStyles} />;
-};
-
-CardText.displayName = 'Card.Text';
 
 export default memo(CardText);

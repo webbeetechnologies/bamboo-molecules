@@ -70,7 +70,7 @@ import {
     cardStyles,
     cardHeaderStyles,
     cardContentStyles,
-    cardTextStyles,
+    cardTypograhyStyles,
     cardMediaStyles,
     cardActionsStyles,
     selectStyles,
@@ -163,7 +163,7 @@ const defaultThemeValue: Partial<ITheme> = {
     Card: cardStyles,
     Card_Header: cardHeaderStyles,
     Card_Content: cardContentStyles,
-    Card_Text: cardTextStyles,
+    Card_Typography: cardTypograhyStyles,
     Card_Media: cardMediaStyles,
     Card_Actions: cardActionsStyles,
 
