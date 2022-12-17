@@ -5,7 +5,8 @@ import { useComponentStyles, useMolecules } from '../../hooks';
 import type { WithElements } from '../../types';
 import { CallbackActionState, withActionState } from '../../hocs';
 import type { TouchableRippleProps } from '../TouchableRipple';
-import type { IconType } from '../Icon';
+import type { IconButtonProps } from '../IconButton';
+import type { ActivityIndicatorProps } from '../ActivityIndicator';
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
     CallbackActionState &
@@ -16,11 +17,19 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          */
         label: string;
         /**
+         * character limit of the label
+         */
+        labelCharacterLimit?: number;
+        /**
          * Variant of the chip.
          * - `elevated` - elevated chip with shadow and without outline.
          * - `outlined` - chip with an outline. (outline will always have elevation 0 even if it's specified)
          */
         variant?: 'elevated' | 'outlined';
+        /**
+         *
+         * */
+        size?: 'sm' | 'md';
         /**
          * callback event when the closeIcon is pressed
          */
@@ -34,15 +43,15 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          */
         selected?: boolean;
         /**
-         * name of the closeIcon
-         * default is `close`
+         * props for the close icon
+         * default is { name: 'close', onPress: onClose, disabled, accessibilityLabel: 'Close' }
          */
-        closeIconName?: string;
+        closeIconProps?: IconButtonProps;
         /**
-         * type of the closeIcon
-         * default is `material-community`
+         * props for the ActivityIndicator
+         * default is { size: 18 }
          */
-        closeIconType?: IconType;
+        activityIndicatorProps?: ActivityIndicatorProps;
         /**
          * Whether to style the chip color as selected.
          */
@@ -55,10 +64,6 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          * Accessibility label for the chip. This is read by the screen reader when the user taps the chip.
          */
         accessibilityLabel?: string;
-        /**
-         * Accessibility label for the close icon. This is read by the screen reader when the user taps the close icon.
-         */
-        closeIconAccessibilityLabel?: string;
         /**
          * Whether the chip is disabled. A disabled chip is greyed out and `onPress` is not called on touch.
          */
@@ -98,7 +103,9 @@ const Chip = (
         style,
         containerStyle: containerStyleProp,
         label,
+        labelCharacterLimit = 20,
         variant = 'outlined',
+        size = 'md',
         disabled,
         hovered = false,
         elevation: elevationProp = 1,
@@ -106,22 +113,20 @@ const Chip = (
         right,
         loading = false,
         onClose,
-        closeIconName = 'close',
-        closeIconType = 'material-community',
+        closeIconProps,
+        activityIndicatorProps,
         selected = false,
         leftElementContainerStyle: leftElementContainerStyleProp,
         rightElementContainerStyle: rightElementContainerStyleProp,
         labelStyle: labelStyleProp,
         accessibilityLabel,
-        closeIconAccessibilityLabel = 'Close',
         selectedColor: selectedColorProp,
         selectionBackgroundColor: selectionBackgroundColorProp,
         ...rest
     }: Props,
     ref: any,
 ) => {
-    const { Surface, TouchableRipple, ActivityIndicator, IconButton, Icon, Text, View } =
-        useMolecules();
+    const { Surface, TouchableRipple, Text } = useMolecules();
     const componentStyles = useComponentStyles(
         'Chip',
         [
@@ -139,6 +144,7 @@ const Chip = (
         ],
         {
             variant,
+            size,
             states: {
                 disabled: !!disabled,
                 selected,
@@ -149,6 +155,7 @@ const Chip = (
     );
 
     const {
+        iconSize,
         containerStyle,
         touchableRippleStyle,
         leftElementStyle,
@@ -156,6 +163,7 @@ const Chip = (
         labelStyle,
     } = useMemo(() => {
         const {
+            iconSize: _iconSize,
             container,
             touchableRippleContainer,
             leftElement,
@@ -167,6 +175,7 @@ const Chip = (
         } = componentStyles;
 
         return {
+            iconSize: _iconSize,
             containerStyle: [
                 container,
                 selected && selectionBackgroundColor
@@ -203,40 +212,94 @@ const Chip = (
                 accessibilityState={accessibilityState}
                 ref={ref}>
                 <>
-                    {(loading || left || selected) && (
-                        <View style={leftElementStyle}>
-                            {loading ? (
-                                <ActivityIndicator size={18} />
-                            ) : left ? (
-                                left
-                            ) : (
-                                <Icon name="check" size={18} />
-                            )}
-                        </View>
-                    )}
+                    <LeftElement
+                        iconSize={iconSize}
+                        leftElementStyle={leftElementStyle}
+                        left={left}
+                        activityIndicatorProps={activityIndicatorProps}
+                        loading={loading}
+                        selected={selected}
+                    />
                     <Text selectable={false} style={labelStyle}>
-                        {label.length < 20 ? `${label}` : `${label.substring(0, 17)}...`}
+                        {label.length < labelCharacterLimit
+                            ? `${label}`
+                            : `${label.substring(0, labelCharacterLimit - 3)}...`}
                     </Text>
-                    {(onClose || right) && (
-                        <View style={rightElementStyle}>
-                            {onClose ? (
-                                <IconButton
-                                    name={closeIconName}
-                                    type={closeIconType}
-                                    onPress={onClose}
-                                    size="xs"
-                                    disabled={disabled}
-                                    accessibilityLabel={closeIconAccessibilityLabel}
-                                    accessibilityState={accessibilityState}
-                                />
-                            ) : (
-                                right
-                            )}
-                        </View>
-                    )}
+                    <RightElement
+                        rightElementStyle={rightElementStyle}
+                        accessibilityState={accessibilityState}
+                        right={right}
+                        disabled={disabled}
+                        onClose={onClose}
+                        closeIconProps={closeIconProps}
+                    />
                 </>
             </TouchableRipple>
         </Surface>
+    );
+};
+
+type LeftElementProps = Pick<Props, 'activityIndicatorProps' | 'left' | 'loading' | 'selected'> & {
+    leftElementStyle: ViewStyle;
+    iconSize: number;
+};
+const LeftElement = ({
+    iconSize,
+    loading,
+    left,
+    selected,
+    activityIndicatorProps,
+    leftElementStyle,
+}: LeftElementProps) => {
+    const { View, ActivityIndicator, Icon } = useMolecules();
+
+    return loading || left || selected ? (
+        <View style={leftElementStyle}>
+            {loading ? (
+                <ActivityIndicator size={iconSize} {...(activityIndicatorProps || {})} />
+            ) : (
+                left || <Icon name="check" size={iconSize} />
+            )}
+        </View>
+    ) : (
+        <></>
+    );
+};
+
+type RightElementProps = Pick<
+    Props,
+    'onClose' | 'right' | 'closeIconProps' | 'disabled' | 'accessibilityState'
+> & {
+    rightElementStyle: ViewStyle;
+};
+const RightElement = ({
+    onClose,
+    right,
+    disabled,
+    closeIconProps,
+    rightElementStyle,
+    accessibilityState,
+}: RightElementProps) => {
+    const { View, IconButton } = useMolecules();
+
+    return onClose || right ? (
+        <View style={rightElementStyle}>
+            {onClose ? (
+                <IconButton
+                    name="close"
+                    size="xs"
+                    accessibilityLabel="Close"
+                    disabled={disabled}
+                    onPress={onClose}
+                    accessibilityState={accessibilityState}
+                    {...(closeIconProps || {})}
+                />
+            ) : (
+                right
+            )}
+        </View>
+    ) : (
+        <></>
     );
 };
 

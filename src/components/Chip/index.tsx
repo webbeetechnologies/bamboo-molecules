@@ -13,7 +13,7 @@ export const Chip = Object.assign(
                 | 'closeIconType'
                 | 'selected'
                 | 'selectedColor'
-                | 'showSelectedOverlay'
+                | 'selectionBackgroundColor'
             >
         >,
         Filter: ChipComponent as ComponentType<
@@ -28,7 +28,7 @@ export const Chip = Object.assign(
                 | 'closeIconType'
                 | 'selected'
                 | 'selectedColor'
-                | 'showSelectedOverlay'
+                | 'selectionBackgroundColor'
                 | 'left'
                 | 'right'
                 | 'leftElementContainerStyle'
