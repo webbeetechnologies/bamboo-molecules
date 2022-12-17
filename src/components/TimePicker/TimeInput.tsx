@@ -3,6 +3,9 @@ import { TextInput, TextInputProps, StyleSheet } from 'react-native';
 
 import { useMolecules, useCurrentTheme, useComponentStyles } from '../../hooks';
 import { inputTypes, PossibleClockTypes, PossibleInputTypes } from './timeUtils';
+import { useMaskedInputProps } from 'react-native-mask-input';
+
+const mask = [/\d/, /\d/];
 
 interface TimeInputProps extends Omit<Omit<TextInputProps, 'value'>, 'onFocus'> {
     value: number;
@@ -22,9 +25,7 @@ function TimeInput(
 
     const onInnerChange = (text: string) => {
         setControlledValue(text);
-        if (text !== '' && text !== '0') {
-            onChanged(Number(text));
-        }
+        onChanged(Number(text));
     };
 
     useEffect(() => {
@@ -57,6 +58,12 @@ function TimeInput(
         return _formattedValue;
     }, [controlledValue, inputFocused]);
 
+    const maskedInputProps = useMaskedInputProps({
+        value: formattedValue,
+        onChangeText: onInnerChange,
+        mask,
+    });
+
     const { rippleColor, containerStyle, textInputStyle, buttonStyle } = useMemo(() => {
         const { rippleColor: _rippleColor, container, input, button } = componentStyles;
 
@@ -73,13 +80,11 @@ function TimeInput(
             <TextInput
                 ref={ref}
                 style={textInputStyle}
-                value={formattedValue}
-                maxLength={2}
                 onFocus={() => setInputFocused(true)}
                 onBlur={() => setInputFocused(false)}
                 keyboardAppearance={theme.dark ? 'dark' : 'default'}
                 keyboardType="number-pad"
-                onChangeText={onInnerChange}
+                {...maskedInputProps}
                 {...rest}
             />
             <>

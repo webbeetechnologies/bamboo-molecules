@@ -54,9 +54,14 @@ function AnalogClockHours({ is24Hour, hours }: { is24Hour: boolean; hours: numbe
             ],
             outerHourInner: _outerHourInner,
             innerHourInner: _innerHourInner,
-            textStyle: (i: number) => (hours === i + 1 ? { color: activeTextColor } : null),
+            textStyle: (i: number) => {
+                // to make sure hour text is active when 00 is selected in 12 hours mode
+                return (!is24Hour && hours === 0 && hours === i - 11) || hours === i + 1
+                    ? { color: activeTextColor }
+                    : null;
+            },
         };
-    }, [componentStyles, hours]);
+    }, [componentStyles, hours, is24Hour]);
 
     return (
         <>
