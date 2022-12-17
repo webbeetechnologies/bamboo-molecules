@@ -21,6 +21,14 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          * Whether the divider shows or not.
          */
         divider?: boolean;
+        /**
+         * variant of the ListItem
+         */
+        variant?: 'default' | 'menuItem';
+        /**
+         * Whether the ListItem is selected or not
+         */
+        selected?: boolean;
     };
 
 /**
@@ -60,6 +68,8 @@ const ListItem = (
         disabled = false,
         hovered,
         divider = false,
+        variant = 'default',
+        selected = false,
         ...props
     }: Props,
     ref: any,
@@ -67,7 +77,12 @@ const ListItem = (
     const { TouchableRipple, View, HorizontalDivider } = useMolecules();
 
     const componentStyles = useComponentStyles('ListItem', styleProp, {
-        states: { disabled, hovered: !!hovered },
+        states: {
+            selected,
+            disabled,
+            hovered: !!hovered,
+        },
+        variant,
     });
 
     const {
@@ -88,13 +103,18 @@ const ListItem = (
         };
     }, [componentStyles]);
 
+    const contextValue = useMemo(
+        () => ({ disabled, hovered: !!hovered, selected, variant }),
+        [disabled, hovered, selected, variant],
+    );
+
     return (
         <TouchableRipple {...props} style={containerStyles} disabled={disabled} ref={ref}>
             <>
                 <View style={innerContainerStyle}>
                     {left ? <View style={leftElementStyle}>{left}</View> : null}
                     <View style={contentStyle}>
-                        <ListItemContext.Provider value={{ disabled, hovered: !!hovered }}>
+                        <ListItemContext.Provider value={contextValue}>
                             <>{children}</>
                         </ListItemContext.Provider>
                     </View>
@@ -109,6 +129,8 @@ const ListItem = (
 export const ListItemContext = createContext({
     disabled: false,
     hovered: false,
+    selected: false,
+    variant: 'default',
 });
 
 export default memo(withActionState(forwardRef(ListItem)));
