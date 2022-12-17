@@ -44,7 +44,6 @@ return (
             type: 'auto',
         },
     },
-    chromatic: { disableSnapshot: true },
 };
 
 export const Media: ComponentStory<typeof CardWithMedia> = args => <CardWithMedia {...args} />;
@@ -87,5 +86,4 @@ return (
             type: 'auto',
         },
     },
-    chromatic: { disableSnapshot: true },
 };

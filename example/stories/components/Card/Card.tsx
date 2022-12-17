@@ -1,4 +1,5 @@
 import { useMolecules, CardProps } from 'bamboo-molecules';
+import { Image } from 'react-native';
 
 export const Example = (props: CardProps) => {
     const { Card } = useMolecules();
@@ -16,8 +17,8 @@ export const BasicCard = (props: CardProps) => {
                 <IconButton name="dots-vertical" size="sm" onPress={() => {}} />
             </Card.Header>
             <Card.Content>
-                <Card.Text variant="title">Headline</Card.Text>
-                <Card.Text variant={'subtitle'}>SubHead</Card.Text>
+                <Card.Headline>Headline</Card.Headline>
+                <Card.Subhead>SubHead</Card.Subhead>
                 <Card.Text>
                     Explain more about the topic shown and headline subhead through supporting text
                 </Card.Text>
@@ -39,10 +40,12 @@ export const CardWithMedia = (props: CardProps) => {
 
     return (
         <Card style={{ maxWidth: 400 }} variant="outlined" {...props}>
-            <Card.Media source={{ uri: 'https://picsum.photos/700' }} />
+            <Card.Media>
+                <Image source={{ uri: 'https://picsum.photos/700' }} style={{ flex: 1 }} />
+            </Card.Media>
             <Card.Content>
-                <Card.Text variant="title">Headline</Card.Text>
-                <Card.Text variant={'subtitle'}>SubHead</Card.Text>
+                <Card.Headline>Headline</Card.Headline>
+                <Card.Subhead>SubHead</Card.Subhead>
                 <Card.Text>
                     Explain more about the topic shown and headline subhead through supporting text
                 </Card.Text>
