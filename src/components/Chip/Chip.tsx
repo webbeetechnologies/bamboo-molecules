@@ -243,28 +243,30 @@ type LeftElementProps = Pick<Props, 'activityIndicatorProps' | 'left' | 'loading
     leftElementStyle: ViewStyle;
     iconSize: number;
 };
-const LeftElement = ({
-    iconSize,
-    loading,
-    left,
-    selected,
-    activityIndicatorProps,
-    leftElementStyle,
-}: LeftElementProps) => {
-    const { View, ActivityIndicator, Icon } = useMolecules();
+const LeftElement = memo(
+    ({
+        iconSize,
+        loading,
+        left,
+        selected,
+        activityIndicatorProps,
+        leftElementStyle,
+    }: LeftElementProps) => {
+        const { View, ActivityIndicator, Icon } = useMolecules();
 
-    return loading || left || selected ? (
-        <View style={leftElementStyle}>
-            {loading ? (
-                <ActivityIndicator size={iconSize} {...(activityIndicatorProps || {})} />
-            ) : (
-                left || <Icon name="check" size={iconSize} />
-            )}
-        </View>
-    ) : (
-        <></>
-    );
-};
+        return loading || left || selected ? (
+            <View style={leftElementStyle}>
+                {loading ? (
+                    <ActivityIndicator size={iconSize} {...(activityIndicatorProps || {})} />
+                ) : (
+                    left || <Icon name="check" size={iconSize} />
+                )}
+            </View>
+        ) : (
+            <></>
+        );
+    },
+);
 
 type RightElementProps = Pick<
     Props,
@@ -272,35 +274,37 @@ type RightElementProps = Pick<
 > & {
     rightElementStyle: ViewStyle;
 };
-const RightElement = ({
-    onClose,
-    right,
-    disabled,
-    closeIconProps,
-    rightElementStyle,
-    accessibilityState,
-}: RightElementProps) => {
-    const { View, IconButton } = useMolecules();
+const RightElement = memo(
+    ({
+        onClose,
+        right,
+        disabled,
+        closeIconProps,
+        rightElementStyle,
+        accessibilityState,
+    }: RightElementProps) => {
+        const { View, IconButton } = useMolecules();
 
-    return onClose || right ? (
-        <View style={rightElementStyle}>
-            {onClose ? (
-                <IconButton
-                    name="close"
-                    size="xs"
-                    accessibilityLabel="Close"
-                    disabled={disabled}
-                    onPress={onClose}
-                    accessibilityState={accessibilityState}
-                    {...(closeIconProps || {})}
-                />
-            ) : (
-                right
-            )}
-        </View>
-    ) : (
-        <></>
-    );
-};
+        return onClose || right ? (
+            <View style={rightElementStyle}>
+                {onClose ? (
+                    <IconButton
+                        name="close"
+                        size="xs"
+                        accessibilityLabel="Close"
+                        disabled={disabled}
+                        onPress={onClose}
+                        accessibilityState={accessibilityState}
+                        {...(closeIconProps || {})}
+                    />
+                ) : (
+                    right
+                )}
+            </View>
+        ) : (
+            <></>
+        );
+    },
+);
 
 export default memo(withActionState(forwardRef(Chip)));
