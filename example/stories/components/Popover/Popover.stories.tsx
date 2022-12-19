@@ -2,7 +2,7 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Example, PopoverContent } from './Popover';
 
-import { within, userEvent } from '@storybook/testing-library';
+import { within, userEvent, waitFor } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 
 export default {
@@ -102,5 +102,7 @@ OpenPopover.play = async ({ canvasElement }) => {
     await new Promise(resolve => setTimeout(resolve, 500));
 
     // 👇 Assert DOM structure
-    await expect(canvas.getByText("I'm a popover")).toBeInTheDocument();
+    await waitFor(() => {
+        expect(canvas.getByText("I'm a popover")).toBeInTheDocument();
+    });
 };
