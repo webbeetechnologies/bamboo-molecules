@@ -35,8 +35,10 @@ const Card = (
         },
     });
 
-    const initialElevation =
-        elevationProp === undefined ? (variant === 'elevated' ? 1 : 0) : elevationProp;
+    const initialElevation = useMemo(
+        () => (elevationProp === undefined ? (variant === 'elevated' ? 1 : 0) : elevationProp),
+        [elevationProp, variant],
+    );
 
     const { current: elevation } = useRef<Animated.Value>(new Animated.Value(initialElevation));
 
@@ -51,8 +53,6 @@ const Card = (
     }, [componentStyles]);
 
     useEffect(() => {
-        if (variant === 'outlined') return;
-
         Animated.timing(elevation, {
             toValue: hovered ? (variant === 'elevated' ? 2 : 1) : initialElevation,
             duration: styles.animationDuration,

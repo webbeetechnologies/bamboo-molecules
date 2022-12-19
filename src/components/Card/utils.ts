@@ -123,11 +123,9 @@ export const cardTypograhyStyles: ComponentStylePropWithVariants<TextStyle> = {
 
 export const cardMediaStyles: ComponentStylePropWithVariants<ViewStyle> = {
     height: 195,
-    borderTopLeftRadius: 'shapes.corner.medium' as unknown as number,
-    borderTopRightRadius: 'shapes.corner.medium' as unknown as number,
-    borderBottomLeftRadius: 'shapes.corner.medium' as unknown as number,
-    borderBottomRightRadius: 'shapes.corner.medium' as unknown as number,
+    borderRadius: 'shapes.corner.medium' as unknown as number,
     overflow: 'hidden',
+    marginBottom: 'spacings.4',
 };
 
 export const cardContentStyles: ComponentStylePropWithVariants<ViewStyle> = {
