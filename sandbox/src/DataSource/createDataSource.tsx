@@ -272,7 +272,6 @@ export const createDataSource = (
         let tempDS = { ...dataSource, shouldResolveRecords, records: propsRef.current.records };
         const dataSourceResults = actionCreators.map(actionCreator => {
             const result = actionCreator(propsRef.current, tempDS, dispatch);
-            debugger;
 
             tempDS = {
                 ...tempDS,
@@ -288,6 +287,7 @@ export const createDataSource = (
                     (combinedResults, result) => ({ ...combinedResults, ...result }),
                     dataSource,
                 ),
+
             [dataSource, ...dataSourceResults],
         );
     };

@@ -8,8 +8,8 @@ import {
     filterableDatasourceReducer,
 } from './DataSource';
 
-import RenderRecords from './RenderRecords';
 import { RecordType } from './types';
+import RenderRecords from './RenderRecords';
 
 function findAllCustomerData() {
     const records = [
@@ -72,12 +72,6 @@ function findAllCustomerData() {
     ] as RecordType[];
 }
 
-const WrappedComponent = () => {
-    const ds = useDataSource();
-
-    return <RenderRecords {...ds} />;
-};
-
 const sort = {
     isNestedSort: true,
     order: [],
@@ -111,7 +105,7 @@ export default function UsingArraySource() {
             pagination={{ pageNumber: 1, perPage: 10 }}
             isSortable={true}
             sort={sort}>
-            <WrappedComponent />
+            <RenderRecords />
         </DataSourceProvider>
     );
 }

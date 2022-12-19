@@ -39,8 +39,6 @@ export const actionCreator = <
                 throw new Error('Cannot paginate when isPaginated is false');
             }
 
-            debugger;
-
             if (!onPaginate) {
                 throw new Error('onPaginate function is not provided');
             }
