@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useContext, useMemo, useState } from 'react';
 import {
     Animated,
     I18nManager,
@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 
 import { useMolecules } from '../../hooks';
+import { normalizeBorderRadiuses, normalizeSpacings, BackgroundContext } from '../../utils';
 import InputLabel from './InputLabel';
 import type { InputBaseProps, RenderProps } from './types';
 import { styles as defaultStyles } from './utils';
-import { normalizeBorderRadiuses, normalizeSpacings } from '../../utils';
 
 const DefaultComponent = (props: RenderProps) => <NativeTextInput {...props} />;
 
@@ -44,6 +44,7 @@ const TextInputBase = ({
     const hasActiveOutline = parentState.focused || error;
 
     const { View } = useMolecules();
+    const { backgroundColor: parentBackground } = useContext(BackgroundContext);
 
     const labelWidth = parentState.labelLayout.width;
     const labelHeight = parentState.labelLayout.height;
@@ -86,6 +87,7 @@ const TextInputBase = ({
             height,
             textAlign,
             activeColor,
+            defaultLabelBackground,
 
             // custom props
             selectionColor,
@@ -138,6 +140,7 @@ const TextInputBase = ({
             height,
             textAlign,
             backgroundColor,
+            labelBackground: parentBackground || backgroundColor || defaultLabelBackground,
 
             activeColor,
             baseLabelTranslateX:
@@ -209,6 +212,7 @@ const TextInputBase = ({
         left,
         leftElementLayout.width,
         multiline,
+        parentBackground,
         variant,
     ]);
 
@@ -259,7 +263,7 @@ const TextInputBase = ({
                     <InputLabel
                         parentState={parentState}
                         label={label}
-                        labelBackground={styles.backgroundColor}
+                        labelBackground={styles.labelBackground}
                         floatingLabelVerticalOffset={styles.floatingLabelVerticalOffset}
                         required={required}
                         onLayoutAnimatedText={onLayoutAnimatedText}
