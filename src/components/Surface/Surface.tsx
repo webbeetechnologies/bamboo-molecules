@@ -6,6 +6,7 @@ import shadow from '../../styles/shadow';
 import { isAnimatedValue } from '../../styles/overlay';
 import { inputRange } from '../../styles/shadow';
 import type { MD3Elevation } from '../../core/theme/types';
+import { BackgroundContext } from '../../utils';
 
 export type Props = ComponentPropsWithRef<typeof View> & {
     /**
@@ -89,15 +90,25 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
         // @ts-ignore
         return theme.colors.elevation?.[`level${elevation}`];
     })();
-    const memoizedStyles = useMemo(
-        () => [{ backgroundColor }, elevation ? shadow(elevation) : null, surfaceStyles],
-        [backgroundColor, elevation, surfaceStyles],
-    );
+    const { surfaceStyle, surfaceContextValue } = useMemo(() => {
+        return {
+            surfaceContextValue: {
+                backgroundColor: surfaceStyles?.backgroundColor,
+            },
+            surfaceStyle: [
+                { backgroundColor },
+                elevation ? shadow(elevation) : null,
+                surfaceStyles,
+            ],
+        };
+    }, [backgroundColor, elevation, surfaceStyles]);
 
     return (
-        <Animated.View {...props} testID={testID} style={memoizedStyles}>
-            {children}
-        </Animated.View>
+        <BackgroundContext.Provider value={surfaceContextValue}>
+            <Animated.View {...props} testID={testID} style={surfaceStyle}>
+                {children}
+            </Animated.View>
+        </BackgroundContext.Provider>
     );
 };
 

@@ -20,27 +20,35 @@ export const cardStyles: ComponentStylePropWithVariants<ViewStyle, States, Custo
 
     variants: {
         elevated: {
-            backgroundColor: 'colors.surface',
+            container: {
+                backgroundColor: 'colors.surface',
+            },
 
             states: {
                 disabled: {
-                    backgroundColor: 'colors.surfaceVariant',
-                    opacity: 0.38,
+                    container: {
+                        backgroundColor: 'colors.surfaceVariant',
+                        opacity: 0.38,
+                    },
                 },
             },
         },
         filled: {
-            backgroundColor: 'colors.surfaceVariant',
+            container: {
+                backgroundColor: 'colors.surfaceVariant',
+            },
 
             states: {
                 disabled: {
-                    backgroundColor: 'colors.surface',
-                    opacity: 0.38,
+                    container: {
+                        backgroundColor: 'colors.surface',
+                        opacity: 0.38,
+                    },
                 },
             },
         },
         outlined: {
-            backgroundColor: 'colors.surface',
+            container: {},
             borderWidth: 1,
             borderColor: 'colors.outline',
 
