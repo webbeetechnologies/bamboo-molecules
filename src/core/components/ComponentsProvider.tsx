@@ -48,7 +48,9 @@ import {
     RadioButton,
     NumberRangeInput,
     DropdownListPopover,
+    Card,
     Select,
+    Chip,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -101,7 +103,9 @@ const defaultComponents: DefaultComponents = {
     RadioButton,
     NumberRangeInput,
     DropdownListPopover,
+    Card,
     Select,
+    Chip,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

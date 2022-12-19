@@ -130,4 +130,8 @@ export * from './NumberRangeInput';
 
 export * from './DropdownListPopover';
 
+export * from './Card';
+
 export * from './Select';
+
+export * from './Chip';
