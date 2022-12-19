@@ -64,6 +64,12 @@ export {
     RadioButtonGroupProps,
     RadioButtonItemProps,
     NumberRangeInputProps,
+    CardProps,
+    CardContentProps,
+    CardMediaProps,
+    CardTextProps,
+    CardActionsProps,
+    CardHeaderProps,
     SelectProps,
 } from './components';
 

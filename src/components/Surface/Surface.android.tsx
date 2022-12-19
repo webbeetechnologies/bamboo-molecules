@@ -70,7 +70,7 @@ export type Props = ComponentPropsWithRef<typeof View> & {
  * });
  * ```
  */
-const elevationLevel = [0, 3, 6, 9, 12, 15];
+const elevationLevel = [0, 1, 2, 6, 8, 12];
 
 const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) => {
     const theme = useCurrentTheme();

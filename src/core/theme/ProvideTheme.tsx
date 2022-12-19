@@ -67,6 +67,12 @@ import {
     radioButtonItemStyles,
     numberRangeInputStyles,
     dropdownListPopoverStyles,
+    cardStyles,
+    cardHeaderStyles,
+    cardContentStyles,
+    cardTypograhyStyles,
+    cardMediaStyles,
+    cardActionsStyles,
     selectStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
@@ -153,6 +159,14 @@ const defaultThemeValue: Partial<ITheme> = {
     NumberRangeInput: numberRangeInputStyles,
 
     DropdownListPopover: dropdownListPopoverStyles,
+
+    Card: cardStyles,
+    Card_Header: cardHeaderStyles,
+    Card_Content: cardContentStyles,
+    Card_Typography: cardTypograhyStyles,
+    Card_Media: cardMediaStyles,
+    Card_Actions: cardActionsStyles,
+
     Select: selectStyles,
 };
 
