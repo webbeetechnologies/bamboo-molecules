@@ -45,7 +45,7 @@ export type Props = TextInputProps &
          * In `outlined` variant, the background color of the label is derived from `colors?.background` in theme or the `backgroundColor` style.
          * This component render TextInputOutlined or TextInputFlat based on that props
          */
-        variant?: 'flat' | 'outlined';
+        variant?: 'flat' | 'outlined' | 'plain';
         /**
          * If true, user won't be able to interact with the component.
          */

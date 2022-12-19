@@ -1,13 +1,11 @@
 import { useState, useEffect, forwardRef, useMemo } from 'react';
-import { TextInput, TextInputProps, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { useMolecules, useCurrentTheme, useComponentStyles } from '../../hooks';
+import type { NumberInputProps } from '../NumberInput';
 import { inputTypes, PossibleClockTypes, PossibleInputTypes } from './timeUtils';
-import { useMaskedInputProps } from 'react-native-mask-input';
 
-const mask = [/\d/, /\d/];
-
-interface TimeInputProps extends Omit<Omit<TextInputProps, 'value'>, 'onFocus'> {
+interface TimeInputProps extends Omit<Omit<NumberInputProps, 'value' | 'variant'>, 'onFocus'> {
     value: number;
     clockType: PossibleClockTypes;
     onPress?: (type: PossibleClockTypes) => any;
@@ -20,7 +18,7 @@ function TimeInput(
     { value, clockType, pressed, onPress, onChanged, inputType, ...rest }: TimeInputProps,
     ref: any,
 ) {
-    const { TouchableRipple, View } = useMolecules();
+    const { NumberInput, TouchableRipple, View } = useMolecules();
     const [controlledValue, setControlledValue] = useState<string>(`${value}`);
 
     const onInnerChange = (text: string) => {
@@ -58,12 +56,6 @@ function TimeInput(
         return _formattedValue;
     }, [controlledValue, inputFocused]);
 
-    const maskedInputProps = useMaskedInputProps({
-        value: formattedValue,
-        onChangeText: onInnerChange,
-        mask,
-    });
-
     const { rippleColor, containerStyle, textInputStyle, buttonStyle } = useMemo(() => {
         const { rippleColor: _rippleColor, container, input, button } = componentStyles;
 
@@ -77,14 +69,15 @@ function TimeInput(
 
     return (
         <View style={containerStyle}>
-            <TextInput
+            <NumberInput
+                variant="plain"
                 ref={ref}
-                style={textInputStyle}
+                inputStyle={textInputStyle}
                 onFocus={() => setInputFocused(true)}
                 onBlur={() => setInputFocused(false)}
                 keyboardAppearance={theme.dark ? 'dark' : 'default'}
-                keyboardType="number-pad"
-                {...maskedInputProps}
+                value={formattedValue}
+                onChangeText={onInnerChange}
                 {...rest}
             />
             <>

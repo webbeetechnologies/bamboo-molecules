@@ -257,6 +257,7 @@ export const defaultStyles: TextInputStyles = {
                 },
             },
         },
+        plain: {},
     },
 
     states: {

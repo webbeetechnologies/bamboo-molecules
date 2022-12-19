@@ -14,6 +14,8 @@ import type { InputBaseProps, RenderProps } from './types';
 import { styles as defaultStyles } from './utils';
 import { normalizeBorderRadiuses, normalizeSpacings } from '../../utils';
 
+const DefaultComponent = (props: RenderProps) => <NativeTextInput {...props} />;
+
 const TextInputBase = ({
     componentStyles,
     variant = 'flat',
@@ -30,7 +32,7 @@ const TextInputBase = ({
     onLayoutAnimatedText,
     left,
     right,
-    render = (props: RenderProps) => <NativeTextInput {...props} />,
+    render = DefaultComponent,
     forceFocus,
     testID = 'text-input',
     required,
@@ -212,15 +214,18 @@ const TextInputBase = ({
 
     return (
         <View style={styles.container}>
-            {variant === 'flat' ? (
-                <Animated.View testID="text-input-underline" style={styles.underlineStyle} />
-            ) : (
-                <Animated.View
-                    testID="text-input-outline"
-                    pointerEvents="none"
-                    style={styles.outlineStyle}
-                />
-            )}
+            <>
+                {variant === 'flat' && (
+                    <Animated.View testID="text-input-underline" style={styles.underlineStyle} />
+                )}
+                {variant === 'outlined' && (
+                    <Animated.View
+                        testID="text-input-outline"
+                        pointerEvents="none"
+                        style={styles.outlineStyle}
+                    />
+                )}
+            </>
 
             <>
                 {left && (
@@ -250,21 +255,23 @@ const TextInputBase = ({
                     />
                 )}
 
-                <InputLabel
-                    parentState={parentState}
-                    label={label}
-                    labelBackground={styles.backgroundColor}
-                    floatingLabelVerticalOffset={styles.floatingLabelVerticalOffset}
-                    required={required}
-                    onLayoutAnimatedText={onLayoutAnimatedText}
-                    error={error}
-                    baseLabelTranslateX={styles.baseLabelTranslateX}
-                    labelScale={styles.labelScale}
-                    wiggleOffsetX={styles.labelWiggleXOffset}
-                    maxFontSizeMultiplier={rest.maxFontSizeMultiplier}
-                    testID={testID}
-                    style={styles.labelText}
-                />
+                {variant !== 'plain' && (
+                    <InputLabel
+                        parentState={parentState}
+                        label={label}
+                        labelBackground={styles.backgroundColor}
+                        floatingLabelVerticalOffset={styles.floatingLabelVerticalOffset}
+                        required={required}
+                        onLayoutAnimatedText={onLayoutAnimatedText}
+                        error={error}
+                        baseLabelTranslateX={styles.baseLabelTranslateX}
+                        labelScale={styles.labelScale}
+                        wiggleOffsetX={styles.labelWiggleXOffset}
+                        maxFontSizeMultiplier={rest.maxFontSizeMultiplier}
+                        testID={testID}
+                        style={styles.labelText}
+                    />
+                )}
 
                 {render({
                     testID: `${testID}-${variant}`,
