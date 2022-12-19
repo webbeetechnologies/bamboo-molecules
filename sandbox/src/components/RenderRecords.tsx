@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { RecordType } from './types';
+import { RecordType } from '../types';
 import { ApplySort } from './ApplySortDemo';
 import { ApplyFilters } from './ApplyFilterDemo';
 import { ApplyPagination } from './ApplyPaginationDemo';
-import { useDataSource } from './DataSource';
+import { useDataSource } from '../DataSource';
 
 const RenderRecords: React.FC<any> = _props => {
     const ds = useDataSource();

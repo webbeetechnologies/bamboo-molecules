@@ -1,4 +1,4 @@
-import { ESortDirection, PaginationDataSourceResult, useDataSource } from './DataSource';
+import { ESortDirection, PaginationDataSourceResult, useDataSource } from '../DataSource';
 import { RenderJSON } from './RenderJSONDemo';
 import { useCallback } from 'react';
 

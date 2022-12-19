@@ -122,8 +122,8 @@ export const filterableDatasourceReducer: FilterReducer = (dataSource, action: O
             break;
         }
         case EFilterActions.UPDATE_FILTER:
-            filters = filters.map((filter, index) => {
-                if (index !== (action.payload.position as number)) return filter;
+            filters = filters.map(filter => {
+                if (filter.columnName !== action.payload.columnName) return filter;
                 return {
                     ...filter,
                     columnName: action.payload.columnName,

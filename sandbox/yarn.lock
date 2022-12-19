@@ -2382,6 +2382,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.keyby@npm:^4.6.7":
+  version: 4.6.7
+  resolution: "@types/lodash.keyby@npm:4.6.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 599ecefd8d4a1eb06c277b5f3f14e82ef9e58a1b7d8fc75490f0d5ee5e43069bae08f0408cb54675e7c1005c9f280ee57a537eafe69a22da5271cd6b815e4e1f
+  languageName: node
+  linkType: hard
+
 "@types/lodash.omitby@npm:^4.6.7":
   version: 4.6.7
   resolution: "@types/lodash.omitby@npm:4.6.7"
@@ -5839,6 +5848,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.keyby@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "lodash.keyby@npm:4.6.0"
+  checksum: 9dd96cc8b83e05a71dc328f8e489056105bc84b57b4d7f8155d6bf5744dcdb0a5534acdf6e4e89e5ddf71f2bc6b93969b12c6da09d69fdf3b1cca65a8ed61e2b
+  languageName: node
+  linkType: hard
+
 "lodash.omitby@npm:^4.6.0":
   version: 4.6.0
   resolution: "lodash.omitby@npm:4.6.0"
@@ -7973,6 +7989,7 @@ __metadata:
     "@babel/core": ^7.12.9
     "@types/lodash.clone": ^4.5.7
     "@types/lodash.isfunction": ^3.0.7
+    "@types/lodash.keyby": ^4.6.7
     "@types/lodash.omitby": ^4.6.7
     "@types/lodash.orderby": ^4.6.7
     "@types/lodash.set": ^4.3.7
@@ -7983,6 +8000,7 @@ __metadata:
     expo-status-bar: ~1.4.2
     lodash.clone: ^4.5.0
     lodash.isfunction: ^3.0.9
+    lodash.keyby: ^4.6.0
     lodash.omitby: ^4.6.0
     lodash.orderby: ^4.6.0
     lodash.set: ^4.3.2

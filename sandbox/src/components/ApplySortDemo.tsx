@@ -1,6 +1,6 @@
-import { ESortDirection, useDataSource } from './DataSource';
-import { RecordType } from './types';
-import { DataSourceReturnType } from './DataSource/__types';
+import { ESortDirection, useDataSource } from '../DataSource';
+import { RecordType } from '../types';
+import { DataSourceReturnType } from '../DataSource/__types';
 import { RenderJSON } from './RenderJSONDemo';
 import { useCallback, useState } from 'react';
 

@@ -9,7 +9,7 @@ import {
 } from './DataSource';
 
 import { RecordType } from './types';
-import RenderRecords from './RenderRecords';
+import RenderRecords from './components/RenderRecords';
 
 function findAllCustomerData() {
     const records = [
