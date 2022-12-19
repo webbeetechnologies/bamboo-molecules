@@ -71,6 +71,7 @@ export {
     CardActionsProps,
     CardHeaderProps,
     SelectProps,
+    ChipProps,
 } from './components';
 
 export {

@@ -11,6 +11,13 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
     color: 'colors.onSurfaceVariant',
 
     sizes: {
+        xs: {
+            width: 26,
+            height: 26,
+            borderRadius: 'shapes.corner.full',
+            // @ts-ignore
+            iconSize: 18,
+        },
         sm: {
             width: 30,
             height: 30,
@@ -37,8 +44,7 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
     states: {
         disabled: {
             borderColor: 'colors.surfaceDisabled',
-            color: 'colors.onSurfaceDisabled',
-            opacity: 0.32,
+            color: 'colors.onSurface',
         },
         selected: {
             color: 'colors.primary',

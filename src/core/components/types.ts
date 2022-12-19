@@ -42,6 +42,7 @@ import type {
     NumberRangeInputProps,
     Card,
     ISelect,
+    Chip,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -92,6 +93,7 @@ export interface DefaultComponents {
     DropdownListPopover: ComponentType<PopoverProps>;
     Card: typeof Card;
     Select: ISelect;
+    Chip: typeof Chip;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

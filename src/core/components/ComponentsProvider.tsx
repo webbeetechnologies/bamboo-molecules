@@ -50,6 +50,7 @@ import {
     DropdownListPopover,
     Card,
     Select,
+    Chip,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -104,6 +105,7 @@ const defaultComponents: DefaultComponents = {
     DropdownListPopover,
     Card,
     Select,
+    Chip,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
