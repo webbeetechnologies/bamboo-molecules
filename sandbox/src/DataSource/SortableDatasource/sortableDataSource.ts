@@ -1,9 +1,10 @@
 import { createDataSource } from '../createDataSource';
 import { useSortableActionCreator } from './actionCreator';
+import { extractInitialState } from './initialState';
 
 const sortableDataSource = {
     actionCreator: useSortableActionCreator,
-    extractInitialState: extractInitialState,
+    extractInitialState,
 };
 
 const { DataSourceProvider, useDataSourceHook, useDataSourceDispatch } = createDataSource([

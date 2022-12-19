@@ -1,16 +1,13 @@
 import * as React from 'react';
-import { DataSourceProvider, useDataSource } from './DataSource';
-// import {
-//     // PaginatedDataSourceProvider,
-//     usePaginatedDataSource,
-// } from './DataSource/PageableDatasource/paginatedDatasource';
-// import {
-//     DataSourceProvider,
-//     useSortableDataSource,
-// } from './DataSource/SortableDatasource';
-// import { PageableReturnProps } from './DataSource/PageableDatasource/types';
-// import { useSortableDataSource } from './DataSource/SortableDatasource';
-// import { SortableReturnProps } from './DataSource/SortableDatasource/types';
+import {
+    DataSourceProvider,
+    useDataSource,
+    paginatedDataSourceReducer,
+    sortableDataSourceReducer,
+    loadableDataSourceReducer,
+    filterableDatasourceReducer,
+} from './DataSource';
+
 import RenderRecords from './RenderRecords';
 import { RecordType } from './types';
 
@@ -107,6 +104,10 @@ export default function UsingArraySource() {
             isPaginated={true}
             isFilterable={true}
             filters={[]}
+            onPaginate={paginatedDataSourceReducer}
+            onFilter={filterableDatasourceReducer}
+            onSort={sortableDataSourceReducer}
+            onLoad={loadableDataSourceReducer}
             pagination={{ pageNumber: 1, perPage: 10 }}
             isSortable={true}
             sort={sort}>

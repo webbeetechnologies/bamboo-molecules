@@ -29,7 +29,7 @@ type RecordsResolverType = <T extends {}>(state: any, func?: RecordsResolverType
 type ExtractInitialState = (props: any) => Record<string, any> | null;
 
 type CreateDataSourceArgs = {
-    reducer: (dataSource: any, action: any) => any;
+    reducer?: (dataSource: any, action: any) => any;
     actionCreator: <
         T extends {},
         S extends DataSourceType<T>,
@@ -272,6 +272,8 @@ export const createDataSource = (
         let tempDS = { ...dataSource, shouldResolveRecords, records: propsRef.current.records };
         const dataSourceResults = actionCreators.map(actionCreator => {
             const result = actionCreator(propsRef.current, tempDS, dispatch);
+            debugger;
+
             tempDS = {
                 ...tempDS,
                 ...result,

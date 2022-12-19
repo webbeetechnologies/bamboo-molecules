@@ -6,8 +6,13 @@ export * from './createDataSource';
 export * from './PageableDatasource';
 export * from './SortableDatasource';
 export * from './FilterableDatasource';
+export * from './LoadableDataSource';
 
-const DataSource = createDataSource([FilterableDatasource, SortableDataSource, PaginatedDataSource]);
+const DataSource = createDataSource([
+    FilterableDatasource,
+    SortableDataSource,
+    PaginatedDataSource,
+]);
 export const DataSourceProvider = DataSource.DataSourceProvider;
 export const useDataSource = DataSource.useDataSourceHook;
 export const useDataSourceDispatch = DataSource.useDataSourceDispatch;

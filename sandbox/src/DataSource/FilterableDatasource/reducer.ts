@@ -100,7 +100,7 @@ const nestedFiltersReducer: FilterReducer = (dataSource, action) => {
     };
 };
 
-export const filteredDataSourceReducer: FilterReducer = (dataSource, action: OnFilterAction) => {
+export const filterableDatasourceReducer: FilterReducer = (dataSource, action: OnFilterAction) => {
     if (dataSource.filterConfig?.hasNestedFilter) {
         return nestedFiltersReducer(dataSource, action);
     }

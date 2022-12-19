@@ -3,7 +3,7 @@ export type { EFilterActions } from './types';
 export * from './filterableDataSource';
 export default FilterableDataSource;
 
-export { filteredDataSourceReducer } from './reducer';
+export { filterableDatasourceReducer } from './reducer';
 export { presentFilteredDataSourceRecords } from './presenter';
 export { useFilterableActionCreator } from './actionCreator';
 export {

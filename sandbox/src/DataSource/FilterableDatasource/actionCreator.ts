@@ -36,7 +36,7 @@ export const useFilterableActionCreator = <
           applyFilter: (payload: ApplyFilterAction['payload']) => void;
       } => {
     const { onFilter = null } = props;
-    const { isFilterable, records, filters, filterConfig } = dataSource;
+    const { isFilterable, records, filters } = dataSource;
 
     const dataSourceRef = useRef(dataSource);
     dataSourceRef.current = dataSource;
@@ -54,7 +54,10 @@ export const useFilterableActionCreator = <
             // @ts-ignore
             dispatch({
                 type: 'UPDATE_PAYLOAD',
-                payload: onFilter(dataSourceRef.current, args),
+                payload: {
+                    ...onFilter(dataSourceRef.current, args),
+                    lastAction: args.type,
+                },
             });
         },
         [isFilterable, dispatch, onFilter, records],

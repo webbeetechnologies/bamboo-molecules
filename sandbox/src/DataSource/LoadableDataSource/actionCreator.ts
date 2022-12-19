@@ -39,8 +39,8 @@ export const useLoadableActionCreator = <
             dispatch({
                 type: 'UPDATE_PAYLOAD',
                 payload: {
-                    type: args.type,
-                    payload: onLoad(dataSourceRef.current, args),
+                    ...onLoad(dataSourceRef.current, args),
+                    lastAction: args.type,
                 },
             });
         },

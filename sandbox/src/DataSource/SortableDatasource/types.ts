@@ -34,7 +34,7 @@ export type Sort = {
 export interface SortableDataSource<T extends {}> extends DataSourceInternalState<T> {
     isSortable: boolean;
     sort: Sort;
-    onSort?: OnSort;
+    onSort: OnSort;
 }
 
 export interface SortableDataSourceResult {

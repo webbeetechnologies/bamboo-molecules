@@ -39,6 +39,8 @@ export const actionCreator = <
                 throw new Error('Cannot paginate when isPaginated is false');
             }
 
+            debugger;
+
             if (!onPaginate) {
                 throw new Error('onPaginate function is not provided');
             }
@@ -47,8 +49,8 @@ export const actionCreator = <
             dispatch({
                 type: 'UPDATE_PAYLOAD',
                 payload: {
-                    type: args.type,
-                    payload: onPaginate(dataSourceRef.current, args),
+                    ...onPaginate(dataSourceRef.current, args),
+                    lastAction: args.type,
                 },
             });
         },
