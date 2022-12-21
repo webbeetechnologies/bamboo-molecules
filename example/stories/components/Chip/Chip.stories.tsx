@@ -1,4 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import { userEvent, waitFor, within } from '@storybook/testing-library';
+import { expect } from '@storybook/jest';
 
 import {
     Example,
@@ -8,6 +10,7 @@ import {
     SuggestionChipExample,
 } from './Chip';
 import { Example as Icon } from '../Icon/Icon';
+import { delay } from '../../common';
 
 export default {
     title: 'components/Chip',
@@ -160,4 +163,41 @@ return <Chip.Filter selected={selected} onPress={onToggle} />;`,
             type: 'auto',
         },
     },
+};
+
+export const ChipInteractions = InputChip.bind({});
+
+ChipInteractions.args = {
+    ...InputChip.args,
+    onPress: () => {},
+    testID: 'input-chip',
+};
+
+ChipInteractions.parameters = {
+    ...InputChip.parameters,
+};
+
+ChipInteractions.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await waitFor(() => {
+        expect(canvas.getByTestId('input-chip')).toBeInTheDocument();
+    });
+
+    await delay(500);
+
+    await userEvent.click(canvas.getByTestId('input-chip'));
+
+    await delay(500);
+
+    // character for checkmark
+    await expect(canvas.getByText('󰄬'));
+
+    await delay(1000);
+
+    await userEvent.click(canvas.getByTestId('input-chip'));
+
+    await delay(500);
+    // character for checkmark
+    await expect(canvas.queryByText('󰄬')).not.toBeTruthy();
 };

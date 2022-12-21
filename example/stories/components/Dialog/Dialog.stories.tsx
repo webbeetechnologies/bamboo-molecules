@@ -1,8 +1,9 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-
-import { ExampleWithContent, ExampleWithTrigger } from './Dialog';
 import { userEvent, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
+
+import { delay } from '../../common';
+import { ExampleWithContent, ExampleWithTrigger } from './Dialog';
 
 export default {
     title: 'components/Dialog',
@@ -98,7 +99,7 @@ UsageWithTrigger.play = async ({ canvasElement }) => {
     // See https://storybook.js.org/docs/react/essentials/actions#automatically-matching-args to learn how to setup logging in the Actions panel
     await userEvent.click(canvas.getByTestId('dialog-trigger'));
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(500);
 
     // 👇 Assert DOM structure
     await expect(canvas.getByText('Dialog with Hero Icon')).toBeInTheDocument();
