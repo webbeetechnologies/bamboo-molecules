@@ -1,11 +1,9 @@
 import { ComponentPropsWithRef, ReactNode, memo, useMemo } from 'react';
 import { Animated, View, StyleProp, ViewStyle } from 'react-native';
 
-import { useComponentStyles, useCurrentTheme } from '../../hooks';
-import shadow from '../../styles/shadow';
-import { isAnimatedValue } from '../../styles/overlay';
-import { inputRange } from '../../styles/shadow';
 import type { MD3Elevation } from '../../core/theme/types';
+import { useComponentStyles } from '../../hooks';
+import shadow from '../../styles/shadow';
 import { BackgroundContext } from '../../utils';
 
 export type Props = ComponentPropsWithRef<typeof View> & {
@@ -74,34 +72,16 @@ export type Props = ComponentPropsWithRef<typeof View> & {
 
 // for Web
 const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) => {
-    const theme = useCurrentTheme();
     const surfaceStyles = useComponentStyles('Surface', style);
-    const backgroundColor = (() => {
-        if (isAnimatedValue(elevation)) {
-            return elevation.interpolate({
-                inputRange,
-                outputRange: inputRange.map(el => {
-                    // @ts-ignore
-                    return theme.colors.elevation?.[`level${el as MD3Elevation}`];
-                }),
-            });
-        }
 
-        // @ts-ignore
-        return theme.colors.elevation?.[`level${elevation}`];
-    })();
     const { surfaceStyle, surfaceContextValue } = useMemo(() => {
         return {
             surfaceContextValue: {
                 backgroundColor: surfaceStyles?.backgroundColor,
             },
-            surfaceStyle: [
-                { backgroundColor },
-                elevation ? shadow(elevation) : null,
-                surfaceStyles,
-            ],
+            surfaceStyle: [elevation ? shadow(elevation) : null, surfaceStyles],
         };
-    }, [backgroundColor, elevation, surfaceStyles]);
+    }, [elevation, surfaceStyles]);
 
     return (
         <BackgroundContext.Provider value={surfaceContextValue}>
