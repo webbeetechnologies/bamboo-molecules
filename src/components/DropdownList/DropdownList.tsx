@@ -1,7 +1,6 @@
-import { memo, useCallback, useMemo } from 'react';
-import { Platform, StyleSheet, useWindowDimensions } from 'react-native';
+import { memo, PropsWithoutRef, ReactElement, RefAttributes, useCallback, useMemo } from 'react';
+import { Platform, SectionList, StyleSheet, useWindowDimensions } from 'react-native';
 
-import { TriggerProps, withPopper } from '../../hocs/withPopper';
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { PopoverProps } from '../Popover';
 import type { OptionListProps } from '../OptionList';
@@ -16,43 +15,57 @@ enum DropdownListMode {
     Dialog = 'dialog', // large screen only
 }
 
-type DefaultSectionT<TItem> = {
+type DefaultItemT = {
+    id: string | number;
     [key: string]: any;
-    data: TItem[];
 };
 
+type DefaultSectionT<TItem> = {
+    data: TItem[];
+    [key: string]: any;
+};
+
+export type IDropdownList = <
+    ItemType extends DefaultItemT = DefaultItemT,
+    TSectionType extends DefaultSectionT<ItemType> = DefaultSectionT<ItemType>,
+>(
+    props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<SectionList<ItemType>>,
+) => ReactElement;
+
 export type Props<
-    TItem = any,
-    TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
-> = OptionListProps<TItem, TSection> & {
+    TItem extends DefaultItemT = DefaultItemT,
+    TSectionType extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
+> = OptionListProps<TItem, TSectionType> & {
     mode?: `${DropdownListMode}`;
     // optionsThreshhold: configuration to show maximum number of options in popover/actionsheet when mode == DropdownListMode.auto (default: 5).
     // on reaching threshold, switches to a full screen view in smaller devices.
     optionsThreshold?: number;
     isOpen?: boolean;
     setIsOpen?: (isOpen: boolean) => void;
-    TriggerComponent: (props: TriggerProps | { onPress: () => void }) => JSX.Element;
+    hideOnSelect?: boolean;
 
-    popoverProps?: Omit<PopoverProps, 'trigger' | 'onOpen' | 'onClose' | 'isOpen'>;
+    popoverProps?: Omit<PopoverProps, 'triggerRef' | 'onOpen' | 'onClose' | 'isOpen'>;
     actionSheetProps?: Omit<ActionSheetProps, 'children' | 'isOpen' | 'onClose' | 'onOpen'>;
     dialogProps?: Omit<DialogProps, 'isOpen' | 'children'>;
+    triggerRef: any;
 };
 
-const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>>({
+const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     mode = 'auto',
     popoverProps,
     actionSheetProps,
     dialogProps = {},
     isOpen: isOpenProp,
     setIsOpen: setIsOpenProp,
-    onSelectItemChange: onSelectItemChangeProp,
+    onSelectionChange: onSelectionChangeProp,
     records,
     optionsThreshold,
     containerStyle,
-    TriggerComponent,
+    triggerRef,
+    hideOnSelect = true,
     ...optionListProps
-}: Props<TItem, TSection>) => {
-    const { OptionList, ActionSheet, Dialog } = useMolecules();
+}: Props<TItem>) => {
+    const { OptionList, ActionSheet, Dialog, DropdownListPopover } = useMolecules();
     const componentStyles = useComponentStyles('DropdownList');
 
     const resolvedMode = useResolvedMode(mode, records, optionsThreshold);
@@ -72,10 +85,6 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
         onChange: setIsOpenProp,
     });
 
-    const onToggleDropdownList = useCallback(() => {
-        setIsOpen(!isOpen);
-    }, [isOpen, setIsOpen]);
-
     const onClose = useCallback(() => {
         if (isOpen) setIsOpen(false);
     }, [isOpen, setIsOpen]);
@@ -84,13 +93,15 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
         if (!isOpen) setIsOpen(true);
     }, [isOpen, setIsOpen]);
 
-    const onSelectItemChange = useCallback(
+    const onSelectionChange = useCallback(
         (item: TItem | TItem[]) => {
-            onSelectItemChangeProp?.(item);
+            onSelectionChangeProp?.(item);
 
-            setIsOpen(false);
+            if (hideOnSelect) {
+                setIsOpen(false);
+            }
         },
-        [setIsOpen, onSelectItemChangeProp],
+        [onSelectionChangeProp, hideOnSelect, setIsOpen],
     );
 
     const [WrapperComponent, props] = useMemo(() => {
@@ -100,10 +111,7 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
             case DropdownListMode.Dialog:
                 return [Dialog, { ...dialogProps, isOpen, onClose }];
             default:
-                return [
-                    PopoverWrapper,
-                    { ...popoverProps, trigger: TriggerComponent, isOpen, setIsOpen },
-                ];
+                return [DropdownListPopover, { ...popoverProps, triggerRef, isOpen, onClose }];
         }
     }, [
         resolvedMode,
@@ -114,29 +122,22 @@ const DropdownList = <TItem, TSection extends DefaultSectionT<TItem> = DefaultSe
         onOpen,
         Dialog,
         dialogProps,
+        DropdownListPopover,
         popoverProps,
-        TriggerComponent,
-        setIsOpen,
+        triggerRef,
     ]);
 
     return (
-        <>
-            {resolvedMode !== DropdownListMode.Popover && (
-                <TriggerComponent onPress={onToggleDropdownList} />
-            )}
-            <WrapperComponent {...(props as any)}>
-                <OptionList
-                    {...optionListProps}
-                    records={records}
-                    onSelectItemChange={onSelectItemChange}
-                    containerStyle={listStyles}
-                />
-            </WrapperComponent>
-        </>
+        <WrapperComponent {...(props as any)}>
+            <OptionList
+                {...optionListProps}
+                records={records}
+                onSelectionChange={onSelectionChange}
+                style={listStyles}
+            />
+        </WrapperComponent>
     );
 };
-
-const PopoverWrapper = withPopper<PopoverProps>(() => null);
 
 const useResolvedMode = (
     mode: `${DropdownListMode}`,
@@ -171,4 +172,4 @@ const useResolvedMode = (
     return DropdownListMode.Popover;
 };
 
-export default memo(DropdownList);
+export default memo(DropdownList) as IDropdownList;

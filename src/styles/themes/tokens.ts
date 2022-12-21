@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import type { Font } from '../../core/theme/types';
 
 const ref = {
@@ -104,6 +104,18 @@ const ref = {
         level2: 0.12,
         level3: 0.16,
         level4: 0.38,
+    },
+
+    shapes: {
+        corner: {
+            none: 0,
+            extraSmall: 4,
+            small: 8,
+            medium: 12,
+            large: 16,
+            extraLarge: 28,
+            full: Dimensions.get('window').width,
+        },
     },
 };
 

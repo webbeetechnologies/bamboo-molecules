@@ -60,7 +60,7 @@ export type BaseDatePickerProps = {
     style?: ViewStyle;
 };
 
-export type CalendarDate = Date | undefined;
+export type CalendarDate = Date | null | undefined;
 export type CalendarDates = Date[] | undefined | null;
 
 export type RangeChange = (params: { startDate: CalendarDate; endDate: CalendarDate }) => any;

@@ -11,27 +11,31 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
     color: 'colors.onSurfaceVariant',
 
     sizes: {
+        xs: {
+            width: 26,
+            height: 26,
+            borderRadius: 'shapes.corner.full',
+            // @ts-ignore
+            iconSize: 18,
+        },
         sm: {
             width: 30,
             height: 30,
-            borderRadius: 15,
-            margin: 4,
+            borderRadius: 'shapes.corner.full',
             // @ts-ignore
             iconSize: 20,
         },
         md: {
             width: 34,
             height: 34,
-            borderRadius: 17,
-            margin: 6,
+            borderRadius: 'shapes.corner.full',
             // @ts-ignore
             iconSize: 24,
         },
         lg: {
             width: 38,
             height: 38,
-            borderRadius: 19,
-            margin: 8,
+            borderRadius: 'shapes.corner.full',
             // @ts-ignore
             iconSize: 28,
         },
@@ -40,8 +44,7 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
     states: {
         disabled: {
             borderColor: 'colors.surfaceDisabled',
-            color: 'colors.onSurfaceDisabled',
-            opacity: 0.32,
+            color: 'colors.onSurface',
         },
         selected: {
             color: 'colors.primary',

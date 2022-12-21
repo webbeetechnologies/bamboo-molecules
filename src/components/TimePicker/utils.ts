@@ -7,25 +7,40 @@ type TimePickerCustomProps = {
     clockContainer?: ViewStyle;
 };
 
+// TODO: cleanup hardcoded values
 export const timePickerStyles: ComponentStylePropWithVariants<
     ViewStyle,
-    'landScape',
+    '',
     TimePickerCustomProps
 > = {
-    container: {},
-    clockContainer: {
-        paddingTop: 36,
-        paddingLeft: 12,
-        paddingRight: 12,
+    container: {
         alignItems: 'center',
     },
-    states: {
+    clockContainer: {
+        paddingLeft: 'spacings.3',
+        paddingRight: 'spacings.3',
+        alignItems: 'center',
+    },
+    variants: {
+        default: {
+            clockContainer: {
+                marginTop: 'spacings.9',
+            },
+        },
         landScape: {
             container: {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: 24 * 3 + 96 * 2 + 52 + circleSize,
+            },
+        },
+        landScapeWithoutClock: {
+            container: {
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 24 * 3 + 96 * 2 + 12,
             },
         },
     },
@@ -61,7 +76,7 @@ export const timePickerInputsStyles: ComponentStylePropWithVariants<
     dot: {
         width: 7,
         height: 7,
-        borderRadius: 7 / 2,
+        borderRadius: 'shapes.corner.full' as unknown as number,
         backgroundColor: 'colors.onSurface',
     },
     betweenDot: {
@@ -99,13 +114,13 @@ export const timePickerInputStyles: ComponentStylePropWithVariants<
         textAlignVertical: 'center',
         width: 96,
         height: 80,
-        backgroundColor: 'colors.surface',
+        backgroundColor: 'colors.surfaceVariant',
         color: 'colors.onSurface',
-        borderRadius: 'roundness.2' as unknown as number,
+        borderRadius: 'shapes.corner.small' as unknown as number,
     },
     button: {
         overflow: 'hidden',
-        borderRadius: 'roundness.2' as unknown as number,
+        borderRadius: 'shapes.corner.small' as unknown as number,
     },
 
     states: {
@@ -137,7 +152,7 @@ export const timePickerClockStyles: ComponentStylePropWithVariants<
         position: 'relative',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: circleSize / 2,
+        borderRadius: 'shapes.corner.full' as unknown as number,
         backgroundColor: 'colors.surfaceVariant',
     },
     middlePoint: {
@@ -148,7 +163,7 @@ export const timePickerClockStyles: ComponentStylePropWithVariants<
     },
     center: { justifyContent: 'center', alignItems: 'center' },
     endPoint: {
-        borderRadius: 'roundness.4' as unknown as number,
+        borderRadius: 'shapes.corner.full' as unknown as number,
         height: 30,
         width: 30,
         position: 'absolute',
@@ -160,7 +175,7 @@ export const timePickerClockStyles: ComponentStylePropWithVariants<
         position: 'absolute',
         marginBottom: -1,
         height: 2,
-        borderRadius: 'roundness.1' as unknown as number,
+        borderRadius: 'shapes.corner.extraSmall' as unknown as number,
         backgroundColor: 'colors.primary',
     },
 };
@@ -192,9 +207,11 @@ export const timePickerClockHoursStyles: ComponentStylePropWithVariants<
         marginLeft: -25,
         marginTop: -25,
 
-        borderRadius: 25,
+        borderRadius: 'shapes.corner.full' as unknown as number,
     },
-    outerHourInner: { borderRadius: 25 },
+    outerHourInner: {
+        borderRadius: 'shapes.corner.full' as unknown as number,
+    },
     innerHourRoot: {
         position: 'absolute',
         zIndex: 20,
@@ -204,9 +221,11 @@ export const timePickerClockHoursStyles: ComponentStylePropWithVariants<
         height: 40,
         marginLeft: -20,
         marginTop: -20,
-        borderRadius: 20,
+        borderRadius: 'shapes.corner.full' as unknown as number,
     },
-    innerHourInner: { borderRadius: 20 },
+    innerHourInner: {
+        borderRadius: 'shapes.corner.full' as unknown as number,
+    },
     innerHourText: { fontSize: 13 },
 };
 
@@ -237,9 +256,11 @@ export const timePickerClockMinutesStyles: ComponentStylePropWithVariants<
         marginLeft: -25,
         marginTop: -25,
 
-        borderRadius: 'roundness.6' as unknown as number,
+        borderRadius: 'shapes.corner.full' as unknown as number,
     },
-    outerHourInner: { borderRadius: 25 },
+    outerHourInner: {
+        borderRadius: 'shapes.corner.full' as unknown as number,
+    },
     innerHourRoot: {
         position: 'absolute',
         zIndex: 20,
@@ -249,10 +270,10 @@ export const timePickerClockMinutesStyles: ComponentStylePropWithVariants<
         height: 40,
         marginLeft: -20,
         marginTop: -20,
-        borderRadius: 20,
+        borderRadius: 'shapes.corner.full' as unknown as number,
     },
     innerHourInner: {
-        borderRadius: 'roundness.5' as unknown as number,
+        borderRadius: 'shapes.corner.full' as unknown as number,
     },
     innerHourText: {
         fontSize: 'typescale.labelLarge.fontSize' as unknown as number,
@@ -279,7 +300,7 @@ export const timePickerAmPmSwitcherStyles: ComponentStylePropWithVariants<
         borderWidth: 1,
         overflow: 'hidden',
         borderColor: 'colors.outline',
-        borderRadius: 'roundness.2' as unknown as number,
+        borderRadius: 'shapes.corner.small' as unknown as number,
     },
     switchSeparator: {
         height: 1,

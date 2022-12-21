@@ -33,7 +33,7 @@ import type {
     IFlatGrid,
     ISectionGrid,
     IOptionList,
-    DropdownListProps,
+    IDropdownList,
     ElementGroupProps,
     InputAddonProps,
     IActionSheet,
@@ -42,6 +42,9 @@ import type {
     NumberRangeInputProps,
     ProgressCircleProps,
     ProgressBarProps,
+    Card,
+    ISelect,
+    Chip,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -82,7 +85,7 @@ export interface DefaultComponents {
     TimePickerModal: ComponentType<TimePickerModalProps>;
     TextInputWithMask: ComponentType<TextInputWithMaskProps>;
     OptionList: IOptionList;
-    DropdownList: ComponentType<DropdownListProps>;
+    DropdownList: IDropdownList;
     ElementGroup: ComponentType<ElementGroupProps>;
     InputAddon: ComponentType<InputAddonProps>;
     ActionSheet: IActionSheet;
@@ -91,6 +94,10 @@ export interface DefaultComponents {
     NumberRangeInput: ComponentType<NumberRangeInputProps>;
     ProgressCircle: ComponentType<ProgressCircleProps>;
     ProgressBar: ComponentType<ProgressBarProps>;
+    DropdownListPopover: ComponentType<PopoverProps>;
+    Card: typeof Card;
+    Select: ISelect;
+    Chip: typeof Chip;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

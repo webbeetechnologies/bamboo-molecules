@@ -29,6 +29,7 @@ import {
     helperTextStyles,
     modalStyles,
     popoverStyles,
+    backdropStyles,
     datePickerStyles,
     datePickerYearPickerStyles,
     datePickerMonthStyles,
@@ -62,11 +63,20 @@ import {
     dialogTitleStyles,
     dialogIconStyles,
     dialogContentStyles,
-    dialogScrollAreaStyles,
     radioButtonStyles,
+    radioButtonItemStyles,
     numberRangeInputStyles,
     progressCircleStyles,
-    progressBarStyles
+    progressBarStyles,
+    dropdownListPopoverStyles,
+    cardStyles,
+    cardHeaderStyles,
+    cardContentStyles,
+    cardTypograhyStyles,
+    cardMediaStyles,
+    cardActionsStyles,
+    selectStyles,
+    chipStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -100,6 +110,7 @@ const defaultThemeValue: Partial<ITheme> = {
     HelperText: helperTextStyles,
     Modal: modalStyles,
     Popover: popoverStyles,
+    Backdrop: backdropStyles,
 
     FlatGrid: flatGridStyles,
     SectionGrid: sectionGridStyles,
@@ -145,13 +156,26 @@ const defaultThemeValue: Partial<ITheme> = {
     Dialog_Title: dialogTitleStyles,
     Dialog_Actions: dialogActionsStyles,
     Dialog_Icon: dialogIconStyles,
-    Dialog_ScrollArea: dialogScrollAreaStyles,
 
     RadioButton: radioButtonStyles,
+    RadioButton_Item: radioButtonItemStyles,
     NumberRangeInput: numberRangeInputStyles,
 
-    ProgressCircle:progressCircleStyles,
-    ProgressBar:progressBarStyles,
+    ProgressCircle: progressCircleStyles,
+    ProgressBar: progressBarStyles,
+
+    DropdownListPopover: dropdownListPopoverStyles,
+
+    Card: cardStyles,
+    Card_Header: cardHeaderStyles,
+    Card_Content: cardContentStyles,
+    Card_Typography: cardTypograhyStyles,
+    Card_Media: cardMediaStyles,
+    Card_Actions: cardActionsStyles,
+
+    Select: selectStyles,
+
+    Chip: chipStyles,
 };
 
 const defaultExtractStyles = memoize(

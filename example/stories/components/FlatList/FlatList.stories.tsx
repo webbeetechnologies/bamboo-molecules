@@ -1,5 +1,5 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ProvideMolecules } from '../../common';
+import { generateFlatListData, ProvideMolecules } from '../../common';
 import { Example as ListItem, ListItemTitle } from '../ListItem/ListItem';
 
 import { Example } from './FlatList';
@@ -18,16 +18,13 @@ export default {
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => (
-    <View style={{ minWidth: 300 }}>
+    <View style={{ minWidth: 300, maxHeight: 500 }}>
         <Example {...args} />
     </View>
 );
 
 Default.args = {
-    data: [
-        { title: 'First item title', description: 'First item description' },
-        { title: 'Second item title', description: 'Second item description' },
-    ],
+    data: generateFlatListData(1000),
     renderItem: ({ item }: any) => (
         <ListItem>
             <ListItemTitle>{item.title}</ListItemTitle>
@@ -39,10 +36,23 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<FlatList {...props} 
+<FlatList
     data={[
-        { title: 'First item title', description: 'First item description' },
-        { title: 'Second item title', description: 'Second item description' },
+        {
+            title: 'Item 0',
+        },
+         {
+            title: 'Item 1',
+        },
+         {
+            title: 'Item 2',
+        },
+         {
+            title: 'Item 3',
+        },
+         {
+            title: 'Item 4',
+        },
     ]}
     renderItem={({ item }: any) => (
         <ListItem>

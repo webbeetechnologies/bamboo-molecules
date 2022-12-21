@@ -2,84 +2,53 @@ import { forwardRef, memo } from 'react';
 
 import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
 import useDateInput from './inputUtils';
-import type { DatePickerInputProps } from './types';
+import type { DatePickerInputWithoutModalProps } from './types';
 
 function DatePickerInputWithoutModal(
     {
         label,
         value,
         onChange,
-        locale = 'en',
+        // locale = 'en',
         validRange,
         inputMode,
-        withDateFormatInLabel = true,
-        modal,
         inputButtons,
+        dateFormat = 'dd/MM/yyyy',
         ...rest
-    }: DatePickerInputProps & {
-        modal?: (params: {
-            value: DatePickerInputProps['value'];
-            locale: DatePickerInputProps['locale'];
-            inputMode: DatePickerInputProps['inputMode'];
-            validRange: DatePickerInputProps['validRange'];
-        }) => any;
-        inputButtons?: any;
-    },
+    }: DatePickerInputWithoutModalProps,
     ref: any,
 ) {
     const { TextInputWithMask, View } = useMolecules();
     const { container } = useComponentStyles('DatePickerInput');
 
     const theme = useCurrentTheme();
-    const { formattedValue, inputFormat, onChangeText, error } = useDateInput({
-        locale,
+    const { formattedValue, onChangeText, error } = useDateInput({
+        // locale,
         value,
         validRange,
         inputMode,
         onChange,
+        dateFormat,
     });
 
     return (
-        <>
-            <View style={container}>
-                <TextInputWithMask
-                    {...rest}
-                    ref={ref}
-                    label={getLabel({
-                        // TODO: support label components?
-                        label: label as any,
-                        inputFormat,
-                        withDateFormatInLabel,
-                    })}
-                    value={formattedValue}
-                    keyboardType={'number-pad'}
-                    placeholder={inputFormat}
-                    mask={inputFormat}
-                    onChangeText={onChangeText}
-                    keyboardAppearance={theme.dark ? 'dark' : 'default'}
-                    error={!!error}
-                    right={inputButtons}
-                    supportingText={error as string}
-                />
-            </View>
-            {modal?.({ value, locale, inputMode, validRange })}
-        </>
+        <View style={container}>
+            <TextInputWithMask
+                placeholder={dateFormat}
+                {...rest}
+                ref={ref}
+                label={label || dateFormat}
+                value={formattedValue}
+                keyboardType={'number-pad'}
+                mask={dateFormat}
+                onChangeText={onChangeText}
+                keyboardAppearance={theme.dark ? 'dark' : 'default'}
+                error={!!error}
+                right={inputButtons}
+                supportingText={error || undefined}
+            />
+        </View>
     );
-}
-
-function getLabel({
-    withDateFormatInLabel,
-    inputFormat,
-    label,
-}: {
-    withDateFormatInLabel: boolean;
-    inputFormat: string;
-    label: string | undefined;
-}) {
-    if (withDateFormatInLabel) {
-        return label ? `${label} (${inputFormat})` : inputFormat;
-    }
-    return label || '';
 }
 
 export default memo(forwardRef(DatePickerInputWithoutModal));

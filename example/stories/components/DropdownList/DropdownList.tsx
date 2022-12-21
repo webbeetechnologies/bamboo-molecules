@@ -1,30 +1,31 @@
+import { useRef } from 'react';
 import { useMolecules, DropdownListProps, useToggle } from 'bamboo-molecules';
-import { useMemo } from 'react';
 
 // @ts-ignore
-export type Props<T> = DropdownListProps<T> & {};
+export type Props = DropdownListProps & {};
 
-export const Example = <T,>(props: Props<T>) => {
+export const Example = (props: Props) => {
     const { DropdownList } = useMolecules();
 
     return <DropdownList {...props} />;
 };
 
-export const ExampleWithToggle = <T,>(props: Props<T>) => {
+export const ExampleWithToggle = (props: Props) => {
     const { DropdownList, Button } = useMolecules();
-    const [isOpen, onToggle] = useToggle();
-
-    const TriggerComponent = useMemo(
-        () => (props: any) => <Button {...props}>Toggle DropdownList</Button>,
-        [Button],
-    );
+    const triggerRef = useRef(null);
+    const { state: isOpen, onToggle, setState: setIsOpen } = useToggle();
 
     return (
-        <DropdownList
-            {...props}
-            isOpen={isOpen}
-            setIsOpen={onToggle}
-            TriggerComponent={TriggerComponent}
-        />
+        <>
+            <Button ref={triggerRef} onPress={onToggle}>
+                Toggle DropdownList
+            </Button>
+            <DropdownList
+                {...props}
+                triggerRef={triggerRef}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+            />
+        </>
     );
 };

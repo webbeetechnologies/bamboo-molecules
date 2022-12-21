@@ -1,5 +1,5 @@
-import type { ComponentStylePropWithVariants } from '../../types';
 import type { TextStyle, ViewStyle } from 'react-native';
+import type { ComponentStylePropWithVariants } from '../../types';
 
 type CustomProps = {
     overlay?: ViewStyle;
@@ -21,7 +21,7 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, '', Custom
     content: {
         backgroundColor: 'colors.surface',
         padding: 'spacings.2',
-        borderRadius: 'roundness.2' as unknown as number,
+        borderRadius: 'shapes.corner.small' as unknown as number,
     },
     arrow: {
         backgroundColor: 'colors.surface',

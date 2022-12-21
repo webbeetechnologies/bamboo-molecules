@@ -121,7 +121,7 @@ const RadioButtonItem = (
         [context?.value, status, value],
     );
 
-    const componentStyles = useComponentStyles('RadioButton', styleProp, {
+    const componentStyles = useComponentStyles('RadioButton_Item', styleProp, {
         states: {
             disabled: !!disabled,
             checked,
@@ -160,7 +160,15 @@ const RadioButtonItem = (
                 checked,
                 disabled,
             },
-            radioButtonProps: { value, disabled, status, color, uncheckedColor, style: _style },
+            radioButtonProps: {
+                value,
+                disabled,
+                status,
+                color,
+                uncheckedColor,
+                checked,
+                style: _style,
+            },
         };
     }, [
         checked,

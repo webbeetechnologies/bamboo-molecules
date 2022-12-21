@@ -1,17 +1,19 @@
-import React from 'react';
+import { memo } from 'react';
 import { Pressable } from 'react-native';
-import { styles } from './utils';
+import { useComponentStyles } from '../../hooks';
 import type { BackdropProps } from './types';
 
-const Backdrop: React.FC<BackdropProps> = props => {
+const Backdrop = ({ style, ...rest }: BackdropProps) => {
+    const componentStyles = useComponentStyles('Backdrop', style);
+
     return (
         <Pressable
-            style={styles.backdrop}
             accessible={false}
             importantForAccessibility="no"
-            {...props}
+            {...rest}
+            style={componentStyles}
         />
     );
 };
 
-export default React.memo(Backdrop);
+export default memo(Backdrop);

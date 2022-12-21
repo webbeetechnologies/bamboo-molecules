@@ -14,7 +14,7 @@ type CustomProps = {
 };
 
 export const datePickerStyles: ComponentStylePropWithVariants<TextStyle, States, CustomProps> = {
-    roundness: 'roundness.1',
+    roundness: 'shapes.corner.extraSmall',
     headerBackgroundColor: 'colors.surface',
 
     container: {
@@ -44,13 +44,13 @@ export const datePickerMonthStyles: ComponentStylePropWithVariants<
     yearButton: {
         alignSelf: 'flex-start',
         marginLeft: 6,
-        borderRadius: 'roundness.1' as unknown as number,
+        borderRadius: 'shapes.corner.extraSmall' as unknown as number,
     },
     yearButtonInner: {
         paddingLeft: 'spacings.4',
         flexDirection: 'row',
         alignItems: 'center',
-        borderRadius: 'roundness.1' as unknown as number,
+        borderRadius: 'shapes.corner.extraSmall' as unknown as number,
     },
     month: {},
     monthHeader: {
