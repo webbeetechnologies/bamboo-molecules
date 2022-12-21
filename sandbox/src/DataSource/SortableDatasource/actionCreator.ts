@@ -7,7 +7,7 @@ import {
     SortableDataSource,
     UpdateSortAction,
 } from './types';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { getSortedValue } from './utils';
 
 const notSortable = { isSortable: false };
@@ -23,7 +23,10 @@ export const useSortableActionCreator = <
     dispatch: (action: A) => void,
 ) => {
     const { onSort = null } = props;
-    const { records, isSortable, sort } = dataSource;
+    const { isSortable, sort } = dataSource;
+
+    const dataSourceRef = useRef(dataSource);
+    dataSourceRef.current = dataSource;
 
     const handleSortAction = useCallback(
         (args: OnSortAction) => {
@@ -39,12 +42,12 @@ export const useSortableActionCreator = <
             dispatch({
                 type: 'UPDATE_PAYLOAD',
                 payload: {
-                    ...onSort(dataSource, args),
+                    ...onSort(dataSourceRef.current, args),
                     lastAction: args.type,
                 },
             });
         },
-        [isSortable, dispatch, onSort, dataSource],
+        [isSortable, dispatch, onSort, dataSourceRef],
     );
 
     return useMemo(
@@ -79,6 +82,6 @@ export const useSortableActionCreator = <
                           });
                       },
                   },
-        [isSortable, sort, records, handleSortAction],
+        [isSortable, sort, handleSortAction],
     );
 };

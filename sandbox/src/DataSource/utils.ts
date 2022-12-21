@@ -14,7 +14,7 @@ export type DataSourcePresenterType = <T extends {}>(
 export const combinePresenters =
     (presenters: DataSourcePresenterType[]): DataSourcePresenterType =>
     async dataSource => {
-        let ds = {};
+        let ds = { records: dataSource.records };
 
         for (const presenter of presenters) {
             ds = {
