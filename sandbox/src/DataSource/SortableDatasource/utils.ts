@@ -3,17 +3,11 @@ import { ESortDirection } from './types';
 import zip from 'lodash.zip';
 import orderBy from 'lodash.orderBy';
 
-export const getSortedValue = <T extends {}>(arg: {
-    isSortable?: boolean;
-    sort: Sort;
-    shouldResolveRecords?: boolean;
-    records: T[];
-}) => {
-    const { isSortable, sort, shouldResolveRecords = true, records } = arg;
+export const getSortedValue = (arg: { isSortable?: boolean; sort: Sort }) => {
+    const { isSortable, sort } = arg;
     return {
         isSortable,
         sort,
-        ...(shouldResolveRecords ? { records: getSortedRecords({ sort, records }) } : {}),
     };
 };
 

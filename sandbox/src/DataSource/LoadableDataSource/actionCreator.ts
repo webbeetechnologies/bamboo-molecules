@@ -37,11 +37,8 @@ export const useLoadableActionCreator = <
 
             // @ts-ignore
             dispatch({
-                type: 'UPDATE_PAYLOAD',
-                payload: {
-                    ...onLoad(dataSourceRef.current, args),
-                    lastAction: args.type,
-                },
+                type: args.type,
+                payload: onLoad(dataSourceRef.current, args),
             });
         },
         [isLoadable, dispatch, onLoad],

@@ -9,4 +9,4 @@ export {
 } from './initialState';
 export { useLoadableActionCreator } from './actionCreator';
 export { loadableDataSourceReducer } from './reducer';
-export { loadableDataSourcePresenter } from './presenter';
+export { presentloadedDataSourceRecords } from './presenter';

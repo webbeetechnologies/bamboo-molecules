@@ -8,6 +8,8 @@ export * from './SortableDatasource';
 export * from './FilterableDatasource';
 export * from './LoadableDataSource';
 
+export * from './utils';
+
 const DataSource = createDataSource([
     FilterableDatasource,
     SortableDataSource,

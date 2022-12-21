@@ -1,10 +1,9 @@
-import { ESortDirection, useDataSource } from '../DataSource';
-import { RecordType } from '../types';
-import { DataSourceReturnType } from '../DataSource/__types';
+import { ESortDirection, SortableDataSourceResult, useDataSource } from '../DataSource';
 import { RenderJSON } from './RenderJSONDemo';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo } from 'react';
+import keyBy from 'lodash/keyby';
 
-const getSortableProps = (props: DataSourceReturnType<RecordType>) => {
+const getSortableProps = <T,>(props: SortableDataSourceResult<T>) => {
     if (!props.isSortable) {
         return { isSortable: props.isSortable };
     }
@@ -15,6 +14,9 @@ const getSortableProps = (props: DataSourceReturnType<RecordType>) => {
 
 export const ApplySort = () => {
     const sortableProps = getSortableProps(useDataSource());
+
+    const order = sortableProps.sort?.order;
+    const sortOrderHash = useMemo(() => keyBy(order, 'column'), [order]);
 
     const handleApplySort = useCallback(
         (column: string, direction?: ESortDirection) => {
@@ -56,17 +58,19 @@ export const ApplySort = () => {
             <div>
                 <h1>Sorting</h1>
                 <table width="300" style={{ marginBlockEnd: 15 }}>
-                    {sortableProps.sort.order.length > 0 && (
+                    {sortableProps.sort?.order.length > 0 && (
                         <thead style={{ textAlign: 'left' }}>
                             <tr>
                                 <th>Column</th>
                                 <th>Order</th>
+                                {sortableProps.sort?.isNestedSort && <th>Order</th>}
+                                <th>Order</th>
                             </tr>
                         </thead>
                     )}
-                    {sortableProps.sort.order.map(({ column, ...rest }, i) => {
+                    {sortableProps.sort?.order.map(({ column, ...rest }, i) => {
                         return (
-                            <tbody key={column + i}>
+                            <tbody key={column}>
                                 <tr>
                                     <td>{column}</td>
                                     <td>
@@ -74,20 +78,16 @@ export const ApplySort = () => {
                                             key={column + 'sort'}
                                             value={rest.direction + ''}
                                             onChange={e => {
-                                                if (e.target.value === '') handleRemoveSort(column);
-                                                else
-                                                    handleUpdateSortDirection(
-                                                        i,
-                                                        +e.target
-                                                            .value as unknown as ESortDirection,
-                                                    );
+                                                handleUpdateSortDirection(
+                                                    i,
+                                                    +e.target.value as unknown as ESortDirection,
+                                                );
                                             }}>
-                                            <option value="">Remove</option>
                                             <option value={ESortDirection.Asc}>asc</option>
                                             <option value={ESortDirection.Desc}>desc</option>
                                         </select>
                                     </td>
-                                    {sortableProps.sort.isNestedSort && (
+                                    {sortableProps.sort?.isNestedSort && (
                                         <td>
                                             <input
                                                 value={i}
@@ -96,6 +96,9 @@ export const ApplySort = () => {
                                             />
                                         </td>
                                     )}
+                                    <td>
+                                        <button onClick={() => handleRemoveSort(column)}>X</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         );
@@ -104,11 +107,13 @@ export const ApplySort = () => {
 
                 <select onChange={e => handleApplySort(e.target.value)} value={''}>
                     <option>Select a column to Filter on</option>
-                    {['id', 'first_name', 'last_name'].map(val => (
-                        <option key={val} value={val}>
-                            {val}
-                        </option>
-                    ))}
+                    {['id', 'first_name', 'last_name'].map(val =>
+                        sortOrderHash?.[val] ? null : (
+                            <option key={val} value={val}>
+                                {val}
+                            </option>
+                        ),
+                    )}
                 </select>
                 <RenderJSON json={sortableProps.sort} />
             </div>

@@ -35,8 +35,8 @@ export const useFilterableActionCreator = <
           updateFilterGroup: (payload: UpdateGroupAction['payload']) => void;
           applyFilter: (payload: ApplyFilterAction['payload']) => void;
       } => {
-    const { onFilter = null } = props;
-    const { isFilterable, records, filters } = dataSource;
+    const { onFilter = null, records } = props;
+    const { isFilterable, filters } = dataSource;
 
     const dataSourceRef = useRef(dataSource);
     dataSourceRef.current = dataSource;
@@ -55,7 +55,7 @@ export const useFilterableActionCreator = <
             dispatch({
                 type: 'UPDATE_PAYLOAD',
                 payload: {
-                    ...onFilter(dataSourceRef.current, args),
+                    ...onFilter({ ...dataSourceRef.current, records }, args),
                     lastAction: args.type,
                 },
             });

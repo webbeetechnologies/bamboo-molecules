@@ -1,11 +1,11 @@
 import { SortableDataSource } from './types';
 import { getSortedRecords } from './utils';
 
-export const sortableDataSourcePresenter = <T extends {}>({
+export const presentSortedDataSourceRecords = <T extends {}>({
     isSortable,
     records,
     sort,
 }: SortableDataSource<T>) => {
-    if (!isSortable) return records;
-    return getSortedRecords({ records, sort });
+    if (!isSortable) return { records };
+    return { records: getSortedRecords({ records, sort }) };
 };

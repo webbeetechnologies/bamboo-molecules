@@ -18,11 +18,11 @@ export interface Pagination {
 }
 
 type OnPaginate = <T extends {}>(
-    dataSource: PaginationDataSource<T> & DataSourceType<T>,
+    dataSource: PaginationDataSource<T>,
     args: OnPaginateAction,
 ) => Omit<Pagination, 'disabled'>;
 
-export interface PaginationDataSource<T extends {}> extends DataSourceType<T> {
+export interface PaginationDataSource<T extends {}> extends DataSourceInternalState<T> {
     isPaginated: boolean;
     pagination: Pagination;
     onPaginate: OnPaginate;

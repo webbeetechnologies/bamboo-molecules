@@ -5,6 +5,8 @@ export const paginatedDataSourceReducer: PaginationReducer = (dataSource, args: 
     let pageNumber = dataSource.pagination.pageNumber;
     let perPage = dataSource.pagination.perPage;
 
+    const records = Array.from({ length: dataSource.totalRecordsCount });
+
     switch (args.type) {
         case EPageableActions.SetPerPage:
             perPage = (args as SetPerPage).payload.perPage;
@@ -17,13 +19,19 @@ export const paginatedDataSourceReducer: PaginationReducer = (dataSource, args: 
             pageNumber = 1;
             break;
         case EPageableActions.End:
-            pageNumber = getPages(dataSource).length;
+            pageNumber = getPages({ ...dataSource, records }).length;
             break;
         case EPageableActions.Prev:
-            pageNumber = Math.max(Math.min(getPages(dataSource).length, pageNumber - 1), 1);
+            pageNumber = Math.max(
+                Math.min(getPages({ ...dataSource, records }).length, pageNumber - 1),
+                1,
+            );
             break;
         case EPageableActions.Next:
-            pageNumber = Math.min(Math.max(0, pageNumber + 1), getPages(dataSource).length);
+            pageNumber = Math.min(
+                Math.max(0, pageNumber + 1),
+                getPages({ ...dataSource, records }).length,
+            );
             break;
         default:
             return dataSource;

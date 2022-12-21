@@ -9,4 +9,4 @@ export {
     extractInitialState as extractInitialSortingState,
     initialState as initialSortingState,
 } from './initialState';
-export { sortableDataSourcePresenter } from './presenter';
+export { presentSortedDataSourceRecords } from './presenter';

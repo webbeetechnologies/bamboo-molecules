@@ -16,7 +16,12 @@ export enum EFilterOperators {
     AND = 'and',
 }
 
-export type SingleFilter = Record<string, any>;
+export type SingleFilter = {
+    columnName: string;
+    value: any;
+    createdAt?: number;
+    updatedAt?: number;
+};
 export type GroupedFilter = {
     type: `${EFilterOperators}`;
     filters: (GroupedFilter | SingleFilter)[];

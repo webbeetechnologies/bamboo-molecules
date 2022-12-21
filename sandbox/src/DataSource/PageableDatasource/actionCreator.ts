@@ -24,7 +24,7 @@ export const actionCreator = <
     dispatch: (action: A) => void,
 ) => {
     const { onPaginate = null } = props;
-    const { isPaginated, records, pagination } = dataSource;
+    const { isPaginated, totalRecordsCount, pagination } = dataSource;
 
     const dataSourceRef = useRef(dataSource);
     dataSourceRef.current = dataSource;
@@ -52,7 +52,7 @@ export const actionCreator = <
                 },
             });
         },
-        [isPaginated, dispatch, onPaginate, records, pagination],
+        [isPaginated, dispatch, onPaginate, pagination],
     );
 
     return useMemo(
@@ -63,7 +63,8 @@ export const actionCreator = <
                       ...getPaginatedValue({
                           isPaginated,
                           pagination,
-                          records,
+                          totalRecordsCount,
+                          debug: true,
                       }),
                       setPerPage: (payload: SetPerPage['payload']) => {
                           handlePaginate({ type: EPageableActions.SetPerPage, payload });
@@ -84,6 +85,6 @@ export const actionCreator = <
                           handlePaginate({ type: EPageableActions.Next });
                       },
                   },
-        [isPaginated, pagination, records, handlePaginate],
+        [isPaginated, pagination, totalRecordsCount, handlePaginate],
     );
 };

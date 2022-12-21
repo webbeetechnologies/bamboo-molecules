@@ -38,7 +38,10 @@ export const useSortableActionCreator = <
             // @ts-ignore
             dispatch({
                 type: 'UPDATE_PAYLOAD',
-                payload: onSort(dataSource, args),
+                payload: {
+                    ...onSort(dataSource, args),
+                    lastAction: args.type,
+                },
             });
         },
         [isSortable, dispatch, onSort, dataSource],
@@ -49,7 +52,7 @@ export const useSortableActionCreator = <
             !isSortable
                 ? notSortable
                 : {
-                      ...getSortedValue({ isSortable, sort, records }),
+                      ...getSortedValue({ isSortable, sort }),
 
                       applySort: (args: ApplySortAction['payload']) => {
                           handleSortAction({

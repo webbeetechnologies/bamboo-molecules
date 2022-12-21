@@ -37,7 +37,7 @@ export interface SortableDataSource<T extends {}> extends DataSourceInternalStat
     onSort: OnSort;
 }
 
-export interface SortableDataSourceResult {
+export interface SortableDataSourceResult<T extends {}> extends DataSourceInternalState<T> {
     isSortable: boolean;
     sort?: Sort;
 }

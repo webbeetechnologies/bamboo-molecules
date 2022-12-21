@@ -7,5 +7,7 @@ export const presentPaginatedDataSourceRecords = <T extends {}>({
     pagination,
 }: PaginationDataSource<T>) => {
     if (!isPaginated) return records;
-    return getPage({ records, pagination });
+    return {
+        records: getPage({ records, pagination }),
+    };
 };

@@ -1,15 +1,19 @@
 import * as React from 'react';
 import {
     DataSourceProvider,
-    useDataSource,
     paginatedDataSourceReducer,
     sortableDataSourceReducer,
     loadableDataSourceReducer,
     filterableDatasourceReducer,
+    presentFilteredDataSourceRecords,
+    presentSortedDataSourceRecords,
+    presentPaginatedDataSourceRecords,
+    combinePresenters,
 } from './DataSource';
 
 import { RecordType } from './types';
 import RenderRecords from './components/RenderRecords';
+import { useMemo } from 'react';
 
 function findAllCustomerData() {
     const records = [
@@ -104,7 +108,16 @@ export default function UsingArraySource() {
             onLoad={loadableDataSourceReducer}
             pagination={{ pageNumber: 1, perPage: 10 }}
             isSortable={true}
-            sort={sort}>
+            sort={sort}
+            recordsPresenter={useMemo(
+                () =>
+                    combinePresenters([
+                        presentFilteredDataSourceRecords,
+                        presentSortedDataSourceRecords,
+                        presentPaginatedDataSourceRecords,
+                    ]),
+                [],
+            )}>
             <RenderRecords />
         </DataSourceProvider>
     );

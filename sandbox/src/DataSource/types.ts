@@ -3,5 +3,5 @@ export interface DataSourceType<T extends {}> {
 }
 
 export interface DataSourceInternalState<T extends {}> extends DataSourceType<T> {
-    shouldResolveRecords: boolean;
+    totalRecordsCount: number;
 }

@@ -13,6 +13,7 @@ import { Dispatch } from 'react';
 import { useEffect } from 'react';
 import { DataSourceError } from '../CustomError/DataSourceError';
 import { DataSourceType } from './types';
+import { combinePresenters, DataSourcePresenterType } from './utils';
 
 export enum EDataSourceActions {
     INIT_SOURCE = 'INIT_SOURCE',
@@ -25,10 +26,15 @@ export type DataSourceActions = {
     payload?: any;
 };
 
-type RecordsResolverType = <T extends {}>(state: any, func?: RecordsResolverType) => T[];
 type ExtractInitialState = (props: any) => Record<string, any> | null;
 
+export enum EDataSourcePhase {
+    BEFORE_DATA = 'BEFORE_DATA',
+    ON_DATA = 'ON_DATA',
+}
+
 type CreateDataSourceArgs = {
+    phase: `${EDataSourcePhase}`;
     reducer?: (dataSource: any, action: any) => any;
     actionCreator: <
         T extends {},
@@ -40,7 +46,7 @@ type CreateDataSourceArgs = {
         state: S,
         dispatch: (action: A) => void,
     ) => Record<string, any> | null;
-    defaultResolver?: <T extends {}>(state: any, func?: RecordsResolverType) => T[];
+    defaultPresenter?: DataSourcePresenterType;
     extractInitialState?: ExtractInitialState;
     initialState: Record<string, any>;
 };
@@ -54,33 +60,47 @@ export const createDataSource = (
         lastAction: EDataSourceActions.INIT_SOURCE,
     });
 
-    const { reducers, actionCreators, defaultResolvers, extractInitialStates, initialState } =
-        dataSources.reduce(
-            (
-                combinedDataSources,
-                { reducer, actionCreator, defaultResolver, extractInitialState, initialState: $i },
-            ) => ({
-                reducers: combinedDataSources.reducers.concat(reducer ?? []),
-                actionCreators: combinedDataSources.actionCreators.concat(actionCreator ?? []),
-                defaultResolvers: combinedDataSources.defaultResolvers.concat(
-                    defaultResolver ?? [],
-                ),
-                extractInitialStates: combinedDataSources.extractInitialStates.concat(
-                    extractInitialState ?? [],
-                ),
-                initialState: initialDataSourceValue ?? {
-                    ...combinedDataSources.initialState,
-                    ...$i,
-                },
-            }),
+    const {
+        reducers,
+        actionCreators,
+        defaultPresenters,
+        extractInitialStates,
+        initialState,
+        hasBeforeDataPhase,
+    } = dataSources.reduce(
+        (
+            combinedDataSources,
             {
-                reducers: [] as CreateDataSourceArgs['reducer'][],
-                actionCreators: [] as CreateDataSourceArgs['actionCreator'][],
-                defaultResolvers: [] as RecordsResolverType[],
-                extractInitialStates: [initialStateExtractor] as ExtractInitialState[],
-                initialState: initialDataSourceValue as Record<string, any>,
+                phase = EDataSourcePhase.ON_DATA,
+                reducer,
+                actionCreator,
+                defaultPresenter,
+                extractInitialState,
+                initialState: $i,
             },
-        );
+        ) => ({
+            hasBeforeDataPhase:
+                combinedDataSources.hasBeforeDataPhase || phase === EDataSourcePhase.BEFORE_DATA,
+            reducers: combinedDataSources.reducers.concat(reducer ?? []),
+            actionCreators: combinedDataSources.actionCreators.concat(actionCreator ?? []),
+            defaultPresenters: combinedDataSources.defaultPresenters.concat(defaultPresenter ?? []),
+            extractInitialStates: combinedDataSources.extractInitialStates.concat(
+                extractInitialState ?? [],
+            ),
+            initialState: initialDataSourceValue ?? {
+                ...combinedDataSources.initialState,
+                ...$i,
+            },
+        }),
+        {
+            hasBeforeDataPhase: false,
+            reducers: [] as CreateDataSourceArgs['reducer'][],
+            actionCreators: [] as CreateDataSourceArgs['actionCreator'][],
+            defaultPresenters: [] as DataSourcePresenterType[],
+            extractInitialStates: [initialStateExtractor] as ExtractInitialState[],
+            initialState: initialDataSourceValue as Record<string, any>,
+        },
+    );
 
     /**
      *
@@ -92,14 +112,13 @@ export const createDataSource = (
             case EDataSourceActions.SET_RESOLVED_RECORDS:
                 return {
                     ...dataSource,
-                    records: action.payload.records,
+                    ...action.payload,
                     lastAction: action.type,
                 };
             case EDataSourceActions.UPDATE_PAYLOAD:
                 return {
                     ...dataSource,
                     ...action.payload,
-                    lastAction: action.type,
                 };
         }
 
@@ -116,7 +135,6 @@ export const createDataSource = (
             }),
             {
                 ...dataSource,
-                records: action.payload.records,
                 lastAction: action.type,
             },
         );
@@ -133,17 +151,7 @@ export const createDataSource = (
      * Thereby reducing the results.
      * If a resolver function is passed, it's the responsibility of the resolver function to handle result output.
      */
-    const combinedResolvers: RecordsResolverType = dataSource => {
-        const records = defaultResolvers.reduce(
-            (ds, resolver) => ({
-                ...ds,
-                records: resolver(ds),
-            }),
-            dataSource,
-        ).records;
-
-        return records;
-    };
+    const combinedPresenters: DataSourcePresenterType = combinePresenters(defaultPresenters);
 
     /**
      *
@@ -158,11 +166,11 @@ export const createDataSource = (
      *
      */
     const DataSourceProvider = <T extends {}>(
-        props: PropsWithChildren<{ recordsResolver?: RecordsResolverType } & DataSourceType<T>>,
+        props: PropsWithChildren<
+            { recordsPresenter?: DataSourcePresenterType } & DataSourceType<T>
+        >,
     ) => {
-        const { children, recordsResolver = combinedResolvers, ...rest } = props;
-
-        const shouldResolveRecords = React.useRef(recordsResolver === combinedResolvers).current;
+        const { children, recordsPresenter = combinedPresenters, ...rest } = props;
 
         /***
          *
@@ -183,7 +191,7 @@ export const createDataSource = (
             ({ type, payload }) => {
                 handleDispatch({
                     type,
-                    payload: { records: propsRef.current.records, ...payload },
+                    payload: { ...payload },
                 });
             },
             [handleDispatch],
@@ -208,23 +216,24 @@ export const createDataSource = (
          */
         useEffect(() => {
             if (dataSource.lastAction === EDataSourceActions.SET_RESOLVED_RECORDS) return;
-            if (dataSource.lastAction === EDataSourceActions.UPDATE_PAYLOAD) return;
 
             (async () => {
                 const recordsProp = propsRef.current.records;
-                const records = await recordsResolver(
+                const presentedDataSource = await recordsPresenter(
                     {
                         ...dataSource,
                         records: recordsProp,
                     },
-                    combinedResolvers,
+                    combinedPresenters,
                 );
-                dispatch({
+
+                debugger;
+                handleDispatch({
                     type: EDataSourceActions.SET_RESOLVED_RECORDS,
-                    payload: { records },
+                    payload: presentedDataSource,
                 });
             })();
-        }, [dataSource, recordsResolver, propsRef, dispatch]);
+        }, [dataSource, recordsPresenter, propsRef, handleDispatch]);
 
         /**
          *
@@ -232,8 +241,8 @@ export const createDataSource = (
          *
          */
         const value = useMemo(
-            () => ({ dataSource, dispatch, propsRef, shouldResolveRecords }),
-            [dataSource, dispatch, shouldResolveRecords],
+            () => ({ dataSource, dispatch, propsRef }),
+            [dataSource, dispatch, propsRef],
         );
 
         return <DataSourceContext.Provider value={value}>{children}</DataSourceContext.Provider>;
@@ -265,11 +274,16 @@ export const createDataSource = (
      *
      */
     const useDataSourceHook = () => {
-        const { shouldResolveRecords, dataSource, propsRef, dispatch } = useDataSourceContext();
+        const { dataSource, propsRef, dispatch } = useDataSourceContext();
 
         // to temporary store the result of the previous data source.
         // records could be updated and updated records need to be passed down..
-        let tempDS = { ...dataSource, shouldResolveRecords, records: propsRef.current.records };
+        let tempDS = {
+            ...dataSource,
+            totalRecordsCount: dataSource?.totalRecordsCount ?? propsRef.current.records.length,
+            records: hasBeforeDataPhase ? dataSource.records : propsRef.current.records,
+        };
+
         const dataSourceResults = actionCreators.map(actionCreator => {
             const result = actionCreator(propsRef.current, tempDS, dispatch);
 
