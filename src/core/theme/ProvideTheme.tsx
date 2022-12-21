@@ -66,8 +66,8 @@ import {
     radioButtonStyles,
     radioButtonItemStyles,
     numberRangeInputStyles,
-    progressCircleStyles,
-    progressBarStyles,
+    linearProgressIndicatorStyles,
+    circularProgressIndicatorStyles,
     dropdownListPopoverStyles,
     cardStyles,
     cardHeaderStyles,
@@ -161,8 +161,8 @@ const defaultThemeValue: Partial<ITheme> = {
     RadioButton_Item: radioButtonItemStyles,
     NumberRangeInput: numberRangeInputStyles,
 
-    ProgressCircle: progressCircleStyles,
-    ProgressBar: progressBarStyles,
+    ProgressIndicator_Linear: linearProgressIndicatorStyles,
+    ProgressIndicator_Circular: circularProgressIndicatorStyles,
 
     DropdownListPopover: dropdownListPopoverStyles,
 

@@ -72,6 +72,8 @@ export {
     CardHeaderProps,
     SelectProps,
     ChipProps,
+    LinearProgressIndicatorProps,
+    CircularProgressIndicatorProps,
 } from './components';
 
 export {
