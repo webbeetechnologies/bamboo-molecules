@@ -1,3 +1,4 @@
+import type { Dispatch } from 'react';
 import React, {
     createContext,
     PropsWithChildren,
@@ -5,15 +6,20 @@ import React, {
     ReducerState,
     useCallback,
     useContext,
+    useEffect,
     useMemo,
     useReducer,
     useRef,
 } from 'react';
-import { Dispatch } from 'react';
-import { useEffect } from 'react';
 import { DataSourceError } from '../CustomError/DataSourceError';
 import { DataSourceType } from './types';
 import { combinePresenters, DataSourcePresenterType } from './utils';
+import omit from 'lodash.omit';
+import {
+    DataSourceContext,
+    useDataSourceContext,
+    useDataSourceDispatch,
+} from './DataSourceContext';
 
 export enum EDataSourceActions {
     INIT_SOURCE = 'INIT_SOURCE',
@@ -34,7 +40,8 @@ export enum EDataSourcePhase {
 }
 
 type CreateDataSourceArgs = {
-    phase: `${EDataSourcePhase}`;
+    name: string;
+    phase?: `${EDataSourcePhase}`;
     reducer?: (dataSource: any, action: any) => any;
     actionCreator: <
         T extends {},
@@ -45,20 +52,27 @@ type CreateDataSourceArgs = {
         props: P,
         state: S,
         dispatch: (action: A) => void,
+        config: { hasReducer: boolean },
     ) => Record<string, any> | null;
-    defaultPresenter?: DataSourcePresenterType;
+    presenter?: DataSourcePresenterType;
     extractInitialState?: ExtractInitialState;
     initialState: Record<string, any>;
 };
 
 export const createDataSource = (
+    name: string,
     dataSources: CreateDataSourceArgs[],
     initialDataSourceValue: Record<string, any> | null = null,
 ) => {
-    const initialStateExtractor: ExtractInitialState = dataSource => ({
-        records: dataSource.records,
-        lastAction: EDataSourceActions.INIT_SOURCE,
-    });
+    const initialStateExtractor: ExtractInitialState = dataSource =>
+        omit(
+            {
+                records: dataSource.records,
+                lastAction: EDataSourceActions.INIT_SOURCE,
+                debug: dataSource.debug,
+            },
+            (x: any) => x === null,
+        );
 
     const {
         reducers,
@@ -74,7 +88,7 @@ export const createDataSource = (
                 phase = EDataSourcePhase.ON_DATA,
                 reducer,
                 actionCreator,
-                defaultPresenter,
+                presenter,
                 extractInitialState,
                 initialState: $i,
             },
@@ -82,8 +96,15 @@ export const createDataSource = (
             hasBeforeDataPhase:
                 combinedDataSources.hasBeforeDataPhase || phase === EDataSourcePhase.BEFORE_DATA,
             reducers: combinedDataSources.reducers.concat(reducer ?? []),
-            actionCreators: combinedDataSources.actionCreators.concat(actionCreator ?? []),
-            defaultPresenters: combinedDataSources.defaultPresenters.concat(defaultPresenter ?? []),
+            actionCreators: combinedDataSources.actionCreators.concat(
+                actionCreator
+                    ? {
+                          creator: actionCreator,
+                          config: { hasReducer: !!reducer },
+                      }
+                    : [],
+            ),
+            defaultPresenters: combinedDataSources.defaultPresenters.concat(presenter ?? []),
             extractInitialStates: combinedDataSources.extractInitialStates.concat(
                 extractInitialState ?? [],
             ),
@@ -95,7 +116,10 @@ export const createDataSource = (
         {
             hasBeforeDataPhase: false,
             reducers: [] as CreateDataSourceArgs['reducer'][],
-            actionCreators: [] as CreateDataSourceArgs['actionCreator'][],
+            actionCreators: [] as Array<{
+                creator: CreateDataSourceArgs['actionCreator'];
+                config: { hasReducer: boolean };
+            }>,
             defaultPresenters: [] as DataSourcePresenterType[],
             extractInitialStates: [initialStateExtractor] as ExtractInitialState[],
             initialState: initialDataSourceValue as Record<string, any>,
@@ -155,13 +179,6 @@ export const createDataSource = (
 
     /**
      *
-     * Context for the Datasource.
-     *
-     */
-    const DataSourceContext = createContext<any>(initialState);
-
-    /**
-     *
      * Normalized Provider for the Datasource
      *
      */
@@ -177,7 +194,7 @@ export const createDataSource = (
          * Reduce Data
          *
          * */
-        const [dataSource, handleDispatch] = useReducer(combinedReducer, null, initial => {
+        const [dataSource, handleDispatch] = useReducer(combinedReducer, initialState, initial => {
             return extractInitialStates.reduce(
                 (state: any, extractInitialState) => ({
                     ...state,
@@ -227,7 +244,6 @@ export const createDataSource = (
                     combinedPresenters,
                 );
 
-                debugger;
                 handleDispatch({
                     type: EDataSourceActions.SET_RESOLVED_RECORDS,
                     payload: presentedDataSource,
@@ -237,11 +253,11 @@ export const createDataSource = (
 
         /**
          *
-         * Memoize context value to avoid rerenders
+         * Memoize context value to avoid re-renders
          *
          */
         const value = useMemo(
-            () => ({ dataSource, dispatch, propsRef }),
+            () => ({ context: { name, dataSource, propsRef, dispatch }, useDataSourceHook }),
             [dataSource, dispatch, propsRef],
         );
 
@@ -250,31 +266,12 @@ export const createDataSource = (
 
     /**
      *
-     * Hook to get the datasource context
-     *
-     */
-    const useDataSourceContext = () => {
-        const context = useContext(DataSourceContext);
-        if (!context)
-            throw new DataSourceError('useDataSourceContext is called outside DataSourceProvider');
-        return context;
-    };
-
-    /**
-     *
-     * Hook to fetch the datasource dispatch
-     *
-     */
-    const useDataSourceDispatch = () => useDataSourceContext().dispatch;
-
-    /**
-     *
      * Run all hooks in a loop. and merge the results into one output.
      * All methods are added and thus returned as one combined data source.
      *
      */
     const useDataSourceHook = () => {
-        const { dataSource, propsRef, dispatch } = useDataSourceContext();
+        const { dataSource, propsRef, dispatch } = useDataSourceContext().context;
 
         // to temporary store the result of the previous data source.
         // records could be updated and updated records need to be passed down..
@@ -284,8 +281,13 @@ export const createDataSource = (
             records: hasBeforeDataPhase ? dataSource.records : propsRef.current.records,
         };
 
-        const dataSourceResults = actionCreators.map(actionCreator => {
-            const result = actionCreator(propsRef.current, tempDS, dispatch);
+        const dataSourceResults = actionCreators.map((actionCreator, i) => {
+            const result = actionCreator.creator(
+                propsRef.current,
+                tempDS,
+                dispatch,
+                actionCreator.config,
+            );
 
             tempDS = {
                 ...tempDS,

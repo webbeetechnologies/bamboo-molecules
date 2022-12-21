@@ -1,8 +1,9 @@
-import { actionCreator } from './actionCreator';
+import { usePageableActionCreator } from './actionCreator';
 import { extractInitialState } from './initialState';
 
 const paginatedDataSource = {
-    actionCreator: actionCreator,
+    name: 'paginatedDataSource',
+    actionCreator: usePageableActionCreator,
     extractInitialState,
 };
 

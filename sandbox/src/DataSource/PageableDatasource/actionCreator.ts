@@ -10,7 +10,7 @@ import { getPaginatedValue } from './utils';
 
 const notPaginated = { isPaginated: false };
 
-export const actionCreator = <
+export const usePageableActionCreator = <
     T extends {},
     S extends Omit<PaginationDataSource<T>, 'onPaginate'> = Omit<
         PaginationDataSource<T>,
@@ -22,6 +22,7 @@ export const actionCreator = <
     props: P,
     dataSource: S,
     dispatch: (action: A) => void,
+    config: { hasReducer: boolean },
 ) => {
     const { onPaginate = null } = props;
     const { isPaginated, totalRecordsCount, pagination } = dataSource;
@@ -32,6 +33,11 @@ export const actionCreator = <
     const handlePaginate = useCallback(
         (args: OnPaginateAction) => {
             if (pagination.disabled) {
+                return;
+            }
+
+            if (config.hasReducer) {
+                dispatch(args);
                 return;
             }
 

@@ -1,4 +1,4 @@
-import { Sort } from './types';
+import { ESortableActions, Sort } from './types';
 import { ESortDirection } from './types';
 import zip from 'lodash.zip';
 import orderBy from 'lodash.orderBy';
@@ -25,3 +25,5 @@ export const getSortedRecords = <T extends {}>(arg: { sort: Sort; records: T[] }
 
     return orderBy(records, ...predicate) as T[];
 };
+
+export const isSortAction = (action: any) => action in ESortableActions;

@@ -3,9 +3,10 @@ import { RecordType } from '../types';
 import { ApplySort } from './ApplySortDemo';
 import { ApplyFilters } from './ApplyFilterDemo';
 import { ApplyPagination } from './ApplyPaginationDemo';
-import { useDataSource } from '../DataSource';
+import { useDataSource, useDataSourceContext } from '../DataSource';
 
 const RenderRecords: React.FC<any> = _props => {
+    const context = useDataSourceContext();
     const ds = useDataSource();
 
     return (

@@ -3,10 +3,22 @@ export * from './sortableDataSource';
 export * from './types';
 export default SortableDataSource;
 
-export { useSortableActionCreator } from './actionCreator';
-export { sortableDataSourceReducer } from './reducer';
+import { sortableDataSourceReducer } from './reducer';
+import { extractInitialState, initialState } from './initialState';
+import { presentSortedDataSourceRecords } from './presenter';
+
 export {
-    extractInitialState as extractInitialSortingState,
-    initialState as initialSortingState,
-} from './initialState';
-export { presentSortedDataSourceRecords } from './presenter';
+    initialState as initialSortableState,
+    extractInitialState as extractInitialSortableState,
+    sortableDataSourceReducer,
+    presentSortedDataSourceRecords,
+};
+
+export const getDefaultSortableDataSource = () => ({
+    ...SortableDataSource,
+    initialState,
+    reducer: sortableDataSourceReducer,
+    presenter: presentSortedDataSourceRecords,
+});
+
+export { isSortAction } from './utils';

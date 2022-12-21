@@ -18,6 +18,7 @@ export const useLoadableActionCreator = <
     props: P,
     dataSource: S,
     dispatch: (action: A) => void,
+    config: { hasReducer: boolean },
 ): { isLoadable: boolean } | LoadableDataSourceResult<T> => {
     const { onLoad = null } = props;
     const { isLoadable, loading } = dataSource;
@@ -31,11 +32,15 @@ export const useLoadableActionCreator = <
                 throw new Error('Cannot load when isLoadable is false');
             }
 
+            if (config.hasReducer) {
+                dispatch(args);
+                return;
+            }
+
             if (!onLoad) {
                 throw new Error('onLoad function not provided');
             }
 
-            // @ts-ignore
             dispatch({
                 type: args.type,
                 payload: onLoad(dataSourceRef.current, args),

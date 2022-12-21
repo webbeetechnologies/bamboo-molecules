@@ -21,6 +21,7 @@ export const useSortableActionCreator = <
     props: P,
     dataSource: S,
     dispatch: (action: A) => void,
+    config: { hasReducer: boolean },
 ) => {
     const { onSort = null } = props;
     const { isSortable, sort } = dataSource;
@@ -32,6 +33,11 @@ export const useSortableActionCreator = <
         (args: OnSortAction) => {
             if (!isSortable) {
                 throw new Error('Cannot paginate when isSortable is false');
+            }
+
+            if (config.hasReducer) {
+                dispatch(args);
+                return;
             }
 
             if (!onSort) {

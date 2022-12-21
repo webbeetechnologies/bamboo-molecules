@@ -10,11 +10,13 @@ export * from './LoadableDataSource';
 
 export * from './utils';
 
-const DataSource = createDataSource([
+const DataSource = createDataSource('BasicDataSource', [
     FilterableDatasource,
     SortableDataSource,
     PaginatedDataSource,
 ]);
 export const DataSourceProvider = DataSource.DataSourceProvider;
-export const useDataSource = DataSource.useDataSourceHook;
-export const useDataSourceDispatch = DataSource.useDataSourceDispatch;
+
+export * from './ArrayDataSource';
+export * from './AsyncDataSource';
+export * from './DataSourceContext';

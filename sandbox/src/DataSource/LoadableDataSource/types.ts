@@ -1,4 +1,3 @@
-import { DataSourceActions, EDataSourceActions } from '../createDataSource';
 import { DataSourceInternalState, DataSourceType } from '../types';
 
 // Paginate methods.
@@ -27,7 +26,7 @@ export type OnLoad = <T extends {}>(
 export interface LoadableDataSource<T extends {}> extends DataSourceInternalState<T> {
     isLoadable: boolean;
     loading: Loading;
-    onLoad: OnLoad;
+    onLoad?: OnLoad;
 }
 
 export interface LoadableDataSourceResult<T extends {}> {

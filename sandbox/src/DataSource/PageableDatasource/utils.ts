@@ -10,7 +10,7 @@ type WithTotalRecordsCount<T> = Args<T> & {
 type WithRecords<T> = Args<T> & { records: T[] };
 
 import chunk from 'lodash/chunk';
-import { Pagination, PaginationInfo } from './types';
+import { EPageableActions, Pagination, PaginationInfo } from './types';
 
 export const getPages = <T>({ pagination, records }: WithRecords<T>) => {
     const { perPage = 10 } = pagination;
@@ -46,3 +46,5 @@ export const getPaginatedValue = <T extends {}>({
         } as Pagination & PaginationInfo<T>,
     };
 };
+
+export const isPaginationAction = (action: any) => action in EPageableActions;

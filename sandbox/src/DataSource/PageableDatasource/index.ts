@@ -3,10 +3,24 @@ export type { EPageableActions } from './types';
 export * from './paginatedDatasource';
 export default PaginatedDataSource;
 
-export { paginatedDataSourceReducer } from './reducer';
-export { actionCreator } from './actionCreator';
-export { presentPaginatedDataSourceRecords } from './presenter';
+import { paginatedDataSourceReducer } from './reducer';
+import { presentPaginatedDataSourceRecords } from './presenter';
+import { extractInitialState, initialState } from './initialState';
+
+export { usePageableActionCreator } from './actionCreator';
+
 export {
-    initialState as initialPaginationState,
+    presentPaginatedDataSourceRecords,
+    paginatedDataSourceReducer,
     extractInitialState as extractInitialPaginationState,
-} from './initialState';
+    initialState as initialPaginatedState,
+};
+
+export const getDefaultPageableDataSource = () => ({
+    ...PaginatedDataSource,
+    initialState,
+    reducer: paginatedDataSourceReducer,
+    presenter: presentPaginatedDataSourceRecords,
+});
+
+export { isPaginationAction } from './utils';

@@ -25,7 +25,7 @@ type OnPaginate = <T extends {}>(
 export interface PaginationDataSource<T extends {}> extends DataSourceInternalState<T> {
     isPaginated: boolean;
     pagination: Pagination;
-    onPaginate: OnPaginate;
+    onPaginate?: OnPaginate;
 }
 
 export interface PaginationInfo<T extends {}> {

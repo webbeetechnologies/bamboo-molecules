@@ -96,7 +96,7 @@ export interface FilterableDataSource<T extends {}> extends DataSourceInternalSt
         hasNestedFilter: boolean;
     };
     filters: Filters;
-    onFilter: OnFilter;
+    onFilter?: OnFilter;
 }
 
 export interface FilterableDataSourceResult<T extends {}> {

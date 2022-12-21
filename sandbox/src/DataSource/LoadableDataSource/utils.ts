@@ -1,9 +1,8 @@
-import {Loading} from "./types";
-
+import { ELoadableActions, Loading } from './types';
 
 export const getLoadingStatus = (args: { loading: Loading }) => {
-    const {loading} = args;
-    const {startedAt, finishedAt, erroredAt} = loading;
+    const { loading } = args;
+    const { startedAt, finishedAt, erroredAt } = loading;
 
     const maxTime = Math.max(Number(finishedAt), Number(erroredAt), Number(startedAt));
     const hasStarted = maxTime > 0;
@@ -14,5 +13,7 @@ export const getLoadingStatus = (args: { loading: Loading }) => {
         isLoading: hasStarted && maxTime === startedAt,
         hasLoaded: hasStarted && maxTime === finishedAt,
         hasErrored: hasStarted && maxTime === erroredAt,
-    }
+    };
 };
+
+export const isLoadableAction = (action: any) => action in ELoadableActions;

@@ -24,6 +24,7 @@ export const useFilterableActionCreator = <
     props: P,
     dataSource: S,
     dispatch: (action: A) => void,
+    config: { hasReducer: boolean },
 ):
     | { isFilterable: boolean }
     | {
@@ -35,8 +36,8 @@ export const useFilterableActionCreator = <
           updateFilterGroup: (payload: UpdateGroupAction['payload']) => void;
           applyFilter: (payload: ApplyFilterAction['payload']) => void;
       } => {
-    const { onFilter = null, records } = props;
-    const { isFilterable, filters } = dataSource;
+    const { onFilter = null } = props;
+    const { isFilterable, filters, records } = dataSource;
 
     const dataSourceRef = useRef(dataSource);
     dataSourceRef.current = dataSource;
@@ -45,6 +46,11 @@ export const useFilterableActionCreator = <
         (args: OnFilterAction) => {
             if (!isFilterable) {
                 throw new Error('Cannot filter when isFilterable is false');
+            }
+
+            if (config.hasReducer) {
+                dispatch(args);
+                return;
             }
 
             if (!onFilter) {

@@ -1,12 +1,22 @@
 import LoadableDataSource from './loadableDatasource';
+import { extractInitialState, initialState } from './initialState';
+
+import { loadableDataSourceReducer } from './reducer';
 export type { ELoadableActions } from './types';
+
 export * from './loadableDatasource';
 export default LoadableDataSource;
+export { useLoadableActionCreator } from './actionCreator';
+export { isLoadableAction } from './utils';
 
 export {
-    extractInitialState as extractInitialLoadingState,
-    initialState as initialLoadingState,
-} from './initialState';
-export { useLoadableActionCreator } from './actionCreator';
-export { loadableDataSourceReducer } from './reducer';
-export { presentloadedDataSourceRecords } from './presenter';
+    extractInitialState as extractInitialLoadableState,
+    initialState as initialLoadableState,
+    loadableDataSourceReducer,
+};
+
+export const getDefaultLoadableDataSource = () => ({
+    ...LoadableDataSource,
+    initialState,
+    reducer: loadableDataSourceReducer,
+});

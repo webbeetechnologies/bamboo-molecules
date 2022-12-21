@@ -1,19 +1,8 @@
 import * as React from 'react';
-import {
-    DataSourceProvider,
-    paginatedDataSourceReducer,
-    sortableDataSourceReducer,
-    loadableDataSourceReducer,
-    filterableDatasourceReducer,
-    presentFilteredDataSourceRecords,
-    presentSortedDataSourceRecords,
-    presentPaginatedDataSourceRecords,
-    combinePresenters,
-} from './DataSource';
+import { ArrayDataSourceProvider as DataSourceProvider } from './DataSource';
 
 import { RecordType } from './types';
 import RenderRecords from './components/RenderRecords';
-import { useMemo } from 'react';
 
 function findAllCustomerData() {
     const records = [
@@ -84,40 +73,15 @@ const sort = {
 export default function UsingArraySource() {
     const [workers] = React.useState(findAllCustomerData);
 
-    // const sortable = useSortableDataSource({
-    //     records: workers,
-    //     sorting: { sort: [] },
-    //     isSortable: true,
-    // }) as SortableReturnProps<RecordType>;
-
-    // const pageable = usePageableDatasource({
-    //     ...sortable,
-    //     pagination: { pageNumber: 1, perPage: 10 },
-    //     isPaginated: true,
-    // }) as PageableReturnProps<RecordType> & SortableReturnProps<RecordType>;
-
     return (
         <DataSourceProvider
             records={workers}
             isPaginated={true}
             isFilterable={true}
             filters={[]}
-            onPaginate={paginatedDataSourceReducer}
-            onFilter={filterableDatasourceReducer}
-            onSort={sortableDataSourceReducer}
-            onLoad={loadableDataSourceReducer}
             pagination={{ pageNumber: 1, perPage: 10 }}
             isSortable={true}
-            sort={sort}
-            recordsPresenter={useMemo(
-                () =>
-                    combinePresenters([
-                        presentFilteredDataSourceRecords,
-                        presentSortedDataSourceRecords,
-                        presentPaginatedDataSourceRecords,
-                    ]),
-                [],
-            )}>
+            sort={sort}>
             <RenderRecords />
         </DataSourceProvider>
     );
