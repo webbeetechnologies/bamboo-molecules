@@ -79,7 +79,7 @@ const Bar = (props: Props) => {
                 ],
             },
         };
-    }, [widthBar, rest.color, componentStyle]);
+    }, [widthBar, componentStyle, progressCalc]);
 
     const handleLayout = useCallback((event: LayoutChangeEvent) => {
         setWidthBar(event.nativeEvent.layout.width);
@@ -99,13 +99,13 @@ const Bar = (props: Props) => {
                 indeterminateAnim();
             }
         });
-    }, [useNativeDriver, animationScale]);
+    }, [progressCalc, animationScale, useNativeDriver]);
 
     useEffect(() => {
         if (indeterminate) {
             indeterminateAnim();
         }
-    }, [indeterminate]);
+    }, [indeterminate, indeterminateAnim]);
 
     useEffect(() => {
         if (!indeterminate) {
@@ -122,7 +122,15 @@ const Bar = (props: Props) => {
                 progressCalc.setValue(newProgress);
             }
         }
-    }, [progress]);
+    }, [
+        animated,
+        animationConfig,
+        animationType,
+        indeterminate,
+        progress,
+        progressCalc,
+        useNativeDriver,
+    ]);
 
     return (
         <View style={containerStyle} {...rest} onLayout={handleLayout}>

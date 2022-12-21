@@ -137,7 +137,7 @@ const Circle = (props: Props) => {
             circumference: r * 2 * PI,
             strokeDashoffset: multiply(alpha, r),
         };
-    }, [size, thickness]);
+    }, [progressAnim, size, thickness]);
 
     const handleLayout = useCallback((event: LayoutChangeEvent) => {
         setSize(event.nativeEvent.layout.width);
@@ -167,7 +167,7 @@ const Circle = (props: Props) => {
                 indeterminateAnim();
             }
         });
-    }, [animationScale, useNativeDriver]);
+    }, [animationScale, progressAnim, useNativeDriver]);
 
     useEffect(() => {
         if (indeterminate) {
@@ -180,7 +180,7 @@ const Circle = (props: Props) => {
         return () => {
             // progressAnim.removeListener();
         };
-    }, [indeterminate]);
+    }, [indeterminate, indeterminateAnim, progressAnim]);
 
     useEffect(() => {
         if (!indeterminate) {
@@ -196,7 +196,15 @@ const Circle = (props: Props) => {
                 progressAnim.setValue(newProgress);
             }
         }
-    }, [progress]);
+    }, [
+        animated,
+        animationConfig,
+        animationType,
+        indeterminate,
+        progress,
+        progressAnim,
+        useNativeDriver,
+    ]);
 
     return (
         <View style={containerStyle} onLayout={handleLayout}>

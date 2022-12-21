@@ -128,12 +128,7 @@ export * from './RadioButton';
 
 export * from './NumberRangeInput';
 
-export {
-    ProgressCircle,
-    ProgressCircleProps,
-    progressCircleStyles,
-} from './ProgressIndicator/Circle';
-export { ProgressBar, ProgressBarProps, progressBarStyles } from './ProgressIndicator/Bar';
+export * from './ProgressIndicator';
 
 export * from './DropdownListPopover';
 
