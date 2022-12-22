@@ -43,6 +43,7 @@ export const Interactions = Default.bind({});
 Interactions.args = {
     ...Default.args,
     testID: 'numberInputInteractions',
+    defaultValue: '12345',
 };
 
 Interactions.parameters = {
@@ -54,7 +55,13 @@ Interactions.play = async ({ canvasElement }) => {
 
     await delay(500);
 
-    await userEvent.type(canvas.getByTestId('numberInputInteractions-flat'), 'hello123.56.');
+    // value should overwrite the default value
+    await expect(canvas.queryByText('12345')).not.toBeTruthy();
+
+    await userEvent.type(
+        canvas.getByTestId('numberInputInteractions-flat'),
+        'hello!@#$%^&*()123.56.',
+    );
 
     await delay(500);
 
