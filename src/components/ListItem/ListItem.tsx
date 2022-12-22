@@ -66,21 +66,23 @@ const ListItem = (
         children,
         style: styleProp,
         disabled = false,
-        hovered,
+        hovered = false,
         divider = false,
         variant = 'default',
         selected = false,
+        onPress,
         ...props
     }: Props,
     ref: any,
 ) => {
     const { TouchableRipple, View, HorizontalDivider } = useMolecules();
+    const isPressable = !disabled && !!onPress;
 
     const componentStyles = useComponentStyles('ListItem', styleProp, {
         states: {
             selected,
             disabled,
-            hovered: !!hovered,
+            hovered: hovered && isPressable,
         },
         variant,
     });
@@ -104,12 +106,17 @@ const ListItem = (
     }, [componentStyles]);
 
     const contextValue = useMemo(
-        () => ({ disabled, hovered: !!hovered, selected, variant }),
-        [disabled, hovered, selected, variant],
+        () => ({ disabled, hovered: hovered && isPressable, selected, variant }),
+        [disabled, hovered, isPressable, selected, variant],
     );
 
     return (
-        <TouchableRipple {...props} style={containerStyles} disabled={disabled} ref={ref}>
+        <TouchableRipple
+            {...props}
+            style={containerStyles}
+            disabled={disabled}
+            onPress={onPress}
+            ref={ref}>
             <>
                 <View style={innerContainerStyle}>
                     {left ? <View style={leftElementStyle}>{left}</View> : null}
