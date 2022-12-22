@@ -41,7 +41,7 @@ export const CardWithMedia = (props: CardProps) => {
     return (
         <Card style={{ maxWidth: 400 }} variant="outlined" {...props}>
             <Card.Media>
-                <Image source={{ uri: 'https://picsum.photos/700' }} style={{ flex: 1 }} />
+                <Image source={{ uri: 'https://picsum.photos/id/451/700' }} style={{ flex: 1 }} />
             </Card.Media>
             <Card.Content>
                 <Card.Headline>Headline</Card.Headline>
@@ -72,8 +72,14 @@ export const ComposedCardExample = (props: CardProps) => {
             </Card.Header>
             <Card.Content>
                 <Card.Media style={styles.media}>
-                    <Image source={{ uri: 'https://picsum.photos/700' }} style={styles.image1} />
-                    <Image source={{ uri: 'https://picsum.photos/700' }} style={styles.image2} />
+                    <Image
+                        source={{ uri: 'https://picsum.photos/id/146/700' }}
+                        style={styles.image1}
+                    />
+                    <Image
+                        source={{ uri: 'https://picsum.photos/id/25/700' }}
+                        style={styles.image2}
+                    />
                 </Card.Media>
                 <Card.Text>
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci at corporis
