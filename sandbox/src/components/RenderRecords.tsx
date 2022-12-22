@@ -3,10 +3,10 @@ import { RecordType } from '../types';
 import { ApplySort } from './ApplySortDemo';
 import { ApplyFilters } from './ApplyFilterDemo';
 import { ApplyPagination } from './ApplyPaginationDemo';
-import { useDataSource, useDataSourceContext } from '../DataSource';
+import { useDataSource } from '../DataSource';
+import { LoadingStatus } from './LoadingStatus';
 
 const RenderRecords: React.FC<any> = _props => {
-    const context = useDataSourceContext();
     const ds = useDataSource();
 
     return (
@@ -25,6 +25,7 @@ const RenderRecords: React.FC<any> = _props => {
                     boxSizing: 'border-box',
                     overflow: 'auto',
                 }}>
+                <LoadingStatus />
                 {ds.records && (
                     <ul>
                         {!ds.records.length ? (

@@ -20,8 +20,8 @@ export const useLoadableActionCreator = <
     dispatch: (action: A) => void,
     config: { hasReducer: boolean },
 ): { isLoadable: boolean } | LoadableDataSourceResult<T> => {
-    const { onLoad = null } = props;
-    const { isLoadable, loading } = dataSource;
+    const { onLoad = null, loading } = props;
+    const { isLoadable } = dataSource;
 
     const dataSourceRef = useRef(dataSource);
     dataSourceRef.current = dataSource;

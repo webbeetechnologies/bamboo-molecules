@@ -177,6 +177,16 @@ export const createDataSource = (
      */
     const combinedPresenters: DataSourcePresenterType = combinePresenters(defaultPresenters);
 
+    const combinedStateExtractor = (initial: any, rest: any) => {
+        return extractInitialStates.reduce(
+            (state: any, extractInitialState) => ({
+                ...state,
+                ...extractInitialState(rest),
+            }),
+            initial as any,
+        ) as { action: string };
+    };
+
     /**
      *
      * Normalized Provider for the Datasource
@@ -195,13 +205,7 @@ export const createDataSource = (
          *
          * */
         const [dataSource, handleDispatch] = useReducer(combinedReducer, initialState, initial => {
-            return extractInitialStates.reduce(
-                (state: any, extractInitialState) => ({
-                    ...state,
-                    ...extractInitialState(rest),
-                }),
-                initial as any,
-            ) as { action: string };
+            return combinedStateExtractor(initial, rest) as { action: string };
         }) as [ReducerState<any>, Dispatch<ReducerAction<any>>];
 
         const dispatch = useCallback(
@@ -222,7 +226,28 @@ export const createDataSource = (
          *
          */
         const propsRef = useRef(rest);
-        propsRef.current = rest;
+        const memoizedExtractedProps = useMemo(() => {
+            const newProps = combinedStateExtractor({}, props);
+            const oldProps = combinedStateExtractor({}, propsRef.current);
+
+            const newValues = Object.values(newProps).filter(x => x instanceof Object);
+            const oldValues = Object.values(oldProps).filter(x => x instanceof Object);
+
+            if (oldValues.length !== newValues.length) {
+                return newProps;
+            }
+
+            if (newValues.length !== Array.from(new Set([...newValues, ...oldValues])).length) {
+                return newProps;
+            }
+
+            return oldProps;
+        }, [props, propsRef]);
+
+        propsRef.current = {
+            ...propsRef.current,
+            ...memoizedExtractedProps,
+        };
 
         /**
          *
@@ -257,8 +282,16 @@ export const createDataSource = (
          *
          */
         const value = useMemo(
-            () => ({ context: { name, dataSource, propsRef, dispatch }, useDataSourceHook }),
-            [dataSource, dispatch, propsRef],
+            () => ({
+                context: {
+                    name,
+                    dataSource,
+                    props: { ...propsRef.current, ...memoizedExtractedProps },
+                    dispatch,
+                },
+                useDataSourceHook,
+            }),
+            [dataSource, dispatch, memoizedExtractedProps],
         );
 
         return <DataSourceContext.Provider value={value}>{children}</DataSourceContext.Provider>;
@@ -271,23 +304,18 @@ export const createDataSource = (
      *
      */
     const useDataSourceHook = () => {
-        const { dataSource, propsRef, dispatch } = useDataSourceContext().context;
+        const { dataSource, props, dispatch } = useDataSourceContext().context;
 
         // to temporary store the result of the previous data source.
         // records could be updated and updated records need to be passed down..
         let tempDS = {
             ...dataSource,
-            totalRecordsCount: dataSource?.totalRecordsCount ?? propsRef.current.records.length,
-            records: hasBeforeDataPhase ? dataSource.records : propsRef.current.records,
+            totalRecordsCount: dataSource?.totalRecordsCount ?? props.records.length,
+            records: hasBeforeDataPhase ? dataSource.records : props.records,
         };
 
         const dataSourceResults = actionCreators.map((actionCreator, i) => {
-            const result = actionCreator.creator(
-                propsRef.current,
-                tempDS,
-                dispatch,
-                actionCreator.config,
-            );
+            const result = actionCreator.creator(props, tempDS, dispatch, actionCreator.config);
 
             tempDS = {
                 ...tempDS,

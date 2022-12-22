@@ -1,61 +1,98 @@
 import * as React from 'react';
-import axios, { AxiosResponse } from 'axios';
-import { useAsyncDataSource } from './DataSource/useAsyncDataSource/useAsyncDataSource';
-import RenderRecords from './components/RenderRecords';
-import { Records } from './DataSource';
+import {
+    AsyncDataSourceProvider as DataSourceProvider,
+    presentPaginatedDataSourceRecords,
+    presentFilteredDataSourceRecords,
+    presentSortedDataSourceRecords,
+    combinePresenters,
+    paginatedDataSourceReducer,
+    sortableDataSourceReducer,
+    filterableDatasourceReducer,
+} from './DataSource';
+
 import { RecordType } from './types';
+import RenderRecords from './components/RenderRecords';
+import { DataSourceType } from './DataSource/types';
+import { getMockData } from './mockData';
 
-function findAllCustomerData() {
-    const baseURL = 'https://ktwjky3ybe.execute-api.us-east-1.amazonaws.com';
-    return new Promise(function (resolve, reject) {
-        axios
-            .post('customers', {}, { baseURL: baseURL })
-            .then(function (result: AxiosResponse<{ customerIds: number[] }>) {
-                var dataPromises =
-                    result.data.customerIds./*splice(0, Math.floor(Math.random() * 10)).*/ map(
-                        function (customerId: number) {
-                            return axios.get('customers/' + customerId, {
-                                baseURL: baseURL,
-                            }) as Promise<AxiosResponse<RecordType>>;
-                        },
-                    );
+const presentDataSource = combinePresenters([
+    presentFilteredDataSourceRecords,
+    presentSortedDataSourceRecords,
+    presentPaginatedDataSourceRecords,
+]);
 
-                Promise.all(dataPromises)
-                    .then(function (res) {
-                        resolve(
-                            res.map(function (result) {
-                                return result.data;
-                            }),
-                        );
-                    })
-                    .catch(function (err) {
-                        reject(err);
-                    });
-            })
-            .catch(function (err: Error) {
-                console.log('fails', err.toString());
-                reject(err);
-            });
-    }) as Promise<Records<RecordType>>;
+// generate a random between a provided range
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+async function findAllCustomerData(dataSource) {
+    const [result, _promise] = await Promise.all([
+        presentDataSource({
+            sort: dataSource.sort,
+            pagination: dataSource.pagination,
+            filters: dataSource.filters,
+            isPaginated: dataSource.isPaginated,
+            isSortable: dataSource.isSortable,
+            isFilterable: dataSource.isFilterable,
+            records: getMockData(),
+        }),
+        new Promise((resolve, reject) =>
+            setTimeout(!getRandomInt(0, 5) ? reject : resolve, getRandomInt(1000, 3000)),
+        ),
+    ]).catch(e => {
+        console.error('findAllCustomerData', e);
+        throw e;
+    });
+
+    return result;
+}
+
+const sort = {
+    isNestedSort: true,
+    order: [],
+};
+
+const pagination = { pageNumber: 1, perPage: 10 };
+
+const filters = [];
+
 export default function UsingAsyncSource({}) {
-    const dataSource = useAsyncDataSource(
-        {
-            records: [] as RecordType[],
-            sort: [],
-            pagination: { page: 1, pageSize: 3 },
+    const [workers, setWorkers] = React.useState([]);
+    const [loading, setLoading] = React.useState({ startedAt: 0, finishedAt: 0, erroredAt: 0 });
+
+    const recordsPresenter = React.useCallback(
+        async (dataSource: DataSourceType<RecordType>) => {
+            setLoading(loading => ({ ...loading, startedAt: Date.now() }));
+            return findAllCustomerData(dataSource)
+                .then(records => {
+                    setLoading(loading => ({ ...loading, finishedAt: Date.now() }));
+                    return records;
+                })
+                .catch(e => {
+                    console.error(e);
+                    setLoading(loading => ({ ...loading, erroredAt: Date.now() }));
+                });
         },
-        async ({ records, action, ...args }) => {
-            return await findAllCustomerData();
-        },
+        [setLoading],
     );
 
     return (
-        <RenderRecords
-            {...{
-                ...dataSource,
-            }}
-        />
+        <DataSourceProvider
+            records={workers}
+            isSortable={true}
+            isPaginated={true}
+            isFilterable={true}
+            isLoadable={true}
+            filters={filters}
+            pagination={pagination}
+            loading={loading}
+            onPaginate={paginatedDataSourceReducer}
+            onSort={sortableDataSourceReducer}
+            onFilter={filterableDatasourceReducer}
+            recordsPresenter={recordsPresenter}
+            sort={sort}>
+            <RenderRecords />
+        </DataSourceProvider>
     );
 }
