@@ -53,12 +53,22 @@ const Card = (
     }, [componentStyles]);
 
     useEffect(() => {
+        if (disabled || !rest?.onPress) return;
+
         Animated.timing(elevation, {
             toValue: hovered ? (variant === 'elevated' ? 2 : 1) : initialElevation,
             duration: styles.animationDuration,
             useNativeDriver: false,
         }).start();
-    }, [variant, elevation, hovered, initialElevation, styles.animationDuration]);
+    }, [
+        variant,
+        elevation,
+        hovered,
+        initialElevation,
+        styles.animationDuration,
+        disabled,
+        rest?.onPress,
+    ]);
 
     return (
         <Surface style={styles.container} elevation={elevation}>
