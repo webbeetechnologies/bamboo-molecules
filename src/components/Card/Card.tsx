@@ -56,7 +56,7 @@ const Card = (
         if (disabled || !rest?.onPress) return;
 
         Animated.timing(elevation, {
-            toValue: hovered ? (variant === 'elevated' ? 2 : 1) : initialElevation,
+            toValue: hovered ? initialElevation + 1 : initialElevation,
             duration: styles.animationDuration,
             useNativeDriver: false,
         }).start();
