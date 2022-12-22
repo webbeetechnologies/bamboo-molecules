@@ -12,18 +12,18 @@ export const BasicCard = (props: CardProps) => {
 
     return (
         <Card style={{ maxWidth: 400 }} variant="outlined" {...props}>
-            <Card.Header>
+            <Card.Header testID="basic-header">
                 <IconButton name="account-circle-outline" size="lg" />
                 <IconButton name="dots-vertical" size="sm" onPress={() => {}} />
             </Card.Header>
             <Card.Content>
-                <Card.Headline>Headline</Card.Headline>
-                <Card.Subhead>SubHead</Card.Subhead>
-                <Card.Text>
+                <Card.Headline testID="basic-headline">Headline</Card.Headline>
+                <Card.Subhead testID="basic-subhead">SubHead</Card.Subhead>
+                <Card.Text testID="basic-text">
                     Explain more about the topic shown and headline subhead through supporting text
                 </Card.Text>
             </Card.Content>
-            <Card.Actions>
+            <Card.Actions testID="basic-actions">
                 <Button variant="outlined" onPress={() => {}} style={{ marginRight: 'spacings.2' }}>
                     Action
                 </Button>
@@ -62,7 +62,7 @@ export const CardWithMedia = (props: CardProps) => {
     );
 };
 
-export const AdvancedUsage = (props: CardProps) => {
+export const ComposedCardExample = (props: CardProps) => {
     const { Card, IconButton, Button } = useMolecules();
 
     return (

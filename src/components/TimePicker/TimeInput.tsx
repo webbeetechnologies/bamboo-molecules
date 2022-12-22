@@ -1,10 +1,11 @@
-import { useState, useEffect, forwardRef, useMemo } from 'react';
-import { TextInput, TextInputProps, StyleSheet } from 'react-native';
+import { useState, forwardRef, useMemo, memo, useCallback } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { useMolecules, useCurrentTheme, useComponentStyles } from '../../hooks';
+import type { NumberInputProps } from '../NumberInput';
 import { inputTypes, PossibleClockTypes, PossibleInputTypes } from './timeUtils';
 
-interface TimeInputProps extends Omit<Omit<TextInputProps, 'value'>, 'onFocus'> {
+interface TimeInputProps extends Omit<Omit<NumberInputProps, 'value' | 'variant'>, 'onFocus'> {
     value: number;
     clockType: PossibleClockTypes;
     onPress?: (type: PossibleClockTypes) => any;
@@ -14,22 +15,24 @@ interface TimeInputProps extends Omit<Omit<TextInputProps, 'value'>, 'onFocus'> 
 }
 
 function TimeInput(
-    { value, clockType, pressed, onPress, onChanged, inputType, ...rest }: TimeInputProps,
+    {
+        value,
+        clockType,
+        pressed,
+        onPress,
+        onChanged,
+        inputType,
+        inputStyle,
+        style,
+        ...rest
+    }: TimeInputProps,
     ref: any,
 ) {
-    const { TouchableRipple, View } = useMolecules();
-    const [controlledValue, setControlledValue] = useState<string>(`${value}`);
+    const { NumberInput, TouchableRipple, View } = useMolecules();
 
     const onInnerChange = (text: string) => {
-        setControlledValue(text);
-        if (text !== '' && text !== '0') {
-            onChanged(Number(text));
-        }
+        onChanged(Number(text));
     };
-
-    useEffect(() => {
-        setControlledValue(`${value}`);
-    }, [value]);
 
     const theme = useCurrentTheme();
     const [inputFocused, setInputFocused] = useState<boolean>(false);
@@ -47,38 +50,44 @@ function TimeInput(
     );
 
     const formattedValue = useMemo(() => {
-        let _formattedValue = controlledValue;
+        let _formattedValue = `${value}`;
 
         if (!inputFocused) {
-            _formattedValue =
-                controlledValue.length === 1 ? `0${controlledValue}` : `${controlledValue}`;
+            _formattedValue = `${value}`.length === 1 ? `0${value}` : `${value}`;
         }
 
         return _formattedValue;
-    }, [controlledValue, inputFocused]);
+    }, [value, inputFocused]);
 
-    const { rippleColor, containerStyle, textInputStyle, buttonStyle } = useMemo(() => {
-        const { rippleColor: _rippleColor, container, input, button } = componentStyles;
+    const { rippleColor, containerStyle, textInputContainerStyle, textInputStyle, buttonStyle } =
+        useMemo(() => {
+            const { rippleColor: _rippleColor, container, input, button } = componentStyles;
 
-        return {
-            rippleColor: _rippleColor,
-            containerStyle: container,
-            textInputStyle: input,
-            buttonStyle: [StyleSheet.absoluteFill, button],
-        };
-    }, [componentStyles]);
+            return {
+                rippleColor: _rippleColor,
+                containerStyle: container,
+                textInputContainerStyle: [{ paddingHorizontal: 0 }, style],
+                textInputStyle: [input, inputStyle],
+                buttonStyle: [StyleSheet.absoluteFill, button],
+            };
+        }, [componentStyles, inputStyle, style]);
+
+    const onFocus = useCallback(() => setInputFocused(true), []);
+    const onBlur = useCallback(() => setInputFocused(false), []);
+    const onPressInput = useCallback(() => onPress?.(clockType), [clockType, onPress]);
 
     return (
         <View style={containerStyle}>
-            <TextInput
+            <NumberInput
+                variant="plain"
                 ref={ref}
-                style={textInputStyle}
+                inputStyle={textInputStyle}
+                style={textInputContainerStyle}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                keyboardAppearance={theme.dark ? 'dark' : 'default'}
                 value={formattedValue}
                 maxLength={2}
-                onFocus={() => setInputFocused(true)}
-                onBlur={() => setInputFocused(false)}
-                keyboardAppearance={theme.dark ? 'dark' : 'default'}
-                keyboardType="number-pad"
                 onChangeText={onInnerChange}
                 {...rest}
             />
@@ -87,7 +96,7 @@ function TimeInput(
                     <TouchableRipple
                         style={buttonStyle}
                         rippleColor={rippleColor}
-                        onPress={() => onPress(clockType)}
+                        onPress={onPressInput}
                         borderless={true}>
                         <View />
                     </TouchableRipple>
@@ -97,4 +106,4 @@ function TimeInput(
     );
 }
 
-export default forwardRef(TimeInput);
+export default memo(forwardRef(TimeInput));

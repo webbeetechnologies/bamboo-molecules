@@ -27,6 +27,7 @@ type CustomProps = {
     supportingText?: Record<string, string | number>;
     placeholder?: Record<string, string | number>;
     outline?: Record<string, string | number>;
+    defaultLabelBackground?: string;
 };
 
 type CustomSizeProps = {
@@ -91,7 +92,8 @@ export const defaultStyles: TextInputStyles = {
 
     variants: {
         outlined: {
-            backgroundColor: 'colors.surface', // floating label backgroundColor comes from here because we want it to be the same background as the TextInput
+            defaultLabelBackground: 'colors.surface',
+            //backgroundColor: 'inherit', // floating label backgroundColor comes from here because we want it to be the same background as the TextInput
             floatingLabelVerticalOffset: 0,
 
             container: {
@@ -257,6 +259,7 @@ export const defaultStyles: TextInputStyles = {
                 },
             },
         },
+        plain: {},
     },
 
     states: {

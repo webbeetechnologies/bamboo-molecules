@@ -174,3 +174,7 @@ export const generateFlatListData = (
     // Return the array
     return arr;
 };
+
+export const delay = async (timeout: number) => {
+    await new Promise(resolve => setTimeout(resolve, timeout));
+};

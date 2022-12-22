@@ -11,9 +11,7 @@ export const Default: ComponentStory<typeof ControlledExample> = args => (
     <ControlledExample {...args} />
 );
 
-Default.args = {
-    time: '10:15',
-};
+Default.args = {};
 
 Default.parameters = {
     docs: {

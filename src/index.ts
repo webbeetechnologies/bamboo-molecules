@@ -135,6 +135,7 @@ export {
     DocumentPickerOptions,
     DocumentResult,
     documentTypes,
+    BackgroundContext,
 } from './utils';
 
 export { ComponentStylePropWithVariants, WithElements } from './types';

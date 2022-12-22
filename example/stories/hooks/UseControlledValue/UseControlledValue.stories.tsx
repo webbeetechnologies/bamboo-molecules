@@ -1,9 +1,10 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-
-import { Example, ControlledExample } from './UseControlledValue';
-import DocsPage from './UseControlledValue.docs';
 import { userEvent, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
+
+import { delay } from '../../common';
+import { Example, ControlledExample } from './UseControlledValue';
+import DocsPage from './UseControlledValue.docs';
 
 export default {
     title: 'hooks/useControlledValue',
@@ -37,7 +38,7 @@ Uncontrolled.play = async ({ canvasElement }) => {
 
     await userEvent.type(canvas.getByTestId('useControlledValue-input'), 'hello');
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(500);
 
     await expect(canvas.getByDisplayValue('hello')).toBeInTheDocument();
 };
@@ -58,7 +59,7 @@ WithDefaultValueProp.args = {
 WithDefaultValueProp.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement); // because the dialog goes outside of the component
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(500);
 
     await expect(canvas.getByDisplayValue('default')).toBeInTheDocument();
 };
@@ -80,7 +81,7 @@ WithDefaultPropAndValue.args = {
 WithDefaultPropAndValue.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(500);
 
     // 👇 Assert DOM structure
     await expect(canvas.getByDisplayValue('value')).toBeInTheDocument();
@@ -106,7 +107,7 @@ WithOnChangeAndValueUndefined.play = async ({ canvasElement }) => {
 
     await userEvent.type(canvas.getByTestId('useControlledValue-input'), 'hello');
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(500);
 
     await expect(canvas.getByDisplayValue('hello')).toBeInTheDocument();
 };
@@ -129,7 +130,7 @@ WithValueAndWithoutOnChange.play = async ({ canvasElement }) => {
 
     await userEvent.type(canvas.getByTestId('useControlledValue-input'), 'hello');
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(500);
 
     await expect(canvas.getByDisplayValue('initial')).toBeInTheDocument();
 };
@@ -148,13 +149,13 @@ WithValueAndOnChange.args = {};
 WithValueAndOnChange.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(500);
 
     await expect(canvas.getByDisplayValue('controlledInitialValue')).toBeInTheDocument();
 
     await userEvent.type(canvas.getByTestId('useControlledValue-input'), ' hello');
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(500);
 
     await expect(canvas.getByDisplayValue('controlledInitialValue hello')).toBeInTheDocument();
 };
@@ -175,13 +176,13 @@ ControlledWithDisabled.args = {
 ControlledWithDisabled.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(500);
 
     await expect(canvas.getByDisplayValue('controlledInitialValue')).toBeInTheDocument();
 
     await userEvent.type(canvas.getByTestId('useControlledValue-input'), ' hello');
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(500);
 
     await expect(canvas.getByDisplayValue('controlledInitialValue')).toBeInTheDocument();
 };

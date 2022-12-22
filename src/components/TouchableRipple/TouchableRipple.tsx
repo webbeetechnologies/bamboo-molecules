@@ -12,7 +12,6 @@ import {
     StyleProp,
     GestureResponderEvent,
     StyleSheet,
-    Platform,
     ViewStyle,
 } from 'react-native';
 
@@ -105,11 +104,17 @@ const TouchableRipple = (
     ref: any,
 ) => {
     const { View } = useMolecules();
+    const disabled = disabledProp || !onPress;
 
-    const componentStyles = useComponentStyles('TouchableRipple', [
-        style,
-        { normalizedRippleColorProp: rippleColorProp },
-    ]);
+    const componentStyles = useComponentStyles(
+        'TouchableRipple',
+        [style, { normalizedRippleColorProp: rippleColorProp }],
+        {
+            states: {
+                pressable: !disabled,
+            },
+        },
+    );
 
     const { rippleColor, containerStyle } = useMemo(() => {
         const {
@@ -257,8 +262,6 @@ const TouchableRipple = (
         [rest],
     );
 
-    const disabled = disabledProp || !onPress;
-
     return (
         <TouchableWithoutFeedback
             {...rest}
@@ -280,7 +283,6 @@ TouchableRipple.supported = true;
 const styles = StyleSheet.create({
     touchable: {
         position: 'relative',
-        ...(Platform.OS === 'web' && { cursor: 'pointer' }),
     },
     borderless: {
         overflow: 'hidden',

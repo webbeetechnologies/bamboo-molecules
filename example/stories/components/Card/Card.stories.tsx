@@ -1,10 +1,12 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import { waitFor, within } from '@storybook/testing-library';
+import { expect } from '@storybook/jest';
 
 import {
     Example,
     BasicCard,
     CardWithMedia,
-    AdvancedUsage,
+    ComposedCardExample,
     CardsInCollection as CardsInCollectionStory,
 } from './Card';
 
@@ -96,23 +98,23 @@ return (
     },
 };
 
-export const ComplexUsage: ComponentStory<typeof AdvancedUsage> = args => (
-    <AdvancedUsage {...args} />
+export const ComposedCard: ComponentStory<typeof ComposedCardExample> = args => (
+    <ComposedCardExample {...args} />
 );
 
-ComplexUsage.args = {
+ComposedCard.args = {
     variant: 'outlined',
 };
 
-ComplexUsage.parameters = {
+ComposedCard.parameters = {
     docs: {
         source: {
             code: `
- export const AdvancedUsage = (props: CardProps) => {
+ export const ComposedCard = (props: CardProps) => {
     const { Card, IconButton, Button } = useMolecules();
 
     return (
-        <Card style={styles.card} variant="outlined" {...props}>
+        <Card style={styles.card} variant="outlined">
             <Card.Header>
                 <IconButton name="account-circle-outline" size="lg" />
             </Card.Header>
@@ -281,4 +283,26 @@ const data = [
             type: 'auto',
         },
     },
+};
+
+export const CardInteractions = Basic.bind({});
+
+CardInteractions.args = {
+    ...Basic.args,
+    onPress: () => {},
+};
+
+CardInteractions.parameters = {
+    ...Basic.parameters,
+};
+
+CardInteractions.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await waitFor(() => {
+        expect(canvas.getByTestId('basic-header')).toBeInTheDocument();
+        expect(canvas.getByTestId('basic-headline')).toBeInTheDocument();
+        expect(canvas.getByTestId('basic-subhead')).toBeInTheDocument();
+        expect(canvas.getByTestId('basic-actions')).toBeInTheDocument();
+    });
 };
