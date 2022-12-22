@@ -37,6 +37,13 @@ export const paginatedDataSourceReducer: PaginationReducer = (dataSource, args: 
             return dataSource;
     }
 
+    if (
+        pageNumber === dataSource.pagination.pageNumber &&
+        perPage === dataSource.pagination.perPage
+    ) {
+        return dataSource;
+    }
+
     return {
         ...dataSource,
         pagination: {

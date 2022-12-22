@@ -49,6 +49,12 @@ export const usePageableActionCreator = <
                 throw new Error('onPaginate function is not provided');
             }
 
+            const ds = onPaginate(dataSourceRef.current, args);
+
+            if (ds === dataSourceRef.current) {
+                return;
+            }
+
             // @ts-ignore
             dispatch({
                 type: 'UPDATE_PAYLOAD',
