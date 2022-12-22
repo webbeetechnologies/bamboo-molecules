@@ -27,6 +27,7 @@ type Props = {
         focused?: undefined | PossibleClockTypes;
     }) => any;
     is24Hour: boolean;
+    testID?: string;
 };
 
 function TimeInputs({
@@ -37,6 +38,7 @@ function TimeInputs({
     inputType,
     onChange,
     is24Hour,
+    testID = '',
 }: Props) {
     const dimensions = useWindowDimensions();
     const isLandscape = dimensions.width > dimensions.height;
@@ -121,6 +123,7 @@ function TimeInputs({
                 onSubmitEditing={onSubmitStartInput}
                 blurOnSubmit={false}
                 onChanged={onHourChange}
+                testID={`${testID}-hour-input`}
                 // onChangeText={onChangeStartInput}
             />
             <View style={componentStyles.hoursAndMinutesSeparator}>
@@ -140,6 +143,7 @@ function TimeInputs({
                 inputType={inputType}
                 onSubmitEditing={onSubmitEndInput}
                 onChanged={onMinuteChange}
+                testID={`${testID}-minute-input`}
             />
             {!is24Hour && (
                 <>
