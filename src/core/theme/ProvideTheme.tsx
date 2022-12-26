@@ -75,6 +75,7 @@ import {
     cardActionsStyles,
     selectStyles,
     chipStyles,
+    tooltipStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -171,6 +172,8 @@ const defaultThemeValue: Partial<ITheme> = {
     Select: selectStyles,
 
     Chip: chipStyles,
+
+    Tooltip: tooltipStyles,
 };
 
 const defaultExtractStyles = memoize(

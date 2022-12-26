@@ -51,6 +51,7 @@ import {
     Card,
     Select,
     Chip,
+    Tooltip,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -106,6 +107,7 @@ const defaultComponents: DefaultComponents = {
     Card,
     Select,
     Chip,
+    Tooltip,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
