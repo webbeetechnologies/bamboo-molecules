@@ -225,7 +225,7 @@ export const createDataSource = (
          *
          *
          */
-        const propsRef = useRef(rest);
+        const propsRef = useRef(props);
         const memoizedExtractedProps = useMemo(() => {
             const newProps = combinedStateExtractor({}, props);
             const oldProps = combinedStateExtractor({}, propsRef.current);
