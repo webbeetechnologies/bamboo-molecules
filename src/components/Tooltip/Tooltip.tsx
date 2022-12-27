@@ -9,10 +9,11 @@ import {
     useMemo,
     useRef,
 } from 'react';
-import { ViewStyle, Platform, Pressable, TextStyle } from 'react-native';
+import { ViewStyle, Platform, Pressable, TextStyle, StyleSheet } from 'react-native';
 
-import { useComponentStyles, useMolecules, useToggle } from '../../hooks';
+import { useToggle } from '../../hooks';
 import type { IPlacement } from '../Popper/types';
+import { popoverFactory } from '../Popover';
 
 export type Props = {
     fadeInDelay?: number;
@@ -24,6 +25,8 @@ export type Props = {
     children: ReactElement | ReactElement[];
 };
 
+const Popover = popoverFactory('Tooltip');
+
 const Tooltip = ({
     style,
     children,
@@ -31,11 +34,8 @@ const Tooltip = ({
     fadeOutDelay = 100,
     showArrow = false,
     placement,
-    contentTextStyles: contentTextStyleProp,
+    contentTextStyles,
 }: Props) => {
-    const { Popover } = useMolecules();
-    const componentStyles = useComponentStyles('Tooltip', style); // all the styling logics goes here
-
     const { state: isOpen, setState: setIsOpen } = useToggle(false);
     const triggerRef = useRef(null);
 
@@ -53,18 +53,6 @@ const Tooltip = ({
         },
         [fadeInDelay, fadeOutDelay, isOpen, setIsOpen],
     );
-
-    const { backdropStyles, contentStyle, contentTextStyle } = useMemo(() => {
-        const { contentText, ...restStyles } = componentStyles;
-
-        return {
-            backdropStyles: {
-                display: 'none',
-            } as ViewStyle,
-            contentStyle: restStyles,
-            contentTextStyle: [contentText, contentTextStyleProp] as TextStyle,
-        };
-    }, [componentStyles, contentTextStyleProp]);
 
     const { trigger, content } = useMemo(
         () =>
@@ -105,12 +93,12 @@ const Tooltip = ({
             <Popover
                 placement={placement}
                 showArrow={showArrow}
-                backdropStyles={backdropStyles}
+                backdropStyles={styles.backdrop}
                 triggerRef={triggerRef}
                 isOpen={isOpen}
                 setIsOpen={setPopoverOpen}
-                contentStyles={contentStyle}
-                contentTextStyles={contentTextStyle}
+                contentStyles={style}
+                contentTextStyles={contentTextStyles}
                 onClose={onClose}>
                 {content}
             </Popover>
@@ -179,5 +167,11 @@ const Trigger = memo(
         );
     },
 );
+
+const styles = StyleSheet.create({
+    backdrop: {
+        display: 'none',
+    },
+});
 
 export default memo(Tooltip);
