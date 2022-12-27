@@ -128,6 +128,8 @@ export * from './RadioButton';
 
 export * from './NumberRangeInput';
 
+export * from './ProgressIndicator';
+
 export * from './DropdownListPopover';
 
 export * from './Card';

@@ -43,6 +43,7 @@ import type {
     Card,
     ISelect,
     Chip,
+    ProgressIndicator,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -90,6 +91,7 @@ export interface DefaultComponents {
     Dialog: typeof Dialog;
     RadioButton: typeof RadioButton;
     NumberRangeInput: ComponentType<NumberRangeInputProps>;
+    ProgressIndicator: typeof ProgressIndicator;
     DropdownListPopover: ComponentType<PopoverProps>;
     Card: typeof Card;
     Select: ISelect;

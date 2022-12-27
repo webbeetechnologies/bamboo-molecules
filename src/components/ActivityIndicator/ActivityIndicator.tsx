@@ -1,10 +1,10 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
-import { Animated, Easing, Platform, StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { Animated, Easing, Platform, StyleProp, ViewStyle } from 'react-native';
 import type { ActivityIndicatorProps } from '@webbee/bamboo-atoms';
 
-import type { ComponentStylePropWithVariants } from '../../types';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import AnimatedSpinner from './AnimatedSpinner';
+import { styles } from './utils';
 
 export type Props = ActivityIndicatorProps & {
     /**
@@ -23,10 +23,12 @@ export type Props = ActivityIndicatorProps & {
      * Whether the indicator should hide when not animating.
      */
     hidesWhenStopped?: boolean;
+    /**
+     * animation duration
+     */
+    duration?: number;
     style?: StyleProp<ViewStyle>;
 };
-
-const DURATION = 2400;
 
 const mapIndicatorSize = (indicatorSize: 'small' | 'large' | number | undefined) => {
     if (typeof indicatorSize === 'string') {
@@ -61,6 +63,7 @@ const ActivityIndicator = ({
     hidesWhenStopped = true,
     size: indicatorSize = 'small',
     style: styleProp,
+    duration = 2400,
     ...rest
 }: Props) => {
     const { View } = useMolecules();
@@ -120,7 +123,7 @@ const ActivityIndicator = ({
         if (rotation.current === undefined) {
             // Circular animation in loop
             rotation.current = Animated.timing(timer, {
-                duration: DURATION,
+                duration,
                 easing: Easing.linear,
                 // Animated.loop does not work if useNativeDriver is true on web
                 useNativeDriver: Platform.OS !== 'web',
@@ -146,7 +149,7 @@ const ActivityIndicator = ({
         return () => {
             if (animating) stopRotation();
         };
-    }, [animating, fade, hidesWhenStopped, startRotation, animationScale, timer]);
+    }, [animating, fade, hidesWhenStopped, startRotation, animationScale, timer, duration]);
 
     return (
         <View
@@ -166,37 +169,13 @@ const ActivityIndicator = ({
                             color={color}
                             timer={timer}
                             styles={styles}
-                            duration={DURATION}
+                            duration={duration}
                         />
                     );
                 })}
             </Animated.View>
         </View>
     );
-};
-
-const styles = {
-    container: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-
-    layer: {
-        ...StyleSheet.absoluteFillObject,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-};
-
-type CustomProps = {
-    color?: string;
-    animationScale?: string;
-};
-
-export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
-    color: 'colors.primary',
-    animationScale: 'animation.scale',
 };
 
 export default memo(ActivityIndicator);

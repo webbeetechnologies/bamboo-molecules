@@ -47,6 +47,7 @@ import {
     Dialog,
     RadioButton,
     NumberRangeInput,
+    ProgressIndicator,
     DropdownListPopover,
     Card,
     Select,
@@ -106,6 +107,7 @@ const defaultComponents: DefaultComponents = {
     Card,
     Select,
     Chip,
+    ProgressIndicator,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
