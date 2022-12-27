@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, memo } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 
 export type Props = {
     children: ReactElement | ReactNode;
@@ -9,4 +9,4 @@ const TooltipContent = ({ children }: Props) => {
 };
 
 TooltipContent.displayName = 'Tooltip.Content';
-export default memo(TooltipContent);
+export default TooltipContent;
