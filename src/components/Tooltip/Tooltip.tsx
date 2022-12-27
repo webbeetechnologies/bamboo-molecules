@@ -70,7 +70,9 @@ const Tooltip = ({
                     if ((child.type as FC).displayName === 'Tooltip.Trigger') {
                         return {
                             ...context,
-                            trigger: child,
+                            trigger: Array.isArray((child?.props as any)?.children)
+                                ? (child?.props as any)?.children[0]
+                                : (child?.props as any)?.children,
                         };
                     }
 
