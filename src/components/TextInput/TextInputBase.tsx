@@ -140,7 +140,10 @@ const TextInputBase = ({
             height,
             textAlign,
             backgroundColor,
-            labelBackground: parentBackground || backgroundColor || defaultLabelBackground,
+            labelBackground:
+                variant === 'outlined'
+                    ? parentBackground || backgroundColor || defaultLabelBackground
+                    : 'transparent',
 
             activeColor,
             baseLabelTranslateX:
