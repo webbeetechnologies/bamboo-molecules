@@ -23,7 +23,7 @@ Default.parameters = {
         <IconButton name="star-outline" />
     </Tooltip.Trigger>
     <Tooltip.Content>
-        <Text>mark as favorite</Text>
+        mark as favorite
     </Tooltip.Content>
 </Tooltip>`,
             language: 'tsx',
@@ -35,7 +35,7 @@ Default.parameters = {
 Default.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await delay(500);
+    await delay(100);
 
     await userEvent.hover(canvas.getByRole('button'));
 
