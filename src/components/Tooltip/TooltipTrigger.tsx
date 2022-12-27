@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import { ReactElement, memo } from 'react';
 
 export type Props = {
     children: ReactElement;
@@ -9,4 +9,4 @@ const TooltipTrigger = ({ children }: Props) => {
 };
 
 TooltipTrigger.displayName = 'Tooltip.Trigger';
-export default TooltipTrigger;
+export default memo(TooltipTrigger);
