@@ -6,5 +6,10 @@ type CustomProps = {
 };
 
 export const tooltipStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
-    contentText: {},
+    backgroundColor: 'colors.onSurfaceVariant',
+    borderRadius: 'shapes.corner.extraSmall' as unknown as number,
+
+    contentText: {
+        color: 'colors.surface',
+    },
 };

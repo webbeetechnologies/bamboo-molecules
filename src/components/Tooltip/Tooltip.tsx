@@ -1,12 +1,13 @@
 import {
-    createContext,
+    Children,
+    cloneElement,
+    FC,
+    isValidElement,
     memo,
     ReactElement,
-    ReactNode,
     useCallback,
     useMemo,
     useRef,
-    useState,
 } from 'react';
 import { ViewStyle, Platform, Pressable, TextStyle } from 'react-native';
 
@@ -20,7 +21,7 @@ export type Props = {
     placement?: IPlacement;
     contentTextStyles?: TextStyle;
     style?: ViewStyle;
-    children: ReactNode;
+    children: ReactElement | ReactElement[];
 };
 
 const Tooltip = ({
@@ -34,10 +35,7 @@ const Tooltip = ({
 }: Props) => {
     const { Popover } = useMolecules();
     const componentStyles = useComponentStyles('Tooltip', style); // all the styling logics goes here
-    const isWeb = Platform.OS === 'web';
 
-    const [trigger, setTrigger] = useState<ReactElement>(<></>);
-    const [content, setContent] = useState<ReactNode | null>(null);
     const { state: isOpen, setState: setIsOpen } = useToggle(false);
     const triggerRef = useRef(null);
 
@@ -48,46 +46,6 @@ const Tooltip = ({
     const onOpen = useCallback(() => {
         setTimeout(() => setIsOpen(true), fadeInDelay);
     }, [fadeInDelay, setIsOpen]);
-
-    const onPress = useCallback(() => {
-        trigger?.props?.onPress?.();
-    }, [trigger?.props]);
-
-    const contextValue = useMemo(
-        () => ({
-            renderTrigger: setTrigger,
-            renderContent: setContent,
-        }),
-        [],
-    );
-
-    const onLongPress = useCallback(() => {
-        trigger?.props?.onLongPress?.();
-
-        if (isWeb) return;
-        onOpen();
-    }, [isWeb, onOpen, trigger?.props]);
-
-    const onPressOut = useCallback(() => {
-        trigger?.props?.onPressOut?.();
-
-        if (isWeb) return;
-        onClose();
-    }, [isWeb, onClose, trigger?.props]);
-
-    const onHoverIn = useCallback(() => {
-        trigger?.props?.onHoverIn?.();
-
-        if (!isWeb) return;
-        onOpen();
-    }, [isWeb, onOpen, trigger?.props]);
-
-    const onHoverOut = useCallback(() => {
-        trigger?.props?.onHoverOut?.();
-
-        if (!isWeb) return;
-        onClose();
-    }, [isWeb, onClose, trigger?.props]);
 
     const setPopoverOpen = useCallback(
         (_isOpen: boolean) => {
@@ -108,19 +66,42 @@ const Tooltip = ({
         };
     }, [componentStyles, contentTextStyleProp]);
 
-    return (
-        <TooltipContext.Provider value={contextValue}>
-            <Pressable
-                ref={triggerRef}
-                onLongPress={onLongPress}
-                onPressOut={onPressOut}
-                onPress={onPress}
-                // @ts-ignore
-                onHoverIn={onHoverIn}
-                onHoverOut={onHoverOut}>
-                {trigger}
-            </Pressable>
+    const { trigger, content } = useMemo(
+        () =>
+            Children.map(children, child => child).reduce(
+                (context, child) => {
+                    if (!isValidElement(child)) return context;
 
+                    if (
+                        (child.type as FC).displayName !== 'Tooltip.Trigger' &&
+                        (child.type as FC).displayName !== 'Tooltip.Content'
+                    ) {
+                        return context;
+                    }
+
+                    if ((child.type as FC).displayName === 'Tooltip.Trigger') {
+                        return {
+                            ...context,
+                            trigger: child,
+                        };
+                    }
+
+                    return {
+                        ...context,
+                        content: [...context.content, child],
+                    };
+                },
+                {
+                    trigger: <></>,
+                    content: [] as ReactElement[],
+                },
+            ),
+        [children],
+    );
+
+    return (
+        <>
+            <Trigger children={trigger} triggerRef={triggerRef} onClose={onClose} onOpen={onOpen} />
             <Popover
                 placement={placement}
                 showArrow={showArrow}
@@ -133,17 +114,70 @@ const Tooltip = ({
                 onClose={onClose}>
                 {content}
             </Popover>
-            {children}
-        </TooltipContext.Provider>
+        </>
     );
 };
 
-export const TooltipContext = createContext<{
-    renderTrigger: (trigger: ReactElement) => void;
-    renderContent: (content: ReactNode) => void;
-}>({
-    renderTrigger: () => null,
-    renderContent: () => null,
-});
+const Trigger = memo(
+    ({
+        children,
+        triggerRef,
+        onOpen,
+        onClose,
+    }: {
+        children: ReactElement;
+        triggerRef: any;
+        onOpen: () => void;
+        onClose: () => void;
+    }) => {
+        const isWeb = Platform.OS === 'web';
+
+        const onPress = useCallback(() => {
+            children?.props?.onPress?.();
+        }, [children?.props]);
+
+        const onLongPress = useCallback(() => {
+            children?.props?.onLongPress?.();
+
+            onOpen();
+        }, [onOpen, children?.props]);
+
+        const onPressOut = useCallback(() => {
+            children?.props?.onPressOut?.();
+
+            onClose();
+        }, [onClose, children?.props]);
+
+        const onHoverIn = useCallback(() => {
+            children?.props?.onHoverIn?.();
+
+            onOpen();
+        }, [onOpen, children?.props]);
+
+        const onHoverOut = useCallback(() => {
+            children?.props?.onHoverOut?.();
+
+            onClose();
+        }, [onClose, children?.props]);
+
+        return isWeb ? (
+            <Pressable
+                ref={triggerRef}
+                onPress={onPress}
+                // @ts-ignore
+                onHoverIn={onHoverIn}
+                onHoverOut={onHoverOut}>
+                {children}
+            </Pressable>
+        ) : (
+            cloneElement(children, {
+                ref: triggerRef,
+                onLongPress,
+                onPressOut,
+                onPress,
+            })
+        );
+    },
+);
 
 export default memo(Tooltip);

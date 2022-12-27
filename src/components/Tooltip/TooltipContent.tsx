@@ -1,20 +1,12 @@
-import type { ReactNode } from 'react';
-import { useContext, useEffect } from 'react';
-import { TooltipContext } from './Tooltip';
+import type { ReactElement, ReactNode } from 'react';
 
 export type Props = {
-    children: ReactNode;
+    children: ReactElement | ReactNode;
 };
 
-const TooltipTrigger = ({ children }: Props) => {
-    const { renderContent } = useContext(TooltipContext);
-
-    useEffect(() => {
-        renderContent(children);
-    }, [children, renderContent]);
-
-    return null;
+const TooltipContent = ({ children }: Props) => {
+    return <>{children}</>;
 };
 
-TooltipTrigger.displayName = 'Tooltip.Trigger';
-export default TooltipTrigger;
+TooltipContent.displayName = 'Tooltip.Content';
+export default TooltipContent;
