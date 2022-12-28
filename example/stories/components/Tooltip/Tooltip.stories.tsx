@@ -37,17 +37,17 @@ Default.play = async ({ canvasElement }) => {
 
     await delay(100);
 
+    await expect(canvas.queryByText('mark as favorite')).not.toBeTruthy();
+
     await userEvent.hover(canvas.getByRole('button'));
 
-    await delay(200);
+    await delay(150);
 
     await expect(canvas.getByText('mark as favorite')).toBeInTheDocument();
 
-    await delay(500);
-
     await userEvent.unhover(canvas.getByRole('button'));
 
-    await delay(200);
+    await delay(150);
 
     await expect(canvas.queryByText('mark as favorite')).not.toBeTruthy();
 };
