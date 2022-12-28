@@ -99,8 +99,6 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                             style={StyleSheet.absoluteFill}>
                             <Backdrop onPress={onClose} style={popoverStyles.backdrop} />
                             <Popper
-                                crossOffset={8}
-                                offset={8}
                                 isOpen={isOpen as boolean}
                                 triggerRef={triggerRef}
                                 {...props}
