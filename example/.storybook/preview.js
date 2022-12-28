@@ -1,5 +1,6 @@
 import { View } from 'react-native';
 import { mockDateDecorator } from 'storybook-mock-date-decorator';
+import isChromatic from 'chromatic/isChromatic';
 
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
@@ -17,5 +18,5 @@ export const decorators = [
             <Story />
         </View>
     ),
-    mockDateDecorator,
+    isChromatic() ? mockDateDecorator : Story => <Story />,
 ];
