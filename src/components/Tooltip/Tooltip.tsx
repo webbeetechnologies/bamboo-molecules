@@ -1,6 +1,6 @@
 import {
     Children,
-    cloneElement,
+    createContext,
     FC,
     isValidElement,
     memo,
@@ -9,7 +9,7 @@ import {
     useMemo,
     useRef,
 } from 'react';
-import { ViewStyle, Platform, Pressable, TextStyle, StyleSheet } from 'react-native';
+import { ViewStyle, TextStyle, StyleSheet } from 'react-native';
 
 import { useToggle } from '../../hooks';
 import type { IPlacement } from '../Popper/types';
@@ -25,7 +25,7 @@ export type Props = {
     children: ReactElement | ReactElement[];
 };
 
-const Popover = popoverFactory('Tooltip');
+const TooltipPopover = popoverFactory('Tooltip');
 
 const Tooltip = ({
     style,
@@ -70,9 +70,8 @@ const Tooltip = ({
                     if ((child.type as FC).displayName === 'Tooltip.Trigger') {
                         return {
                             ...context,
-                            trigger: Array.isArray((child?.props as any)?.children)
-                                ? (child?.props as any)?.children[0]
-                                : (child?.props as any)?.children,
+                            // this will make sure we only take the last child as the trigger
+                            trigger: child,
                         };
                     }
 
@@ -89,10 +88,19 @@ const Tooltip = ({
         [children],
     );
 
+    const contextValue = useMemo(
+        () => ({
+            triggerRef,
+            onOpen,
+            onClose,
+        }),
+        [onClose, onOpen],
+    );
+
     return (
-        <>
-            <Trigger children={trigger} triggerRef={triggerRef} onClose={onClose} onOpen={onOpen} />
-            <Popover
+        <TooltipContext.Provider value={contextValue}>
+            {trigger}
+            <TooltipPopover
                 placement={placement}
                 showArrow={showArrow}
                 backdropStyles={styles.backdrop}
@@ -103,72 +111,16 @@ const Tooltip = ({
                 contentTextStyles={contentTextStyles}
                 onClose={onClose}>
                 {content}
-            </Popover>
-        </>
+            </TooltipPopover>
+        </TooltipContext.Provider>
     );
 };
 
-const Trigger = memo(
-    ({
-        children,
-        triggerRef,
-        onOpen,
-        onClose,
-    }: {
-        children: ReactElement;
-        triggerRef: any;
-        onOpen: () => void;
-        onClose: () => void;
-    }) => {
-        const isWeb = Platform.OS === 'web';
-
-        const onPress = useCallback(() => {
-            children?.props?.onPress?.();
-        }, [children?.props]);
-
-        const onLongPress = useCallback(() => {
-            children?.props?.onLongPress?.();
-
-            onOpen();
-        }, [onOpen, children?.props]);
-
-        const onPressOut = useCallback(() => {
-            children?.props?.onPressOut?.();
-
-            onClose();
-        }, [onClose, children?.props]);
-
-        const onHoverIn = useCallback(() => {
-            children?.props?.onHoverIn?.();
-
-            onOpen();
-        }, [onOpen, children?.props]);
-
-        const onHoverOut = useCallback(() => {
-            children?.props?.onHoverOut?.();
-
-            onClose();
-        }, [onClose, children?.props]);
-
-        return isWeb ? (
-            <Pressable
-                ref={triggerRef}
-                onPress={onPress}
-                // @ts-ignore
-                onHoverIn={onHoverIn}
-                onHoverOut={onHoverOut}>
-                {children}
-            </Pressable>
-        ) : (
-            cloneElement(children, {
-                ref: triggerRef,
-                onLongPress,
-                onPressOut,
-                onPress,
-            })
-        );
-    },
-);
+export const TooltipContext = createContext({
+    onOpen: () => {},
+    onClose: () => {},
+    triggerRef: null as any,
+});
 
 const styles = StyleSheet.create({
     backdrop: {
