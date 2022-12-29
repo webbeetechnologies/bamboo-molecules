@@ -6,6 +6,8 @@ import {
     useEffect,
     useContext,
     useMemo,
+    useImperativeHandle,
+    RefAttributes,
 } from 'react';
 import { Platform } from 'react-native';
 
@@ -20,6 +22,12 @@ const TooltipTrigger = memo(({ children }: { children: ReactElement }) => {
     const isWeb = Platform.OS === 'web';
     const { onOpen, onClose, triggerRef } = useContext(TooltipContext);
     const isHovered = useHover(triggerRef);
+
+    // this will make sure children's ref is not overwritten by the triggerRef
+    useImperativeHandle(
+        (children as ReactElement & RefAttributes<any>)?.ref,
+        () => triggerRef?.current,
+    );
 
     const onPress = useCallback(() => {
         children?.props?.onPress?.();
