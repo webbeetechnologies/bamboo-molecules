@@ -75,6 +75,13 @@ export {
     TooltipProps,
     TooltipTriggerProps,
     TooltipContentProps,
+    MaskedInputProps,
+    Masks,
+    Mask,
+    MaskItem,
+    MaskArray,
+    useMaskedInputProps,
+    createNumberMask,
 } from './components';
 
 export {
