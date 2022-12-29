@@ -43,6 +43,7 @@ import type {
     Card,
     ISelect,
     Chip,
+    Tooltip,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -94,6 +95,7 @@ export interface DefaultComponents {
     Card: typeof Card;
     Select: ISelect;
     Chip: typeof Chip;
+    Tooltip: typeof Tooltip;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

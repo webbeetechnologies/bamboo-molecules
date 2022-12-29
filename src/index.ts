@@ -72,6 +72,9 @@ export {
     CardHeaderProps,
     SelectProps,
     ChipProps,
+    TooltipProps,
+    TooltipTriggerProps,
+    TooltipContentProps,
 } from './components';
 
 export {
