@@ -1,7 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Example } from './Tooltip';
-import { userEvent, within } from '@storybook/testing-library';
+import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 import { delay } from '../../common';
 
@@ -35,19 +35,19 @@ Default.parameters = {
 Default.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await delay(100);
+    await waitFor(async () => {
+        await expect(canvas.queryByText('mark as favorite')).not.toBeTruthy();
 
-    await expect(canvas.queryByText('mark as favorite')).not.toBeTruthy();
+        await userEvent.hover(canvas.getByRole('button'));
 
-    await userEvent.hover(canvas.getByRole('button'));
+        await delay(150);
 
-    await delay(150);
+        await expect(canvas.getByText('mark as favorite')).toBeInTheDocument();
 
-    await expect(canvas.getByText('mark as favorite')).toBeInTheDocument();
+        await userEvent.unhover(canvas.getByRole('button'));
 
-    await userEvent.unhover(canvas.getByRole('button'));
+        await delay(150);
 
-    await delay(150);
-
-    await expect(canvas.queryByText('mark as favorite')).not.toBeTruthy();
+        await expect(canvas.queryByText('mark as favorite')).not.toBeTruthy();
+    });
 };
