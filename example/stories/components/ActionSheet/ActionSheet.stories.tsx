@@ -87,6 +87,9 @@ UsageWithTrigger.args = {
 };
 
 UsageWithTrigger.parameters = {
+    controls: {
+        exclude: ['isOpen'],
+    },
     docs: {
         source: {
             code: `
