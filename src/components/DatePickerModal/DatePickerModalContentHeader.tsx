@@ -4,7 +4,7 @@ import type { TextStyle } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { format } from '../../utils';
 import type { ModeType } from '../DatePickerInline';
-import type { LocalState } from './types';
+import type { LocalState, LocalStateMultiple, LocalStateRange, LocalStateSingle } from './types';
 
 export interface HeaderPickProps {
     moreLabel?: string;
@@ -146,9 +146,11 @@ export function HeaderContentSingle({
     textStyle,
 }: HeaderContentProps) {
     const { Text } = useMolecules();
+    const singleState = state as LocalStateSingle;
+
     const label = useMemo(
-        () => (state.date ? format(state.date, 'LLL dd') : emptyLabel),
-        [emptyLabel, state.date],
+        () => (singleState.date ? format(singleState.date, 'LLL dd') : emptyLabel),
+        [emptyLabel, singleState.date],
     );
 
     return <Text style={textStyle}>{label}</Text>;
@@ -163,20 +165,22 @@ export function HeaderContentMulti({
 }: // locale = 'en',
 HeaderContentProps & { moreLabel: string | undefined }) {
     const { Text } = useMolecules();
+    const multiState = state as LocalStateMultiple;
 
     const label = useMemo(() => {
         let _label = emptyLabel;
-        const dateCount = state.dates?.length || 0;
+        const dateCount = multiState.dates?.length || 0;
 
         if (dateCount) {
             if (dateCount <= 2) {
-                _label = state.dates!.map(date => format(date, 'LLL dd')).join(', ');
+                _label = multiState.dates!.map(date => format(date, 'LLL dd')).join(', ');
             } else {
-                _label = format(state.dates![0], 'LLL dd') + ` (+ ${dateCount - 1} ${moreLabel})`;
+                _label =
+                    format(multiState.dates![0], 'LLL dd') + ` (+ ${dateCount - 1} ${moreLabel})`;
             }
         }
         return _label;
-    }, [emptyLabel, moreLabel, state.dates]);
+    }, [emptyLabel, moreLabel, multiState.dates]);
 
     return <Text style={textStyle}>{label}</Text>;
 }
@@ -192,13 +196,15 @@ export function HeaderContentRange({
     separatorStyle,
 }: HeaderContentProps) {
     const { Text } = useMolecules();
+    const rangeState = state as LocalStateRange;
+
     const startDateLabel = useMemo(
-        () => (state.startDate ? format(state.startDate, 'LLL dd') : startLabel),
-        [startLabel, state.startDate],
+        () => (rangeState.startDate ? format(rangeState.startDate, 'LLL dd') : startLabel),
+        [rangeState.startDate, startLabel],
     );
     const endDateLabel = useMemo(
-        () => (state.endDate ? format(state.endDate, 'LLL dd') : endLabel),
-        [endLabel, state.endDate],
+        () => (rangeState.endDate ? format(rangeState.endDate, 'LLL dd') : endLabel),
+        [endLabel, rangeState.endDate],
     );
 
     return (

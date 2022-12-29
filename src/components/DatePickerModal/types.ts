@@ -10,11 +10,19 @@ import type {
 } from '../DatePickerInline';
 import type { HeaderPickProps } from './DatePickerModalContentHeader';
 
-export type LocalState = {
+export type LocalState = LocalStateSingle | LocalStateMultiple | LocalStateRange;
+
+export type LocalStateSingle = {
+    date: CalendarDate;
+};
+
+export type LocalStateMultiple = {
+    dates: CalendarDates;
+};
+
+export type LocalStateRange = {
     startDate: CalendarDate;
     endDate: CalendarDate;
-    date: CalendarDate;
-    dates: CalendarDates;
 };
 
 interface DatePickerModalContentBaseProps {

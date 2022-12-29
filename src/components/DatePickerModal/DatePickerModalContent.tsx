@@ -12,6 +12,9 @@ import type {
     DatePickerModalContentRangeProps,
     DatePickerModalContentMultiProps,
     LocalState,
+    LocalStateSingle,
+    LocalStateRange,
+    LocalStateMultiple,
 } from './types';
 import { useControlledValue } from '../../hooks';
 
@@ -63,16 +66,16 @@ export function DatePickerModalContent(props: Props) {
     const onInnerConfirm = useCallback(() => {
         if (mode === 'single') {
             (onConfirm as DatePickerModalContentSingleProps['onConfirm'])?.({
-                date: state?.date,
+                date: (state as LocalStateSingle)?.date,
             });
         } else if (mode === 'range') {
             (onConfirm as DatePickerModalContentRangeProps['onConfirm'])?.({
-                startDate: state?.startDate,
-                endDate: state?.endDate,
+                startDate: (state as LocalStateRange)?.startDate,
+                endDate: (state as LocalStateRange)?.endDate,
             });
         } else if (mode === 'multiple') {
             (onConfirm as DatePickerModalContentMultiProps['onConfirm'])?.({
-                dates: state?.dates || [],
+                dates: (state as LocalStateMultiple)?.dates || [],
             });
         }
     }, [state, mode, onConfirm]);
@@ -116,12 +119,12 @@ export function DatePickerModalContent(props: Props) {
                     <DatePickerInlineBase
                         // locale={locale}
                         mode={mode}
-                        startDate={state?.startDate}
-                        endDate={state?.endDate}
-                        date={state?.date}
+                        startDate={(state as LocalStateRange)?.startDate}
+                        endDate={(state as LocalStateRange)?.endDate}
+                        date={(state as LocalStateSingle)?.date}
                         onChange={onStateChange as typeof onInnerChange}
                         disableWeekDays={disableWeekDays}
-                        dates={state?.dates}
+                        dates={(state as LocalStateMultiple)?.dates}
                         validRange={validRange}
                         dateMode={dateMode}
                         startYear={startYear}
