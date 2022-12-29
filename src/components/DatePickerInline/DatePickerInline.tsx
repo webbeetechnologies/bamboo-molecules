@@ -2,7 +2,12 @@ import { memo, useCallback, useMemo } from 'react';
 import { View, ViewStyle } from 'react-native';
 
 import { useComponentStyles, useControlledValue } from '../../hooks';
-import type { LocalState } from '../DatePickerModal/types';
+import type {
+    LocalState,
+    LocalStateMultiple,
+    LocalStateRange,
+    LocalStateSingle,
+} from '../DatePickerModal/types';
 import DatePickerInlineBase from './DatePickerInlineBase';
 import type { DatePickerInlineBaseProps } from './types';
 
@@ -49,11 +54,11 @@ const DatePickerInline = ({
                 {...rest}
                 locale={locale}
                 mode={mode}
-                startDate={state?.startDate}
-                endDate={state?.endDate}
-                date={state?.date}
+                startDate={(state as LocalStateRange)?.startDate}
+                endDate={(state as LocalStateRange)?.endDate}
+                date={(state as LocalStateSingle)?.date}
                 onChange={onStateChange as typeof onInnerChange}
-                dates={state?.dates}
+                dates={(state as LocalStateMultiple)?.dates}
             />
         </View>
     );
@@ -61,11 +66,14 @@ const DatePickerInline = ({
 
 export const getStateValue = (state: LocalState, mode: DatePickerInlineProps['mode']) => {
     if (mode === 'single') {
-        return state.date !== undefined ? state : undefined;
+        return (state as LocalStateSingle).date !== undefined ? state : undefined;
     } else if (mode === 'range') {
-        return state.startDate !== undefined || state.endDate !== undefined ? state : undefined;
+        return (state as LocalStateRange).startDate !== undefined ||
+            (state as LocalStateRange).endDate !== undefined
+            ? state
+            : undefined;
     } else if (mode === 'multiple') {
-        return state.dates !== undefined ? state : undefined;
+        return (state as LocalStateMultiple).dates !== undefined ? state : undefined;
     }
     return state;
 };

@@ -2,10 +2,10 @@ import { memo, useRef, useEffect, useCallback } from 'react';
 import { View, TextInput as TextInputNative, Keyboard } from 'react-native';
 
 import type { ModeType, ValidRangeType } from '../DatePickerInline';
-import type { LocalState } from './types';
 
 import DatePickerInputWithoutModal from '../DatePickerInput/DatePickerInputWithoutModal';
 import { useComponentStyles } from '../../hooks';
+import type { LocalState, LocalStateSingle, LocalStateRange } from './types';
 
 type Props = {
     mode: ModeType;
@@ -95,7 +95,7 @@ Props) {
                         inputMode="start"
                         ref={dateInput}
                         label={label}
-                        value={state.date}
+                        value={(state as LocalStateSingle).date}
                         onChange={onSingleInputChange}
                         onSubmitEditing={onSubmitInput}
                         validRange={validRange}
@@ -112,7 +112,7 @@ Props) {
                             inputMode="start"
                             ref={startInput}
                             label={startLabel}
-                            value={state.startDate}
+                            value={(state as LocalStateRange).startDate}
                             onChange={onStartDateChange}
                             returnKeyType={'next'}
                             onSubmitEditing={onSubmitStartInput}
@@ -125,7 +125,7 @@ Props) {
                             inputMode="end"
                             ref={endInput}
                             label={endLabel}
-                            value={state.endDate}
+                            value={(state as LocalStateRange).endDate}
                             onChange={onEndDateChange}
                             onSubmitEditing={onSubmitEndInput}
                             validRange={validRange}
