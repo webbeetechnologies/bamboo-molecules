@@ -91,8 +91,6 @@ function TimePicker({
 
     const onChange = useCallback<onChangeFunc>(
         params => {
-            console.log({ params });
-
             params.hours = toHourOutputFormat(params.hours, hours, is24Hour);
 
             const newDisplayMode = params.hours >= 12 ? 'PM' : 'AM';
