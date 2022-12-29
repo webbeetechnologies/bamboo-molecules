@@ -96,7 +96,8 @@ function TimeInputs({
             let newHours = hours;
 
             if (newMinutesFromInput > 59) {
-                newHours = hours + 1;
+                newHours = hours + 1 >= 24 ? 0 : hours + 1;
+
                 newMinutes = 0;
             }
             onChange({

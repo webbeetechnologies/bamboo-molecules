@@ -91,11 +91,17 @@ function TimePicker({
 
     const onChange = useCallback<onChangeFunc>(
         params => {
+            console.log({ params });
+
             params.hours = toHourOutputFormat(params.hours, hours, is24Hour);
+
+            const newDisplayMode = params.hours >= 12 ? 'PM' : 'AM';
+
+            if (newDisplayMode !== displayMode) setDisplayMode(newDisplayMode);
 
             onTimeChange?.({ time: `${params.hours}:${params.minutes}`, focused: params.focused });
         },
-        [onTimeChange, hours, is24Hour],
+        [displayMode, hours, is24Hour, onTimeChange],
     );
 
     const memoizedValue = useMemo(
