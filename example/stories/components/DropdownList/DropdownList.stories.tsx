@@ -35,7 +35,7 @@ Default.args = {
         <Text
             style={{
                 fontSize: 16,
-                paddingHorizontal: 4,
+                paddingHorizontal: 16,
                 paddingTop: 8,
                 paddingBottom: 4,
                 fontWeight: '600',
