@@ -6,6 +6,12 @@ export type Props = NumberInputProps & {};
 export const Example = (props: Props) => {
     const { NumberInput } = useMolecules();
 
+    return <NumberInput {...props} />;
+};
+
+export const ControlledExample = (props: Props) => {
+    const { NumberInput } = useMolecules();
+
     const [number, setNumber] = useState('');
 
     const onChangeNumber = useCallback((text: string) => {
