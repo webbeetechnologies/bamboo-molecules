@@ -1,4 +1,4 @@
-import { memo, useContext, useRef, useCallback, useMemo } from 'react';
+import { memo, useRef, useCallback, useMemo } from 'react';
 import { GestureResponderEvent, PanResponder, StyleSheet, ViewProps } from 'react-native';
 
 import { useMolecules, useComponentStyles, useLatest } from '../../hooks';
@@ -16,7 +16,6 @@ import {
 import AnalogClockHours from './AnalogClockHours';
 import AnimatedClockSwitcher from './AnimatedClockSwitcher';
 import AnalogClockMinutes from './AnalogClockMinutes';
-import { DisplayModeContext } from './TimePicker';
 
 type Props = {
     hours: number;
@@ -33,7 +32,7 @@ type Props = {
 function AnalogClock({ hours, minutes, focused, is24Hour, onChange }: Props) {
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('TimePicker_Clock');
-    const { mode } = useContext(DisplayModeContext);
+    // const { mode } = useContext(DisplayModeContext);
     // used to make pointer shorter if hours are selected and above 12
     const shortPointer = (hours === 0 || hours > 12) && is24Hour;
     const clockRef = useRef<ViewProps | null>(null);
@@ -44,7 +43,7 @@ function AnalogClock({ hours, minutes, focused, is24Hour, onChange }: Props) {
     const minutesRef = useLatest(minutes);
     const focusedRef = useLatest(focused);
     const is24HourRef = useLatest(is24Hour);
-    const modeRef = useLatest(mode);
+    // const modeRef = useLatest(mode);
 
     const onPointerMove = useCallback(
         (e: GestureResponderEvent, final: boolean) => {
@@ -57,26 +56,20 @@ function AnalogClock({ hours, minutes, focused, is24Hour, onChange }: Props) {
                 const previousHourType = getHourType(hoursRef.current);
                 let pickedHours = getHours(angle, previousHourType);
 
-                const hours12AndPm = !hours24 && modeRef.current === 'AM';
+                if (hours24) {
+                    const hourTypeFromOffset = getHourTypeFromOffset(x, y, circleSize);
+                    const hours24AndPM = hours24 && hourTypeFromOffset === hourTypes.pm;
 
-                const hourTypeFromOffset = getHourTypeFromOffset(x, y, circleSize);
-                const hours24AndPM = hours24 && hourTypeFromOffset === hourTypes.pm;
+                    // Avoiding the "24h"
+                    // Should be 12h for 12 hours and PM mode
 
-                // Avoiding the "24h"
-                // Should be 12h for 12 hours and PM mode
+                    if (hours24AndPM) {
+                        pickedHours += 12;
+                    }
 
-                if (hours12AndPm || hours24AndPM) {
-                    pickedHours += 12;
-                }
-                if (modeRef.current === 'AM' && pickedHours === 12) {
-                    pickedHours = 0;
-                }
-
-                if (
-                    (!hours24 && modeRef.current === 'AM' && pickedHours === 12) ||
-                    pickedHours === 24
-                ) {
-                    pickedHours = 0;
+                    if (pickedHours === 24) {
+                        pickedHours = 0;
+                    }
                 }
 
                 if (hoursRef.current !== pickedHours || final) {
@@ -96,7 +89,7 @@ function AnalogClock({ hours, minutes, focused, is24Hour, onChange }: Props) {
                 }
             }
         },
-        [focusedRef, is24HourRef, hoursRef, onChangeRef, minutesRef, modeRef],
+        [focusedRef, is24HourRef, hoursRef, onChangeRef, minutesRef],
     );
     const panResponder = useRef(
         PanResponder.create({

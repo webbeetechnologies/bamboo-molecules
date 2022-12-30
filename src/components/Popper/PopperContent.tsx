@@ -78,11 +78,16 @@ const PopperContent = (
     const restElements: ReactNode[] = [];
     let arrowElement: ReactElement | null = null;
 
+    const updatePositionRef = useRef(updatePosition);
+    const onUpdate = useCallback(() => {
+        updatePositionRef.current();
+    }, []);
+
     useEffect(() => {
         if (isOpen) {
-            updatePosition();
+            onUpdate();
         }
-    }, [isOpen, updatePosition]);
+    }, [isOpen, onUpdate]);
 
     useEffect(() => {
         setOverlayRef && setOverlayRef(overlayRef);
@@ -155,7 +160,7 @@ const PopperContent = (
                         actualPlacement={placement as IPlacement}
                     />
                 ))}
-            <Surface elevation={2} style={containerStyle} {...rest} ref={ref}>
+            <Surface elevation={2} style={containerStyle} {...rest} ref={ref} onLayout={onUpdate}>
                 <Text style={contentTextStyles}>{restElements}</Text>
             </Surface>
         </View>
