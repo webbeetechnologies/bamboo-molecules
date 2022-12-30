@@ -1,6 +1,6 @@
 {
   "name": "@webbee/bamboo-molecules",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "repository": "git@github.com:webbeetechnologies/bamboo-molecules.git",
   "license": "MIT",
   "packageManager": "yarn@3.3.0",
@@ -33,7 +33,7 @@
     "run:example": "yarn workspace example start",
     "run:storybook": "yarn workspace example storybook",
     "run:testcases": "yarn workspace test-cases start",
-    "bundle": "yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
+    "bundle": "rm -rf lib/* && yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
     "release": "yarn bundle && npm publish ./dist/webbee-bamboo-molecules-$npm_package_version.tgz --access=public"
   },
   "dependencies": {
@@ -55,8 +55,6 @@
     "ts-deepmerge": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.18.6",
-    "@babel/preset-typescript": "^7.18.6",
     "@react-native-community/eslint-config": "^3.1.0",
     "@shopify/flash-list": "^1.4.0",
     "@types/color": "^3.0.3",

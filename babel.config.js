@@ -1,6 +1,6 @@
 module.exports = api => {
     api.cache(true);
-    const presets = [['@babel/preset-react', { runtime: 'automatic' }], '@babel/preset-typescript'];
+    const presets = [['babel-preset-expo', { jsxRuntime: 'automatic' }]];
     // to resolve the bamboo-shoots packages directory
     const plugins = [
         [
