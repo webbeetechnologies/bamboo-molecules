@@ -33,7 +33,7 @@ export default function AmPmSwitcher({
                 return;
             }
 
-            if (period === 'PM' && hours + 12 <= 24) {
+            if (period === 'PM' && hours + 12 <= 23) {
                 onChange(hours + 12);
             }
         },
