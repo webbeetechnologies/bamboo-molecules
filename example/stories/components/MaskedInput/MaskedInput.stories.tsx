@@ -2,9 +2,8 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { createNumberMask, Masks } from 'bamboo-molecules';
 
 import { Example, ControlledExample } from './MaskedInput';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
-import { delay } from '../../common';
 
 export default {
     title: 'components/MaskedInput',
@@ -53,20 +52,16 @@ const maskInteractionTest = async (
     expectedValue: string,
 ) => {
     const canvas = within(canvasElement);
-    const input = canvas.getByTestId(`${args.testID}-${args.variant || 'flat'}`);
+    const input = canvas.getByTestId(
+        `${args.testID}-${args.variant || 'flat'}`,
+    ) as HTMLInputElement;
 
-    await waitFor(async () => {
-        await userEvent.type(input, enteredValue);
+    await userEvent.type(input, enteredValue);
 
-        await delay(100);
+    await expect(input.value).toBe(expectedValue);
 
-        await expect(canvas.getByDisplayValue(expectedValue)).toBeInTheDocument();
-
-        await delay(100);
-
-        await userEvent.clear(input);
-        await userEvent.click(canvasElement);
-    });
+    await userEvent.clear(input);
+    await userEvent.click(canvasElement);
 };
 
 Default.play = async ({ canvasElement, args }) =>

@@ -1,5 +1,5 @@
-import { forwardRef, memo, useCallback } from 'react';
-import { formatWithMask, Mask, MaskInputProps } from 'react-native-mask-input';
+import { forwardRef, memo } from 'react';
+import { Mask, MaskInputProps, useMaskedInputProps } from 'react-native-mask-input';
 import { useControlledValue, useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 
@@ -19,6 +19,14 @@ export type Props = Omit<TextInputProps, 'onChangeText'> & {
      * Character to be used on the obfuscated characteres. Defaults to "*"
      */
     obfuscationCharacter?: string;
+    /**
+     * Whether or not to display the obfuscated value on the `TextInput`. Defaults to false
+     */
+    showObfuscatedValue?: boolean;
+    /**
+     * Character to be used as the "fill character" on the default placeholder
+     */
+    placeholderFillCharacter?: string;
 };
 
 const MaskedInput = (
@@ -28,46 +36,29 @@ const MaskedInput = (
         value: valueProp,
         defaultValue = '',
         onChangeText: onChangeTextProp,
+        showObfuscatedValue,
+        placeholderFillCharacter,
         ...rest
     }: Props,
     ref: any,
 ) => {
     const { TextInput } = useMolecules();
-
-    const manipulateValue = useCallback(
-        (text: string | undefined) => {
-            const { masked } = formatWithMask({
-                mask,
-                obfuscationCharacter,
-                text,
-            });
-
-            return masked;
-        },
-        [mask, obfuscationCharacter],
-    );
-
-    const onChangeText = useCallback(
-        (text: string) => {
-            const { masked, unmasked, obfuscated } = formatWithMask({
-                mask,
-                obfuscationCharacter,
-                text,
-            });
-
-            onChangeTextProp?.(masked, unmasked, obfuscated);
-        },
-        [mask, obfuscationCharacter, onChangeTextProp],
-    );
-
     const [value, onValueChange] = useControlledValue({
         value: valueProp,
+        onChange: onChangeTextProp,
         defaultValue,
-        onChange: onChangeText,
-        manipulateValue,
     });
 
-    return <TextInput {...rest} value={value} onChangeText={onValueChange} ref={ref} />;
+    const maskedProps = useMaskedInputProps({
+        mask,
+        obfuscationCharacter,
+        value: value,
+        onChangeText: onValueChange,
+        showObfuscatedValue,
+        placeholderFillCharacter,
+    });
+
+    return <TextInput {...rest} {...maskedProps} ref={ref} />;
 };
 
 export default memo(forwardRef(MaskedInput));
