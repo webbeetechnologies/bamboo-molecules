@@ -1,6 +1,7 @@
-import { forwardRef, memo } from 'react';
+import { forwardRef, memo, useMemo } from 'react';
+import { MaskArray, createNumberMask } from 'react-native-mask-input';
 
-import { useControlledValue, useMolecules } from '../../hooks';
+import { useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 
 export type Props = TextInputProps & {
@@ -8,47 +9,48 @@ export type Props = TextInputProps & {
      * Number-only keyboardType
      */
     keyboardType?: 'number-pad' | 'decimal-pad' | 'numeric' | 'phone-pad';
-};
-
-const toNumber = (val: string = '', prevVal: string = '') => {
-    const sanitizedVal = val.replace(/[^0-9.-]/g, ''); // allows minus and decimal
-
-    return !isNaN(Number(`${sanitizedVal}0`)) ? sanitizedVal : prevVal; // zero at the end because we want - signs and trailing dot to be recognized as a number. isNaN('+') => true but isNaN('+0') => false
+    /**
+     * Character for thousands delimiter. Defaults to `"."`
+     * */
+    delimiter?: string;
+    /**
+     * Decimal precision. Defaults to `2`
+     * */
+    precision?: number;
+    /**
+     * Decimal separator character. Defaults to `","`
+     * */
+    separator?: string;
+    /**
+     * Mask to be prefixed on the mask result
+     * */
+    prefix?: MaskArray;
 };
 
 const NumberInput = (
     {
-        onChangeText,
         keyboardType = 'numeric',
-        editable = true,
-        disabled = false,
-        value: valueProp,
-        defaultValue,
+        delimiter = '.',
+        precision = 0,
+        separator = ',',
+        prefix,
         ...rest
     }: Props,
     ref: any,
 ) => {
-    const { TextInput } = useMolecules();
-
-    const [value, onChange] = useControlledValue({
-        value: valueProp,
-        defaultValue: defaultValue ?? '', // making one value defined so that textinput's useControlledValue's onChange won't be used
-        disabled: !editable || disabled,
-        onChange: onChangeText,
-        manipulateValue: toNumber,
-    });
-
-    return (
-        <TextInput
-            {...rest}
-            value={value}
-            onChangeText={onChange}
-            keyboardType={keyboardType}
-            editable={editable}
-            disabled={disabled}
-            ref={ref}
-        />
+    const { MaskedInput } = useMolecules();
+    const mask = useMemo(
+        () =>
+            createNumberMask({
+                delimiter,
+                precision,
+                separator,
+                prefix,
+            }),
+        [delimiter, precision, prefix, separator],
     );
+
+    return <MaskedInput mask={mask} {...rest} keyboardType={keyboardType} ref={ref} />;
 };
 
 export default memo(forwardRef(NumberInput));
