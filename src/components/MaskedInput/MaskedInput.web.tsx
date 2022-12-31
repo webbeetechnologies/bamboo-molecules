@@ -1,15 +1,10 @@
-import { forwardRef, memo, useCallback, useRef, useState } from 'react';
-import type { NativeSyntheticEvent, TextInputSelectionChangeEventData } from 'react-native';
-import { useMaskedInputProps } from 'react-native-mask-input';
+import { forwardRef, memo, useCallback, useRef } from 'react';
 
-import { useControlledValue, useMolecules } from '../../hooks';
+import { useMolecules } from '../../hooks';
+import { useMaskedInputProps, useSelectionHandler } from './utils';
 import type { MaskedInputProps } from './types';
 
-const changedByOne = (reference: number, number: number) => {
-    return number === reference + 1 || number === reference - 1;
-};
-
-const MaskedInputBase = (
+const MaskedInput = (
     {
         mask,
         obfuscationCharacter,
@@ -24,21 +19,13 @@ const MaskedInputBase = (
 ) => {
     const { TextInput } = useMolecules();
 
-    const [value, onValueChange] = useControlledValue({
-        value: valueProp,
-        onChange: onChangeTextProp,
-        defaultValue,
+    const { selection, setSelection, onSelectionChange, onKeyPress } = useSelectionHandler({
+        initialStart: valueProp?.length || 0,
+        initialEnd: valueProp?.length || 0,
     });
 
-    const [selection, setSelection] = useState({
-        start: value.length,
-        end: value.length,
-    });
-
-    const onChangeText = useCallback(
-        (masked: string, unmasked: string, obfuscated: string) => {
-            onValueChange(masked, unmasked, obfuscated);
-
+    const onChangeTextCallback = useCallback(
+        (masked: string) => {
             const delta = masked.length - previousMaskedValue.current.length;
 
             previousMaskedValue.current = masked;
@@ -48,44 +35,21 @@ const MaskedInputBase = (
                 end: selection.end + delta,
             });
         },
-        [onValueChange, selection],
+        [selection.end, selection.start, setSelection],
     );
 
     const maskedProps = useMaskedInputProps({
         mask,
         obfuscationCharacter,
-        value: value,
-        onChangeText,
+        value: valueProp,
+        defaultValue,
+        onChangeText: onChangeTextProp,
         showObfuscatedValue,
         placeholderFillCharacter,
+        onChangeTextCallback,
     });
 
-    const keyRef = useRef(false);
     const previousMaskedValue = useRef(maskedProps.value);
-
-    const onSelectionChange = useCallback(
-        ({ nativeEvent }: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => {
-            if (
-                (nativeEvent as any).type === 'selectionchange' &&
-                keyRef.current &&
-                !changedByOne(selection.start, nativeEvent.selection.start)
-            ) {
-                setSelection({
-                    ...selection,
-                });
-                return;
-            }
-
-            setSelection({ ...nativeEvent.selection });
-        },
-        [selection],
-    );
-
-    const onKeyPress = useCallback((e: any) => {
-        const { key, altKey, metaKey } = e;
-
-        keyRef.current = (altKey || metaKey) && ['Ctrl', 'Meta', 'Alt'].includes(key);
-    }, []);
 
     return (
         <TextInput
@@ -99,4 +63,4 @@ const MaskedInputBase = (
     );
 };
 
-export default memo(forwardRef(MaskedInputBase));
+export default memo(forwardRef(MaskedInput));

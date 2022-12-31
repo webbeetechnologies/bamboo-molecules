@@ -1,16 +1,16 @@
 import { forwardRef, memo } from 'react';
-import { useMaskedInputProps } from 'react-native-mask-input';
 
-import { useControlledValue, useMolecules } from '../../hooks';
+import { useMolecules } from '../../hooks';
+import { useMaskedInputProps } from './utils';
 import type { MaskedInputProps } from './types';
 
-const MaskedInputMobile = (
+const MaskedInput = (
     {
         mask,
         obfuscationCharacter,
-        value: valueProp,
+        value,
         defaultValue = '',
-        onChangeText: onChangeTextProp,
+        onChangeText,
         showObfuscatedValue,
         placeholderFillCharacter,
         ...rest
@@ -19,17 +19,12 @@ const MaskedInputMobile = (
 ) => {
     const { TextInput } = useMolecules();
 
-    const [value, onValueChange] = useControlledValue({
-        value: valueProp,
-        onChange: onChangeTextProp,
-        defaultValue,
-    });
-
     const maskedProps = useMaskedInputProps({
         mask,
         obfuscationCharacter,
         value,
-        onChangeText: onValueChange,
+        defaultValue,
+        onChangeText,
         showObfuscatedValue,
         placeholderFillCharacter,
     });
@@ -37,4 +32,4 @@ const MaskedInputMobile = (
     return <TextInput {...rest} {...maskedProps} ref={ref} />;
 };
 
-export default memo(forwardRef(MaskedInputMobile));
+export default memo(forwardRef(MaskedInput));
