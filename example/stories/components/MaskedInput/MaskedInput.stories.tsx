@@ -1,22 +1,24 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { createNumberMask, Masks } from 'bamboo-molecules';
 
-import { Example, ControlledExample } from './MaskedInput';
 import { userEvent, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
+import { Example, ControlledExample } from './MaskedInput';
 
 export default {
     title: 'components/MaskedInput',
     component: Example,
 } as ComponentMeta<typeof Example>;
 
-export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
+export const WithNumberMask: ComponentStory<typeof Example> = args => (
+    <ControlledExample {...args} />
+);
 
-Default.args = {
+WithNumberMask.args = {
     mask: createNumberMask({
-        delimiter: '',
+        delimiter: ',',
         precision: 0,
-        separator: '',
+        separator: '.',
     }),
     placeholder: 'enter numbers',
     label: 'number',
@@ -24,54 +26,40 @@ Default.args = {
     testID: 'numberInput',
 };
 
-Default.parameters = {
+WithNumberMask.parameters = {
     docs: {
         source: {
             code: `
     const { MaskedInput } = useMolecules();
+    const [text, setText] = useState('');
+
+    const onChangeText = useCallback((maskedText: string) => {
+        setText(maskedText);
+    }, []);
 
     const mask = useMemo(() => {
         return createNumberMask({
-            delimiter: '',
-            precision: 0,
-            separator: '',
+            delimiter: ',',
+            precision: 3,
+            separator: '.',
         })
     }, [])
 
-    return <MaskedInput mask={mask} placeholder="enter numbers" label="number" />;`,
+    return <MaskedInput mask={mask} placeholder="enter numbers" label="number" value={text} onChangeText={onChangeText} />;`,
             language: 'tsx',
             type: 'auto',
         },
     },
 };
 
-const maskInteractionTest = async (
-    canvasElement: HTMLElement,
-    args: typeof Default.args,
-    enteredValue: string,
-    expectedValue: string,
-) => {
-    const canvas = within(canvasElement);
-    const input = canvas.getByTestId(
-        `${args.testID}-${args.variant || 'flat'}`,
-    ) as HTMLInputElement;
+WithNumberMask.play = async ({ canvasElement, args }) =>
+    await maskInteractionTest(canvasElement, args, 'lajf29lja9fla222', '299,222');
 
-    await userEvent.type(input, enteredValue);
-
-    await expect(input.value).toBe(expectedValue);
-
-    await userEvent.clear(input);
-    await userEvent.click(canvasElement);
-};
-
-Default.play = async ({ canvasElement, args }) =>
-    await maskInteractionTest(canvasElement, args, 'lajf29lja9fla222', '299222');
-
-export const Controlled: ComponentStory<typeof ControlledExample> = args => (
+export const WithCreditCardMask: ComponentStory<typeof ControlledExample> = args => (
     <ControlledExample {...args} />
 );
 
-Controlled.args = {
+WithCreditCardMask.args = {
     mask: Masks.CREDIT_CARD,
     placeholder: '---- ---- ---- ----',
     label: 'Credit Card',
@@ -79,7 +67,7 @@ Controlled.args = {
     variant: 'flat',
 };
 
-Controlled.parameters = {
+WithCreditCardMask.parameters = {
     docs: {
         source: {
             code: `
@@ -97,5 +85,24 @@ Controlled.parameters = {
     },
 };
 
-Controlled.play = async ({ canvasElement, args }) =>
+const maskInteractionTest = async (
+    canvasElement: HTMLElement,
+    args: typeof WithCreditCardMask.args,
+    enteredValue: string,
+    expectedValue: string,
+) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByTestId(
+        `${args.testID}-${args.variant || 'flat'}`,
+    ) as HTMLInputElement;
+
+    await userEvent.type(input, enteredValue);
+
+    await expect(input.value).toBe(expectedValue);
+
+    await userEvent.clear(input);
+    await userEvent.click(canvasElement);
+};
+
+WithCreditCardMask.play = async ({ canvasElement, args }) =>
     await maskInteractionTest(canvasElement, args, '122345.5535', '1223 4555 35');
