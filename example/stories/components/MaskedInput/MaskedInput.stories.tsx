@@ -55,19 +55,19 @@ WithNumberMask.parameters = {
 WithNumberMask.play = async ({ canvasElement, args }) =>
     await maskInteractionTest(canvasElement, args, 'lajf29lja9fla222', '299,222');
 
-export const WithCreditCardMask: ComponentStory<typeof ControlledExample> = args => (
+export const WithCurrencyMask: ComponentStory<typeof ControlledExample> = args => (
     <ControlledExample {...args} />
 );
 
-WithCreditCardMask.args = {
-    mask: Masks.CREDIT_CARD,
-    placeholder: '---- ---- ---- ----',
-    label: 'Credit Card',
-    testID: 'creditCardInput',
+WithCurrencyMask.args = {
+    mask: Masks.BRL_CURRENCY,
+    placeholder: 'R$ ---.---.---',
+    label: 'Currency',
+    testID: 'currencyInput',
     variant: 'flat',
 };
 
-WithCreditCardMask.parameters = {
+WithCurrencyMask.parameters = {
     docs: {
         source: {
             code: `
@@ -87,7 +87,7 @@ WithCreditCardMask.parameters = {
 
 const maskInteractionTest = async (
     canvasElement: HTMLElement,
-    args: typeof WithCreditCardMask.args,
+    args: typeof WithNumberMask.args,
     enteredValue: string,
     expectedValue: string,
 ) => {
@@ -104,5 +104,5 @@ const maskInteractionTest = async (
     await userEvent.click(canvasElement);
 };
 
-WithCreditCardMask.play = async ({ canvasElement, args }) =>
-    await maskInteractionTest(canvasElement, args, '122345.5535', '1223 4555 35');
+WithCurrencyMask.play = async ({ canvasElement, args }) =>
+    await maskInteractionTest(canvasElement, args, '122345.5535', 'R$ 12.234.555,35');
