@@ -16,11 +16,7 @@ const AppbarTitle = memo(({ style, children, ...rest }: Props) => {
     });
 
     const titleStyles = useMemo(
-        () =>
-            StyleSheet.flatten([
-                type === 'center-aligned' ? styles.center : styles.left,
-                componentStyles,
-            ]),
+        () => StyleSheet.flatten([styles[type], componentStyles]),
         [componentStyles, type],
     );
 
@@ -32,11 +28,17 @@ const AppbarTitle = memo(({ style, children, ...rest }: Props) => {
 });
 
 const styles = StyleSheet.create({
-    center: {
+    'center-aligned': {
         justifyContent: 'center',
     },
-    left: {
+    small: {
         justifyContent: 'flex-start',
+    },
+    medium: {
+        alignItems: 'flex-end',
+    },
+    large: {
+        alignItems: 'flex-end',
     },
 });
 

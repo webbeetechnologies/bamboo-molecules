@@ -3,8 +3,8 @@ import { useComponentStyles } from '../../hooks';
 import { default as AppbarBase } from './AppbarBase';
 import type { AppbarProps } from './types';
 
-const AppbarCenterAligned = ({ ...rest }: AppbarProps) => {
-    const componentStyles = useComponentStyles('Appbar_CenterAligned');
+const AppbarCenterAligned = ({ style, ...rest }: AppbarProps) => {
+    const componentStyles = useComponentStyles('Appbar_CenterAligned', style);
 
     return <AppbarBase _type="center-aligned" style={componentStyles} {...rest} />;
 };

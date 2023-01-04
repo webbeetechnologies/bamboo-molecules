@@ -9,11 +9,13 @@ export const appbarBaseStyles: ComponentStylePropWithVariants<ViewStyle, '', Cus
     paddingHorizontal: 'spacings.4',
     backgroundColor: 'colors.surface',
     flex: 1,
+    minHeight: 64,
 
     innerContainer: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
     },
 };
 
@@ -47,6 +49,7 @@ export const appbarLargeStyles: ComponentStylePropWithVariants<ViewStyle, '', Cu
 };
 
 export const appbarTitle: ComponentStylePropWithVariants<TextStyle> = {
+    display: 'flex',
     flex: 1,
     color: 'colors.onSurface',
 

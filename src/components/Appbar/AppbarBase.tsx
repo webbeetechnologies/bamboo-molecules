@@ -8,6 +8,7 @@ const AppbarBase = ({
     children,
     style,
     innerContainerStyle: innerContainerStyleProp = {},
+    scrolling = false,
     ...rest
 }: AppbarBaseProps) => {
     const { Surface, View } = useMolecules();
