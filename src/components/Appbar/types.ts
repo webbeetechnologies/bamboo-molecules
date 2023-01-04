@@ -5,7 +5,7 @@ import type { SurfaceProps } from '../Surface';
 export type AppbarType = 'center-aligned' | 'small' | 'medium' | 'large';
 
 export type AppbarBaseProps = Omit<SurfaceProps, 'children'> & {
-    _type: AppbarType;
+    _type?: AppbarType;
 
     innerContainerStyle?: ViewStyle;
     children: ReactElement | ReactElement[];

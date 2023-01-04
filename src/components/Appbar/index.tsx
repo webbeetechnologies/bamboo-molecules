@@ -7,8 +7,11 @@ import AppbarLeft from './AppbarLeft';
 import AppbarRight from './AppbarRight';
 import AppbarTitle from './AppbarTitle';
 import AppbarActions from './AppbarActions';
+import AppbarBase from './AppbarBase';
+import type { ComponentType } from 'react';
+import type { AppbarProps } from './types';
 
-export const Appbar = {
+export const Appbar = Object.assign(AppbarBase as ComponentType<AppbarProps>, {
     Small: AppbarSmall,
     CenterAligned: AppbarCenterAligned,
     Medium: AppbarMedium,
@@ -18,7 +21,7 @@ export const Appbar = {
     Right: AppbarRight,
     Title: AppbarTitle,
     Actions: AppbarActions,
-};
+});
 
 export {
     appbarBaseStyles,

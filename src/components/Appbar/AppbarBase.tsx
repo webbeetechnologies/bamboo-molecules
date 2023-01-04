@@ -3,7 +3,7 @@ import { useComponentStyles, useMolecules } from '../../hooks';
 import type { AppbarBaseProps, AppbarType } from './types';
 
 const AppbarBase = ({
-    _type,
+    _type = 'center-aligned',
     elevation = 0,
     children,
     style,
