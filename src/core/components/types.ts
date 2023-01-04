@@ -44,6 +44,7 @@ import type {
     ISelect,
     Chip,
     Tooltip,
+    Appbar,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -96,6 +97,7 @@ export interface DefaultComponents {
     Select: ISelect;
     Chip: typeof Chip;
     Tooltip: typeof Tooltip;
+    Appbar: typeof Appbar;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

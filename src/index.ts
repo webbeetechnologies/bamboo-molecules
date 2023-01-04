@@ -75,6 +75,11 @@ export {
     TooltipProps,
     TooltipTriggerProps,
     TooltipContentProps,
+    AppbarProps,
+    AppbarLeftProps,
+    AppbarRightProps,
+    AppbarTitleProps,
+    AppbarActionsProps,
 } from './components';
 
 export {
