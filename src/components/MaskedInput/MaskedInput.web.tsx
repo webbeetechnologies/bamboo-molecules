@@ -9,7 +9,6 @@ const MaskedInput = (
         mask,
         obfuscationCharacter,
         value: valueProp,
-        defaultValue = '',
         onChangeText: onChangeTextProp,
         showObfuscatedValue,
         placeholderFillCharacter,
@@ -24,29 +23,29 @@ const MaskedInput = (
         initialEnd: valueProp?.length || 0,
     });
 
-    const onChangeTextCallback = useCallback(
-        (masked: string) => {
+    const onChangeText = useCallback(
+        (masked: string, unmasked: string, obfuscated: string) => {
+            onChangeTextProp?.(masked, unmasked, obfuscated);
+
             const delta = masked.length - previousMaskedValue.current.length;
 
             previousMaskedValue.current = masked;
 
-            setSelection({
-                start: selection.start + delta,
-                end: selection.end + delta,
-            });
+            setSelection(prev => ({
+                start: prev.start + delta,
+                end: prev.end + delta,
+            }));
         },
-        [selection.end, selection.start, setSelection],
+        [onChangeTextProp, setSelection],
     );
 
     const maskedProps = useMaskedInputProps({
         mask,
         obfuscationCharacter,
         value: valueProp,
-        defaultValue,
-        onChangeText: onChangeTextProp,
+        onChangeText,
         showObfuscatedValue,
         placeholderFillCharacter,
-        onChangeTextCallback,
     });
 
     const previousMaskedValue = useRef(maskedProps.value);

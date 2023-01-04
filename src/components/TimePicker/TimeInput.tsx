@@ -88,8 +88,8 @@ function TimeInput(
                 keyboardAppearance={theme.dark ? 'dark' : 'default'}
                 value={formattedValue}
                 maxLength={2}
-                onChangeText={onInnerChange}
                 {...rest}
+                onChangeText={onInnerChange}
             />
             <>
                 {onPress && inputType === inputTypes.picker ? (

@@ -4,7 +4,15 @@ import { MaskArray, createNumberMask } from 'react-native-mask-input';
 import { useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 
-export type Props = TextInputProps & {
+export type Props = Omit<TextInputProps, 'value' | 'defaultValue' | 'onChangeText'> & {
+    /**
+     * required for all the maskedinputs
+     * */
+    value: string;
+    /**
+     * required for all the maskedinput
+     * */
+    onChangeText: (value: string) => void;
     /**
      * Number-only keyboardType
      */

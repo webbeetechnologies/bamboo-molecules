@@ -5,9 +5,6 @@ import {
     useMaskedInputProps as useMaskedInputPropsDefault,
 } from 'react-native-mask-input';
 
-import { useControlledValue } from '../../hooks';
-import type { MaskedInputProps } from './types';
-
 export const Masks = {
     ...defaultMasks,
     // TODO add more masks
@@ -15,51 +12,7 @@ export const Masks = {
 
 export { createNumberMask } from 'react-native-mask-input';
 
-type Props = Pick<
-    MaskedInputProps,
-    | 'mask'
-    | 'value'
-    | 'onChangeText'
-    | 'defaultValue'
-    | 'obfuscationCharacter'
-    | 'showObfuscatedValue'
-    | 'placeholderFillCharacter'
-> & { onChangeTextCallback?: (masked: string, unmasked: string, obfuscated: string) => void };
-
-export const useMaskedInputProps = ({
-    mask,
-    value: valueProp,
-    onChangeText: onChangeTextProp,
-    defaultValue,
-    obfuscationCharacter,
-    showObfuscatedValue,
-    placeholderFillCharacter,
-    onChangeTextCallback,
-}: Props) => {
-    const [value, onValueChange] = useControlledValue({
-        value: valueProp,
-        onChange: onChangeTextProp,
-        defaultValue,
-    });
-
-    const onChangeText = useCallback(
-        (masked: string, unmasked: string, obfuscated: string) => {
-            onValueChange(masked, unmasked, obfuscated);
-
-            onChangeTextCallback?.(masked, unmasked, obfuscated);
-        },
-        [onChangeTextCallback, onValueChange],
-    );
-
-    return useMaskedInputPropsDefault({
-        mask,
-        obfuscationCharacter,
-        value,
-        onChangeText,
-        showObfuscatedValue,
-        placeholderFillCharacter,
-    });
-};
+export const useMaskedInputProps = useMaskedInputPropsDefault;
 
 const changedByOne = (reference: number, number: number) => {
     return number === reference + 1 || number === reference - 1;
@@ -80,7 +33,6 @@ export const useSelectionHandler = ({ initialStart = 0, initialEnd = 0 }) => {
                 keyRef.current &&
                 !changedByOne(selection.start, nativeEvent.selection.start)
             ) {
-                setSelection(selection);
                 return;
             }
 
