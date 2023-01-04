@@ -64,6 +64,17 @@ export {
     RadioButtonGroupProps,
     RadioButtonItemProps,
     NumberRangeInputProps,
+    CardProps,
+    CardContentProps,
+    CardMediaProps,
+    CardTextProps,
+    CardActionsProps,
+    CardHeaderProps,
+    SelectProps,
+    ChipProps,
+    TooltipProps,
+    TooltipTriggerProps,
+    TooltipContentProps,
 } from './components';
 
 export {
@@ -127,6 +138,7 @@ export {
     DocumentPickerOptions,
     DocumentResult,
     documentTypes,
+    BackgroundContext,
 } from './utils';
 
 export { ComponentStylePropWithVariants, WithElements } from './types';

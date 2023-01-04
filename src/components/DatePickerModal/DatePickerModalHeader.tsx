@@ -7,7 +7,6 @@ export interface DatePickerModalHeaderProps {
     disableSafeTop?: boolean;
     saveLabel?: string;
     saveLabelDisabled?: boolean;
-    uppercase?: boolean;
     onClose: () => void;
     onSave: () => void;
     closeIcon?: string;
@@ -59,10 +58,10 @@ export default function DatePickerModalHeader(props: DatePickerModalHeaderProps)
                             testID="date-picker-close"
                         />
                         <Button
+                            variant="contained"
                             style={buttonStyle as ViewStyle}
                             onPress={props.onSave}
                             disabled={props.saveLabelDisabled || false}
-                            uppercase={props.uppercase || true}
                             testID="dates-save">
                             {saveLabel}
                         </Button>

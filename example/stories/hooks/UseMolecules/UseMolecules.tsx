@@ -1,6 +1,6 @@
-import { ProvideMolecules, useMolecules } from 'bamboo-molecules';
+import { useMolecules } from 'bamboo-molecules';
 
-export const Components = () => {
+export const Example = () => {
     const { View, Text } = useMolecules();
 
     return (
@@ -10,13 +10,5 @@ export const Components = () => {
                 nobis placeat quod, recusandae voluptatibus. Aperiam asperiores enim fugiat ipsam
             </Text>
         </View>
-    );
-};
-
-export const Example = () => {
-    return (
-        <ProvideMolecules>
-            <Components />
-        </ProvideMolecules>
     );
 };

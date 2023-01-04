@@ -13,7 +13,7 @@ export const dialogStyles: ComponentStylePropWithVariants<TextStyle, States, Cus
 
     container: {
         justifyContent: 'flex-start',
-        borderRadius: 'roundness.7' as unknown as number,
+        borderRadius: 'shapes.corner.extraLarge' as unknown as number,
         backgroundColor: 'colors.surface',
         minWidth: 280,
         maxWidth: 560,

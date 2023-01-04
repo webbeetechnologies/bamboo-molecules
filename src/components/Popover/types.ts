@@ -17,6 +17,7 @@ export type PopoverProps = PropsWithChildren<
         overlayStyles?: ViewStyle;
         contentStyles?: ViewStyle;
         contentTextStyles?: TextStyle;
+        backdropStyles?: ViewStyle;
         initialTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
         animateTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
         exitTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };

@@ -8,7 +8,6 @@ type CustomProps = {
     icon?: ViewStyle;
     iconTextMode?: ViewStyle;
     label?: TextStyle;
-    uppercaseLabel?: TextStyle;
     labelText?: TextStyle;
     labelTextAddons?: TextStyle;
 };
@@ -45,12 +44,11 @@ export const defaultStyles: ComponentStylePropWithVariants<
         marginRight: 'spacings._2',
     },
     label: {
+        display: 'flex',
+        alignItems: 'center',
         textAlign: 'center',
         marginVertical: 'spacings.2l',
         marginHorizontal: 'spacings.6',
-    },
-    uppercaseLabel: {
-        textTransform: 'uppercase',
     },
     labelText: {
         marginHorizontal: 'spacings.3',
@@ -63,19 +61,19 @@ export const defaultStyles: ComponentStylePropWithVariants<
         sm: {
             minWidth: 64,
             iconSize: 22,
-            borderRadius: 'roundness.5',
+            borderRadius: 'shapes.corner.full',
             typeScale: 'typescale.labelMedium',
         },
         md: {
             minWidth: 64,
             iconSize: 24,
-            borderRadius: 'roundness.5',
+            borderRadius: 'shapes.corner.full',
             typeScale: 'typescale.labelLarge',
         },
         lg: {
             minWidth: 64,
             iconSize: 26,
-            borderRadius: 'roundness.5',
+            borderRadius: 'shapes.corner.full',
             typeScale: 'typescale.labelLarge',
             fontSize: 'fontSizes.md',
         },

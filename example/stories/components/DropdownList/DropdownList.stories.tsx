@@ -1,4 +1,4 @@
-import { Text } from 'react-native';
+import { Dimensions, Text } from 'react-native';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ProvideMolecules } from '../../common';
 import { Example as ListItem, ListItemTitle } from '../ListItem/ListItem';
@@ -22,51 +22,26 @@ export const Default: ComponentStory<typeof ExampleWithToggle> = args => (
 );
 
 Default.args = {
+    contentContainerStyle: {
+        maxHeight: Dimensions.get('screen').height / 2,
+    },
     searchable: true,
-    onQueryChange: () => {},
-    records: [
-        {
-            title: 'Numbers',
-            data: [
-                {
-                    text: '1',
-                },
-                {
-                    text: '2',
-                },
-                {
-                    text: '3',
-                },
-                {
-                    text: '4',
-                },
-            ],
-        },
-        {
-            title: 'Letters',
-            data: [
-                {
-                    text: 'A',
-                },
-                {
-                    text: 'B',
-                },
-                {
-                    text: 'C',
-                },
-                {
-                    text: 'D',
-                },
-            ],
-        },
-    ],
     renderItem: ({ item }: any) => (
         <ListItem>
-            <ListItemTitle>{item.text}</ListItemTitle>
+            <ListItemTitle>{item.title}</ListItemTitle>
         </ListItem>
     ),
     renderSectionHeader: ({ section }: any) => (
-        <Text style={{ fontSize: 25 }}>{section.title}</Text>
+        <Text
+            style={{
+                fontSize: 16,
+                paddingHorizontal: 16,
+                paddingTop: 8,
+                paddingBottom: 4,
+                fontWeight: '600',
+            }}>
+            {section.title.toUpperCase()}
+        </Text>
     ),
     actionSheetProps: {
         gestureEnabled: true,
@@ -78,51 +53,46 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<OptionList {...props} 
-    records={[
-        {
-            title: 'Numbers',
-            data: [
-                {
-                    text: '1',
-                },
-                {
-                    text: '2',
-                },
-                {
-                    text: '3',
-                },
-                {
-                    text: '4',
-                },
-            ],
+    const { DropdownList, Button } = useMolecules();
+    const triggerRef = useRef(null);
+    const { state: isOpen, onToggle, setState: setIsOpen } = useToggle();
+    const [query, onQueryChange] = useState('');
+    const sectionListData = useRef(generateSectionListData(10, 100)).current;
+    const [records, setRecords] = useState(sectionListData);
+
+    const onSearch = useCallback(
+        (newQuery: string) => {
+            onQueryChange(newQuery);
+
+            setRecords(
+                sectionListData
+                    .map(section => ({
+                        ...section,
+                        data: section.data.filter(item => item.title.includes(newQuery)),
+                    }))
+                    .filter(section => section.data.length > 0),
+            );
         },
-        {
-            title: 'Letters',
-            data: [
-                {
-                    text: 'A',
-                },
-                {
-                    text: 'B',
-                },
-                {
-                    text: 'C',
-                },
-                {
-                    text: 'D',
-                },
-            ],
-        },
-]} 
-    renderItem={({ item }) => (
-        <ListItem>
-            <ListItem.Title>{item}</ListItem.Title>
-        </ListItem>
-    )}
-    renderSectionHeader={({ section }) => (
-        <Text style={{ fontSize: 25 }}>{section.title}</Text>
-    )} />`,
+        [sectionListData],
+    );
+
+    return (
+        <>
+            <Button ref={triggerRef} onPress={onToggle}>
+                Toggle DropdownList
+            </Button>
+            <DropdownList
+                records={records}
+                searchable
+                query={query}
+                onQueryChange={onSearch}
+                triggerRef={triggerRef}
+                isOpen={isOpen}
+                searchInputProps={searchInputProps}
+                setIsOpen={setIsOpen}
+            />
+        </>
+    );`,
             language: 'tsx',
             type: 'auto',
         },

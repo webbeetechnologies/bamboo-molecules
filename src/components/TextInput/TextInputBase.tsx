@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useContext, useMemo, useState } from 'react';
 import {
     Animated,
     I18nManager,
@@ -9,10 +9,12 @@ import {
 } from 'react-native';
 
 import { useMolecules } from '../../hooks';
+import { normalizeBorderRadiuses, normalizeSpacings, BackgroundContext } from '../../utils';
 import InputLabel from './InputLabel';
 import type { InputBaseProps, RenderProps } from './types';
 import { styles as defaultStyles } from './utils';
-import { normalizeBorderRadiuses, normalizeSpacings } from '../../utils';
+
+const DefaultComponent = (props: RenderProps) => <NativeTextInput {...props} />;
 
 const TextInputBase = ({
     componentStyles,
@@ -30,7 +32,7 @@ const TextInputBase = ({
     onLayoutAnimatedText,
     left,
     right,
-    render = (props: RenderProps) => <NativeTextInput {...props} />,
+    render = DefaultComponent,
     forceFocus,
     testID = 'text-input',
     required,
@@ -42,6 +44,7 @@ const TextInputBase = ({
     const hasActiveOutline = parentState.focused || error;
 
     const { View } = useMolecules();
+    const { backgroundColor: parentBackground } = useContext(BackgroundContext);
 
     const labelWidth = parentState.labelLayout.width;
     const labelHeight = parentState.labelLayout.height;
@@ -84,6 +87,7 @@ const TextInputBase = ({
             height,
             textAlign,
             activeColor,
+            defaultLabelBackground,
 
             // custom props
             selectionColor,
@@ -136,6 +140,10 @@ const TextInputBase = ({
             height,
             textAlign,
             backgroundColor,
+            labelBackground:
+                variant === 'outlined'
+                    ? parentBackground || backgroundColor || defaultLabelBackground
+                    : backgroundColor || defaultLabelBackground,
 
             activeColor,
             baseLabelTranslateX:
@@ -207,20 +215,24 @@ const TextInputBase = ({
         left,
         leftElementLayout.width,
         multiline,
+        parentBackground,
         variant,
     ]);
 
     return (
         <View style={styles.container}>
-            {variant === 'flat' ? (
-                <Animated.View testID="text-input-underline" style={styles.underlineStyle} />
-            ) : (
-                <Animated.View
-                    testID="text-input-outline"
-                    pointerEvents="none"
-                    style={styles.outlineStyle}
-                />
-            )}
+            <>
+                {variant === 'flat' && (
+                    <Animated.View testID="text-input-underline" style={styles.underlineStyle} />
+                )}
+                {variant === 'outlined' && (
+                    <Animated.View
+                        testID="text-input-outline"
+                        pointerEvents="none"
+                        style={styles.outlineStyle}
+                    />
+                )}
+            </>
 
             <>
                 {left && (
@@ -250,21 +262,23 @@ const TextInputBase = ({
                     />
                 )}
 
-                <InputLabel
-                    parentState={parentState}
-                    label={label}
-                    labelBackground={styles.backgroundColor}
-                    floatingLabelVerticalOffset={styles.floatingLabelVerticalOffset}
-                    required={required}
-                    onLayoutAnimatedText={onLayoutAnimatedText}
-                    error={error}
-                    baseLabelTranslateX={styles.baseLabelTranslateX}
-                    labelScale={styles.labelScale}
-                    wiggleOffsetX={styles.labelWiggleXOffset}
-                    maxFontSizeMultiplier={rest.maxFontSizeMultiplier}
-                    testID={testID}
-                    style={styles.labelText}
-                />
+                {variant !== 'plain' && (
+                    <InputLabel
+                        parentState={parentState}
+                        label={label}
+                        labelBackground={styles.labelBackground}
+                        floatingLabelVerticalOffset={styles.floatingLabelVerticalOffset}
+                        required={required}
+                        onLayoutAnimatedText={onLayoutAnimatedText}
+                        error={error}
+                        baseLabelTranslateX={styles.baseLabelTranslateX}
+                        labelScale={styles.labelScale}
+                        wiggleOffsetX={styles.labelWiggleXOffset}
+                        maxFontSizeMultiplier={rest.maxFontSizeMultiplier}
+                        testID={testID}
+                        style={styles.labelText}
+                    />
+                )}
 
                 {render({
                     testID: `${testID}-${variant}`,

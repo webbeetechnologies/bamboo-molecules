@@ -2,8 +2,9 @@ import { useMemo } from 'react';
 import type { TextStyle } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
+import { format } from '../../utils';
 import type { ModeType } from '../DatePickerInline';
-import type { LocalState } from './types';
+import type { LocalState, LocalStateMultiple, LocalStateRange, LocalStateSingle } from './types';
 
 export interface HeaderPickProps {
     moreLabel?: string;
@@ -24,7 +25,7 @@ export interface HeaderContentProps extends HeaderPickProps {
     mode: ModeType;
     collapsed: boolean;
     onToggle: () => any;
-    locale: string | undefined;
+    // locale: string | undefined;
     textStyle?: TextStyle;
     separatorStyle?: TextStyle;
 }
@@ -137,55 +138,56 @@ export default function DatePickerModalContentHeader(props: HeaderContentProps) 
     );
 }
 
+// TODO add translations
 export function HeaderContentSingle({
     state,
     emptyLabel = ' ',
-    locale,
+    // locale,
     textStyle,
 }: HeaderContentProps) {
     const { Text } = useMolecules();
+    const singleState = state as LocalStateSingle;
 
-    const formatter = useMemo(() => {
-        return new Intl.DateTimeFormat(locale, {
-            month: 'short',
-            day: 'numeric',
-        });
-    }, [locale]);
+    const label = useMemo(
+        () => (singleState.date ? format(singleState.date, 'LLL dd') : emptyLabel),
+        [emptyLabel, singleState.date],
+    );
 
-    return <Text style={textStyle}>{state.date ? formatter.format(state.date) : emptyLabel}</Text>;
+    return <Text style={textStyle}>{label}</Text>;
 }
 
+// TODO add translations
 export function HeaderContentMulti({
     state,
     emptyLabel = ' ',
     moreLabel = 'more',
     textStyle,
-    locale = 'en',
-}: HeaderContentProps & { moreLabel: string | undefined }) {
-    const dateCount = state.dates?.length || 0;
+}: // locale = 'en',
+HeaderContentProps & { moreLabel: string | undefined }) {
     const { Text } = useMolecules();
+    const multiState = state as LocalStateMultiple;
 
-    const formatter = useMemo(() => {
-        return new Intl.DateTimeFormat(locale, {
-            month: 'short',
-            day: 'numeric',
-        });
-    }, [locale]);
+    const label = useMemo(() => {
+        let _label = emptyLabel;
+        const dateCount = multiState.dates?.length || 0;
 
-    let label = emptyLabel;
-    if (dateCount) {
-        if (dateCount <= 2) {
-            label = state.dates!.map(date => formatter.format(date)).join(', ');
-        } else {
-            label = formatter.format(state.dates![0]) + ` (+ ${dateCount - 1} ${moreLabel})`;
+        if (dateCount) {
+            if (dateCount <= 2) {
+                _label = multiState.dates!.map(date => format(date, 'LLL dd')).join(', ');
+            } else {
+                _label =
+                    format(multiState.dates![0], 'LLL dd') + ` (+ ${dateCount - 1} ${moreLabel})`;
+            }
         }
-    }
+        return _label;
+    }, [emptyLabel, moreLabel, multiState.dates]);
 
     return <Text style={textStyle}>{label}</Text>;
 }
 
+// TODO add translations
 export function HeaderContentRange({
-    locale,
+    // locale,
     state,
     headerSeparator = '-',
     startLabel = 'Start',
@@ -194,23 +196,22 @@ export function HeaderContentRange({
     separatorStyle,
 }: HeaderContentProps) {
     const { Text } = useMolecules();
+    const rangeState = state as LocalStateRange;
 
-    const formatter = useMemo(() => {
-        return new Intl.DateTimeFormat(locale, {
-            month: 'short',
-            day: 'numeric',
-        });
-    }, [locale]);
+    const startDateLabel = useMemo(
+        () => (rangeState.startDate ? format(rangeState.startDate, 'LLL dd') : startLabel),
+        [rangeState.startDate, startLabel],
+    );
+    const endDateLabel = useMemo(
+        () => (rangeState.endDate ? format(rangeState.endDate, 'LLL dd') : endLabel),
+        [endLabel, rangeState.endDate],
+    );
 
     return (
         <>
-            <Text style={textStyle}>
-                {state.startDate ? formatter.format(state.startDate) : startLabel}
-            </Text>
+            <Text style={textStyle}>{startDateLabel}</Text>
             <Text style={separatorStyle}>{headerSeparator}</Text>
-            <Text style={textStyle}>
-                {state.endDate ? formatter.format(state.endDate) : endLabel}
-            </Text>
+            <Text style={textStyle}>{endDateLabel}</Text>
         </>
     );
 }

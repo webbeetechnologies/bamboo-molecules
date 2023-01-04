@@ -63,7 +63,7 @@ const theme = extendTheme({
     Button: {
         color: 'colors.primary',
         borderColor: 'colors.outline',
-        borderRadius: 'roundness.1',
+        borderRadius: 'shapes.corner.extraSmall',
     },
 });
 

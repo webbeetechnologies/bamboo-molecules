@@ -1,2 +1,2 @@
-export { default as DropdownList, Props as DropdownListProps } from './DropdownList';
+export { default as DropdownList, Props as DropdownListProps, IDropdownList } from './DropdownList';
 export { dropdownListStyles } from './utils';

@@ -26,6 +26,7 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                 overlayStyles = {},
                 contentStyles = {},
                 contentTextStyles = {},
+                backdropStyles = {},
                 arrowProps = {},
                 initialTransition = {},
                 animateTransition = {},
@@ -41,6 +42,7 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                 overlayStyles,
                 content: contentStyles,
                 contentText: contentTextStyles,
+                backdrop: backdropStyles,
                 initialTransition,
                 animateTransition,
                 exitTransition,
@@ -95,10 +97,8 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                             exit={popoverStyles.exitTransition}
                             visible={isOpen}
                             style={StyleSheet.absoluteFill}>
-                            <Backdrop onPress={onClose} />
+                            <Backdrop onPress={onClose} style={popoverStyles.backdrop} />
                             <Popper
-                                crossOffset={8}
-                                offset={8}
                                 isOpen={isOpen as boolean}
                                 triggerRef={triggerRef}
                                 {...props}

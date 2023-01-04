@@ -12,6 +12,9 @@ import type {
     DatePickerModalContentRangeProps,
     DatePickerModalContentMultiProps,
     LocalState,
+    LocalStateSingle,
+    LocalStateRange,
+    LocalStateMultiple,
 } from './types';
 import { useControlledValue } from '../../hooks';
 
@@ -28,7 +31,7 @@ export function DatePickerModalContent(props: Props) {
         onClose,
         disableSafeTop,
         disableWeekDays,
-        locale = 'en',
+        // locale = 'en',
         validRange,
         dateMode,
         startYear,
@@ -63,16 +66,16 @@ export function DatePickerModalContent(props: Props) {
     const onInnerConfirm = useCallback(() => {
         if (mode === 'single') {
             (onConfirm as DatePickerModalContentSingleProps['onConfirm'])?.({
-                date: state?.date,
+                date: (state as LocalStateSingle)?.date,
             });
         } else if (mode === 'range') {
             (onConfirm as DatePickerModalContentRangeProps['onConfirm'])?.({
-                startDate: state?.startDate,
-                endDate: state?.endDate,
+                startDate: (state as LocalStateRange)?.startDate,
+                endDate: (state as LocalStateRange)?.endDate,
             });
         } else if (mode === 'multiple') {
             (onConfirm as DatePickerModalContentMultiProps['onConfirm'])?.({
-                dates: state?.dates || [],
+                dates: (state as LocalStateMultiple)?.dates || [],
             });
         }
     }, [state, mode, onConfirm]);
@@ -89,7 +92,6 @@ export function DatePickerModalContent(props: Props) {
                     onClose={onClose}
                     saveLabel={props.saveLabel}
                     saveLabelDisabled={props.saveLabelDisabled || false}
-                    uppercase={props.uppercase || true}
                     disableSafeTop={disableSafeTop}
                     closeIcon={props.closeIcon}
                 />
@@ -105,7 +107,7 @@ export function DatePickerModalContent(props: Props) {
                     startLabel={props.startLabel}
                     endLabel={props.endLabel}
                     uppercase={props.uppercase || true}
-                    locale={locale}
+                    // locale={locale}
                     editIcon={props.editIcon}
                     calendarIcon={props.calendarIcon}
                 />
@@ -115,14 +117,14 @@ export function DatePickerModalContent(props: Props) {
                 collapsed={collapsed}
                 calendar={
                     <DatePickerInlineBase
-                        locale={locale}
+                        // locale={locale}
                         mode={mode}
-                        startDate={state?.startDate}
-                        endDate={state?.endDate}
-                        date={state?.date}
+                        startDate={(state as LocalStateRange)?.startDate}
+                        endDate={(state as LocalStateRange)?.endDate}
+                        date={(state as LocalStateSingle)?.date}
                         onChange={onStateChange as typeof onInnerChange}
                         disableWeekDays={disableWeekDays}
-                        dates={state?.dates}
+                        dates={(state as LocalStateMultiple)?.dates}
                         validRange={validRange}
                         dateMode={dateMode}
                         startYear={startYear}
@@ -139,7 +141,7 @@ export function DatePickerModalContent(props: Props) {
                         collapsed={collapsed}
                         onChange={onStateChange}
                         validRange={validRange}
-                        locale={locale}
+                        // locale={locale}
                     />
                 }
             />

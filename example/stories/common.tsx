@@ -2,7 +2,7 @@ import React, { ComponentType, ReactNode } from 'react';
 import {
     extendTheme,
     ProvideMolecules as DefaultProvideMolecules,
-    useMolecules as useAtomsMolecules,
+    useMolecules as useMoleculesDefault,
     useComponentStyles,
     TextProps,
 } from 'bamboo-molecules';
@@ -71,7 +71,7 @@ export interface InjectedComponentTypes {
     Link: ComponentType<LinkProps>;
 }
 
-export const useMolecules = () => useAtomsMolecules<InjectedComponentTypes>();
+export const useMolecules = () => useMoleculesDefault<InjectedComponentTypes>();
 
 addDecorator(Story => (
     <ProvideMolecules>
@@ -121,4 +121,60 @@ const storyTheme = extendTheme({
 
 export const ProvideMolecules = ({ children }: { children: ReactNode }) => {
     return <DefaultProvideMolecules theme={storyTheme}>{children}</DefaultProvideMolecules>;
+};
+
+export const generateSectionListData = (sectionsLength: number, dataLength: number) => {
+    // Create an empty array
+    const arr: { id: number; title: string; data: { id: number; title: string }[] }[] = [];
+
+    // Loop n times
+    for (let sectionIndex = 0; sectionIndex < sectionsLength; sectionIndex++) {
+        // Create the title for the parent object
+        const title = `section ${sectionIndex}`;
+
+        // Create an empty array for the data property
+        const data: { id: number; title: string }[] = generateFlatListData(
+            dataLength,
+            itemIndex => ({
+                id: sectionIndex * dataLength + itemIndex,
+                title: `item ${sectionIndex * dataLength + itemIndex}`,
+            }),
+        );
+
+        // Create an object with the unique id, title, and data properties
+        const obj = { id: sectionIndex, title, data };
+
+        // Push the object into the array
+        arr.push(obj);
+    }
+
+    // Return the array
+    return arr;
+};
+
+export const generateFlatListData = (
+    dataLength: number,
+    manipulateOutputObj: (itemIndex: number) => { id: number; title: string } = i => ({
+        id: i,
+        title: `item ${i}`,
+    }),
+) => {
+    // Create an empty array
+    const arr: { id: number; title: string }[] = [];
+
+    // Loop n times
+    for (let i = 0; i < dataLength; i++) {
+        // Create an object with the unique id, title, and data properties
+        const obj = manipulateOutputObj(i);
+
+        // Push the object into the array
+        arr.push(obj);
+    }
+
+    // Return the array
+    return arr;
+};
+
+export const delay = async (timeout: number) => {
+    await new Promise(resolve => setTimeout(resolve, timeout));
 };

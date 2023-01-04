@@ -21,6 +21,14 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          * Whether the divider shows or not.
          */
         divider?: boolean;
+        /**
+         * variant of the ListItem
+         */
+        variant?: 'default' | 'menuItem';
+        /**
+         * Whether the ListItem is selected or not
+         */
+        selected?: boolean;
     };
 
 /**
@@ -58,16 +66,25 @@ const ListItem = (
         children,
         style: styleProp,
         disabled = false,
-        hovered,
+        hovered = false,
         divider = false,
+        variant = 'default',
+        selected = false,
+        onPress,
         ...props
     }: Props,
     ref: any,
 ) => {
     const { TouchableRipple, View, HorizontalDivider } = useMolecules();
+    const isPressable = !disabled && !!onPress;
 
     const componentStyles = useComponentStyles('ListItem', styleProp, {
-        states: { disabled, hovered: !!hovered },
+        states: {
+            selected,
+            disabled,
+            hovered: hovered && isPressable,
+        },
+        variant,
     });
 
     const {
@@ -88,13 +105,23 @@ const ListItem = (
         };
     }, [componentStyles]);
 
+    const contextValue = useMemo(
+        () => ({ disabled, hovered: hovered && isPressable, selected, variant }),
+        [disabled, hovered, isPressable, selected, variant],
+    );
+
     return (
-        <TouchableRipple {...props} style={containerStyles} disabled={disabled} ref={ref}>
+        <TouchableRipple
+            {...props}
+            style={containerStyles}
+            disabled={disabled}
+            onPress={onPress}
+            ref={ref}>
             <>
                 <View style={innerContainerStyle}>
                     {left ? <View style={leftElementStyle}>{left}</View> : null}
                     <View style={contentStyle}>
-                        <ListItemContext.Provider value={{ disabled, hovered: !!hovered }}>
+                        <ListItemContext.Provider value={contextValue}>
                             <>{children}</>
                         </ListItemContext.Provider>
                     </View>
@@ -109,6 +136,8 @@ const ListItem = (
 export const ListItemContext = createContext({
     disabled: false,
     hovered: false,
+    selected: false,
+    variant: 'default',
 });
 
 export default memo(withActionState(forwardRef(ListItem)));

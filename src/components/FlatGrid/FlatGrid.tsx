@@ -4,7 +4,8 @@ import { FlatGrid as SuperFlatGrid, FlatGridProps } from 'react-native-super-gri
 import { useComponentStyles, useMolecules } from '../../hooks';
 
 export type IFlatGrid = <ItemType = any>(
-    props: PropsWithoutRef<FlatGridProps<ItemType>> & RefAttributes<FlatList<ItemType>>,
+    props: PropsWithoutRef<Omit<FlatGridProps<ItemType>, 'numColumns'>> &
+        RefAttributes<FlatList<ItemType>>,
 ) => ReactElement;
 
 const FlatGrid = (
@@ -13,6 +14,7 @@ const FlatGrid = (
         contentContainerStyle: contentContainerStyleProp,
         additionalRowStyle: additionalRowStyleProp,
         itemContainerStyle: itemContainerStyleProp,
+        numColumns: _numColumns,
         ...rest
     }: FlatGridProps,
     ref: any,

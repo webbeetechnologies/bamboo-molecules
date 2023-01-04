@@ -11,7 +11,7 @@ import { StyleSheet, Pressable } from 'react-native';
  * A consumer should be able to replace the design tokens or extend the design tokens
  * A consumer should be able to pass down the design tokens inside the styles props and it should be normalized (when button component is created, these two test cases will be tested)
  * Should be able to define the active, hover, focused states
- * Design tokens should also provide a way to define multiple roundness, and spacing properties
+ * Design tokens should also provide a way to define multiple shapes, and spacing properties
  *
  */
 
@@ -19,7 +19,7 @@ const theme = extendTheme({
     CustomButton: {
         paddingHorizontal: 20,
         paddingVertical: 8,
-        borderRadius: 'roundness.1',
+        borderRadius: 'shapes.corner.extraSmall',
 
         primary: {
             backgroundColor: 'colors.primary',

@@ -29,6 +29,7 @@ import {
     helperTextStyles,
     modalStyles,
     popoverStyles,
+    backdropStyles,
     datePickerStyles,
     datePickerYearPickerStyles,
     datePickerMonthStyles,
@@ -63,8 +64,18 @@ import {
     dialogIconStyles,
     dialogContentStyles,
     radioButtonStyles,
+    radioButtonItemStyles,
     numberRangeInputStyles,
     dropdownListPopoverStyles,
+    cardStyles,
+    cardHeaderStyles,
+    cardContentStyles,
+    cardTypograhyStyles,
+    cardMediaStyles,
+    cardActionsStyles,
+    selectStyles,
+    chipStyles,
+    tooltipStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -98,6 +109,7 @@ const defaultThemeValue: Partial<ITheme> = {
     HelperText: helperTextStyles,
     Modal: modalStyles,
     Popover: popoverStyles,
+    Backdrop: backdropStyles,
 
     FlatGrid: flatGridStyles,
     SectionGrid: sectionGridStyles,
@@ -145,9 +157,23 @@ const defaultThemeValue: Partial<ITheme> = {
     Dialog_Icon: dialogIconStyles,
 
     RadioButton: radioButtonStyles,
+    RadioButton_Item: radioButtonItemStyles,
     NumberRangeInput: numberRangeInputStyles,
 
     DropdownListPopover: dropdownListPopoverStyles,
+
+    Card: cardStyles,
+    Card_Header: cardHeaderStyles,
+    Card_Content: cardContentStyles,
+    Card_Typography: cardTypograhyStyles,
+    Card_Media: cardMediaStyles,
+    Card_Actions: cardActionsStyles,
+
+    Select: selectStyles,
+
+    Chip: chipStyles,
+
+    Tooltip: tooltipStyles,
 };
 
 const defaultExtractStyles = memoize(

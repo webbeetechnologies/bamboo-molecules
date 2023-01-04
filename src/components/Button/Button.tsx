@@ -51,10 +51,6 @@ export type Props = SurfaceProps &
          */
         children: ReactNode;
         /**
-         * Make the label text uppercased. Note that this won't work if you pass React elements as children.
-         */
-        uppercase?: boolean;
-        /**
          * Accessibility label for the button. This is read by the screen reader when the user taps the button.
          */
         accessibilityLabel?: string;
@@ -162,7 +158,6 @@ const Button = (
         onPressOut,
         onLongPress,
         style: styleProp,
-        uppercase = false,
         contentStyle,
         labelStyle,
         iconContainerStyle: iconContainerStyleProp,
@@ -225,7 +220,6 @@ const Button = (
             icon,
             iconTextMode,
             label,
-            uppercaseLabel,
             labelText,
             labelTextAddons,
             ..._buttonStyles
@@ -254,7 +248,6 @@ const Button = (
             textStyle: [
                 label,
                 isVariant('text') ? (iconName || loading ? labelTextAddons : labelText) : label,
-                uppercase && uppercaseLabel,
                 {
                     color: _textColor,
                     ...typeScale,
@@ -272,7 +265,6 @@ const Button = (
         isVariant,
         labelStyle,
         loading,
-        uppercase,
     ]);
 
     const isElevationEntitled = !disabled && isVariant('elevated');

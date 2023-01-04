@@ -1,4 +1,4 @@
-import { useState, useEffect, forwardRef } from 'react';
+import { useState, useEffect, forwardRef, useCallback } from 'react';
 import { useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 import { enhanceTextWithMask } from './utils';
@@ -8,24 +8,30 @@ export type Props = TextInputProps & {
 };
 
 // TODO - make it more universal
-function TextInputWithMask({ onChangeText, value, mask, ...rest }: Props, ref: any) {
+function TextInputWithMask(
+    { onChangeText: onChangeTextProp, value, mask, ...rest }: Props,
+    ref: any,
+) {
     const { TextInput } = useMolecules();
     const [controlledValue, setControlledValue] = useState<string>(value || '');
 
-    const onInnerChange = (text: string) => {
-        const enhancedText = enhanceTextWithMask(text, mask, controlledValue);
-        setControlledValue(enhancedText);
+    const onChangeText = useCallback(
+        (text: string) => {
+            const enhancedText = enhanceTextWithMask(text, mask, controlledValue);
+            setControlledValue(enhancedText);
 
-        if (text.length === mask.length) {
-            onChangeText && onChangeText(text);
-        }
-    };
+            if (text.length === mask.length) {
+                onChangeTextProp && onChangeTextProp(text);
+            }
+        },
+        [controlledValue, mask, onChangeTextProp],
+    );
 
     useEffect(() => {
         setControlledValue(value || '');
     }, [value]);
 
-    return <TextInput ref={ref} {...rest} value={controlledValue} onChangeText={onInnerChange} />;
+    return <TextInput ref={ref} {...rest} value={controlledValue} onChangeText={onChangeText} />;
 }
 
 export default forwardRef(TextInputWithMask);

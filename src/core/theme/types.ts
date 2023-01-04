@@ -16,7 +16,7 @@ export type MD3Theme = {
     };
     colors: MD3Colors;
     typescale: MD3Typescale;
-    roundness: Record<string, string | number>;
+    shapes: MD3Shapes;
     spacings: Record<string, string | number>;
     letterSpacings: Record<string, string | number>;
     fontSizes: Record<string, string | number>;
@@ -86,6 +86,17 @@ export type MD3Colors = {
     inversePrimary: string;
     backdrop: string;
     elevation: MD3ElevationColors;
+};
+
+export type MD3Shapes = {
+    corner: {
+        none: number;
+        extraSmall: number;
+        small: number;
+        medium: number;
+        large: number;
+        extraLarge: number;
+    };
 };
 
 export enum MD3TypescaleKey {
