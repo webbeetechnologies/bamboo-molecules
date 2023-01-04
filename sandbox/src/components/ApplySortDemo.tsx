@@ -1,7 +1,7 @@
 import { ESortDirection, SortableDataSourceResult, useDataSource } from '../DataSource';
 import { RenderJSON } from './RenderJSONDemo';
 import { useCallback, useMemo } from 'react';
-import keyBy from 'lodash/keyby';
+import keyBy from 'lodash/keyBy';
 
 const getSortableProps = <T,>(props: SortableDataSourceResult<T>) => {
     if (!props.isSortable) {

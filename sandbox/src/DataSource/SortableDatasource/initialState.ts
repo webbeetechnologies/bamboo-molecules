@@ -1,4 +1,4 @@
-import omitBy from 'lodash.omitby';
+import omitBy from 'lodash/omitBy';
 
 export const extractInitialState = (props: any) =>
     omitBy(

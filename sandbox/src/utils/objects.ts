@@ -1,7 +1,7 @@
-import get from "lodash.get";
-import isFunction from "lodash.isfunction";
-import clone from "lodash.clone";
-import set from "lodash.set";
+import get from "lodash/get";
+import isFunction from "lodash/isFunction";
+import clone from "lodash/clone";
+import set from "lodash/set";
 
 export const getOrFail = <T extends {} | []>(obj: T, key: string | number) => {
     const result = get(obj, key);

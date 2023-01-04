@@ -1,7 +1,7 @@
 import { ESortableActions, Sort } from './types';
 import { ESortDirection } from './types';
-import zip from 'lodash.zip';
-import orderBy from 'lodash.orderBy';
+import zip from 'lodash/zip';
+import orderBy from 'lodash/orderBy';
 
 export const getSortedValue = (arg: { isSortable?: boolean; sort: Sort }) => {
     const { isSortable, sort } = arg;

@@ -1,5 +1,5 @@
 import { LoadableDataSource } from './types';
-import omitBy from 'lodash.omitby';
+import omitBy from 'lodash/omitBy';
 
 export const initialState = {
     isLoadable: true,

@@ -14,7 +14,7 @@ import React, {
 import { DataSourceError } from '../CustomError/DataSourceError';
 import { DataSourceType } from './types';
 import { combinePresenters, DataSourcePresenterType } from './utils';
-import omit from 'lodash.omit';
+import omit from 'lodash/omit';
 import {
     DataSourceContext,
     useDataSourceContext,

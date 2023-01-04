@@ -13,15 +13,16 @@ const RenderRecords: React.FC<any> = _props => {
         <div
             style={{
                 display: 'flex',
-                width: '100%',
-                height: '100vh',
+                width: '90vw',
+                height: '90vh',
+                margin: '5vh 5vw',
                 alignItems: 'flex-start',
             }}>
             <div
                 style={{
                     flex: 1,
                     padding: '2em',
-                    height: '100vh',
+                    height: '100%',
                     boxSizing: 'border-box',
                     overflow: 'auto',
                 }}>
@@ -41,7 +42,7 @@ const RenderRecords: React.FC<any> = _props => {
             <div
                 style={{
                     flex: 1,
-                    height: '100vh',
+                    height: '100%',
                     padding: '2em',
                     backgroundColor: '#e5e5e5',
                     overflow: 'auto',

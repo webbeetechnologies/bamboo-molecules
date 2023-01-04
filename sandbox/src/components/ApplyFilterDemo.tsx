@@ -4,7 +4,7 @@ import { FilterableDataSourceResult } from '../DataSource/FilterableDatasource/t
 import { RecordType } from '../types';
 import { RenderJSON } from './RenderJSONDemo';
 import { ReactNode, useCallback, useMemo } from 'react';
-import keyBy from 'lodash/keyby';
+import keyBy from 'lodash/keyBy';
 
 const getFilterableProps = (props: FilterableDataSourceResult<RecordType>) => {
     const {
