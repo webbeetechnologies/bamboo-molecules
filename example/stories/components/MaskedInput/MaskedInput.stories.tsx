@@ -27,6 +27,9 @@ WithNumberMask.args = {
 };
 
 WithNumberMask.parameters = {
+    controls: {
+        exclude: ['mask'],
+    },
     docs: {
         source: {
             code: `
@@ -68,6 +71,9 @@ WithCurrencyMask.args = {
 };
 
 WithCurrencyMask.parameters = {
+    controls: {
+        exclude: ['mask'],
+    },
     docs: {
         source: {
             code: `
