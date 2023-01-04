@@ -1,9 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { NativeSyntheticEvent, TextInputSelectionChangeEventData } from 'react-native';
-import {
-    Masks as defaultMasks,
-    useMaskedInputProps as useMaskedInputPropsDefault,
-} from 'react-native-mask-input';
+import { Masks as defaultMasks } from 'react-native-mask-input';
 
 export const Masks = {
     ...defaultMasks,
@@ -11,8 +8,6 @@ export const Masks = {
 };
 
 export { createNumberMask } from 'react-native-mask-input';
-
-export const useMaskedInputProps = useMaskedInputPropsDefault;
 
 const changedByOne = (reference: number, number: number) => {
     return number === reference + 1 || number === reference - 1;

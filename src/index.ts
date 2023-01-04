@@ -80,7 +80,6 @@ export {
     Mask,
     MaskItem,
     MaskArray,
-    useMaskedInputProps,
     createNumberMask,
 } from './components';
 
@@ -123,6 +122,8 @@ export {
     useLayout,
     useDimensions,
     useScaledSize,
+    useMaskedInputProps,
+    UseMaskedInputProps,
 } from './hooks';
 
 export {

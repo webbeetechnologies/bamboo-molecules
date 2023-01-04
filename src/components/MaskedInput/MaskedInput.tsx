@@ -1,14 +1,13 @@
 import { forwardRef, memo } from 'react';
 
-import { useMolecules } from '../../hooks';
-import { useMaskedInputProps } from './utils';
+import { useMolecules, useMaskedInputProps } from '../../hooks';
 import type { MaskedInputProps } from './types';
 
 const MaskedInput = (
     {
         mask,
         obfuscationCharacter,
-        value,
+        value: valueProp,
         onChangeText,
         showObfuscatedValue,
         placeholderFillCharacter,
@@ -21,7 +20,7 @@ const MaskedInput = (
     const maskedProps = useMaskedInputProps({
         mask,
         obfuscationCharacter,
-        value,
+        value: valueProp,
         onChangeText,
         showObfuscatedValue,
         placeholderFillCharacter,

@@ -1,4 +1,5 @@
-export { Mask, MaskItem, MaskArray, useMaskedInputProps } from 'react-native-mask-input';
+export { Mask, MaskItem, MaskArray } from 'react-native-mask-input';
 export { default as MaskedInput } from './MaskedInput';
-export { MaskedInputProps } from './types';
+export { default as useMaskedInputProps } from '../../hooks/useMaskedInputProps/useMaskedInputProps';
+export { MaskedInputProps, UseMaskedInputProps } from './types';
 export * from './utils';
