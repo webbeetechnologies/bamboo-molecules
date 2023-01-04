@@ -11,6 +11,7 @@ const MaskedInput = (
         onChangeText,
         showObfuscatedValue,
         placeholderFillCharacter,
+        placeholder,
         ...rest
     }: MaskedInputProps,
     ref: any,
@@ -26,7 +27,7 @@ const MaskedInput = (
         placeholderFillCharacter,
     });
 
-    return <TextInput {...rest} {...maskedProps} ref={ref} />;
+    return <TextInput {...rest} {...maskedProps} placeholder={placeholder} ref={ref} />;
 };
 
 export default memo(forwardRef(MaskedInput));
