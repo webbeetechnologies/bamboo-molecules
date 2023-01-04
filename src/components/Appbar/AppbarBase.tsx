@@ -23,10 +23,13 @@ const AppbarBase = ({
         const { innerContainer, ...restStyles } = componentStyles;
 
         return {
-            containerStyle: restStyles,
+            containerStyle: [
+                scrolling ? { backgroundColor: 'colors.surfaceVariant' } : {},
+                restStyles,
+            ],
             innerContainerStyle: innerContainer,
         };
-    }, [componentStyles]);
+    }, [componentStyles, scrolling]);
 
     const { left, right, title } = useMemo(
         () =>
