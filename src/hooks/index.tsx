@@ -27,3 +27,5 @@ export * from './useKeyboardDismissable';
 export const useTheme: <T extends ITheme>() => T = useThemeAtoms;
 
 export { default as useSubcomponents, UseSubcomponentsProps } from './useSubcomponents';
+
+export * from './useMaskedInputProps';

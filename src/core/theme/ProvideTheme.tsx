@@ -81,6 +81,14 @@ import {
     drawerContentStyles,
     drawerHeaderStyles,
     drawerFooterStyles,
+    appbarBaseStyles,
+    appbarCenterAlignedStyles,
+    appbarSmallStyles,
+    appbarMediumStyles,
+    appbarLargeStyles,
+    appbarLeft,
+    appbarRight,
+    appbarTitle,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -185,6 +193,15 @@ const defaultThemeValue: Partial<ITheme> = {
     Drawer_Content: drawerContentStyles,
     Drawer_Header: drawerHeaderStyles,
     Drawer_Footer: drawerFooterStyles,
+
+    Appbar: appbarBaseStyles,
+    Appbar_CenterAligned: appbarCenterAlignedStyles,
+    Appbar_Small: appbarSmallStyles,
+    Appbar_Medium: appbarMediumStyles,
+    Appbar_Large: appbarLargeStyles,
+    Appbar_Left: appbarLeft,
+    Appbar_Right: appbarRight,
+    Appbar_Title: appbarTitle,
 };
 
 const defaultExtractStyles = memoize(
