@@ -7,24 +7,6 @@ export default {
     component: Example,
 } as ComponentMeta<typeof Example>;
 
-export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
-
-Default.args = {};
-
-Default.parameters = {
-    docs: {
-        source: {
-            code: `
-    const { NumberRangeInput } = useMolecules();
-
-    return <NumberRangeInput />;
-`,
-            language: 'tsx',
-            type: 'auto',
-        },
-    },
-};
-
 export const Controlled: ComponentStory<typeof Example> = args => <ControlledExample {...args} />;
 
 Controlled.args = {};

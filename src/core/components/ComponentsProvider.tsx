@@ -53,6 +53,7 @@ import {
     Chip,
     Tooltip,
     Appbar,
+    MaskedInput,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -110,6 +111,7 @@ const defaultComponents: DefaultComponents = {
     Chip,
     Tooltip,
     Appbar,
+    MaskedInput,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

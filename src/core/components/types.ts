@@ -45,6 +45,7 @@ import type {
     Chip,
     Tooltip,
     Appbar,
+    MaskedInputProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -98,6 +99,7 @@ export interface DefaultComponents {
     Chip: typeof Chip;
     Tooltip: typeof Tooltip;
     Appbar: typeof Appbar;
+    MaskedInput: ComponentType<MaskedInputProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

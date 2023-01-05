@@ -13,5 +13,5 @@ export const ControlledExample = (props: Props) => {
     const { NumberRangeInput } = useMolecules();
     const [value, setValue] = useState({ min: '10', max: '8' });
 
-    return <NumberRangeInput value={value} {...props} onChange={setValue} />;
+    return <NumberRangeInput {...props} value={value} onChange={setValue} />;
 };

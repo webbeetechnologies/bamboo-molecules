@@ -5,7 +5,8 @@ import { useMolecules, useCurrentTheme, useComponentStyles } from '../../hooks';
 import type { NumberInputProps } from '../NumberInput';
 import { inputTypes, PossibleClockTypes, PossibleInputTypes } from './timeUtils';
 
-interface TimeInputProps extends Omit<Omit<NumberInputProps, 'value' | 'variant'>, 'onFocus'> {
+interface TimeInputProps
+    extends Omit<Omit<NumberInputProps, 'value' | 'variant' | 'onChangeText'>, 'onFocus'> {
     value: number;
     clockType: PossibleClockTypes;
     onPress?: (type: PossibleClockTypes) => any;

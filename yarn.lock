@@ -7664,9 +7664,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webbee/bamboo-molecules@workspace:.":
+"@webbeetechnologies/bamboo-molecules@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@webbee/bamboo-molecules@workspace:."
+  resolution: "@webbeetechnologies/bamboo-molecules@workspace:."
   dependencies:
     "@react-native-aria/overlays": ^0.3.2
     "@react-native-community/eslint-config": ^3.1.0
@@ -7711,8 +7711,6 @@ __metadata:
     typescript: ~4.3.5
   peerDependencies:
     "@shopify/flash-list": ^1.4.0
-    "@types/react": ^18.0.20
-    "@types/react-native": ^0.60.0
     react: ^18.2.0
     react-dom: ^18.2.0
     react-native: ^0.60.0
