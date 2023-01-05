@@ -1,4 +1,3 @@
-import { Dimensions } from 'react-native';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Example, ExampleCenterAligned, ExampleSmall, ExampleMedium, ExampleLarge } from './Appbar';
@@ -11,9 +10,6 @@ export default {
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 Default.args = {
-    style: {
-        width: Dimensions.get('window').width,
-    },
     scrolling: false,
 };
 
@@ -48,9 +44,6 @@ export const CenterAligned: ComponentStory<typeof ExampleCenterAligned> = args =
 );
 
 CenterAligned.args = {
-    style: {
-        width: Dimensions.get('window').width,
-    },
     scrolling: false,
 };
 
@@ -81,9 +74,6 @@ CenterAligned.parameters = {
 export const Small: ComponentStory<typeof ExampleSmall> = args => <ExampleSmall {...args} />;
 
 Small.args = {
-    style: {
-        width: Dimensions.get('window').width,
-    },
     scrolling: false,
 };
 
@@ -115,9 +105,6 @@ Small.parameters = {
 export const Medium: ComponentStory<typeof ExampleMedium> = args => <ExampleMedium {...args} />;
 
 Medium.args = {
-    style: {
-        width: Dimensions.get('window').width,
-    },
     scrolling: false,
 };
 
@@ -149,9 +136,6 @@ Medium.parameters = {
 export const Large: ComponentStory<typeof ExampleLarge> = args => <ExampleLarge {...args} />;
 
 Large.args = {
-    style: {
-        width: Dimensions.get('window').width,
-    },
     scrolling: false,
 };
 
