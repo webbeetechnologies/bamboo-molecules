@@ -76,6 +76,11 @@ import {
     selectStyles,
     chipStyles,
     tooltipStyles,
+    drawerStyles,
+    drawerItemStyles,
+    drawerContentStyles,
+    drawerHeaderStyles,
+    drawerFooterStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -174,6 +179,12 @@ const defaultThemeValue: Partial<ITheme> = {
     Chip: chipStyles,
 
     Tooltip: tooltipStyles,
+
+    Drawer: drawerStyles,
+    Drawer_Item: drawerItemStyles,
+    Drawer_Content: drawerContentStyles,
+    Drawer_Header: drawerHeaderStyles,
+    Drawer_Footer: drawerFooterStyles,
 };
 
 const defaultExtractStyles = memoize(

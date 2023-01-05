@@ -75,6 +75,11 @@ export {
     TooltipProps,
     TooltipTriggerProps,
     TooltipContentProps,
+    DrawerProps,
+    DrawerItemProps,
+    DrawerContentProps,
+    DrawerHeaderProps,
+    DrawerFooterProps,
 } from './components';
 
 export {

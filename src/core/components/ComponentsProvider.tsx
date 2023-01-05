@@ -52,6 +52,7 @@ import {
     Select,
     Chip,
     Tooltip,
+    Drawer,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -108,6 +109,7 @@ const defaultComponents: DefaultComponents = {
     Select,
     Chip,
     Tooltip,
+    Drawer,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

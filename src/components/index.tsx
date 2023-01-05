@@ -137,3 +137,5 @@ export * from './Select';
 export * from './Chip';
 
 export * from './Tooltip';
+
+export * from './Drawer';
