@@ -76,6 +76,14 @@ import {
     selectStyles,
     chipStyles,
     tooltipStyles,
+    appbarBaseStyles,
+    appbarCenterAlignedStyles,
+    appbarSmallStyles,
+    appbarMediumStyles,
+    appbarLargeStyles,
+    appbarLeft,
+    appbarRight,
+    appbarTitle,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -174,6 +182,15 @@ const defaultThemeValue: Partial<ITheme> = {
     Chip: chipStyles,
 
     Tooltip: tooltipStyles,
+
+    Appbar: appbarBaseStyles,
+    Appbar_CenterAligned: appbarCenterAlignedStyles,
+    Appbar_Small: appbarSmallStyles,
+    Appbar_Medium: appbarMediumStyles,
+    Appbar_Large: appbarLargeStyles,
+    Appbar_Left: appbarLeft,
+    Appbar_Right: appbarRight,
+    Appbar_Title: appbarTitle,
 };
 
 const defaultExtractStyles = memoize(

@@ -52,6 +52,7 @@ import {
     Select,
     Chip,
     Tooltip,
+    Appbar,
     MaskedInput,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
@@ -109,6 +110,7 @@ const defaultComponents: DefaultComponents = {
     Select,
     Chip,
     Tooltip,
+    Appbar,
     MaskedInput,
 };
 
