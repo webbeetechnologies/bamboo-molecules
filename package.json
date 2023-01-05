@@ -1,7 +1,11 @@
 {
-  "name": "@webbee/bamboo-molecules",
+  "name": "@webbeetechnologies/bamboo-molecules",
   "version": "0.1.7",
-  "repository": "git@github.com:webbeetechnologies/bamboo-molecules.git",
+
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webbeetechnologies/bamboo-molecules.git"
+  },
   "license": "MIT",
   "packageManager": "yarn@3.3.0",
   "main": "lib/commonjs/index.js",
@@ -19,7 +23,6 @@
     ]
   },
   "files": [
-    "src",
     "lib",
     "!**/__tests__",
     "!**/__fixtures__",
@@ -34,7 +37,7 @@
     "run:storybook": "yarn workspace example storybook",
     "run:testcases": "yarn workspace test-cases start",
     "bundle": "rm -rf lib/* && yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
-    "release": "yarn bundle && npm publish ./dist/webbee-bamboo-molecules-$npm_package_version.tgz --access=public"
+    "release": "npm publish ./dist/webbeetechnologies-bamboo-molecules-$npm_package_version.tgz --access=public"
   },
   "dependencies": {
     "@react-native-aria/overlays": "^0.3.2",
@@ -83,11 +86,6 @@
   },
   "peerDependencies": {
     "@shopify/flash-list": "^1.4.0",
-    "@types/react": "^18.0.20",
-    "@types/react-native": "^0.60.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-native": "^0.60.0",
     "react-native-document-picker": "^8.1.3",
     "react-native-vector-icons": ">9.2.0"
   },
