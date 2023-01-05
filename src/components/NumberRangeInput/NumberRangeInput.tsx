@@ -12,9 +12,8 @@ type Value = {
 export type Props = ViewProps & {
     inputsContainerStyle?: ViewProps;
     dividerStyle?: ViewProps;
-    value?: Value;
-    defaultValue?: Value;
-    onChange?: (args: { min: string; max: string }) => void;
+    value: Value;
+    onChange: (args: { min: string; max: string }) => void;
     minInputProps?: Omit<NumberInputProps, 'variant' | 'value' | 'onChangeText' | 'onChange'>;
     maxInputProps?: Omit<NumberInputProps, 'variant' | 'value' | 'onChangeText' | 'onChange'>;
     variant?: NumberInputProps['variant'];
@@ -38,7 +37,6 @@ const NumberRangeInput = ({
         ...maxInputProps
     } = {},
     value: valueProp,
-    defaultValue,
     onChange,
     errorMessage = 'Invalid number range.',
     style,
@@ -56,7 +54,6 @@ const NumberRangeInput = ({
     ]);
     const [value, onValueChange] = useControlledValue({
         value: valueProp,
-        defaultValue,
         onChange,
     });
     const [error, setError] = useState(false);

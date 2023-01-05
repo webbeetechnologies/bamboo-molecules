@@ -75,6 +75,12 @@ export {
     TooltipProps,
     TooltipTriggerProps,
     TooltipContentProps,
+    MaskedInputProps,
+    Masks,
+    Mask,
+    MaskItem,
+    MaskArray,
+    createNumberMask,
 } from './components';
 
 export {
@@ -116,6 +122,8 @@ export {
     useLayout,
     useDimensions,
     useScaledSize,
+    useMaskedInputProps,
+    UseMaskedInputProps,
 } from './hooks';
 
 export {
