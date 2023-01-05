@@ -25,3 +25,5 @@ export { default as useSearchable, UseSearchableProps } from './useSearchable';
 export * from './useKeyboardDismissable';
 
 export const useTheme: <T extends ITheme>() => T = useThemeAtoms;
+
+export { default as useSubcomponents, UseSubcomponentsProps } from './useSubcomponents';
