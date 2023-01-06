@@ -6,9 +6,13 @@ import type { CallbackActionState } from '../../hocs';
 import { withActionState } from '../../hocs';
 import type { ViewStyle } from 'react-native';
 
+export type DrawerItemElementProps = { color: string };
+
+export type DrawerItemElement = ReactNode | ((props: DrawerItemElementProps) => ReactNode);
+
 export type Props = Omit<TouchableRippleProps, 'children' | 'disabled'> &
     CallbackActionState &
-    WithElements<ReactNode> & {
+    WithElements<DrawerItemElement> & {
         label?: string;
         active?: boolean;
         children?: ReactNode;
@@ -57,36 +61,75 @@ const DrawerItem = (
         },
     );
 
-    const { containerStyle, leftElementStyle, rightElementStyle, contentStyle, labelStyle } =
-        useMemo(() => {
-            const {
-                leftElement,
-                rightElement,
-                label: _labelStyle,
-                content,
-                ...restStyle
-            } = componentStyles;
+    const {
+        leftElementColor,
+        rightElementColor,
+        containerStyle,
+        leftElementStyle,
+        rightElementStyle,
+        contentStyle,
+        labelStyle,
+    } = useMemo(() => {
+        const {
+            leftElementColor: _leftElementColor,
+            rightElementColor: _rightElementColor,
+            leftElement,
+            rightElement,
+            label: _labelStyle,
+            content,
+            ...restStyle
+        } = componentStyles;
 
-            return {
-                containerStyle: restStyle,
-                leftElementStyle: leftElement,
-                rightElementStyle: rightElement,
-                labelStyle: _labelStyle,
-                contentStyle: content,
-            };
-        }, [componentStyles]);
+        return {
+            leftElementColor: _leftElementColor,
+            rightElementColor: _rightElementColor,
+            containerStyle: restStyle,
+            leftElementStyle: leftElement,
+            rightElementStyle: rightElement,
+            labelStyle: _labelStyle,
+            contentStyle: content,
+        };
+    }, [componentStyles]);
+
+    const leftElement = useMemo(
+        () =>
+            left ? (
+                <View style={leftElementStyle}>
+                    {typeof left === 'function'
+                        ? left?.({
+                              color: leftElementColor,
+                          })
+                        : left}
+                </View>
+            ) : null,
+        [View, left, leftElementColor, leftElementStyle],
+    );
+
+    const rightElement = useMemo(
+        () =>
+            right ? (
+                <View style={rightElementStyle}>
+                    {typeof right === 'function'
+                        ? right?.({
+                              color: rightElementColor,
+                          })
+                        : right}
+                </View>
+            ) : null,
+        [View, right, rightElementColor, rightElementStyle],
+    );
 
     return (
         <TouchableRipple style={containerStyle} {...rest} ref={ref}>
             <>
-                <View style={leftElementStyle}>{left}</View>
+                {leftElement}
                 <View style={contentStyle}>
                     <Text style={labelStyle} selectable={false}>
                         {label}
                     </Text>
                     {children}
                 </View>
-                <View style={rightElementStyle}>{right}</View>
+                {rightElement}
             </>
         </TouchableRipple>
     );

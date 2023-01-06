@@ -80,6 +80,8 @@ export {
     DrawerContentProps,
     DrawerHeaderProps,
     DrawerFooterProps,
+    DrawerItemElement,
+    DrawerItemElementProps,
     AppbarProps,
     AppbarLeftProps,
     AppbarRightProps,

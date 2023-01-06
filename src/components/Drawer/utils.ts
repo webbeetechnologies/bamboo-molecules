@@ -26,6 +26,8 @@ type DrawerItemCustomProps = {
     rightElement?: ViewStyle;
     content?: ViewStyle;
     label?: TextStyle;
+    leftElementColor?: string;
+    rightElementColor?: string;
 };
 
 export const drawerItemStyles: ComponentStylePropWithVariants<
@@ -39,6 +41,9 @@ export const drawerItemStyles: ComponentStylePropWithVariants<
     borderRadius: 'shapes.corner.full' as unknown as number,
     paddingLeft: 'spacings.4',
     paddingRight: 'spacings.6',
+
+    leftElementColor: 'colors.onSurfaceVariant',
+    rightElementColor: 'colors.onSurfaceVariant',
 
     leftElement: {
         marginRight: 'spacings.3',
@@ -64,12 +69,16 @@ export const drawerItemStyles: ComponentStylePropWithVariants<
         activeAndHovered: {
             backgroundColor: 'colors.secondaryContainer',
 
+            leftElementColor: 'colors.onSecondaryContainer',
+
             label: {
                 color: 'colors.onSecondaryContainer',
             },
         },
         active: {
             backgroundColor: 'colors.secondaryContainer',
+
+            leftElementColor: 'colors.onSecondaryContainer',
 
             label: {
                 color: 'colors.onSecondaryContainer',
