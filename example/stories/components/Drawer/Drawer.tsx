@@ -1,8 +1,8 @@
-import { useMolecules, DrawerProps } from 'bamboo-molecules';
-import { StyleSheet, Text, TextStyle, useWindowDimensions } from 'react-native';
 import { useState } from 'react';
+import { useMolecules, DrawerProps, DrawerItemProps } from 'bamboo-molecules';
+import { StyleSheet, Text, TextStyle, useWindowDimensions } from 'react-native';
 
-export type Props = DrawerProps & {};
+export type Props = DrawerProps & DrawerItemProps['left'] & {};
 
 export const Example = (props: Props) => {
     const { Drawer, Icon, HorizontalDivider } = useMolecules();
@@ -19,28 +19,28 @@ export const Example = (props: Props) => {
                 <Text style={styles.sectionHeadline}>Mail</Text>
                 <Drawer.Item
                     label="Inbox"
-                    left={<Icon name="inbox" size={24} />}
+                    left={({ color }) => <Icon name="inbox" color={color} size={24} />}
                     active={activeItem === 0}
                     onPress={() => setActiveItem(0)}
-                    right={<Text>24</Text>}
+                    right={({ color }) => <Text style={{ color }}>24</Text>}
                 />
 
                 <Drawer.Item
                     label="Outbox"
-                    left={<Icon name="send-outline" size={24} />}
+                    left={({ color }) => <Icon name="send-outline" color={color} size={24} />}
                     active={activeItem === 1}
                     onPress={() => setActiveItem(1)}
-                    right={<Text>100+</Text>}
+                    right={({ color }) => <Text style={{ color }}>100+</Text>}
                 />
                 <Drawer.Item
                     label="Favorites"
-                    left={<Icon name="heart-outline" size={24} />}
+                    left={({ color }) => <Icon name="heart-outline" color={color} size={24} />}
                     active={activeItem === 2}
                     onPress={() => setActiveItem(2)}
                 />
                 <Drawer.Item
                     label="Trash"
-                    left={<Icon name="delete-outline" size={24} />}
+                    left={({ color }) => <Icon name="delete-outline" color={color} size={24} />}
                     active={activeItem === 3}
                     onPress={() => setActiveItem(3)}
                 />
@@ -48,26 +48,26 @@ export const Example = (props: Props) => {
                 <Text style={styles.sectionHeadline}>Labels</Text>
                 <Drawer.Item
                     label="Inbox"
-                    left={<Icon name="inbox" size={24} />}
+                    left={({ color }) => <Icon name="inbox" color={color} size={24} />}
                     active={activeItem === 4}
                     onPress={() => setActiveItem(4)}
                 />
 
                 <Drawer.Item
                     label="Outbox"
-                    left={<Icon name="send-outline" size={24} />}
+                    left={({ color }) => <Icon name="send-outline" color={color} size={24} />}
                     active={activeItem === 5}
                     onPress={() => setActiveItem(5)}
                 />
                 <Drawer.Item
                     label="Favorites"
-                    left={<Icon name="heart-outline" size={24} />}
+                    left={({ color }) => <Icon name="heart-outline" color={color} size={24} />}
                     active={activeItem === 6}
                     onPress={() => setActiveItem(6)}
                 />
                 <Drawer.Item
                     label="Trash"
-                    left={<Icon name="delete-outline" size={24} />}
+                    left={({ color }) => <Icon name="delete-outline" color={color} size={24} />}
                     active={activeItem === 7}
                     onPress={() => setActiveItem(7)}
                 />
