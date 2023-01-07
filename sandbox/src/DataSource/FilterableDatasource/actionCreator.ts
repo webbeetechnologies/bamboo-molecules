@@ -1,41 +1,20 @@
 import {
-    AddGroupAction,
-    ApplyFilterAction,
     EFilterActions,
     FilterableDataSource,
-    GroupedFilter,
-    MoveFilterAction,
+    FilterableDataSourceProps,
+    FilterableDataSourceResult,
     OnFilterAction,
-    RemoveFilterAction,
-    SingleFilter,
-    UpdateFilterAction,
-    UpdateGroupAction,
 } from './types';
 import { useCallback, useMemo, useRef } from 'react';
 
-const notFilterable = { isFilterable: false };
+const notFilterable = { isFilterable: false } as FilterableDataSourceResult;
 
-export const useFilterableActionCreator = <
-    T extends {},
-    S extends Omit<FilterableDataSource<T>, 'onFilter'> = Omit<FilterableDataSource<T>, 'onFilter'>,
-    A extends OnFilterAction = OnFilterAction,
-    P extends FilterableDataSource<T> = FilterableDataSource<T>,
->(
-    props: P,
-    dataSource: S,
-    dispatch: (action: A) => void,
+export const useFilterableActionCreator = <T extends {}>(
+    props: FilterableDataSourceProps,
+    dataSource: Omit<FilterableDataSource<T>, 'onFilter'>,
+    dispatch: (action: OnFilterAction) => void,
     config: { hasReducer: boolean },
-):
-    | { isFilterable: boolean }
-    | {
-          addFilterGroup: (payload: AddGroupAction['payload']) => void;
-          moveFilter: (payload: MoveFilterAction['payload']) => void;
-          removeFilter: (payload: RemoveFilterAction['payload']) => void;
-          updateFilter: (payload: UpdateFilterAction['payload']) => void;
-          filters: GroupedFilter | SingleFilter[];
-          updateFilterGroup: (payload: UpdateGroupAction['payload']) => void;
-          applyFilter: (payload: ApplyFilterAction['payload']) => void;
-      } => {
+): FilterableDataSourceResult => {
     const { onFilter = null } = props;
     const { isFilterable, filters, records } = dataSource;
 
@@ -71,29 +50,29 @@ export const useFilterableActionCreator = <
 
     return useMemo(
         () =>
-            !isFilterable
-                ? notFilterable
-                : {
-                      filters,
-                      applyFilter: (payload: ApplyFilterAction['payload']) => {
-                          handleFilter({ type: EFilterActions.APPLY_FILTER, payload });
-                      },
-                      removeFilter: (payload: RemoveFilterAction['payload']) => {
-                          handleFilter({ type: EFilterActions.REMOVE_FILTER, payload });
-                      },
-                      updateFilter: (payload: UpdateFilterAction['payload']) => {
-                          handleFilter({ type: EFilterActions.UPDATE_FILTER, payload });
-                      },
-                      moveFilter: (payload: MoveFilterAction['payload']) => {
-                          handleFilter({ type: EFilterActions.MOVE_FILTER, payload });
-                      },
-                      addFilterGroup: (payload: AddGroupAction['payload']) => {
-                          handleFilter({ type: EFilterActions.ADD_GROUP, payload });
-                      },
-                      updateFilterGroup: (payload: UpdateGroupAction['payload']) => {
-                          handleFilter({ type: EFilterActions.UPDATE_GROUP, payload });
-                      },
-                  },
+            ({
+                isFilterable,
+                filters,
+                notFilterable,
+                applyFilter: payload => {
+                    handleFilter({ type: EFilterActions.APPLY_FILTER, payload });
+                },
+                removeFilter: payload => {
+                    handleFilter({ type: EFilterActions.REMOVE_FILTER, payload });
+                },
+                updateFilter: payload => {
+                    handleFilter({ type: EFilterActions.UPDATE_FILTER, payload });
+                },
+                moveFilter: payload => {
+                    handleFilter({ type: EFilterActions.MOVE_FILTER, payload });
+                },
+                addFilterGroup: payload => {
+                    handleFilter({ type: EFilterActions.ADD_GROUP, payload });
+                },
+                updateFilterGroup: payload => {
+                    handleFilter({ type: EFilterActions.UPDATE_GROUP, payload });
+                },
+            } as FilterableDataSourceResult),
         [isFilterable, filters, handleFilter],
     );
 };

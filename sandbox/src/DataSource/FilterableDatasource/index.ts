@@ -17,7 +17,7 @@ export {
     initialState as initialFilterState,
 };
 
-export const getDefaultFilterableDataSource = () => ({
+export const getDefaultFilterableDataSource = <T extends {}>() => ({
     ...filterableDataSource,
     reducer: filterableDatasourceReducer,
     presenter: presentFilteredDataSourceRecords,

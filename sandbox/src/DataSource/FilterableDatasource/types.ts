@@ -1,6 +1,6 @@
 import { DataSourceActions, EDataSourceActions } from '../createDataSource';
-import { DataSourceInternalState, DataSourceType } from '../types';
 
+import { DataSourceInternalState, DataSourceType } from '../types';
 // Paginate methods.
 export enum EFilterActions {
     APPLY_FILTER = 'APPLY_FILTER',
@@ -90,7 +90,7 @@ export type OnFilter = <T extends {}>(
     args: OnFilterAction,
 ) => Filters;
 
-export interface FilterableDataSource<T extends {}> extends DataSourceInternalState<T> {
+export interface FilterableDataSourceProps {
     isFilterable: boolean;
     filterConfig?: {
         hasNestedFilter: boolean;
@@ -99,7 +99,11 @@ export interface FilterableDataSource<T extends {}> extends DataSourceInternalSt
     onFilter?: OnFilter;
 }
 
-export interface FilterableDataSourceResult<T extends {}> {
+export interface FilterableDataSource<T extends {}>
+    extends DataSourceInternalState<T>,
+        FilterableDataSourceProps {}
+
+export interface FilterableDataSourceResult {
     isFilterable: boolean;
     filters: Filters;
     applyFilter: (payload: ApplyFilterAction['payload']) => void;

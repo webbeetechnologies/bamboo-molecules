@@ -5,6 +5,8 @@ import {
     RemoveSortAction,
     ReorderSortAction,
     SortableDataSource,
+    SortableDataSourceProps,
+    SortableDataSourceResult,
     UpdateSortAction,
 } from './types';
 import { useCallback, useMemo, useRef } from 'react';
@@ -12,15 +14,10 @@ import { getSortedValue } from './utils';
 
 const notSortable = { isSortable: false };
 
-export const useSortableActionCreator = <
-    T extends {},
-    S extends Omit<SortableDataSource<T>, 'onSort'> = Omit<SortableDataSource<T>, 'onSort'>,
-    A extends OnSortAction = OnSortAction,
-    P extends SortableDataSource<T> = SortableDataSource<T>,
->(
-    props: P,
-    dataSource: S,
-    dispatch: (action: A) => void,
+export const useSortableActionCreator = <T extends {}>(
+    props: SortableDataSourceProps,
+    dataSource: SortableDataSource<T>,
+    dispatch: (action: OnSortAction) => void,
     config: { hasReducer: boolean },
 ) => {
     const { onSort = null } = props;
@@ -60,34 +57,33 @@ export const useSortableActionCreator = <
         () =>
             !isSortable
                 ? notSortable
-                : {
+                : ({
                       ...getSortedValue({ isSortable, sort }),
-
-                      applySort: (args: ApplySortAction['payload']) => {
+                      applySort: args => {
                           handleSortAction({
                               type: ESortableActions.ApplySort,
                               payload: args,
                           });
                       },
-                      removeSort: (args: RemoveSortAction['payload']) => {
+                      removeSort: args => {
                           handleSortAction({
                               type: ESortableActions.RemoveSort,
                               payload: args,
                           });
                       },
-                      reorderSort: (args: ReorderSortAction['payload']) => {
+                      reorderSort: args => {
                           handleSortAction({
                               type: ESortableActions.ReorderSort,
                               payload: args,
                           });
                       },
-                      updateSort: (args: UpdateSortAction['payload']) => {
+                      updateSort: args => {
                           handleSortAction({
                               type: ESortableActions.UpdateSort,
                               payload: args,
                           });
                       },
-                  },
+                  } as SortableDataSourceResult<T>),
         [isSortable, sort, handleSortAction],
     );
 };

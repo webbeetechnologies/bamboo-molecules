@@ -1,25 +1,19 @@
 import {
     ELoadableActions,
-    LoadableDataSource,
+    LoadableDataSourceState,
+    LoadableDataSourceProps,
     LoadableDataSourceResult,
     OnLoadableAction,
 } from './types';
 import { useCallback, useMemo, useRef } from 'react';
 import { getLoadingStatus } from './utils';
 
-const notLoadable = { isLoadable: false };
-
-export const useLoadableActionCreator = <
-    T extends {},
-    S extends Omit<LoadableDataSource<T>, 'onLoad'> = Omit<LoadableDataSource<T>, 'onLoad'>,
-    A extends OnLoadableAction = OnLoadableAction,
-    P extends LoadableDataSource<T> = LoadableDataSource<T>,
->(
-    props: P,
-    dataSource: S,
-    dispatch: (action: A) => void,
+export const useLoadableActionCreator = <T extends {}>(
+    props: LoadableDataSourceProps,
+    dataSource: LoadableDataSourceState<T>,
+    dispatch: (action: OnLoadableAction) => void,
     config: { hasReducer: boolean },
-): { isLoadable: boolean } | LoadableDataSourceResult<T> => {
+): LoadableDataSourceResult => {
     const { onLoad = null, loading } = props;
     const { isLoadable } = dataSource;
 
@@ -50,11 +44,12 @@ export const useLoadableActionCreator = <
     );
 
     return useMemo(() => {
-        return !isLoadable
-            ? notLoadable
-            : {
-                  ...getLoadingStatus({ loading }),
-                  fetchRecords: () => handlePaginate({ type: ELoadableActions.FETCH_RECORDS }),
-              };
+        return {
+            ...getLoadingStatus({ loading }),
+            fetchRecords: () =>
+                handlePaginate({
+                    type: ELoadableActions.FETCH_RECORDS,
+                }),
+        };
     }, [isLoadable, loading, handlePaginate]);
 };

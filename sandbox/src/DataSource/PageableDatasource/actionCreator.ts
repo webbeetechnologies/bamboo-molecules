@@ -1,27 +1,19 @@
 import {
     EPageableActions,
-    GoToArbitrary,
     OnPaginateAction,
+    PageableDataSourceProps,
     PaginationDataSource,
-    SetPerPage,
+    PaginationDataSourceResult,
 } from './types';
 import { useCallback, useMemo, useRef } from 'react';
 import { getPaginatedValue } from './utils';
 
 const notPaginated = { isPaginated: false };
 
-export const usePageableActionCreator = <
-    T extends {},
-    S extends Omit<PaginationDataSource<T>, 'onPaginate'> = Omit<
-        PaginationDataSource<T>,
-        'onPaginate'
-    >,
-    A extends OnPaginateAction = OnPaginateAction,
-    P extends PaginationDataSource<T> = PaginationDataSource<T>,
->(
-    props: P,
-    dataSource: S,
-    dispatch: (action: A) => void,
+export const usePageableActionCreator = <T extends {}>(
+    props: PageableDataSourceProps,
+    dataSource: PaginationDataSource<T>,
+    dispatch: (action: OnPaginateAction) => void,
     config: { hasReducer: boolean },
 ) => {
     const { onPaginate = null } = props;
@@ -49,17 +41,16 @@ export const usePageableActionCreator = <
                 throw new Error('onPaginate function is not provided');
             }
 
-            const ds = onPaginate(dataSourceRef.current, args);
+            const paginationResult = onPaginate(dataSourceRef.current, args);
 
-            if (ds === dataSourceRef.current) {
+            if (paginationResult === dataSourceRef.current) {
                 return;
             }
 
-            // @ts-ignore
             dispatch({
                 type: 'UPDATE_PAYLOAD',
                 payload: {
-                    ...onPaginate(dataSourceRef.current, args),
+                    ...paginationResult,
                     lastAction: args.type,
                 },
             });
@@ -71,17 +62,17 @@ export const usePageableActionCreator = <
         () =>
             !isPaginated
                 ? notPaginated
-                : {
+                : ({
                       ...getPaginatedValue({
                           isPaginated,
                           pagination,
                           totalRecordsCount,
                           debug: true,
                       }),
-                      setPerPage: (payload: SetPerPage['payload']) => {
+                      setPerPage: payload => {
                           handlePaginate({ type: EPageableActions.SetPerPage, payload });
                       },
-                      goTo: (payload: GoToArbitrary['payload']) => {
+                      goTo: payload => {
                           handlePaginate({ type: EPageableActions.Page, payload });
                       },
                       goToStart: () => {
@@ -96,7 +87,7 @@ export const usePageableActionCreator = <
                       goToNext: () => {
                           handlePaginate({ type: EPageableActions.Next });
                       },
-                  },
+                  } as PaginationDataSourceResult<T>),
         [isPaginated, pagination, totalRecordsCount, handlePaginate],
     );
 };

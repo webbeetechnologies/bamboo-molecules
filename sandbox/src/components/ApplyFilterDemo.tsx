@@ -6,7 +6,7 @@ import { RenderJSON } from './RenderJSONDemo';
 import { ReactNode, useCallback, useMemo } from 'react';
 import keyBy from 'lodash/keyBy';
 
-const getFilterableProps = (props: FilterableDataSourceResult<RecordType>) => {
+const getFilterableProps = (props: FilterableDataSourceResult) => {
     const {
         isFilterable,
         filters,

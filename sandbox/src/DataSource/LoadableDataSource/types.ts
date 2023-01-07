@@ -1,6 +1,5 @@
-import { DataSourceInternalState, DataSourceType } from '../types';
+import { DataSourceInternalState } from '../types';
 
-// Paginate methods.
 export enum ELoadableActions {
     FETCH_RECORDS = 'FETCH_RECORDS',
 }
@@ -14,30 +13,36 @@ export type Loading = {
 // Define type of arguments for GoToMethods
 export type ApplyFilterAction = {
     type: ELoadableActions.FETCH_RECORDS;
+    payload?: Loading;
 };
 
 export type OnLoadableAction = ApplyFilterAction;
 
 export type OnLoad = <T extends {}>(
-    dataSource: Omit<LoadableDataSource<T>, 'onLoad'> & DataSourceType<T>,
+    dataSource: Omit<LoadableDataSourceState<T>, 'onLoad'>,
     args: OnLoadableAction,
 ) => Loading;
 
-export interface LoadableDataSource<T extends {}> extends DataSourceInternalState<T> {
+export interface LoadableDataSourceProps {
     isLoadable: boolean;
     loading: Loading;
-    onLoad?: OnLoad;
+    onLoad: OnLoad;
 }
 
-export interface LoadableDataSourceResult<T extends {}> {
+export interface LoadableDataSourceState<T extends {}>
+    extends DataSourceInternalState<T>,
+        Omit<LoadableDataSourceProps, 'OnLoad'> {}
+
+export interface LoadableDataSourceResult {
     isLoadable: boolean;
     isLoading: boolean;
     hasLoaded: boolean;
     hasErrored: boolean;
     hasStarted: boolean;
+    fetchRecords: () => void;
 }
 
 export type LoaderReducer = <T extends {}>(
-    dataSource: LoadableDataSource<T> & DataSourceInternalState<T>,
+    dataSource: LoadableDataSourceState<T> & DataSourceInternalState<T>,
     args: OnLoadableAction,
-) => LoadableDataSource<T> & DataSourceInternalState<T>;
+) => LoadableDataSourceState<T> & DataSourceInternalState<T>;

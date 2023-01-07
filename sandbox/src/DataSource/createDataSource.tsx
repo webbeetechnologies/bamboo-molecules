@@ -1,20 +1,15 @@
-import type { Dispatch } from 'react';
 import React, {
-    createContext,
     PropsWithChildren,
-    ReducerAction,
-    ReducerState,
+    Reducer,
     useCallback,
-    useContext,
     useEffect,
     useMemo,
     useReducer,
     useRef,
 } from 'react';
-import { DataSourceError } from '../CustomError/DataSourceError';
-import { DataSourceType } from './types';
+import { DataSourceInternalState, DataSourceType } from './types';
 import { combinePresenters, DataSourcePresenterType } from './utils';
-import omit from 'lodash/omit';
+import omitBy from 'lodash/omitBy';
 import {
     DataSourceContext,
     useDataSourceContext,
@@ -39,19 +34,14 @@ export enum EDataSourcePhase {
     ON_DATA = 'ON_DATA',
 }
 
-type CreateDataSourceArgs = {
+export type CreateDataSourceArgs<T extends {}, StateType extends {} = any, ActionTypes = any> = {
     name: string;
     phase?: `${EDataSourcePhase}`;
-    reducer?: (dataSource: any, action: any) => any;
-    actionCreator: <
-        T extends {},
-        S extends DataSourceType<T>,
-        A extends DataSourceActions,
-        P extends unknown = unknown,
-    >(
-        props: P,
-        state: S,
-        dispatch: (action: A) => void,
+    reducer?: Reducer<StateType & DataSourceInternalState<T>, DataSourceActions>;
+    actionCreator: <T>(
+        props: Record<string, any>,
+        state: DataSourceType<T>,
+        dispatch: (action: ActionTypes | DataSourceActions) => void,
         config: { hasReducer: boolean },
     ) => Record<string, any> | null;
     presenter?: DataSourcePresenterType;
@@ -59,13 +49,13 @@ type CreateDataSourceArgs = {
     initialState: Record<string, any>;
 };
 
-export const createDataSource = (
+export const createDataSource = <T,>(
     name: string,
-    dataSources: CreateDataSourceArgs[],
-    initialDataSourceValue: Record<string, any> | null = null,
+    dataSources: CreateDataSourceArgs<T>[],
+    initialDataSourceValue: DataSourceType<T> | null = null,
 ) => {
     const initialStateExtractor: ExtractInitialState = dataSource =>
-        omit(
+        omitBy(
             {
                 records: dataSource.records,
                 lastAction: EDataSourceActions.INIT_SOURCE,
@@ -108,21 +98,21 @@ export const createDataSource = (
             extractInitialStates: combinedDataSources.extractInitialStates.concat(
                 extractInitialState ?? [],
             ),
-            initialState: initialDataSourceValue ?? {
+            initialState: (initialDataSourceValue ?? {
                 ...combinedDataSources.initialState,
                 ...$i,
-            },
+            }) as DataSourceInternalState<T>,
         }),
         {
             hasBeforeDataPhase: false,
-            reducers: [] as CreateDataSourceArgs['reducer'][],
+            reducers: [] as CreateDataSourceArgs<T>['reducer'][],
             actionCreators: [] as Array<{
-                creator: CreateDataSourceArgs['actionCreator'];
+                creator: CreateDataSourceArgs<T>['actionCreator'];
                 config: { hasReducer: boolean };
             }>,
             defaultPresenters: [] as DataSourcePresenterType[],
             extractInitialStates: [initialStateExtractor] as ExtractInitialState[],
-            initialState: initialDataSourceValue as Record<string, any>,
+            initialState: initialDataSourceValue as DataSourceInternalState<T>,
         },
     );
 
@@ -131,7 +121,10 @@ export const createDataSource = (
      * Take all the reducers from dataSources and combines to make one output
      *
      */
-    const combinedReducer: CreateDataSourceArgs['reducer'] = (dataSource: any, action: any) => {
+    const combinedReducer = ((
+        dataSource: DataSourceInternalState<T>,
+        action: DataSourceActions,
+    ) => {
         switch (action.type) {
             case EDataSourceActions.SET_RESOLVED_RECORDS:
                 return {
@@ -152,22 +145,22 @@ export const createDataSource = (
          */
         const records = dataSource.records;
 
-        const resultDS = reducers.reduce(
-            (ds, reducer) => ({
+        const resultDS = reducers.reduce((ds, reducer) => {
+            const reducedValue = reducer?.(ds, action);
+            if (reducedValue === ds) return ds;
+
+            return {
                 ...ds,
-                ...reducer(ds, action),
-            }),
-            {
-                ...dataSource,
-                lastAction: action.type,
-            },
-        );
+                ...reducer?.(ds, action),
+                lastAction: action.type as string,
+            };
+        }, dataSource);
 
         return {
             ...resultDS,
             records,
         };
-    };
+    }) as Reducer<DataSourceInternalState<T>, DataSourceActions>;
 
     /**
      *
@@ -177,14 +170,14 @@ export const createDataSource = (
      */
     const combinedPresenters: DataSourcePresenterType = combinePresenters(defaultPresenters);
 
-    const combinedStateExtractor = (initial: any, rest: any) => {
+    const combinedStateExtractor = <T extends {}>(initial: {}, rest: DataSourceType<T>) => {
         return extractInitialStates.reduce(
             (state: any, extractInitialState) => ({
                 ...state,
                 ...extractInitialState(rest),
             }),
-            initial as any,
-        ) as { action: string };
+            initial,
+        ) as DataSourceInternalState<T>;
     };
 
     /**
@@ -192,7 +185,7 @@ export const createDataSource = (
      * Normalized Provider for the Datasource
      *
      */
-    const DataSourceProvider = <T extends {}>(
+    const DataSourceProvider = <RecordType extends {}>(
         props: PropsWithChildren<
             { recordsPresenter?: DataSourcePresenterType } & DataSourceType<T>
         >,
@@ -204,11 +197,16 @@ export const createDataSource = (
          * Reduce Data
          *
          * */
-        const [dataSource, handleDispatch] = useReducer(combinedReducer, initialState, initial => {
-            return combinedStateExtractor(initial, rest) as { action: string };
-        }) as [ReducerState<any>, Dispatch<ReducerAction<any>>];
+        const dataSourceRef = useRef<typeof initialState | null>(null);
+        const [dataSource, handleDispatch] = useReducer<typeof combinedReducer, DataSourceType<T>>(
+            combinedReducer,
+            initialState,
+            initial => {
+                return combinedStateExtractor(initial, rest);
+            },
+        );
 
-        const dispatch = useCallback(
+        const dispatch: typeof handleDispatch = useCallback(
             ({ type, payload }) => {
                 handleDispatch({
                     type,
@@ -221,7 +219,7 @@ export const createDataSource = (
         /***
          *
          *
-         *  Store reference of props for reuse..
+         *  Store reference of props for reuse.
          *
          *
          */
@@ -257,6 +255,7 @@ export const createDataSource = (
          *
          */
         useEffect(() => {
+            dataSourceRef.current = dataSource;
             if (dataSource.lastAction === EDataSourceActions.SET_RESOLVED_RECORDS) return;
 
             (async () => {
@@ -307,14 +306,14 @@ export const createDataSource = (
         const { dataSource, props, dispatch } = useDataSourceContext().context;
 
         // to temporary store the result of the previous data source.
-        // records could be updated and updated records need to be passed down..
+        // records could be updated and updated records need to be passed down.
         let tempDS = {
             ...dataSource,
             totalRecordsCount: dataSource?.totalRecordsCount ?? props.records.length,
             records: hasBeforeDataPhase ? dataSource.records : props.records,
         };
 
-        const dataSourceResults = actionCreators.map((actionCreator, i) => {
+        const dataSourceResults = actionCreators.map(actionCreator => {
             const result = actionCreator.creator(props, tempDS, dispatch, actionCreator.config);
 
             tempDS = {

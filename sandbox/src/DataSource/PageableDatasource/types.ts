@@ -20,13 +20,17 @@ export interface Pagination {
 type OnPaginate = <T extends {}>(
     dataSource: PaginationDataSource<T>,
     args: OnPaginateAction,
-) => Omit<Pagination, 'disabled'>;
+) => PaginationDataSource<T>;
 
-export interface PaginationDataSource<T extends {}> extends DataSourceInternalState<T> {
+export interface PageableDataSourceProps {
     isPaginated: boolean;
     pagination: Pagination;
     onPaginate?: OnPaginate;
 }
+
+export interface PaginationDataSource<T extends {}>
+    extends DataSourceInternalState<T>,
+        Omit<PageableDataSourceProps, 'onPaginate'> {}
 
 export interface PaginationInfo<T extends {}> {
     // count of records on current page
@@ -41,6 +45,12 @@ export interface PaginationInfo<T extends {}> {
 export interface PaginationDataSourceResult<T extends {}> {
     isPaginated: boolean;
     pagination?: Pagination & PaginationInfo<T>;
+    setPerPage: (payload: SetPerPage['payload']) => void;
+    goTo: (payload: GoToArbitrary['payload']) => void;
+    goToStart: () => void;
+    goToEnd: () => void;
+    goToPrev: () => void;
+    goToNext: () => void;
 }
 
 // Define type of arguments for GoToMethods
@@ -51,5 +61,5 @@ export type OnPaginateAction = PaginateAction | GoToArbitrary | SetPerPage | Dat
 
 export type PaginationReducer = <T extends {}>(
     dataSource: PaginationDataSource<T> & DataSourceInternalState<T>,
-    args: any,
+    args: OnPaginateAction,
 ) => PaginationDataSource<T>;

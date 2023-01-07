@@ -1,7 +1,7 @@
 import { EPageableActions, GoToArbitrary, PaginationReducer, SetPerPage } from './types';
 import { getPages } from './utils';
 
-export const paginatedDataSourceReducer: PaginationReducer = (dataSource, args: any) => {
+export const paginatedDataSourceReducer: PaginationReducer = (dataSource, args) => {
     let pageNumber = dataSource.pagination.pageNumber;
     let perPage = dataSource.pagination.perPage;
 

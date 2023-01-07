@@ -31,15 +31,23 @@ export type Sort = {
     order: ColumnSort[];
 };
 
-export interface SortableDataSource<T extends {}> extends DataSourceInternalState<T> {
+export interface SortableDataSourceProps {
     isSortable: boolean;
     sort: Sort;
     onSort?: OnSort;
 }
 
-export interface SortableDataSourceResult<T extends {}> extends DataSourceInternalState<T> {
+export interface SortableDataSource<T extends {}>
+    extends DataSourceInternalState<T>,
+        Omit<SortableDataSourceProps, 'onSort'> {}
+
+export interface SortableDataSourceResult<T extends {}> {
     isSortable: boolean;
     sort?: Sort;
+    applySort: (args: ApplySortAction['payload']) => void;
+    removeSort: (args: RemoveSortAction['payload']) => void;
+    reorderSort: (args: ReorderSortAction['payload']) => void;
+    updateSort: (args: UpdateSortAction['payload']) => void;
 }
 
 // Sort Actions interfaces
