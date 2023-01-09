@@ -275,7 +275,7 @@ exports[`renders TimePicker component with keyboard mode, hours value 10 and min
               }
               testID="text-input-plain"
               underlineColorAndroid="transparent"
-              value="11"
+              value="10"
             />
           </View>
         </View>
@@ -411,7 +411,7 @@ exports[`renders TimePicker component with keyboard mode, hours value 10 and min
               }
               testID="text-input-plain"
               underlineColorAndroid="transparent"
-              value="50"
+              value="15"
             />
           </View>
         </View>
@@ -653,7 +653,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
               }
               testID="text-input-plain"
               underlineColorAndroid="transparent"
-              value="11"
+              value="10"
             />
           </View>
         </View>
@@ -825,7 +825,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
               }
               testID="text-input-plain"
               underlineColorAndroid="transparent"
-              value="50"
+              value="15"
             />
           </View>
         </View>
@@ -1050,7 +1050,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             "position": "absolute",
             "transform": Array [
               Object {
-                "rotate": "210deg",
+                "rotate": "0deg",
               },
               Object {
                 "translateX": 49.75,
@@ -1453,7 +1453,11 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             >
               <Text
                 selectable={false}
-                style={Object {}}
+                style={
+                  Object {
+                    "color": "rgba(255, 255, 255, 1)",
+                  }
+                }
               >
                 10
               </Text>
@@ -1486,11 +1490,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             >
               <Text
                 selectable={false}
-                style={
-                  Object {
-                    "color": "rgba(255, 255, 255, 1)",
-                  }
-                }
+                style={Object {}}
               >
                 11
               </Text>
@@ -1675,7 +1675,11 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             >
               <Text
                 selectable={false}
-                style={Object {}}
+                style={
+                  Object {
+                    "color": "rgba(255, 255, 255, 1)",
+                  }
+                }
               >
                 15
               </Text>
@@ -1906,11 +1910,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             >
               <Text
                 selectable={false}
-                style={
-                  Object {
-                    "color": "rgba(255, 255, 255, 1)",
-                  }
-                }
+                style={Object {}}
               >
                 50
               </Text>
@@ -1960,8 +1960,6 @@ exports[`renders TimePickerModal component with hours value 10 and minutes value
 <Modal
   animationType="none"
   hardwareAccelerated={false}
-  hours={10}
-  minutes={15}
   onRequestClose={[MockFunction]}
   presentationStyle="overFullScreen"
   statusBarTranslucent={true}
