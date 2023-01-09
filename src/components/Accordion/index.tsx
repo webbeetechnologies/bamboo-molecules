@@ -9,7 +9,10 @@ export const AccordionItem = Object.assign(AccordionItemComponent, {
 
 export { default as Accordion, Props as AccordionProps } from './Accordion';
 export { Props as AccordionItemProps } from './AccordionItem';
-export { Props as AccordionItemHeaderProps } from './AccordionItemHeader';
+export {
+    Props as AccordionItemHeaderProps,
+    AccordionHeaderElementProps,
+} from './AccordionItemHeader';
 export { Props as AccordionContentProps } from './AccordionItemContent';
 
 export {

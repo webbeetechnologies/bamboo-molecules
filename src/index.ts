@@ -90,6 +90,7 @@ export {
     AccordionItemProps,
     AccordionItemHeaderProps,
     AccordionContentProps,
+    AccordionHeaderElementProps,
 } from './components';
 
 export {

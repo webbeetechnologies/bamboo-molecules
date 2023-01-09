@@ -6,12 +6,12 @@ import { AccordionItemContext } from './AccordionItem';
 import { CallbackActionState, withActionState } from '../../hocs';
 import type { GestureResponderEvent, TextStyle, ViewStyle } from 'react-native';
 
-type ElementProps = {
+export type AccordionHeaderElementProps = {
     color: string;
     expanded: boolean;
 };
 
-type Element = ReactNode | ((props: ElementProps) => ReactNode);
+type Element = ReactNode | ((props: AccordionHeaderElementProps) => ReactNode);
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
     WithElements<Element> &
