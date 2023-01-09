@@ -1,5 +1,3 @@
-import { ColumnSort } from '../SortableDatasource';
-import { modify } from '../../utils/objects';
 import { EFilterActions } from './types';
 
 // Mutating

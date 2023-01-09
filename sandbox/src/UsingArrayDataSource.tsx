@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ArrayDataSourceProvider as DataSourceProvider } from './DataSource';
 import RenderRecords from './components/RenderRecords';
 import { getMockData } from './mockData';
+import { SingleFilter } from './DataSource/FilterableDatasource/types';
 
 const sort = {
     isNestedSort: true,
@@ -10,7 +11,7 @@ const sort = {
 
 const pagination = { pageNumber: 1, perPage: 10 };
 
-const filters = [];
+const filters = [] as SingleFilter[];
 
 export default function UsingArraySource() {
     const [workers] = React.useState(getMockData);

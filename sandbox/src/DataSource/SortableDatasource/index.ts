@@ -1,11 +1,13 @@
 import SortableDataSource from './sortableDataSource';
 export * from './sortableDataSource';
-export * from './types';
+export { ESortableActions, ESortDirection } from './types';
 export default SortableDataSource;
 
 import { sortableDataSourceReducer } from './reducer';
 import { extractInitialState, initialState } from './initialState';
 import { presentSortedDataSourceRecords } from './presenter';
+
+export { useSortableActionCreator, useSortableDataSource } from './actionCreator';
 
 export {
     initialState as initialSortableState,

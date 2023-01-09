@@ -1,36 +1,28 @@
-import { ESortDirection, PaginationDataSourceResult, useDataSource } from '../DataSource';
+import { usePaginatedDataSource } from '../DataSource';
 import { RenderJSON } from './RenderJSONDemo';
-import { useCallback } from 'react';
-
-const getPaginatedProps = <T,>(props: PaginationDataSourceResult<T>) => {
-    if (!props.isPaginated) {
-        return { isPaginated: props.isPaginated };
-    }
-
-    const { isPaginated, pagination, goToStart, goToEnd, goToNext, goToPrev, setPerPage } = props;
-    return { isPaginated, pagination, goToStart, goToEnd, goToNext, goToPrev, setPerPage };
-};
+import { ChangeEventHandler, SyntheticEvent } from 'react';
+import { RecordType } from '../types';
 
 export const ApplyPagination = () => {
-    const paginatedProps = getPaginatedProps(useDataSource());
+    const paginatedProps = usePaginatedDataSource<RecordType>();
 
-    const handleGoToStart = (_e: React.SyntheticEvent) => {
+    const handleGoToStart = (_e: SyntheticEvent) => {
         paginatedProps.goToStart?.();
     };
 
-    const handleGoToPrev = (_e: React.SyntheticEvent) => {
+    const handleGoToPrev = (_e: SyntheticEvent) => {
         paginatedProps.goToPrev?.();
     };
 
-    const handleGoToNext = (_e: React.SyntheticEvent) => {
+    const handleGoToNext = (_e: SyntheticEvent) => {
         paginatedProps.goToNext?.();
     };
 
-    const handleGoToEnd = (_e: React.SyntheticEvent) => {
+    const handleGoToEnd = (_e: SyntheticEvent) => {
         paginatedProps.goToEnd?.();
     };
 
-    const handleSetPerPage: React.ChangeEventHandler<HTMLInputElement> = e => {
+    const handleSetPerPage: ChangeEventHandler<HTMLInputElement> = e => {
         paginatedProps.setPerPage?.({ perPage: +e.target.value || 1 });
     };
 

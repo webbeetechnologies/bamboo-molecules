@@ -7,7 +7,7 @@ import { paginatedDataSourceReducer } from './reducer';
 import { presentPaginatedDataSourceRecords } from './presenter';
 import { extractInitialState, initialState } from './initialState';
 
-export { usePageableActionCreator } from './actionCreator';
+export { usePageableActionCreator, usePaginatedDataSource } from './actionCreator';
 
 export {
     presentPaginatedDataSourceRecords,

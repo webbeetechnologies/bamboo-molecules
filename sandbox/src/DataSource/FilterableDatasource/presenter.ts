@@ -1,6 +1,8 @@
-import { FilterableDataSource, SingleFilter } from './types';
+import { FilterableDataSourceState, SingleFilter } from './types';
 
-const presentRecordsWithNestedFilters = <T extends {}>({ records }: FilterableDataSource<T>) => {
+const presentRecordsWithNestedFilters = <T extends {}>({
+    records,
+}: FilterableDataSourceState<T>) => {
     console.warn('TODO: Implement custom logic nested filters to resolve nested filters');
 
     return {
@@ -9,7 +11,10 @@ const presentRecordsWithNestedFilters = <T extends {}>({ records }: FilterableDa
     };
 };
 
-const presentRecordsWithFilters = <T extends {}>({ records, filters }: FilterableDataSource<T>) => {
+const presentRecordsWithFilters = <T extends {}>({
+    records,
+    filters,
+}: FilterableDataSourceState<T>) => {
     const filteredRecords = (filters as SingleFilter[]).reduce(
         (r: T[], { columnName, value }: SingleFilter) => {
             return records.filter((x: any) => x[columnName].includes(value));
@@ -23,9 +28,11 @@ const presentRecordsWithFilters = <T extends {}>({ records, filters }: Filterabl
     };
 };
 
-export const presentFilteredDataSourceRecords = <T extends {}>(ds: FilterableDataSource<T>) => {
+export const presentFilteredDataSourceRecords = <T extends {}>(
+    ds: FilterableDataSourceState<T>,
+) => {
     if (!ds.isFilterable) {
-        return ds.records;
+        return { records: ds.records };
     }
 
     if (ds.filterConfig?.hasNestedFilter) {

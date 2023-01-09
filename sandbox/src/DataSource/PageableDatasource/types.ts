@@ -18,9 +18,9 @@ export interface Pagination {
 }
 
 type OnPaginate = <T extends {}>(
-    dataSource: PaginationDataSource<T>,
+    dataSource: PaginationDataSourceState<T>,
     args: OnPaginateAction,
-) => PaginationDataSource<T>;
+) => PaginationDataSourceState<T>;
 
 export interface PageableDataSourceProps {
     isPaginated: boolean;
@@ -28,9 +28,11 @@ export interface PageableDataSourceProps {
     onPaginate?: OnPaginate;
 }
 
-export interface PaginationDataSource<T extends {}>
+export interface PaginationDataSourceState<T extends {}>
     extends DataSourceInternalState<T>,
         Omit<PageableDataSourceProps, 'onPaginate'> {}
+{
+}
 
 export interface PaginationInfo<T extends {}> {
     // count of records on current page
@@ -42,16 +44,22 @@ export interface PaginationInfo<T extends {}> {
     page: T[];
 }
 
-export interface PaginationDataSourceResult<T extends {}> {
-    isPaginated: boolean;
-    pagination?: Pagination & PaginationInfo<T>;
+type HasPagination<T> = {
+    isPaginated: true;
+    pagination: Pagination & PaginationInfo<T>;
     setPerPage: (payload: SetPerPage['payload']) => void;
     goTo: (payload: GoToArbitrary['payload']) => void;
     goToStart: () => void;
     goToEnd: () => void;
     goToPrev: () => void;
     goToNext: () => void;
-}
+};
+
+type NoPagination<T> = Partial<HasPagination<T>> & {
+    isPaginated: false;
+};
+
+export type PaginationDataSourceResult<T extends {}> = NoPagination<T> | HasPagination<T>;
 
 // Define type of arguments for GoToMethods
 export type PaginateAction = { type: `${EPageableActions}` | `${EDataSourceActions}` };
@@ -60,6 +68,6 @@ export type SetPerPage = { type: EPageableActions.SetPerPage; payload: { perPage
 export type OnPaginateAction = PaginateAction | GoToArbitrary | SetPerPage | DataSourceActions;
 
 export type PaginationReducer = <T extends {}>(
-    dataSource: PaginationDataSource<T> & DataSourceInternalState<T>,
+    dataSource: PaginationDataSourceState<T> & DataSourceInternalState<T>,
     args: OnPaginateAction,
-) => PaginationDataSource<T>;
+) => PaginationDataSourceState<T>;

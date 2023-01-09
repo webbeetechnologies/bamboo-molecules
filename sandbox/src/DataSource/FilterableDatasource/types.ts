@@ -47,7 +47,7 @@ export type RemoveFilterAction = {
 export type UpdateFilterAction = {
     type: EFilterActions.UPDATE_FILTER;
     payload: {
-        position: string | number;
+        position?: string | number;
         columnName: string;
         value: string;
     };
@@ -85,10 +85,10 @@ export type OnFilterAction =
     | UpdateGroupAction
     | DataSourceActions;
 
-export type OnFilter = <T extends {}>(
-    dataSource: FilterableDataSource<T> & DataSourceType<T>,
+export type FilterReducer = <T extends {}>(
+    dataSource: FilterableDataSourceState<T>,
     args: OnFilterAction,
-) => Filters;
+) => FilterableDataSourceState<T>;
 
 export interface FilterableDataSourceProps {
     isFilterable: boolean;
@@ -96,15 +96,15 @@ export interface FilterableDataSourceProps {
         hasNestedFilter: boolean;
     };
     filters: Filters;
-    onFilter?: OnFilter;
+    onFilter?: FilterReducer;
 }
 
-export interface FilterableDataSource<T extends {}>
+export interface FilterableDataSourceState<T extends {}>
     extends DataSourceInternalState<T>,
-        FilterableDataSourceProps {}
+        Omit<FilterableDataSourceProps, 'onFilter'> {}
 
-export interface FilterableDataSourceResult {
-    isFilterable: boolean;
+type HasFilters = {
+    isFilterable: true;
     filters: Filters;
     applyFilter: (payload: ApplyFilterAction['payload']) => void;
     removeFilter: (payload: RemoveFilterAction['payload']) => void;
@@ -112,9 +112,10 @@ export interface FilterableDataSourceResult {
     moveFilter: (payload: MoveFilterAction['payload']) => void;
     addFilterGroup: (payload: AddGroupAction['payload']) => void;
     updateFilterGroup: (payload: UpdateGroupAction['payload']) => void;
-}
+};
 
-export type FilterReducer = <T extends {}>(
-    dataSource: FilterableDataSource<T> & DataSourceInternalState<T>,
-    args: OnFilterAction,
-) => FilterableDataSource<T> & DataSourceInternalState<T>;
+type NoFilters = Partial<HasFilters> & {
+    isFilterable: false;
+};
+
+export type FilterableDataSourceResult = NoFilters | HasFilters;

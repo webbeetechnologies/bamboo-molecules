@@ -1,7 +1,7 @@
 import omitBy from 'lodash/omitBy';
-import { PaginationDataSource } from './types';
+import { PaginationDataSourceState } from './types';
 
-export const extractInitialState = <T extends {}>(props: PaginationDataSource<T>) =>
+export const extractInitialState = <T extends {}>(props: PaginationDataSourceState<T>) =>
     omitBy(
         {
             isPaginated: props.isPaginated ?? false,

@@ -8,7 +8,7 @@ export type { EFilterActions } from './types';
 export * from './filterableDataSource';
 export default FilterableDataSource;
 
-export { useFilterableActionCreator } from './actionCreator';
+export { useFilterableActionCreator, useFilterableDataSource } from './actionCreator';
 
 export {
     filterableDatasourceReducer,

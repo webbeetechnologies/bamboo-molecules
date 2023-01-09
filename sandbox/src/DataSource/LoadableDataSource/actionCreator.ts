@@ -7,13 +7,16 @@ import {
 } from './types';
 import { useCallback, useMemo, useRef } from 'react';
 import { getLoadingStatus } from './utils';
+import { useDataSource } from '../DataSourceContext';
+
+const notLoadable = { isLoadable: false };
 
 export const useLoadableActionCreator = <T extends {}>(
     props: LoadableDataSourceProps,
     dataSource: LoadableDataSourceState<T>,
     dispatch: (action: OnLoadableAction) => void,
     config: { hasReducer: boolean },
-): LoadableDataSourceResult => {
+) => {
     const { onLoad = null, loading } = props;
     const { isLoadable } = dataSource;
 
@@ -44,12 +47,35 @@ export const useLoadableActionCreator = <T extends {}>(
     );
 
     return useMemo(() => {
-        return {
-            ...getLoadingStatus({ loading }),
-            fetchRecords: () =>
-                handlePaginate({
-                    type: ELoadableActions.FETCH_RECORDS,
-                }),
-        };
-    }, [isLoadable, loading, handlePaginate]);
+        return !isLoadable
+            ? notLoadable
+            : {
+                  ...getLoadingStatus({ loading }),
+                  fetchRecords: () =>
+                      handlePaginate({
+                          type: ELoadableActions.FETCH_RECORDS,
+                      }),
+              };
+    }, [isLoadable, loading, handlePaginate]) as LoadableDataSourceResult;
+};
+
+export const useLoadableDataSource = (): LoadableDataSourceResult => {
+    const { isLoadable, hasStarted, isLoading, hasLoaded, hasErrored, fetchRecords } =
+        useDataSource();
+
+    if (!isLoadable) {
+        return notLoadable as LoadableDataSourceResult;
+    }
+
+    return useMemo(
+        () => ({
+            isLoadable,
+            hasStarted,
+            isLoading,
+            hasLoaded,
+            hasErrored,
+            fetchRecords,
+        }),
+        [isLoadable, hasStarted, isLoading, hasLoaded, hasErrored],
+    );
 };

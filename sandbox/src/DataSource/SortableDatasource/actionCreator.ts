@@ -4,19 +4,20 @@ import {
     OnSortAction,
     RemoveSortAction,
     ReorderSortAction,
-    SortableDataSource,
+    SortableDataSourceState,
     SortableDataSourceProps,
     SortableDataSourceResult,
     UpdateSortAction,
 } from './types';
 import { useCallback, useMemo, useRef } from 'react';
 import { getSortedValue } from './utils';
+import { useDataSource } from '../DataSourceContext';
 
 const notSortable = { isSortable: false };
 
 export const useSortableActionCreator = <T extends {}>(
     props: SortableDataSourceProps,
-    dataSource: SortableDataSource<T>,
+    dataSource: SortableDataSourceState<T>,
     dispatch: (action: OnSortAction) => void,
     config: { hasReducer: boolean },
 ) => {
@@ -83,7 +84,27 @@ export const useSortableActionCreator = <T extends {}>(
                               payload: args,
                           });
                       },
-                  } as SortableDataSourceResult<T>),
+                  } as SortableDataSourceResult),
         [isSortable, sort, handleSortAction],
+    );
+};
+
+export const useSortableDataSource = (): SortableDataSourceResult => {
+    const { isSortable, sort, applySort, removeSort, reorderSort, updateSort } = useDataSource();
+
+    if (!isSortable) {
+        return notSortable as SortableDataSourceResult;
+    }
+
+    return useMemo(
+        () => ({
+            isSortable,
+            sort,
+            applySort,
+            removeSort,
+            reorderSort,
+            updateSort,
+        }),
+        [isSortable, sort, applySort, removeSort, reorderSort, updateSort],
     );
 };

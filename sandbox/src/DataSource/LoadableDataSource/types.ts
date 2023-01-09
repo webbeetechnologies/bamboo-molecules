@@ -31,16 +31,22 @@ export interface LoadableDataSourceProps {
 
 export interface LoadableDataSourceState<T extends {}>
     extends DataSourceInternalState<T>,
-        Omit<LoadableDataSourceProps, 'OnLoad'> {}
+        Pick<HasLoading, 'isLoading' | 'hasLoaded' | 'hasStarted' | 'hasErrored' | 'isLoadable'> {}
 
-export interface LoadableDataSourceResult {
-    isLoadable: boolean;
+type HasLoading = {
+    isLoadable: true;
     isLoading: boolean;
     hasLoaded: boolean;
     hasErrored: boolean;
     hasStarted: boolean;
     fetchRecords: () => void;
-}
+};
+
+type NotLoadable = Partial<HasLoading> & {
+    isLoadable: false;
+};
+
+export type LoadableDataSourceResult = HasLoading | NotLoadable;
 
 export type LoaderReducer = <T extends {}>(
     dataSource: LoadableDataSourceState<T> & DataSourceInternalState<T>,

@@ -8,25 +8,30 @@ import {
     paginatedDataSourceReducer,
     sortableDataSourceReducer,
     filterableDatasourceReducer,
+    AsyncDataSourceReturns,
+    AsyncDataSourceProps,
+    AsyncDataSourceState,
 } from './DataSource';
 
 import { RecordType } from './types';
 import RenderRecords from './components/RenderRecords';
 import { DataSourceType } from './DataSource/types';
 import { getMockData } from './mockData';
+import { SingleFilter } from './DataSource/FilterableDatasource/types';
+import { useMemo } from 'react';
 
-const presentDataSource = combinePresenters([
+const presentDataSource = combinePresenters<RecordType, AsyncDataSourceState<RecordType>>([
     presentFilteredDataSourceRecords,
     presentSortedDataSourceRecords,
     presentPaginatedDataSourceRecords,
 ]);
 
 // generate a random between a provided range
-function getRandomInt(min, max) {
+function getRandomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-async function findAllCustomerData(dataSource) {
+async function findAllCustomerData(dataSource: AsyncDataSourceState<RecordType>) {
     const [result, _promise] = await Promise.all([
         presentDataSource({
             sort: dataSource.sort,
@@ -55,14 +60,14 @@ const sort = {
 
 const pagination = { pageNumber: 1, perPage: 10 };
 
-const filters = [];
+const filters = [] as SingleFilter[];
 
 export default function UsingAsyncSource({}) {
-    const [workers, setWorkers] = React.useState([]);
+    const [workers, setWorkers] = React.useState<RecordType[]>([]);
     const [loading, setLoading] = React.useState({ startedAt: 0, finishedAt: 0, erroredAt: 0 });
 
     const recordsPresenter = React.useCallback(
-        async (dataSource: DataSourceType<RecordType>) => {
+        async (dataSource: AsyncDataSourceState<RecordType>) => {
             setLoading(loading => ({ ...loading, startedAt: Date.now() }));
             return findAllCustomerData(dataSource)
                 .then(records => {
@@ -72,6 +77,7 @@ export default function UsingAsyncSource({}) {
                 .catch(e => {
                     console.error(e);
                     setLoading(loading => ({ ...loading, erroredAt: Date.now() }));
+                    return dataSource.records;
                 });
         },
         [setLoading],
@@ -90,6 +96,7 @@ export default function UsingAsyncSource({}) {
             onPaginate={paginatedDataSourceReducer}
             onSort={sortableDataSourceReducer}
             onFilter={filterableDatasourceReducer}
+            // @ts-ignore
             recordsPresenter={recordsPresenter}
             sort={sort}>
             <RenderRecords />

@@ -1,17 +1,18 @@
 import {
     EFilterActions,
-    FilterableDataSource,
+    FilterableDataSourceState,
     FilterableDataSourceProps,
     FilterableDataSourceResult,
     OnFilterAction,
 } from './types';
 import { useCallback, useMemo, useRef } from 'react';
+import { useDataSource } from '../DataSourceContext';
 
-const notFilterable = { isFilterable: false } as FilterableDataSourceResult;
+const notFilterable = { isFilterable: false };
 
 export const useFilterableActionCreator = <T extends {}>(
     props: FilterableDataSourceProps,
-    dataSource: Omit<FilterableDataSource<T>, 'onFilter'>,
+    dataSource: FilterableDataSourceState<T>,
     dispatch: (action: OnFilterAction) => void,
     config: { hasReducer: boolean },
 ): FilterableDataSourceResult => {
@@ -74,5 +75,45 @@ export const useFilterableActionCreator = <T extends {}>(
                 },
             } as FilterableDataSourceResult),
         [isFilterable, filters, handleFilter],
+    );
+};
+
+export const useFilterableDataSource = (): FilterableDataSourceResult => {
+    const {
+        isFilterable,
+        filters,
+        applyFilter,
+        removeFilter,
+        updateFilter,
+        moveFilter,
+        addFilterGroup,
+        updateFilterGroup,
+    } = useDataSource();
+
+    if (!isFilterable) {
+        return notFilterable as FilterableDataSourceResult;
+    }
+
+    return useMemo(
+        () => ({
+            isFilterable,
+            filters,
+            applyFilter,
+            removeFilter,
+            updateFilter,
+            moveFilter,
+            addFilterGroup,
+            updateFilterGroup,
+        }),
+        [
+            isFilterable,
+            filters,
+            applyFilter,
+            removeFilter,
+            updateFilter,
+            moveFilter,
+            addFilterGroup,
+            updateFilterGroup,
+        ],
     );
 };

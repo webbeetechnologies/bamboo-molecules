@@ -6,7 +6,7 @@ export type { ELoadableActions } from './types';
 
 export * from './loadableDatasource';
 export default LoadableDataSource;
-export { useLoadableActionCreator } from './actionCreator';
+export { useLoadableActionCreator, useLoadableDataSource } from './actionCreator';
 export { isLoadableAction } from './utils';
 
 export {

@@ -1,19 +1,10 @@
-import { ESortDirection, SortableDataSourceResult, useDataSource } from '../DataSource';
+import { ESortDirection, useSortableDataSource } from '../DataSource';
 import { RenderJSON } from './RenderJSONDemo';
 import { useCallback, useMemo } from 'react';
 import keyBy from 'lodash/keyBy';
 
-const getSortableProps = <T,>(props: SortableDataSourceResult<T>) => {
-    if (!props.isSortable) {
-        return { isSortable: props.isSortable };
-    }
-
-    const { isSortable, sort, applySort, removeSort, reorderSort, updateSort } = props;
-    return { isSortable, sort, applySort, removeSort, reorderSort, updateSort };
-};
-
 export const ApplySort = () => {
-    const sortableProps = getSortableProps(useDataSource());
+    const sortableProps = useSortableDataSource();
 
     const order = sortableProps.sort?.order;
     const sortOrderHash = useMemo(() => keyBy(order, 'column'), [order]);

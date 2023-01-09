@@ -21,10 +21,13 @@ export interface ColumnSort {
     direction: ESortDirection;
 }
 
-type OnSort = <T extends {}>(
-    dataSource: SortableDataSource<T> & DataSourceType<T>,
+export type SortableReducer = <
+    T extends {},
+    D extends DataSourceInternalState<T> = SortableDataSourceState<T>,
+>(
+    dataSource: SortableDataSourceState<T>,
     args: OnSortAction,
-) => ColumnSort[];
+) => SortableDataSourceState<T>;
 
 export type Sort = {
     isNestedSort?: boolean;
@@ -34,21 +37,27 @@ export type Sort = {
 export interface SortableDataSourceProps {
     isSortable: boolean;
     sort: Sort;
-    onSort?: OnSort;
+    onSort?: SortableReducer;
 }
 
-export interface SortableDataSource<T extends {}>
+export interface SortableDataSourceState<T extends {}>
     extends DataSourceInternalState<T>,
-        Omit<SortableDataSourceProps, 'onSort'> {}
+        Pick<HasSort, 'sort' | 'isSortable'> {}
 
-export interface SortableDataSourceResult<T extends {}> {
-    isSortable: boolean;
-    sort?: Sort;
+type HasSort = {
+    isSortable: true;
+    sort: Sort;
     applySort: (args: ApplySortAction['payload']) => void;
     removeSort: (args: RemoveSortAction['payload']) => void;
     reorderSort: (args: ReorderSortAction['payload']) => void;
     updateSort: (args: UpdateSortAction['payload']) => void;
-}
+};
+
+type NoSort = Partial<HasSort> & {
+    isSortable: false;
+};
+
+export type SortableDataSourceResult = HasSort | NoSort;
 
 // Sort Actions interfaces
 export interface SortAction {
@@ -83,8 +92,3 @@ export type OnSortAction =
     | RemoveSortAction
     | UpdateSortAction
     | DataSourceActions;
-
-export type SortableReducer = <T extends {}>(
-    dataSource: SortableDataSource<T> & DataSourceInternalState<T>,
-    args: OnSortAction,
-) => SortableDataSource<T>;
