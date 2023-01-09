@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "bamboo-molecules": ["../src/index"],
+      "bamboo-molecules": ["../src"],
+      "bamboo-molecules/*": ["../src/*"]
     },
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
