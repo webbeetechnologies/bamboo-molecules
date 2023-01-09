@@ -110,7 +110,9 @@ exports[`FlatGrid renders FlatGrid items with itemDimension 100 and spacing 10 1
         "props": Object {
           "ListFooterComponentStyle": undefined,
           "ListHeaderComponentStyle": undefined,
-          "contentContainerStyle": undefined,
+          "contentContainerStyle": Object {
+            "paddingTop": 10,
+          },
           "data": Array [
             Array [
               Object {
@@ -134,9 +136,6 @@ exports[`FlatGrid renders FlatGrid items with itemDimension 100 and spacing 10 1
           "numColumns": 1,
           "onLayout": [Function],
           "renderItem": [Function],
-          "style": Object {
-            "paddingTop": 10,
-          },
         },
         "renderWindowInsets": Object {
           "height": 0,

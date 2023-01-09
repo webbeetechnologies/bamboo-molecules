@@ -100,7 +100,7 @@ exports[`FlatList renders FlatList items 1`] = `
         "props": Object {
           "ListFooterComponentStyle": undefined,
           "ListHeaderComponentStyle": undefined,
-          "contentContainerStyle": undefined,
+          "contentContainerStyle": Object {},
           "data": Array [
             Object {
               "text": "1",
@@ -117,7 +117,6 @@ exports[`FlatList renders FlatList items 1`] = `
           ],
           "numColumns": 1,
           "renderItem": [MockFunction],
-          "style": Object {},
         },
         "renderWindowInsets": Object {
           "height": 0,

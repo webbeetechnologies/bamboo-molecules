@@ -8,12 +8,12 @@ export type Props = ViewProps & {
     children: ReactNode;
 };
 
-const CardMedia = ({ style, children, ...rest }: Props) => {
+const CardMedia = ({ style, children, ...rest }: Props, ref: any) => {
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('Card_Media', style);
 
     return (
-        <View style={componentStyles} {...rest}>
+        <View style={componentStyles} {...rest} ref={ref}>
             {children}
         </View>
     );

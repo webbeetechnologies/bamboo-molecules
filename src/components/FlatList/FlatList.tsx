@@ -1,4 +1,5 @@
 import { memo, useMemo, forwardRef, PropsWithoutRef, RefAttributes, ReactElement } from 'react';
+import { StyleSheet } from 'react-native';
 import { FlashList, FlashListProps } from '@shopify/flash-list';
 import { useComponentStyles } from '../../hooks';
 
@@ -30,7 +31,7 @@ function FlatList<T = any>(
         },
     ]);
 
-    const { contentContainerStyles, listFooterComponentStyles, listHeaderComponentStyles, style } =
+    const { contentContainerStyles, listFooterComponentStyles, listHeaderComponentStyles } =
         useMemo(() => {
             const {
                 contentContainerStyle,
@@ -40,7 +41,7 @@ function FlatList<T = any>(
             } = componentStyles;
             return {
                 style: restStyles,
-                contentContainerStyles: contentContainerStyle,
+                contentContainerStyles: StyleSheet.flatten([contentContainerStyle, restStyles]),
                 listFooterComponentStyles: listHeaderComponentStyle,
                 listHeaderComponentStyles: listFooterComponentStyle,
             };
@@ -49,7 +50,6 @@ function FlatList<T = any>(
     return (
         <FlashList
             data={data}
-            style={style}
             renderItem={renderItem}
             contentContainerStyle={contentContainerStyles}
             ListHeaderComponentStyle={listHeaderComponentStyles}
