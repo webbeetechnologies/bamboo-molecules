@@ -4,7 +4,7 @@ import type { WithElements } from '../../types';
 import type { TouchableRippleProps } from '../TouchableRipple';
 import { AccordionItemContext } from './AccordionItem';
 import { CallbackActionState, withActionState } from '../../hocs';
-import type { TextStyle, ViewStyle } from 'react-native';
+import type { GestureResponderEvent, TextStyle, ViewStyle } from 'react-native';
 
 type ElementProps = {
     color: string;
@@ -13,7 +13,7 @@ type ElementProps = {
 
 type Element = ReactNode | ((props: ElementProps) => ReactNode);
 
-export type Props = Omit<TouchableRippleProps, 'children' | 'onPress'> &
+export type Props = Omit<TouchableRippleProps, 'children'> &
     WithElements<Element> &
     CallbackActionState & {
         children: ReactNode;
@@ -34,10 +34,11 @@ const AccordionItemHeader = memo(
                 leftElementStyle: leftElementStyleProp = {},
                 rightElementStyle: rightElementStyleProp = {},
                 contentStyle: contentStyleProp = {},
+                onPress: onPressProp,
                 ...rest
             }: Props) => {
                 const { View, TouchableRipple, Text } = useMolecules();
-                const { expanded, setExpanded } = useContext(AccordionItemContext);
+                const { expanded, onExpandedChange } = useContext(AccordionItemContext);
                 const componentStyles = useComponentStyles(
                     'AccordionItem_Header',
                     [
@@ -57,9 +58,14 @@ const AccordionItemHeader = memo(
                     },
                 );
 
-                const onPress = useCallback(() => {
-                    setExpanded(!expanded);
-                }, [expanded, setExpanded]);
+                const onPress = useCallback(
+                    (e: GestureResponderEvent) => {
+                        onPressProp?.(e);
+
+                        onExpandedChange(!expanded);
+                    },
+                    [expanded, onPressProp, onExpandedChange],
+                );
 
                 const {
                     containerStyle,

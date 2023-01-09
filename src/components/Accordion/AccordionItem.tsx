@@ -39,7 +39,7 @@ const AccordionItem = memo(
         ) => {
             const { View } = useMolecules();
             const componentStyles = useComponentStyles('AccordionItem', style);
-            const [expanded, setExpanded] = useControlledValue({
+            const [expanded, onExpandedChange] = useControlledValue({
                 value: expandedProp,
                 onChange: setExpandedProp,
             });
@@ -95,13 +95,13 @@ const AccordionItem = memo(
                         : groupContext.expandedItemIds === id
                     : expandedInternal;
 
-                const handleExpand =
+                const handleExpandChange =
                     groupContext && id !== undefined
                         ? () => groupContext.onPressItem?.(id)
-                        : setExpanded;
+                        : onExpandedChange;
 
-                return { expanded: isExpanded, setExpanded: handleExpand };
-            }, [groupContext, id, expandedInternal, setExpanded]);
+                return { expanded: isExpanded, onExpandedChange: handleExpandChange };
+            }, [groupContext, id, expandedInternal, onExpandedChange]);
 
             return (
                 <View style={componentStyles} {...rest} ref={ref}>
@@ -117,7 +117,7 @@ const AccordionItem = memo(
 
 export const AccordionItemContext = createContext({
     expanded: false,
-    setExpanded: (_expanded: boolean) => {},
+    onExpandedChange: (_expanded: boolean) => {},
 });
 
 AccordionItem.displayName = 'AccordionItem';
