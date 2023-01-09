@@ -49,6 +49,7 @@ exports[`OptionList renders OptionList with SearchField 1`] = `
           style={
             Object {
               "flexGrow": 1,
+              "flexShrink": 1,
               "minHeight": 56,
               "paddingBottom": 0,
               "paddingTop": 0,
@@ -144,10 +145,10 @@ exports[`OptionList renders OptionList with SearchField 1`] = `
                   Object {
                     "backgroundColor": undefined,
                     "borderColor": "rgba(121, 116, 126, 1)",
-                    "borderRadius": 17,
+                    "borderRadius": 750,
                     "borderWidth": undefined,
                     "height": 34,
-                    "margin": 6,
+                    "margin": undefined,
                     "overflow": "hidden",
                     "width": 34,
                   }
@@ -405,6 +406,7 @@ exports[`OptionList renders OptionList with selectable items 1`] = `
     onScroll={[Function]}
     onScrollBeginDrag={[Function]}
     onScrollEndDrag={[Function]}
+    onSelectItemChange={[MockFunction]}
     renderItem={[Function]}
     scrollEventThrottle={50}
     stickyHeaderIndices={

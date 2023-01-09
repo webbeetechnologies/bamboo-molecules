@@ -39,7 +39,7 @@ exports[`should render Surface with default elevation 1`] = `
       collapsable={false}
       style={
         Object {
-          "backgroundColor": "rgba(103, 80, 164, 0.05)",
+          "backgroundColor": "#6750A40D",
           "height": 50,
           "width": 100,
         }
@@ -94,7 +94,7 @@ exports[`should render Surface with elevation level 3 1`] = `
       collapsable={false}
       style={
         Object {
-          "backgroundColor": "rgba(103, 80, 164, 0.11)",
+          "backgroundColor": "#6750A41C",
           "height": 50,
           "width": 100,
         }

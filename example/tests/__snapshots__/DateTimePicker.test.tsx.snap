@@ -180,7 +180,11 @@ exports[`renders DatePickerModal component with range mode 1`] = `
 
 exports[`renders TimePicker component with keyboard mode, hours value 10 and minutes value 15, focused to hours input 1`] = `
 <View
-  style={Object {}}
+  style={
+    Object {
+      "alignItems": "center",
+    }
+  }
 >
   <View
     style={
@@ -197,31 +201,85 @@ exports[`renders TimePicker component with keyboard mode, hours value 10 and min
         }
       }
     >
-      <TextInput
-        blurOnSubmit={false}
-        keyboardAppearance="default"
-        keyboardType="number-pad"
-        maxLength={2}
-        onBlur={[Function]}
-        onChangeText={[Function]}
-        onFocus={[Function]}
-        onSubmitEditing={[Function]}
-        placeholder="00"
-        returnKeyType="next"
-        style={
-          Object {
-            "backgroundColor": "rgba(255, 251, 254, 1)",
-            "borderRadius": 8,
-            "color": "rgba(28, 27, 31, 1)",
-            "fontSize": 57,
-            "height": 80,
-            "textAlign": "center",
-            "textAlignVertical": "center",
-            "width": 96,
+      <View
+        style={Object {}}
+      >
+        <View
+          style={
+            Object {
+              "animationScale": 1,
+              "flexDirection": "row",
+              "paddingHorizontal": 0,
+            }
           }
-        }
-        value="10"
-      />
+        >
+          <View
+            style={
+              Object {
+                "flexGrow": 1,
+                "flexShrink": 1,
+                "minHeight": undefined,
+                "paddingBottom": 0,
+                "paddingTop": 0,
+              }
+            }
+          >
+            <TextInput
+              blurOnSubmit={false}
+              editable={true}
+              keyboardAppearance="default"
+              keyboardType="numeric"
+              maxFontSizeMultiplier={15}
+              maxLength={2}
+              multiline={false}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              onSubmitEditing={[Function]}
+              placeholder="00"
+              placeholderTextColor="rgba(73, 69, 79, 1)"
+              returnKeyType="next"
+              size="md"
+              style={
+                Array [
+                  Object {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "flexGrow": 1,
+                    "fontSize": 16,
+                    "fontWeight": "400",
+                    "lineHeight": 24,
+                  },
+                  Object {
+                    "height": 0,
+                  },
+                  false,
+                  Object {
+                    "textAlign": "left",
+                    "textAlignVertical": "center",
+                  },
+                  false,
+                  Array [
+                    Object {
+                      "backgroundColor": "rgba(231, 224, 236, 1)",
+                      "borderRadius": 8,
+                      "color": "rgba(28, 27, 31, 1)",
+                      "fontSize": 57,
+                      "height": 80,
+                      "textAlign": "center",
+                      "textAlignVertical": "center",
+                      "width": 96,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              testID="text-input-plain"
+              underlineColorAndroid="transparent"
+              value="11"
+            />
+          </View>
+        </View>
+      </View>
     </View>
     <View
       style={
@@ -243,7 +301,7 @@ exports[`renders TimePicker component with keyboard mode, hours value 10 and min
         style={
           Object {
             "backgroundColor": "rgba(28, 27, 31, 1)",
-            "borderRadius": 3.5,
+            "borderRadius": 750,
             "height": 7,
             "width": 7,
           }
@@ -260,7 +318,7 @@ exports[`renders TimePicker component with keyboard mode, hours value 10 and min
         style={
           Object {
             "backgroundColor": "rgba(28, 27, 31, 1)",
-            "borderRadius": 3.5,
+            "borderRadius": 750,
             "height": 7,
             "width": 7,
           }
@@ -281,29 +339,83 @@ exports[`renders TimePicker component with keyboard mode, hours value 10 and min
         }
       }
     >
-      <TextInput
-        keyboardAppearance="default"
-        keyboardType="number-pad"
-        maxLength={2}
-        onBlur={[Function]}
-        onChangeText={[Function]}
-        onFocus={[Function]}
-        onSubmitEditing={[Function]}
-        placeholder="00"
-        style={
-          Object {
-            "backgroundColor": "rgba(255, 251, 254, 1)",
-            "borderRadius": 8,
-            "color": "rgba(28, 27, 31, 1)",
-            "fontSize": 57,
-            "height": 80,
-            "textAlign": "center",
-            "textAlignVertical": "center",
-            "width": 96,
+      <View
+        style={Object {}}
+      >
+        <View
+          style={
+            Object {
+              "animationScale": 1,
+              "flexDirection": "row",
+              "paddingHorizontal": 0,
+            }
           }
-        }
-        value="15"
-      />
+        >
+          <View
+            style={
+              Object {
+                "flexGrow": 1,
+                "flexShrink": 1,
+                "minHeight": undefined,
+                "paddingBottom": 0,
+                "paddingTop": 0,
+              }
+            }
+          >
+            <TextInput
+              editable={true}
+              keyboardAppearance="default"
+              keyboardType="numeric"
+              maxFontSizeMultiplier={15}
+              maxLength={2}
+              multiline={false}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              onSubmitEditing={[Function]}
+              placeholder="00"
+              placeholderTextColor="rgba(73, 69, 79, 1)"
+              size="md"
+              style={
+                Array [
+                  Object {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "flexGrow": 1,
+                    "fontSize": 16,
+                    "fontWeight": "400",
+                    "lineHeight": 24,
+                  },
+                  Object {
+                    "height": 0,
+                  },
+                  false,
+                  Object {
+                    "textAlign": "left",
+                    "textAlignVertical": "center",
+                  },
+                  false,
+                  Array [
+                    Object {
+                      "backgroundColor": "rgba(231, 224, 236, 1)",
+                      "borderRadius": 8,
+                      "color": "rgba(28, 27, 31, 1)",
+                      "fontSize": 57,
+                      "height": 80,
+                      "textAlign": "center",
+                      "textAlignVertical": "center",
+                      "width": 96,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              testID="text-input-plain"
+              underlineColorAndroid="transparent"
+              value="50"
+            />
+          </View>
+        </View>
+      </View>
     </View>
     <View
       style={
@@ -446,7 +558,11 @@ exports[`renders TimePicker component with keyboard mode, hours value 10 and min
 
 exports[`renders TimePicker component with picker mode, hours value 10 and minutes value 15, focused to minutes input 1`] = `
 <View
-  style={Object {}}
+  style={
+    Object {
+      "alignItems": "center",
+    }
+  }
 >
   <View
     style={
@@ -463,31 +579,85 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
         }
       }
     >
-      <TextInput
-        blurOnSubmit={false}
-        keyboardAppearance="default"
-        keyboardType="number-pad"
-        maxLength={2}
-        onBlur={[Function]}
-        onChangeText={[Function]}
-        onFocus={[Function]}
-        onSubmitEditing={[Function]}
-        placeholder="00"
-        returnKeyType="next"
-        style={
-          Object {
-            "backgroundColor": "rgba(255, 251, 254, 1)",
-            "borderRadius": 8,
-            "color": "rgba(28, 27, 31, 1)",
-            "fontSize": 57,
-            "height": 80,
-            "textAlign": "center",
-            "textAlignVertical": "center",
-            "width": 96,
+      <View
+        style={Object {}}
+      >
+        <View
+          style={
+            Object {
+              "animationScale": 1,
+              "flexDirection": "row",
+              "paddingHorizontal": 0,
+            }
           }
-        }
-        value="10"
-      />
+        >
+          <View
+            style={
+              Object {
+                "flexGrow": 1,
+                "flexShrink": 1,
+                "minHeight": undefined,
+                "paddingBottom": 0,
+                "paddingTop": 0,
+              }
+            }
+          >
+            <TextInput
+              blurOnSubmit={false}
+              editable={true}
+              keyboardAppearance="default"
+              keyboardType="numeric"
+              maxFontSizeMultiplier={15}
+              maxLength={2}
+              multiline={false}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              onSubmitEditing={[Function]}
+              placeholder="00"
+              placeholderTextColor="rgba(73, 69, 79, 1)"
+              returnKeyType="next"
+              size="md"
+              style={
+                Array [
+                  Object {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "flexGrow": 1,
+                    "fontSize": 16,
+                    "fontWeight": "400",
+                    "lineHeight": 24,
+                  },
+                  Object {
+                    "height": 0,
+                  },
+                  false,
+                  Object {
+                    "textAlign": "left",
+                    "textAlignVertical": "center",
+                  },
+                  false,
+                  Array [
+                    Object {
+                      "backgroundColor": "rgba(231, 224, 236, 1)",
+                      "borderRadius": 8,
+                      "color": "rgba(28, 27, 31, 1)",
+                      "fontSize": 57,
+                      "height": 80,
+                      "textAlign": "center",
+                      "textAlignVertical": "center",
+                      "width": 96,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              testID="text-input-plain"
+              underlineColorAndroid="transparent"
+              value="11"
+            />
+          </View>
+        </View>
+      </View>
       <View
         accessibilityState={
           Object {
@@ -545,7 +715,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
         style={
           Object {
             "backgroundColor": "rgba(28, 27, 31, 1)",
-            "borderRadius": 3.5,
+            "borderRadius": 750,
             "height": 7,
             "width": 7,
           }
@@ -562,7 +732,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
         style={
           Object {
             "backgroundColor": "rgba(28, 27, 31, 1)",
-            "borderRadius": 3.5,
+            "borderRadius": 750,
             "height": 7,
             "width": 7,
           }
@@ -583,29 +753,83 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
         }
       }
     >
-      <TextInput
-        keyboardAppearance="default"
-        keyboardType="number-pad"
-        maxLength={2}
-        onBlur={[Function]}
-        onChangeText={[Function]}
-        onFocus={[Function]}
-        onSubmitEditing={[Function]}
-        placeholder="00"
-        style={
-          Object {
-            "backgroundColor": "rgba(234, 221, 255, 1)",
-            "borderRadius": 8,
-            "color": "rgba(103, 80, 164, 1)",
-            "fontSize": 57,
-            "height": 80,
-            "textAlign": "center",
-            "textAlignVertical": "center",
-            "width": 96,
+      <View
+        style={Object {}}
+      >
+        <View
+          style={
+            Object {
+              "animationScale": 1,
+              "flexDirection": "row",
+              "paddingHorizontal": 0,
+            }
           }
-        }
-        value="15"
-      />
+        >
+          <View
+            style={
+              Object {
+                "flexGrow": 1,
+                "flexShrink": 1,
+                "minHeight": undefined,
+                "paddingBottom": 0,
+                "paddingTop": 0,
+              }
+            }
+          >
+            <TextInput
+              editable={true}
+              keyboardAppearance="default"
+              keyboardType="numeric"
+              maxFontSizeMultiplier={15}
+              maxLength={2}
+              multiline={false}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              onSubmitEditing={[Function]}
+              placeholder="00"
+              placeholderTextColor="rgba(73, 69, 79, 1)"
+              size="md"
+              style={
+                Array [
+                  Object {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "flexGrow": 1,
+                    "fontSize": 16,
+                    "fontWeight": "400",
+                    "lineHeight": 24,
+                  },
+                  Object {
+                    "height": 0,
+                  },
+                  false,
+                  Object {
+                    "textAlign": "left",
+                    "textAlignVertical": "center",
+                  },
+                  false,
+                  Array [
+                    Object {
+                      "backgroundColor": "rgba(234, 221, 255, 1)",
+                      "borderRadius": 8,
+                      "color": "rgba(103, 80, 164, 1)",
+                      "fontSize": 57,
+                      "height": 80,
+                      "textAlign": "center",
+                      "textAlignVertical": "center",
+                      "width": 96,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+              testID="text-input-plain"
+              underlineColorAndroid="transparent"
+              value="50"
+            />
+          </View>
+        </View>
+      </View>
       <View
         accessibilityState={
           Object {
@@ -783,9 +1007,9 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
     style={
       Object {
         "alignItems": "center",
+        "marginTop": 36,
         "paddingLeft": 12,
         "paddingRight": 12,
-        "paddingTop": 36,
       }
     }
   >
@@ -807,7 +1031,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
         Object {
           "alignItems": "center",
           "backgroundColor": "rgba(231, 224, 236, 1)",
-          "borderRadius": 107.5,
+          "borderRadius": 750,
           "height": 215,
           "justifyContent": "center",
           "position": "relative",
@@ -826,7 +1050,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             "position": "absolute",
             "transform": Array [
               Object {
-                "rotate": "0deg",
+                "rotate": "210deg",
               },
               Object {
                 "translateX": 49.75,
@@ -840,7 +1064,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
           style={
             Object {
               "backgroundColor": "rgba(103, 80, 164, 1)",
-              "borderRadius": 16,
+              "borderRadius": 750,
               "bottom": -14,
               "height": 30,
               "position": "absolute",
@@ -910,7 +1134,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 25,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 151,
@@ -926,7 +1150,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -943,7 +1167,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 25,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 182,
@@ -959,7 +1183,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -976,7 +1200,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 25,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 194,
@@ -992,7 +1216,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1009,7 +1233,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 25,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 182,
@@ -1025,7 +1249,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1042,7 +1266,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 25,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 151,
@@ -1058,7 +1282,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1075,7 +1299,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 25,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 108,
@@ -1091,7 +1315,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1108,7 +1332,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 25,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 65,
@@ -1124,7 +1348,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1141,7 +1365,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 25,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 33,
@@ -1157,7 +1381,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1174,7 +1398,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 25,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 22,
@@ -1190,7 +1414,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1207,7 +1431,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 25,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 33,
@@ -1223,17 +1447,13 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
               <Text
                 selectable={false}
-                style={
-                  Object {
-                    "color": "rgba(255, 255, 255, 1)",
-                  }
-                }
+                style={Object {}}
               >
                 10
               </Text>
@@ -1244,7 +1464,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 25,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 64,
@@ -1260,13 +1480,17 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
               <Text
                 selectable={false}
-                style={Object {}}
+                style={
+                  Object {
+                    "color": "rgba(255, 255, 255, 1)",
+                  }
+                }
               >
                 11
               </Text>
@@ -1277,7 +1501,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 25,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 107,
@@ -1293,7 +1517,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1330,7 +1554,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 24,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 108,
@@ -1346,7 +1570,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1363,7 +1587,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 24,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 151,
@@ -1379,7 +1603,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1396,7 +1620,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 24,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 182,
@@ -1412,7 +1636,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1429,7 +1653,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 24,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 194,
@@ -1445,17 +1669,13 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
               <Text
                 selectable={false}
-                style={
-                  Object {
-                    "color": "rgba(255, 255, 255, 1)",
-                  }
-                }
+                style={Object {}}
               >
                 15
               </Text>
@@ -1466,7 +1686,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 24,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 182,
@@ -1482,7 +1702,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1499,7 +1719,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 24,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 151,
@@ -1515,7 +1735,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1532,7 +1752,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 24,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 108,
@@ -1548,7 +1768,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1565,7 +1785,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 24,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 65,
@@ -1581,7 +1801,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1598,7 +1818,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 24,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 33,
@@ -1614,7 +1834,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1631,7 +1851,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 24,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 22,
@@ -1647,7 +1867,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1664,7 +1884,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 24,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 33,
@@ -1680,13 +1900,17 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
               <Text
                 selectable={false}
-                style={Object {}}
+                style={
+                  Object {
+                    "color": "rgba(255, 255, 255, 1)",
+                  }
+                }
               >
                 50
               </Text>
@@ -1697,7 +1921,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             style={
               Object {
                 "alignItems": "center",
-                "borderRadius": 24,
+                "borderRadius": 750,
                 "height": 50,
                 "justifyContent": "center",
                 "left": 64,
@@ -1713,7 +1937,7 @@ exports[`renders TimePicker component with picker mode, hours value 10 and minut
             <View
               style={
                 Object {
-                  "borderRadius": 25,
+                  "borderRadius": 750,
                 }
               }
             >
@@ -1736,6 +1960,8 @@ exports[`renders TimePickerModal component with hours value 10 and minutes value
 <Modal
   animationType="none"
   hardwareAccelerated={false}
+  hours={10}
+  minutes={15}
   onRequestClose={[MockFunction]}
   presentationStyle="overFullScreen"
   statusBarTranslucent={true}

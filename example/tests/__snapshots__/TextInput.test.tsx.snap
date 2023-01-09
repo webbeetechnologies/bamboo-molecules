@@ -8,7 +8,6 @@ exports[`correctly applies height to multiline Outline TextInput 1`] = `
     style={
       Object {
         "animationScale": 1,
-        "backgroundColor": "rgba(255, 251, 254, 1)",
         "borderRadius": 4,
         "flexDirection": "row",
         "paddingHorizontal": 16,
@@ -20,7 +19,6 @@ exports[`correctly applies height to multiline Outline TextInput 1`] = `
       pointerEvents="none"
       style={
         Object {
-          "backgroundColor": "rgba(255, 251, 254, 1)",
           "borderColor": "rgba(121, 116, 126, 1)",
           "borderRadius": 4,
           "borderWidth": 1,
@@ -37,6 +35,7 @@ exports[`correctly applies height to multiline Outline TextInput 1`] = `
       style={
         Object {
           "flexGrow": 1,
+          "flexShrink": 1,
           "minHeight": 56,
           "paddingBottom": 0,
           "paddingTop": 0,
@@ -209,6 +208,7 @@ exports[`renders button with flat variant 1`] = `
       style={
         Object {
           "flexGrow": 1,
+          "flexShrink": 1,
           "minHeight": 56,
           "paddingBottom": 0,
           "paddingTop": 0,
@@ -305,6 +305,7 @@ exports[`renders button with left element 1`] = `
       style={
         Object {
           "flexGrow": 1,
+          "flexShrink": 1,
           "minHeight": 56,
           "paddingBottom": 0,
           "paddingTop": 0,
@@ -359,7 +360,6 @@ exports[`renders button with outlined variant 1`] = `
     style={
       Object {
         "animationScale": 1,
-        "backgroundColor": "rgba(255, 251, 254, 1)",
         "borderRadius": 4,
         "flexDirection": "row",
         "paddingHorizontal": 16,
@@ -371,7 +371,6 @@ exports[`renders button with outlined variant 1`] = `
       pointerEvents="none"
       style={
         Object {
-          "backgroundColor": "rgba(255, 251, 254, 1)",
           "borderColor": "rgba(121, 116, 126, 1)",
           "borderRadius": 4,
           "borderWidth": 1,
@@ -388,6 +387,7 @@ exports[`renders button with outlined variant 1`] = `
       style={
         Object {
           "flexGrow": 1,
+          "flexShrink": 1,
           "minHeight": 56,
           "paddingBottom": 0,
           "paddingTop": 0,
@@ -469,6 +469,7 @@ exports[`renders button with right element 1`] = `
       style={
         Object {
           "flexGrow": 1,
+          "flexShrink": 1,
           "minHeight": 56,
           "paddingBottom": 0,
           "paddingTop": 0,
@@ -564,6 +565,7 @@ exports[`renders text button by default 1`] = `
       style={
         Object {
           "flexGrow": 1,
+          "flexShrink": 1,
           "minHeight": 56,
           "paddingBottom": 0,
           "paddingTop": 0,

@@ -16,6 +16,8 @@ exports[`FlatGrid renders FlatGrid items with itemDimension 100 and spacing 10 1
         "backgroundColor": undefined,
         "minHeight": 1,
         "minWidth": 1,
+        "paddingLeft": 0,
+        "paddingRight": 0,
       }
     }
     contentHeight={0}
@@ -85,6 +87,7 @@ exports[`FlatGrid renders FlatGrid items with itemDimension 100 and spacing 10 1
         "_getHeightOrWidth": [Function],
         "_getLayoutTypeForIndex": [Function],
         "_getSpan": [Function],
+        "_hasExpired": false,
         "_maxSpan": 1,
         "_setLayoutForType": [Function],
         "_tempDim": Object {
@@ -135,6 +138,10 @@ exports[`FlatGrid renders FlatGrid items with itemDimension 100 and spacing 10 1
             "paddingTop": 10,
           },
         },
+        "renderWindowInsets": Object {
+          "height": 0,
+          "width": 0,
+        },
         "shouldRefreshWithAnchoring": true,
       }
     }
@@ -164,6 +171,8 @@ exports[`FlatGrid renders FlatGrid items with itemDimension 100 and spacing 10 1
           "backgroundColor": undefined,
           "minHeight": 1,
           "minWidth": 1,
+          "paddingLeft": 0,
+          "paddingRight": 0,
         },
         "onLayout": [Function],
         "onScrollBeginDrag": [Function],
