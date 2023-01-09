@@ -9,21 +9,14 @@ export default {
 
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
-Default.args = {
-    animating: true,
-    color: 'colors.primary',
-    size: 30,
-};
+Default.args = {};
 
 Default.parameters = {
     docs: {
         source: {
-            code: `
-<ActivityIndicator color="colors.primary" size={30} animating {...rest} />
-`,
+            code: ``,
             language: 'tsx',
             type: 'auto',
         },
     },
-    chromatic: { disableSnapshot: true },
 };
