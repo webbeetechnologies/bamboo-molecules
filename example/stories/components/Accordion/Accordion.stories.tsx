@@ -1,5 +1,8 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import { expect } from '@storybook/jest';
+import { userEvent, waitFor, within } from '@storybook/testing-library';
 
+import { delay } from '../../common';
 import { Example, ExampleControlled, ExampleNestedAccordion } from './Accordion';
 
 export default {
@@ -192,4 +195,73 @@ NestedAccordion.parameters = {
             type: 'auto',
         },
     },
+};
+
+Controlled.args = {
+    testID: 'controlledAccordion',
+};
+
+Controlled.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await waitFor(() => canvas);
+
+    const accordionItem1Header = await canvas.getByTestId(
+        'controlledAccordion-accordionItem-1-header',
+    );
+    const accordionItem2Header = await canvas.getByTestId(
+        'controlledAccordion-accordionItem-2-header',
+    );
+
+    await expect(
+        canvas.queryByTestId('controlledAccordion-accordionItem-1-content'),
+    ).not.toBeInTheDocument();
+    await expect(
+        canvas.queryByTestId('controlledAccordion-accordionItem-2-content'),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(accordionItem1Header);
+
+    await expect(
+        canvas.queryByTestId('controlledAccordion-accordionItem-1-content'),
+    ).toBeInTheDocument();
+
+    await userEvent.click(accordionItem2Header);
+
+    await expect(
+        canvas.queryByTestId('controlledAccordion-accordionItem-2-content'),
+    ).toBeInTheDocument();
+
+    await userEvent.click(accordionItem1Header);
+    await userEvent.click(accordionItem2Header);
+
+    await expect(
+        canvas.queryByTestId('controlledAccordion-accordionItem-1-content'),
+    ).not.toBeInTheDocument();
+    await expect(
+        canvas.queryByTestId('controlledAccordion-accordionItem-2-content'),
+    ).not.toBeInTheDocument();
+
+    // hover test
+    const defaultBg = 'rgba(0, 0, 0, 0)';
+    const hoverBg = 'rgba(28, 27, 31, 0.08)';
+
+    await expect(window.getComputedStyle(accordionItem1Header).backgroundColor).toBe(defaultBg);
+    await expect(window.getComputedStyle(accordionItem2Header).backgroundColor).toBe(defaultBg);
+
+    await userEvent.hover(accordionItem1Header);
+    await userEvent.hover(accordionItem2Header);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(accordionItem1Header).backgroundColor).toBe(hoverBg);
+    await expect(window.getComputedStyle(accordionItem2Header).backgroundColor).toBe(hoverBg);
+
+    await userEvent.unhover(accordionItem1Header);
+    await userEvent.unhover(accordionItem2Header);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(accordionItem1Header).backgroundColor).toBe(defaultBg);
+    await expect(window.getComputedStyle(accordionItem2Header).backgroundColor).toBe(defaultBg);
 };

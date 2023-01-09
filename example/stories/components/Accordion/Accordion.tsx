@@ -61,9 +61,16 @@ export const ExampleControlled = (props: Props) => {
             multiple
             expandedItemIds={expandedItems}
             onChange={onExpandedItemsChange}>
-            <AccordionItem style={{ width: 400 }} id="1">
-                <AccordionItem.Header left={leftElement}>First Item</AccordionItem.Header>
-                <AccordionItem.Content>
+            <AccordionItem
+                style={{ width: 400 }}
+                id="1"
+                testID={`${props.testID || ''}-accordionItem-1`}>
+                <AccordionItem.Header
+                    left={leftElement}
+                    testID={`${props.testID || ''}-accordionItem-1-header`}>
+                    First Item
+                </AccordionItem.Header>
+                <AccordionItem.Content testID={`${props.testID || ''}-accordionItem-1-content`}>
                     <View style={{ padding: 'spacings.4' }}>
                         <Text style={{ fontSize: 16 }}>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque
@@ -72,9 +79,16 @@ export const ExampleControlled = (props: Props) => {
                     </View>
                 </AccordionItem.Content>
             </AccordionItem>
-            <AccordionItem style={{ width: 400 }} id="2">
-                <AccordionItem.Header left={leftElement}>Second Item</AccordionItem.Header>
-                <AccordionItem.Content>
+            <AccordionItem
+                style={{ width: 400 }}
+                id="2"
+                testID={`${props.testID || ''}-accordionItem-2`}>
+                <AccordionItem.Header
+                    left={leftElement}
+                    testID={`${props.testID || ''}-accordionItem-2-header`}>
+                    Second Item
+                </AccordionItem.Header>
+                <AccordionItem.Content testID={`${props.testID || ''}-accordionItem-2-content`}>
                     <View style={{ padding: 'spacings.4' }}>
                         <Text style={{ fontSize: 16 }}>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque
