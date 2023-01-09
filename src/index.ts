@@ -86,6 +86,10 @@ export {
     MaskItem,
     MaskArray,
     createNumberMask,
+    AccordionProps,
+    AccordionItemProps,
+    AccordionItemHeaderProps,
+    AccordionContentProps,
 } from './components';
 
 export {

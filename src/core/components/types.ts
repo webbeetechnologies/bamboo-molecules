@@ -46,6 +46,8 @@ import type {
     Tooltip,
     Appbar,
     MaskedInputProps,
+    AccordionItem,
+    AccordionProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -100,6 +102,8 @@ export interface DefaultComponents {
     Tooltip: typeof Tooltip;
     Appbar: typeof Appbar;
     MaskedInput: ComponentType<MaskedInputProps>;
+    Accordion: ComponentType<AccordionProps>;
+    AccordionItem: typeof AccordionItem;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

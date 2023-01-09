@@ -141,3 +141,5 @@ export * from './Tooltip';
 export * from './Appbar';
 
 export * from './MaskedInput';
+
+export * from './Accordion';

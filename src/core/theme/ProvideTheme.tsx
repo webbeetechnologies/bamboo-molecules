@@ -84,6 +84,10 @@ import {
     appbarLeft,
     appbarRight,
     appbarTitle,
+    accordionStyles,
+    accordionItemStyles,
+    accordionItemHeaderStyles,
+    accordionItemContentStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -191,6 +195,11 @@ const defaultThemeValue: Partial<ITheme> = {
     Appbar_Left: appbarLeft,
     Appbar_Right: appbarRight,
     Appbar_Title: appbarTitle,
+
+    Accordion: accordionStyles,
+    AccordionItem: accordionItemStyles,
+    AccordionItem_Header: accordionItemHeaderStyles,
+    AccordionItem_Content: accordionItemContentStyles,
 };
 
 const defaultExtractStyles = memoize(
