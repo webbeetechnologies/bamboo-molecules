@@ -14,6 +14,7 @@ export const drawerStyles: ComponentStylePropWithVariants<ViewStyle, '', DrawerC
 
 export const drawerContentStyles: ComponentStylePropWithVariants<ViewStyle> = {
     paddingHorizontal: 'spacings.3',
+    flex: 1,
 };
 
 export const drawerHeaderStyles: ComponentStylePropWithVariants<ViewStyle> = {};
