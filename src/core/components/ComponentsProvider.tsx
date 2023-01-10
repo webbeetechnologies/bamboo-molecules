@@ -55,6 +55,8 @@ import {
     Drawer,
     Appbar,
     MaskedInput,
+    Accordion,
+    AccordionItem,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -114,6 +116,8 @@ const defaultComponents: DefaultComponents = {
     Drawer,
     Appbar,
     MaskedInput,
+    Accordion,
+    AccordionItem,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

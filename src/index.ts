@@ -93,6 +93,11 @@ export {
     MaskItem,
     MaskArray,
     createNumberMask,
+    AccordionProps,
+    AccordionItemProps,
+    AccordionItemHeaderProps,
+    AccordionContentProps,
+    AccordionHeaderElementProps,
 } from './components';
 
 export {

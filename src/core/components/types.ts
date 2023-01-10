@@ -47,6 +47,8 @@ import type {
     Drawer,
     Appbar,
     MaskedInputProps,
+    AccordionItem,
+    AccordionProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -102,6 +104,8 @@ export interface DefaultComponents {
     Drawer: typeof Drawer;
     Appbar: typeof Appbar;
     MaskedInput: ComponentType<MaskedInputProps>;
+    Accordion: ComponentType<AccordionProps>;
+    AccordionItem: typeof AccordionItem;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
