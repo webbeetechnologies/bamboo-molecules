@@ -1,5 +1,13 @@
-import { createContext, forwardRef, memo, ReactElement, useCallback, useMemo } from 'react';
-import type { ViewProps } from 'react-native';
+import {
+    ComponentPropsWithRef,
+    createContext,
+    forwardRef,
+    memo,
+    ReactElement,
+    useCallback,
+    useMemo,
+} from 'react';
+import type { View } from 'react-native';
 import {
     useComponentStyles,
     useControlledValue,
@@ -7,7 +15,7 @@ import {
     useSubcomponents,
 } from '../../hooks';
 
-export type Props = Omit<ViewProps, 'children'> & {
+export type Props = Omit<ComponentPropsWithRef<typeof View>, 'children'> & {
     children: ReactElement | ReactElement[];
     expandedItemIds?: string | string[];
     defaultExpandedItemIds?: string | string[];

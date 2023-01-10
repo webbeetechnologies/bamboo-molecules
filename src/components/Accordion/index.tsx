@@ -13,7 +13,7 @@ export {
     Props as AccordionItemHeaderProps,
     AccordionHeaderElementProps,
 } from './AccordionItemHeader';
-export { Props as AccordionContentProps } from './AccordionItemContent';
+export { Props as AccordionItemContentProps } from './AccordionItemContent';
 
 export {
     accordionStyles,

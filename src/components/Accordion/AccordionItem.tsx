@@ -81,8 +81,8 @@ const AccordionItem = memo(
             return (
                 <View style={componentStyles} {...rest} ref={ref}>
                     <AccordionItemContext.Provider value={contextValue}>
-                        {header}
-                        {contextValue.expanded ? content : null}
+                        {header[0]}
+                        {contextValue.expanded ? content[0] : null}
                     </AccordionItemContext.Provider>
                 </View>
             );
