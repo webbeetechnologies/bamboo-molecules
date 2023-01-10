@@ -1,17 +1,7 @@
-import {
-    Children,
-    createContext,
-    FC,
-    isValidElement,
-    memo,
-    ReactElement,
-    useCallback,
-    useMemo,
-    useRef,
-} from 'react';
+import { createContext, memo, ReactElement, useCallback, useMemo, useRef } from 'react';
 import { ViewStyle, TextStyle, StyleSheet } from 'react-native';
 
-import { useToggle } from '../../hooks';
+import { useSubcomponents, useToggle } from '../../hooks';
 import type { IPlacement } from '../Popper/types';
 import { popoverFactory } from '../Popover';
 
@@ -54,39 +44,10 @@ const Tooltip = ({
         [fadeInDelay, fadeOutDelay, isOpen, setIsOpen],
     );
 
-    const { trigger, content } = useMemo(
-        () =>
-            Children.map(children, child => child).reduce(
-                (context, child) => {
-                    if (!isValidElement(child)) return context;
-
-                    if (
-                        (child.type as FC).displayName !== 'Tooltip.Trigger' &&
-                        (child.type as FC).displayName !== 'Tooltip.Content'
-                    ) {
-                        return context;
-                    }
-
-                    if ((child.type as FC).displayName === 'Tooltip.Trigger') {
-                        return {
-                            ...context,
-                            // this will make sure we only take the last child as the trigger
-                            trigger: child,
-                        };
-                    }
-
-                    return {
-                        ...context,
-                        content: [...context.content, child],
-                    };
-                },
-                {
-                    trigger: <></>,
-                    content: [] as ReactElement[],
-                },
-            ),
-        [children],
-    );
+    const { trigger, content } = useSubcomponents({
+        children,
+        allowedChildren: ['Tooltip.Trigger', 'Tooltip.Content'],
+    });
 
     const contextValue = useMemo(
         () => ({

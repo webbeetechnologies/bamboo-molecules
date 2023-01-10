@@ -1,16 +1,11 @@
-import {
-    Children,
-    createContext,
-    FC,
-    forwardRef,
-    isValidElement,
-    memo,
-    ReactElement,
-    useCallback,
-    useMemo,
-} from 'react';
+import { createContext, forwardRef, memo, ReactElement, useCallback, useMemo } from 'react';
 import type { ViewProps } from 'react-native';
-import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
+import {
+    useComponentStyles,
+    useControlledValue,
+    useMolecules,
+    useSubcomponents,
+} from '../../hooks';
 
 export type Props = Omit<ViewProps, 'children'> & {
     children: ReactElement | ReactElement[];
@@ -22,7 +17,7 @@ export type Props = Omit<ViewProps, 'children'> & {
 
 const Accordion = (
     {
-        children: childrenProp,
+        children,
         style,
         expandedItemIds: expandedItemIdsProp,
         defaultExpandedItemIds,
@@ -40,19 +35,7 @@ const Accordion = (
         onChange: onChangeProp,
     });
 
-    const children = useMemo(
-        () =>
-            Children.map(childrenProp, child => child).reduce((context, child) => {
-                if (!isValidElement(child)) return context;
-
-                if ((child.type as FC).displayName !== 'AccordionItem') {
-                    return context;
-                }
-
-                return [...context, child];
-            }, [] as ReactElement[]),
-        [childrenProp],
-    );
+    const { accordionItem } = useSubcomponents({ children, allowedChildren: ['AccordionItem'] });
 
     const onPressItem = useCallback(
         (id: string) => {
@@ -84,7 +67,9 @@ const Accordion = (
 
     return (
         <View style={componentStyles} {...rest} ref={ref}>
-            <AccordionContext.Provider value={contextValue}>{children}</AccordionContext.Provider>
+            <AccordionContext.Provider value={contextValue}>
+                {accordionItem}
+            </AccordionContext.Provider>
         </View>
     );
 };

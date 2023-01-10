@@ -16,9 +16,9 @@ const Drawer = ({ style, children, ...rest }: Props) => {
 
     return (
         <View style={componentStyles} {...rest}>
-            {header}
-            {content}
-            {footer}
+            {header[0]}
+            {content[0]}
+            {footer[0]}
         </View>
     );
 };

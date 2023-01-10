@@ -6765,6 +6765,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.camelcase@npm:^4.3.7":
+  version: 4.3.7
+  resolution: "@types/lodash.camelcase@npm:4.3.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: ef068b921ab439f7b1a2c0ebbd890ba64ba437fc6aeb5e3ac18d34da30f9054fceaac5ccfdfa9e12b2fc403e10910439d3ebf92ba2f93de03c2f02261adfc000
+  languageName: node
+  linkType: hard
+
 "@types/lodash.get@npm:^4.4.7":
   version: 4.4.7
   resolution: "@types/lodash.get@npm:4.4.7"
@@ -7672,6 +7681,7 @@ __metadata:
     "@react-native-community/eslint-config": ^3.1.0
     "@shopify/flash-list": ^1.4.0
     "@types/color": ^3.0.3
+    "@types/lodash.camelcase": ^4.3.7
     "@types/lodash.get": ^4.4.7
     "@types/lodash.isnil": ^4.0.7
     "@types/lodash.memoize": ^4.1.7
@@ -7689,6 +7699,7 @@ __metadata:
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
     husky: ^8.0.1
+    lodash.camelcase: ^4.3.0
     lodash.get: ^4.4.2
     lodash.isnil: ^4.0.0
     lodash.memoize: ^4.1.2
@@ -18077,6 +18088,13 @@ __metadata:
   dependencies:
     p-locate: ^5.0.0
   checksum: 72eb661788a0368c099a184c59d2fee760b3831c9c1c33955e8a19ae4a21b4116e53fa736dc086cdeb9fce9f7cc508f2f92d2d3aae516f133e16a2bb59a39f5a
+  languageName: node
+  linkType: hard
+
+"lodash.camelcase@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "lodash.camelcase@npm:4.3.0"
+  checksum: cb9227612f71b83e42de93eccf1232feeb25e705bdb19ba26c04f91e885bfd3dd5c517c4a97137658190581d3493ea3973072ca010aab7e301046d90740393d1
   languageName: node
   linkType: hard
 
