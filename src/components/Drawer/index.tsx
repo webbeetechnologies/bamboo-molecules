@@ -3,12 +3,15 @@ import DrawerItem from './DrawerItem';
 import DrawerHeader from './DrawerHeader';
 import DrawerContent from './DrawerContent';
 import DrawerFooter from './DrawerFooter';
+import { DrawerCollapsible, DrawerCollapsibleItem } from './Collapsible';
 
 export const Drawer = Object.assign(DrawerComponent, {
     Item: DrawerItem,
     Header: DrawerHeader,
     Content: DrawerContent,
     Footer: DrawerFooter,
+    Collapsible: DrawerCollapsible,
+    CollapsibleItem: DrawerCollapsibleItem,
 });
 
 export { Props as DrawerProps } from './Drawer';
@@ -24,3 +27,15 @@ export {
     drawerHeaderStyles,
     drawerFooterStyles,
 } from './utils';
+
+export {
+    drawerCollapsibleStyles,
+    drawerCollapsibleItemStyles,
+    drawerCollapsibleItemHeaderStyles,
+    drawerCollapsibleItemContentStyles,
+    DrawerCollapsibleProps,
+    DrawerCollapsibleItemProps,
+    DrawerCollapsibleItemHeaderProps,
+    DrawerCollapsibleItemHeaderElementProps,
+    DrawerCollapsibleItemContentProps,
+} from './Collapsible';
