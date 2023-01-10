@@ -60,7 +60,7 @@ const Tooltip = ({
 
     return (
         <TooltipContext.Provider value={contextValue}>
-            {trigger}
+            {trigger[0]}
             <TooltipPopover
                 placement={placement}
                 showArrow={showArrow}
@@ -71,7 +71,7 @@ const Tooltip = ({
                 contentStyles={style}
                 contentTextStyles={contentTextStyles}
                 onClose={onClose}>
-                {content}
+                {content[0]}
             </TooltipPopover>
         </TooltipContext.Provider>
     );

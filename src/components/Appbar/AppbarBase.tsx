@@ -42,11 +42,11 @@ const AppbarBase = ({
         <Surface elevation={elevation} style={containerStyle} {...rest}>
             <AppbarContext.Provider value={contextValue}>
                 <View style={innerContainerStyle}>
-                    {left}
-                    <>{_type === 'center-aligned' || _type === 'small' ? title : <View />}</>
-                    {right}
+                    {left[0]}
+                    <>{_type === 'center-aligned' || _type === 'small' ? title[0] : <View />}</>
+                    {right[0]}
                 </View>
-                <>{(_type === 'medium' || _type === 'large') && title}</>
+                <>{(_type === 'medium' || _type === 'large') && title[0]}</>
             </AppbarContext.Provider>
         </Surface>
     );
