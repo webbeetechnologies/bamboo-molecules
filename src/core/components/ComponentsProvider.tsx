@@ -54,6 +54,7 @@ import {
     Tooltip,
     Appbar,
     MaskedInput,
+    NavigationStack,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -112,6 +113,7 @@ const defaultComponents: DefaultComponents = {
     Tooltip,
     Appbar,
     MaskedInput,
+    NavigationStack,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

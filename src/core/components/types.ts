@@ -46,6 +46,7 @@ import type {
     Tooltip,
     Appbar,
     MaskedInputProps,
+    NavigationStack,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -100,6 +101,7 @@ export interface DefaultComponents {
     Tooltip: typeof Tooltip;
     Appbar: typeof Appbar;
     MaskedInput: ComponentType<MaskedInputProps>;
+    NavigationStack: typeof NavigationStack;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
