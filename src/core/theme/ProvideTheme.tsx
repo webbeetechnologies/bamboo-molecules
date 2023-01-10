@@ -93,6 +93,10 @@ import {
     accordionItemStyles,
     accordionItemHeaderStyles,
     accordionItemContentStyles,
+    drawerCollapsibleStyles,
+    drawerCollapsibleItemStyles,
+    drawerCollapsibleItemHeaderStyles,
+    drawerCollapsibleItemContentStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -197,6 +201,10 @@ const defaultThemeValue: Partial<ITheme> = {
     Drawer_Content: drawerContentStyles,
     Drawer_Header: drawerHeaderStyles,
     Drawer_Footer: drawerFooterStyles,
+    Drawer_Collapsible: drawerCollapsibleStyles,
+    Drawer_CollapsibleItem: drawerCollapsibleItemStyles,
+    Drawer_CollapsibleItem_Header: drawerCollapsibleItemHeaderStyles,
+    Drawer_CollapsibleItem_Content: drawerCollapsibleItemContentStyles,
 
     Appbar: appbarBaseStyles,
     Appbar_CenterAligned: appbarCenterAlignedStyles,
