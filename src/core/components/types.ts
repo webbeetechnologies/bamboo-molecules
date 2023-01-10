@@ -44,9 +44,12 @@ import type {
     ISelect,
     Chip,
     Tooltip,
+    Drawer,
     Appbar,
     MaskedInputProps,
     NavigationStack,
+    AccordionItem,
+    AccordionProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -99,9 +102,12 @@ export interface DefaultComponents {
     Select: ISelect;
     Chip: typeof Chip;
     Tooltip: typeof Tooltip;
+    Drawer: typeof Drawer;
     Appbar: typeof Appbar;
     MaskedInput: ComponentType<MaskedInputProps>;
     NavigationStack: typeof NavigationStack;
+    Accordion: ComponentType<AccordionProps>;
+    AccordionItem: typeof AccordionItem;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

@@ -75,6 +75,13 @@ export {
     TooltipProps,
     TooltipTriggerProps,
     TooltipContentProps,
+    DrawerProps,
+    DrawerItemProps,
+    DrawerContentProps,
+    DrawerHeaderProps,
+    DrawerFooterProps,
+    DrawerItemElement,
+    DrawerItemElementProps,
     AppbarProps,
     AppbarLeftProps,
     AppbarRightProps,
@@ -91,6 +98,11 @@ export {
     NavigationStackHandle,
     useNavigation,
     useRoute,
+    AccordionProps,
+    AccordionItemProps,
+    AccordionItemHeaderProps,
+    AccordionContentProps,
+    AccordionHeaderElementProps,
 } from './components';
 
 export {

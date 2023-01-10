@@ -138,8 +138,12 @@ export * from './Chip';
 
 export * from './Tooltip';
 
+export * from './Drawer';
+
 export * from './Appbar';
 
 export * from './MaskedInput';
 
 export * from './NavigationStack';
+
+export * from './Accordion';

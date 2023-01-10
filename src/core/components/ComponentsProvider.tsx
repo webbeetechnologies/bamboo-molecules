@@ -52,9 +52,12 @@ import {
     Select,
     Chip,
     Tooltip,
+    Drawer,
     Appbar,
     MaskedInput,
     NavigationStack,
+    Accordion,
+    AccordionItem,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -111,9 +114,12 @@ const defaultComponents: DefaultComponents = {
     Select,
     Chip,
     Tooltip,
+    Drawer,
     Appbar,
     MaskedInput,
     NavigationStack,
+    Accordion,
+    AccordionItem,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

@@ -16,6 +16,8 @@ exports[`FlatList renders FlatList items 1`] = `
         "backgroundColor": undefined,
         "minHeight": 1,
         "minWidth": 1,
+        "paddingLeft": 0,
+        "paddingRight": 0,
       }
     }
     contentHeight={0}
@@ -53,7 +55,7 @@ exports[`FlatList renders FlatList items 1`] = `
           },
         ],
         "_firstIndexToProcess": 0,
-        "_hasStableIds": true,
+        "_hasStableIds": false,
         "_requiresDataChangeHandling": false,
         "_size": 4,
         "getStableId": [Function],
@@ -75,6 +77,7 @@ exports[`FlatList renders FlatList items 1`] = `
         "_getHeightOrWidth": [Function],
         "_getLayoutTypeForIndex": [Function],
         "_getSpan": [Function],
+        "_hasExpired": false,
         "_maxSpan": 1,
         "_setLayoutForType": [Function],
         "_tempDim": Object {
@@ -97,7 +100,7 @@ exports[`FlatList renders FlatList items 1`] = `
         "props": Object {
           "ListFooterComponentStyle": undefined,
           "ListHeaderComponentStyle": undefined,
-          "contentContainerStyle": undefined,
+          "contentContainerStyle": Object {},
           "data": Array [
             Object {
               "text": "1",
@@ -114,7 +117,10 @@ exports[`FlatList renders FlatList items 1`] = `
           ],
           "numColumns": 1,
           "renderItem": [MockFunction],
-          "style": Object {},
+        },
+        "renderWindowInsets": Object {
+          "height": 0,
+          "width": 0,
         },
         "shouldRefreshWithAnchoring": true,
       }
@@ -145,6 +151,8 @@ exports[`FlatList renders FlatList items 1`] = `
           "backgroundColor": undefined,
           "minHeight": 1,
           "minWidth": 1,
+          "paddingLeft": 0,
+          "paddingRight": 0,
         },
         "onLayout": [Function],
         "onScrollBeginDrag": [Function],

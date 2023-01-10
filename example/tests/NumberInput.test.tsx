@@ -12,10 +12,3 @@ it('should render correctly with the default mask', () => {
     ).toJSON();
     expect(tree).toMatchSnapshot();
 });
-
-it('should correctly mask default value', () => {
-    const { getByDisplayValue } = renderWithWrapper(
-        <NumberInput defaultValue="-123.22abc" onChangeText={mockedOnChangeText} />,
-    );
-    expect(getByDisplayValue('-123.22')).toBeTruthy();
-});

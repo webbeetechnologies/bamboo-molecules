@@ -62,31 +62,8 @@ exports[`can render leading radio button control 1`] = `
             "overflow": "hidden",
           },
           Object {
-            "animationDuration": 100,
-            "animationScale": 1,
             "borderRadius": 18,
-            "container": Object {
-              "borderRadius": 20,
-            },
-            "dot": Object {
-              "borderRadius": 5,
-              "height": 10,
-              "width": 10,
-            },
             "padding": 6,
-            "paddingHorizontal": 16,
-            "paddingVertical": 8,
-            "radio": Object {
-              "borderRadius": 10,
-              "height": 20,
-              "margin": 8,
-              "width": 20,
-            },
-            "radioContainer": Object {
-              "alignItems": "center",
-              "justifyContent": "center",
-            },
-            "uncheckedColor": "rgba(73, 69, 79, 1)",
           },
         ]
       }
@@ -203,31 +180,8 @@ exports[`renders unchecked 1`] = `
             "overflow": "hidden",
           },
           Object {
-            "animationDuration": 100,
-            "animationScale": 1,
             "borderRadius": 18,
-            "container": Object {
-              "borderRadius": 20,
-            },
-            "dot": Object {
-              "borderRadius": 5,
-              "height": 10,
-              "width": 10,
-            },
             "padding": 6,
-            "paddingHorizontal": 16,
-            "paddingVertical": 8,
-            "radio": Object {
-              "borderRadius": 10,
-              "height": 20,
-              "margin": 8,
-              "width": 20,
-            },
-            "radioContainer": Object {
-              "alignItems": "center",
-              "justifyContent": "center",
-            },
-            "uncheckedColor": "rgba(73, 69, 79, 1)",
           },
         ]
       }

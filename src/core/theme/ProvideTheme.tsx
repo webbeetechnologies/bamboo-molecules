@@ -76,6 +76,11 @@ import {
     selectStyles,
     chipStyles,
     tooltipStyles,
+    drawerStyles,
+    drawerItemStyles,
+    drawerContentStyles,
+    drawerHeaderStyles,
+    drawerFooterStyles,
     appbarBaseStyles,
     appbarCenterAlignedStyles,
     appbarSmallStyles,
@@ -84,6 +89,10 @@ import {
     appbarLeft,
     appbarRight,
     appbarTitle,
+    accordionStyles,
+    accordionItemStyles,
+    accordionItemHeaderStyles,
+    accordionItemContentStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -183,6 +192,12 @@ const defaultThemeValue: Partial<ITheme> = {
 
     Tooltip: tooltipStyles,
 
+    Drawer: drawerStyles,
+    Drawer_Item: drawerItemStyles,
+    Drawer_Content: drawerContentStyles,
+    Drawer_Header: drawerHeaderStyles,
+    Drawer_Footer: drawerFooterStyles,
+
     Appbar: appbarBaseStyles,
     Appbar_CenterAligned: appbarCenterAlignedStyles,
     Appbar_Small: appbarSmallStyles,
@@ -191,6 +206,11 @@ const defaultThemeValue: Partial<ITheme> = {
     Appbar_Left: appbarLeft,
     Appbar_Right: appbarRight,
     Appbar_Title: appbarTitle,
+
+    Accordion: accordionStyles,
+    AccordionItem: accordionItemStyles,
+    AccordionItem_Header: accordionItemHeaderStyles,
+    AccordionItem_Content: accordionItemContentStyles,
 };
 
 const defaultExtractStyles = memoize(
