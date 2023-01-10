@@ -76,6 +76,11 @@ import {
     selectStyles,
     chipStyles,
     tooltipStyles,
+    drawerStyles,
+    drawerItemStyles,
+    drawerContentStyles,
+    drawerHeaderStyles,
+    drawerFooterStyles,
     appbarBaseStyles,
     appbarCenterAlignedStyles,
     appbarSmallStyles,
@@ -182,6 +187,12 @@ const defaultThemeValue: Partial<ITheme> = {
     Chip: chipStyles,
 
     Tooltip: tooltipStyles,
+
+    Drawer: drawerStyles,
+    Drawer_Item: drawerItemStyles,
+    Drawer_Content: drawerContentStyles,
+    Drawer_Header: drawerHeaderStyles,
+    Drawer_Footer: drawerFooterStyles,
 
     Appbar: appbarBaseStyles,
     Appbar_CenterAligned: appbarCenterAlignedStyles,

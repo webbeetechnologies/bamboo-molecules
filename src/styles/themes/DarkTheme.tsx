@@ -61,6 +61,8 @@ export const generateDarkThemeColors = (
         stateLayer: {
             hover: {
                 onSurface: color(palette.neutral90).alpha(opacity.level1).rgb().string(),
+                onSurfaceVariant: color(palette.neutralVariant80).alpha(opacity.level1).hexa(),
+                onSecondaryContainer: color(palette.secondary90).alpha(opacity.level1).hexa(),
             },
         },
     };

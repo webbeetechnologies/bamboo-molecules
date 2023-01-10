@@ -44,6 +44,7 @@ import type {
     ISelect,
     Chip,
     Tooltip,
+    Drawer,
     Appbar,
     MaskedInputProps,
 } from '../../components';
@@ -98,6 +99,7 @@ export interface DefaultComponents {
     Select: ISelect;
     Chip: typeof Chip;
     Tooltip: typeof Tooltip;
+    Drawer: typeof Drawer;
     Appbar: typeof Appbar;
     MaskedInput: ComponentType<MaskedInputProps>;
 }
