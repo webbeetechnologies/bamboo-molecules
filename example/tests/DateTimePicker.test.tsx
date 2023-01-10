@@ -57,10 +57,9 @@ it('renders DatePickerModal component with range mode', () => {
 it('renders TimePicker component with keyboard mode, hours value 10 and minutes value 15, focused to hours input', () => {
     const tree = renderWithWrapper(
         <TimePicker
-            hours={10}
-            minutes={15}
+            time="10:15"
             focused="hours"
-            onChange={onChangeMock}
+            onTimeChange={onChangeMock}
             inputType={'keyboard'}
             onFocusInput={onFocusInputMock}
         />,
@@ -72,10 +71,9 @@ it('renders TimePicker component with keyboard mode, hours value 10 and minutes 
 it('renders TimePicker component with picker mode, hours value 10 and minutes value 15, focused to minutes input', () => {
     const tree = renderWithWrapper(
         <TimePicker
-            hours={10}
-            minutes={15}
+            time="10:15"
             focused="minutes"
-            onChange={onChangeMock}
+            onTimeChange={onChangeMock}
             inputType={'picker'}
             onFocusInput={onFocusInputMock}
         />,
@@ -88,8 +86,7 @@ it('renders TimePickerModal component with hours value 10 and minutes value 15',
     const tree = renderWithWrapper(
         <TimePickerModal
             isOpen={false}
-            hours={10}
-            minutes={15}
+            time="10:15"
             onConfirm={onConfirmMock}
             onClose={onDismissMock}
         />,

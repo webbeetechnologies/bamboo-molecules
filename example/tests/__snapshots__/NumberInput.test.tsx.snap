@@ -35,6 +35,7 @@ exports[`should render correctly with the default mask 1`] = `
       style={
         Object {
           "flexGrow": 1,
+          "flexShrink": 1,
           "minHeight": 56,
           "paddingBottom": 0,
           "paddingTop": 0,
