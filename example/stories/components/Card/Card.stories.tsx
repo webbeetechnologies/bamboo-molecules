@@ -116,7 +116,7 @@ ComposedCard.parameters = {
     return (
         <Card style={styles.card} variant="outlined">
             <Card.Header>
-                <IconButton name="account-circle-outline" size="lg" />
+                <IconButton name="account-circle-outline" size={18} />
             </Card.Header>
             <Card.Content>
                 <Card.Media style={styles.media}>
@@ -131,7 +131,7 @@ ComposedCard.parameters = {
             <Card.Actions style={styles.actions}>
                 <View style={styles.row}>
                     <Button
-                        size="sm"
+                        size={20}
                         variant="contained-tonal"
                         onPress={() => {}}
                         style={{ marginRight: 'spacings.2' }}>
@@ -144,7 +144,7 @@ ComposedCard.parameters = {
                 <View style={styles.row}>
                     <IconButton
                         name="phone-outline"
-                        size="lg"
+                        size={28}
                         style={{ marginRight: 'spacings.2' }}
                         onPress={() => {}}
                     />
