@@ -16,6 +16,37 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
 
     whiteSpace: 12,
 
+    sizes: {
+        xs: {
+            width: 26,
+            height: 26,
+            borderRadius: 'shapes.corner.full',
+            // @ts-ignore
+            iconSize: 18,
+        },
+        sm: {
+            width: 30,
+            height: 30,
+            borderRadius: 'shapes.corner.full',
+            // @ts-ignore
+            iconSize: 20,
+        },
+        md: {
+            width: 34,
+            height: 34,
+            borderRadius: 'shapes.corner.full',
+            // @ts-ignore
+            iconSize: 24,
+        },
+        lg: {
+            width: 38,
+            height: 38,
+            borderRadius: 'shapes.corner.full',
+            // @ts-ignore
+            iconSize: 28,
+        },
+    },
+
     innerContainer: {
         flexGrow: 1,
         justifyContent: 'center',

@@ -27,7 +27,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
         /**
          * Size of the icon.
          */
-        size?: number;
+        size?: 'xs' | 'sm' | 'md' | 'lg' | number;
         /**
          * Type of the icon. Default is material
          * Should be a number or a Design Token
@@ -138,11 +138,13 @@ const IconButton = (
                 hovered,
                 selected,
             },
+            size: `${size}`,
         },
     );
 
     const {
         iconColor,
+        iconSize,
         rippleColor,
         containerStyle,
         accessibilityState,
@@ -155,26 +157,33 @@ const IconButton = (
             backgroundColor,
             borderWidth,
             borderRadius,
-            iconSize: _iconSize,
+            iconSize: _iconSize = 24,
             margin,
             innerContainer,
             whiteSpace,
+            width,
+            height,
             ...iconButtonStyles
         } = componentStyles;
 
+        const iconSizeInNum = typeof size === 'number' ? size : _iconSize;
+
         return {
             iconColor: _iconColor,
+            iconSize: iconSizeInNum,
             rippleColor: color(_iconColor).alpha(0.12).rgb().string(),
             innerContainerStyle: innerContainer,
             containerStyle: [
                 {
                     backgroundColor,
+                },
+                {
                     margin,
                     borderWidth,
                     borderColor,
                     borderRadius,
-                    width: size + whiteSpace,
-                    height: size + whiteSpace,
+                    width: width === undefined ? iconSizeInNum + whiteSpace : width,
+                    height: height === undefined ? iconSizeInNum + whiteSpace : height,
                 },
                 iconButtonStyles,
             ],
@@ -204,7 +213,7 @@ const IconButton = (
                 }
                 ref={ref}
                 {...rest}>
-                <IconComponent color={iconColor} name={name} size={size} type={type} />
+                <IconComponent color={iconColor} name={name} size={iconSize} type={type} />
             </TouchableRipple>
         </Surface>
     );
