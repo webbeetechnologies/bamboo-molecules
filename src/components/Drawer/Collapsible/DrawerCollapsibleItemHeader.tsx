@@ -1,5 +1,4 @@
 import { forwardRef, memo, useContext, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../../hooks';
 import type { AccordionItemHeaderProps } from '../../Accordion';
 import { DrawerCollapsibleItemContext } from './DrawerCollapsibleItem';
@@ -10,26 +9,22 @@ const DrawerCollapsibleItemHeader = memo(
     forwardRef(({ style, ...rest }: Props, ref: any) => {
         const { AccordionItem } = useMolecules();
         const { active } = useContext(DrawerCollapsibleItemContext);
-        const componentStyles = useComponentStyles(
-            'Drawer_CollapsibleItem_Header',
-            {},
-            {
-                states: {
-                    active,
-                },
+        const componentStyles = useComponentStyles('Drawer_CollapsibleItem_Header', style, {
+            states: {
+                active,
             },
-        );
+        });
 
         const { leftElementStyle, rightElementStyle, contentStyle, headerStyle } = useMemo(() => {
             const { content, leftElement, rightElement, ...restStyles } = componentStyles;
 
             return {
-                headerStyle: StyleSheet.flatten([restStyles, style]),
+                headerStyle: restStyles,
                 leftElementStyle: leftElement,
                 rightElementStyle: rightElement,
                 contentStyle: content,
             };
-        }, [componentStyles, style]);
+        }, [componentStyles]);
 
         return (
             <AccordionItem.Header
