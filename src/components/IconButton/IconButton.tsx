@@ -1,58 +1,63 @@
 import { forwardRef, memo, useMemo } from 'react';
-import { StyleSheet, StyleProp, GestureResponderEvent, TextStyle } from 'react-native';
+import type { StyleProp, GestureResponderEvent, TextStyle, ViewStyle } from 'react-native';
 import color from 'color';
 
-import type { IconType } from '../Icon';
-import CrossFadeIcon from '../Icon/CrossFadeIcon';
 import { useMolecules, useComponentStyles } from '../../hooks';
+import { CallbackActionState, withActionState } from '../../hocs';
+import CrossFadeIcon from '../Icon/CrossFadeIcon';
+import type { IconType } from '../Icon';
 import type { TouchableRippleProps } from '../TouchableRipple';
 
-type IconButtonVariant = 'outlined' | 'contained' | 'contained-tonal';
+type IconButtonVariant = 'default' | 'outlined' | 'contained' | 'contained-tonal';
 
-export type Props = Omit<TouchableRippleProps, 'children'> & {
-    /**
-     * Icon to display.
-     */
-    name: string;
-    /**
-     * Mode of the icon button. By default there is no specified mode - only pressable icon will be rendered.
-     */
-    variant?: IconButtonVariant;
-    /**
-     * Whether icon button is selected. A selected button receives alternative combination of icon and container colors.
-     */
-    selected?: boolean;
-    /**
-     * Size of the icon.
-     * Should be a number or a Design Token
-     */
-    size?: 'xs' | 'sm' | 'md' | 'lg';
-    /**
-     * Type of the icon. Default is material
-     * Should be a number or a Design Token
-     */
-    type?: IconType;
-    /**
-     * Whether the button is disabled. A disabled button is greyed out and `onPress` is not called on touch.
-     */
-    disabled?: boolean;
-    /**
-     * Whether an icon change is animated.
-     */
-    animated?: boolean;
-    /**
-     * Accessibility label for the button. This is read by the screen reader when the user taps the button.
-     */
-    accessibilityLabel?: string;
-    /**
-     * Function to execute on press.
-     */
-    onPress?: (e: GestureResponderEvent) => void;
-    /**
-     * backgroundColor and color will be extracted from here and act as buttonBackgroundColor and iconColor
-     */
-    style?: StyleProp<TextStyle>;
-};
+export type Props = Omit<TouchableRippleProps, 'children'> &
+    CallbackActionState & {
+        /**
+         * Icon to display.
+         */
+        name: string;
+        /**
+         * Mode of the icon button. By default there is no specified mode - only pressable icon will be rendered.
+         */
+        variant?: IconButtonVariant;
+        /**
+         * Whether icon button is selected. A selected button receives alternative combination of icon and container colors.
+         */
+        selected?: boolean;
+        /**
+         * Size of the icon.
+         */
+        size?: number;
+        /**
+         * Type of the icon. Default is material
+         * Should be a number or a Design Token
+         */
+        type?: IconType;
+        /**
+         * Whether the button is disabled. A disabled button is greyed out and `onPress` is not called on touch.
+         */
+        disabled?: boolean;
+        /**
+         * Whether an icon change is animated.
+         */
+        animated?: boolean;
+        /**
+         * Accessibility label for the button. This is read by the screen reader when the user taps the button.
+         */
+        accessibilityLabel?: string;
+        /**
+         * Function to execute on press.
+         */
+        onPress?: (e: GestureResponderEvent) => void;
+        /**
+         * backgroundColor and color will be extracted from here and act as buttonBackgroundColor and iconColor
+         */
+        style?: StyleProp<TextStyle>;
+        /**
+         * Style of the innerContainer
+         */
+        innerContainerStyle?: ViewStyle;
+    };
 
 /**
  * An icon button is a button which displays only an icon without a label.
@@ -98,7 +103,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
 const IconButton = (
     {
         name,
-        size = 'md',
+        size = 24,
         type,
         accessibilityLabel,
         disabled = false,
@@ -107,6 +112,8 @@ const IconButton = (
         animated = false,
         variant,
         style,
+        hovered = false,
+        innerContainerStyle: innerContainerStyleProp = {},
         ...rest
     }: Props,
     ref: any,
@@ -114,21 +121,32 @@ const IconButton = (
     const { TouchableRipple, Surface, Icon } = useMolecules();
     const IconComponent = animated ? CrossFadeIcon : Icon;
 
-    const componentStyles = useComponentStyles('IconButton', style, {
-        variant,
-        states: {
-            disabled,
-            selected,
+    const componentStyles = useComponentStyles(
+        'IconButton',
+        [
+            style,
+            {
+                innerContainer: innerContainerStyleProp,
+            },
+        ],
+        {
+            variant,
+            states: {
+                selectedAndDisabled: selected && disabled,
+                selectedAndHovered: hovered && selected,
+                disabled,
+                hovered,
+                selected,
+            },
         },
-        size,
-    });
+    );
 
     const {
-        iconSize,
         iconColor,
         rippleColor,
         containerStyle,
         accessibilityState,
+        innerContainerStyle,
         accessibilityTraits,
     } = useMemo(() => {
         const {
@@ -137,36 +155,33 @@ const IconButton = (
             backgroundColor,
             borderWidth,
             borderRadius,
-            width,
-            height,
             iconSize: _iconSize,
             margin,
+            innerContainer,
+            whiteSpace,
             ...iconButtonStyles
         } = componentStyles;
 
         return {
-            iconSize: _iconSize,
             iconColor: _iconColor,
             rippleColor: color(_iconColor).alpha(0.12).rgb().string(),
+            innerContainerStyle: innerContainer,
             containerStyle: [
                 {
                     backgroundColor,
-                    width,
-                    height,
                     margin,
-                },
-                styles.container,
-                {
                     borderWidth,
                     borderColor,
                     borderRadius,
+                    width: size + whiteSpace,
+                    height: size + whiteSpace,
                 },
                 iconButtonStyles,
             ],
             accessibilityTraits: disabled ? ['button', 'disabled'] : 'button',
             accessibilityState: { disabled },
         };
-    }, [componentStyles, disabled]);
+    }, [componentStyles, disabled, size]);
 
     return (
         <Surface style={containerStyle} elevation={0}>
@@ -176,7 +191,7 @@ const IconButton = (
                 onPress={onPress}
                 rippleColor={rippleColor}
                 accessibilityLabel={accessibilityLabel}
-                style={styles.touchable}
+                style={innerContainerStyle}
                 // @ts-expect-error We keep old a11y props for backwards compat with old RN versions
                 accessibilityTraits={accessibilityTraits}
                 accessibilityComponentType="button"
@@ -189,7 +204,7 @@ const IconButton = (
                 }
                 ref={ref}
                 {...rest}>
-                <IconComponent color={iconColor} name={name} size={iconSize} type={type} />
+                <IconComponent color={iconColor} name={name} size={size} type={type} />
             </TouchableRipple>
         </Surface>
     );
@@ -198,15 +213,4 @@ const IconButton = (
 const rippleSupportedHitSlop = { top: 10, left: 10, bottom: 10, right: 10 };
 const rippleUnsupportedHitSlop = { top: 6, left: 6, bottom: 6, right: 6 };
 
-const styles = StyleSheet.create({
-    container: {
-        overflow: 'hidden',
-    },
-    touchable: {
-        flexGrow: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-});
-
-export default memo(forwardRef(IconButton));
+export default memo(withActionState(forwardRef(IconButton)));
