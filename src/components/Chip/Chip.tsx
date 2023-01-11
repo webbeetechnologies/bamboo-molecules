@@ -290,7 +290,7 @@ const RightElement = memo(
                 {onClose ? (
                     <IconButton
                         name="close"
-                        size="xs"
+                        size={18}
                         accessibilityLabel="Close"
                         disabled={disabled}
                         onPress={onClose}
