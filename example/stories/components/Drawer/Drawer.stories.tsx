@@ -20,7 +20,7 @@ Default.parameters = {
     const [activeItem, setActiveItem] = useState(0);
 
      return (
-        <Drawer {...props} style={{ height: height }}>
+        <Drawer style={styles.drawer}>
             <Drawer.Header style={styles.header}>
                 <Text>Header</Text>
             </Drawer.Header>
