@@ -1,4 +1,4 @@
-import { forwardRef, memo, useContext } from 'react';
+import { forwardRef, memo, useContext, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../../hooks';
 import type { AccordionItemHeaderProps } from '../../Accordion';
@@ -20,10 +20,24 @@ const DrawerCollapsibleItemHeader = memo(
             },
         );
 
+        const { leftElementStyle, rightElementStyle, contentStyle, headerStyle } = useMemo(() => {
+            const { content, leftElement, rightElement, ...restStyles } = componentStyles;
+
+            return {
+                headerStyle: restStyles,
+                leftElementStyle: leftElement,
+                rightElementStyle: rightElement,
+                contentStyle: content,
+            };
+        }, [componentStyles]);
+
         return (
             <AccordionItem.Header
                 {...rest}
-                style={StyleSheet.flatten([componentStyles, style])}
+                style={StyleSheet.flatten([headerStyle, style])}
+                contentStyle={contentStyle}
+                leftElementStyle={leftElementStyle}
+                rightElementStyle={rightElementStyle}
                 ref={ref}
             />
         );

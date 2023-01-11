@@ -18,6 +18,15 @@ export const drawerCollapsibleItemHeaderStyles: ComponentStylePropWithVariants<
     CollapsibleItemHeaderStates,
     CollapsibleItemHeaderCustomProps
 > = {
+    content: {
+        color: 'colors.onSurfaceVariant',
+        lineHeight: 'typescale.labelLarge.lineHeight' as unknown as number,
+        fontSize: 'typescale.labelLarge.fontSize' as unknown as number,
+        fontWeight: 'typescale.labelLarge.fontWeight' as unknown as TextStyle['fontWeight'],
+    },
+    leftElement: {},
+    rightElement: {},
+
     states: {
         active: {
             backgroundColor: 'colors.stateLayer.hover.onSurface',
