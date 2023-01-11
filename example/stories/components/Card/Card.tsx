@@ -13,8 +13,8 @@ export const BasicCard = (props: CardProps) => {
     return (
         <Card style={{ maxWidth: 400 }} variant="outlined" {...props}>
             <Card.Header testID="basic-header">
-                <IconButton name="account-circle-outline" size="lg" />
-                <IconButton name="dots-vertical" size="sm" onPress={() => {}} />
+                <IconButton name="account-circle-outline" size={28} />
+                <IconButton name="dots-vertical" size={20} onPress={() => {}} />
             </Card.Header>
             <Card.Content>
                 <Card.Headline testID="basic-headline">Headline</Card.Headline>
@@ -68,7 +68,7 @@ export const ComposedCardExample = (props: CardProps) => {
     return (
         <Card style={styles.card} variant="outlined" {...props}>
             <Card.Header>
-                <IconButton name="account-circle-outline" size="lg" />
+                <IconButton name="account-circle-outline" size={28} />
             </Card.Header>
             <Card.Content>
                 <Card.Media style={styles.media}>
@@ -102,11 +102,11 @@ export const ComposedCardExample = (props: CardProps) => {
                 <View style={styles.row}>
                     <IconButton
                         name="phone-outline"
-                        size="lg"
+                        size={28}
                         style={{ marginRight: 'spacings.2' }}
                         onPress={() => {}}
                     />
-                    <IconButton name="message-text-outline" size="lg" onPress={() => {}} />
+                    <IconButton name="message-text-outline" size={28} onPress={() => {}} />
                 </View>
             </Card.Actions>
         </Card>
