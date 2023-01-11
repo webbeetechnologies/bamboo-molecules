@@ -1,5 +1,6 @@
 import DrawerComponent from './Drawer';
 import DrawerItem from './DrawerItem';
+import DrawerItemGroup from './DrawerItemGroup';
 import DrawerHeader from './DrawerHeader';
 import DrawerContent from './DrawerContent';
 import DrawerFooter from './DrawerFooter';
@@ -7,6 +8,7 @@ import { DrawerCollapsible, DrawerCollapsibleItem } from './Collapsible';
 
 export const Drawer = Object.assign(DrawerComponent, {
     Item: DrawerItem,
+    ItemGroup: DrawerItemGroup,
     Header: DrawerHeader,
     Content: DrawerContent,
     Footer: DrawerFooter,

@@ -90,3 +90,27 @@ export const drawerItemStyles: ComponentStylePropWithVariants<
         },
     },
 };
+
+export const drawerItemGroupStyles: ComponentStylePropWithVariants<
+    ViewStyle,
+    '',
+    {
+        title?: TextStyle;
+        divider?: ViewStyle;
+    }
+> = {
+    marginBottom: 'spacings.1',
+
+    title: {
+        color: 'colors.onSurfaceVariant',
+        lineHeight: 'typescale.titleSmall.lineHeight' as unknown as number,
+        fontSize: 'typescale.titleSmall.fontSize' as unknown as number,
+        fontWeight: 'typescale.titleSmall.fontWeight' as unknown as TextStyle['fontWeight'],
+        marginVertical: 16,
+        marginHorizontal: 12,
+    },
+
+    divider: {
+        marginTop: 'spacings.1',
+    },
+};
