@@ -39,6 +39,7 @@ export const generateDarkThemeColors = (
         onErrorContainer: palette.error80,
         onBackground: palette.neutral90,
         outline: palette.neutralVariant60,
+        outlineVariant: palette.neutralVariant30,
         inverseSurface: palette.neutral90,
         inverseOnSurface: palette.neutral20,
         inversePrimary: palette.primary40,

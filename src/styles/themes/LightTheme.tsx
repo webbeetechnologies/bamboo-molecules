@@ -38,6 +38,7 @@ export const generateLightThemeColors = (
         onErrorContainer: palette.error10,
         onBackground: palette.neutral10,
         outline: palette.neutralVariant50,
+        outlineVariant: palette.neutralVariant80,
         inverseSurface: palette.neutral20,
         inverseOnSurface: palette.neutral95,
         inversePrimary: palette.primary80,
