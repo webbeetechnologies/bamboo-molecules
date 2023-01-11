@@ -77,6 +77,7 @@ export {
     TooltipContentProps,
     DrawerProps,
     DrawerItemProps,
+    DrawerItemGroupProps,
     DrawerContentProps,
     DrawerHeaderProps,
     DrawerFooterProps,
@@ -96,7 +97,7 @@ export {
     AccordionProps,
     AccordionItemProps,
     AccordionItemHeaderProps,
-    AccordionContentProps,
+    AccordionItemContentProps,
     AccordionHeaderElementProps,
 } from './components';
 

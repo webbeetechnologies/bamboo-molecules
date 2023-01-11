@@ -18,6 +18,7 @@ export const Drawer = Object.assign(DrawerComponent, {
 
 export { Props as DrawerProps } from './Drawer';
 export { Props as DrawerItemProps, DrawerItemElement, DrawerItemElementProps } from './DrawerItem';
+export { Props as DrawerItemGroupProps } from './DrawerItem';
 export { Props as DrawerContentProps } from './DrawerContent';
 export { Props as DrawerHeaderProps } from './DrawerHeader';
 export { Props as DrawerFooterProps } from './DrawerFooter';
