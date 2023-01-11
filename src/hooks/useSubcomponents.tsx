@@ -1,41 +1,38 @@
 import type { ReactElement } from 'react';
 import { Children, FC, isValidElement, useMemo } from 'react';
-import { camelCase } from '../utils';
 
-export type UseSubcomponentsProps = {
+export type UseSubcomponentsProps<T extends string> = {
     children: ReactElement | ReactElement[];
     /**
-     * array of displayName is this format 'Component.Subcomponent' - eg 'Tooltip.Trigger'
+     * array of displayName as string
      * */
-    allowedChildren: string[];
+    allowedChildren: T[];
 };
 
 /**
- *  This will return an object with the camelCase format of the subComponents' displayNames as the properties
- *  eg. allowedChildren: ['Drawer.Header', 'Drawer.Content', 'Drawer.Footer', 'DrawerItem'];
+ *  This will return an object with the displayNames as the property names
+ *  eg. allowedChildren: ['Drawer_Header', 'Drawer_Content', 'Drawer_Footer', 'DrawerItem'];
  *
  *  return value -> {
- *    header: [],
- *    content: [],
- *    footer: [],
- *    drawerItem: [],
+ *    Drawer_Header: [],
+ *    Drawer_Content: [],
+ *    Drawer_Footer: [],
+ *    DrawerItem: [],
  *  }
  *  */
-const useSubcomponents = ({ children, allowedChildren }: UseSubcomponentsProps) => {
+const useSubcomponents = <T extends string = string>({
+    children,
+    allowedChildren,
+}: UseSubcomponentsProps<T>) => {
     return useMemo(() => {
         // this will create properties with default empty array values even if they don't exist in the children
         const defaultContext = allowedChildren.reduce((context, childName) => {
-            // the displayNames may not always have the dot // we will allow it to be flexible
-            const name = camelCase(childName.split('.')[1] || childName);
-
-            if (!name) return context;
-
             return {
                 ...context,
-                [name]: [],
+                [childName]: [],
             };
         }, {}) as {
-            [key: string]: ReactElement[];
+            [key in T]: ReactElement[];
         };
 
         return Children.map(children, child => child).reduce((context, child) => {
@@ -47,9 +44,7 @@ const useSubcomponents = ({ children, allowedChildren }: UseSubcomponentsProps) 
                 return context;
             }
 
-            const name = camelCase(
-                (child.type as FC).displayName?.split('.')[1] || (child.type as FC).displayName,
-            );
+            const name = (child.type as FC).displayName as T;
 
             if (!name) return context;
 
