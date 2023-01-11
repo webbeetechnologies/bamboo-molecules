@@ -1,10 +1,10 @@
-import { memo, useMemo } from 'react';
+import { memo, ReactNode, useMemo } from 'react';
 import type { ViewProps } from '@webbee/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { HorizontalDividerProps } from '../HorizontalDivider';
 
 export type Props = ViewProps & {
-    title?: string;
+    title?: ReactNode;
     showDivider?: boolean;
     dividerProps?: HorizontalDividerProps;
 };

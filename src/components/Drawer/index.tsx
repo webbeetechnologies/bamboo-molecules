@@ -29,6 +29,7 @@ export {
     drawerContentStyles,
     drawerHeaderStyles,
     drawerFooterStyles,
+    drawerItemGroupStyles,
 } from './utils';
 
 export {

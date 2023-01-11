@@ -106,8 +106,8 @@ export const drawerItemGroupStyles: ComponentStylePropWithVariants<
         lineHeight: 'typescale.titleSmall.lineHeight' as unknown as number,
         fontSize: 'typescale.titleSmall.fontSize' as unknown as number,
         fontWeight: 'typescale.titleSmall.fontWeight' as unknown as TextStyle['fontWeight'],
-        marginVertical: 16,
-        marginHorizontal: 12,
+        marginVertical: 'spacings.4',
+        marginHorizontal: 'spacings.3',
     },
 
     divider: {

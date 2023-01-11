@@ -91,6 +91,7 @@ import {
     appbarTitle,
     accordionStyles,
     accordionItemStyles,
+    drawerItemGroupStyles,
     accordionItemHeaderStyles,
     accordionItemContentStyles,
     drawerCollapsibleStyles,
@@ -198,6 +199,7 @@ const defaultThemeValue: Partial<ITheme> = {
 
     Drawer: drawerStyles,
     Drawer_Item: drawerItemStyles,
+    Drawer_ItemGroup: drawerItemGroupStyles,
     Drawer_Content: drawerContentStyles,
     Drawer_Header: drawerHeaderStyles,
     Drawer_Footer: drawerFooterStyles,
