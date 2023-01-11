@@ -6,7 +6,11 @@ import {
     DrawerItemProps,
     DrawerItemElementProps,
 } from 'bamboo-molecules';
-import type { DrawerCollapsibleItemHeaderElementProps } from 'bamboo-molecules/components';
+import type {
+    DrawerCollapsibleItemHeaderElementProps,
+    DrawerCollapsibleItemProps,
+    DrawerItemGroupProps,
+} from 'bamboo-molecules/components';
 
 export type Props = DrawerProps & DrawerItemProps['left'] & {};
 
@@ -169,6 +173,147 @@ export const Example = (props: Props) => {
                 <Text>Footer</Text>
             </Drawer.Footer>
         </Drawer>
+    );
+};
+
+export const ExampleDrawerItem = (props: DrawerItemProps) => {
+    const { Drawer, Icon, Text } = useMolecules();
+
+    return (
+        <Drawer.Item
+            label="Inbox"
+            left={useCallback(
+                ({ color }: DrawerItemElementProps) => (
+                    <Icon name="inbox" color={color} size={24} />
+                ),
+                [Icon],
+            )}
+            right={useCallback(
+                ({ color }: DrawerItemElementProps) => (
+                    <Text style={{ color }}>24</Text>
+                ),
+                [Text],
+            )}
+            {...props}
+        />
+    );
+};
+
+export const ExampleDrawerItemGroup = (props: DrawerItemGroupProps) => {
+    const { Drawer, Icon, Text } = useMolecules();
+
+    return (
+        <Drawer.ItemGroup {...props}>
+            <Drawer.Item
+                label="Inbox"
+                left={useCallback(
+                    ({ color }: DrawerItemElementProps) => (
+                        <Icon name="inbox" color={color} size={24} />
+                    ),
+                    [Icon],
+                )}
+                right={useCallback(
+                    ({ color }: DrawerItemElementProps) => (
+                        <Text style={{ color }}>24</Text>
+                    ),
+                    [Text],
+                )}
+            />
+
+            <Drawer.Item
+                label="Outbox"
+                left={useCallback(
+                    ({ color }: DrawerItemElementProps) => (
+                        <Icon name="send-outline" color={color} size={24} />
+                    ),
+                    [Icon],
+                )}
+                right={useCallback(
+                    ({ color }: DrawerItemElementProps) => (
+                        <Text style={{ color }}>100+</Text>
+                    ),
+                    [Text],
+                )}
+            />
+            <Drawer.Item
+                label="Favorites"
+                left={useCallback(
+                    ({ color }: DrawerItemElementProps) => (
+                        <Icon name="heart-outline" color={color} size={24} />
+                    ),
+                    [Icon],
+                )}
+            />
+            <Drawer.Item
+                label="Trash"
+                left={useCallback(
+                    ({ color }: DrawerItemElementProps) => (
+                        <Icon name="delete-outline" color={color} size={24} />
+                    ),
+                    [Icon],
+                )}
+            />
+        </Drawer.ItemGroup>
+    );
+};
+
+export const ExampleDrawerCollapsibleItem = (props: DrawerCollapsibleItemProps) => {
+    const { Drawer, Icon } = useMolecules();
+
+    return (
+        <Drawer.CollapsibleItem {...props}>
+            <Drawer.CollapsibleItem.Header
+                left={useCallback(
+                    ({ color, expanded }: DrawerCollapsibleItemHeaderElementProps) => (
+                        <Icon
+                            name={expanded ? 'chevron-up' : 'chevron-down'}
+                            color={color}
+                            size={24}
+                        />
+                    ),
+                    [Icon],
+                )}>
+                More
+            </Drawer.CollapsibleItem.Header>
+            <Drawer.CollapsibleItem.Content>
+                <Drawer.Item
+                    label="Important"
+                    left={useCallback(
+                        ({ color }: DrawerItemElementProps) => (
+                            <Icon name="label-outline" color={color} size={24} />
+                        ),
+                        [Icon],
+                    )}
+                />
+                <Drawer.Item
+                    label="All mails"
+                    left={useCallback(
+                        ({ color }: DrawerItemElementProps) => (
+                            <Icon name="email-multiple-outline" color={color} size={24} />
+                        ),
+                        [Icon],
+                    )}
+                />
+                <Drawer.Item
+                    label="Spams"
+                    left={useCallback(
+                        ({ color }: DrawerItemElementProps) => (
+                            <Icon name="alert-octagon-outline" color={color} size={24} />
+                        ),
+                        [Icon],
+                    )}
+                />
+                <Drawer.Item
+                    label="Manage labels"
+                    left={useCallback(
+                        ({ color }: DrawerItemElementProps) => (
+                            <Icon name="cog-outline" color={color} size={24} />
+                        ),
+                        [Icon],
+                    )}
+                />
+            </Drawer.CollapsibleItem.Content>
+        </Drawer.CollapsibleItem>
     );
 };
 
