@@ -12,6 +12,6 @@ const CardHeader: FC<Props> = ({ style, ...rest }, ref: any) => {
     return <View style={componentStyles} {...rest} ref={ref} />;
 };
 
-CardHeader.displayName = 'Card.Header';
+CardHeader.displayName = 'Card_Header';
 
 export default memo(CardHeader);

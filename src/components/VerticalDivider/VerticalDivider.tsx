@@ -79,7 +79,7 @@ const VerticalDivider = ({
 
 export const verticalDividerStyles = {
     width: StyleSheet.hairlineWidth,
-    background: 'colors.surfaceVariant',
+    background: 'colors.outlineVariant',
     bold: {
         width: 1,
     },

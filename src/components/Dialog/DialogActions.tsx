@@ -92,6 +92,6 @@ const DialogActions = (
     );
 };
 
-DialogActions.displayName = 'Dialog.Actions';
+DialogActions.displayName = 'Dialog_Actions';
 
 export default memo(forwardRef(DialogActions));

@@ -1,91 +1,324 @@
-import { useState } from 'react';
-import { useMolecules, DrawerProps, DrawerItemProps } from 'bamboo-molecules';
-import { StyleSheet, Text, TextStyle, useWindowDimensions } from 'react-native';
+import { useCallback, useState } from 'react';
+import { StyleSheet, useWindowDimensions } from 'react-native';
+import {
+    useMolecules,
+    DrawerProps,
+    DrawerItemProps,
+    DrawerItemElementProps,
+    DrawerCollapsibleItemHeaderElementProps,
+    DrawerCollapsibleItemProps,
+    DrawerItemGroupProps,
+} from 'bamboo-molecules';
 
 export type Props = DrawerProps & DrawerItemProps['left'] & {};
 
 export const Example = (props: Props) => {
-    const { Drawer, Icon, HorizontalDivider } = useMolecules();
+    const { Drawer, Icon, Text } = useMolecules();
     const { height } = useWindowDimensions();
 
     const [activeItem, setActiveItem] = useState(0);
 
     return (
         <Drawer {...props} style={{ height: height }}>
-            <Drawer.Header style={{ height: 100, backgroundColor: '#f5f5f5', padding: 12 }}>
+            <Drawer.Header style={styles.header}>
                 <Text>Header</Text>
             </Drawer.Header>
             <Drawer.Content>
-                <Text style={styles.sectionHeadline}>Mail</Text>
-                <Drawer.Item
-                    label="Inbox"
-                    left={({ color }) => <Icon name="inbox" color={color} size={24} />}
-                    active={activeItem === 0}
-                    onPress={() => setActiveItem(0)}
-                    right={({ color }) => <Text style={{ color }}>24</Text>}
-                />
+                <Drawer.ItemGroup title="Mail" showDivider>
+                    <Drawer.Item
+                        label="Inbox"
+                        left={useCallback(
+                            ({ color }: DrawerItemElementProps) => (
+                                <Icon name="inbox" color={color} size={24} />
+                            ),
+                            [Icon],
+                        )}
+                        active={activeItem === 0}
+                        onPress={useCallback(() => setActiveItem(0), [])}
+                        right={useCallback(
+                            ({ color }: DrawerItemElementProps) => (
+                                <Text style={{ color }}>24</Text>
+                            ),
+                            [Text],
+                        )}
+                    />
 
-                <Drawer.Item
-                    label="Outbox"
-                    left={({ color }) => <Icon name="send-outline" color={color} size={24} />}
-                    active={activeItem === 1}
-                    onPress={() => setActiveItem(1)}
-                    right={({ color }) => <Text style={{ color }}>100+</Text>}
-                />
-                <Drawer.Item
-                    label="Favorites"
-                    left={({ color }) => <Icon name="heart-outline" color={color} size={24} />}
-                    active={activeItem === 2}
-                    onPress={() => setActiveItem(2)}
-                />
-                <Drawer.Item
-                    label="Trash"
-                    left={({ color }) => <Icon name="delete-outline" color={color} size={24} />}
-                    active={activeItem === 3}
-                    onPress={() => setActiveItem(3)}
-                />
-                <HorizontalDivider spacing={4} />
-                <Text style={styles.sectionHeadline}>Labels</Text>
-                <Drawer.Item
-                    label="Inbox"
-                    left={({ color }) => <Icon name="inbox" color={color} size={24} />}
-                    active={activeItem === 4}
-                    onPress={() => setActiveItem(4)}
-                />
+                    <Drawer.Item
+                        label="Outbox"
+                        left={useCallback(
+                            ({ color }: DrawerItemElementProps) => (
+                                <Icon name="send-outline" color={color} size={24} />
+                            ),
+                            [Icon],
+                        )}
+                        active={activeItem === 1}
+                        onPress={useCallback(() => setActiveItem(1), [])}
+                        right={useCallback(
+                            ({ color }: DrawerItemElementProps) => (
+                                <Text style={{ color }}>100+</Text>
+                            ),
+                            [Text],
+                        )}
+                    />
+                    <Drawer.Item
+                        label="Favorites"
+                        left={useCallback(
+                            ({ color }: DrawerItemElementProps) => (
+                                <Icon name="heart-outline" color={color} size={24} />
+                            ),
+                            [Icon],
+                        )}
+                        active={activeItem === 2}
+                        onPress={useCallback(() => setActiveItem(2), [])}
+                    />
+                    <Drawer.Item
+                        label="Trash"
+                        left={useCallback(
+                            ({ color }: DrawerItemElementProps) => (
+                                <Icon name="delete-outline" color={color} size={24} />
+                            ),
+                            [Icon],
+                        )}
+                        active={activeItem === 3}
+                        onPress={useCallback(() => setActiveItem(3), [])}
+                    />
+                </Drawer.ItemGroup>
+                <Drawer.ItemGroup title="Labels" showDivider>
+                    <Drawer.Item
+                        label="Inbox"
+                        left={useCallback(
+                            ({ color }: DrawerItemElementProps) => (
+                                <Icon name="inbox" color={color} size={24} />
+                            ),
+                            [Icon],
+                        )}
+                        active={activeItem === 4}
+                        onPress={useCallback(() => setActiveItem(4), [])}
+                    />
 
-                <Drawer.Item
-                    label="Outbox"
-                    left={({ color }) => <Icon name="send-outline" color={color} size={24} />}
-                    active={activeItem === 5}
-                    onPress={() => setActiveItem(5)}
-                />
-                <Drawer.Item
-                    label="Favorites"
-                    left={({ color }) => <Icon name="heart-outline" color={color} size={24} />}
-                    active={activeItem === 6}
-                    onPress={() => setActiveItem(6)}
-                />
-                <Drawer.Item
-                    label="Trash"
-                    left={({ color }) => <Icon name="delete-outline" color={color} size={24} />}
-                    active={activeItem === 7}
-                    onPress={() => setActiveItem(7)}
-                />
+                    <Drawer.CollapsibleItem active={[5, 6, 7, 8].includes(activeItem)}>
+                        <Drawer.CollapsibleItem.Header
+                            left={useCallback(
+                                ({ color, expanded }: DrawerCollapsibleItemHeaderElementProps) => (
+                                    <Icon
+                                        name={expanded ? 'chevron-up' : 'chevron-down'}
+                                        color={color}
+                                        size={24}
+                                    />
+                                ),
+                                [Icon],
+                            )}>
+                            More
+                        </Drawer.CollapsibleItem.Header>
+                        <Drawer.CollapsibleItem.Content>
+                            <Drawer.Item
+                                label="Important"
+                                left={useCallback(
+                                    ({ color }: DrawerItemElementProps) => (
+                                        <Icon name="label-outline" color={color} size={24} />
+                                    ),
+                                    [Icon],
+                                )}
+                                active={activeItem === 5}
+                                onPress={useCallback(() => setActiveItem(5), [])}
+                            />
+                            <Drawer.Item
+                                label="All mails"
+                                left={useCallback(
+                                    ({ color }: DrawerItemElementProps) => (
+                                        <Icon
+                                            name="email-multiple-outline"
+                                            color={color}
+                                            size={24}
+                                        />
+                                    ),
+                                    [Icon],
+                                )}
+                                active={activeItem === 6}
+                                onPress={useCallback(() => setActiveItem(6), [])}
+                            />
+                            <Drawer.Item
+                                label="Spams"
+                                left={useCallback(
+                                    ({ color }: DrawerItemElementProps) => (
+                                        <Icon
+                                            name="alert-octagon-outline"
+                                            color={color}
+                                            size={24}
+                                        />
+                                    ),
+                                    [Icon],
+                                )}
+                                active={activeItem === 7}
+                                onPress={useCallback(() => setActiveItem(7), [])}
+                            />
+                            <Drawer.Item
+                                label="Manage labels"
+                                left={useCallback(
+                                    ({ color }: DrawerItemElementProps) => (
+                                        <Icon name="cog-outline" color={color} size={24} />
+                                    ),
+                                    [Icon],
+                                )}
+                                active={activeItem === 8}
+                                onPress={useCallback(() => setActiveItem(8), [])}
+                            />
+                        </Drawer.CollapsibleItem.Content>
+                    </Drawer.CollapsibleItem>
+                </Drawer.ItemGroup>
             </Drawer.Content>
-            <Drawer.Footer style={{ height: 50, padding: 12 }}>
+            <Drawer.Footer style={styles.footer}>
                 <Text>Footer</Text>
             </Drawer.Footer>
         </Drawer>
     );
 };
 
+export const ExampleDrawerItem = (props: DrawerItemProps) => {
+    const { Drawer, Icon, Text } = useMolecules();
+
+    return (
+        <Drawer.Item
+            label="Inbox"
+            left={useCallback(
+                ({ color }: DrawerItemElementProps) => (
+                    <Icon name="inbox" color={color} size={24} />
+                ),
+                [Icon],
+            )}
+            right={useCallback(
+                ({ color }: DrawerItemElementProps) => (
+                    <Text style={{ color }}>24</Text>
+                ),
+                [Text],
+            )}
+            {...props}
+        />
+    );
+};
+
+export const ExampleDrawerItemGroup = (props: DrawerItemGroupProps) => {
+    const { Drawer, Icon, Text } = useMolecules();
+
+    return (
+        <Drawer.ItemGroup {...props}>
+            <Drawer.Item
+                label="Inbox"
+                left={useCallback(
+                    ({ color }: DrawerItemElementProps) => (
+                        <Icon name="inbox" color={color} size={24} />
+                    ),
+                    [Icon],
+                )}
+                right={useCallback(
+                    ({ color }: DrawerItemElementProps) => (
+                        <Text style={{ color }}>24</Text>
+                    ),
+                    [Text],
+                )}
+            />
+
+            <Drawer.Item
+                label="Outbox"
+                left={useCallback(
+                    ({ color }: DrawerItemElementProps) => (
+                        <Icon name="send-outline" color={color} size={24} />
+                    ),
+                    [Icon],
+                )}
+                right={useCallback(
+                    ({ color }: DrawerItemElementProps) => (
+                        <Text style={{ color }}>100+</Text>
+                    ),
+                    [Text],
+                )}
+            />
+            <Drawer.Item
+                label="Favorites"
+                left={useCallback(
+                    ({ color }: DrawerItemElementProps) => (
+                        <Icon name="heart-outline" color={color} size={24} />
+                    ),
+                    [Icon],
+                )}
+            />
+            <Drawer.Item
+                label="Trash"
+                left={useCallback(
+                    ({ color }: DrawerItemElementProps) => (
+                        <Icon name="delete-outline" color={color} size={24} />
+                    ),
+                    [Icon],
+                )}
+            />
+        </Drawer.ItemGroup>
+    );
+};
+
+export const ExampleDrawerCollapsibleItem = (props: DrawerCollapsibleItemProps) => {
+    const { Drawer, Icon } = useMolecules();
+
+    return (
+        <Drawer.CollapsibleItem {...props}>
+            <Drawer.CollapsibleItem.Header
+                testID={`${props.testID || 'drawer-collapsible-item'}-header`}
+                left={useCallback(
+                    ({ color, expanded }: DrawerCollapsibleItemHeaderElementProps) => (
+                        <Icon
+                            name={expanded ? 'chevron-up' : 'chevron-down'}
+                            color={color}
+                            size={24}
+                        />
+                    ),
+                    [Icon],
+                )}>
+                More
+            </Drawer.CollapsibleItem.Header>
+
+            <Drawer.CollapsibleItem.Content
+                testID={`${props.testID || 'drawer-collapsible-item'}-content`}>
+                <Drawer.Item
+                    label="Important"
+                    left={useCallback(
+                        ({ color }: DrawerItemElementProps) => (
+                            <Icon name="label-outline" color={color} size={24} />
+                        ),
+                        [Icon],
+                    )}
+                />
+                <Drawer.Item
+                    label="All mails"
+                    left={useCallback(
+                        ({ color }: DrawerItemElementProps) => (
+                            <Icon name="email-multiple-outline" color={color} size={24} />
+                        ),
+                        [Icon],
+                    )}
+                />
+                <Drawer.Item
+                    label="Spams"
+                    left={useCallback(
+                        ({ color }: DrawerItemElementProps) => (
+                            <Icon name="alert-octagon-outline" color={color} size={24} />
+                        ),
+                        [Icon],
+                    )}
+                />
+                <Drawer.Item
+                    label="Manage labels"
+                    left={useCallback(
+                        ({ color }: DrawerItemElementProps) => (
+                            <Icon name="cog-outline" color={color} size={24} />
+                        ),
+                        [Icon],
+                    )}
+                />
+            </Drawer.CollapsibleItem.Content>
+        </Drawer.CollapsibleItem>
+    );
+};
+
 const styles = StyleSheet.create({
-    sectionHeadline: {
-        color: 'colors.onSurfaceVariant',
-        lineHeight: 'typescale.titleSmall.lineHeight' as unknown as number,
-        fontSize: 'typescale.titleSmall.fontSize' as unknown as number,
-        fontWeight: 'typescale.titleSmall.fontWeight' as unknown as TextStyle['fontWeight'],
-        marginVertical: 16,
-        marginHorizontal: 12,
-    },
+    header: { height: 100, backgroundColor: '#f5f5f5', padding: 12 },
+    footer: { height: 50, padding: 12 },
 });

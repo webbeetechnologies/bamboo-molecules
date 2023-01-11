@@ -79,7 +79,7 @@ const HorizontalDivider = ({
 
 export const horizontalDividerStyles = {
     height: StyleSheet.hairlineWidth,
-    background: 'colors.surfaceVariant',
+    background: 'colors.outlineVariant',
     bold: {
         height: 1,
     },

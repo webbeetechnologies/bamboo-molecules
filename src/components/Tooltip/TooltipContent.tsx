@@ -8,5 +8,5 @@ const TooltipContent = memo(({ children }: Props) => {
     return <>{children}</>;
 });
 
-TooltipContent.displayName = 'Tooltip.Content';
+TooltipContent.displayName = 'Tooltip_Content';
 export default TooltipContent;

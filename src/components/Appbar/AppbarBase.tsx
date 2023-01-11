@@ -1,5 +1,5 @@
-import { Children, createContext, FC, isValidElement, memo, useMemo } from 'react';
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { createContext, memo, useMemo } from 'react';
+import { useComponentStyles, useMolecules, useSubcomponents } from '../../hooks';
 import type { AppbarBaseProps, AppbarType } from './types';
 
 const AppbarBase = ({
@@ -31,50 +31,10 @@ const AppbarBase = ({
         };
     }, [componentStyles, scrolling]);
 
-    const { left, right, title } = useMemo(
-        () =>
-            Children.map(children, child => child).reduce(
-                (context, child) => {
-                    if (!isValidElement(child)) return context;
-
-                    if (
-                        (child.type as FC).displayName !== 'Appbar.Left' &&
-                        (child.type as FC).displayName !== 'Appbar.Right' &&
-                        (child.type as FC).displayName !== 'Appbar.Title'
-                    ) {
-                        return context;
-                    }
-
-                    switch ((child.type as FC).displayName) {
-                        case 'Appbar.Left':
-                            return {
-                                ...context,
-                                // this will make sure we only take the last child as the trigger
-                                left: child,
-                            };
-                        case 'Appbar.Right':
-                            return {
-                                ...context,
-                                // this will make sure we only take the last child as the trigger
-                                right: child,
-                            };
-                        case 'Appbar.Title':
-                            return {
-                                ...context,
-                                title: child,
-                            };
-                        default:
-                            return context;
-                    }
-                },
-                {
-                    left: <></>,
-                    right: <></>,
-                    title: <></>,
-                },
-            ),
-        [children],
-    );
+    const { Appbar_Left, Appbar_Right, Appbar_Title } = useSubcomponents({
+        children,
+        allowedChildren: ['Appbar_Left', 'Appbar_Right', 'Appbar_Title'],
+    });
 
     const contextValue = useMemo(() => ({ type: _type }), [_type]);
 
@@ -82,11 +42,17 @@ const AppbarBase = ({
         <Surface elevation={elevation} style={containerStyle} {...rest}>
             <AppbarContext.Provider value={contextValue}>
                 <View style={innerContainerStyle}>
-                    {left}
-                    <>{_type === 'center-aligned' || _type === 'small' ? title : <View />}</>
-                    {right}
+                    {Appbar_Left[0]}
+                    <>
+                        {_type === 'center-aligned' || _type === 'small' ? (
+                            Appbar_Title[0]
+                        ) : (
+                            <View />
+                        )}
+                    </>
+                    {Appbar_Right[0]}
                 </View>
-                <>{(_type === 'medium' || _type === 'large') && title}</>
+                <>{(_type === 'medium' || _type === 'large') && Appbar_Title[0]}</>
             </AppbarContext.Provider>
         </Surface>
     );

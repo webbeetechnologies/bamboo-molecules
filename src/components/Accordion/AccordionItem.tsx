@@ -1,9 +1,6 @@
 import {
-    Children,
     createContext,
-    FC,
     forwardRef,
-    isValidElement,
     memo,
     ReactElement,
     ReactNode,
@@ -12,7 +9,12 @@ import {
     useMemo,
 } from 'react';
 import type { ViewProps } from 'react-native';
-import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
+import {
+    useComponentStyles,
+    useControlledValue,
+    useMolecules,
+    useSubcomponents,
+} from '../../hooks';
 import type { WithElements } from '../../types';
 import { AccordionContext } from './Accordion';
 
@@ -48,37 +50,10 @@ const AccordionItem = memo(
 
             const groupContext = useContext(AccordionContext);
 
-            const { header, content } = useMemo(
-                () =>
-                    Children.map(children, child => child).reduce(
-                        (context, child) => {
-                            if (!isValidElement(child)) return context;
-
-                            if (
-                                (child.type as FC).displayName !== 'AccordionItem.Header' &&
-                                (child.type as FC).displayName !== 'AccordionItem.Content'
-                            ) {
-                                return context;
-                            }
-
-                            const name = (child.type as FC).displayName
-                                ?.split('.')?.[1]
-                                .toLowerCase();
-
-                            if (!name) return context;
-
-                            return {
-                                ...context,
-                                [name]: child,
-                            };
-                        },
-                        {
-                            header: <></>,
-                            content: <></>,
-                        },
-                    ),
-                [children],
-            );
+            const { AccordionItem_Header, AccordionItem_Content } = useSubcomponents({
+                children,
+                allowedChildren: ['AccordionItem_Header', 'AccordionItem_Content'],
+            });
 
             useEffect(() => {
                 if (groupContext !== null && !id) {
@@ -106,8 +81,8 @@ const AccordionItem = memo(
             return (
                 <View style={componentStyles} {...rest} ref={ref}>
                     <AccordionItemContext.Provider value={contextValue}>
-                        {header}
-                        {contextValue.expanded ? content : null}
+                        {AccordionItem_Header[0]}
+                        {contextValue.expanded ? AccordionItem_Content[0] : null}
                     </AccordionItemContext.Provider>
                 </View>
             );

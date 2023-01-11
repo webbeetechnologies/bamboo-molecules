@@ -15,6 +15,6 @@ const DrawerFooter = memo(({ style, children, ...rest }: Props) => {
     );
 });
 
-DrawerFooter.displayName = 'Drawer.Footer';
+DrawerFooter.displayName = 'Drawer_Footer';
 
 export default DrawerFooter;

@@ -57,6 +57,6 @@ const DialogContent = ({ children, style, ...rest }: Props, ref: any) => {
     );
 };
 
-DialogContent.displayName = 'Dialog.Content';
+DialogContent.displayName = 'Dialog_Content';
 
 export default memo(forwardRef(DialogContent));

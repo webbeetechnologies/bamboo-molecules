@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
     },
 });
 
-AppbarTitle.displayName = 'Appbar.Title';
+AppbarTitle.displayName = 'Appbar_Title';
 
 export default AppbarTitle;

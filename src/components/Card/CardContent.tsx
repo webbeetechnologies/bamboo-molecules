@@ -13,6 +13,6 @@ const CardContent: FC<Props> = ({ style, ...rest }, ref: any) => {
     return <View style={componentStyles} {...rest} ref={ref} />;
 };
 
-CardContent.displayName = 'Card.Content';
+CardContent.displayName = 'Card_Content';
 
 export default memo(CardContent);

@@ -68,6 +68,6 @@ const DialogIcon = ({ containerStyle, color: colorProp, style, size = 24, ...res
     );
 };
 
-DialogIcon.displayName = 'Dialog.Icon';
+DialogIcon.displayName = 'Dialog_Icon';
 
 export default memo(DialogIcon);
