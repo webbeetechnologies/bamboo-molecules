@@ -5,12 +5,10 @@ import {
     DrawerProps,
     DrawerItemProps,
     DrawerItemElementProps,
-} from 'bamboo-molecules';
-import type {
     DrawerCollapsibleItemHeaderElementProps,
     DrawerCollapsibleItemProps,
     DrawerItemGroupProps,
-} from 'bamboo-molecules/components';
+} from 'bamboo-molecules';
 
 export type Props = DrawerProps & DrawerItemProps['left'] & {};
 
@@ -263,6 +261,7 @@ export const ExampleDrawerCollapsibleItem = (props: DrawerCollapsibleItemProps) 
     return (
         <Drawer.CollapsibleItem {...props}>
             <Drawer.CollapsibleItem.Header
+                testID={`${props.testID || 'drawer-collapsible-item'}-header`}
                 left={useCallback(
                     ({ color, expanded }: DrawerCollapsibleItemHeaderElementProps) => (
                         <Icon
@@ -275,7 +274,9 @@ export const ExampleDrawerCollapsibleItem = (props: DrawerCollapsibleItemProps) 
                 )}>
                 More
             </Drawer.CollapsibleItem.Header>
-            <Drawer.CollapsibleItem.Content>
+
+            <Drawer.CollapsibleItem.Content
+                testID={`${props.testID || 'drawer-collapsible-item'}-content`}>
                 <Drawer.Item
                     label="Important"
                     left={useCallback(

@@ -6,6 +6,10 @@ import {
     ExampleDrawerItem,
     ExampleDrawerItemGroup,
 } from './Drawer';
+import { userEvent, waitFor, within } from '@storybook/testing-library';
+import { expect } from '@storybook/jest';
+import { useArgs } from '@storybook/addons';
+import { delay } from '../../common';
 
 export default {
     title: 'components/Drawer',
@@ -185,9 +189,16 @@ Default.parameters = {
     },
 };
 
-export const DrawerItem: ComponentStory<typeof ExampleDrawerItem> = args => (
-    <ExampleDrawerItem {...args} />
-);
+export const DrawerItem: ComponentStory<typeof ExampleDrawerItem> = args => {
+    const [_, updateArgs] = useArgs();
+
+    return (
+        <ExampleDrawerItem
+            {...args}
+            onPress={() => updateArgs({ ...args, active: !args.active })}
+        />
+    );
+};
 
 DrawerItem.args = {
     label: 'Inbox',
@@ -195,6 +206,7 @@ DrawerItem.args = {
     style: {
         minWidth: 300,
     },
+    testID: 'drawer-item',
 };
 
 DrawerItem.parameters = {
@@ -313,6 +325,7 @@ DrawerCollapsibleItem.args = {
     style: {
         minWidth: 300,
     },
+    testID: 'drawer-collapsible-item',
 };
 
 DrawerCollapsibleItem.parameters = {
@@ -381,4 +394,107 @@ DrawerCollapsibleItem.parameters = {
             type: 'auto',
         },
     },
+};
+
+DrawerItem.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await waitFor(() => canvas);
+
+    const drawerItem = await canvas.getByTestId('drawer-item');
+
+    // hover test
+    const defaultBg = 'rgba(0, 0, 0, 0)';
+    const hoverBg = 'rgba(28, 27, 31, 0.08)';
+    const activeBg = 'rgb(232, 222, 248)';
+
+    await expect(window.getComputedStyle(drawerItem).backgroundColor).toBe(defaultBg);
+
+    await delay(100);
+
+    await userEvent.hover(drawerItem);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(drawerItem).backgroundColor).toBe(hoverBg);
+
+    await userEvent.unhover(drawerItem);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(drawerItem).backgroundColor).toBe(defaultBg);
+
+    // click interaction test with active prop
+
+    await userEvent.click(drawerItem);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(drawerItem).backgroundColor).toBe(activeBg);
+
+    await userEvent.click(drawerItem);
+    await userEvent.unhover(drawerItem);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(drawerItem).backgroundColor).toBe(defaultBg);
+};
+
+DrawerCollapsibleItem.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await waitFor(() => canvas);
+
+    const drawerCollapsibleItemHeader = await canvas.getByTestId('drawer-collapsible-item-header');
+
+    // hover test
+    const defaultBg = 'rgba(0, 0, 0, 0)';
+    const hoverBg = 'rgba(28, 27, 31, 0.08)';
+
+    await expect(window.getComputedStyle(drawerCollapsibleItemHeader).backgroundColor).toBe(
+        defaultBg,
+    );
+
+    await delay(100);
+
+    await userEvent.hover(drawerCollapsibleItemHeader);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(drawerCollapsibleItemHeader).backgroundColor).toBe(
+        hoverBg,
+    );
+
+    await userEvent.unhover(drawerCollapsibleItemHeader);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(drawerCollapsibleItemHeader).backgroundColor).toBe(
+        defaultBg,
+    );
+
+    // click interaction test with active prop
+    await userEvent.click(drawerCollapsibleItemHeader);
+
+    await delay(100);
+
+    await expect(canvas.queryByTestId('drawer-collapsible-item-content')).toBeInTheDocument();
+    await expect(canvas.getByText('Important')).toBeInTheDocument();
+    await expect(canvas.getByText('All mails')).toBeInTheDocument();
+    await expect(canvas.getByText('Spams')).toBeInTheDocument();
+    await expect(canvas.getByText('Manage labels')).toBeInTheDocument();
+
+    await userEvent.click(drawerCollapsibleItemHeader);
+    await userEvent.unhover(drawerCollapsibleItemHeader);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(drawerCollapsibleItemHeader).backgroundColor).toBe(
+        defaultBg,
+    );
+    await expect(canvas.queryByTestId('drawer-collapsible-item-content')).toBeNull();
+    await expect(canvas.queryByTestId('Important')).toBeNull();
+    await expect(canvas.queryByTestId('All mails')).toBeNull();
+    await expect(canvas.queryByTestId('Spams')).toBeNull();
+    await expect(canvas.queryByTestId('Manage labels')).toBeNull();
 };
