@@ -12,19 +12,19 @@ const DrawerCollapsibleItem = memo(
         const { AccordionItem } = useMolecules();
         const componentStyles = useComponentStyles('Drawer_CollapsibleItem');
 
-        const contextValue = useMemo(
+        const { contextValue, accordionStyle } = useMemo(
             () => ({
-                active,
+                contextValue: {
+                    active,
+                },
+                accordionStyle: StyleSheet.flatten([componentStyles, style]),
             }),
-            [active],
+            [active, componentStyles, style],
         );
 
         return (
             <DrawerCollapsibleItemContext.Provider value={contextValue}>
-                <AccordionItem
-                    {...rest}
-                    style={StyleSheet.flatten([componentStyles, style])}
-                    ref={ref}>
+                <AccordionItem {...rest} style={accordionStyle} ref={ref}>
                     {children}
                 </AccordionItem>
             </DrawerCollapsibleItemContext.Provider>

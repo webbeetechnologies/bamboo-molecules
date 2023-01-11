@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../../hooks';
 import type { AccordionItemContentProps } from '../../Accordion';
@@ -9,7 +9,12 @@ const DrawerCollapsibleItemContent = memo(({ style, ...rest }: Props) => {
     const { AccordionItem } = useMolecules();
     const componentStyles = useComponentStyles('Drawer_CollapsibleItem_Content');
 
-    return <AccordionItem.Content {...rest} style={StyleSheet.flatten([componentStyles, style])} />;
+    const styles = useMemo(
+        () => StyleSheet.flatten([componentStyles, style]),
+        [componentStyles, style],
+    );
+
+    return <AccordionItem.Content {...rest} style={styles} />;
 });
 
 DrawerCollapsibleItemContent.displayName = 'AccordionItem_Content';

@@ -24,17 +24,17 @@ const DrawerCollapsibleItemHeader = memo(
             const { content, leftElement, rightElement, ...restStyles } = componentStyles;
 
             return {
-                headerStyle: restStyles,
+                headerStyle: StyleSheet.flatten([restStyles, style]),
                 leftElementStyle: leftElement,
                 rightElementStyle: rightElement,
                 contentStyle: content,
             };
-        }, [componentStyles]);
+        }, [componentStyles, style]);
 
         return (
             <AccordionItem.Header
                 {...rest}
-                style={StyleSheet.flatten([headerStyle, style])}
+                style={headerStyle}
                 contentStyle={contentStyle}
                 leftElementStyle={leftElementStyle}
                 rightElementStyle={rightElementStyle}
