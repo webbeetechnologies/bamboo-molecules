@@ -101,7 +101,7 @@ const RadioButtonIOS = (
     );
 };
 
-RadioButtonIOS.displayName = 'RadioButton.IOS';
+RadioButtonIOS.displayName = 'RadioButton_IOS';
 
 const styles = StyleSheet.create({
     container: {

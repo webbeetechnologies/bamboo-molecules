@@ -44,6 +44,6 @@ const AppbarRight = memo(({ children, spacing: spacingProp, style, ...rest }: Pr
     );
 });
 
-AppbarRight.displayName = 'Appbar.Right';
+AppbarRight.displayName = 'Appbar_Right';
 
 export default AppbarRight;

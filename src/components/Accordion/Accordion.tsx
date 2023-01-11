@@ -43,7 +43,7 @@ const Accordion = (
         onChange: onChangeProp,
     });
 
-    const { accordionItem } = useSubcomponents({ children, allowedChildren: ['AccordionItem'] });
+    const { AccordionItem } = useSubcomponents({ children, allowedChildren: ['AccordionItem'] });
 
     const onPressItem = useCallback(
         (id: string) => {
@@ -76,7 +76,7 @@ const Accordion = (
     return (
         <View style={componentStyles} {...rest} ref={ref}>
             <AccordionContext.Provider value={contextValue}>
-                {accordionItem}
+                {AccordionItem}
             </AccordionContext.Provider>
         </View>
     );

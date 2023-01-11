@@ -12,6 +12,6 @@ const DrawerCollapsibleItemContent = memo(({ style, ...rest }: Props) => {
     return <AccordionItem.Content {...rest} style={StyleSheet.flatten([componentStyles, style])} />;
 });
 
-DrawerCollapsibleItemContent.displayName = 'AccordionItem.Content';
+DrawerCollapsibleItemContent.displayName = 'AccordionItem_Content';
 
 export default DrawerCollapsibleItemContent;

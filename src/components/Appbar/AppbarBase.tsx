@@ -31,9 +31,9 @@ const AppbarBase = ({
         };
     }, [componentStyles, scrolling]);
 
-    const { left, right, title } = useSubcomponents({
+    const { Appbar_Left, Appbar_Right, Appbar_Title } = useSubcomponents({
         children,
-        allowedChildren: ['Appbar.Left', 'Appbar.Right', 'Appbar.Title'],
+        allowedChildren: ['Appbar_Left', 'Appbar_Right', 'Appbar_Title'],
     });
 
     const contextValue = useMemo(() => ({ type: _type }), [_type]);
@@ -42,11 +42,17 @@ const AppbarBase = ({
         <Surface elevation={elevation} style={containerStyle} {...rest}>
             <AppbarContext.Provider value={contextValue}>
                 <View style={innerContainerStyle}>
-                    {left[0]}
-                    <>{_type === 'center-aligned' || _type === 'small' ? title[0] : <View />}</>
-                    {right[0]}
+                    {Appbar_Left[0]}
+                    <>
+                        {_type === 'center-aligned' || _type === 'small' ? (
+                            Appbar_Title[0]
+                        ) : (
+                            <View />
+                        )}
+                    </>
+                    {Appbar_Right[0]}
                 </View>
-                <>{(_type === 'medium' || _type === 'large') && title[0]}</>
+                <>{(_type === 'medium' || _type === 'large') && Appbar_Title[0]}</>
             </AppbarContext.Provider>
         </Surface>
     );

@@ -21,6 +21,6 @@ const DrawerContent = memo(
     },
 );
 
-DrawerContent.displayName = 'Drawer.Content';
+DrawerContent.displayName = 'Drawer_Content';
 
 export default DrawerContent;

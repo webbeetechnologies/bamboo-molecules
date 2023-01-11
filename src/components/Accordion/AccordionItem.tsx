@@ -50,9 +50,9 @@ const AccordionItem = memo(
 
             const groupContext = useContext(AccordionContext);
 
-            const { header, content } = useSubcomponents({
+            const { AccordionItem_Header, AccordionItem_Content } = useSubcomponents({
                 children,
-                allowedChildren: ['AccordionItem.Header', 'AccordionItem.Content'],
+                allowedChildren: ['AccordionItem_Header', 'AccordionItem_Content'],
             });
 
             useEffect(() => {
@@ -81,8 +81,8 @@ const AccordionItem = memo(
             return (
                 <View style={componentStyles} {...rest} ref={ref}>
                     <AccordionItemContext.Provider value={contextValue}>
-                        {header[0]}
-                        {contextValue.expanded ? content[0] : null}
+                        {AccordionItem_Header[0]}
+                        {contextValue.expanded ? AccordionItem_Content[0] : null}
                     </AccordionItemContext.Provider>
                 </View>
             );

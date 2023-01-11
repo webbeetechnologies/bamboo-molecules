@@ -16,6 +16,6 @@ const DrawerCollapsible = memo(
     }),
 );
 
-DrawerCollapsible.displayName = 'Drawer.Collapsible';
+DrawerCollapsible.displayName = 'Drawer_Collapsible';
 
 export default DrawerCollapsible;

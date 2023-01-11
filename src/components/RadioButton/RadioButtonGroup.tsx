@@ -93,6 +93,6 @@ const RadioButtonGroup = ({
     );
 };
 
-RadioButtonGroup.displayName = 'RadioButton.Group';
+RadioButtonGroup.displayName = 'RadioButton_Group';
 
 export default memo(RadioButtonGroup);

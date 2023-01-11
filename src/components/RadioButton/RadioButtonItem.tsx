@@ -224,6 +224,6 @@ const styles = StyleSheet.create({
     },
 });
 
-RadioButtonItem.displayName = 'RadioButton.Item';
+RadioButtonItem.displayName = 'RadioButton_Item';
 
 export default memo(forwardRef(RadioButtonItem));

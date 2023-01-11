@@ -40,6 +40,6 @@ const DrawerItemGroup = memo(
     },
 );
 
-DrawerItemGroup.displayName = 'Drawer.ItemGroup';
+DrawerItemGroup.displayName = 'Drawer_ItemGroup';
 
 export default DrawerItemGroup;

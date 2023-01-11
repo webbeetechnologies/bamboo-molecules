@@ -44,9 +44,9 @@ const Tooltip = ({
         [fadeInDelay, fadeOutDelay, isOpen, setIsOpen],
     );
 
-    const { trigger, content } = useSubcomponents({
+    const { Tooltip_Trigger, Tooltip_Content } = useSubcomponents({
         children,
-        allowedChildren: ['Tooltip.Trigger', 'Tooltip.Content'],
+        allowedChildren: ['Tooltip_Trigger', 'Tooltip_Content'],
     });
 
     const contextValue = useMemo(
@@ -60,7 +60,7 @@ const Tooltip = ({
 
     return (
         <TooltipContext.Provider value={contextValue}>
-            {trigger[0]}
+            {Tooltip_Trigger[0]}
             <TooltipPopover
                 placement={placement}
                 showArrow={showArrow}
@@ -71,7 +71,7 @@ const Tooltip = ({
                 contentStyles={style}
                 contentTextStyles={contentTextStyles}
                 onClose={onClose}>
-                {content[0]}
+                {Tooltip_Content[0]}
             </TooltipPopover>
         </TooltipContext.Provider>
     );

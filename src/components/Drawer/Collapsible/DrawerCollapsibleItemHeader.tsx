@@ -44,6 +44,6 @@ const DrawerCollapsibleItemHeader = memo(
     }),
 );
 
-DrawerCollapsibleItemHeader.displayName = 'AccordionItem.Header';
+DrawerCollapsibleItemHeader.displayName = 'AccordionItem_Header';
 
 export default DrawerCollapsibleItemHeader;

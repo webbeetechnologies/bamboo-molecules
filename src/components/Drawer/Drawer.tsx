@@ -6,19 +6,22 @@ export type Props = Omit<ViewProps, 'children'> & {
     children: ReactElement | ReactElement[];
 };
 
-const allowedChildren = ['Drawer.Footer', 'Drawer.Header', 'Drawer.Content'];
+const allowedChildren = ['Drawer_Footer', 'Drawer_Header', 'Drawer_Content'];
 
 const Drawer = ({ style, children, ...rest }: Props) => {
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('Drawer', style);
 
-    const { header, footer, content } = useSubcomponents({ children, allowedChildren });
+    const { Drawer_Header, Drawer_Footer, Drawer_Content } = useSubcomponents({
+        children,
+        allowedChildren,
+    });
 
     return (
         <View style={componentStyles} {...rest}>
-            {header[0]}
-            {content[0]}
-            {footer[0]}
+            {Drawer_Header[0]}
+            {Drawer_Content[0]}
+            {Drawer_Footer[0]}
         </View>
     );
 };

@@ -10,6 +10,6 @@ const AppbarActions = memo(({ size = 'md', ...rest }: Props) => {
     return <IconButton size={size} {...rest} />;
 });
 
-AppbarActions.displayName = 'Appbar.Actions';
+AppbarActions.displayName = 'Appbar_Actions';
 
 export default AppbarActions;

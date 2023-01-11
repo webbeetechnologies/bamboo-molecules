@@ -24,6 +24,6 @@ const AppbarLeft = memo(({ children, style, ...rest }: Props) => {
     );
 });
 
-AppbarLeft.displayName = 'Appbar.Left';
+AppbarLeft.displayName = 'Appbar_Left';
 
 export default AppbarLeft;

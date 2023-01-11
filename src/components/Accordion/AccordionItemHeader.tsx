@@ -123,6 +123,6 @@ const AccordionItemHeader = memo(
     ),
 );
 
-AccordionItemHeader.displayName = 'AccordionItem.Header';
+AccordionItemHeader.displayName = 'AccordionItem_Header';
 
 export default AccordionItemHeader;

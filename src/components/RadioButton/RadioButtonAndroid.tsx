@@ -172,6 +172,6 @@ const RadioButtonAndroid = (
     );
 };
 
-RadioButtonAndroid.displayName = 'RadioButton.Android';
+RadioButtonAndroid.displayName = 'RadioButton_Android';
 
 export default memo(forwardRef(RadioButtonAndroid));
