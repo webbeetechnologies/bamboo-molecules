@@ -1,6 +1,6 @@
 {
   "name": "@webbeetechnologies/bamboo-molecules",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/webbeetechnologies/bamboo-molecules.git"
@@ -8,7 +8,6 @@
   "license": "MIT",
   "packageManager": "yarn@3.3.0",
   "main": "lib/commonjs/index.js",
-  "react-native": "src/index.ts",
   "module": "lib/module/index.js",
   "types": "lib/typescript/index.d.ts",
   "workspaces": {
