@@ -41,7 +41,7 @@ const NumberInput = (
         delimiter = '',
         precision = 0,
         separator = '',
-        prefix = [/^[\d +-]+$/],
+        prefix = [/^[\d+-]+$/],
         ...rest
     }: Props,
     ref: any,
