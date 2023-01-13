@@ -38,10 +38,10 @@ export type Props = Omit<TextInputProps, 'value' | 'defaultValue' | 'onChangeTex
 const NumberInput = (
     {
         keyboardType = 'numeric',
-        delimiter = '.',
+        delimiter = '',
         precision = 0,
-        separator = ',',
-        prefix,
+        separator = '',
+        prefix = [/^[\d +-]+$/],
         ...rest
     }: Props,
     ref: any,
