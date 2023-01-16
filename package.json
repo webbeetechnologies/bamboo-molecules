@@ -36,7 +36,7 @@
     "run:testcases": "yarn workspace test-cases start",
     "bundle": "rm -rf lib/* && yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
     "do-release": "npm publish ./dist/webbeetechnologies-bamboo-molecules-$npm_package_version.tgz --access=public",
-    "yarn release": "yarn bundle && yarn do-release"
+    "release": "yarn bundle && yarn do-release"
   },
   "dependencies": {
     "@react-native-aria/overlays": "^0.3.2",
