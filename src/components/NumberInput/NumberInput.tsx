@@ -30,6 +30,15 @@ export type Props = Omit<TextInputProps, 'value' | 'defaultValue' | 'onChangeTex
      * */
     separator?: string;
     /**
+     * If this is false, precision will be ignored
+     * */
+    allowDecimals?: boolean;
+    /**
+     * For default prefix, if we want to allow negative or not
+     * If the custom prefix is passed, this will be ignored.
+     * */
+    allowNegative?: boolean;
+    /**
      * Mask to be prefixed on the mask result
      * */
     prefix?: MaskArray;
@@ -39,8 +48,10 @@ const NumberInput = (
     {
         keyboardType = 'numeric',
         delimiter = '.',
-        precision = 0,
-        separator = ',',
+        precision = 2,
+        separator = '',
+        allowDecimals = true,
+        allowNegative = true,
         prefix,
         ...rest
     }: Props,
@@ -51,11 +62,11 @@ const NumberInput = (
         () =>
             createNumberMask({
                 delimiter,
-                precision,
+                precision: !allowDecimals ? 0 : precision,
                 separator,
-                prefix,
+                prefix: prefix ? prefix : allowNegative ? [/^[\d+-]+$/] : [/^[\d+]+$/],
             }),
-        [delimiter, precision, prefix, separator],
+        [allowDecimals, allowNegative, delimiter, precision, prefix, separator],
     );
 
     return <MaskedInput mask={mask} {...rest} keyboardType={keyboardType} ref={ref} />;
