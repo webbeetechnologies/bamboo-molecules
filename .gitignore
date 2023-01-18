@@ -69,6 +69,8 @@ example/.ondevice/storybook.requires.js
 # release
 dist
 
+cache/
+
 example/cache
 
 .yarn
