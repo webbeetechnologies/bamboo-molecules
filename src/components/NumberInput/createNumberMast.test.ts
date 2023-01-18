@@ -6,6 +6,7 @@ import { formatWithMask } from 'react-native-mask-input';
 interface Props extends Partial<CreateNumberMaskProps> {
     value: string;
     suffix?: CreateNumberMaskProps['prefix'];
+    getDelimiterOffset?: (index: number) => number;
 }
 
 const getMaskedValue = ({
@@ -15,6 +16,7 @@ const getMaskedValue = ({
     value,
     prefix,
     suffix,
+    getDelimiterOffset,
 }: Props) => {
     const mask = (
         createNumberMask({
@@ -23,6 +25,7 @@ const getMaskedValue = ({
             separator,
             suffix,
             prefix,
+            getDelimiterOffset,
         }) as (value?: string) => MaskArray
     )(value);
 
@@ -116,5 +119,16 @@ describe('createNumberMask', () => {
         });
 
         expect(masked).toBe('USD 10,000.200%');
+    });
+
+    it('with a custom getDelimiterOffset', () => {
+        const { masked } = getMaskedValue({
+            prefix: ['INR '],
+            precision: 2,
+            value: '98765432.10',
+            getDelimiterOffset: i => (i > 0 ? 2 : 3),
+        });
+
+        expect(masked).toBe('INR 9,87,65,432.10');
     });
 });
