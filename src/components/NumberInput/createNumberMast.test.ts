@@ -85,8 +85,13 @@ describe('createNumberMask', () => {
         expect(masked).toBe('100.20');
     });
 
+    it('works when value a decimal number but precision is 0', () => {
+        const { masked } = getMaskedValue({ precision: 0, value: '100.203' });
+        expect(masked).toBe('100');
+    });
+
     it('works with a suffix', () => {
-        const { masked } = getMaskedValue({ suffix: ['%'], precision: 0, value: '100.203' });
+        const { masked } = getMaskedValue({ suffix: ['%'], precision: 0, value: '100.203%' });
         expect(masked).toBe('100%');
     });
 
@@ -119,6 +124,17 @@ describe('createNumberMask', () => {
         });
 
         expect(masked).toBe('USD 10,000.200%');
+    });
+
+    it('works with a different delimiter', () => {
+        const { masked } = getMaskedValue({
+            value: '23123123123,20',
+            precision: 2,
+            delimiter: '.',
+            separator: ',',
+        });
+
+        expect(masked).toBe('23.123.123.123,20');
     });
 
     it('with a custom getDelimiterOffset', () => {

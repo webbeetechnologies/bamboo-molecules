@@ -9,18 +9,19 @@ interface Props extends Partial<CreateNumberMaskProps> {
 
 export default function createNumberMask(props?: Props): Mask {
     const {
-        delimiter = '.',
+        delimiter = ',',
         precision = 2,
         prefix = [],
-        separator = ',',
+        separator = '.',
         suffix = [],
         getDelimiterOffset = (_index: number) => 3,
     } = props || {};
 
     return (value: string | number = '') => {
         value = String(value);
-        const [normalizedValue = '', ...mantissa] = value.split('.');
         const shouldAddSeparatorOnMask = !!value && precision > 0 && !!separator;
+        const [normalizedValue = '', ...mantissa] =
+            shouldAddSeparatorOnMask || precision === 0 ? value.split(separator) : [value];
         const numericValue = normalizedValue.replace(/\D+/g, '') || '';
         const decimalLength = Math.max(
             0,
