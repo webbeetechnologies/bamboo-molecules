@@ -1,0 +1,120 @@
+import createNumberMask from './createNumberMask';
+import type { CreateNumberMaskProps } from 'react-native-mask-input/lib/typescript/src/createNumberMask.types';
+import type { MaskArray } from 'react-native-mask-input/src/formatWithMask.types';
+import { formatWithMask } from 'react-native-mask-input';
+
+interface Props extends Partial<CreateNumberMaskProps> {
+    value: string;
+    suffix?: CreateNumberMaskProps['prefix'];
+}
+
+const getMaskedValue = ({
+    precision = 0,
+    delimiter = ',',
+    separator = '.',
+    value,
+    prefix,
+    suffix,
+}: Props) => {
+    const mask = (
+        createNumberMask({
+            precision,
+            delimiter,
+            separator,
+            suffix,
+            prefix,
+        }) as (value?: string) => MaskArray
+    )(value);
+
+    return formatWithMask({
+        text: value,
+        mask,
+    });
+};
+
+const getMaskedValueWithDefaultPrefix = ({ prefix = ['$'], ...props }: Props) =>
+    getMaskedValue({ ...props, prefix });
+
+describe('createNumberMask', () => {
+    it('works with a 5 digit amount without precision', () => {
+        const { masked } = getMaskedValueWithDefaultPrefix({ value: '10000' });
+
+        expect(masked).toBe('$10,000');
+    });
+
+    it('works with a 3 digit amount without precision', () => {
+        const { masked } = getMaskedValueWithDefaultPrefix({ value: '100' });
+        expect(masked).toBe('$100');
+    });
+
+    it('works with a 6 digit amount without precision', () => {
+        const { masked } = getMaskedValueWithDefaultPrefix({ value: '100000' });
+        expect(masked).toBe('$100,000');
+    });
+
+    it('works with a 10 digit amount without precision', () => {
+        const { masked } = getMaskedValueWithDefaultPrefix({ value: '9876543210' });
+        expect(masked).toBe('$9,876,543,210');
+    });
+
+    it('works with a 3 digit amount precision 2', () => {
+        const { masked } = getMaskedValueWithDefaultPrefix({ precision: 2, value: '100' });
+        expect(masked).toBe('$100');
+    });
+
+    it('works with a 3 digit amount precision 2 for decimal', () => {
+        const { masked } = getMaskedValueWithDefaultPrefix({ precision: 2, value: '100.' });
+        expect(masked).toBe('$100.');
+    });
+
+    it('works with a 3 digit amount precision 2 for proper number', () => {
+        const { masked } = getMaskedValueWithDefaultPrefix({ precision: 2, value: '100.20' });
+        expect(masked).toBe('$100.20');
+    });
+
+    it('works with a 3 digit amount precision 2 for number with improper precision', () => {
+        const { masked } = getMaskedValueWithDefaultPrefix({ precision: 2, value: '100.203' });
+        expect(masked).toBe('$100.20');
+    });
+
+    it('works without a prefix', () => {
+        const { masked } = getMaskedValue({ prefix: [], precision: 2, value: '100.203' });
+        expect(masked).toBe('100.20');
+    });
+
+    it('works with a suffix', () => {
+        const { masked } = getMaskedValue({ suffix: ['%'], precision: 0, value: '100.203' });
+        expect(masked).toBe('100%');
+    });
+
+    it('works with a suffix and a precision', () => {
+        const { masked } = getMaskedValue({
+            suffix: ['%'],
+            precision: 2,
+            value: '100.20%',
+        });
+        expect(masked).toBe('100.20%');
+    });
+
+    it('works with a suffix, a precision of 5, and a custom prefix', () => {
+        const { masked } = getMaskedValue({
+            prefix: ['USD '],
+            suffix: ['%'],
+            precision: 5,
+            value: '10000.20300%',
+        });
+
+        expect(masked).toBe('USD 10,000.20300%');
+    });
+
+    it('works with a suffix, a precision of 5, a custom prefix, and lesser precision', () => {
+        const { masked } = getMaskedValue({
+            prefix: ['USD '],
+            suffix: ['%'],
+            precision: 5,
+            value: '10000.200%',
+        });
+
+        expect(masked).toBe('USD 10,000.200%');
+    });
+});
