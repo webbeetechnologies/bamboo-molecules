@@ -1,4 +1,4 @@
-import createNumberMask from './createNumberMask';
+import createNumberMask from '../createNumberMask';
 import type { CreateNumberMaskProps } from 'react-native-mask-input/lib/typescript/src/createNumberMask.types';
 import type { MaskArray } from 'react-native-mask-input/src/formatWithMask.types';
 import { formatWithMask } from 'react-native-mask-input';
