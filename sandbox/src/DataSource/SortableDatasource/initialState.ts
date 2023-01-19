@@ -4,7 +4,7 @@ export const extractInitialState = (props: any) =>
     omitBy(
         {
             isSortable: props.isSortable ?? false,
-            sort: props.sort ?? null,
+            sort: Object.assign({ order: [], isNestedSort: false }, props.sort) ?? null,
         },
         value => value === null,
     );

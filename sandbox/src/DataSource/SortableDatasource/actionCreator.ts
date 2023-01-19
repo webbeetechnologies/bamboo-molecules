@@ -42,11 +42,11 @@ export const useSortableActionCreator = <T extends {}>(
                 throw new Error('onSort function not provided');
             }
 
-            // @ts-ignore
+            dataSourceRef.current = onSort(dataSourceRef.current, args);
             dispatch({
                 type: 'UPDATE_PAYLOAD',
                 payload: {
-                    ...onSort(dataSourceRef.current, args),
+                    ...dataSourceRef.current,
                     lastAction: args.type,
                 },
             });
@@ -92,19 +92,18 @@ export const useSortableActionCreator = <T extends {}>(
 export const useSortableDataSource = (): SortableDataSourceResult => {
     const { isSortable, sort, applySort, removeSort, reorderSort, updateSort } = useDataSource();
 
-    if (!isSortable) {
-        return notSortable as SortableDataSourceResult;
-    }
-
     return useMemo(
-        () => ({
-            isSortable,
-            sort,
-            applySort,
-            removeSort,
-            reorderSort,
-            updateSort,
-        }),
+        () =>
+            !isSortable
+                ? (notSortable as SortableDataSourceResult)
+                : {
+                      isSortable,
+                      sort,
+                      applySort,
+                      removeSort,
+                      reorderSort,
+                      updateSort,
+                  },
         [isSortable, sort, applySort, removeSort, reorderSort, updateSort],
     );
 };

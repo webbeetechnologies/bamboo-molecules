@@ -47,7 +47,7 @@ export const sortableDataSourceReducer: SortableReducer = (dataSource, args) => 
         ...dataSource,
         sort: {
             order,
-            isNestedSort,
+            isNestedSort: isNestedSort ?? false,
         },
     };
 

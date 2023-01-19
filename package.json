@@ -57,6 +57,7 @@
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.1.0",
     "@shopify/flash-list": "^1.4.0",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/color": "^3.0.3",
     "@types/lodash.get": "^4.4.7",
     "@types/lodash.isnil": "^4.0.7",
