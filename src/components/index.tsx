@@ -145,3 +145,5 @@ export * from './Appbar';
 export * from './MaskedInput';
 
 export * from './Accordion';
+
+export * from './Link';

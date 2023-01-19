@@ -98,6 +98,7 @@ import {
     drawerCollapsibleItemStyles,
     drawerCollapsibleItemHeaderStyles,
     drawerCollapsibleItemContentStyles,
+    linkStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -221,6 +222,8 @@ const defaultThemeValue: Partial<ITheme> = {
     AccordionItem: accordionItemStyles,
     AccordionItem_Header: accordionItemHeaderStyles,
     AccordionItem_Content: accordionItemContentStyles,
+
+    Link: linkStyles,
 };
 
 const defaultExtractStyles = memoize(
