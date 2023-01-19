@@ -13,6 +13,12 @@ export const linkStyles: ComponentStylePropWithVariants<TextStyle, States> = {
     lineHeight: 'typescale.bodyMedium.lineHeight' as unknown as number,
 
     states: {
+        disabled: {
+            color: 'colors.onSurfaceDisabled',
+            opacity: 0.38,
+            // @ts-ignore
+            cursor: 'default',
+        },
         hovered: {
             color: 'colors.onPrimaryContainer',
         },

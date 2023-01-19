@@ -26,18 +26,20 @@ const Link = (
     const { Text } = useMolecules();
     const componentStyles = useComponentStyles('Link', style, {
         states: {
-            hovered,
             disabled,
+            hovered,
         },
     });
 
     const onPress = useCallback(
         (e: GestureResponderEvent) => {
+            if (disabled) return;
+
             onPressProp?.(e);
 
             Linking.openURL(href);
         },
-        [onPressProp, href],
+        [disabled, onPressProp, href],
     );
 
     return (
