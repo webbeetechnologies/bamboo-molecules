@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 export type UseDataSourceHookWithFunc<T = any> = (hook: () => T, callback?: (args: T) => void) => T;
-export type CreateDataSourceHookWithFunc<T = any> = (
+export type CreateDataSourceHookWithFunc = <T = unknown>(
     hook: () => T,
 ) => (callback?: (args: T) => void) => T;
 

@@ -8,8 +8,7 @@ import {
 import { useCallback, useMemo, useRef } from 'react';
 import { getPaginatedValue } from './utils';
 import { useDataSource } from '../DataSourceContext';
-
-const notPaginated = { isPaginated: false };
+import { DataSourceType } from '../types';
 
 export const usePageableActionCreator = <T extends {}>(
     props: PageableDataSourceProps,
@@ -48,6 +47,8 @@ export const usePageableActionCreator = <T extends {}>(
                 return;
             }
 
+            dataSourceRef.current = paginationResult;
+
             dispatch({
                 type: 'UPDATE_PAYLOAD',
                 payload: {
@@ -56,7 +57,7 @@ export const usePageableActionCreator = <T extends {}>(
                 },
             });
         },
-        [isPaginated, dispatch, onPaginate, pagination],
+        [config.hasReducer, isPaginated, dispatch, onPaginate, pagination],
     );
 
     return useMemo(
@@ -66,7 +67,6 @@ export const usePageableActionCreator = <T extends {}>(
                     isPaginated,
                     pagination,
                     totalRecordsCount,
-                    debug: true,
                 }),
                 setPerPage: payload => {
                     handlePaginate({ type: EPageableActions.SetPerPage, payload });
@@ -92,24 +92,46 @@ export const usePageableActionCreator = <T extends {}>(
 };
 
 export const usePaginatedDataSource = <T extends {}>(): PaginationDataSourceResult<T> => {
-    const { isPaginated, setPerPage, pagination, goTo, goToStart, goToEnd, goToPrev, goToNext } =
-        useDataSource();
-
-    if (!isPaginated) {
-        return notPaginated as PaginationDataSourceResult<T>;
-    }
+    const {
+        records,
+        isPaginated,
+        setPerPage,
+        pagination,
+        goTo,
+        goToStart,
+        goToEnd,
+        goToPrev,
+        goToNext,
+    } = useDataSource() as DataSourceType<T> & PaginationDataSourceResult<T>;
 
     return useMemo(
-        () => ({
-            isPaginated: true,
+        () =>
+            !(isPaginated as boolean)
+                ? ({
+                      records,
+                      isPaginated,
+                  } as PaginationDataSourceResult<T>)
+                : ({
+                      records,
+                      isPaginated: true,
+                      setPerPage,
+                      goTo,
+                      goToStart,
+                      goToEnd,
+                      goToPrev,
+                      goToNext,
+                      pagination,
+                  } as PaginationDataSourceResult<T>),
+        [
+            records,
+            isPaginated,
+            pagination,
             setPerPage,
             goTo,
             goToStart,
             goToEnd,
             goToPrev,
             goToNext,
-            pagination,
-        }),
-        [isPaginated, pagination, setPerPage, goTo, goToStart, goToEnd, goToPrev, goToNext],
+        ],
     );
 };

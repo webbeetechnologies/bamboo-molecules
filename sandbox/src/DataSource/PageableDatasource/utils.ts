@@ -1,13 +1,12 @@
-type Args<T> = {
+type Args = {
     isPaginated?: boolean;
     pagination: Pagination;
-    debug?: boolean;
 };
-type WithTotalRecordsCount<T> = Args<T> & {
+type WithTotalRecordsCount = Args & {
     totalRecordsCount: number;
 };
 
-type WithRecords<T> = Args<T> & { records: T[] };
+type WithRecords<T> = Args & { records: T[] };
 
 import chunk from 'lodash/chunk';
 import { EPageableActions, Pagination, PaginationInfo } from './types';
@@ -23,11 +22,11 @@ export const getPage = <T>({ pagination, records }: WithRecords<T>) => {
     return getPages({ pagination, records })[pageNumber - 1] ?? (emptyPage as T[]);
 };
 
-export const getPaginatedValue = <T extends {}>({
+export const getPaginatedValue = ({
     isPaginated,
     pagination,
     totalRecordsCount: length,
-}: WithTotalRecordsCount<T>) => {
+}: WithTotalRecordsCount) => {
     if (!isPaginated) {
         return { isPaginated: false };
     }
@@ -43,7 +42,7 @@ export const getPaginatedValue = <T extends {}>({
             ...pagination,
             count: page.length || 0,
             totalRecords: length,
-        } as Pagination & PaginationInfo<T>,
+        } as Pagination & PaginationInfo,
     };
 };
 

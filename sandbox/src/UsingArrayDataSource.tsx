@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ArrayDataSourceProvider as DataSourceProvider } from './DataSource';
 import RenderRecords from './components/RenderRecords';
-import { getMockData } from './mockData';
+import { getMockData } from '../__mocks__/src/mockData';
 import { SingleFilter } from './DataSource/FilterableDatasource/types';
 
 const sort = {

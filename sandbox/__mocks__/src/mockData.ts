@@ -1,4 +1,4 @@
-import { RecordType } from './types';
+import { RecordType } from '../../src/types';
 
 export function getMockData() {
     const records = [

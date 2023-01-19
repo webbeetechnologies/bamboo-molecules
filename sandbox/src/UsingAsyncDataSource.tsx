@@ -8,17 +8,13 @@ import {
     paginatedDataSourceReducer,
     sortableDataSourceReducer,
     filterableDatasourceReducer,
-    AsyncDataSourceReturns,
-    AsyncDataSourceProps,
     AsyncDataSourceState,
 } from './DataSource';
 
 import { RecordType } from './types';
 import RenderRecords from './components/RenderRecords';
-import { DataSourceType } from './DataSource/types';
-import { getMockData } from './mockData';
+import { getMockData } from '../__mocks__/src/mockData';
 import { SingleFilter } from './DataSource/FilterableDatasource/types';
-import { useMemo } from 'react';
 
 const presentDataSource = combinePresenters<RecordType, AsyncDataSourceState<RecordType>>([
     presentFilteredDataSourceRecords,
@@ -63,20 +59,20 @@ const pagination = { pageNumber: 1, perPage: 10 };
 const filters = [] as SingleFilter[];
 
 export default function UsingAsyncSource({}) {
-    const [workers, setWorkers] = React.useState<RecordType[]>([]);
+    const [workers] = React.useState<RecordType[]>([]);
     const [loading, setLoading] = React.useState({ startedAt: 0, finishedAt: 0, erroredAt: 0 });
 
     const recordsPresenter = React.useCallback(
         async (dataSource: AsyncDataSourceState<RecordType>) => {
-            setLoading(loading => ({ ...loading, startedAt: Date.now() }));
+            setLoading(l => ({ ...l, startedAt: Date.now() }));
             return findAllCustomerData(dataSource)
                 .then(records => {
-                    setLoading(loading => ({ ...loading, finishedAt: Date.now() }));
+                    setLoading(l => ({ ...l, finishedAt: Date.now() }));
                     return records;
                 })
                 .catch(e => {
                     console.error(e);
-                    setLoading(loading => ({ ...loading, erroredAt: Date.now() }));
+                    setLoading(l => ({ ...l, erroredAt: Date.now() }));
                     return dataSource.records;
                 });
         },

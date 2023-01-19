@@ -1,5 +1,5 @@
 import { DataSourceActions, EDataSourceActions } from '../createDataSource';
-import { DataSourceInternalState, DataSourceType } from '../types';
+import { DataSourceInternalState } from '../types';
 
 // Paginate methods.
 export enum EPageableActions {
@@ -31,22 +31,18 @@ export interface PageableDataSourceProps {
 export interface PaginationDataSourceState<T extends {}>
     extends DataSourceInternalState<T>,
         Omit<PageableDataSourceProps, 'onPaginate'> {}
-{
-}
 
-export interface PaginationInfo<T extends {}> {
+export interface PaginationInfo {
     // count of records on current page
     count: number;
 
     // count of all records
     totalRecords: number;
-
-    page: T[];
 }
 
-type HasPagination<T> = {
+export type HasPagination = {
     isPaginated: true;
-    pagination: Pagination & PaginationInfo<T>;
+    pagination: Pagination & PaginationInfo;
     setPerPage: (payload: SetPerPage['payload']) => void;
     goTo: (payload: GoToArbitrary['payload']) => void;
     goToStart: () => void;
@@ -55,11 +51,13 @@ type HasPagination<T> = {
     goToNext: () => void;
 };
 
-type NoPagination<T> = Partial<HasPagination<T>> & {
+export type NoPagination = Partial<HasPagination> & {
     isPaginated: false;
 };
 
-export type PaginationDataSourceResult<T extends {}> = NoPagination<T> | HasPagination<T>;
+export type PaginationDataSourceResult<T extends {}> = (NoPagination | HasPagination) & {
+    records: T[];
+};
 
 // Define type of arguments for GoToMethods
 export type PaginateAction = { type: `${EPageableActions}` | `${EDataSourceActions}` };

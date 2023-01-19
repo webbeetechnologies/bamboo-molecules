@@ -39,6 +39,11 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
     describe(`${key} Sortable Data Source`, () => {
         afterEach(cleanup);
 
+        /**
+         *
+         * Is not sortable datasource
+         *
+         */
         test('is not sortable', async () => {
             const { result } = await act(() => {
                 return renderHook(() => useSortableDataSource(), {
@@ -49,6 +54,11 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
             expect(result.current.isSortable).toBe(false);
         });
 
+        /**
+         *
+         * Is sortable datasource
+         *
+         */
         test('is sortable', async () => {
             const wrapper = createWrapper(Wrapper, { isSortable: true });
 
@@ -83,6 +93,11 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
             expect(records).toHaveLength(0);
         });
 
+        /**
+         *
+         * exists on a sortable datasource
+         *
+         */
         test('order is defined', async () => {
             const wrapper = createWrapper(Wrapper, {
                 isSortable: true,
@@ -112,6 +127,11 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
             expect(item.direction).toBe(1);
         });
 
+        /**
+         *
+         * order updates on action
+         *
+         */
         test('order is to update', async () => {
             const wrapper = createWrapper(Wrapper, {
                 isSortable: true,
@@ -144,6 +164,11 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
             expect(item.direction).toBe(0);
         });
 
+        /**
+         *
+         * Sort can be nested
+         *
+         */
         test('order with nested sort', async () => {
             const wrapper = createWrapper(Wrapper, {
                 isSortable: true,
@@ -180,6 +205,11 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
             expect(item3.direction).toBe(1);
         });
 
+        /**
+         *
+         * order can be removed
+         *
+         */
         test('order with removing sort', async () => {
             const wrapper = createWrapper(Wrapper, {
                 isSortable: true,
@@ -207,6 +237,11 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
             expect(sort.order).toHaveLength(0);
         });
 
+        /**
+         *
+         * Can update existing sort item
+         *
+         */
         test('order with updating sort', async () => {
             const wrapper = createWrapper(Wrapper, {
                 isSortable: true,
@@ -242,6 +277,11 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
             expect(item.direction).toBe(0);
         });
 
+        /**
+         *
+         * Can reorder a nested sort
+         *
+         */
         test('order with reordering sort', async () => {
             const wrapper = createWrapper(Wrapper, {
                 isSortable: true,

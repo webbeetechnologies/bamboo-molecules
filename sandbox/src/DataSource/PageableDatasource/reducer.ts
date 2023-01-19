@@ -5,7 +5,9 @@ export const paginatedDataSourceReducer: PaginationReducer = (dataSource, args) 
     let pageNumber = dataSource.pagination.pageNumber;
     let perPage = dataSource.pagination.perPage;
 
-    const records = Array.from({ length: dataSource.totalRecordsCount });
+    const records = Array.from({
+        length: dataSource.totalRecordsCount ?? dataSource.records.length,
+    });
 
     switch (args.type) {
         case EPageableActions.SetPerPage:
