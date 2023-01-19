@@ -63,6 +63,10 @@ export type Props<
      * */
     value?: TItem | TItem[];
     /*
+     * default value for the uncontrolledState
+     * */
+    defaultValue?: TItem | TItem[];
+    /*
      * passes the current selectedItem. Will be an array in multiple mode
      * */
     onChange?: (item: TItem | TItem[]) => void;
@@ -79,6 +83,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
     dropdownTestID,
     searchable,
     onQueryChange,
+    defaultValue = [],
     ...rest
 }: Props<TItem>) => {
     const { TextInput, IconButton, DropdownList, ListItem } = useMolecules();
@@ -88,12 +93,11 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
 
     const [selectionValue, onSelectionValueChange] = useControlledValue({
         value: valueProp,
-        defaultValue: [],
+        defaultValue,
         onChange: onChangeProp,
     });
 
     const { state: isOpen, onToggle, setState: setIsOpen } = useToggle(false);
-    const [value, setValue] = useState('');
 
     const [inputLayout, setInputLayout] = useState<{
         width: number;
@@ -107,23 +111,23 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
         setIsOpen(true);
     }, [setIsOpen]);
 
+    const inputValue = useMemo(() => {
+        if (!selectionValue) return '';
+
+        if (!Array.isArray(selectionValue)) {
+            return selectionValue.label;
+        }
+
+        return selectionValue.reduce(
+            (acc: string, current: TItem, index: number) =>
+                acc.concat(index === 0 ? `${current.label}` : `, ${current.label}`),
+            '',
+        );
+    }, [selectionValue]);
+
     const onSelectItemChange = useCallback(
         (item: TItem | TItem[]) => {
             onSelectionValueChange(item);
-
-            if (!Array.isArray(item)) {
-                setValue(item.label);
-
-                return;
-            }
-
-            setValue(
-                item.reduce(
-                    (acc: string, current: TItem, index: number) =>
-                        acc.concat(index === 0 ? `${current.label}` : `, ${current.label}`),
-                    '',
-                ),
-            );
         },
         [onSelectionValueChange],
     );
@@ -178,7 +182,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
                     label={'Select Item'}
                     {...(inputProps || {})}
                     right={<IconButton name="chevron-down" onPress={onToggle} />}
-                    value={value}
+                    value={inputValue}
                     editable={false}
                 />
             </Pressable>
