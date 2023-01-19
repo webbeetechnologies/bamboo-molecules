@@ -1,4 +1,4 @@
-import { createDataSource } from './createDataSource';
+import { createDataSource } from '../createDataSource';
 
 describe('Create Data Source', () => {
     test('initialize', () => {

@@ -1,54 +1,39 @@
-import { FC, PropsWithChildren, useEffect, useRef } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { cleanup, renderHook, act } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-import { createDataSource } from '../createDataSource';
-import { getDefaultSortableDataSource, useSortableDataSource } from './index';
-import { DataSourceType } from '../types';
-import { RecordType } from '../../types';
+import { createDataSource } from '../../createDataSource';
+import { getDefaultSortableDataSource, useSortableDataSource } from '../index';
+import { DataSourceType } from '../../types';
+import { RecordType } from '../../../types';
 
-import { SortableDataSourceProps, SortableDataSourceResult } from './types';
-import { useDataSource } from '../DataSourceContext';
+import { SortableDataSourceProps } from '../types';
+import { useDataSource } from '../../DataSourceContext';
+import {
+    createTestWrapper,
+    CreateTestWrapper,
+} from '../../../../__tests__/utils/createTestWrapper';
+import { createDataSourceHookWithFunc } from '../../../../__tests__/utils/useDataSourceHookWithFunc';
+
+const createWrapper: CreateTestWrapper<DataSourceProviderProps> = createTestWrapper;
+
+const useDataSourceHookWithFunc = createDataSourceHookWithFunc(useSortableDataSource);
 
 type DataSourceProviderProps = Partial<SortableDataSourceProps> &
     Partial<DataSourceType<RecordType>>;
 
-const getDataSourceProvider = (ds: any) =>
-    createDataSource('Sortable DataSource Test', [ds]).DataSourceProvider as unknown as FC<
-        PropsWithChildren<DataSourceProviderProps>
-    >;
-
 const { reducer, ...dataSourceObject } = getDefaultSortableDataSource();
 
-const DataSourceProviderWithoutReducer = getDataSourceProvider(dataSourceObject);
-const DataSourceContextProvider = getDataSourceProvider({ reducer, ...dataSourceObject });
+const DataSourceProviderWithoutReducer = createDataSource('Sortable DataSource Test', [
+    dataSourceObject,
+]).DataSourceProvider as FC<PropsWithChildren<DataSourceProviderProps>>;
 
-const createWrapper = (
-    props: DataSourceProviderProps,
-    Wrapper: typeof DataSourceProviderWithoutReducer = DataSourceProviderWithoutReducer,
-): FC<PropsWithChildren> => {
-    return ({ children }) => {
-        return (
-            <Wrapper isSortable={false} records={[]} sort={{ order: [] as any[] }} {...props}>
-                {children}
-            </Wrapper>
-        );
-    };
-};
-
-const useDataSourceHookWithFunc = (
-    callback: (arg: SortableDataSourceResult) => void,
-): SortableDataSourceResult => {
-    const dataSource = useSortableDataSource();
-    const dsRef = useRef(dataSource);
-    const callbackRef = useRef(callback).current;
-
-    useEffect(() => {
-        callbackRef(dsRef.current);
-    }, [callbackRef]);
-
-    return dataSource;
-};
+const DataSourceContextProvider = createDataSource('Sortable DataSource without reducer', [
+    {
+        reducer,
+        ...dataSourceObject,
+    },
+]).DataSourceProvider as FC<PropsWithChildren<DataSourceProviderProps>>;
 
 const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
     describe(`${key} Sortable Data Source`, () => {
@@ -57,7 +42,7 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
         test('is not sortable', async () => {
             const { result } = await act(() => {
                 return renderHook(() => useSortableDataSource(), {
-                    wrapper: createWrapper({}, Wrapper),
+                    wrapper: createWrapper(Wrapper, {}),
                 });
             });
 
@@ -65,7 +50,7 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
         });
 
         test('is sortable', async () => {
-            const wrapper = createWrapper({ isSortable: true }, Wrapper);
+            const wrapper = createWrapper(Wrapper, { isSortable: true });
 
             const { result: sortableDataSource } = await act(() => {
                 return renderHook(() => useSortableDataSource(), {
@@ -99,15 +84,12 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
         });
 
         test('order is defined', async () => {
-            const wrapper = createWrapper(
-                {
-                    isSortable: true,
-                    sort: {
-                        order: [{ column: 'name', direction: 1 }],
-                    },
+            const wrapper = createWrapper(Wrapper, {
+                isSortable: true,
+                sort: {
+                    order: [{ column: 'name', direction: 1 }],
                 },
-                Wrapper,
-            );
+            });
 
             const { result: sortableDataSource } = await act(() => {
                 return renderHook(() => useSortableDataSource(), {
@@ -131,15 +113,12 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
         });
 
         test('order is to update', async () => {
-            const wrapper = createWrapper(
-                {
-                    isSortable: true,
-                    sort: {
-                        order: [{ column: 'name', direction: 1 }],
-                    },
+            const wrapper = createWrapper(Wrapper, {
+                isSortable: true,
+                sort: {
+                    order: [{ column: 'name', direction: 1 }],
                 },
-                Wrapper,
-            );
+            });
 
             const { result: sortResult } = await act(() => {
                 return renderHook(
@@ -166,25 +145,21 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
         });
 
         test('order with nested sort', async () => {
-            const wrapper = createWrapper(
-                {
-                    isSortable: true,
-                    sort: {
-                        isNestedSort: true,
-                        order: [{ column: 'name', direction: 1 }],
-                    },
+            const wrapper = createWrapper(Wrapper, {
+                isSortable: true,
+                sort: {
+                    isNestedSort: true,
+                    order: [{ column: 'name', direction: 1 }],
                 },
-                Wrapper,
-            );
+            });
 
             const { result: sortableDataSource } = await act(() => {
                 return renderHook(
                     () => {
-                        const dataSource = useDataSourceHookWithFunc(({ applySort }) => {
+                        return useDataSourceHookWithFunc(({ applySort }) => {
                             applySort({ column: 'age' });
                             applySort({ column: 'id', direction: 1 });
                         });
-                        return dataSource;
                     },
                     {
                         wrapper,
@@ -206,16 +181,13 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
         });
 
         test('order with removing sort', async () => {
-            const wrapper = createWrapper(
-                {
-                    isSortable: true,
-                    sort: {
-                        isNestedSort: true,
-                        order: [{ column: 'name', direction: 1 }],
-                    },
+            const wrapper = createWrapper(Wrapper, {
+                isSortable: true,
+                sort: {
+                    isNestedSort: true,
+                    order: [{ column: 'name', direction: 1 }],
                 },
-                Wrapper,
-            );
+            });
 
             const { result: sortableDataSource } = await act(() => {
                 return renderHook(
@@ -236,16 +208,13 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
         });
 
         test('order with updating sort', async () => {
-            const wrapper = createWrapper(
-                {
-                    isSortable: true,
-                    sort: {
-                        isNestedSort: true,
-                        order: [{ column: 'name', direction: 1 }],
-                    },
+            const wrapper = createWrapper(Wrapper, {
+                isSortable: true,
+                sort: {
+                    isNestedSort: true,
+                    order: [{ column: 'name', direction: 1 }],
                 },
-                Wrapper,
-            );
+            });
 
             const { result: sortableDataSource } = await act(() => {
                 return renderHook(
@@ -274,19 +243,16 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
         });
 
         test('order with reordering sort', async () => {
-            const wrapper = createWrapper(
-                {
-                    isSortable: true,
-                    sort: {
-                        isNestedSort: true,
-                        order: [
-                            { column: 'name', direction: 1 },
-                            { column: 'age', direction: 0 },
-                        ],
-                    },
+            const wrapper = createWrapper(Wrapper, {
+                isSortable: true,
+                sort: {
+                    isNestedSort: true,
+                    order: [
+                        { column: 'name', direction: 1 },
+                        { column: 'age', direction: 0 },
+                    ],
                 },
-                Wrapper,
-            );
+            });
 
             const { result: sortableDataSource } = await act(() => {
                 return renderHook(
@@ -318,7 +284,7 @@ const runTests = (key: string, Wrapper: typeof DataSourceContextProvider) => {
     });
 };
 
-describe('nested', () => {
+describe('All Sorted Data Source Tests', () => {
     runTests('DataSourceContextProvider', DataSourceContextProvider);
     runTests('DataSourceProviderWithoutReducer', (props => {
         return <DataSourceProviderWithoutReducer {...props} onSort={reducer} />;
