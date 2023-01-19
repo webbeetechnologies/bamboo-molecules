@@ -49,6 +49,7 @@ import type {
     MaskedInputProps,
     AccordionItem,
     AccordionProps,
+    RatingProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -106,6 +107,7 @@ export interface DefaultComponents {
     MaskedInput: ComponentType<MaskedInputProps>;
     Accordion: ComponentType<AccordionProps>;
     AccordionItem: typeof AccordionItem;
+    Rating: ComponentType<RatingProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

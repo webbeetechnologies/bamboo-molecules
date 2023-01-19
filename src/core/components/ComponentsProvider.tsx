@@ -57,6 +57,7 @@ import {
     MaskedInput,
     Accordion,
     AccordionItem,
+    Rating,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -118,6 +119,7 @@ const defaultComponents: DefaultComponents = {
     MaskedInput,
     Accordion,
     AccordionItem,
+    Rating,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
