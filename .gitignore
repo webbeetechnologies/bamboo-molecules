@@ -2,6 +2,8 @@
 #
 .DS_Store
 
+cache
+
 # XDE
 .expo/
 
@@ -68,6 +70,8 @@ example/.ondevice/storybook.requires.js
 
 # release
 dist
+
+cache/
 
 example/cache
 

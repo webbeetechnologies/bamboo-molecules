@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { forwardRef, memo } from 'react';
 import type { ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 import iconFactory from './iconFactory';
@@ -8,11 +8,11 @@ import { useComponentStyles } from '../../hooks';
 /**
  * Neutral component. Doesn't have platform specific styles
  */
-const Icon = ({ type = 'material-community', style, ...rest }: IconProps) => {
+const Icon = ({ type = 'material-community', style, ...rest }: IconProps, ref: any) => {
     const IconComponent = iconFactory(type);
     const componentStyles = useComponentStyles('Icon', style);
 
-    return <IconComponent style={componentStyles} {...rest} />;
+    return <IconComponent ref={ref} style={componentStyles} {...rest} />;
 };
 
 type CustomProps = {
@@ -23,4 +23,4 @@ export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, '', Custom
     animationScale: 'animation.scale',
 };
 
-export default memo(Icon);
+export default memo(forwardRef(Icon));
