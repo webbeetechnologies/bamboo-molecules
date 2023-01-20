@@ -98,6 +98,8 @@ import {
     drawerCollapsibleItemStyles,
     drawerCollapsibleItemHeaderStyles,
     drawerCollapsibleItemContentStyles,
+    ratingStyles,
+    ratingItemStyles,
     linkStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
@@ -222,6 +224,9 @@ const defaultThemeValue: Partial<ITheme> = {
     AccordionItem: accordionItemStyles,
     AccordionItem_Header: accordionItemHeaderStyles,
     AccordionItem_Content: accordionItemContentStyles,
+
+    Rating: ratingStyles,
+    Rating_Item: ratingItemStyles,
 
     Link: linkStyles,
 };
