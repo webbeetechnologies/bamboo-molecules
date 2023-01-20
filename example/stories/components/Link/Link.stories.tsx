@@ -38,19 +38,17 @@ Default.play = async ({ canvasElement }) => {
     await waitFor(() => canvas);
     const link = await canvas.getByTestId('LinkComponent-test');
 
-    await expect(window.getComputedStyle(link).color).toBe(defaultColor);
+    await waitFor(() => expect(window.getComputedStyle(link).color).toBe(defaultColor));
 
-    await delay(100);
+    await delay(0);
 
     await userEvent.hover(link);
 
-    await delay(100);
-
-    await expect(window.getComputedStyle(link).color).toBe(hoverColor);
+    await waitFor(() => expect(window.getComputedStyle(link).color).toBe(hoverColor));
 
     await userEvent.unhover(link);
 
-    await delay(100);
+    await delay(0);
 
     await expect(window.getComputedStyle(link).color).toBe(defaultColor);
 };
