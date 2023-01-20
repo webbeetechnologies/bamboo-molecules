@@ -100,6 +100,7 @@ import {
     drawerCollapsibleItemContentStyles,
     ratingStyles,
     ratingItemStyles,
+    linkStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -226,6 +227,8 @@ const defaultThemeValue: Partial<ITheme> = {
 
     Rating: ratingStyles,
     Rating_Item: ratingItemStyles,
+
+    Link: linkStyles,
 };
 
 const defaultExtractStyles = memoize(

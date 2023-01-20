@@ -105,6 +105,7 @@ export {
     AccordionItemContentProps,
     AccordionHeaderElementProps,
     RatingProps,
+    LinkProps,
 } from './components';
 
 export {
