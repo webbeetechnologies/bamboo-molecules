@@ -7,13 +7,13 @@ export type Props = IconProps & {
     index: number;
     value: number;
     onChange: (val: number) => void;
-    emptyIconName: string;
-    emptyIconType: IconType;
+    activeIconName: string;
+    activeIconType: IconType;
     disabled?: boolean;
     readonly?: boolean;
     iconContainerStyle?: ViewStyle;
+    activeColor?: string;
     color?: string;
-    emptyColor?: string;
 };
 
 const RatingItem = (
@@ -27,10 +27,10 @@ const RatingItem = (
         onChange,
         name,
         type,
-        emptyIconName,
-        emptyIconType,
-        color = 'rgb(250, 175, 0)',
-        emptyColor,
+        activeIconName,
+        activeIconType,
+        activeColor = 'rgb(250, 175, 0)',
+        color,
         ...rest
     }: Props,
     ref: any,
@@ -40,7 +40,7 @@ const RatingItem = (
 
     const componentStyles = useComponentStyles(
         'Rating_Item',
-        [style, active ? { color } : emptyColor ? { color: emptyColor } : {}],
+        [active ? { color: activeColor } : color ? { color } : {}, style],
         {
             states: {
                 activeAndDisabled: active && disabled,
@@ -67,8 +67,8 @@ const RatingItem = (
                     <Icon
                         style={componentStyles}
                         {...rest}
-                        name={value >= index ? name : emptyIconName}
-                        type={value >= index ? type : emptyIconType}
+                        name={value >= index ? activeIconName : name}
+                        type={value >= index ? activeIconType : type}
                     />
                 </Pressable>
             </Tooltip.Trigger>

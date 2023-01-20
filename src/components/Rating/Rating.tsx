@@ -34,33 +34,33 @@ export type Props = ViewProps & {
      */
     disabled?: boolean;
     /**
-     * name of the active icon
+     * name of the empty icon
      */
     iconName?: string;
     /**
-     * the type of the active icon
+     * the type of the empty icon
      */
     iconType?: IconType;
     /**
-     * name of the empty icon
+     * name of the active icon
      */
-    emptyIconName?: string;
+    activeIconName?: string;
     /**
-     * name of the empty icon
+     * type of the active icon
      */
-    emptyIconType?: IconType;
+    activeIconType?: IconType;
     /**
      * size of all the icons
      * */
     size?: number;
     /**
-     * color of the active icon
+     * color of the empty icon
      * */
     color?: string;
     /**
-     * color of the empty icon
+     * color of the active icon
      * */
-    emptyColor?: string;
+    activeColor?: string;
     /**
      * style of the icon container component
      * */
@@ -81,13 +81,13 @@ const Rating = (
         disabled,
         readonly,
         iconContainerStyle,
-        iconName = 'star',
+        iconName = 'star-outline',
         iconType = 'material-community',
-        emptyIconName = 'star-outline',
-        emptyIconType = 'material-community',
+        activeIconName = 'star',
+        activeIconType = 'material-community',
         iconProps = {},
         color,
-        emptyColor,
+        activeColor,
         style,
         testID,
         ...rest
@@ -118,12 +118,12 @@ const Rating = (
                     index={i}
                     name={iconName}
                     type={iconType}
-                    emptyIconName={emptyIconName}
-                    emptyIconType={emptyIconType}
+                    activeIconName={activeIconName}
+                    activeIconType={activeIconType}
                     value={value}
                     onChange={onChange}
                     color={color}
-                    emptyColor={emptyColor}
+                    activeColor={activeColor}
                     testID={testID ? `${testID}-rating-item-${i}` : ''}
                 />
             ))}
