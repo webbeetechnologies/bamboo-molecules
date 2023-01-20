@@ -170,6 +170,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
         [ListItem, renderItemProp, selectionValue],
     );
 
+    // TODO - translate label
     return (
         <>
             <Pressable
