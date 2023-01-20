@@ -1,4 +1,4 @@
-import { forwardRef, memo, useCallback } from 'react';
+import { forwardRef, memo, useCallback, useMemo } from 'react';
 import { ViewStyle, Pressable } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { IconProps, IconType } from '../Icon';
@@ -14,6 +14,7 @@ export type Props = IconProps & {
     iconContainerStyle?: ViewStyle;
     activeColor?: string;
     color?: string;
+    showTooltips?: boolean;
 };
 
 const RatingItem = (
@@ -31,6 +32,7 @@ const RatingItem = (
         activeIconType,
         activeColor = 'rgb(250, 175, 0)',
         color,
+        showTooltips = true,
         ...rest
     }: Props,
     ref: any,
@@ -56,24 +58,46 @@ const RatingItem = (
         onChange(value === index ? 0 : index);
     }, [index, onChange, value]);
 
-    return (
+    const IconComponent = useMemo(
+        () => (
+            <Pressable
+                ref={ref}
+                style={iconContainerStyle}
+                onPress={onPress}
+                disabled={disabled || readonly}>
+                <Icon
+                    style={componentStyles}
+                    {...rest}
+                    name={value >= index ? activeIconName : name}
+                    type={value >= index ? activeIconType : type}
+                />
+            </Pressable>
+        ),
+        [
+            Icon,
+            activeIconName,
+            activeIconType,
+            componentStyles,
+            disabled,
+            iconContainerStyle,
+            index,
+            name,
+            onPress,
+            readonly,
+            ref,
+            rest,
+            type,
+            value,
+        ],
+    );
+
+    return showTooltips ? (
         <Tooltip>
-            <Tooltip.Trigger>
-                <Pressable
-                    ref={ref}
-                    style={iconContainerStyle}
-                    onPress={onPress}
-                    disabled={disabled || readonly}>
-                    <Icon
-                        style={componentStyles}
-                        {...rest}
-                        name={value >= index ? activeIconName : name}
-                        type={value >= index ? activeIconType : type}
-                    />
-                </Pressable>
-            </Tooltip.Trigger>
+            <Tooltip.Trigger>{IconComponent}</Tooltip.Trigger>
             <Tooltip.Content>{index}</Tooltip.Content>
         </Tooltip>
+    ) : (
+        IconComponent
     );
 };
 

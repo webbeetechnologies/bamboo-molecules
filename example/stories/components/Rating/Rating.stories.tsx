@@ -17,6 +17,7 @@ Default.args = {
     disabled: false,
     count: 5,
     testID: 'ratingInteraction',
+    showTooltips: true,
 };
 
 Default.parameters = {

@@ -69,6 +69,10 @@ export type Props = ViewProps & {
      * props for to pass down to all the icons
      * */
     iconProps: Omit<IconProps, 'name' | 'type' | 'color'>;
+    /**
+     * display tooltips
+     * */
+    showTooltips?: boolean;
 };
 
 const Rating = (
@@ -90,6 +94,7 @@ const Rating = (
         activeColor,
         style,
         testID,
+        showTooltips,
         ...rest
     }: Props,
     ref: any,
@@ -125,6 +130,7 @@ const Rating = (
                     color={color}
                     activeColor={activeColor}
                     testID={testID ? `${testID}-rating-item-${i}` : ''}
+                    showTooltips={showTooltips}
                 />
             ))}
         </View>
