@@ -12,8 +12,8 @@ import { useDataSource } from '../../DataSourceContext';
 import {
     createTestWrapper,
     CreateTestWrapper,
-} from '../../../../__tests__/utils/createTestWrapper';
-import { createDataSourceHookWithFunc } from '../../../../__tests__/utils/useDataSourceHookWithFunc';
+} from '../../../../testUtils/utils/createTestWrapper';
+import { createDataSourceHookWithFunc } from '../../../../testUtils/utils/useDataSourceHookWithFunc';
 
 const createWrapper: CreateTestWrapper<DataSourceProviderProps> = createTestWrapper;
 

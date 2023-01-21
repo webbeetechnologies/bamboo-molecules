@@ -1,6 +1,6 @@
-import { DataSourceActions, EDataSourceActions } from '../createDataSource';
+import { DataSourceActions } from '../createDataSource';
 
-import { DataSourceInternalState, DataSourceType } from '../types';
+import { DataSourceInternalState } from '../types';
 // Paginate methods.
 export enum EFilterActions {
     APPLY_FILTER = 'APPLY_FILTER',
@@ -47,9 +47,9 @@ export type RemoveFilterAction = {
 export type UpdateFilterAction = {
     type: EFilterActions.UPDATE_FILTER;
     payload: {
-        position?: string | number;
-        columnName: string;
-        value: string;
+        position: string | number;
+        columnName?: string;
+        value?: string;
     };
 };
 

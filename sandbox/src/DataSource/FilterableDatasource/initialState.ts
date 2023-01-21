@@ -1,7 +1,7 @@
-import { FilterableDataSourceProps, FilterableDataSourceState } from './types';
+import { FilterableDataSourceProps } from './types';
 import omitBy from 'lodash/omitBy';
 
-export const extractInitialState = <T extends {}>(props: FilterableDataSourceProps) =>
+export const extractInitialState = (props: FilterableDataSourceProps) =>
     omitBy(
         {
             isFilterable: props.isFilterable ?? false,

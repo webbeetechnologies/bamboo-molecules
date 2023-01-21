@@ -10,6 +10,8 @@ npm-debug.*
 *.orig.*
 web-build/
 
+coverage/
+
 # macOS
 .DS_Store
 .yarn/cache

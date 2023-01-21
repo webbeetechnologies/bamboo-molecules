@@ -37,16 +37,27 @@ export const useFilterableActionCreator = <T extends {}>(
                 throw new Error('onFilter function not provided');
             }
 
+            const ds = onFilter({ ...dataSourceRef.current, records }, args);
+
+            if (ds === dataSourceRef.current) {
+                return;
+            }
+
+            dataSourceRef.current = {
+                ...dataSourceRef.current,
+                ...ds,
+            };
+
             // @ts-ignore
             dispatch({
                 type: 'UPDATE_PAYLOAD',
                 payload: {
-                    ...onFilter({ ...dataSourceRef.current, records }, args),
+                    ...ds,
                     lastAction: args.type,
                 },
             });
         },
-        [isFilterable, dispatch, onFilter, records],
+        [config.hasReducer, isFilterable, dispatch, onFilter, records],
     );
 
     return useMemo(
@@ -78,7 +89,9 @@ export const useFilterableActionCreator = <T extends {}>(
     );
 };
 
-export const useFilterableDataSource = (): FilterableDataSourceResult => {
+type UseFilterableDataSourceResult<T> = FilterableDataSourceResult & Record<'records', T[]>;
+
+export const useFilterableDataSource = <T>(): UseFilterableDataSourceResult<T> => {
     const {
         isFilterable,
         filters,
@@ -88,24 +101,26 @@ export const useFilterableDataSource = (): FilterableDataSourceResult => {
         moveFilter,
         addFilterGroup,
         updateFilterGroup,
+        records,
     } = useDataSource();
 
-    if (!isFilterable) {
-        return notFilterable as FilterableDataSourceResult;
-    }
-
     return useMemo(
-        () => ({
-            isFilterable,
-            filters,
-            applyFilter,
-            removeFilter,
-            updateFilter,
-            moveFilter,
-            addFilterGroup,
-            updateFilterGroup,
-        }),
+        () =>
+            !isFilterable
+                ? ({ isFilterable, records } as UseFilterableDataSourceResult<T>)
+                : {
+                      records,
+                      isFilterable,
+                      filters,
+                      applyFilter,
+                      removeFilter,
+                      updateFilter,
+                      moveFilter,
+                      addFilterGroup,
+                      updateFilterGroup,
+                  },
         [
+            records,
             isFilterable,
             filters,
             applyFilter,

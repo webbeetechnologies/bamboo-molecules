@@ -12,8 +12,8 @@ import { PageableDataSourceProps, PaginationDataSourceResult } from '../types';
 import {
     createTestWrapper,
     CreateTestWrapper,
-} from '../../../../__tests__/utils/createTestWrapper';
-import { createDataSourceHookWithFunc } from '../../../../__tests__/utils/useDataSourceHookWithFunc';
+} from '../../../../testUtils/utils/createTestWrapper';
+import { createDataSourceHookWithFunc } from '../../../../testUtils/utils/useDataSourceHookWithFunc';
 import { getMockData } from '../../../../__mocks__/src/mockData';
 
 const createWrapper: CreateTestWrapper<DataSourceProviderProps> = createTestWrapper;

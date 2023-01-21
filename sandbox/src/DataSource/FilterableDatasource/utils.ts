@@ -7,24 +7,30 @@ export const move = <T extends {}>(args: {
     to: number;
     toArray?: T[];
 }) => {
-    let { fromArray, toArray, from, to } = args;
+    const { fromArray, toArray = fromArray, from, to } = args;
 
     if (from > fromArray.length - 1) throw new Error(`Item doesn't exist at position ${from}`);
 
-    const oldItem = fromArray.at(from);
-    fromArray = [...fromArray];
-    fromArray.splice(from, 1);
+    const [normalizedFrom, normalizedTo] = fromArray === toArray ? [from, to].sort() : [from, to];
 
-    if (toArray) {
+    const oldItem = fromArray.at(normalizedFrom);
+    const newFromArray = [...fromArray];
+
+    if (fromArray !== toArray) {
+        newFromArray.splice(normalizedFrom, 1);
+
         return {
-            fromArray,
-            toArray: [...toArray].splice(to, 0, oldItem as T),
+            fromArray: newFromArray,
+            toArray: [...toArray].splice(normalizedTo, 0, oldItem as T),
         };
     }
 
-    fromArray.splice(to, 0, oldItem as T);
+    const oldToItem = fromArray.at(normalizedTo);
 
-    return { fromArray };
+    newFromArray.splice(normalizedFrom, 1, oldToItem as T);
+    newFromArray.splice(normalizedTo, 1, oldItem as T);
+
+    return { fromArray: newFromArray, toArray: [...newFromArray] };
 };
 
 export const isFilterAction = (action: any) => action in EFilterActions;

@@ -1,8 +1,8 @@
 import { FilterableDataSourceState, SingleFilter } from './types';
 
-const presentRecordsWithNestedFilters = <T extends {}>({
+export const presentRecordsWithNestedFilters = <T extends {}>({
     records,
-}: FilterableDataSourceState<T>) => {
+}: Pick<FilterableDataSourceState<T>, 'records' | 'filters'>) => {
     console.warn('TODO: Implement custom logic nested filters to resolve nested filters');
 
     return {
@@ -11,16 +11,22 @@ const presentRecordsWithNestedFilters = <T extends {}>({
     };
 };
 
-const presentRecordsWithFilters = <T extends {}>({
+export const presentRecordsWithFilters = <T extends {}>({
     records,
     filters,
-}: FilterableDataSourceState<T>) => {
+}: Pick<FilterableDataSourceState<T>, 'records' | 'filters'>) => {
     const filteredRecords = (filters as SingleFilter[]).reduce(
         (r: T[], { columnName, value }: SingleFilter) => {
             return records.filter((x: any) => x[columnName].includes(value));
         },
         records as T[],
     );
+
+    if (filteredRecords.length === records.length)
+        return {
+            records,
+            totalRecordsCount: records.length,
+        };
 
     return {
         records: filteredRecords,
