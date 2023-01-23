@@ -187,11 +187,14 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
     );
 
     // passing the methods and merging with triggerRef so that element instance is also available in the ref (useful for using with components like Tooltip)
-    useImperativeHandle<unknown, SelectHandles>(ref, () =>
-        Object.assign(triggerRef.current, {
-            isOpen,
-            setIsOpen,
-        }),
+    useImperativeHandle<unknown, SelectHandles>(
+        ref,
+        () =>
+            Object.assign(triggerRef.current, {
+                isOpen,
+                setIsOpen,
+            }),
+        [isOpen, setIsOpen],
     );
 
     const onPress = useCallback(() => {

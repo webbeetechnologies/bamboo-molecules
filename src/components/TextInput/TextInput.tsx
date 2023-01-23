@@ -300,14 +300,18 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
         const root = useRef<NativeTextInput | undefined | null>();
 
-        useImperativeHandle(ref, () => ({
-            focus: () => root.current?.focus(),
-            clear: () => root.current?.clear(),
-            setNativeProps: (args: Object) => root.current?.setNativeProps(args),
-            isFocused: () => root.current?.isFocused() || false,
-            blur: () => root.current?.blur(),
-            forceFocus: () => root.current?.focus(),
-        }));
+        useImperativeHandle(
+            ref,
+            () => ({
+                focus: () => root.current?.focus(),
+                clear: () => root.current?.clear(),
+                setNativeProps: (args: Object) => root.current?.setNativeProps(args),
+                isFocused: () => root.current?.isFocused() || false,
+                blur: () => root.current?.blur(),
+                forceFocus: () => root.current?.focus(),
+            }),
+            [],
+        );
 
         useEffect(() => {
             // When the input has an error, we wiggle the label and apply error styles
