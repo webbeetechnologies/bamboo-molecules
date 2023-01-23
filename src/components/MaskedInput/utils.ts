@@ -7,7 +7,7 @@ export const Masks = {
     // TODO add more masks
 };
 
-export { createNumberMask } from 'react-native-mask-input';
+export { createNumberMask } from '../../utils';
 
 const changedByOne = (reference: number, number: number) => {
     return number === reference + 1 || number === reference - 1;
