@@ -65,6 +65,10 @@ export const generateDarkThemeColors = (
                 onSurfaceVariant: color(palette.neutralVariant80).alpha(opacity.level1).hexa(),
                 onSecondaryContainer: color(palette.secondary90).alpha(opacity.level1).hexa(),
             },
+            disabled: {
+                onSurface: color(palette.neutral90).alpha(opacity.level2).hexa(),
+                onSurface_Level4: color(palette.neutral90).alpha(opacity.level4).hexa(),
+            },
         },
     };
 };

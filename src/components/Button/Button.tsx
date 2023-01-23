@@ -239,7 +239,7 @@ const Button = (
             animationScale: _animationScale,
             iconSize: _iconSize,
             rippleColor: setColor(_textColor).alpha(0.12).rgb().string(),
-            touchableStyle: { borderRadius, flex: 1 }, // TODO extract flex properties from style object
+            touchableStyle: { borderRadius }, // TODO extract flex properties from style object
             surfaceStyle: [button, { backgroundColor, borderRadius, ..._buttonStyles }],
 
             iconStyle: _iconStyle,
