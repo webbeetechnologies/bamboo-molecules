@@ -25,18 +25,21 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
 const AccordionItemHeader = memo(
     withActionState(
         forwardRef(
-            ({
-                left,
-                right,
-                style,
-                children,
-                hovered = false,
-                leftElementStyle: leftElementStyleProp = {},
-                rightElementStyle: rightElementStyleProp = {},
-                contentStyle: contentStyleProp = {},
-                onPress: onPressProp,
-                ...rest
-            }: Props) => {
+            (
+                {
+                    left,
+                    right,
+                    style,
+                    children,
+                    hovered = false,
+                    leftElementStyle: leftElementStyleProp = {},
+                    rightElementStyle: rightElementStyleProp = {},
+                    contentStyle: contentStyleProp = {},
+                    onPress: onPressProp,
+                    ...rest
+                }: Props,
+                ref: any,
+            ) => {
                 const { View, TouchableRipple, Text } = useMolecules();
                 const { expanded, onExpandedChange } = useContext(AccordionItemContext);
                 const componentStyles = useComponentStyles(
@@ -100,7 +103,7 @@ const AccordionItemHeader = memo(
                 );
 
                 return (
-                    <TouchableRipple style={containerStyle} {...rest} onPress={onPress}>
+                    <TouchableRipple style={containerStyle} {...rest} onPress={onPress} ref={ref}>
                         <>
                             {left && (
                                 <View style={leftElementStyle}>

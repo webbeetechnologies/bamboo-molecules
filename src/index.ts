@@ -106,6 +106,7 @@ export {
     AccordionHeaderElementProps,
     RatingProps,
     LinkProps,
+    SelectHandles,
 } from './components';
 
 export {
