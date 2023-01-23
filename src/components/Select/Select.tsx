@@ -1,10 +1,12 @@
 import {
+    forwardRef,
     memo,
     PropsWithoutRef,
     ReactElement,
     ReactNode,
     RefAttributes,
     useCallback,
+    useImperativeHandle,
     useMemo,
     useRef,
     useState,
@@ -70,22 +72,36 @@ export type Props<
      * passes the current selectedItem. Will be an array in multiple mode
      * */
     onChange?: (item: TItem | TItem[]) => void;
+    /*
+     * whether or not pressing the field will open the popup
+     * if false, the popup can be controlled using the ref
+     * */
+    pressOpen?: boolean;
 };
 
-const Select = <TItem extends DefaultItemT = DefaultItemT>({
-    inputProps,
-    popoverProps: _popoverProps,
-    style,
-    renderItem: renderItemProp,
-    value: valueProp,
-    onChange: onChangeProp,
-    testID,
-    dropdownTestID,
-    searchable,
-    onQueryChange,
-    defaultValue = [],
-    ...rest
-}: Props<TItem>) => {
+export type SelectHandles = {
+    isOpen: boolean;
+    setIsOpen: (isOpen: boolean) => void;
+};
+
+const Select = <TItem extends DefaultItemT = DefaultItemT>(
+    {
+        inputProps,
+        popoverProps: _popoverProps,
+        style,
+        renderItem: renderItemProp,
+        value: valueProp,
+        onChange: onChangeProp,
+        testID,
+        dropdownTestID,
+        searchable,
+        onQueryChange,
+        defaultValue = [],
+        pressOpen = true,
+        ...rest
+    }: Props<TItem>,
+    ref: any,
+) => {
     const { TextInput, IconButton, DropdownList, ListItem } = useMolecules();
     const componentStyles = useComponentStyles('Select', style);
 
@@ -170,12 +186,26 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
         [ListItem, renderItemProp, selectionValue],
     );
 
+    // passing the methods and merging with triggerRef so that element instance is also available in the ref (useful for using with components like Tooltip)
+    useImperativeHandle<unknown, SelectHandles>(ref, () =>
+        Object.assign(triggerRef.current, {
+            isOpen,
+            setIsOpen,
+        }),
+    );
+
+    const onPress = useCallback(() => {
+        if (!pressOpen) return;
+
+        onOpen();
+    }, [onOpen, pressOpen]);
+
     // TODO - translate label
     return (
         <>
             <Pressable
                 ref={triggerRef}
-                onPress={onOpen}
+                onPress={onPress}
                 onLayout={onInputLayout}
                 style={componentStyles}
                 testID={testID}>
@@ -206,4 +236,4 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
     );
 };
 
-export default memo(Select) as ISelect;
+export default memo(forwardRef(Select)) as ISelect;
