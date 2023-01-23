@@ -181,10 +181,10 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>({
                 testID={testID}>
                 <TextInput
                     label={'Select Item'}
-                    {...(inputProps || {})}
                     right={<IconButton name="chevron-down" onPress={onToggle} />}
-                    value={inputValue}
                     editable={false}
+                    {...(inputProps || {})}
+                    value={inputValue}
                 />
             </Pressable>
 
