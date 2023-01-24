@@ -23,6 +23,7 @@ module.exports = {
             acc[name] = path.join(__dirname, 'node_modules', name);
             return acc;
         }, {}),
+        disableHierarchicalLookup: true,
     },
 
     transformer: {
