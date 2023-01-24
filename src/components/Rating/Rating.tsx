@@ -3,7 +3,7 @@ import type { ViewProps, ViewStyle } from 'react-native';
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { IconProps, IconType } from '../Icon';
 import RatingItem from './RatingItem';
-import { TooltipProps } from '../Tooltip';
+import type { TooltipProps } from '../Tooltip';
 
 export type Props = ViewProps & {
     /**
