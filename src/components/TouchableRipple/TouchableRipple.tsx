@@ -104,6 +104,7 @@ const TouchableRipple = (
     ref: any,
 ) => {
     const { View } = useMolecules();
+    // TODO - enable ripple onLongPress, need to check for mobile as well
     const disabled = disabledProp || !onPress;
 
     const componentStyles = useComponentStyles(
