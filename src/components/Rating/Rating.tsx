@@ -3,6 +3,7 @@ import type { ViewProps, ViewStyle } from 'react-native';
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { IconProps, IconType } from '../Icon';
 import RatingItem from './RatingItem';
+import { TooltipProps } from '../Tooltip';
 
 export type Props = ViewProps & {
     /**
@@ -73,6 +74,11 @@ export type Props = ViewProps & {
      * display tooltips
      * */
     showTooltips?: boolean;
+    /**
+     * for configuring tooltip
+     * won't be used if showTooltips is false
+     * */
+    tooltipProps?: TooltipProps;
 };
 
 const Rating = (
@@ -95,6 +101,7 @@ const Rating = (
         style,
         testID,
         showTooltips,
+        tooltipProps,
         ...rest
     }: Props,
     ref: any,
@@ -131,6 +138,7 @@ const Rating = (
                     activeColor={activeColor}
                     testID={testID ? `${testID}-rating-item-${i}` : ''}
                     showTooltips={showTooltips}
+                    tooltipProps={tooltipProps}
                 />
             ))}
         </View>
