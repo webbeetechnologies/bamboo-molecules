@@ -142,7 +142,7 @@ export type Props = SurfaceProps &
  */
 const Button = (
     {
-        disabled: disabledProp,
+        disabled = false,
         variant = 'text',
         size = 'lg',
         loading,
@@ -168,7 +168,6 @@ const Button = (
     }: Props,
     ref: any,
 ) => {
-    const disabled = disabledProp || !onPress;
     const { ActivityIndicator, TouchableRipple, Text, Icon, Surface } = useMolecules();
 
     const componentStyles = useComponentStyles(
@@ -204,6 +203,7 @@ const Button = (
         iconStyle,
         viewStyle,
         iconContainerStyle,
+        accessibilityState,
     } = useMemo(() => {
         const {
             backgroundColor: _backgroundColor,
@@ -239,7 +239,7 @@ const Button = (
             animationScale: _animationScale,
             iconSize: _iconSize,
             rippleColor: setColor(_textColor).alpha(0.12).rgb().string(),
-            touchableStyle: { borderRadius, flex: 1 }, // TODO extract flex properties from style object
+            touchableStyle: { borderRadius }, // TODO extract flex properties from style object
             surfaceStyle: [button, { backgroundColor, borderRadius, ..._buttonStyles }],
 
             iconStyle: _iconStyle,
@@ -255,6 +255,7 @@ const Button = (
                 },
                 labelStyle,
             ],
+            accessibilityState: { disabled },
         };
     }, [
         componentStyles,
@@ -300,7 +301,7 @@ const Button = (
     };
 
     return (
-        <Surface {...rest} style={surfaceStyle} {...{ elevation: elevation }}>
+        <Surface {...rest} style={surfaceStyle} elevation={elevation}>
             <TouchableRipple
                 borderless
                 delayPressIn={0}
@@ -311,7 +312,7 @@ const Button = (
                 accessibilityLabel={accessibilityLabel}
                 accessibilityHint={accessibilityHint}
                 accessibilityRole="button"
-                accessibilityState={{ disabled }}
+                accessibilityState={accessibilityState}
                 accessible={accessible}
                 disabled={disabled}
                 rippleColor={rippleColor}
