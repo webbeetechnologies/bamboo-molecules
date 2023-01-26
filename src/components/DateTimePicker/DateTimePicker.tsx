@@ -34,6 +34,7 @@ const DateTimePicker = (
         timeInputProps = emptyObj,
         timePickerModalProps = emptyObj,
         style,
+        testID,
         ...rest
     }: Props,
     ref: any,
@@ -102,10 +103,11 @@ const DateTimePicker = (
 
     return (
         <>
-            <ElementGroup style={componentStyles} {...rest} ref={ref}>
+            <ElementGroup style={componentStyles} testID={testID} {...rest} ref={ref}>
                 <DatePickerInput
                     inputMode="start"
                     variant="outlined"
+                    testID={testID ? `${testID}--datepickerinput` : undefined}
                     {...datePickerInputProps}
                     value={date}
                     onChange={onDateChange}
@@ -114,6 +116,7 @@ const DateTimePicker = (
                     variant="outlined"
                     label="hh:mm"
                     mask={is24Hour ? timeMask24Hour : timeMask12Hour}
+                    testID={testID ? `${testID}--timepickerinput` : undefined}
                     {...timeInputProps}
                     value={time}
                     onChangeText={setTime}
@@ -122,6 +125,7 @@ const DateTimePicker = (
                 />
             </ElementGroup>
             <TimePickerModal
+                testID={`${testID}--timepickermodal`}
                 {...timePickerModalProps}
                 time={time.replace(/^[ap]m/, '')}
                 isOpen={isOpen}
