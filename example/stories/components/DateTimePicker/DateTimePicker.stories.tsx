@@ -3,7 +3,6 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Example } from './DateTimePicker';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
-import { delay } from '../../common';
 
 export default {
     title: 'components/DateTimePicker',
