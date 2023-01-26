@@ -107,6 +107,7 @@ export {
     RatingProps,
     LinkProps,
     SelectHandles,
+    DateTimePickerProps,
 } from './components';
 
 export {

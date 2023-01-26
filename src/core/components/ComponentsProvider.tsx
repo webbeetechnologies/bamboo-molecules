@@ -59,6 +59,7 @@ import {
     AccordionItem,
     Rating,
     Link,
+    DateTimePicker,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -99,6 +100,7 @@ const defaultComponents: DefaultComponents = {
     DatePickerInline,
     DatePickerModal,
     DatePickerInput,
+    DateTimePicker,
     TimePicker,
     TimePickerModal,
     TextInputWithMask: TextInputWithMask as ComponentType<TextInputWithMaskProps>,

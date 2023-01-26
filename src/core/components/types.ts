@@ -51,6 +51,7 @@ import type {
     AccordionProps,
     RatingProps,
     LinkProps,
+    DateTimePickerProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -87,6 +88,7 @@ export interface DefaultComponents {
     DatePickerInline: ComponentType<DatePickerInlineProps>;
     DatePickerModal: ComponentType<DatePickerModalProps>;
     DatePickerInput: ComponentType<DatePickerInputProps>;
+    DateTimePicker: ComponentType<DateTimePickerProps>;
     TimePicker: ComponentType<TimePickerProps>;
     TimePickerModal: ComponentType<TimePickerModalProps>;
     TextInputWithMask: ComponentType<TextInputWithMaskProps>;
