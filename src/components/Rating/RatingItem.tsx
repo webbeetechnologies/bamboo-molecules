@@ -2,6 +2,7 @@ import { forwardRef, memo, useCallback, useMemo } from 'react';
 import { ViewStyle, Pressable } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { IconProps, IconType } from '../Icon';
+import type { TooltipProps } from '../Tooltip';
 
 export type Props = IconProps & {
     index: number;
@@ -15,6 +16,7 @@ export type Props = IconProps & {
     activeColor?: string;
     color?: string;
     showTooltips?: boolean;
+    tooltipProps?: Omit<TooltipProps, 'children'>;
 };
 
 const RatingItem = (
@@ -33,6 +35,7 @@ const RatingItem = (
         activeColor = 'rgb(250, 175, 0)',
         color,
         showTooltips = true,
+        tooltipProps = {},
         ...rest
     }: Props,
     ref: any,
@@ -92,7 +95,7 @@ const RatingItem = (
     );
 
     return showTooltips ? (
-        <Tooltip>
+        <Tooltip {...tooltipProps}>
             <Tooltip.Trigger>{IconComponent}</Tooltip.Trigger>
             <Tooltip.Content>{index}</Tooltip.Content>
         </Tooltip>

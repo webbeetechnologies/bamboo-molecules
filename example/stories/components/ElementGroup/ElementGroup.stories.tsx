@@ -43,6 +43,7 @@ ButtonGroup.parameters = {
     },
 };
 
+// TODO revisit button height issue
 export const TextInputElementGroup: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 TextInputElementGroup.args = {

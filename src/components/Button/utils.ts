@@ -24,6 +24,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
     CustomSizeProps
 > = {
     animationScale: 'animation.scale',
+    flexGrow: 1,
 
     button: {
         borderStyle: 'solid',
@@ -32,6 +33,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        flexGrow: 1,
     },
     icon: {
         marginLeft: 'spacings.4',
