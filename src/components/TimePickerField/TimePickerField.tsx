@@ -35,7 +35,9 @@ const TimePickerField = (
 
     const currentTimeFormat = useMemo(() => timeFormat[!is24Hour ? '12' : '24'], [is24Hour]);
 
-    const [time, setTime] = useState(timeProp ? format(timeProp, currentTimeFormat.format) : '');
+    const [time, setTime] = useState(() =>
+        timeProp ? format(timeProp, currentTimeFormat.format) : '',
+    );
     const { state: isOpen, setState: setIsOpen } = useToggle(false);
 
     const onCloseModal = useCallback(() => setIsOpen(false), [setIsOpen]);
@@ -101,12 +103,8 @@ const TimePickerField = (
     ]);
 
     useEffect(() => {
-        const newTime = timeProp ? format(timeProp, currentTimeFormat.format) : '';
-
-        if (time === newTime) return;
-
-        setTime(newTime);
-    }, [timeProp, is24Hour, time, currentTimeFormat.format]);
+        setTime(timeProp ? format(timeProp, currentTimeFormat.format) : '');
+    }, [timeProp, currentTimeFormat.format]);
 
     return (
         <MaskedInput
