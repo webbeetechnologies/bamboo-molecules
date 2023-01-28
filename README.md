@@ -1,19 +1,36 @@
 # Bamboo Molecules
 
-## What is it?
-A one place library for React Native Material UI and iOS Cupertino components. It aims to provide a solid set of components that can used to create complex platform specific layouts like screens, modals, drawers and navigation.
+## Goals 
+- A feature complete UI component library for react-native; works on Android, iOS and Web
+- Follows platform specific guidelines
+- Reliably performant React Native components
+- Easy theming
+- Rapid development
+- Composable components
+
+## Core Principles
+- A product developer should be able to style all the components, not only colors, but also shapes, sizes and variants. 
+- A product developer shouldn't have to worry about importing a multitude of components.
+- A product developer should be able to replace any components, including child components, as he thinks fit.
+- A product developer should be able to use a component without worrying about performance of the component.
+
+
+## What is Bamboo Molecules?
+A one place library for React Native Material UI and iOS Cupertino components.\
+It aims to provide a solid set of components that can used to create complex platform specific layouts like screens, modals, drawers and navigation.
 
 
 ## What does it provide?
-Molecules is a set of composed components, a level higher than the un-opinionated Atoms. Following the design pattern, Molecules
+Molecules is a set of composed components, a level higher than the un-opinionated Atoms.
+Following the design pattern, Molecules like <a href="https://github.com/webbeetechnologies/bamboo-atoms" target="_blank">Bamboo Atoms</a>; the library is a highly performant, and well tested set of components.
+Components have been specifically designed to meet the design guidelines of each platform iOS or Android.
+Bamboo Molecules are opinionated for the platform they cater to.
 
+For the web, the user gets the option to toggle between Material UI and iOS Cupertino style.
+Molecules components are designed and optimized for the best user experience on the web in both the design styles.
+Of-course, you can overwrite the styles for any of the platforms using the platform specific extensions. :)
 
-Like <a href="https://github.com/webbeetechnologies/bamboo-atoms" target="_blank">Bamboo Atoms</a>; the library is a highly performant, and well tested set of components. Components have been specifically designed to meet the design guidelines of each platform iOS or Android. Components that are composed/created in this level are opinionated for the platform they cater to;
-
-
-However, for the web, the user gets the option to toggle between Material UI and iOS Cupertino style. [Molecules components](./components.md) are designed and optimized for the best user experience on the web in both the design styles. and are built upon bamboo atoms which in-turn are built on react-native components. Offcourse, you can overwrite the styles for any of the platforms using the platform specific extensions. :)
-
-Molecules also exposes a larger set of hooks otherwise not available from bamboo-atoms.
+Molecules also exposes an assortment of hooks otherwise not available from bamboo-atoms that make the development experience a breeze.
 
 
 ## What does it not do?
@@ -21,37 +38,145 @@ Bamboo molecules do not provide a for complex screens and layouts; you can creat
 
 
 
-# Platforms
+## Platforms
 - Android
 - iOS
 - Web
 
-# Themes
+## Themes
 - Android
 - iOS
 - Web (Android/iOS)
 
-## Build Setup
 
-``` bash
-# install dependencies for the library and examples
-yarn
+# Getting Started
 
-# setup husky
-yarn prepare:husky
+## Installation
 
-# install a new package to a workspace
-yarn workspace <workspace-name> add <package-name>
-
-# install a new package to root
-yarn add <package-name> -W
+Simply get started by using the [Bamboo Molecules starter template](https://github.com/webbeetechnologies/blueprint-react-native). Alternately, add Bamboo Molecules to an existing project by installing.
+```bash
+yarn add @webbeetechnologies/bamboo-molecules
 ```
 
-## Demo
-```
-# run expo example app
-yarn run:example
 
-# run storybook
-yarn run:storybook
+## Usage
+
+### Basic usage
+
+- `ProvideMolecules`: React context provider to add the theming and components to your project.
+- `useMolecules`: Hook to read the provided components from context.
+
+```tsx
+import { ProvideMolecules, useMolecules } from "@webbeetechnologies/bamboo-molecules";
+
+const DemoComponent = () => {
+  const {View, Text} = useMolecules();
+  return (
+    <View>
+      <Text>Hello World!</Text>
+    </View>
+  )
+}
+
+const App = (props) => {
+  return (
+    <ProvideMolecules>
+      <DemoComponent />
+    </ProvideMolecules>
+  )
+}
+
+export default Component;
+```
+
+### Providing Custom Components
+Want to provide custom components to use within your app? Simply pass them to provider.
+useMolecules is a generic, and thus, and thus it will accept an interface and for type inference.
+```tsx
+import { ProvideMolecules, useMolecules } from "@webbeetechnologies/bamboo-molecules";
+
+const components = {
+  AwesomeStringComponent: (props: { value: string, onChange?: (value: string) => {} }) => <>{ value }</>,
+  AwesomeNumberComponent: (props: { value: number, onChange?: (value: number) => {} }) => <>{ value }</>,
+}
+
+const useAwesomeAppComponents = () => useMolecules<typeof components>();
+
+
+const DemoComponent = () => {
+  const {View, AwesomeStringComponent, AwesomeNumberComponent} = useAwesomeAppComponents();
+  return (
+    <View>
+      <AwesomeStringComponent value="Hello World" />
+      <AwesomeNumberComponent value={42} />
+    </View>
+  )
+}
+
+const App = (props) => {
+  return (
+    <ProvideMolecules components={components}>
+      <DemoComponent />
+    </ProvideMolecules>
+  )
+}
+export default App;
+```
+
+
+### Theming
+Want to provide a custom theme or extend the existing components; easy.\
+Make a custom style definition for your components by using the `extendTheme` function.
+Bamboo molecules implement platform specific design tokens that can be also be easily.
+- `extendTheme`: accepts a custom default style definition for the Molecules and custom components that extends the theme.
+```tsx
+import { ProvideMolecules, useMolecules, extendTheme } from "@webbeetechnologies/bamboo-molecules";
+
+const theme = extendTheme({
+  AwesomeStringComponent: {
+    color: "colors.onPrimary",
+    backgroundColor: "colors.primary",
+  },
+  Button: {
+    backgroundColor: "colors.primary",
+    text: "colors.onPrimary",
+    states: {
+      disabled: {
+        backgroundColor: "red",
+        text: "black",
+      },
+      hovered: {
+        backgroundColor: "colors.primaryOnHover",
+      }
+    }
+  }
+});
+
+
+const DemoComponent = () => {
+  const {Button} = useMolecules();
+  return (
+    <Button />
+  )
+}
+
+const App = (props) => {
+  return (
+    <ProvideMolecules theme={theme}>
+      <DemoComponent />
+    </ProvideMolecules>
+  )
+}
+export default App;
+```
+
+
+
+# Scripts
+```bash
+# Get started with storybooks
+yarn start
+
+# Demo project
+yarn demo
 ```
