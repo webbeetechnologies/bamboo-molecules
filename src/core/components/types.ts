@@ -52,6 +52,7 @@ import type {
     RatingProps,
     LinkProps,
     DateTimePickerProps,
+    TimePickerFieldProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -112,6 +113,7 @@ export interface DefaultComponents {
     AccordionItem: typeof AccordionItem;
     Rating: ComponentType<RatingProps>;
     Link: ComponentType<LinkProps>;
+    TimePickerField: ComponentType<TimePickerFieldProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

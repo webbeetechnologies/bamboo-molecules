@@ -69,6 +69,12 @@ export function TimePickerModal({
 
     const onConfirm = useCallback(() => onConfirmProp(time), [onConfirmProp, time]);
 
+    useEffect(() => {
+        if (timeProp === time) return;
+
+        setTime(timeProp || '');
+    }, [time, timeProp]);
+
     return (
         <Modal
             {...rest}

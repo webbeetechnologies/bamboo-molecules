@@ -60,6 +60,7 @@ import {
     Rating,
     Link,
     DateTimePicker,
+    TimePickerField,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -103,6 +104,7 @@ const defaultComponents: DefaultComponents = {
     DateTimePicker,
     TimePicker,
     TimePickerModal,
+    TimePickerField,
     TextInputWithMask: TextInputWithMask as ComponentType<TextInputWithMaskProps>,
     OptionList,
     DropdownList,

@@ -1,25 +1,21 @@
-import { forwardRef, memo, useCallback, useState } from 'react';
-import type { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
+import { forwardRef, memo, useCallback } from 'react';
 import type { ViewProps } from '@webbee/bamboo-atoms';
-import type { Mask } from 'react-native-mask-input';
 import { set, format } from 'date-fns';
 
-import { useComponentStyles, useControlledValue, useMolecules, useToggle } from '../../hooks';
-import type { MaskedInputProps } from '../MaskedInput';
+import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { DatePickerInputProps } from '../DatePickerInput';
-import type { TimePickerModalProps } from '../TimePickerModal';
+import type { TimePickerFieldProps } from '../TimePickerField';
 
 export type Props = ViewProps & {
     is24Hour?: boolean;
     date?: Date | null;
     onChange?: (date: Date | null) => void;
     defaultValue?: Date | null;
-    timeInputProps?: Omit<Partial<MaskedInputProps>, 'value' | 'onChangeText' | 'mask'>;
-    datePickerInputProps?: Omit<Partial<DatePickerInputProps>, 'value' | 'onChange'>;
-    timePickerModalProps?: Omit<
-        Partial<TimePickerModalProps>,
-        'time' | 'onConfirm' | 'isOpen' | 'onClose'
+    timePickerFieldProps?: Omit<
+        Partial<TimePickerFieldProps>,
+        'value' | 'onChangeText' | 'date' | 'onTimeChange'
     >;
+    datePickerInputProps?: Omit<Partial<DatePickerInputProps>, 'value' | 'onChange'>;
 };
 
 const emptyObj = {};
@@ -31,16 +27,14 @@ const DateTimePicker = (
         onChange: onChangeProp,
         defaultValue,
         datePickerInputProps = emptyObj,
-        timeInputProps = emptyObj,
-        timePickerModalProps = emptyObj,
+        timePickerFieldProps = emptyObj,
         style,
         testID,
         ...rest
     }: Props,
     ref: any,
 ) => {
-    const { DatePickerInput, ElementGroup, MaskedInput, IconButton, TimePickerModal } =
-        useMolecules();
+    const { DatePickerInput, ElementGroup, TimePickerField } = useMolecules();
     const componentStyles = useComponentStyles('DateTimePicker', style);
 
     const [date, onChange] = useControlledValue<Date | null>({
@@ -48,8 +42,6 @@ const DateTimePicker = (
         defaultValue,
         onChange: onChangeProp,
     });
-    const [time, setTime] = useState(date ? format(date, is24Hour ? 'HH:mm' : 'hh:mmaaa') : '');
-    const { state: isOpen, setState: setIsOpen } = useToggle(false);
 
     const onDateChange = useCallback(
         (newDate: Date | null) => {
@@ -67,40 +59,6 @@ const DateTimePicker = (
         [date, onChange],
     );
 
-    const onTimeChange = useCallback(
-        (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-            timeInputProps.onBlur?.(e);
-
-            const [hour = '0', minute = '0'] = time.split(':');
-
-            onChange(
-                set(date || new Date(), {
-                    hours: +hour,
-                    minutes: +minute,
-                }),
-            );
-
-            setTime(formatTime({ date, hour, minute, is24Hour }));
-        },
-        [date, is24Hour, onChange, time, timeInputProps],
-    );
-
-    const onCloseModal = useCallback(() => setIsOpen(false), [setIsOpen]);
-
-    const onOpenModal = useCallback(() => setIsOpen(true), [setIsOpen]);
-
-    const onConfirmTime = useCallback(
-        (newTime: string) => {
-            const [hour = '0', minute = '0'] = newTime.split(':');
-
-            onChange(set(date || new Date(), { hours: +hour, minutes: +minute }));
-            setTime(formatTime({ date, hour, minute, is24Hour }));
-
-            setIsOpen(false);
-        },
-        [date, is24Hour, onChange, setIsOpen],
-    );
-
     return (
         <>
             <ElementGroup style={componentStyles} testID={testID} {...rest} ref={ref}>
@@ -112,62 +70,16 @@ const DateTimePicker = (
                     value={date}
                     onChange={onDateChange}
                 />
-                <MaskedInput
+                <TimePickerField
                     variant="outlined"
-                    label="hh:mm"
-                    mask={is24Hour ? timeMask24Hour : timeMask12Hour}
                     testID={testID ? `${testID}--timepickerinput` : undefined}
-                    {...timeInputProps}
-                    value={time}
-                    onChangeText={setTime}
-                    onBlur={onTimeChange}
-                    right={<IconButton name="clock-outline" onPress={onOpenModal} />}
+                    is24Hour={is24Hour}
+                    {...timePickerFieldProps}
+                    time={date}
+                    onTimeChange={onChange}
                 />
             </ElementGroup>
-            <TimePickerModal
-                testID={`${testID}--timepickermodal`}
-                {...timePickerModalProps}
-                time={time.replace(/^[ap]m/, '')}
-                isOpen={isOpen}
-                onClose={onCloseModal}
-                onConfirm={onConfirmTime}
-            />
         </>
-    );
-};
-
-const timeMask24Hour: Mask = (text: string = '') => {
-    const cleanTime = text.replace(/\D+/g, '');
-
-    const hourFirstDigit = /[012]/; // only 0,1 or 2
-    let hourSecondDigit = /\d/; // any number
-
-    if (cleanTime.charAt(0) === '2') {
-        hourSecondDigit = /[0123]/; // only 0,1,2 or 3
-    }
-
-    const minuteFirstDigit = /[012345]/; // only 0,1,2,3,4 or 5
-    const minuteSecondDigit = /\d/; // any number
-
-    return [hourFirstDigit, hourSecondDigit, ':', minuteFirstDigit, minuteSecondDigit];
-};
-
-const timeMask12Hour: Mask = [/[01]/, /\d/, ':', /[012345]/, /\d/, /[ap]/, 'm'];
-
-const formatTime = ({
-    date,
-    hour,
-    minute,
-    is24Hour,
-}: {
-    date: Date | null;
-    hour: string;
-    minute: string;
-    is24Hour: boolean;
-}) => {
-    return format(
-        set(date || new Date(), { hours: +hour, minutes: +(minute || 0) }),
-        is24Hour ? 'HH:mm' : 'hh:mmaaa',
     );
 };
 

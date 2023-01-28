@@ -108,6 +108,7 @@ export {
     LinkProps,
     SelectHandles,
     DateTimePickerProps,
+    TimePickerFieldProps,
 } from './components';
 
 export {

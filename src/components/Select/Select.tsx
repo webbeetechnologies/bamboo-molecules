@@ -130,7 +130,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
     const inputValue = useMemo(() => {
         if (!selectionValue) return '';
 
-        if (!Array.isArray(selectionValue)) {
+        if (!Array.isArray(selectionValue) && Object.keys(selectionValue).length) {
             return selectionValue.label;
         }
 

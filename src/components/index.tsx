@@ -151,3 +151,5 @@ export * from './Rating';
 export * from './Link';
 
 export * from './DateTimePicker';
+
+export * from './TimePickerField';
