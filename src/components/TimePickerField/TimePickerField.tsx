@@ -24,7 +24,7 @@ const TimePickerField = (
         is24Hour = false,
         withModal = true,
         style,
-        onBlur,
+        onBlur: onBlurProp,
         modalProps = {},
         ...rest
     }: Props,
@@ -50,16 +50,18 @@ const TimePickerField = (
 
             onTimeChangeProp?.(set(timeProp || new Date(), { hours: +hour, minutes: +minute }));
 
-            setTime(formatTime({ date: timeProp, hour, minute, is24Hour }));
-
             setIsOpen(false);
+
+            if (onTimeChangeProp) return;
+
+            setTime(formatTime({ date: timeProp, hour, minute, is24Hour }));
         },
         [timeProp, is24Hour, onTimeChangeProp, setIsOpen],
     );
 
-    const onTimeChange = useCallback(
+    const onBlur = useCallback(
         (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-            onBlur?.(e);
+            onBlurProp?.(e);
 
             const [hour = '0', minute = '0'] = time.replace(/[ap]m/, '').split(':');
 
@@ -70,9 +72,11 @@ const TimePickerField = (
                 }),
             );
 
+            if (onTimeChangeProp) return;
+
             setTime(formatTime({ date: timeProp, hour, minute, is24Hour }));
         },
-        [timeProp, is24Hour, onBlur, onTimeChangeProp, time],
+        [timeProp, is24Hour, onBlurProp, onTimeChangeProp, time],
     );
 
     const rightElement = useMemo(() => {
@@ -115,7 +119,7 @@ const TimePickerField = (
             value={time}
             onChangeText={setTime}
             style={componentStyles}
-            onBlur={onTimeChange}
+            onBlur={onBlur}
             right={rightElement}
         />
     );
@@ -137,7 +141,21 @@ const timeMask24Hour: Mask = (text: string = '') => {
     return [hourFirstDigit, hourSecondDigit, ':', minuteFirstDigit, minuteSecondDigit];
 };
 
-const timeMask12Hour: Mask = [/[01]/, /\d/, ':', /[012345]/, /\d/, /[ap]/, 'm'];
+const timeMask12Hour: Mask = (text: string = '') => {
+    const cleanTime = text.replace(/\D+/g, '');
+
+    const hourFirstDigit = /[01]/; // only 0,1 or 2
+    let hourSecondDigit = /\d/; // any number
+
+    if (cleanTime.charAt(0) === '1') {
+        hourSecondDigit = /[012]/; // only 0,1,2 or 3
+    }
+
+    const minuteFirstDigit = /[012345]/; // only 0,1,2,3,4 or 5
+    const minuteSecondDigit = /\d/; // any number
+
+    return [hourFirstDigit, hourSecondDigit, ':', minuteFirstDigit, minuteSecondDigit, /[ap]/, 'm'];
+};
 
 const timeFormat = {
     '24': {

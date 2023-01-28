@@ -13,6 +13,7 @@ export const Default: ComponentStory<typeof Example> = args => <Example {...args
 
 Default.args = {
     testID: 'datetimepicker',
+    is24Hour: true,
 };
 
 Default.parameters = {
