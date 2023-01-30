@@ -181,7 +181,76 @@ You may have different states, you may also want to have different variants.
 Bamboo Molecules enables you to create a configurable component all the parts of which can be separately styled.
 
 ```tsx
-    // TODO: Add a Component 
+import { FC, useMemo } from "react";
+import type { ViewProps } from "react-native";
+import { ProvideMolecules, useMolecules, useComponentStyles, extendTheme, } from "@webbeetechnologies/bamboo-molecules";
+
+const theme = extendTheme({
+  ChessTile: {
+    height: 16,
+    width: 16,
+    variants: {
+      "black": { backgroundColor: "#000" },
+      "white": { backgroundColor: "#fff" },
+    },
+    states: {
+      possible: {
+        variants: {
+          "black": { backgroundColor: "#222" },
+          "white": { backgroundColor: "#ddd" },
+        }
+      },
+      selected: {
+        variants: {
+          "black": { backgroundColor: "#111" },
+          "white": { backgroundColor: "#eee" },
+        }
+      },
+      potentialMove: {
+        backgroundColor: "blue",
+      }
+    },
+  },
+});
+
+
+const ChessTile: FC<ViewProps & AndSomeChessPositionArgs> = (props) => {
+  const { possible, selected, potentialMove } = deriveCurrentTileState(props);
+  const componentStyles = useComponentStyles("ChessTile", props.style, {
+    // Represents a possible position for the selected piece
+    possible,
+    // Represents the position of the selected piece
+    selected,
+    // Represents the selected possible position of the selected piece.
+    potentialMove
+  });
+
+  const { View, Text } = useMolecules();
+  return <View { ...props} />
+}
+
+const components = {AwesomeViewComponent}
+
+const App = (props) => {
+  const board = useMemo(() => {
+    Array.from({ length: 12 }, (_, i) => Array.from({ length: 12 }, (_, j) => <ChessTile variant={ i % 2 === j % 2 ? "white" : 'black' } />))
+  }, []);
+  
+  return (
+    <ProvideMolecules components={components} theme={theme}>
+      {board}
+    </ProvideMolecules>
+  )
+}
+export default App;
+```
+
+
+### Resolve Component styles
+Though the component theme is opinionated by default.
+You can write your own custom style resolver allowing you to use styles you already have. Molecules provider accepts an optional `resolveComponentStyles` prop.
+```tsx
+    // TODO: Add an example for resolving component styles
 ```
 
 
@@ -201,6 +270,7 @@ Also, the component consumer can have a different color mode in different parts 
 ```tsx
     // TODO: Add an example for documenting nested
 ```
+
 
 # Scripts
 ```bash
