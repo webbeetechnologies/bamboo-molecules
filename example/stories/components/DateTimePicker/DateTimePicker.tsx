@@ -8,9 +8,9 @@ export const Example = (props: Props) => {
     const [date, setDate] = useState<Date | null>(null);
 
     const onChange = useCallback(
-        (date: Date | null) => {
-            props.onChange?.(date);
-            setDate(date);
+        (newDate: Date | null) => {
+            props.onChange?.(newDate);
+            setDate(newDate);
         },
         [props],
     );
