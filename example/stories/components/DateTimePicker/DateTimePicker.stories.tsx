@@ -48,7 +48,5 @@ Default.play = async ({ canvasElement }) => {
     await userEvent.type(timeInput, '1');
     await userEvent.click(canvasElement);
 
-    await delay(50);
-
-    expect(canvas.getByDisplayValue('01:00am')).toBeInTheDocument();
+    await waitFor(() => expect(canvas.getByDisplayValue('01:00am')).toBeInTheDocument());
 };
