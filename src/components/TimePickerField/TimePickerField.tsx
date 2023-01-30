@@ -1,11 +1,11 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import type { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
-import type { Mask } from 'react-native-mask-input';
 import { format, set } from 'date-fns';
 
 import { useComponentStyles, useMolecules, useToggle } from '../../hooks';
 import type { TimePickerModalProps } from '../TimePickerModal';
 import type { TextInputProps } from '../TextInput';
+import { formatTime, timeFormat, getAddableHourAndMinute } from './utils';
 
 export type Props = TextInputProps & {
     time?: Date | null;
@@ -44,31 +44,14 @@ const TimePickerField = (
 
     const onOpenModal = useCallback(() => setIsOpen(true), [setIsOpen]);
 
-    const onConfirmTime = useCallback(
-        (newTime: string) => {
-            const [hour = '0', minute = '0'] = newTime.replace(/[ap]m/, '').split(':');
-
-            onTimeChangeProp?.(set(timeProp || new Date(), { hours: +hour, minutes: +minute }));
-
-            setIsOpen(false);
-
-            if (onTimeChangeProp) return;
-
-            setTime(formatTime({ date: timeProp, hour, minute, is24Hour }));
-        },
-        [timeProp, is24Hour, onTimeChangeProp, setIsOpen],
-    );
-
-    const onBlur = useCallback(
-        (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-            onBlurProp?.(e);
-
-            const [hour = '0', minute = '0'] = time.replace(/[ap]m/, '').split(':');
+    const onTimeChange = useCallback(
+        ({ time: _time }: { time: string }) => {
+            const { hour, minute } = getAddableHourAndMinute({ time: _time, is24Hour });
 
             onTimeChangeProp?.(
                 set(timeProp || new Date(), {
-                    hours: +hour,
-                    minutes: +minute,
+                    hours: hour,
+                    minutes: minute,
                 }),
             );
 
@@ -76,7 +59,25 @@ const TimePickerField = (
 
             setTime(formatTime({ date: timeProp, hour, minute, is24Hour }));
         },
-        [timeProp, is24Hour, onBlurProp, onTimeChangeProp, time],
+        [is24Hour, onTimeChangeProp, timeProp],
+    );
+
+    const onConfirmTime = useCallback(
+        (newTime: string) => {
+            setIsOpen(false);
+
+            onTimeChange({ time: newTime });
+        },
+        [setIsOpen, onTimeChange],
+    );
+
+    const onBlur = useCallback(
+        (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+            onBlurProp?.(e);
+
+            onTimeChange({ time });
+        },
+        [onBlurProp, onTimeChange, time],
     );
 
     const rightElement = useMemo(() => {
@@ -122,66 +123,6 @@ const TimePickerField = (
             onBlur={onBlur}
             right={rightElement}
         />
-    );
-};
-
-const timeMask24Hour: Mask = (text: string = '') => {
-    const cleanTime = text.replace(/\D+/g, '');
-
-    const hourFirstDigit = /[012]/; // only 0,1 or 2
-    let hourSecondDigit = /\d/; // any number
-
-    if (cleanTime.charAt(0) === '2') {
-        hourSecondDigit = /[0123]/; // only 0,1,2 or 3
-    }
-
-    const minuteFirstDigit = /[012345]/; // only 0,1,2,3,4 or 5
-    const minuteSecondDigit = /\d/; // any number
-
-    return [hourFirstDigit, hourSecondDigit, ':', minuteFirstDigit, minuteSecondDigit];
-};
-
-const timeMask12Hour: Mask = (text: string = '') => {
-    const cleanTime = text.replace(/\D+/g, '');
-
-    const hourFirstDigit = /[01]/; // only 0,1 or 2
-    let hourSecondDigit = /\d/; // any number
-
-    if (cleanTime.charAt(0) === '1') {
-        hourSecondDigit = /[012]/; // only 0,1,2 or 3
-    }
-
-    const minuteFirstDigit = /[012345]/; // only 0,1,2,3,4 or 5
-    const minuteSecondDigit = /\d/; // any number
-
-    return [hourFirstDigit, hourSecondDigit, ':', minuteFirstDigit, minuteSecondDigit, /[ap]/, 'm'];
-};
-
-const timeFormat = {
-    '24': {
-        format: 'hh:mm',
-        mask: timeMask24Hour,
-    },
-    '12': {
-        format: 'hh:mmaaa',
-        mask: timeMask12Hour,
-    },
-};
-
-const formatTime = ({
-    date,
-    hour,
-    minute,
-    is24Hour,
-}: {
-    date: Date | null;
-    hour: string;
-    minute: string;
-    is24Hour: boolean;
-}) => {
-    return format(
-        set(date || new Date(), { hours: +hour, minutes: +(minute || 0) }),
-        is24Hour ? 'HH:mm' : 'hh:mmaaa',
     );
 };
 
