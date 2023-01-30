@@ -9,6 +9,11 @@
 - Composable components
 
 ## Core Principles
+- At it core, Bamboo molecules extends the principles of Bamboo Atoms.
+  - Dependency Injection\
+    Allows the product developers to replace a component with an equivalent component
+  - Absolute control and customizations\
+    As a developer, you take control of how Molecules work for you from styles to functionality.
 - A product developer should be able to style all the components, not only colors, but also shapes, sizes and variants. 
 - A product developer shouldn't have to worry about importing a multitude of components.
 - A product developer should be able to replace any components, including child components, as he thinks fit.
@@ -170,7 +175,32 @@ const App = (props) => {
 export default App;
 ```
 
+### Styling Custom components
+If you are a library developer, you may want to enable your component consumers to extend the styles of the components.
+You may have different states, you may also want to have different variants.
+Bamboo Molecules enables you to create a configurable component all the parts of which can be separately styled.
 
+```tsx
+    // TODO: Add a Component 
+```
+
+
+### Nesting ProvideMolecules - Components
+If you need to provide some components access in only a certain part of the application, you can nest ProvideMolecules.
+ProvideMolecules takes the top-down approach, thus allowing you to overwrite the components of molecules. 
+This also allows you to provide the components at the topmost level, or at a much lower level where the component is most relevant.
+
+Consider the example
+```tsx
+    // TODO: Add a Component Modal example with sub children
+```
+### Nesting ProvideMolecules - Themes
+You may also find it useful to provide styling components separately at a lower level while still being able to extend the styles from a higher level.
+While it allows you to create custom styles, it enables the end consumer of these components to overwrite the design.
+Also, the component consumer can have a different color mode in different parts of the application without much ado.
+```tsx
+    // TODO: Add an example for documenting nested
+```
 
 # Scripts
 ```bash
