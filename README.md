@@ -249,8 +249,50 @@ export default App;
 ### Resolve Component styles
 Though the component theme is opinionated by default.
 You can write your own custom style resolver allowing you to use styles you already have. Molecules provider accepts an optional `resolveComponentStyles` prop.
+
 ```tsx
-    // TODO: Add an example for resolving component styles
+import { ProvideMolecules, extendTheme, resolveComponentStyles, extractComponentStyles } from "@webbeetechnologies/bamboo-molecules";
+
+
+const theme = extendTheme({
+  Knight: {
+    height: 16,
+    width: 16,
+  },
+});
+
+const resolveStyles = (arg) => {
+  const {componentName, componentTheme, variant, states, size, style, } = arg;
+
+  switch(componentName) {
+    case 'Knight':
+      // Do something amazing with the componentTheme.
+      // here, you can do something with the variants, states and sizes also.
+      // you may choose to drop styles entirely for example.
+      break;
+    default:
+      return resolveComponentStyles(arg);
+  }
+}
+
+const extractStyles = (arg) => {
+  const { theme, componentName, colorMode, style } = arg;
+
+  switch(componentName) {
+    case 'Knight':
+      // here, you get the theme with duly resolved design tokens.
+      // Do something with the style object and the theme.
+      break;
+    default:
+      return resolveComponentStyles(arg);
+  }
+}
+
+const App = (props) => {
+  return (
+      <ProvideMolecules theme={theme} extractComponentStyles={extractStyles} resolveComponentStyles={resolveStyles} />
+  )
+}
 ```
 
 
@@ -260,15 +302,117 @@ ProvideMolecules takes the top-down approach, thus allowing you to overwrite the
 This also allows you to provide the components at the topmost level, or at a much lower level where the component is most relevant.
 
 Consider the example
+
 ```tsx
-    // TODO: Add a Component Modal example with sub children
+import { ProvideMolecules, extendTheme, useMolecules } from "@webbeetechnologies/bamboo-molecules";
+import { useMemo } from "react";
+
+
+const componentsModal = {
+  ModalTitle: (props: TextProps) => {
+    const { Text } = useMolecules();
+    const style = useMemo(() => [{ typescale: 'typescale.displayMedium' }], []);
+    return <Text style={style}></Text>
+  },
+  ModalBody: (props: ViewProps) => {
+    const { View } = useMolecules();
+    const viewStyles = useMemo(() => [{ borderRadius: 'shapes.corner.large' }], []);
+    const textStyles = useMemo(() => [{ typescale: 'typescale.displayRegular' }], []);
+
+    return (
+      <View style={viewStyles} {...props}>
+        <Text style={textStyles}>{props.children}</Text>
+      </View>
+    )
+  },
+}
+
+const componentsRoot = {
+  Modal: (props: ViewProps) => {
+    const { View } = useMolecules();
+    return (
+      <ProvideMolecules components={componentsModal}>
+        <View {...props} />
+      </ProvideMolecules>
+    )
+  },
+  ModalTitle: (props: TextProps) => {
+    const { Text } = useMolecules();
+    const style = useMemo(() => [{ typescale: 'typescale.headlineLarge' }], []);
+    return <Text style={style}></Text>
+  },
+}
+
+const LibraryModalBody = () => {
+  const {ModalBody, ModalTitle} = useMolecules();
+  return (
+      <>
+        <ModalTitle>I am rendered `headlineLarge`</ModalTitle>
+        <ModalBody>Some Modal Body</ModalBody>
+      </>
+  )
+}
+
+const AppModal = () => {
+  const {Modal} = useMolecules();
+  return (
+    <Modal>
+      <LibraryModalBody />
+    </Modal>
+  )
+}
+
+
+
+const App = (props) => {
+  return (
+          <ProvideMolecules components={componentsRoot}>
+            <AppModal />
+          </ProvideMolecules>
+  )
+}
 ```
+
 ### Nesting ProvideMolecules - Themes
 You may also find it useful to provide styling components separately at a lower level while still being able to extend the styles from a higher level.
 While it allows you to create custom styles, it enables the end consumer of these components to overwrite the design.
 Also, the component consumer can have a different color mode in different parts of the application without much ado.
 ```tsx
-    // TODO: Add an example for documenting nested
+import { ProvideMolecules, extendTheme, useMolecules } from "@webbeetechnologies/bamboo-molecules";
+
+const theme = extendTheme({
+  ViewComponent: {
+    backgroundColor: "colors.primary",
+    padding: "spacings.16",
+    margin: "spacings.16",
+  }
+})
+
+const darkTheme = extendTheme({
+  ...theme,
+  colorMode: "dark",
+})
+
+
+const ViewComponent = (props) => {
+  const {View, Text} = useMolecules();
+  return (
+          <View { ...props }>
+            <Text>{props.children}</Text>
+          </View>
+  )
+}
+
+const App = (props) => {
+  return (
+          <ProvideMolecules theme={theme}>
+            <ViewComponent>I am in a light theme</ViewComponent>
+            <ProvideMolecules theme={darkTheme}>
+              <ViewComponent>I am in a dark theme</ViewComponent>
+            </ProvideMolecules>
+          </ProvideMolecules>
+  )
+}
 ```
 
 
