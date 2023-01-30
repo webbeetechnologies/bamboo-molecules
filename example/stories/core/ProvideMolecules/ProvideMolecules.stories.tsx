@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Example } from './ProvideMolecules';
+import { Example, NestedThemeExample } from './ProvideMolecules';
 import DocsPage from './ProvideMolecules.docs';
 
 export default {
@@ -16,6 +16,19 @@ Default.args = {
 };
 
 Default.parameters = {
+    docs: {
+        page: DocsPage,
+    },
+};
+
+export const NestedTheme: ComponentStory<typeof Example> = NestedThemeExample;
+
+NestedTheme.args = {
+    variant: 'contained',
+    onPress: () => {},
+};
+
+NestedTheme.parameters = {
     docs: {
         page: DocsPage,
     },

@@ -54,7 +54,7 @@ export const theme = extendTheme({
         color: 'rgba(51,51,51,0.9)',
         backgroundColor: '#F8F8F8',
     },
-    Link: {
+    DocLink: {
         fontSize: 15,
         lineHeight: 24,
         color: '#1a0dab',
@@ -62,13 +62,13 @@ export const theme = extendTheme({
     },
 });
 
-type LinkProps = TextProps & {
+type DocLinkProps = TextProps & {
     href: { idOrTitle: string; name?: string };
 };
 
 export interface InjectedComponentTypes {
     Code: ComponentType<TextProps>;
-    Link: ComponentType<LinkProps>;
+    DocLink: ComponentType<DocLinkProps>;
 }
 
 export const useMolecules = () => useMoleculesDefault<InjectedComponentTypes>();
@@ -98,17 +98,18 @@ const Code = ({ style, ...rest }: TextProps) => {
     return <Text style={codeStyles} {...rest} />;
 };
 
-const Link = ({ style, href, ...rest }: LinkProps) => {
+const DocLink = ({ style, href, ...rest }: DocLinkProps) => {
     const { Text } = useMolecules();
     const linkStyles = useComponentStyles('Link', style);
 
     return <Text style={linkStyles} {...rest} onPress={linkTo(href.idOrTitle, href?.name)} />;
 };
 
-const components = { Code, Link };
+const components = { Code, DocLink };
 
 export const withDocsWrapper = (Component: () => JSX.Element) => (props: typeof Component) => {
     return (
+        // @ts-ignore
         <DefaultProvideMolecules components={components} theme={theme}>
             <Component {...props} />
         </DefaultProvideMolecules>
