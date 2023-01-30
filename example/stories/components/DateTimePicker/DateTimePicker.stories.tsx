@@ -1,8 +1,9 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-
-import { Example } from './DateTimePicker';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
+import { userEvent, waitFor, within } from '@storybook/testing-library';
+
+import { delay } from '../../common';
+import { Example } from './DateTimePicker';
 
 export default {
     title: 'components/DateTimePicker',
@@ -46,6 +47,8 @@ Default.play = async ({ canvasElement }) => {
 
     await userEvent.type(timeInput, '1');
     await userEvent.click(canvasElement);
+
+    await delay(50);
 
     expect(canvas.getByDisplayValue('01:00am')).toBeInTheDocument();
 };
