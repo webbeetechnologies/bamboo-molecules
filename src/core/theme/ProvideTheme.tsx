@@ -101,6 +101,7 @@ import {
     ratingStyles,
     ratingItemStyles,
     linkStyles,
+    navigationRailStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -229,6 +230,8 @@ const defaultThemeValue: Partial<ITheme> = {
     Rating_Item: ratingItemStyles,
 
     Link: linkStyles,
+
+    NavigationRail: navigationRailStyles,
 };
 
 const defaultExtractStyles = memoize(

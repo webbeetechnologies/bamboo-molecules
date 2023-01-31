@@ -59,6 +59,7 @@ import {
     AccordionItem,
     Rating,
     Link,
+    NavigationRail,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -122,6 +123,7 @@ const defaultComponents: DefaultComponents = {
     AccordionItem,
     Rating,
     Link,
+    NavigationRail,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

@@ -51,6 +51,7 @@ import type {
     AccordionProps,
     RatingProps,
     LinkProps,
+    NavigationRail,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -110,6 +111,7 @@ export interface DefaultComponents {
     AccordionItem: typeof AccordionItem;
     Rating: ComponentType<RatingProps>;
     Link: ComponentType<LinkProps>;
+    NavigationRail: typeof NavigationRail;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
