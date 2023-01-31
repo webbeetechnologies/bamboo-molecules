@@ -69,7 +69,7 @@ export const timeMask12Hour: Mask = (text: string = '') => {
 
 export const timeFormat = {
     '24': {
-        format: 'hh:mm',
+        format: 'HH:mm',
         mask: timeMask24Hour,
     },
     '12': {
