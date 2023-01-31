@@ -1,4 +1,4 @@
-import type { TextStyle } from 'react-native';
+import type { TextStyle, ViewStyle } from 'react-native';
 import {
     ProvideMolecules,
     useMolecules,
@@ -59,11 +59,25 @@ export const buttonDefaultStyles: ComponentStylePropWithVariants<TextStyle, 'dis
 };
 
 const theme = extendTheme({
+    colorMode: 'light',
     CustomButton: buttonDefaultStyles,
-    Button: {
-        color: 'colors.primary',
-        borderColor: 'colors.outline',
-        borderRadius: 'shapes.corner.extraSmall',
+});
+
+const darkTheme = extendTheme({
+    colorMode: 'dark',
+    CustomButton: buttonDefaultStyles,
+
+    CustomButtonTwo: {
+        ...buttonDefaultStyles,
+        variants: {
+            ...buttonDefaultStyles.variants,
+            contained: {
+                ...((buttonDefaultStyles?.variants?.contained as ViewStyle) ?? {}),
+                backgroundColor: 'colors.error',
+                color: 'colors.scrim',
+                borderColor: 'colors.outline',
+            },
+        },
     },
 });
 
@@ -72,11 +86,12 @@ export const Button = ({
     variant = 'text',
     disabled: disabledProp,
     onPress,
+    componentName,
     ...rest
-}: Props) => {
+}: Props & { componentName: string }) => {
     const disabled = disabledProp || !onPress;
     const { TouchableRipple, Text } = useMolecules();
-    const { color, ...buttonStyles } = useComponentStyles('CustomButton', style, {
+    const { color, ...buttonStyles } = useComponentStyles(componentName, style, {
         variant: variant,
         states: { disabled },
     });
@@ -89,16 +104,53 @@ export const Button = ({
             accessibilityRole="button"
             {...rest}>
             <Text selectable={false} style={{ color }}>
-                Custom Button
+                {rest.children}
             </Text>
         </TouchableRipple>
     );
 };
 
+const CustomButtonExampleTwo = Button.bind({});
+
 export const Example = (props: Props) => {
     return (
         <ProvideMolecules theme={theme}>
-            <Button {...props} />
+            <Button {...props} componentName="CustomButton" children="Custom Button" />
+        </ProvideMolecules>
+    );
+};
+
+export const NestedThemeExample = (props: Props) => {
+    const { Card } = useMolecules();
+    return (
+        <ProvideMolecules theme={theme}>
+            <Card>
+                <Card.Header>
+                    <Card.Headline>Light Mode</Card.Headline>
+                </Card.Header>
+                <Card.Content>
+                    <Button {...props} componentName="CustomButton" children="I am primary" />
+                    <ProvideMolecules theme={darkTheme}>
+                        <Card style={{ marginTop: 10 }}>
+                            <Card.Header>
+                                <Card.Headline>Dark Mode</Card.Headline>
+                            </Card.Header>
+                            <Card.Content>
+                                <CustomButtonExampleTwo
+                                    {...props}
+                                    componentName="CustomButtonTwo"
+                                    children="I am red"
+                                />
+                                <Button
+                                    {...props}
+                                    componentName="CustomButton"
+                                    children="I am primary"
+                                />
+                            </Card.Content>
+                        </Card>
+                    </ProvideMolecules>
+                </Card.Content>
+            </Card>
         </ProvideMolecules>
     );
 };

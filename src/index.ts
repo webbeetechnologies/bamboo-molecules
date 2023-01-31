@@ -122,6 +122,7 @@ export {
     PlatformType,
     IComponentsProviderContext,
     ResolveComponentStylesArgs,
+    extractStyles,
 } from './core';
 
 export { withRipple, withActionState, CallbackActionState } from './hocs';

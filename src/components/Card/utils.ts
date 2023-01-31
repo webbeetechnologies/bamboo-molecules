@@ -62,6 +62,8 @@ export const cardStyles: ComponentStylePropWithVariants<ViewStyle, States, Custo
 };
 
 export const cardTypograhyStyles: ComponentStylePropWithVariants<TextStyle> = {
+    color: 'colors.onSurface',
+
     variants: {
         headline: {
             marginBottom: 'spacings.3',
