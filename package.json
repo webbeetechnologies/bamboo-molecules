@@ -1,9 +1,12 @@
 {
-  "name": "@webbeetechnologies/bamboo-molecules",
-  "version": "0.1.13",
+  "name": "@bambooapp/bamboo-molecules",
+  "version": "0.1.14",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/webbeetechnologies/bamboo-molecules.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "license": "MIT",
   "packageManager": "yarn@3.3.0",
