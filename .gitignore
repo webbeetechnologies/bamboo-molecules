@@ -78,3 +78,5 @@ example/cache
 .yarn
 .yarn/cache
 .yarn/install-state.gz
+
+coverage
