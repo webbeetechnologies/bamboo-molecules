@@ -38,7 +38,18 @@ Default.parameters = {
     },
 };
 
-Default.play = async ({ canvasElement }) => {
+export const TwelveHourInteractionTest = Default.bind({});
+
+TwelveHourInteractionTest.args = {
+    testID: 'timepickerfield',
+    is24Hour: false,
+};
+
+TwelveHourInteractionTest.parameters = {
+    chromatic: { disableSnapshot: true },
+};
+
+TwelveHourInteractionTest.play = async ({ canvasElement }) => {
     const canvas = await within(canvasElement);
 
     await waitFor(() => canvas);
@@ -71,14 +82,18 @@ Default.play = async ({ canvasElement }) => {
     await waitFor(() => expect(canvas.getByDisplayValue('11:30am')).toBeInTheDocument());
 };
 
-export const TwentyFourHourTest = Default.bind({});
+export const TwentyFourHourInteractionTest = Default.bind({});
 
-TwentyFourHourTest.args = {
+TwentyFourHourInteractionTest.args = {
     testID: 'timepickerfield',
     is24Hour: true,
 };
 
-TwentyFourHourTest.play = async ({ canvasElement }) => {
+TwentyFourHourInteractionTest.parameters = {
+    chromatic: { disableSnapshot: true },
+};
+
+TwentyFourHourInteractionTest.play = async ({ canvasElement }) => {
     const canvas = await within(canvasElement);
 
     await waitFor(() => canvas);
