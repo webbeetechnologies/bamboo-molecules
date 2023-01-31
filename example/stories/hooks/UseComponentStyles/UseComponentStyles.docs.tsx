@@ -3,7 +3,7 @@ import { Source } from '@storybook/addon-docs';
 import { withDocsWrapper, useMolecules } from '../../common';
 
 const DocsPage = () => {
-    const { View, H1, H3, Text, Code, Link } = useMolecules();
+    const { View, H1, H3, Text, Code, DocLink } = useMolecules();
 
     return (
         <View>
@@ -94,8 +94,10 @@ const DocsPage = () => {
                 hook.
                 {'\n'}
                 Please checkout{' '}
-                <Link href={{ idOrTitle: 'hooks/useCurrentTheme' }}>useCurrentTheme docs</Link> for
-                more details about this.
+                <DocLink href={{ idOrTitle: 'hooks/useCurrentTheme' }}>
+                    useCurrentTheme docs
+                </DocLink>{' '}
+                for more details about this.
             </Text>
 
             <Source language="tsx" code={thirdCodeBlock} />

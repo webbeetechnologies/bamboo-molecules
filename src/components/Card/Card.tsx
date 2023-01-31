@@ -8,7 +8,7 @@ import type { TouchableRippleProps } from '../TouchableRipple';
 export type Props = TouchableRippleProps &
     CallbackActionState & {
         variant?: 'elevated' | 'outlined' | 'filled';
-        containerStyle?: ViewStyle;
+        touchableContainerStyle?: ViewStyle;
         elevation?: MD3Elevation;
     };
 
@@ -21,19 +21,29 @@ const Card = (
         style,
         elevation: elevationProp,
         children,
+        touchableContainerStyle = {},
         ...rest
     }: Props,
     ref: any,
 ) => {
     const { Surface, TouchableRipple } = useMolecules();
-    const componentStyles = useComponentStyles('Card', style, {
-        variant,
-        states: {
-            disabled: !!disabled,
-            pressed: !!pressed,
-            hovered: !!hovered,
+    const componentStyles = useComponentStyles(
+        'Card',
+        [
+            style,
+            {
+                innerContainer: touchableContainerStyle,
+            },
+        ],
+        {
+            variant,
+            states: {
+                disabled: !!disabled,
+                pressed: !!pressed,
+                hovered: !!hovered,
+            },
         },
-    });
+    );
 
     const initialElevation = useMemo(
         () => (elevationProp === undefined ? (variant === 'elevated' ? 1 : 0) : elevationProp),
@@ -46,8 +56,8 @@ const Card = (
         const { container, innerContainer, animationDuration, ...restStyles } = componentStyles;
 
         return {
-            container,
-            innerContainer: [innerContainer, restStyles],
+            container: [container, restStyles],
+            innerContainer: innerContainer,
             animationDuration,
         };
     }, [componentStyles]);

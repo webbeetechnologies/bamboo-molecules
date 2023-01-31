@@ -237,7 +237,7 @@ const defaultThemeValue: Partial<ITheme> = {
     Link: linkStyles,
 };
 
-const defaultExtractStyles = memoize(
+export const defaultExtractStyles = memoize(
     ({ theme, componentName, colorMode, style }: IExtractStylesFuncArgs) => {
         const normalizedComponentStyles = normalizeStyles(theme[componentName], theme[colorMode]);
         const normalizedStyleProp = normalizeStyles(style, theme[colorMode]);
