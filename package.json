@@ -40,7 +40,7 @@
     "run:testcases": "yarn workspace test-cases start",
     "test": "npx jest",
     "bundle": "rm -rf lib/* && yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
-    "do-release": "npm publish ./dist/webbeetechnologies-bamboo-molecules-$npm_package_version.tgz --access=public",
+    "do-release": "npm publish ./dist/bambooapp-bamboo-molecules-$npm_package_version.tgz --access=public",
     "release": "yarn bundle && yarn do-release"
   },
   "dependencies": {

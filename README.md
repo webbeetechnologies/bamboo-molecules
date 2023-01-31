@@ -415,6 +415,9 @@ const App = (props) => {
 }
 ```
 
+# Components and hooks
+Bamboo Molecules components are well documented in storybooks. Learn how to use [Bamboo Molecules](https://main--63724aa647b048f99d6b7c3c.chromatic.com/) in your React Native project now.
+
 
 # Scripts
 ```bash
