@@ -5,6 +5,8 @@
 - As a developer, I expect that a border radius styles are only added if it's the only child and addons appear seamlessly attached.
 
 ## Reference
+- [Explainer Video](https://www.loom.com/share/982a6a2fa5004d7b872c97f98a68545a)
+- [Explainer Video AddonBefore/AddonAfter](https://www.loom.com/share/47072626007e452d8cb693d1bc9a398d)
 - <a href="https://docs.nativebase.io/next/input#h3-input-addons" rel="noreferrer nofollow noopener">Native Base: Input Group Addons</a>
 - <a href="https://getbootstrap.com/docs/5.2/forms/input-group/" rel="noreferrer nofollow noopener">Bootstrap: Input Groups</a>
 - <a href="https://getbootstrap.com/docs/5.2/components/button-group/#basic-example" rel="noreferrer nofollow noopener">Bootstrap: Button Groups</a>

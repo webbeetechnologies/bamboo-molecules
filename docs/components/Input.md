@@ -24,9 +24,9 @@ User inputs are an essential field for a user facing interface.
 - As a developer, I want to use inputs in different predefined sizes.
 
 ## Variants
-1. Outlined
-2. Ghost
-3. Underlined
+1. Filled
+2. Outlined
+3. Ghost
 
 
 ## Implementation Details

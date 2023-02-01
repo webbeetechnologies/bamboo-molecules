@@ -22,6 +22,8 @@ Molecules is heavily inspired by Material and Cupertino components and thus trie
 - [WithElements](./components/HOC/WithElements.md)
 - [WithActionIconButton](./components/HOC/WithActionIconButton.md)
 - [WithPopover](./components/HOC/WithPopover.md)
+- [WithBottomsheet](./components/HOC/WithBottomsheet.md)
+
 
 
 ## Molecules created using Atoms:
