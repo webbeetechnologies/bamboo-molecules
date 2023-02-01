@@ -4,7 +4,7 @@ import {
     ProvideComponents as AtomsProvideComponents,
     ConsumeComponents as AtomsConsumeComponents,
     extractComponents as extractComponentsAtoms,
-} from '@webbee/bamboo-atoms';
+} from '@bambooapp/bamboo-atoms';
 import {
     ActivityIndicator,
     Icon,

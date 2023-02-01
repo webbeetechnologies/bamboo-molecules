@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { TextProps } from '@webbee/bamboo-atoms';
+import type { TextProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
 export type Props = TextProps & {

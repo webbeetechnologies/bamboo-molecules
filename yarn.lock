@@ -1758,10 +1758,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bambooapp/bamboo-atoms@npm:^0.0.19":
+  version: 0.0.19
+  resolution: "@bambooapp/bamboo-atoms@npm:0.0.19"
+  dependencies:
+    lodash.isnil: ^4.0.0
+    ts-deepmerge: ^3.0.0
+  peerDependencies:
+    "@types/react": ^16.6.0
+    "@types/react-native": ^0.60.0
+    react: ^16.6.0
+    react-dom: ^16.6.0
+    react-native: ^0.60.0
+  checksum: 3615a154bbb891c10cd7a8d0b8d1b60139d57f93de7cd3339b7789827708d68edd52580a9fa1fcf79278f68582a478c497618dbe772560851af4779d40cd2c9a
+  languageName: node
+  linkType: hard
+
 "@bambooapp/bamboo-molecules@workspace:.":
   version: 0.0.0-use.local
   resolution: "@bambooapp/bamboo-molecules@workspace:."
   dependencies:
+    "@bambooapp/bamboo-atoms": ^0.0.19
     "@react-native-aria/overlays": ^0.3.2
     "@react-native-community/eslint-config": ^3.1.0
     "@shopify/flash-list": ^1.4.0
@@ -1779,7 +1796,6 @@ __metadata:
     "@types/react-native": ^0.70.0
     "@types/react-native-vector-icons": ^6.4.12
     "@types/uuid": ^8.3.4
-    "@webbee/bamboo-atoms": ^0.0.18
     color: ^4.2.3
     date-fns: ^2.29.3
     eslint: ^8.23.1
@@ -1789,7 +1805,7 @@ __metadata:
     jest: 27
     jest-environment-jsdom: 27
     jest-environment-node: 27
-    jest-transform-stub: 2
+    jest-transform-stub: ^2.0.0
     lodash.get: ^4.4.2
     lodash.isnil: ^4.0.0
     lodash.memoize: ^4.1.2
@@ -7705,22 +7721,6 @@ __metadata:
     "@webassemblyjs/wast-parser": 1.9.0
     "@xtuc/long": 4.2.2
   checksum: 3d1e1b2e84745a963f69acd1c02425b321dd2e608e11dabc467cae0c9a808962bc769ec9afc46fbcea7188cc1e47d72370da762d258f716fb367cb1a7865c54b
-  languageName: node
-  linkType: hard
-
-"@webbee/bamboo-atoms@npm:^0.0.18":
-  version: 0.0.18
-  resolution: "@webbee/bamboo-atoms@npm:0.0.18"
-  dependencies:
-    lodash.isnil: ^4.0.0
-    ts-deepmerge: ^3.0.0
-  peerDependencies:
-    "@types/react": ^16.6.0
-    "@types/react-native": ^0.60.0
-    react: ^16.6.0
-    react-dom: ^16.6.0
-    react-native: ^0.60.0
-  checksum: e1cf2862ab60e3c37011a65fcc8c44cff346a76d7de00289c53946fe15d074fbf9bdb3cd2d5959a27fa1d392ed74f7cfc100920edabe8170fc9f2e3261db9628
   languageName: node
   linkType: hard
 
@@ -17297,7 +17297,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-transform-stub@npm:2, jest-transform-stub@npm:^2.0.0":
+"jest-transform-stub@npm:^2.0.0":
   version: 2.0.0
   resolution: "jest-transform-stub@npm:2.0.0"
   checksum: c46134257e5fb047f5952e4a4a1339925dd009da15aa8d3310ba1d3e4d22266ed6c675cd18e58c9d5ca2246718d6cc8ff00ea6a4b6f3b2a6b285b6426f6ae8fe

@@ -1,4 +1,4 @@
-import { useComponents } from '@webbee/bamboo-atoms';
+import { useComponents } from '@bambooapp/bamboo-atoms';
 import type { DefaultComponents } from '../core/components/types';
 
 const useMolecules = <T,>() => {

@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Animated, Easing, Platform, StyleProp, StyleSheet, ViewStyle } from 'react-native';
-import type { ActivityIndicatorProps } from '@webbee/bamboo-atoms';
+import type { ActivityIndicatorProps } from '@bambooapp/bamboo-atoms';
 
 import type { ComponentStylePropWithVariants } from '../../types';
 import { useComponentStyles, useMolecules } from '../../hooks';

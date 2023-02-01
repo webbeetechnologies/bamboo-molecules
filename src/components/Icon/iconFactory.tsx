@@ -1,4 +1,4 @@
-import { textFactory } from '@webbee/bamboo-atoms';
+import { textFactory } from '@bambooapp/bamboo-atoms';
 import { memoize } from '../../utils';
 import { IconPacks, IconType } from './types';
 

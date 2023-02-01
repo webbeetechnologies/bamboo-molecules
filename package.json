@@ -44,9 +44,9 @@
     "release": "yarn bundle && yarn do-release"
   },
   "dependencies": {
+    "@bambooapp/bamboo-atoms": "^0.0.19",
     "@react-native-aria/overlays": "^0.3.2",
     "@types/lodash.omitby": "^4.6.7",
-    "@webbee/bamboo-atoms": "^0.0.18",
     "color": "^4.2.3",
     "date-fns": "^2.29.3",
     "lodash.get": "^4.4.2",
