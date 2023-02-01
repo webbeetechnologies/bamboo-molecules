@@ -1,6 +1,9 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import { userEvent, waitFor, within } from '@storybook/testing-library';
+import { expect } from '@storybook/jest';
 
-import { Example } from './NumberInput';
+import { delay } from '../../common';
+import { Example, ControlledExample } from './NumberInput';
 
 export default {
     title: 'components/NumberInput',
@@ -12,6 +15,7 @@ export default {
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 Default.args = {
+    variant: 'flat',
     placeholder: 'Placeholder',
     label: 'Enter numbers',
 };
@@ -20,29 +24,67 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<NumberInput placeholder="Placeholder" value={number} onChangeText={masked => setNumber(masked)} {...props}  />
-`,
+    const { NumberInput } = useMolecules();
+
+    return <NumberInput />;`,
             language: 'tsx',
             type: 'auto',
         },
     },
 };
 
-export const WithCustomMask: ComponentStory<typeof Example> = args => <Example {...args} />;
+export const Controlled: ComponentStory<typeof ControlledExample> = args => (
+    <ControlledExample {...args} />
+);
 
-WithCustomMask.args = {
+Controlled.args = {
+    variant: 'flat',
     placeholder: 'Placeholder',
     label: 'Enter numbers',
 };
 
-WithCustomMask.parameters = {
+Controlled.parameters = {
+    controls: {
+        exclude: ['value'],
+    },
     docs: {
         source: {
             code: `
-<NumberInput placeholder="Placeholder" label="Enter numbers" value={number} onChangeText={value => setNumber(value)} {...props} />
-`,
+    const { NumberInput } = useMolecules();
+
+    return <NumberInput />;`,
             language: 'tsx',
             type: 'auto',
         },
     },
+};
+
+export const Interactions = Controlled.bind({});
+
+Interactions.args = {
+    ...Controlled.args,
+    testID: 'numberInputInteractions',
+    defaultValue: '12345',
+};
+
+Interactions.parameters = {
+    ...Controlled.parameters,
+};
+
+Interactions.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await waitFor(async () => {
+        // value should overwrite the default value
+        await expect(canvas.queryByText('12345')).not.toBeTruthy();
+
+        await userEvent.type(
+            canvas.getByTestId('numberInputInteractions-flat'),
+            'hello!@#$%^&*()123.56.',
+        );
+
+        await delay(500);
+
+        await expect(canvas.getByDisplayValue('123.56')).toBeInTheDocument();
+    });
 };
