@@ -49,6 +49,7 @@ export type Props = {
 
     onFocusInput?: (type: PossibleClockTypes) => any;
     isLandscape?: boolean;
+    testID?: string;
 };
 
 function TimePicker({
@@ -59,6 +60,7 @@ function TimePicker({
     inputType = 'keyboard',
     onTimeChange,
     isLandscape = false,
+    testID,
 }: Props) {
     const { hours, minutes } = useMemo(() => {
         const date = time ? parse(time, 'HH:mm', new Date()) : new Date();
@@ -109,7 +111,7 @@ function TimePicker({
 
     return (
         <DisplayModeContext.Provider value={memoizedValue}>
-            <View style={componentStyles.container}>
+            <View style={componentStyles.container} testID={testID}>
                 <TimeInputs
                     inputType={inputType}
                     hours={hours}
@@ -118,6 +120,7 @@ function TimePicker({
                     onChange={onChange}
                     onFocusInput={onFocusInput}
                     focused={focused}
+                    testID={testID}
                 />
                 <>
                     {inputType === inputTypes.picker ? (
