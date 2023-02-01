@@ -40,6 +40,7 @@ const NumberRangeInput = ({
     onChange,
     errorMessage = 'Invalid number range.',
     style,
+    testID = 'number-range-input',
     ...rest
 }: Props) => {
     const { View, ElementGroup, NumberInput, HelperText } = useMolecules();
@@ -139,6 +140,7 @@ const NumberRangeInput = ({
                     )}
                     onFocus={useCallback((args: any) => onFocus(args, 'min'), [onFocus])}
                     onBlur={useCallback((args: any) => onBlur(args, 'min'), [onBlur])}
+                    testID={`${testID}-min`}
                 />
                 <NumberInput
                     label="max"
@@ -152,6 +154,7 @@ const NumberRangeInput = ({
                     )}
                     onFocus={useCallback((args: any) => onFocus(args, 'max'), [onFocus])}
                     onBlur={useCallback((args: any) => onBlur(args, 'max'), [onBlur])}
+                    testID={`${testID}-max`}
                 />
             </ElementGroup>
             {error && <HelperText style={errorTextStyle}>{errorMessage}</HelperText>}
