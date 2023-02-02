@@ -6,9 +6,9 @@ export type Props = Omit<ViewProps, 'children'> & {
     children: ReactElement | ReactElement[];
 };
 const allowedChildren = [
-    'NavigationRail_Footer',
     'NavigationRail_Header',
     'NavigationRail_Content',
+    'NavigationRail_Footer',
 ];
 
 const NavigationRail = ({ children, style, ...rest }: Props) => {

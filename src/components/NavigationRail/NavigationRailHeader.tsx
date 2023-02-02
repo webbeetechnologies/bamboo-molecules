@@ -15,6 +15,6 @@ const NavigationRailHeader = memo(({ style, children, ...rest }: Props) => {
     );
 });
 
-NavigationRailHeader.displayName = 'NavigationRail_Footer';
+NavigationRailHeader.displayName = 'NavigationRail_Header';
 
 export default NavigationRailHeader;
