@@ -97,7 +97,13 @@ function TimePicker({
 
             if (newDisplayMode !== displayMode) setDisplayMode(newDisplayMode);
 
-            onTimeChange?.({ time: `${params.hours}:${params.minutes}`, focused: params.focused });
+            onTimeChange?.({
+                time: `${`${params.hours}`.padStart(2, '0')}:${`${params.minutes}`.padStart(
+                    2,
+                    '0',
+                )}`,
+                focused: params.focused,
+            });
         },
         [displayMode, hours, is24Hour, onTimeChange],
     );

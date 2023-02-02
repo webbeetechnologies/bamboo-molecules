@@ -5,12 +5,12 @@ export type Props = TimePickerFieldProps & {};
 
 export const Example = (props: Props) => {
     const { TimePickerField } = useMolecules();
-    const [time, setTime] = useState<Date | null>(new Date('2023-01-01T00:00:00.000Z'));
+    const [time, setTime] = useState<string>('10:13');
 
     const onChange = useCallback(
-        (newDate: Date) => {
-            props.onTimeChange?.(newDate);
-            setTime(newDate);
+        (newTime: string) => {
+            props.onTimeChange?.(newTime);
+            setTime(newTime);
         },
         [props],
     );

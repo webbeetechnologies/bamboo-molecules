@@ -1,25 +1,24 @@
-import { forwardRef, memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { forwardRef, memo, useCallback, useMemo, useState } from 'react';
 import type { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
-import { format, set } from 'date-fns';
 
 import { useComponentStyles, useMolecules, useToggle } from '../../hooks';
 import type { TimePickerModalProps } from '../TimePickerModal';
 import type { TextInputProps } from '../TextInput';
-import { formatTime, timeFormat, getAddableHourAndMinute } from './utils';
+import { timeFormat, getAddableHourAndMinute } from './utils';
+import { parse } from '../../utils';
+import { format } from 'date-fns';
 
 export type Props = TextInputProps & {
-    time?: Date | null;
-    onTimeChange?: (date: Date) => void;
+    time: string;
+    onTimeChange: (time: string) => void;
     is24Hour?: boolean;
     withModal?: boolean;
     modalProps?: Omit<TimePickerModalProps, 'time' | 'onConfirm' | 'isOpen' | 'onClose'>;
 };
 
-const today = new Date();
-
 const TimePickerField = (
     {
-        time: timeProp = today,
+        time,
         onTimeChange: onTimeChangeProp,
         is24Hour = false,
         withModal = true,
@@ -33,11 +32,12 @@ const TimePickerField = (
     const { MaskedInput, IconButton, TimePickerModal } = useMolecules();
     const componentStyles = useComponentStyles('TimePickerField', style); // all the styling logics goes here
 
+    const [timeString, setTimeString] = useState(
+        format(parse(time, 'HH:mm', new Date()), timeFormat[!is24Hour ? '12' : '24'].format),
+    );
+
     const currentTimeFormat = useMemo(() => timeFormat[!is24Hour ? '12' : '24'], [is24Hour]);
 
-    const [time, setTime] = useState(() =>
-        timeProp ? format(timeProp, currentTimeFormat.format) : '',
-    );
     const { state: isOpen, setState: setIsOpen } = useToggle(false);
 
     const onCloseModal = useCallback(() => setIsOpen(false), [setIsOpen]);
@@ -46,20 +46,14 @@ const TimePickerField = (
 
     const onTimeChange = useCallback(
         ({ time: _time }: { time: string }) => {
-            const { hour, minute } = getAddableHourAndMinute({ time: _time, is24Hour });
+            const { hour, minute } = getAddableHourAndMinute({ time: timeString, is24Hour });
+            // const isPM = timeString.replace(/[\d:]/g, '').includes('p');
 
             onTimeChangeProp?.(
-                set(timeProp || new Date(), {
-                    hours: hour,
-                    minutes: minute,
-                }),
+                `${hour.toString().padStart(2, '0')}:${minute.toString().padEnd(2, '0')}`,
             );
-
-            if (onTimeChangeProp) return;
-
-            setTime(formatTime({ date: timeProp, hour, minute, is24Hour }));
         },
-        [is24Hour, onTimeChangeProp, timeProp],
+        [is24Hour, onTimeChangeProp, timeString],
     );
 
     const onConfirmTime = useCallback(
@@ -92,12 +86,14 @@ const TimePickerField = (
                     isOpen={isOpen}
                     onClose={onCloseModal}
                     onConfirm={onConfirmTime}
+                    is24Hour={is24Hour}
                 />
             </>
         );
     }, [
         IconButton,
         TimePickerModal,
+        is24Hour,
         isOpen,
         modalProps,
         onCloseModal,
@@ -106,10 +102,15 @@ const TimePickerField = (
         time,
         withModal,
     ]);
-
-    useEffect(() => {
-        setTime(timeProp ? format(timeProp, currentTimeFormat.format) : '');
-    }, [timeProp, currentTimeFormat.format]);
+    // useEffect(() => {
+    //     setTimeString(
+    //         () =>
+    //             formatWithMask({
+    //                 text: time,
+    //                 mask: timeFormat[is24Hour ? '24' : '12'].mask,
+    //             }).masked,
+    //     );
+    // }, [time, currentTimeFormat.format, is24Hour]);
 
     return (
         <MaskedInput
@@ -117,8 +118,8 @@ const TimePickerField = (
             mask={currentTimeFormat.mask}
             label={currentTimeFormat.format}
             {...rest}
-            value={time}
-            onChangeText={setTime}
+            value={timeString}
+            onChangeText={setTimeString}
             style={componentStyles}
             onBlur={onBlur}
             right={rightElement}
