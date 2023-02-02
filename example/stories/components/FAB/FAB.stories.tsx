@@ -18,8 +18,11 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<ActivityIndicator color="colors.primary" size={30} animating {...rest} />
-`,
+    const { FAB } = useMolecules();
+
+    const onPress = useCallback(() => {}, []);
+
+    return <FAB iconName="plus" onPress={onPress} />;`,
             language: 'tsx',
             type: 'auto',
         },
@@ -38,7 +41,11 @@ ExtendedFAB.parameters = {
     docs: {
         source: {
             code: `
-<ActivityIndicator color="colors.primary" size={30} animating {...rest} />
+    const { FAB } = useMolecules();
+
+    const onPress = useCallback(() => {}, []);
+
+    return <FAB iconName="pencil-outline" label="Compose" onPress={onPress} />;
 `,
             language: 'tsx',
             type: 'auto',
