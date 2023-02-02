@@ -52,6 +52,8 @@ import type {
     RatingProps,
     LinkProps,
     NavigationRail,
+    BadgeProps,
+    FABProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -112,6 +114,8 @@ export interface DefaultComponents {
     Rating: ComponentType<RatingProps>;
     Link: ComponentType<LinkProps>;
     NavigationRail: typeof NavigationRail;
+    Badge: ComponentType<BadgeProps>;
+    FAB: ComponentType<FABProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

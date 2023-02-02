@@ -63,7 +63,10 @@ export const generateLightThemeColors = (
             hover: {
                 onSurface: color(palette.neutral10).alpha(opacity.level1).hexa(),
                 onSurfaceVariant: color(palette.neutralVariant30).alpha(opacity.level1).hexa(),
+                primary: color(palette.primary40).alpha(opacity.level1).hexa(),
+                onPrimaryContainer: color(palette.primary10).alpha(opacity.level1).hexa(),
                 onSecondaryContainer: color(palette.secondary10).alpha(opacity.level1).hexa(),
+                onTertiaryContainer: color(palette.tertiary10).alpha(opacity.level1).hexa(),
             },
             disabled: {
                 onSurface: color(palette.neutral10).alpha(opacity.level2).hexa(),
