@@ -149,3 +149,9 @@ export * from './Accordion';
 export * from './Rating';
 
 export * from './Link';
+
+export * from './NavigationRail';
+
+export * from './Badge';
+
+export * from './FAB';

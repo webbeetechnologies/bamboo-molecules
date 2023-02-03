@@ -33,7 +33,7 @@ export const generateDarkThemeColors = (
         onTertiaryContainer: palette.tertiary90,
         onSurface: palette.neutral90,
         onSurfaceVariant: palette.neutralVariant80,
-        onSurfaceDisabled: color(palette.neutral90).alpha(opacity.level4).rgb().string(),
+        onSurfaceDisabled: color(palette.neutral90).alpha(opacity.level4).hexa(),
         onSurfaceRipple: color(palette.neutral90).alpha(0.12).rgb().string(),
         onError: palette.error20,
         onErrorContainer: palette.error80,
@@ -63,7 +63,10 @@ export const generateDarkThemeColors = (
             hover: {
                 onSurface: color(palette.neutral90).alpha(opacity.level1).rgb().string(),
                 onSurfaceVariant: color(palette.neutralVariant80).alpha(opacity.level1).hexa(),
+                primary: color(palette.primary70).alpha(opacity.level1).hexa(),
+                onPrimaryContainer: color(palette.primary90).alpha(opacity.level1).hexa(),
                 onSecondaryContainer: color(palette.secondary90).alpha(opacity.level1).hexa(),
+                onTertiaryContainer: color(palette.tertiary90).alpha(opacity.level1).hexa(),
             },
             disabled: {
                 onSurface: color(palette.neutral90).alpha(opacity.level2).hexa(),
