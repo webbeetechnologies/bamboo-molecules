@@ -33,7 +33,7 @@ export const generateDarkThemeColors = (
         onTertiaryContainer: palette.tertiary90,
         onSurface: palette.neutral90,
         onSurfaceVariant: palette.neutralVariant80,
-        onSurfaceDisabled: color(palette.neutral90).alpha(opacity.level4).rgb().string(),
+        onSurfaceDisabled: color(palette.neutral90).alpha(opacity.level4).hexa(),
         onSurfaceRipple: color(palette.neutral90).alpha(0.12).rgb().string(),
         onError: palette.error20,
         onErrorContainer: palette.error80,

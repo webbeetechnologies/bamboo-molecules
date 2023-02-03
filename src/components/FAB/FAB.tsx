@@ -1,12 +1,13 @@
-import { forwardRef, memo, useMemo } from 'react';
-import type { TextProps, ViewStyle } from 'react-native';
+import { forwardRef, memo, useEffect, useMemo, useRef } from 'react';
+import { TextProps, ViewStyle, Animated } from 'react-native';
+import type { ViewProps } from '@webbee/bamboo-atoms';
 
+import type { MD3Elevation } from '../../core/theme/types';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { CallbackActionState, withActionState } from '../../hocs';
 import type { SurfaceProps } from '../Surface';
 import type { TouchableRippleProps } from '../TouchableRipple';
 import type { IconProps, IconType } from '../Icon';
-import type { ViewProps } from '@webbee/bamboo-atoms';
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
     CallbackActionState & {
@@ -51,7 +52,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          * Elevation level
          * @default 2
          * */
-        elevation?: SurfaceProps['elevation'];
+        elevation?: MD3Elevation;
         /**
          * Props for the state layer
          * */
@@ -68,12 +69,14 @@ const FAB = (
         label,
         variant = 'primary',
         size = 'md',
-        elevation = 3,
+        elevation: elevationProp,
         containerProps,
         innerContainerStyle: innerContainerStyleProp = emptyObj,
         labelProps = emptyObj,
         stateLayerProps = emptyObj,
         hovered = false,
+        disabled = false,
+        onPress,
         style,
         testID,
         ...rest
@@ -81,6 +84,13 @@ const FAB = (
     ref: any,
 ) => {
     const { Surface, TouchableRipple, Icon, Text, View } = useMolecules();
+
+    const initialElevation = useMemo(
+        () => (elevationProp === undefined ? 3 : elevationProp),
+        [elevationProp],
+    );
+
+    const { current: elevation } = useRef<Animated.Value>(new Animated.Value(initialElevation));
 
     const componentStyles = useComponentStyles(
         'FAB',
@@ -97,6 +107,7 @@ const FAB = (
             variant,
             size,
             states: {
+                disabled,
                 hovered,
             },
         },
@@ -109,6 +120,7 @@ const FAB = (
         labelStyle,
         iconSize,
         stateLayerStyle,
+        animationDuration,
     } = useMemo(() => {
         const {
             innerContainer,
@@ -116,6 +128,7 @@ const FAB = (
             icon,
             label: _label,
             stateLayer,
+            animationDuration: _animationDuration,
             ...restStyle
         } = componentStyles;
 
@@ -126,17 +139,34 @@ const FAB = (
             labelStyle: _label,
             iconSize: _iconSize,
             stateLayerStyle: stateLayer,
+            animationDuration: _animationDuration,
         };
     }, [componentStyles]);
+
+    useEffect(() => {
+        if (disabled || !onPress) return;
+
+        Animated.timing(elevation, {
+            toValue: hovered ? initialElevation + 1 : initialElevation,
+            duration: animationDuration,
+            useNativeDriver: false,
+        }).start();
+    }, [variant, elevation, hovered, initialElevation, disabled, onPress, animationDuration]);
 
     // TODO: abstract the stateLayer
     return (
         <Surface
             testID={testID ? `${testID}-container` : ''}
             {...containerProps}
-            elevation={elevation}
+            elevation={disabled ? 0 : elevation}
             style={containerStyle}>
-            <TouchableRipple testID={testID} {...rest} style={innerContainerStyle} ref={ref}>
+            <TouchableRipple
+                testID={testID}
+                {...rest}
+                disabled={disabled}
+                onPress={onPress}
+                style={innerContainerStyle}
+                ref={ref}>
                 <>
                     <Icon
                         name={iconName}

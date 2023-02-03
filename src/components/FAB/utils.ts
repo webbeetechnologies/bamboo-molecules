@@ -2,8 +2,9 @@ import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 import { StyleSheet } from 'react-native';
 
-type States = 'hovered';
+type States = 'hovered' | 'disabled';
 type CustomProps = {
+    animationDuration?: string;
     innerContainer?: ViewStyle;
     iconSize?: number;
     icon?: TextStyle;
@@ -19,6 +20,7 @@ export const fabStyles: ComponentStylePropWithVariants<
     CustomSizeProps
 > = {
     iconSize: 24,
+    animationDuration: 'animation.durations.1',
 
     innerContainer: {
         flexGrow: 1,
@@ -31,6 +33,23 @@ export const fabStyles: ComponentStylePropWithVariants<
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'transparent',
         zIndex: -1,
+    },
+
+    states: {
+        disabled: {
+            backgroundColor: 'colors.surfaceDisabled',
+
+            stateLayer: {
+                backgroundColor: 'colors.stateLayer.disabled.onSurface',
+            },
+
+            icon: {
+                color: 'colors.onSurfaceDisabled',
+            },
+            label: {
+                color: 'colors.onSurfaceDisabled',
+            },
+        },
     },
 
     variants: {
