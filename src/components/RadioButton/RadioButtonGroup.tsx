@@ -1,5 +1,5 @@
 import { memo, createContext, ReactNode, useMemo } from 'react';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useControlledValue, useMolecules } from '../../hooks';
 
 export type Props = ViewProps & {

@@ -3,7 +3,7 @@ import {
     ProvideTheme as AtomProvideTheme,
     extendTheme as extendThemeAtoms,
     IExtractStylesFuncArgs,
-} from '@webbee/bamboo-atoms';
+} from '@bambooapp/bamboo-atoms';
 import merge from 'ts-deepmerge';
 import { memoize } from '../../utils';
 

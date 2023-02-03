@@ -17,7 +17,7 @@ import {
     TextStyle,
     ViewStyle,
 } from 'react-native';
-import type { TextInputProps } from '@webbee/bamboo-atoms';
+import type { TextInputProps } from '@bambooapp/bamboo-atoms';
 
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { WithElements } from '../../types';

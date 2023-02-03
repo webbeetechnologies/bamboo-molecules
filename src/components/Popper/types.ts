@@ -1,5 +1,5 @@
 import type { MutableRefObject, ReactElement, ReactNode } from 'react';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import type { View } from 'react-native';
 
 export type IPlacement =

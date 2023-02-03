@@ -1,4 +1,4 @@
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import React, { forwardRef, ReactNode, useMemo, useRef } from 'react';
 import type { ButtonProps } from '../../src/components';
 import { useMolecules } from '../../src/hooks';
