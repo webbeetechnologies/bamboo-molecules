@@ -109,6 +109,13 @@ export {
     SelectHandles,
     DateTimePickerProps,
     TimePickerFieldProps,
+    NavigationRailProps,
+    NavigationRailHeaderProps,
+    NavigationRailContentProps,
+    NavigationRailFooterProps,
+    NavigationRailItemProps,
+    BadgeProps,
+    FABProps,
 } from './components';
 
 export {

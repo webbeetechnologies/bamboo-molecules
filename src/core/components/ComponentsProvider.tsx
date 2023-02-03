@@ -61,6 +61,9 @@ import {
     Link,
     DateTimePicker,
     TimePickerField,
+    NavigationRail,
+    Badge,
+    FAB,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -126,6 +129,9 @@ const defaultComponents: DefaultComponents = {
     AccordionItem,
     Rating,
     Link,
+    NavigationRail,
+    Badge,
+    FAB,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

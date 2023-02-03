@@ -53,6 +53,9 @@ import type {
     LinkProps,
     DateTimePickerProps,
     TimePickerFieldProps,
+    NavigationRail,
+    BadgeProps,
+    FABProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -114,6 +117,9 @@ export interface DefaultComponents {
     Rating: ComponentType<RatingProps>;
     Link: ComponentType<LinkProps>;
     TimePickerField: ComponentType<TimePickerFieldProps>;
+    NavigationRail: typeof NavigationRail;
+    Badge: ComponentType<BadgeProps>;
+    FAB: ComponentType<FABProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

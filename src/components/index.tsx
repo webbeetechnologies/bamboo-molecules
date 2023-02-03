@@ -153,3 +153,9 @@ export * from './Link';
 export * from './DateTimePicker';
 
 export * from './TimePickerField';
+
+export * from './NavigationRail';
+
+export * from './Badge';
+
+export * from './FAB';
