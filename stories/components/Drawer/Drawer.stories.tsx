@@ -440,63 +440,63 @@ DrawerItem.play = async ({ canvasElement }) => {
     await expect(window.getComputedStyle(drawerItem).backgroundColor).toBe(defaultBg);
 };
 
-// DrawerCollapsibleItem.play = async ({ canvasElement }) => {
-//     const canvas = within(canvasElement);
-//
-//     await waitFor(() => canvas);
-//
-//     const drawerCollapsibleItemHeader = await canvas.getByTestId('drawer-collapsible-item-header');
-//
-//     // hover test
-//     const defaultBg = 'rgba(0, 0, 0, 0)';
-//     const hoverBg = 'rgba(28, 27, 31, 0.08)';
-//
-//     await delay(100);
-//
-//     await expect(window.getComputedStyle(drawerCollapsibleItemHeader).backgroundColor).toBe(
-//         defaultBg,
-//     );
-//
-//     await delay(100);
-//
-//     await userEvent.hover(drawerCollapsibleItemHeader);
-//
-//     await delay(100);
-//
-//     await expect(window.getComputedStyle(drawerCollapsibleItemHeader).backgroundColor).toBe(
-//         hoverBg,
-//     );
-//
-//     await userEvent.unhover(drawerCollapsibleItemHeader);
-//
-//     await delay(100);
-//
-//     await expect(window.getComputedStyle(drawerCollapsibleItemHeader).backgroundColor).toBe(
-//         defaultBg,
-//     );
-//
-//     // click interaction test with active prop
-//     await userEvent.click(drawerCollapsibleItemHeader);
-//
-//     await delay(100);
-//
-//     await expect(canvas.queryByTestId('drawer-collapsible-item-content')).toBeInTheDocument();
-//     await expect(canvas.getByText('Important')).toBeInTheDocument();
-//     await expect(canvas.getByText('All mails')).toBeInTheDocument();
-//     await expect(canvas.getByText('Spams')).toBeInTheDocument();
-//     await expect(canvas.getByText('Manage labels')).toBeInTheDocument();
-//
-//     await userEvent.click(drawerCollapsibleItemHeader);
-//     await userEvent.unhover(drawerCollapsibleItemHeader);
-//
-//     await delay(100);
-//
-//     await expect(window.getComputedStyle(drawerCollapsibleItemHeader).backgroundColor).toBe(
-//         defaultBg,
-//     );
-//     await expect(canvas.queryByTestId('drawer-collapsible-item-content')).toBeNull();
-//     await expect(canvas.queryByTestId('Important')).toBeNull();
-//     await expect(canvas.queryByTestId('All mails')).toBeNull();
-//     await expect(canvas.queryByTestId('Spams')).toBeNull();
-//     await expect(canvas.queryByTestId('Manage labels')).toBeNull();
-// };
+DrawerCollapsibleItem.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await waitFor(() => canvas);
+
+    const drawerCollapsibleItemHeader = await canvas.getByTestId('drawer-collapsible-item-header');
+
+    // hover test
+    const defaultBg = 'rgba(0, 0, 0, 0)';
+    const hoverBg = 'rgba(28, 27, 31, 0.08)';
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(drawerCollapsibleItemHeader).backgroundColor).toBe(
+        defaultBg,
+    );
+
+    await delay(100);
+
+    await userEvent.hover(drawerCollapsibleItemHeader);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(drawerCollapsibleItemHeader).backgroundColor).toBe(
+        hoverBg,
+    );
+
+    await userEvent.unhover(drawerCollapsibleItemHeader);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(drawerCollapsibleItemHeader).backgroundColor).toBe(
+        defaultBg,
+    );
+
+    // click interaction test with active prop
+    await userEvent.click(drawerCollapsibleItemHeader);
+
+    await delay(100);
+
+    await expect(canvas.queryByTestId('drawer-collapsible-item-content')).toBeInTheDocument();
+    await expect(canvas.getByText('Important')).toBeInTheDocument();
+    await expect(canvas.getByText('All mails')).toBeInTheDocument();
+    await expect(canvas.getByText('Spams')).toBeInTheDocument();
+    await expect(canvas.getByText('Manage labels')).toBeInTheDocument();
+
+    await userEvent.click(drawerCollapsibleItemHeader);
+    await userEvent.unhover(drawerCollapsibleItemHeader);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(drawerCollapsibleItemHeader).backgroundColor).toBe(
+        defaultBg,
+    );
+    await expect(canvas.queryByTestId('drawer-collapsible-item-content')).toBeNull();
+    await expect(canvas.queryByTestId('Important')).toBeNull();
+    await expect(canvas.queryByTestId('All mails')).toBeNull();
+    await expect(canvas.queryByTestId('Spams')).toBeNull();
+    await expect(canvas.queryByTestId('Manage labels')).toBeNull();
+};

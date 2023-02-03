@@ -34,8 +34,6 @@
     "prepare:husky": "husky install",
     "prepare": "bob build",
     "start": "yarn run:storybook",
-    "run:example": "yarn workspace example start",
-    "run:storybook": "yarn workspace example storybook",
     "run:testcases": "yarn workspace test-cases start",
     "test": "jest && yarn test-storybook",
     "test-jest": "jest",
