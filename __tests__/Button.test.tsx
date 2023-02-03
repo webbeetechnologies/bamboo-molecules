@@ -1,5 +1,5 @@
 import { Button } from '../src/components';
-import { renderWithWrapper, fireEvent } from './testHelpers';
+import { renderWithWrapper, fireEvent } from '../testHelpers';
 
 describe('button', () => {
     it('renders text button by default', () => {

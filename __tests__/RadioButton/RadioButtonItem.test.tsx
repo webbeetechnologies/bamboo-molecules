@@ -1,5 +1,5 @@
 import { RadioButton } from '../../src/components';
-import { renderWithWrapper } from '../testHelpers';
+import { renderWithWrapper } from '../../testHelpers';
 
 it('renders unchecked', () => {
     const tree = renderWithWrapper(

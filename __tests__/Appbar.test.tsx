@@ -2,7 +2,7 @@ import { Text } from 'react-native';
 import { fireEvent } from '@testing-library/react-native';
 
 import { Appbar } from '../src/components';
-import { renderWithWrapper } from './testHelpers';
+import { renderWithWrapper } from '../testHelpers';
 
 describe('Appbar', () => {
     it('renders all of the expected subcomponents', () => {

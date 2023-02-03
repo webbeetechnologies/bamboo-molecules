@@ -1,5 +1,5 @@
 import { HorizontalDivider } from '../src/components';
-import { renderWithWrapper } from './testHelpers';
+import { renderWithWrapper } from '../testHelpers';
 
 it('should render VerticalDivider', () => {
     const tree = renderWithWrapper(<HorizontalDivider />).toJSON();

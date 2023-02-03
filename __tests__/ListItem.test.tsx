@@ -1,5 +1,5 @@
 import { ListItem } from '../src/components';
-import { renderWithWrapper } from './testHelpers';
+import { renderWithWrapper } from '../testHelpers';
 
 it('should render ListItem', () => {
     const tree = renderWithWrapper(

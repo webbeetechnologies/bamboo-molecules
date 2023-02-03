@@ -1,6 +1,6 @@
 import { RadioButton } from '../../src/components';
 import { RadioButtonContext } from '../../src/components/RadioButton/RadioButtonGroup';
-import { renderWithWrapper } from '../testHelpers';
+import { renderWithWrapper } from '../../testHelpers';
 
 describe('RadioButton', () => {
     describe('on default platform', () => {

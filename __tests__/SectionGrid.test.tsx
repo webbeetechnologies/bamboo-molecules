@@ -1,6 +1,6 @@
 import { Text } from 'react-native';
 import { SectionGrid } from '../src/components/SectionGrid';
-import { renderWithWrapper } from './testHelpers';
+import { renderWithWrapper } from '../testHelpers';
 
 const renderItemMock = jest.fn(({ item }) => {
     return <Text>{item.text}</Text>;

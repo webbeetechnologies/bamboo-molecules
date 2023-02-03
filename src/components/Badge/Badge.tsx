@@ -1,7 +1,8 @@
 import { memo, useMemo } from 'react';
 import type { ViewProps } from 'react-native';
+import type { TextProps } from '@bambooapp/bamboo-atoms';
+
 import { useComponentStyles, useMolecules } from '../../hooks';
-import type { TextProps } from '@webbee/bamboo-atoms';
 
 export type Props = Omit<ViewProps, 'children'> & {
     label?: string | number;

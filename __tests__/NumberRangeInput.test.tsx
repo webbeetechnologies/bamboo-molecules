@@ -1,4 +1,4 @@
-import { renderWithWrapper } from './testHelpers';
+import { renderWithWrapper } from '../testHelpers';
 import { NumberRangeInput } from '../src/components/NumberRangeInput';
 
 const mockedOnChange = jest.fn();

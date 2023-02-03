@@ -1,5 +1,5 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Text, View } from 'react-native';
+import { Text, useWindowDimensions, View } from 'react-native';
 import { generateSectionListData, ProvideMolecules } from '../../common';
 
 import { Example } from './SectionGrid';
@@ -17,7 +17,7 @@ export default {
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => (
-    <View style={{ maxHeight: 500 }}>
+    <View style={{ maxHeight: 500, maxWidth: useWindowDimensions().width }}>
         <Example {...args} />
     </View>
 );

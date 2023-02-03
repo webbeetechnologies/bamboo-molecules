@@ -1,4 +1,4 @@
-import { renderWithWrapper } from '../testHelpers';
+import { renderWithWrapper } from '../../testHelpers';
 
 import { RadioButton } from '../../src/components';
 

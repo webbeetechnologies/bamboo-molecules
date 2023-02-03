@@ -1,6 +1,6 @@
 import { Text } from 'react-native';
 import { OptionList } from '../src/components/OptionList';
-import { renderWithWrapper } from './testHelpers';
+import { renderWithWrapper } from '../testHelpers';
 
 const renderItemMock = jest.fn(({ item }) => {
     return <Text>{item.text}</Text>;

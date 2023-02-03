@@ -1,5 +1,5 @@
 import { DatePickerInline, TimePicker, DatePickerModal, TimePickerModal } from '../src/components';
-import { renderWithWrapper } from './testHelpers';
+import { renderWithWrapper } from '../testHelpers';
 
 const onChangeMock = jest.fn();
 const onDismissMock = jest.fn();
