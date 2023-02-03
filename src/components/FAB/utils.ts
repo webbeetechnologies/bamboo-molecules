@@ -179,6 +179,7 @@ export const fabStyles: ComponentStylePropWithVariants<
 
             innerContainer: {
                 padding: 'spacings.7',
+                borderRadius: 'shapes.corner.extraLarge' as unknown as number,
             },
 
             stateLayer: {

@@ -26,3 +26,23 @@ Default.parameters = {
         },
     },
 };
+
+export const SmallBadge: ComponentStory<typeof Example> = args => <Example {...args} />;
+
+SmallBadge.args = {
+    size: 'sm',
+};
+
+SmallBadge.parameters = {
+    docs: {
+        source: {
+            code: `
+    const { Badge } = useMolecules();
+
+    return <Badge label="10" />;
+`,
+            language: 'tsx',
+            type: 'auto',
+        },
+    },
+};
