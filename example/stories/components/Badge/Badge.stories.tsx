@@ -39,7 +39,7 @@ SmallBadge.parameters = {
             code: `
     const { Badge } = useMolecules();
 
-    return <Badge label="10" />;
+    return <Badge size="sm" />;
 `,
             language: 'tsx',
             type: 'auto',

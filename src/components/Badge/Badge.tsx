@@ -21,7 +21,7 @@ const Badge = ({ style, label, size = 'md', labelProps = {}, ...rest }: Props) =
             },
         ],
         {
-            size: size === 'md' && label ? 'md' : 'sm',
+            size: !label ? 'sm' : size,
         },
     );
 
@@ -36,7 +36,7 @@ const Badge = ({ style, label, size = 'md', labelProps = {}, ...rest }: Props) =
 
     return (
         <View style={containerStyle} {...rest}>
-            {size !== 'sm' && (
+            {label && size !== 'sm' && (
                 <Text {...labelProps} style={labelStyle}>
                     {label}
                 </Text>
