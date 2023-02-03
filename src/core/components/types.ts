@@ -1,5 +1,5 @@
 import type { ComponentType, ReactNode } from 'react';
-import type { IComponentsProviderContext as IAtomsComponentsProviderContext } from '@webbee/bamboo-atoms';
+import type { IComponentsProviderContext as IAtomsComponentsProviderContext } from '@bambooapp/bamboo-atoms';
 import type {
     IconProps,
     IconButtonProps,

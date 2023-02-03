@@ -1,5 +1,5 @@
 import { memo, useContext, useMemo } from 'react';
-import type { TextProps, ViewProps } from '@webbee/bamboo-atoms';
+import type { TextProps, ViewProps } from '@bambooapp/bamboo-atoms';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { circleSize } from './timeUtils';
