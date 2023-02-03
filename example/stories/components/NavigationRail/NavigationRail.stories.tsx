@@ -1,6 +1,10 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Example, NavigationRailItemExample } from './NavigationRail';
+import { userEvent, within } from '@storybook/testing-library';
+import { useArgs } from '@storybook/addons';
+import { expect } from '@storybook/jest';
+import { delay } from '../../common';
 
 export default {
     title: 'components/NavigationRail',
@@ -25,8 +29,8 @@ export const NavigationRailExample = (props: Props) => {
     return (
         <NavigationRail style={styles.container} {...props}>
             <NavigationRail.Header style={styles.header}>
-                <IconButton name="menu" size={24} onPress={() => {}} style={styles.menuButton} />
-                <FAB iconName="pencil-outline" onPress={() => {}} elevation={0} />
+                <IconButton name="menu" size={24} onPress={onPressMenu} style={styles.menuButton} />
+                <FAB iconName="pencil-outline" onPress={onPressFAB} elevation={0} />
             </NavigationRail.Header>
             <NavigationRail.Content>
                 {routesData.map(item => (
@@ -104,9 +108,16 @@ const routesData = [
     },
 };
 
-export const NavigationRailItem: ComponentStory<typeof NavigationRailItemExample> = args => (
-    <NavigationRailItemExample {...args} />
-);
+export const NavigationRailItem: ComponentStory<typeof NavigationRailItemExample> = args => {
+    const [_, updateArgs] = useArgs();
+
+    return (
+        <NavigationRailItemExample
+            {...args}
+            onPress={() => updateArgs({ ...args, active: !args.active })}
+        />
+    );
+};
 
 NavigationRailItem.args = {
     iconName: 'circle-outline',
@@ -115,6 +126,7 @@ NavigationRailItem.args = {
     active: false,
     showBadge: true,
     badgeLabel: '10',
+    testID: 'navigationrailitem',
 };
 
 NavigationRailItem.parameters = {
@@ -130,4 +142,67 @@ NavigationRailItem.parameters = {
             type: 'auto',
         },
     },
+};
+
+export const NavigationRailItemTests = NavigationRailItem.bind({});
+
+NavigationRailItemTests.args = {
+    ...NavigationRailItem.args,
+};
+
+NavigationRailItemTests.parameters = {
+    chromatic: { disableSnapshot: true },
+};
+
+NavigationRailItemTests.play = async ({ canvasElement }) => {
+    const canvas = await within(canvasElement);
+
+    const navigationRailItem = await canvas.getByTestId('navigationrailitem');
+    const navigationRailItemIconContainer = await canvas.getByTestId(
+        'navigationrailitem-iconContainer',
+    );
+    const navigationRailItemStateLayer = await canvas.getByTestId('navigationrailitem-stateLayer');
+
+    const defaultBg = 'rgba(0, 0, 0, 0)';
+    const hoverBg = 'rgba(73, 69, 79, 0.08)';
+    const activeBg = 'rgb(232, 222, 248)';
+
+    await expect(window.getComputedStyle(navigationRailItemStateLayer).backgroundColor).toBe(
+        defaultBg,
+    );
+
+    await delay(100);
+
+    await userEvent.hover(navigationRailItem);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(navigationRailItemStateLayer).backgroundColor).toBe(
+        hoverBg,
+    );
+    await userEvent.unhover(navigationRailItem);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(navigationRailItemStateLayer).backgroundColor).toBe(
+        defaultBg,
+    );
+
+    await userEvent.click(navigationRailItem);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(navigationRailItemIconContainer).backgroundColor).toBe(
+        activeBg,
+    );
+
+    await userEvent.click(navigationRailItem);
+    await userEvent.unhover(navigationRailItem);
+    await userEvent.unhover(navigationRailItem);
+
+    await delay(100);
+
+    await expect(window.getComputedStyle(navigationRailItemIconContainer).backgroundColor).toBe(
+        defaultBg,
+    );
 };
