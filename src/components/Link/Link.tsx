@@ -1,5 +1,5 @@
 import { forwardRef, memo, useCallback } from 'react';
-import type { TextProps } from '@webbee/bamboo-atoms';
+import type { TextProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { CallbackActionState, withActionState } from '../../hocs';
 import type { GestureResponderEvent } from 'react-native';

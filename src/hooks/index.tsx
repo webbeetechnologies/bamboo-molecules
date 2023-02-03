@@ -1,7 +1,7 @@
-import { useTheme as useThemeAtoms } from '@webbee/bamboo-atoms';
+import { useTheme as useThemeAtoms } from '@bambooapp/bamboo-atoms';
 import type { ITheme } from '../core';
 
-export { useColorMode, useMediaQuery } from '@webbee/bamboo-atoms';
+export { useColorMode, useMediaQuery } from '@bambooapp/bamboo-atoms';
 export {
     useActive,
     useFocus,

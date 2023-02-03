@@ -4,7 +4,7 @@ import {
     ProvideComponents as AtomsProvideComponents,
     ConsumeComponents as AtomsConsumeComponents,
     extractComponents as extractComponentsAtoms,
-} from '@webbee/bamboo-atoms';
+} from '@bambooapp/bamboo-atoms';
 import {
     ActivityIndicator,
     Icon,
@@ -59,6 +59,9 @@ import {
     AccordionItem,
     Rating,
     Link,
+    NavigationRail,
+    Badge,
+    FAB,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -122,6 +125,9 @@ const defaultComponents: DefaultComponents = {
     AccordionItem,
     Rating,
     Link,
+    NavigationRail,
+    Badge,
+    FAB,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

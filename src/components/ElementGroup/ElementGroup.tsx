@@ -1,6 +1,6 @@
 import { memo, forwardRef, cloneElement, Children, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { defaultStyles } from './utils';

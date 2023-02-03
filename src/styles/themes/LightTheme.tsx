@@ -32,7 +32,7 @@ export const generateLightThemeColors = (
         onTertiaryContainer: palette.tertiary10,
         onSurface: palette.neutral10,
         onSurfaceVariant: palette.neutralVariant30,
-        onSurfaceDisabled: color(palette.neutral10).alpha(opacity.level4).rgb().string(),
+        onSurfaceDisabled: color(palette.neutral10).alpha(opacity.level4).hexa(),
         onSurfaceRipple: color(palette.neutral10).alpha(0.12).rgb().string(),
         onError: palette.error100,
         onErrorContainer: palette.error10,
@@ -63,7 +63,10 @@ export const generateLightThemeColors = (
             hover: {
                 onSurface: color(palette.neutral10).alpha(opacity.level1).hexa(),
                 onSurfaceVariant: color(palette.neutralVariant30).alpha(opacity.level1).hexa(),
+                primary: color(palette.primary40).alpha(opacity.level1).hexa(),
+                onPrimaryContainer: color(palette.primary10).alpha(opacity.level1).hexa(),
                 onSecondaryContainer: color(palette.secondary10).alpha(opacity.level1).hexa(),
+                onTertiaryContainer: color(palette.tertiary10).alpha(opacity.level1).hexa(),
             },
             disabled: {
                 onSurface: color(palette.neutral10).alpha(opacity.level2).hexa(),

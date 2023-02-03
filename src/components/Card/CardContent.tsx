@@ -1,6 +1,6 @@
 import { FC, memo, ReactNode } from 'react';
 import { View } from 'react-native';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles } from '../../hooks';
 
 export type Props = ViewProps & {

@@ -3,7 +3,7 @@ import {
     ProvideTheme as AtomProvideTheme,
     extendTheme as extendThemeAtoms,
     IExtractStylesFuncArgs,
-} from '@webbee/bamboo-atoms';
+} from '@bambooapp/bamboo-atoms';
 import merge from 'ts-deepmerge';
 import { memoize } from '../../utils';
 
@@ -101,6 +101,13 @@ import {
     ratingStyles,
     ratingItemStyles,
     linkStyles,
+    navigationRailStyles,
+    navigationRailHeaderStyles,
+    navigationRailContentStyles,
+    navigationRailFooterStyles,
+    navigationRailItemStyles,
+    badgeStyles,
+    fabStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -229,6 +236,16 @@ const defaultThemeValue: Partial<ITheme> = {
     Rating_Item: ratingItemStyles,
 
     Link: linkStyles,
+
+    NavigationRail: navigationRailStyles,
+    NavigationRail_Header: navigationRailHeaderStyles,
+    NavigationRail_Content: navigationRailContentStyles,
+    NavigationRail_Footer: navigationRailFooterStyles,
+    NavigationRail_Item: navigationRailItemStyles,
+
+    Badge: badgeStyles,
+
+    FAB: fabStyles,
 };
 
 export const defaultExtractStyles = memoize(

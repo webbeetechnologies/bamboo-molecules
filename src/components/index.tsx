@@ -12,7 +12,7 @@ export {
     StrikethroughProps,
     ItalicProps,
     ViewProps,
-} from '@webbee/bamboo-atoms';
+} from '@bambooapp/bamboo-atoms';
 
 export { Icon, registerCustomIconType, IconProps, iconStyles } from './Icon';
 export { TouchableRipple, TouchableRippleProps, touchableRippleStyles } from './TouchableRipple';
@@ -149,3 +149,9 @@ export * from './Accordion';
 export * from './Rating';
 
 export * from './Link';
+
+export * from './NavigationRail';
+
+export * from './Badge';
+
+export * from './FAB';
