@@ -42,7 +42,6 @@ export const navigationRailItemStyles: ComponentStylePropWithVariants<
     cursor: 'pointer',
     alignItems: 'center',
     marginBottom: 'spacings.3',
-    iconSize: 24,
 
     iconContainer: {
         borderRadius: 'shapes.corner.full' as unknown as number,
@@ -112,7 +111,25 @@ export const navigationRailItemStyles: ComponentStylePropWithVariants<
     },
 
     sizes: {
+        sm: {
+            iconSize: 24,
+
+            iconContainer: {
+                width: 56,
+                height: 32,
+            },
+        },
         md: {
+            iconSize: 24,
+
+            iconContainer: {
+                width: 56,
+                height: 32,
+            },
+        },
+        lg: {
+            iconSize: 24,
+
             iconContainer: {
                 width: 56,
                 height: 32,
