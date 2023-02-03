@@ -1,6 +1,6 @@
 import { forwardRef, memo, useEffect, useMemo, useRef } from 'react';
 import { TextProps, ViewStyle, Animated } from 'react-native';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 
 import type { MD3Elevation } from '../../core/theme/types';
 import { useComponentStyles, useMolecules } from '../../hooks';

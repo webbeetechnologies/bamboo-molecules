@@ -15,7 +15,6 @@
   "types": "lib/typescript/index.d.ts",
   "workspaces": {
     "packages": [
-      "example",
       "test-cases"
     ],
     "nohoist": [
@@ -35,13 +34,16 @@
     "prepare:husky": "husky install",
     "prepare": "bob build",
     "start": "yarn run:storybook",
-    "run:example": "yarn workspace example start",
-    "run:storybook": "yarn workspace example storybook",
     "run:testcases": "yarn workspace test-cases start",
-    "test": "npx jest",
+    "test": "jest && yarn test-storybook",
+    "test-jest": "jest",
     "bundle": "rm -rf lib/* && yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
-    "do-release": "npm publish ./dist/bambooapp-bamboo-molecules-$npm_package_version.tgz --access=public",
-    "release": "yarn bundle && yarn do-release"
+    "do-release": "npm publish ./dist/webbeetechnologies-bamboo-molecules-$npm_package_version.tgz --access=public",
+    "release": "yarn bundle && yarn do-release",
+    "storybook": "start-storybook -p 6006",
+    "test-storybook": "test-storybook",
+    "coverage": "cp coverage/storybook/coverage-storybook.json coverage/coverage-storybook.json && npx nyc report --reporter=html -t coverage --report-dir coverage/lcov-report",
+    "test:coverage": "yarn test-jest --coverage && yarn test-storybook --coverage && yarn coverage"
   },
   "dependencies": {
     "@bambooapp/bamboo-atoms": "^0.0.19",
@@ -64,6 +66,15 @@
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.1.0",
     "@shopify/flash-list": "^1.4.0",
+    "@storybook/addon-coverage": "^0.0.7",
+    "@storybook/addon-essentials": "^6.5.16",
+    "@storybook/addon-interactions": "^6.5.16",
+    "@storybook/addon-links": "^6.5.16",
+    "@storybook/addon-react-native-web": "^0.0.19",
+    "@storybook/jest": "^0.0.10",
+    "@storybook/react": "^6.5.16",
+    "@storybook/test-runner": "^0.9.3",
+    "@storybook/testing-library": "^0.0.13",
     "@testing-library/jest-native": "^5.1.2",
     "@testing-library/react-native": "^11.2.0",
     "@types/color": "^3.0.3",
@@ -77,6 +88,7 @@
     "@types/react-native": "^0.70.0",
     "@types/react-native-vector-icons": "^6.4.12",
     "@types/uuid": "^8.3.4",
+    "chromatic": "^6.15.0",
     "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -93,6 +105,8 @@
     "react-native-document-picker": "^8.1.3",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "^0.18.9",
+    "storybook-addon-performance": "^0.16.1",
+    "storybook-mock-date-decorator": "^1.0.0",
     "ts-jest": "^29.0.3",
     "typescript": "~4.3.5"
   },
@@ -130,6 +144,7 @@
     "lib/"
   ],
   "jest": {
+    "coverageReporters": ["json"],
     "preset": "react-native",
     "setupFiles": [],
     "testPathIgnorePatterns": [
@@ -139,6 +154,7 @@
       "/lib"
     ],
     "setupFilesAfterEnv": [
+      "<rootDir>/testSetup.js",
       "@testing-library/jest-native/extend-expect"
     ],
     "cacheDirectory": "./cache/jest",
