@@ -50,12 +50,14 @@ export const timeFormat = {
 
 const referenceDate = new Date('2022-01-01T00:00:00.000Z');
 
+export const sanitizeTimeString = (time: string): string => time.replace(/[^\d:]/g, '');
+
 export const getFormattedTime = ({ time, is24Hour }: { time: string; is24Hour: boolean }) => {
     if (!time) {
-        return format(new Date(), timeFormat[is24Hour ? '24' : '12'].format);
+        return '';
     }
 
-    const [hour = '0', minute = '0'] = time.replace(/[^\d:]/g, '').split(':');
+    const [hour = '0', minute = '0'] = sanitizeTimeString(time).split(':');
 
     const newHour = hour.padStart(2, '0');
     const newMinute = minute.padEnd(2, '0');

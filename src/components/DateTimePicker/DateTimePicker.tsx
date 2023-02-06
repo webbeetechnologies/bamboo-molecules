@@ -1,10 +1,10 @@
-import { forwardRef, memo, useCallback } from 'react';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import { forwardRef, memo, useCallback, useMemo } from 'react';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { set, format } from 'date-fns';
 
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { DatePickerInputProps } from '../DatePickerInput';
-import type { TimePickerFieldProps } from '../TimePickerField';
+import { TimePickerFieldProps, sanitizeTimeString } from '../TimePickerField';
 
 export type Props = ViewProps & {
     is24Hour?: boolean;
@@ -43,6 +43,8 @@ const DateTimePicker = (
         onChange: onChangeProp,
     });
 
+    const timeString = useMemo(() => (date ? format(date, 'HH:mm') : ''), [date]);
+
     const onDateChange = useCallback(
         (newDate: Date | null) => {
             if (!newDate) return;
@@ -55,6 +57,15 @@ const DateTimePicker = (
             const [day, month, year] = format(newDate, 'dd/MM/yyyy').split('/');
 
             onChange(set(date, { date: +day, month: +month, year: +year }));
+        },
+        [date, onChange],
+    );
+
+    const onTimeChange = useCallback(
+        (time: string) => {
+            const [hour = '0', minute = '0'] = sanitizeTimeString(time).split(':');
+
+            onChange(set(date || new Date(), { hours: +hour, minutes: +minute }));
         },
         [date, onChange],
     );
@@ -75,8 +86,8 @@ const DateTimePicker = (
                     testID={testID ? `${testID}--timepickerinput` : undefined}
                     is24Hour={is24Hour}
                     {...timePickerFieldProps}
-                    time={date}
-                    onTimeChange={onChange}
+                    time={timeString}
+                    onTimeChange={onTimeChange}
                 />
             </ElementGroup>
         </>
