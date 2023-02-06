@@ -144,7 +144,9 @@
     "lib/"
   ],
   "jest": {
-    "coverageReporters": ["json"],
+    "coverageReporters": [
+      "json"
+    ],
     "preset": "react-native",
     "setupFiles": [],
     "testPathIgnorePatterns": [
