@@ -75,14 +75,10 @@ export const getOutputTime = ({ time, is24Hour }: { time: string; is24Hour: bool
     let newHour = hour.padStart(2, '0');
     const newMinute = minute.padEnd(2, '0');
 
-    if (is24Hour) {
-        newHour = `${Math.min(+newHour, 23)}`;
-    } else {
-        newHour = `${Math.min(+newHour, 12)}`;
-    }
+    newHour = `${Math.min(+newHour, is24Hour ? 23 : 12)}`;
 
     if (!is24Hour && +newHour === 0) {
-        newHour = `12`;
+        newHour = '12';
     }
 
     return format(
