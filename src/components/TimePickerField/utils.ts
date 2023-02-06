@@ -1,39 +1,9 @@
 import type { ViewStyle } from 'react-native';
 import type { Mask } from 'react-native-mask-input';
-import { format, set } from 'date-fns';
+import { format, parse, set } from 'date-fns';
 import type { ComponentStylePropWithVariants } from '../../types';
 
 export const timepickerFieldStyles: ComponentStylePropWithVariants<ViewStyle> = {};
-
-export const getAddableHourAndMinute = ({
-    time,
-    is24Hour,
-}: {
-    time: string;
-    is24Hour: boolean;
-}) => {
-    const [hour = '0', minute = '0'] = time.replace(/[ap]m/, '').split(':');
-
-    const hourAndMinute = {
-        hour: +hour,
-        minute: +minute.toString().padEnd(2, '0'),
-    };
-
-    if (is24Hour) {
-        return hourAndMinute;
-    }
-
-    const isPM = time.replace(/[\d:]/g, '') === 'pm';
-
-    if (isPM) {
-        hourAndMinute.hour = +hour >= 12 ? 12 : +hour + 12;
-    } else {
-        // for AM
-        hourAndMinute.hour = +hour >= 12 ? 0 : +hour;
-    }
-
-    return hourAndMinute;
-};
 
 export const timeMask24Hour: Mask = (text: string = '') => {
     const cleanTime = text.replace(/\D+/g, '');
@@ -78,19 +48,47 @@ export const timeFormat = {
     },
 };
 
-export const formatTime = ({
-    date,
-    hour,
-    minute,
-    is24Hour,
-}: {
-    date: Date | null;
-    hour: string | number;
-    minute: string | number;
-    is24Hour: boolean;
-}) => {
+const referenceDate = new Date('2022-01-01T00:00:00.000Z');
+
+export const getFormattedTime = ({ time, is24Hour }: { time: string; is24Hour: boolean }) => {
+    if (!time) {
+        return format(new Date(), timeFormat[is24Hour ? '24' : '12'].format);
+    }
+
+    const [hour = '0', minute = '0'] = time.replace(/[^\d:]/g, '').split(':');
+
+    const newHour = hour.padStart(2, '0');
+    const newMinute = minute.padEnd(2, '0');
+
     return format(
-        set(date || new Date(), { hours: +hour, minutes: +minute }),
-        is24Hour ? 'HH:mm' : 'hh:mmaaa',
+        set(referenceDate, { hours: +newHour, minutes: +newMinute }),
+        timeFormat[is24Hour ? '24' : '12'].format,
+    );
+};
+
+export const getOutputTime = ({ time, is24Hour }: { time: string; is24Hour: boolean }) => {
+    const [hour = '0', minute = '0'] = time.replace(/[^\d:]/g, '').split(':');
+    const isPM = time.replace(/[\d:]/g, '').includes('p');
+
+    let newHour = hour.padStart(2, '0');
+    const newMinute = minute.padEnd(2, '0');
+
+    if (is24Hour) {
+        newHour = `${Math.min(+newHour, 23)}`;
+    } else {
+        newHour = `${Math.min(+newHour, 12)}`;
+    }
+
+    if (!is24Hour && +newHour === 0) {
+        newHour = `12`;
+    }
+
+    return format(
+        parse(
+            `${newHour}:${newMinute}${is24Hour ? '' : isPM ? 'pm' : 'am'}`,
+            timeFormat[is24Hour ? '24' : '12'].format,
+            referenceDate,
+        ),
+        'HH:mm',
     );
 };

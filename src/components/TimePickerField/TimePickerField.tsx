@@ -1,12 +1,10 @@
-import { forwardRef, memo, useCallback, useMemo, useState } from 'react';
+import { forwardRef, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import type { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
 
 import { useComponentStyles, useMolecules, useToggle } from '../../hooks';
 import type { TimePickerModalProps } from '../TimePickerModal';
 import type { TextInputProps } from '../TextInput';
-import { timeFormat, getAddableHourAndMinute } from './utils';
-import { parse } from '../../utils';
-import { format } from 'date-fns';
+import { timeFormat, getFormattedTime, getOutputTime } from './utils';
 
 export type Props = TextInputProps & {
     time: string;
@@ -30,11 +28,9 @@ const TimePickerField = (
     ref: any,
 ) => {
     const { MaskedInput, IconButton, TimePickerModal } = useMolecules();
-    const componentStyles = useComponentStyles('TimePickerField', style); // all the styling logics goes here
+    const componentStyles = useComponentStyles('TimePickerField', style);
 
-    const [timeString, setTimeString] = useState(
-        format(parse(time, 'HH:mm', new Date()), timeFormat[!is24Hour ? '12' : '24'].format),
-    );
+    const [timeString, setTimeString] = useState(getFormattedTime({ time, is24Hour }));
 
     const currentTimeFormat = useMemo(() => timeFormat[!is24Hour ? '12' : '24'], [is24Hour]);
 
@@ -44,34 +40,22 @@ const TimePickerField = (
 
     const onOpenModal = useCallback(() => setIsOpen(true), [setIsOpen]);
 
-    const onTimeChange = useCallback(
-        ({ time: _time }: { time: string }) => {
-            const { hour, minute } = getAddableHourAndMinute({ time: timeString, is24Hour });
-            // const isPM = timeString.replace(/[\d:]/g, '').includes('p');
-
-            onTimeChangeProp?.(
-                `${hour.toString().padStart(2, '0')}:${minute.toString().padEnd(2, '0')}`,
-            );
-        },
-        [is24Hour, onTimeChangeProp, timeString],
-    );
-
     const onConfirmTime = useCallback(
         (newTime: string) => {
             setIsOpen(false);
 
-            onTimeChange({ time: newTime });
+            onTimeChangeProp(newTime);
         },
-        [setIsOpen, onTimeChange],
+        [onTimeChangeProp, setIsOpen],
     );
 
     const onBlur = useCallback(
         (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
             onBlurProp?.(e);
 
-            onTimeChange({ time });
+            onTimeChangeProp(getOutputTime({ time: timeString, is24Hour }));
         },
-        [onBlurProp, onTimeChange, time],
+        [is24Hour, onBlurProp, onTimeChangeProp, timeString],
     );
 
     const rightElement = useMemo(() => {
@@ -82,7 +66,7 @@ const TimePickerField = (
                 <IconButton name="clock-outline" onPress={onOpenModal} />
                 <TimePickerModal
                     {...modalProps}
-                    time={time.replace(/[ap]m/g, '')}
+                    time={getFormattedTime({ time: time, is24Hour: true })}
                     isOpen={isOpen}
                     onClose={onCloseModal}
                     onConfirm={onConfirmTime}
@@ -102,15 +86,10 @@ const TimePickerField = (
         time,
         withModal,
     ]);
-    // useEffect(() => {
-    //     setTimeString(
-    //         () =>
-    //             formatWithMask({
-    //                 text: time,
-    //                 mask: timeFormat[is24Hour ? '24' : '12'].mask,
-    //             }).masked,
-    //     );
-    // }, [time, currentTimeFormat.format, is24Hour]);
+
+    useEffect(() => {
+        setTimeString(getFormattedTime({ time, is24Hour }));
+    }, [is24Hour, time]);
 
     return (
         <MaskedInput
