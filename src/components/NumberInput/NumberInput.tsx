@@ -46,7 +46,7 @@ export type Props = Omit<TextInputProps, 'value' | 'defaultValue' | 'onChangeTex
     /**
      * Mask to be suffixed on the mask result
      * */
-    suffix?: MaskArray;
+    suffix?: string | string[];
 };
 
 const NumberInput = (
