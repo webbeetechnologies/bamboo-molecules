@@ -24,8 +24,8 @@ Default.parameters = {
     const [time, setTime] = useState<Date | null>(null);
 
     const onChange = useCallback(
-        (newDate: Date) => {
-            setTime(newDate);
+        (newTime: string) => {
+            setTime(newTime);
         },
         [props],
     );
