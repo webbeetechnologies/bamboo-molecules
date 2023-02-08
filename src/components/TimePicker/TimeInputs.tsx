@@ -72,7 +72,7 @@ function TimeInputs({
 
     const onHourChange = useCallback(
         (newHoursFromInput: number) => {
-            let newHours = hours;
+            let newHours = newHoursFromInput;
             if (newHoursFromInput >= 24) {
                 newHours = 0;
             }
@@ -81,7 +81,7 @@ function TimeInputs({
                 minutes,
             });
         },
-        [hours, minutes, onChange],
+        [minutes, onChange],
     );
 
     const onMinuteChange = useCallback(
