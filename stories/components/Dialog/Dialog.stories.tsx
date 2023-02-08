@@ -24,9 +24,10 @@ Default.parameters = {
             code: `
     const { Dialog, Text, Button } = useMolecules();
 
+    const iconProps = useMemo(() => ({ name: 'cellphone-check' }), []);
+
     return (
-        <Dialog>
-            <Dialog.Icon name="cellphone-check" />
+        <Dialog iconProps={iconProps}>
             <Dialog.Title>Dialog with Hero Icon</Dialog.Title>
             <Dialog.Content>
                 <Text>
@@ -67,11 +68,13 @@ UsageWithTrigger.parameters = {
     const onClose = useCallback(() => {
         setIsOpen(false);
     }, []);
+    
+    const iconProps = useMemo(() => ({ name: 'cellphone-check' }), []);
 
     return (
         <>
             <Button onPress={onOpen}>Show Dialog</Button>
-            <Dialog iconProps={{ name: 'cellphone-check' }} isOpen={isOpen} onClose={onClose} >
+            <Dialog iconProps={iconProps} isOpen={isOpen} onClose={onClose} >
                 <Dialog.Title>Dialog with Hero Icon</Dialog.Title>
                 <Dialog.Content>
                     <Text>
