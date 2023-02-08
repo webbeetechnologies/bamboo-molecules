@@ -30,23 +30,19 @@ const TimePickerField = (
     const { MaskedInput, IconButton, TimePickerModal } = useMolecules();
     const componentStyles = useComponentStyles('TimePickerField', style);
 
-    const [timeString, setTimeString] = useState(getFormattedTime({ time, is24Hour }));
+    const [timeString, setTimeString] = useState(() => getFormattedTime({ time, is24Hour }));
 
     const currentTimeFormat = useMemo(() => timeFormat[!is24Hour ? '12' : '24'], [is24Hour]);
 
-    const { state: isOpen, setState: setIsOpen } = useToggle(false);
-
-    const onCloseModal = useCallback(() => setIsOpen(false), [setIsOpen]);
-
-    const onOpenModal = useCallback(() => setIsOpen(true), [setIsOpen]);
+    const { state: isOpen, handleOpen: onOpenModal, handleClose: onCloseModal } = useToggle(false);
 
     const onConfirmTime = useCallback(
         (newTime: string) => {
-            setIsOpen(false);
+            onCloseModal();
 
             onTimeChangeProp(newTime);
         },
-        [onTimeChangeProp, setIsOpen],
+        [onTimeChangeProp, onCloseModal],
     );
 
     const onBlur = useCallback(
