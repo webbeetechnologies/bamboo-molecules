@@ -53,9 +53,12 @@ const TimePickerField = (
         (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
             onBlurProp?.(e);
 
-            onTimeChangeProp(getOutputTime({ time: timeString, is24Hour }));
+            const outputTime = getOutputTime({ time: timeString, is24Hour });
+            onTimeChangeProp(outputTime);
 
-            setTimeString(getFormattedTime({ time, is24Hour }));
+            if (time === outputTime) {
+                setTimeString(getFormattedTime({ time, is24Hour }));
+            }
         },
         [is24Hour, onBlurProp, onTimeChangeProp, time, timeString],
     );
