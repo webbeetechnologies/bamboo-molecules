@@ -54,8 +54,10 @@ const TimePickerField = (
             onBlurProp?.(e);
 
             onTimeChangeProp(getOutputTime({ time: timeString, is24Hour }));
+
+            setTimeString(getFormattedTime({ time, is24Hour }));
         },
-        [is24Hour, onBlurProp, onTimeChangeProp, timeString],
+        [is24Hour, onBlurProp, onTimeChangeProp, time, timeString],
     );
 
     const rightElement = useMemo(() => {

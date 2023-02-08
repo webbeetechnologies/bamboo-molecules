@@ -60,7 +60,7 @@ export const getFormattedTime = ({ time, is24Hour }: { time: string; is24Hour: b
     const [hour = '0', minute = '0'] = sanitizeTimeString(time).split(':');
 
     const newHour = hour.padStart(2, '0');
-    const newMinute = minute.padEnd(2, '0');
+    const newMinute = minute.padStart(2, '0');
 
     return format(
         set(referenceDate, { hours: +newHour, minutes: +newMinute }),
@@ -69,21 +69,12 @@ export const getFormattedTime = ({ time, is24Hour }: { time: string; is24Hour: b
 };
 
 export const getOutputTime = ({ time, is24Hour }: { time: string; is24Hour: boolean }) => {
-    const [hour = '0', minute = '0'] = time.replace(/[^\d:]/g, '').split(':');
+    const formattedTime = sanitizeTimeString(getFormattedTime({ time, is24Hour }));
     const isPM = time.replace(/[\d:]/g, '').includes('p');
-
-    let newHour = hour.padStart(2, '0');
-    const newMinute = minute.padEnd(2, '0');
-
-    newHour = `${Math.min(+newHour, is24Hour ? 23 : 12)}`;
-
-    if (!is24Hour && +newHour === 0) {
-        newHour = '12';
-    }
 
     return format(
         parse(
-            `${newHour}:${newMinute}${is24Hour ? '' : isPM ? 'pm' : 'am'}`,
+            formattedTime + (is24Hour ? '' : isPM ? 'pm' : 'am'),
             timeFormat[is24Hour ? '24' : '12'].format,
             referenceDate,
         ),

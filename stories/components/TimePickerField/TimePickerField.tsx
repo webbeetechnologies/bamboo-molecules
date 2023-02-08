@@ -4,7 +4,7 @@ import { TimePickerField, TimePickerFieldProps } from '../../../src/components';
 export type Props = TimePickerFieldProps & {};
 
 export const Example = (props: Props) => {
-    const [time, setTime] = useState<string>('10:13');
+    const [time, setTime] = useState<string>('17:00');
 
     const onChange = useCallback(
         (newTime: string) => {

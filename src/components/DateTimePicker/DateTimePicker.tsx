@@ -1,6 +1,6 @@
 import { forwardRef, memo, useCallback, useMemo } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
-import { set, format } from 'date-fns';
+import { set, format, parse } from 'date-fns';
 
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { DatePickerInputProps } from '../DatePickerInput';
@@ -63,9 +63,9 @@ const DateTimePicker = (
 
     const onTimeChange = useCallback(
         (time: string) => {
-            const [hour = '0', minute = '0'] = sanitizeTimeString(time).split(':');
+            const newTime = sanitizeTimeString(time);
 
-            onChange(set(date || new Date(), { hours: +hour, minutes: +minute }));
+            onChange(parse(newTime, 'HH:mm', date || new Date()));
         },
         [date, onChange],
     );

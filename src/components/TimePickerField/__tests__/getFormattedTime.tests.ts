@@ -8,10 +8,9 @@ describe('formatTime. Should normalize any input value into the correctly format
 
         expect(getFormattedTime({ time, is24Hour })).toBe(expected);
     });
-
     it('should format time in 12 hour format', () => {
         const time = '1:3';
-        const expected = '01:30am';
+        const expected = '01:03am';
         const is24Hour = false;
 
         expect(getFormattedTime({ time, is24Hour })).toBe(expected);
