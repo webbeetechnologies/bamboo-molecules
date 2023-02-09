@@ -1,11 +1,17 @@
 import { useRef } from 'react';
 import { StyleSheet } from 'react-native';
-import { useMolecules, NavigationStackProps, NavigationStackHandle } from 'bamboo-molecules';
+import { useMolecules } from '../../../src';
+import {
+    NavigationStackProps,
+    NavigationStackHandle,
+    NavigationStack,
+    Button,
+} from '../../../src/components';
 
 export type Props = NavigationStackProps & {};
 
 export const Example = (props: Props) => {
-    const { NavigationStack, View, Button, Text } = useMolecules();
+    const { View, Text } = useMolecules();
     const ref = useRef<NavigationStackHandle>(null);
 
     const onPressProfile = () => {
