@@ -23,27 +23,45 @@ export const useLoadableActionCreator = <T extends {}>(
     const dataSourceRef = useRef(dataSource);
     dataSourceRef.current = dataSource;
 
-    const handlePaginate = useCallback(
+    const handleFetchData = useCallback(
         (args: OnLoadableAction) => {
             if (!isLoadable) {
                 throw new Error('Cannot load when isLoadable is false');
-            }
-
-            if (config.hasReducer) {
-                dispatch(args);
-                return;
             }
 
             if (!onLoad) {
                 throw new Error('onLoad function not provided');
             }
 
+            const loadingResult = onLoad(dataSourceRef.current, args);
+
+            const { isLoadable: _isLoadable, ...loadedResult } = getLoadingStatus({
+                loading: loadingResult,
+            });
+
+            if (
+                loadedResult.hasStarted === dataSourceRef.current.hasStarted &&
+                loadedResult.isLoading === dataSourceRef.current.isLoading &&
+                loadedResult.hasLoaded === dataSourceRef.current.hasLoaded &&
+                loadedResult.hasErrored === dataSourceRef.current.hasErrored
+            ) {
+                return;
+            }
+
+            dataSourceRef.current = {
+                ...dataSourceRef.current,
+                ...loadedResult,
+            };
+
             dispatch({
-                type: args.type,
-                payload: onLoad(dataSourceRef.current, args),
+                type: 'UPDATE_PAYLOAD',
+                payload: {
+                    ...loadedResult,
+                    lastAction: args.type,
+                },
             });
         },
-        [isLoadable, dispatch, onLoad],
+        [config.hasReducer, isLoadable, dispatch, onLoad],
     );
 
     return useMemo(() => {
@@ -52,30 +70,30 @@ export const useLoadableActionCreator = <T extends {}>(
             : {
                   ...getLoadingStatus({ loading }),
                   fetchRecords: () =>
-                      handlePaginate({
+                      handleFetchData({
                           type: ELoadableActions.FETCH_RECORDS,
                       }),
               };
-    }, [isLoadable, loading, handlePaginate]) as LoadableDataSourceResult;
+    }, [isLoadable, loading, handleFetchData]) as LoadableDataSourceResult;
 };
 
-export const useLoadableDataSource = (): LoadableDataSourceResult => {
-    const { isLoadable, hasStarted, isLoading, hasLoaded, hasErrored, fetchRecords } =
+export const useLoadableDataSource = <T>(): LoadableDataSourceResult<T> => {
+    const { isLoadable, hasStarted, isLoading, hasLoaded, hasErrored, fetchRecords, records } =
         useDataSource();
 
-    if (!isLoadable) {
-        return notLoadable as LoadableDataSourceResult;
-    }
-
     return useMemo(
-        () => ({
-            isLoadable,
-            hasStarted,
-            isLoading,
-            hasLoaded,
-            hasErrored,
-            fetchRecords,
-        }),
-        [isLoadable, hasStarted, isLoading, hasLoaded, hasErrored],
+        () =>
+            (!isLoadable
+                ? notLoadable
+                : {
+                      isLoadable,
+                      hasStarted,
+                      isLoading,
+                      hasLoaded,
+                      hasErrored,
+                      fetchRecords,
+                      records,
+                  }) as LoadableDataSourceResult<T>,
+        [isLoadable, hasStarted, isLoading, hasLoaded, hasErrored, fetchRecords, records],
     );
 };

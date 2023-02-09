@@ -2,9 +2,9 @@ import { ELoadableActions, Loading } from './types';
 
 export const getLoadingStatus = (args: { loading: Loading }) => {
     const { loading } = args;
-    const { startedAt, finishedAt, erroredAt } = loading;
+    const { startedAt = 0, finishedAt = 0, erroredAt = 0 } = loading || {};
 
-    const maxTime = Math.max(Number(finishedAt), Number(erroredAt), Number(startedAt));
+    const maxTime = Math.max(0, Number(finishedAt), Number(erroredAt), Number(startedAt));
     const hasStarted = maxTime > 0;
 
     return {

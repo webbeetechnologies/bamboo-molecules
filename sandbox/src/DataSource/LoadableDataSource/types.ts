@@ -33,20 +33,22 @@ export interface LoadableDataSourceState<T extends {}>
     extends DataSourceInternalState<T>,
         Pick<HasLoading, 'isLoading' | 'hasLoaded' | 'hasStarted' | 'hasErrored' | 'isLoadable'> {}
 
-type HasLoading = {
+type HasLoading<T = {}> = {
     isLoadable: true;
     isLoading: boolean;
     hasLoaded: boolean;
     hasErrored: boolean;
     hasStarted: boolean;
     fetchRecords: () => void;
+
+    records: T[];
 };
 
-type NotLoadable = Partial<HasLoading> & {
+type NotLoadable<T = {}> = Partial<HasLoading<T>> & {
     isLoadable: false;
 };
 
-export type LoadableDataSourceResult = HasLoading | NotLoadable;
+export type LoadableDataSourceResult<T = {}> = HasLoading<T> | NotLoadable<T>;
 
 export type LoaderReducer = <T extends {}>(
     dataSource: LoadableDataSourceState<T> & DataSourceInternalState<T>,

@@ -48,7 +48,6 @@ export const useFilterableActionCreator = <T extends {}>(
                 ...ds,
             };
 
-            // @ts-ignore
             dispatch({
                 type: 'UPDATE_PAYLOAD',
                 payload: {

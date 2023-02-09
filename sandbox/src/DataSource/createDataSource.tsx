@@ -148,7 +148,7 @@ export const createDataSource = <T, DS = CreateDataSourceArgs<T>>(
          */
         const records = dataSource.records;
 
-        const resultDS = reducers.reduce((ds, reducer) => {
+        let resultDS = reducers.reduce((ds, reducer) => {
             const reducedValue = reducer?.(ds, action);
             if (reducedValue === ds) return ds;
 
@@ -158,6 +158,10 @@ export const createDataSource = <T, DS = CreateDataSourceArgs<T>>(
                 lastAction: action.type as string,
             };
         }, dataSource);
+
+        if (resultDS === dataSource) {
+            return dataSource;
+        }
 
         return {
             ...resultDS,

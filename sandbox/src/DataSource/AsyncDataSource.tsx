@@ -26,7 +26,6 @@ import {
     LoadableDataSourceState,
 } from './LoadableDataSource/types';
 import { DataSourceReturns, DataSourceType } from './types';
-import FilterableDatasource from './FilterableDatasource';
 import { DataSourcePresenterType } from './utils';
 
 export type AsyncDataSourceProps<T extends {} = Record<string, any>> = FilterableDataSourceProps &
