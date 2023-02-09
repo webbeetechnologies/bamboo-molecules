@@ -10,7 +10,7 @@ import {
     forwardRef,
 } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
 export type Props = ViewProps &
@@ -92,6 +92,6 @@ const DialogActions = (
     );
 };
 
-DialogActions.displayName = 'Dialog.Actions';
+DialogActions.displayName = 'Dialog_Actions';
 
 export default memo(forwardRef(DialogActions));

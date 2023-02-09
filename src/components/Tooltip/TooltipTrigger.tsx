@@ -82,5 +82,5 @@ const TooltipTrigger = memo(({ children }: { children: ReactElement }) => {
     );
 });
 
-TooltipTrigger.displayName = 'Tooltip.Trigger';
+TooltipTrigger.displayName = 'Tooltip_Trigger';
 export default TooltipTrigger;

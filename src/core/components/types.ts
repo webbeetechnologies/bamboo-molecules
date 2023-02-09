@@ -1,5 +1,5 @@
 import type { ComponentType, ReactNode } from 'react';
-import type { IComponentsProviderContext as IAtomsComponentsProviderContext } from '@webbee/bamboo-atoms';
+import type { IComponentsProviderContext as IAtomsComponentsProviderContext } from '@bambooapp/bamboo-atoms';
 import type {
     IconProps,
     IconButtonProps,
@@ -50,6 +50,13 @@ import type {
     NavigationStack,
     AccordionItem,
     AccordionProps,
+    RatingProps,
+    LinkProps,
+    DateTimePickerProps,
+    TimePickerFieldProps,
+    NavigationRail,
+    BadgeProps,
+    FABProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -86,6 +93,7 @@ export interface DefaultComponents {
     DatePickerInline: ComponentType<DatePickerInlineProps>;
     DatePickerModal: ComponentType<DatePickerModalProps>;
     DatePickerInput: ComponentType<DatePickerInputProps>;
+    DateTimePicker: ComponentType<DateTimePickerProps>;
     TimePicker: ComponentType<TimePickerProps>;
     TimePickerModal: ComponentType<TimePickerModalProps>;
     TextInputWithMask: ComponentType<TextInputWithMaskProps>;
@@ -108,6 +116,12 @@ export interface DefaultComponents {
     NavigationStack: typeof NavigationStack;
     Accordion: ComponentType<AccordionProps>;
     AccordionItem: typeof AccordionItem;
+    Rating: ComponentType<RatingProps>;
+    Link: ComponentType<LinkProps>;
+    TimePickerField: ComponentType<TimePickerFieldProps>;
+    NavigationRail: typeof NavigationRail;
+    Badge: ComponentType<BadgeProps>;
+    FAB: ComponentType<FABProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

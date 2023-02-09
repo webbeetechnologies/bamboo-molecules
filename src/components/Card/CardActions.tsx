@@ -12,6 +12,6 @@ const CardActions: FC<Props> = ({ style, ...rest }, ref: any) => {
     return <View style={componentStyles} {...rest} ref={ref} />;
 };
 
-CardActions.displayName = 'Card.Actions';
+CardActions.displayName = 'Card_Actions';
 
 export default memo(CardActions);

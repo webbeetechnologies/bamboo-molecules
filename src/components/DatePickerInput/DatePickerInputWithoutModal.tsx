@@ -14,12 +14,13 @@ function DatePickerInputWithoutModal(
         inputMode,
         inputButtons,
         dateFormat = 'dd/MM/yyyy',
+        style,
         ...rest
     }: DatePickerInputWithoutModalProps,
     ref: any,
 ) {
-    const { TextInputWithMask, View } = useMolecules();
-    const { container } = useComponentStyles('DatePickerInput');
+    const { TextInputWithMask } = useMolecules();
+    const componentStyles = useComponentStyles('DatePickerInput', style);
 
     const theme = useCurrentTheme();
     const { formattedValue, onChangeText, error } = useDateInput({
@@ -32,22 +33,21 @@ function DatePickerInputWithoutModal(
     });
 
     return (
-        <View style={container}>
-            <TextInputWithMask
-                placeholder={dateFormat}
-                {...rest}
-                ref={ref}
-                label={label || dateFormat}
-                value={formattedValue}
-                keyboardType={'number-pad'}
-                mask={dateFormat}
-                onChangeText={onChangeText}
-                keyboardAppearance={theme.dark ? 'dark' : 'default'}
-                error={!!error}
-                right={inputButtons}
-                supportingText={error || undefined}
-            />
-        </View>
+        <TextInputWithMask
+            placeholder={dateFormat}
+            style={componentStyles}
+            {...rest}
+            ref={ref}
+            label={label || dateFormat}
+            value={formattedValue}
+            keyboardType={'number-pad'}
+            mask={dateFormat}
+            onChangeText={onChangeText}
+            keyboardAppearance={theme.dark ? 'dark' : 'default'}
+            error={!!error}
+            right={inputButtons}
+            supportingText={error || undefined}
+        />
     );
 }
 

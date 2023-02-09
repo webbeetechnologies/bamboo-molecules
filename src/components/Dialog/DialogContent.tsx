@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef, ReactNode, ComponentType, memo, forwardRef } from 'react';
 import type { ViewStyle, StyleProp } from 'react-native';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
 export type Props = ViewProps &
@@ -57,6 +57,6 @@ const DialogContent = ({ children, style, ...rest }: Props, ref: any) => {
     );
 };
 
-DialogContent.displayName = 'Dialog.Content';
+DialogContent.displayName = 'Dialog_Content';
 
 export default memo(forwardRef(DialogContent));

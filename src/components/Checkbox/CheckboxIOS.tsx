@@ -104,6 +104,4 @@ const CheckboxIOS = (
     );
 };
 
-CheckboxIOS.displayName = 'Checkbox.IOS';
-
 export default memo(forwardRef(CheckboxIOS));

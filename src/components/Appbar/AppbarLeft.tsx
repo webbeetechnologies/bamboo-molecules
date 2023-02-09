@@ -1,5 +1,5 @@
 import { memo, ReactElement, useContext } from 'react';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { AppbarContext } from './AppbarBase';
 
@@ -24,6 +24,6 @@ const AppbarLeft = memo(({ children, style, ...rest }: Props) => {
     );
 });
 
-AppbarLeft.displayName = 'Appbar.Left';
+AppbarLeft.displayName = 'Appbar_Left';
 
 export default AppbarLeft;

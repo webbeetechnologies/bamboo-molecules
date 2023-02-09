@@ -17,7 +17,7 @@ import {
     TextStyle,
     ViewStyle,
 } from 'react-native';
-import type { TextInputProps } from '@webbee/bamboo-atoms';
+import type { TextInputProps } from '@bambooapp/bamboo-atoms';
 
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { WithElements } from '../../types';
@@ -300,14 +300,18 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
         const root = useRef<NativeTextInput | undefined | null>();
 
-        useImperativeHandle(ref, () => ({
-            focus: () => root.current?.focus(),
-            clear: () => root.current?.clear(),
-            setNativeProps: (args: Object) => root.current?.setNativeProps(args),
-            isFocused: () => root.current?.isFocused() || false,
-            blur: () => root.current?.blur(),
-            forceFocus: () => root.current?.focus(),
-        }));
+        useImperativeHandle(
+            ref,
+            () => ({
+                focus: () => root.current?.focus(),
+                clear: () => root.current?.clear(),
+                setNativeProps: (args: Object) => root.current?.setNativeProps(args),
+                isFocused: () => root.current?.isFocused() || false,
+                blur: () => root.current?.blur(),
+                forceFocus: () => root.current?.focus(),
+            }),
+            [],
+        );
 
         useEffect(() => {
             // When the input has an error, we wiggle the label and apply error styles

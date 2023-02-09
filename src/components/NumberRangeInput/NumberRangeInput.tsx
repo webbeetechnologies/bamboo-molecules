@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { NumberInputProps } from '../NumberInput';
 import { isNil } from '../../utils';

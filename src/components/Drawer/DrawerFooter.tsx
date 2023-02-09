@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
 export type Props = ViewProps & {};
@@ -15,6 +15,6 @@ const DrawerFooter = memo(({ style, children, ...rest }: Props) => {
     );
 });
 
-DrawerFooter.displayName = 'Drawer.Footer';
+DrawerFooter.displayName = 'Drawer_Footer';
 
 export default DrawerFooter;

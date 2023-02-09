@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { IExtractStylesFuncArgs, ITheme as AtomsTheme } from '@webbee/bamboo-atoms';
+import type { IExtractStylesFuncArgs, ITheme as AtomsTheme } from '@bambooapp/bamboo-atoms';
 import type { StyleProp } from 'react-native';
 
 export type ITheme = AtomsTheme & {

@@ -1,8 +1,9 @@
 import { forwardRef, memo, useMemo } from 'react';
-import { MaskArray, createNumberMask } from 'react-native-mask-input';
+import type { MaskArray } from 'react-native-mask-input';
 
 import { useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
+import { createNumberMask } from '../../utils';
 
 export type Props = Omit<TextInputProps, 'value' | 'defaultValue' | 'onChangeText'> & {
     /**
@@ -30,18 +31,34 @@ export type Props = Omit<TextInputProps, 'value' | 'defaultValue' | 'onChangeTex
      * */
     separator?: string;
     /**
+     * If this is false, precision will be ignored
+     * */
+    allowDecimals?: boolean;
+    /**
+     * For default prefix, if we want to allow negative or not
+     * If the custom prefix is passed, this will be ignored.
+     * */
+    allowNegative?: boolean;
+    /**
      * Mask to be prefixed on the mask result
      * */
     prefix?: MaskArray;
+    /**
+     * Mask to be suffixed on the mask result
+     * */
+    suffix?: string | string[];
 };
 
 const NumberInput = (
     {
         keyboardType = 'numeric',
         delimiter = '.',
-        precision = 0,
-        separator = ',',
+        precision = 2,
+        separator = '',
+        allowDecimals = true,
+        allowNegative = true,
         prefix,
+        suffix,
         ...rest
     }: Props,
     ref: any,
@@ -51,11 +68,12 @@ const NumberInput = (
         () =>
             createNumberMask({
                 delimiter,
-                precision,
+                precision: !allowDecimals ? 0 : precision,
                 separator,
-                prefix,
+                prefix: prefix ? prefix : allowNegative ? [/^[\d+-]+$/] : [/^[\d+]+$/],
+                suffix,
             }),
-        [delimiter, precision, prefix, separator],
+        [allowDecimals, allowNegative, delimiter, precision, prefix, suffix, separator],
     );
 
     return <MaskedInput mask={mask} {...rest} keyboardType={keyboardType} ref={ref} />;

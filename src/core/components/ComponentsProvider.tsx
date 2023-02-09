@@ -4,7 +4,7 @@ import {
     ProvideComponents as AtomsProvideComponents,
     ConsumeComponents as AtomsConsumeComponents,
     extractComponents as extractComponentsAtoms,
-} from '@webbee/bamboo-atoms';
+} from '@bambooapp/bamboo-atoms';
 import {
     ActivityIndicator,
     Icon,
@@ -58,6 +58,13 @@ import {
     NavigationStack,
     Accordion,
     AccordionItem,
+    Rating,
+    Link,
+    DateTimePicker,
+    TimePickerField,
+    NavigationRail,
+    Badge,
+    FAB,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -98,8 +105,10 @@ const defaultComponents: DefaultComponents = {
     DatePickerInline,
     DatePickerModal,
     DatePickerInput,
+    DateTimePicker,
     TimePicker,
     TimePickerModal,
+    TimePickerField,
     TextInputWithMask: TextInputWithMask as ComponentType<TextInputWithMaskProps>,
     OptionList,
     DropdownList,
@@ -120,6 +129,11 @@ const defaultComponents: DefaultComponents = {
     NavigationStack,
     Accordion,
     AccordionItem,
+    Rating,
+    Link,
+    NavigationRail,
+    Badge,
+    FAB,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

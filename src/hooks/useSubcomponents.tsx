@@ -1,39 +1,59 @@
 import type { ReactElement } from 'react';
 import { Children, FC, isValidElement, useMemo } from 'react';
 
-export type UseSubcomponentsProps = {
+export type UseSubcomponentsProps<T extends string> = {
     children: ReactElement | ReactElement[];
     /**
-     * array of displayName is this format 'Component.Subcomponent' - eg 'Tooltip.Trigger'
+     * array of displayName as string
      * */
-    allowedChildren: string[];
+    allowedChildren: T[];
 };
 
-const useSubcomponents = ({ children, allowedChildren }: UseSubcomponentsProps) => {
-    return useMemo(
-        () =>
-            Children.map(children, child => child).reduce((context, child) => {
-                if (!isValidElement(child)) return context;
+/**
+ *  This will return an object with the displayNames as the property names
+ *  eg. allowedChildren: ['Drawer_Header', 'Drawer_Content', 'Drawer_Footer', 'DrawerItem'];
+ *
+ *  return value -> {
+ *    Drawer_Header: [],
+ *    Drawer_Content: [],
+ *    Drawer_Footer: [],
+ *    DrawerItem: [],
+ *  }
+ *  */
+const useSubcomponents = <T extends string = string>({
+    children,
+    allowedChildren,
+}: UseSubcomponentsProps<T>) => {
+    return useMemo(() => {
+        // this will create properties with default empty array values even if they don't exist in the children
+        const defaultContext = allowedChildren.reduce((context, childName) => {
+            return {
+                ...context,
+                [childName]: [],
+            };
+        }, {}) as {
+            [key in T]: ReactElement[];
+        };
 
-                if (
-                    !allowedChildren.find(
-                        name => name === ((child.type as FC).displayName as string),
-                    )
-                ) {
-                    return context;
-                }
+        return Children.map(children, child => child).reduce((context, child) => {
+            if (!isValidElement(child)) return context;
 
-                const name = (child.type as FC).displayName?.split('.')[1]?.toLowerCase();
+            if (
+                !allowedChildren.find(name => name === ((child.type as FC).displayName as string))
+            ) {
+                return context;
+            }
 
-                if (!name) return context;
+            const name = (child.type as FC).displayName as T;
 
-                return {
-                    ...context,
-                    [name]: child,
-                };
-            }, {} as any),
-        [allowedChildren, children],
-    );
+            if (!name) return context;
+
+            return {
+                ...context,
+                [name]: [...context[name], child],
+            };
+        }, defaultContext);
+    }, [allowedChildren, children]);
 };
 
 export default useSubcomponents;

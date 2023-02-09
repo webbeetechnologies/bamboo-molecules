@@ -1,9 +1,5 @@
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Platform } from 'react-native';
-import { Card, Headline } from 'react-native-paper';
-import DesignTokens from './DesignTokens';
-import { ComponentsDemo } from './ComponentsDemo';
-import { Popover } from './Popover';
-import { ProvideMolecules } from '../../src/core';
+import { StyleSheet, SafeAreaView, StatusBar, Platform } from 'react-native';
+import { useMolecules, ProvideMolecules } from 'bamboo-molecules';
 
 const style = StyleSheet.create({
     wrap: {
@@ -20,34 +16,17 @@ const style = StyleSheet.create({
     },
 });
 
-const CardHeader: typeof Headline = props => {
-    return <Card.Title style={style.cardTitle} title={<Headline {...props} />} />;
+const Components = () => {
+    const { Button } = useMolecules();
+
+    return <Button variant="contained">Contained Button </Button>;
 };
 
 export default () => {
     return (
         <ProvideMolecules>
             <SafeAreaView style={style.wrap}>
-                <ScrollView>
-                    <Card>
-                        <CardHeader children="Design Tokens" />
-                        <Card.Content>
-                            <DesignTokens />
-                        </Card.Content>
-                    </Card>
-                    <Card>
-                        <CardHeader children="Components Demo" />
-                        <Card.Content>
-                            <ComponentsDemo />
-                        </Card.Content>
-                    </Card>
-                    <Card>
-                        <CardHeader children="Popover" />
-                        <Card.Content>
-                            <Popover />
-                        </Card.Content>
-                    </Card>
-                </ScrollView>
+                <Components />
             </SafeAreaView>
         </ProvideMolecules>
     );

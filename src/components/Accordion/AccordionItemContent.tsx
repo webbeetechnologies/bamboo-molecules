@@ -15,6 +15,6 @@ const AccordionItemContent = memo(({ style, children, ...rest }: Props) => {
     );
 });
 
-AccordionItemContent.displayName = 'AccordionItem.Content';
+AccordionItemContent.displayName = 'AccordionItem_Content';
 
 export default AccordionItemContent;

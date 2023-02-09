@@ -24,16 +24,16 @@ export const defaultStyles: ComponentStylePropWithVariants<
     CustomSizeProps
 > = {
     animationScale: 'animation.scale',
+    flexGrow: 1,
 
     button: {
         borderStyle: 'solid',
-        flex: 1,
     },
     content: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 1,
+        flexGrow: 1,
     },
     icon: {
         marginLeft: 'spacings.4',
@@ -93,8 +93,8 @@ export const defaultStyles: ComponentStylePropWithVariants<
 
             states: {
                 disabled: {
-                    color: 'colors.onSurfaceDisabled',
-                    borderColor: 'colors.surfaceDisabled',
+                    color: 'colors.stateLayer.disabled.onSurface_Level4',
+                    borderColor: 'colors.stateLayer.disabled.onSurface',
                 },
                 hovered: {
                     backgroundColor: 'colors.primaryContainerOnHover',
@@ -106,7 +106,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
             color: 'colors.primary',
 
             states: {
-                disabled: {},
+                disabled: {
+                    color: 'colors.stateLayer.disabled.onSurface_Level4',
+                },
                 hovered: {
                     backgroundColor: 'colors.primaryContainerOnHover',
                 },
@@ -118,7 +120,8 @@ export const defaultStyles: ComponentStylePropWithVariants<
 
             states: {
                 disabled: {
-                    backgroundColor: 'transparent',
+                    backgroundColor: 'colors.stateLayer.disabled.onSurface',
+                    color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
                     backgroundColor: 'colors.primaryOnHover',
@@ -132,6 +135,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
             states: {
                 disabled: {
                     backgroundColor: 'colors.surfaceDisabled',
+                    color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
                     backgroundColor: 'colors.primaryContainerOnHover',
@@ -145,6 +149,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
             states: {
                 disabled: {
                     backgroundColor: 'colors.surfaceDisabled',
+                    color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
                     backgroundColor: 'colors.secondaryContainerOnHover',

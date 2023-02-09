@@ -1,6 +1,6 @@
 import { FC, memo, ReactNode } from 'react';
 import { View } from 'react-native';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles } from '../../hooks';
 
 export type Props = ViewProps & {
@@ -13,6 +13,6 @@ const CardContent: FC<Props> = ({ style, ...rest }, ref: any) => {
     return <View style={componentStyles} {...rest} ref={ref} />;
 };
 
-CardContent.displayName = 'Card.Content';
+CardContent.displayName = 'Card_Content';
 
 export default memo(CardContent);

@@ -1,5 +1,5 @@
 import { memo, createContext, ReactNode, useMemo } from 'react';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useControlledValue, useMolecules } from '../../hooks';
 
 export type Props = ViewProps & {
@@ -93,6 +93,6 @@ const RadioButtonGroup = ({
     );
 };
 
-RadioButtonGroup.displayName = 'RadioButton.Group';
+RadioButtonGroup.displayName = 'RadioButton_Group';
 
 export default memo(RadioButtonGroup);

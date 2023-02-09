@@ -1,6 +1,6 @@
 import { memo, useContext, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
-import type { TextProps } from '@webbee/bamboo-atoms';
+import type { TextProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { AppbarContext } from './AppbarBase';
 
@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
     },
 });
 
-AppbarTitle.displayName = 'Appbar.Title';
+AppbarTitle.displayName = 'Appbar_Title';
 
 export default AppbarTitle;

@@ -170,8 +170,6 @@ const CheckboxAndroid = (
     );
 };
 
-CheckboxAndroid.displayName = 'Checkbox.Android';
-
 const styles = StyleSheet.create({
     fillContainer: {
         alignItems: 'center',

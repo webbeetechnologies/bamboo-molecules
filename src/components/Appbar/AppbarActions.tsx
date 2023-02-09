@@ -4,12 +4,12 @@ import type { IconButtonProps } from '../IconButton';
 
 export type Props = IconButtonProps & {};
 
-const AppbarActions = memo(({ size = 'md', ...rest }: Props) => {
+const AppbarActions = memo(({ size = 24, ...rest }: Props) => {
     const { IconButton } = useMolecules();
 
     return <IconButton size={size} {...rest} />;
 });
 
-AppbarActions.displayName = 'Appbar.Actions';
+AppbarActions.displayName = 'Appbar_Actions';
 
 export default AppbarActions;

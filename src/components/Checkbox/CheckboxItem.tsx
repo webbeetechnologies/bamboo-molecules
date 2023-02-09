@@ -131,7 +131,7 @@ const CheckboxItem = (
     );
 };
 
-CheckboxItem.displayName = 'Checkbox.Item';
+CheckboxItem.displayName = 'Checkbox_Item';
 
 const styles = StyleSheet.create({
     container: {

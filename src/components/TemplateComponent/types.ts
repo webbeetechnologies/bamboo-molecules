@@ -1,3 +1,3 @@
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 
 export type TemplateComponentProps = ViewProps & {};

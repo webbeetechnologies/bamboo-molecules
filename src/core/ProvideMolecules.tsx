@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { StyleProp } from 'react-native';
-import type { IExtractStylesFuncArgs } from '@webbee/bamboo-atoms';
+import type { IExtractStylesFuncArgs } from '@bambooapp/bamboo-atoms';
 import { IComponentsProviderContext, ProvideComponents } from './components';
 import { ProvidePlatformType, PlatformType } from './platform';
 import { extendTheme, ITheme, ProvideTheme, ResolveComponentStylesArgs } from './theme';

@@ -77,11 +77,17 @@ export {
     TooltipContentProps,
     DrawerProps,
     DrawerItemProps,
+    DrawerItemGroupProps,
     DrawerContentProps,
     DrawerHeaderProps,
     DrawerFooterProps,
     DrawerItemElement,
     DrawerItemElementProps,
+    DrawerCollapsibleProps,
+    DrawerCollapsibleItemProps,
+    DrawerCollapsibleItemHeaderProps,
+    DrawerCollapsibleItemHeaderElementProps,
+    DrawerCollapsibleItemContentProps,
     AppbarProps,
     AppbarLeftProps,
     AppbarRightProps,
@@ -101,8 +107,20 @@ export {
     AccordionProps,
     AccordionItemProps,
     AccordionItemHeaderProps,
-    AccordionContentProps,
+    AccordionItemContentProps,
     AccordionHeaderElementProps,
+    RatingProps,
+    LinkProps,
+    SelectHandles,
+    DateTimePickerProps,
+    TimePickerFieldProps,
+    NavigationRailProps,
+    NavigationRailHeaderProps,
+    NavigationRailContentProps,
+    NavigationRailFooterProps,
+    NavigationRailItemProps,
+    BadgeProps,
+    FABProps,
 } from './components';
 
 export {
@@ -118,6 +136,7 @@ export {
     PlatformType,
     IComponentsProviderContext,
     ResolveComponentStylesArgs,
+    extractStyles,
 } from './core';
 
 export { withRipple, withActionState, CallbackActionState } from './hocs';

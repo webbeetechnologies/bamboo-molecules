@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react';
 import { StyleSheet, ViewStyle, StyleProp } from 'react-native';
-import type { ViewProps } from '@webbee/bamboo-atoms';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
 export type Props = Omit<ViewProps, 'children'> & {
@@ -79,7 +79,7 @@ const HorizontalDivider = ({
 
 export const horizontalDividerStyles = {
     height: StyleSheet.hairlineWidth,
-    background: 'colors.surfaceVariant',
+    background: 'colors.outlineVariant',
     bold: {
         height: 1,
     },

@@ -3,7 +3,7 @@ import {
     ProvideTheme as AtomProvideTheme,
     extendTheme as extendThemeAtoms,
     IExtractStylesFuncArgs,
-} from '@webbee/bamboo-atoms';
+} from '@bambooapp/bamboo-atoms';
 import merge from 'ts-deepmerge';
 import { memoize } from '../../utils';
 
@@ -91,8 +91,25 @@ import {
     appbarTitle,
     accordionStyles,
     accordionItemStyles,
+    drawerItemGroupStyles,
     accordionItemHeaderStyles,
     accordionItemContentStyles,
+    drawerCollapsibleStyles,
+    drawerCollapsibleItemStyles,
+    drawerCollapsibleItemHeaderStyles,
+    drawerCollapsibleItemContentStyles,
+    ratingStyles,
+    ratingItemStyles,
+    linkStyles,
+    dateTimePickerStyles,
+    timepickerFieldStyles,
+    navigationRailStyles,
+    navigationRailHeaderStyles,
+    navigationRailContentStyles,
+    navigationRailFooterStyles,
+    navigationRailItemStyles,
+    badgeStyles,
+    fabStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -149,6 +166,8 @@ const defaultThemeValue: Partial<ITheme> = {
 
     DatePickerInput: datePickerInputStyles,
 
+    DateTimePicker: dateTimePickerStyles,
+
     TimePickerModal: timePickerModalStyles,
 
     TimePicker: timePickerStyles,
@@ -158,6 +177,8 @@ const defaultThemeValue: Partial<ITheme> = {
     TimePicker_ClockHours: timePickerClockHoursStyles,
     TimePicker_ClockMinutes: timePickerClockMinutesStyles,
     TimePicker_AmPmSwitcher: timePickerAmPmSwitcherStyles,
+
+    TimePickerField: timepickerFieldStyles,
 
     OptionList: optionListStyles,
     ElementGroup: elementGroupStyles,
@@ -194,9 +215,14 @@ const defaultThemeValue: Partial<ITheme> = {
 
     Drawer: drawerStyles,
     Drawer_Item: drawerItemStyles,
+    Drawer_ItemGroup: drawerItemGroupStyles,
     Drawer_Content: drawerContentStyles,
     Drawer_Header: drawerHeaderStyles,
     Drawer_Footer: drawerFooterStyles,
+    Drawer_Collapsible: drawerCollapsibleStyles,
+    Drawer_CollapsibleItem: drawerCollapsibleItemStyles,
+    Drawer_CollapsibleItem_Header: drawerCollapsibleItemHeaderStyles,
+    Drawer_CollapsibleItem_Content: drawerCollapsibleItemContentStyles,
 
     Appbar: appbarBaseStyles,
     Appbar_CenterAligned: appbarCenterAlignedStyles,
@@ -211,9 +237,24 @@ const defaultThemeValue: Partial<ITheme> = {
     AccordionItem: accordionItemStyles,
     AccordionItem_Header: accordionItemHeaderStyles,
     AccordionItem_Content: accordionItemContentStyles,
+
+    Rating: ratingStyles,
+    Rating_Item: ratingItemStyles,
+
+    Link: linkStyles,
+
+    NavigationRail: navigationRailStyles,
+    NavigationRail_Header: navigationRailHeaderStyles,
+    NavigationRail_Content: navigationRailContentStyles,
+    NavigationRail_Footer: navigationRailFooterStyles,
+    NavigationRail_Item: navigationRailItemStyles,
+
+    Badge: badgeStyles,
+
+    FAB: fabStyles,
 };
 
-const defaultExtractStyles = memoize(
+export const defaultExtractStyles = memoize(
     ({ theme, componentName, colorMode, style }: IExtractStylesFuncArgs) => {
         const normalizedComponentStyles = normalizeStyles(theme[componentName], theme[colorMode]);
         const normalizedStyleProp = normalizeStyles(style, theme[colorMode]);
