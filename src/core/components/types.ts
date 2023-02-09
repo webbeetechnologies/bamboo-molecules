@@ -51,6 +51,8 @@ import type {
     AccordionProps,
     RatingProps,
     LinkProps,
+    DateTimePickerProps,
+    TimePickerFieldProps,
     NavigationRail,
     BadgeProps,
     FABProps,
@@ -90,6 +92,7 @@ export interface DefaultComponents {
     DatePickerInline: ComponentType<DatePickerInlineProps>;
     DatePickerModal: ComponentType<DatePickerModalProps>;
     DatePickerInput: ComponentType<DatePickerInputProps>;
+    DateTimePicker: ComponentType<DateTimePickerProps>;
     TimePicker: ComponentType<TimePickerProps>;
     TimePickerModal: ComponentType<TimePickerModalProps>;
     TextInputWithMask: ComponentType<TextInputWithMaskProps>;
@@ -113,6 +116,7 @@ export interface DefaultComponents {
     AccordionItem: typeof AccordionItem;
     Rating: ComponentType<RatingProps>;
     Link: ComponentType<LinkProps>;
+    TimePickerField: ComponentType<TimePickerFieldProps>;
     NavigationRail: typeof NavigationRail;
     Badge: ComponentType<BadgeProps>;
     FAB: ComponentType<FABProps>;

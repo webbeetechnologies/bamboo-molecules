@@ -5,13 +5,7 @@ import { memo, useCallback, useRef } from 'react';
 import { View, useWindowDimensions, TextInput as TextInputNative } from 'react-native';
 import { useComponentStyles, useLatest } from '../../hooks';
 
-import {
-    clockTypes,
-    PossibleClockTypes,
-    PossibleInputTypes,
-    toHourInputFormat,
-    toHourOutputFormat,
-} from './timeUtils';
+import { clockTypes, PossibleClockTypes, PossibleInputTypes, toHourInputFormat } from './timeUtils';
 import TimeInput from './TimeInput';
 import AmPmSwitcher from './AmPmSwitcher';
 
@@ -78,7 +72,7 @@ function TimeInputs({
 
     const onHourChange = useCallback(
         (newHoursFromInput: number) => {
-            let newHours = toHourOutputFormat(newHoursFromInput, hours, is24Hour);
+            let newHours = newHoursFromInput;
             if (newHoursFromInput >= 24) {
                 newHours = 0;
             }
@@ -87,7 +81,7 @@ function TimeInputs({
                 minutes,
             });
         },
-        [hours, is24Hour, minutes, onChange],
+        [minutes, onChange],
     );
 
     const onMinuteChange = useCallback(

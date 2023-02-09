@@ -10,8 +10,6 @@ export const datePickerInputStyles: ComponentStylePropWithVariants<
     '',
     DatePickerInputCustomProps
 > = {
-    container: {
-        minWidth: 150,
-        justifyContent: 'center',
-    },
+    minWidth: 150,
+    justifyContent: 'center',
 };

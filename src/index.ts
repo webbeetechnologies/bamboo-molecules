@@ -107,6 +107,8 @@ export {
     RatingProps,
     LinkProps,
     SelectHandles,
+    DateTimePickerProps,
+    TimePickerFieldProps,
     NavigationRailProps,
     NavigationRailHeaderProps,
     NavigationRailContentProps,

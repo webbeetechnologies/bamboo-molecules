@@ -33,7 +33,7 @@
     "type-check": "tsc --noEmit",
     "prepare:husky": "husky install",
     "prepare": "bob build",
-    "start": "yarn run:storybook",
+    "start": "yarn storybook",
     "run:testcases": "yarn workspace test-cases start",
     "test": "jest && yarn test-storybook",
     "test-jest": "jest",
@@ -43,12 +43,13 @@
     "storybook": "start-storybook -p 6006",
     "test-storybook": "test-storybook",
     "coverage": "cp coverage/storybook/coverage-storybook.json coverage/coverage-storybook.json && npx nyc report --reporter=html -t coverage --report-dir coverage/lcov-report",
-    "test:coverage": "yarn test-jest --coverage && yarn test-storybook --coverage && yarn coverage"
+    "test:coverage": "yarn test-jest --coverage && yarn test-storybook --coverage && yarn coverage",
+    "build-storybook": "build-storybook",
+    "chromatic": "npx chromatic --project-token=934368a7f6c9"
   },
   "dependencies": {
     "@bambooapp/bamboo-atoms": "^0.0.19",
     "@react-native-aria/overlays": "^0.3.2",
-    "@types/lodash.omitby": "^4.6.7",
     "color": "^4.2.3",
     "date-fns": "^2.29.3",
     "lodash.get": "^4.4.2",
@@ -84,6 +85,7 @@
     "@types/lodash.memoize": "^4.1.7",
     "@types/lodash.noop": "^3.0.7",
     "@types/lodash.omit": "^4.5.7",
+    "@types/lodash.omitby": "^4.6.7",
     "@types/react": "^18.0.20",
     "@types/react-native": "^0.70.0",
     "@types/react-native-vector-icons": "^6.4.12",
@@ -144,7 +146,9 @@
     "lib/"
   ],
   "jest": {
-    "coverageReporters": ["json"],
+    "coverageReporters": [
+      "json"
+    ],
     "preset": "react-native",
     "setupFiles": [],
     "testPathIgnorePatterns": [
