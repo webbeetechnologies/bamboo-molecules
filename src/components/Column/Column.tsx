@@ -38,13 +38,7 @@ export type Props = ViewProps & {
     alignment?: 'top' | 'center' | 'bottom';
 };
 
-const Column: FC<PropsWithChildren<Props>> = ({
-    breakPoints,
-    children,
-    name,
-    alignment,
-    style,
-}) => {
+const Column: FC<PropsWithChildren<Props>> = ({ breakPoints, children, alignment, style }) => {
     const { View } = useMolecules();
     const { width } = useWindowDimensions();
     const colSize = useMemo(() => {
@@ -86,15 +80,6 @@ const Column: FC<PropsWithChildren<Props>> = ({
         ],
         [colSize, alignment, componentStyles, width],
     );
-    if (name === 'grid2')
-        console.log(
-            name,
-            'colSize',
-            `${(colSize / 12) * 100}%`,
-            colSize,
-            'style-col',
-            componentStyles[`col-${colSize}`],
-        );
     return <View style={styles}>{children}</View>;
 };
 

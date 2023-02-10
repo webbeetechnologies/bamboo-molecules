@@ -14,22 +14,13 @@ Default.args = {
         {
             name: 'grid1',
             breakPoints: {
-                md: 6,
                 lg: 12,
             },
         },
         {
             name: 'grid2',
             breakPoints: {
-                md: 4,
-                lg: 8,
-            },
-        },
-        {
-            name: 'field1',
-            breakPoints: {
-                md: 4,
-                lg: 5,
+                lg: 12,
             },
         },
     ],

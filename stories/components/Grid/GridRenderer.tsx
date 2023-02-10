@@ -1,7 +1,7 @@
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import type { ViewProps } from 'react-native';
-import { useMolecules } from '../../../src/hooks';
 import Grid from '../../../src/components/Grid/Grid';
+import { useMolecules } from '../../../src/hooks';
 
 export type Props = {
     /**
@@ -10,19 +10,69 @@ export type Props = {
     name: string;
 };
 
-// Just a placeholder for a Text component.
-const Text = ({ children, style }: ViewProps) => {
-    const { Text, View } = useMolecules();
+/**
+ * Modules for demonstration purposes.
+ */
+
+const ExampleCard = ({
+    title,
+    subheading,
+    style,
+}: ViewProps & {
+    title: string;
+    subheading: string;
+    description: string;
+    withActions?: boolean;
+}) => {
+    const { Card, View } = useMolecules();
     return (
         <View style={style}>
-            <Text>{children}</Text>
+            <Card>
+                <Card.Content>
+                    <Card.Headline>{title}</Card.Headline>
+                    <Card.Subhead>{subheading}</Card.Subhead>
+                    <Card.Text>
+                        Explain more about the topic shown and headline subhead through supporting
+                        text
+                    </Card.Text>
+                </Card.Content>
+            </Card>
         </View>
+    );
+};
+
+const keyExtractor = (item: { title: string; value: string }) => item.title;
+
+const ExampleTable = ({
+    style,
+    data,
+}: ViewProps & { data: { title: string; value: string }[] }) => {
+    const { View, Card, FlatList, Text } = useMolecules();
+    const renderItem = useCallback(
+        ({ item }: { item: { title: string; value: string } }) => (
+            <View>
+                <Text>{item.title}</Text>
+                <Text>{item.value}</Text>
+            </View>
+        ),
+        [],
+    );
+    return (
+        <Card style={style}>
+            <FlatList
+                data={data}
+                keyExtractor={keyExtractor}
+                renderItem={renderItem}
+                numColumns={6}
+            />
+        </Card>
     );
 };
 
 const componentType = {
     grid: Grid,
-    text: Text,
+    table: ExampleTable,
+    card: ExampleCard,
 };
 
 const GridRenderer = ({ name }: Props) => {
@@ -33,69 +83,66 @@ const GridRenderer = ({ name }: Props) => {
 };
 
 const fieldData = {
-    field1: {
-        type: 'text',
-        children: 'Some text 1',
-        style: { backgroundColor: 'blue' },
+    table1: {
+        type: 'table',
+        data: [
+            { title: 'Title 1', value: 'Value 1' },
+            { title: 'Title 2', value: 'Value 2' },
+            { title: 'Title 3', value: 'Value 3' },
+            { title: 'Title 4', value: 'Value 4' },
+            { title: 'Title 5', value: 'Value 5' },
+            { title: 'Title 6', value: 'Value 6' },
+        ],
+        style: { marginHorizontal: 10, padding: 10 },
     },
-    field2: {
-        type: 'text',
-        children: 'Some text 2',
-        style: { backgroundColor: 'lightblue' },
+    card1: {
+        type: 'card',
+        title: 'Card 1',
+        subheading: 'Card 1 subheading',
+        style: { padding: 10 },
     },
-    field3: {
-        type: 'text',
-        children: 'Some text 3',
-        style: { backgroundColor: 'green' },
+    card2: {
+        type: 'card',
+        title: 'Card 2',
+        subheading: 'Card 2 subheading',
+        style: { padding: 10 },
+    },
+    card3: {
+        type: 'card',
+        title: 'Card 3',
+        subheading: 'Card 3 subheading',
+        style: { padding: 10 },
     },
     grid1: {
         type: 'grid',
         data: [
             {
-                name: 'field1',
-                breakPoints: {
-                    md: 4,
-                    sm: 6,
-                    xs: 3,
-                },
-            },
-            {
-                name: 'field2',
-                breakPoints: {
-                    md: 4,
-                    sm: 6,
-                },
-            },
-            {
-                name: 'grid2',
-                breakPoints: {
-                    md: 4,
-                },
+                name: 'table1',
+                breakPoints: 12,
             },
         ],
         renderer: GridRenderer,
-        style: { backgroundColor: 'pink' },
+        style: { marginVertical: 20 },
     },
     grid2: {
         type: 'grid',
         data: [
             {
-                name: 'field1',
-                breakPoints: {
-                    md: 4,
-                    sm: 6,
-                    xs: 3,
-                },
-            },
-            {
-                name: 'field2',
+                name: 'card1',
                 breakPoints: {
                     md: 4,
                     sm: 6,
                 },
             },
             {
-                name: 'field3',
+                name: 'card2',
+                breakPoints: {
+                    md: 4,
+                    sm: 6,
+                },
+            },
+            {
+                name: 'card3',
                 breakPoints: {
                     md: 4,
                     sm: 6,
@@ -103,7 +150,6 @@ const fieldData = {
             },
         ],
         renderer: GridRenderer,
-        style: { backgroundColor: 'red' },
     },
 };
 
