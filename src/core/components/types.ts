@@ -54,6 +54,8 @@ import type {
     NavigationRail,
     BadgeProps,
     FABProps,
+    GridProps,
+    ColumnProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -116,6 +118,8 @@ export interface DefaultComponents {
     NavigationRail: typeof NavigationRail;
     Badge: ComponentType<BadgeProps>;
     FAB: ComponentType<FABProps>;
+    Grid: ComponentType<GridProps>;
+    Column: ComponentType<ColumnProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
