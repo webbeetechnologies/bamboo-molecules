@@ -1,6 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Example } from './Grid';
 import GridRenderer from './GridRenderer';
+import DocsPage from './Grid.docs';
 
 export default {
     title: 'components/Grid',
@@ -25,4 +26,10 @@ Default.args = {
         },
     ],
     renderer: GridRenderer,
+};
+
+Default.parameters = {
+    docs: {
+        page: DocsPage,
+    },
 };
