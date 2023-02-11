@@ -66,9 +66,7 @@ const DocsPage = () => {
                 <Source language="tsx" code={firstCodeBlock} />
                 Then, use the <Code>Grid</Code> component to render the grid layout:
                 <Source language="tsx" code={secondCodeBlock} />
-                And here's the result:
             </Text>
-            <Story id="components-grid--default" />
         </View>
     );
 };
