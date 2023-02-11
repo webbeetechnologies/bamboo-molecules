@@ -16,6 +16,5 @@ type CustomProps = {
     [key: string]: ViewStyle;
 };
 
-export const columnStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
-    ...generateColStyles(12),
-};
+export const columnStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> =
+    generateColStyles(12);
