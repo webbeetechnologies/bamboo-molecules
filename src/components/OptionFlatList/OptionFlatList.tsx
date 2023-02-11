@@ -1,5 +1,16 @@
-import { memo, PropsWithoutRef, ReactElement, RefAttributes, useCallback, useMemo } from 'react';
-import type { ViewStyle, SectionList } from 'react-native';
+import {
+    ComponentType,
+    memo,
+    PropsWithoutRef,
+    ReactElement,
+    RefAttributes,
+    useCallback,
+    useMemo,
+} from 'react';
+import type { ViewStyle } from 'react-native';
+import type { FlatList } from 'react-native';
+import type { ListRenderItemInfo } from '@shopify/flash-list';
+
 import {
     useComponentStyles,
     useControlledValue,
@@ -7,26 +18,22 @@ import {
     useSearchable,
     UseSearchableProps,
 } from '../../hooks';
-import type { SectionListProps, SectionListRenderItemInfo } from '../SectionList';
-
-type DefaultSectionT<TItem> = {
-    data: TItem[];
-    [key: string]: any;
-};
+import type { FlatListProps } from '../FlatList';
 
 type DefaultItemT = {
     id: string | number;
+    selectable?: boolean;
     [key: string]: any;
 };
 
 // To make a correct type inference
-export type IOptionList = <ItemType = DefaultItemT, TSectionType = DefaultSectionT<ItemType>>(
-    props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<SectionList<ItemType>>,
+export type IOptionFlatList = <ItemType extends DefaultItemT = DefaultItemT>(
+    props: PropsWithoutRef<Props<ItemType> & RefAttributes<FlatList<ItemType>>>,
 ) => ReactElement;
 
-export type Props<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = UseSearchableProps &
-    Omit<SectionListProps<TItem, TSection>, 'sections'> & {
-        records: TSection[];
+export type Props<TItem extends DefaultItemT = DefaultItemT> = UseSearchableProps &
+    Omit<FlatListProps<TItem>, 'sections'> & {
+        records: TItem[];
         containerStyle?: ViewStyle;
         searchInputContainerStyle?: ViewStyle;
         /*
@@ -45,12 +52,10 @@ export type Props<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = Use
          * passes the current selectedItem. Will be an array in multiple mode
          * */
         onSelectionChange?: (item: TItem | TItem[]) => void;
+        customFlatList?: ComponentType<FlatListProps<TItem>>;
     };
 
-const OptionList = <
-    TItem extends DefaultItemT = DefaultItemT,
-    TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
->({
+const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>({
     query,
     onQueryChange,
     searchInputProps,
@@ -64,16 +69,20 @@ const OptionList = <
     selection: selectionProp,
     onSelectionChange: onSelectionChangeProp,
     renderItem: renderItemProp,
+    customFlatList: CustomFlatList,
     ...rest
-}: Props<TItem, TSection>) => {
-    const { SectionList, View, TouchableRipple } = useMolecules();
+}: Props<TItem>) => {
+    const { FlatList, View, TouchableRipple } = useMolecules();
+    const FlatListComponent = CustomFlatList || FlatList;
+
     const SearchField = useSearchable({ query, onQueryChange, searchable, searchInputProps });
+
     const [selection, onSelectionChange] = useControlledValue<TItem | TItem[]>({
         value: selectionProp,
         onChange: onSelectionChangeProp,
     });
 
-    const componentStyles = useComponentStyles('OptionList', [
+    const componentStyles = useComponentStyles('OptionFlatList', [
         { container: containerStyle, searchInputContainer: searchInputContainerStyle },
     ]);
 
@@ -108,7 +117,7 @@ const OptionList = <
     );
 
     const renderItem = useCallback(
-        (info: SectionListRenderItemInfo<TItem, TSection>) => {
+        (info: ListRenderItemInfo<TItem>) => {
             if (!renderItemProp) return null;
 
             return selectable && info.item?.selectable !== false ? (
@@ -125,9 +134,9 @@ const OptionList = <
     return (
         <View style={containerStyles}>
             <>{SearchField && <View style={searchInputContainerStyles}>{SearchField}</View>}</>
-            <SectionList {...rest} sections={records} renderItem={renderItem} style={style} />
+            <FlatListComponent {...rest} data={records} renderItem={renderItem} style={style} />
         </View>
     );
 };
 
-export default memo(OptionList) as IOptionList;
+export default memo(OptionFlatList) as IOptionFlatList;

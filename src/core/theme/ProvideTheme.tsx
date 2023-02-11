@@ -110,6 +110,7 @@ import {
     navigationRailItemStyles,
     badgeStyles,
     fabStyles,
+    optionFlatListStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -252,6 +253,8 @@ const defaultThemeValue: Partial<ITheme> = {
     Badge: badgeStyles,
 
     FAB: fabStyles,
+
+    OptionFlatList: optionFlatListStyles,
 };
 
 export const defaultExtractStyles = memoize(
