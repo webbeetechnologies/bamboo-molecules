@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react';
 import type { ViewProps } from 'react-native';
-import Grid from '../../../src/components/Grid/Grid';
+import type { GridProps } from '../../../src/components';
 import { useMolecules } from '../../../src/hooks';
 
 export type Props = {
@@ -14,7 +14,12 @@ export type Props = {
  * Modules for demonstration purposes.
  */
 
-const ExampleCard = ({
+export const Grid = (props: GridProps) => {
+    const { Grid } = useMolecules();
+    return <Grid {...props} />;
+};
+
+const Card = ({
     title,
     subheading,
     style,
@@ -43,10 +48,7 @@ const ExampleCard = ({
 
 const keyExtractor = (item: { title: string; value: string }) => item.title;
 
-const ExampleTable = ({
-    style,
-    data,
-}: ViewProps & { data: { title: string; value: string }[] }) => {
+const Table = ({ style, data }: ViewProps & { data: { title: string; value: string }[] }) => {
     const { View, Card, FlatList, Text } = useMolecules();
     const renderItem = useCallback(
         ({ item }: { item: { title: string; value: string } }) => (
@@ -71,8 +73,8 @@ const ExampleTable = ({
 
 const componentType = {
     grid: Grid,
-    table: ExampleTable,
-    card: ExampleCard,
+    table: Table,
+    card: Card,
 };
 
 const GridRenderer = ({ name }: Props) => {

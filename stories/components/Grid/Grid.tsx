@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import { Grid, GridProps } from '../../../src/components';
+import type { GridProps } from '../../../src/components';
+import { useMolecules } from '../../../src';
 
-export type Props = GridProps & {};
-
-export const Example = memo((props: Props) => {
+export const Example = memo((props: GridProps) => {
+    const { Grid } = useMolecules();
     return <Grid {...props} />;
 });
