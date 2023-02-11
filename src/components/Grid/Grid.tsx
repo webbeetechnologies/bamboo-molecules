@@ -1,11 +1,10 @@
 import { FC, forwardRef, memo, useCallback, useMemo, useRef } from 'react';
-import { FlatList, useWindowDimensions, ViewProps } from 'react-native';
+import { FlatList, FlatListProps, useWindowDimensions } from 'react-native';
 import { useComponentStyles } from '../../hooks';
 import type { ColumnProps } from '../Column';
 import Column from '../Column/Column';
 
-export type Props = ViewProps & {
-    data: ColumnProps[];
+export type Props = FlatListProps<ColumnProps> & {
     renderer: FC<{ name: string }>;
 };
 
