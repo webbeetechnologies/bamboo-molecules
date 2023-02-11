@@ -161,3 +161,5 @@ export * from './Badge';
 export * from './FAB';
 
 export * from './Grid';
+
+export * from './OptionFlatList';

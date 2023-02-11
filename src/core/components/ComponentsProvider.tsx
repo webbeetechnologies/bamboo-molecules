@@ -65,6 +65,7 @@ import {
     Badge,
     FAB,
     Grid,
+    OptionFlatList,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -134,6 +135,7 @@ const defaultComponents: DefaultComponents = {
     Badge,
     FAB,
     Grid,
+    OptionFlatList,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
