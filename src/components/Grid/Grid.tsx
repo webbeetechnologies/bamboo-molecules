@@ -1,6 +1,6 @@
 import { FC, forwardRef, memo, useCallback, useMemo, useRef } from 'react';
 import { FlatList, useWindowDimensions, ViewProps } from 'react-native';
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { useComponentStyles } from '../../hooks';
 import type { ColumnProps } from '../Column';
 import Column from '../Column/Column';
 
@@ -12,16 +12,14 @@ export type Props = ViewProps & {
 const keyExtractor = (item: ColumnProps) => item.name;
 
 function Grid({ data, style, renderer }: Props, ref: any) {
-    const { View } = useMolecules();
     const { width } = useWindowDimensions();
     const componentStyles = useComponentStyles('Grid', style);
 
-    const { gridStyles, rowStyles } = useMemo(() => {
-        const { grid, row, ...otherStyles } = componentStyles;
+    const { gridStyles } = useMemo(() => {
+        const { grid, ...otherStyles } = componentStyles;
 
         return {
             gridStyles: { ...grid, ...otherStyles },
-            rowStyles: row,
         };
     }, [componentStyles, width]);
 
@@ -37,15 +35,14 @@ function Grid({ data, style, renderer }: Props, ref: any) {
     );
 
     return (
-        <View ref={ref} style={gridStyles}>
-            <FlatList
-                columnWrapperStyle={rowStyles}
-                keyExtractor={keyExtractor}
-                data={data}
-                renderItem={renderItem}
-                numColumns={12}
-            />
-        </View>
+        <FlatList
+            columnWrapperStyle={gridStyles}
+            keyExtractor={keyExtractor}
+            data={data}
+            renderItem={renderItem}
+            numColumns={12}
+            ref={ref}
+        />
     );
 }
 
