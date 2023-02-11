@@ -33,12 +33,18 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<ListItem>
-         <>
-            <ListItem.Title>This is the title</ListItem.Title>
-            <ListItem.Description>This is the description</ListItem.Description>
-        </>
-</ListItem>
+import { useMolecules } from '@bambooapp/bamboo-molecules'
+ 
+const Example = () => {
+      const { ListItem } = useMolecules();
+
+      return (
+          <ListItem>
+              <ListItem.Title>This is the title</ListItem.Title>
+              <ListItem.Description>This is the description</ListItem.Description>
+          </ListItem>
+      );
+}
 `,
             language: 'tsx',
             type: 'auto',
@@ -62,12 +68,18 @@ WithLeftElement.parameters = {
     docs: {
         source: {
             code: `
-<ListItem left={<Icon name="robot-angry-outline" type="material-community" size={30} />}>
-        <>
-            <ListItem.Title>ListItem with Left Element</ListItem.Title>
-            <ListItem.Description>Supporting Text</ListItem.Description>
-        </>
-<ListItem>
+import { useMolecules } from '@bambooapp/bamboo-molecules'
+ 
+const Example = () => {
+      const { ListItem } = useMolecules();
+
+      return (
+          <ListItem left={<Icon name="robot-angry-outline" type="material-community" size={30} />}>
+              <ListItem.Title>ListItem with Left Element</ListItem.Title>
+              <ListItem.Description>Supporting Text</ListItem.Description>
+          </ListItem>
+      );
+}
 `,
             language: 'tsx',
             type: 'auto',
@@ -91,12 +103,18 @@ WithRightElement.parameters = {
     docs: {
         source: {
             code: `
-<ListItem right={<Icon name="account-plus-outline" type="material-community" size={30} />}>
-        <>
-            <ListItem.Title>ListItem with Right Element</ListItem.Title>
-            <ListItem.Description>Supporting Text</ListItem.Description>
-        </>
-<ListItem>
+import { useMolecules } from '@bambooapp/bamboo-molecules'
+ 
+const Example = () => {
+      const { ListItem } = useMolecules();
+
+      return (
+          <ListItem right={<Icon name="account-plus-outline" type="material-community" size={30} />}>
+              <ListItem.Title>ListItem with Right Element</ListItem.Title>
+              <ListItem.Description>Supporting Text</ListItem.Description>
+          </ListItem>
+      );
+}
 `,
             language: 'tsx',
             type: 'auto',
@@ -120,12 +138,18 @@ WithDivider.parameters = {
     docs: {
         source: {
             code: `
-<ListItem divider={true}>
-     <>
-        <ListItem.Title>ListItem with Divider</ListItem.Title>
-        <ListItem.Description>Supporting Text</ListItem.Description>
-     </>
-<ListItem>
+import { useMolecules } from '@bambooapp/bamboo-molecules'
+ 
+const Example = () => {
+      const { ListItem } = useMolecules();
+
+      return (
+          <ListItem divider={true}>
+               <ListItem.Title>ListItem with Divider</ListItem.Title>
+               <ListItem.Description>Supporting Text</ListItem.Description>
+          </ListItem>
+      );
+}
 `,
             language: 'tsx',
             type: 'auto',
