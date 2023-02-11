@@ -31,7 +31,7 @@ function Grid({ data, style, renderer }: Props, ref: any) {
                 <MemoizedRenderer name={item.name} />
             </Column>
         ),
-        [renderer],
+        [],
     );
 
     return (
