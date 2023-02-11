@@ -39,6 +39,9 @@ Default.args = {
 };
 
 Default.parameters = {
+    controls: {
+        exclude: 'renderer',
+    },
     docs: {
         page: DocsPage,
     },

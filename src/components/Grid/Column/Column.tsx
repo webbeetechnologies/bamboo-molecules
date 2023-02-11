@@ -39,7 +39,7 @@ const Column: FC<PropsWithChildren<Props>> = ({
     const { View } = useMolecules();
     const { width } = useWindowDimensions();
     const colSize = useMemo(() => {
-        if (breakpoints === undefined) return 1;
+        if (!breakpoints) return 1;
         if (typeof breakpoints === 'number') {
             return breakpoints;
         } else {
@@ -77,6 +77,7 @@ const Column: FC<PropsWithChildren<Props>> = ({
         ],
         [colSize, alignment, width, colStyles, numberOfColumns],
     );
+
     return <View style={[styles, style]}>{children}</View>;
 };
 

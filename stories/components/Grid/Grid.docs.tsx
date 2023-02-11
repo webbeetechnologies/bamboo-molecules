@@ -1,5 +1,7 @@
 import { useMolecules, withDocsWrapper } from '../../common';
-import { Source } from '@storybook/addon-docs';
+import { Source, Canvas, Story } from '@storybook/addon-docs';
+import { Example as Grid } from './Grid';
+import GridRenderer from './GridRenderer';
 
 const DocsPage = () => {
     const { View, H1, H2, H3, Text, Code } = useMolecules();
@@ -64,7 +66,9 @@ const DocsPage = () => {
                 <Source language="tsx" code={firstCodeBlock} />
                 Then, use the <Code>Grid</Code> component to render the grid layout:
                 <Source language="tsx" code={secondCodeBlock} />
+                And here's the result:
             </Text>
+            <Story id="components-grid--default" />
         </View>
     );
 };

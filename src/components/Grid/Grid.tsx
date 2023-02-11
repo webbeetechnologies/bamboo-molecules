@@ -1,5 +1,5 @@
 import { FC, forwardRef, memo, useCallback, useMemo, useRef } from 'react';
-import { FlatList, FlatListProps, useWindowDimensions } from 'react-native';
+import { FlatList, FlatListProps } from 'react-native';
 import { useComponentStyles, useTheme } from '../../hooks';
 import type { ColumnProps } from './Column';
 import Column from './Column/Column';
