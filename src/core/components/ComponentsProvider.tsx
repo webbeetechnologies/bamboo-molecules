@@ -64,6 +64,7 @@ import {
     NavigationRail,
     Badge,
     FAB,
+    OptionFlatList,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -132,6 +133,7 @@ const defaultComponents: DefaultComponents = {
     NavigationRail,
     Badge,
     FAB,
+    OptionFlatList,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
