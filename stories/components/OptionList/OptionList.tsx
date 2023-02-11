@@ -28,7 +28,7 @@ export const Example = (props: Props) => {
 
 const styles = StyleSheet.create({
     sectionTitle: {
-        fontSize: 15,
+        fontSize: 'typescale.titleSmall.fontSize' as unknown as number,
         fontWeight: '600',
         paddingLeft: 'spacings.3',
         backgroundColor: 'colors.surface',
