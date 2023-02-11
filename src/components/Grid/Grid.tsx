@@ -7,7 +7,7 @@ import type { Breakpoints } from './types';
 
 type IColumnProps = Omit<ColumnProps, 'referenceBreakpoints' | 'numberOfColumns'>;
 
-export type Props = FlatListProps<IColumnProps> & {
+export type Props = Pick<FlatListProps<IColumnProps>, 'data' | 'style'> & {
     renderer: FC<{ name: string }>;
     referenceBreakpoints?: Partial<Breakpoints>;
     numberOfColumns?: number;
@@ -19,7 +19,6 @@ const Grid = (
     { data, style, renderer, referenceBreakpoints, numberOfColumns }: Props,
     ref: any,
 ) => {
-    const { width } = useWindowDimensions();
     const componentStyles = useComponentStyles('Grid', style);
 
     const theme = useTheme();
@@ -30,7 +29,7 @@ const Grid = (
         return {
             gridStyles: { ...grid, ...otherStyles },
         };
-    }, [componentStyles, width]);
+    }, [componentStyles]);
 
     const MemoizedRenderer = useRef(renderer).current;
 
@@ -39,7 +38,7 @@ const Grid = (
 
         return {
             _breakpoints: referenceBreakpoints ?? breakpoints,
-            _numberOfColumns: defaultNumberOfColumns ?? numberOfColumns,
+            _numberOfColumns: numberOfColumns ?? defaultNumberOfColumns,
         };
     }, [theme.grid, referenceBreakpoints]);
 
