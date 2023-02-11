@@ -20,17 +20,11 @@ type DefaultItemT = {
 };
 
 // To make a correct type inference
-export type IOptionList = <
-    ItemType extends DefaultItemT = DefaultItemT,
-    TSectionType extends DefaultSectionT<ItemType> = DefaultSectionT<ItemType>,
->(
+export type IOptionList = <ItemType = DefaultItemT, TSectionType = DefaultSectionT<ItemType>>(
     props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<SectionList<ItemType>>,
 ) => ReactElement;
 
-export type Props<
-    TItem extends DefaultItemT = DefaultItemT,
-    TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
-> = UseSearchableProps &
+export type Props<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = UseSearchableProps &
     Omit<SectionListProps<TItem, TSection>, 'sections'> & {
         records: TSection[];
         containerStyle?: ViewStyle;

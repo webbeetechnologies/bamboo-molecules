@@ -10,7 +10,5 @@ export const optionFlatListStyles: ComponentStylePropWithVariants<ViewStyle, '',
     container: {
         flex: 1,
     },
-    searchInputContainer: {
-        marginBottom: 'spacings.2',
-    },
+    searchInputContainer: {},
 };

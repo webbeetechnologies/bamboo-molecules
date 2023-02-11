@@ -23,6 +23,7 @@ import type { FlatListProps } from '../FlatList';
 type DefaultItemT = {
     id: string | number;
     selectable?: boolean;
+    [key: string]: any;
 };
 
 // To make a correct type inference

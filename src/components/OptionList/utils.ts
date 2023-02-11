@@ -10,7 +10,5 @@ export const optionListStyles: ComponentStylePropWithVariants<ViewStyle, '', Cus
     container: {
         flex: 1,
     },
-    searchInputContainer: {
-        marginBottom: 'spacings.2',
-    },
+    searchInputContainer: {},
 };
