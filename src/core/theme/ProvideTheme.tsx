@@ -108,7 +108,6 @@ import {
     navigationRailItemStyles,
     badgeStyles,
     fabStyles,
-    columnStyles,
     gridStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
@@ -248,8 +247,6 @@ const defaultThemeValue: Partial<ITheme> = {
     Badge: badgeStyles,
 
     FAB: fabStyles,
-
-    Column: columnStyles,
 
     Grid: gridStyles,
 };

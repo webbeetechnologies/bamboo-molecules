@@ -55,7 +55,6 @@ import type {
     BadgeProps,
     FABProps,
     GridProps,
-    ColumnProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -119,7 +118,6 @@ export interface DefaultComponents {
     Badge: ComponentType<BadgeProps>;
     FAB: ComponentType<FABProps>;
     Grid: ComponentType<GridProps>;
-    Column: ComponentType<ColumnProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

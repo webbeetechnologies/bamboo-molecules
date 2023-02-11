@@ -63,7 +63,6 @@ import {
     Badge,
     FAB,
     Grid,
-    Column,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -131,7 +130,6 @@ const defaultComponents: DefaultComponents = {
     Badge,
     FAB,
     Grid,
-    Column,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

@@ -156,6 +156,4 @@ export * from './Badge';
 
 export * from './FAB';
 
-export * from './Column';
-
 export * from './Grid';

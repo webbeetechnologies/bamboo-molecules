@@ -1,16 +1,23 @@
 import { FC, memo, PropsWithChildren, useMemo } from 'react';
 import { useWindowDimensions, ViewProps } from 'react-native';
-import { useComponentStyles, useMolecules } from '../../hooks';
-
-const breakpoints = {
-    xs: 320,
-    sm: 576,
-    md: 768,
-    lg: 992,
-    xl: 1200,
-};
+import { useMolecules } from '../../../hooks';
+import { generateColStyles } from './utils';
 
 export type Props = ViewProps & {
+    /**
+     * Number of columns for the grid
+     */
+    numberOfColumns: number;
+    /**
+     * Reference breakpoints for the grid
+     */
+    referenceBreakpoints: {
+        xs: number;
+        sm: number;
+        md: number;
+        lg: number;
+        xl: number;
+    };
     /**
      * Number of columns to span
      * @default 1
@@ -25,10 +32,6 @@ export type Props = ViewProps & {
               xl?: number;
           };
     /**
-     * Theme id
-     */
-    theme?: string;
-    /**
      * Name of module or field to render
      */
     name: string;
@@ -38,7 +41,14 @@ export type Props = ViewProps & {
     alignment?: 'top' | 'center' | 'bottom';
 };
 
-const Column: FC<PropsWithChildren<Props>> = ({ breakPoints, children, alignment, style }) => {
+const Column: FC<PropsWithChildren<Props>> = ({
+    numberOfColumns,
+    breakPoints,
+    children,
+    alignment,
+    referenceBreakpoints,
+    style,
+}) => {
     const { View } = useMolecules();
     const { width } = useWindowDimensions();
     const colSize = useMemo(() => {
@@ -46,41 +56,41 @@ const Column: FC<PropsWithChildren<Props>> = ({ breakPoints, children, alignment
         if (typeof breakPoints === 'number') {
             return breakPoints;
         } else {
-            if (breakPoints.xl && width > breakpoints.lg) {
+            if (breakPoints.xl && width > referenceBreakpoints.lg) {
                 return breakPoints.xl;
             }
-            if (breakPoints.lg && width > breakpoints.md) {
+            if (breakPoints.lg && width > referenceBreakpoints.md) {
                 return breakPoints.lg;
             }
-            if (breakPoints.md && width > breakpoints.sm) {
+            if (breakPoints.md && width > referenceBreakpoints.sm) {
                 return breakPoints.md;
             }
-            if (breakPoints.sm && width > breakpoints.xs) {
+            if (breakPoints.sm && width > referenceBreakpoints.xs) {
                 return breakPoints.sm;
             }
             if (breakPoints.xs) {
                 return breakPoints.xs;
             }
-            return 12;
+            return numberOfColumns;
         }
     }, [width, breakPoints]);
 
-    const componentStyles = useComponentStyles('Column', style);
+    const colStyles = useMemo(() => generateColStyles(numberOfColumns), [numberOfColumns]);
     const styles = useMemo(
         () => [
-            componentStyles[`col-${colSize}`],
+            colStyles[`col-${colSize}`],
             {
                 // set alignment
                 alignItems: alignment,
                 // calculate width based on colSize
-                flexBasis: `${(colSize / 12) * 100}%`, // issue here
-                minWidth: (colSize / 12) * width,
-                maxWidth: (colSize / 12) * width,
+                flexBasis: `${(colSize / numberOfColumns) * 100}%`,
+                minWidth: (colSize / numberOfColumns) * width,
+                maxWidth: (colSize / numberOfColumns) * width,
             },
         ],
-        [colSize, alignment, componentStyles, width],
+        [colSize, alignment, width, colStyles, numberOfColumns],
     );
-    return <View style={styles}>{children}</View>;
+    return <View style={[styles, style]}>{children}</View>;
 };
 
 export default memo(Column);
