@@ -22,7 +22,7 @@ const DocsPage = () => {
             <Text>
                 The data prop is an array of objects that represent a column in the grid. Each
                 object in the array may have the following properties: {'\n\n'}
-                <Code>breakPoints</Code> - A number or an object that represents the number of
+                <Code>breakpoints</Code> - A number or an object that represents the number of
                 columns that the column should span for each screen breakpoint. {'\n\n'}
                 <Code>theme</Code> - An id of a theme that will be applied to the column. {'\n\n'}
                 <Code>name</Code> - The name of the module or field to render. {'\n\n'}
@@ -35,6 +35,26 @@ const DocsPage = () => {
                 The renderer is a component that will be used to render the module or field in each
                 column. It accepts a single prop called <Code>name</Code> that represents the name
                 of the module or field to render. {'\n\n'}
+            </Text>
+            <H3>
+                <Code>numberOfColumns (optional)</Code>
+            </H3>
+            <Text>
+                This prop represents the number of columns that will be rendered in the grid. If
+                this prop is not provided, the grid will render 12 columns by default. {'\n\n'}
+            </Text>
+            <H3>
+                <Code>referenceBreakpoints (optional)</Code>
+            </H3>
+            <Text>
+                This prop represents the reference breakpoints for the grid in different screen
+                sizes. If this prop is not provided, the grid will use the default reference
+                breakpoints: {'\n\n'}
+                <Code>xs</Code> - 320px {'\n'}
+                <Code>sm</Code> - 576px {'\n'}
+                <Code>md</Code> - 768px {'\n'}
+                <Code>lg</Code> - 992px {'\n'}
+                <Code>xl</Code> - 1200px {'\n\n'}
             </Text>
 
             <H2>Usage</H2>
@@ -172,7 +192,7 @@ const fieldData = {
         data: [
             {
                 name: 'table1',
-                breakPoints: 12,
+                breakpoints: 12,
             },
         ],
         renderer: GridRenderer,
@@ -183,21 +203,21 @@ const fieldData = {
         data: [
             {
                 name: 'card1',
-                breakPoints: {
+                breakpoints: {
                     md: 4,
                     sm: 6,
                 },
             },
             {
                 name: 'card2',
-                breakPoints: {
+                breakpoints: {
                     md: 4,
                     sm: 6,
                 },
             },
             {
                 name: 'card3',
-                breakPoints: {
+                breakpoints: {
                     md: 4,
                     sm: 6,
                 },
@@ -220,13 +240,13 @@ export const ExampleGrid = memo((props: Props) => {
       data={[
           {
               name: 'grid1',
-              breakPoints: {
+              breakpoints: {
                   lg: 12,
               },
           },
           {
               name: 'grid2',
-              breakPoints: {
+              breakpoints: {
                   lg: 12,
               },
           },
@@ -236,7 +256,7 @@ export const ExampleGrid = memo((props: Props) => {
       // Optional props
       numberOfColumns: 12,
       referenceBreakpoints: {
-          xs: 0,
+          xs: 320,
           sm: 576,
           md: 768,
           lg: 992,
