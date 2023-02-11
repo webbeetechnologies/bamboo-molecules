@@ -14,13 +14,13 @@ Default.args = {
     data: [
         {
             name: 'grid1',
-            breakPoints: {
+            breakpoints: {
                 lg: 12,
             },
         },
         {
             name: 'grid2',
-            breakPoints: {
+            breakpoints: {
                 lg: 12,
             },
         },
@@ -30,7 +30,7 @@ Default.args = {
     // Optional props
     numberOfColumns: 12,
     referenceBreakpoints: {
-        xs: 0,
+        xs: 320,
         sm: 576,
         md: 768,
         lg: 992,

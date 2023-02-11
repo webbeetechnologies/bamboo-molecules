@@ -1,10 +1,15 @@
 import type { ReactNode } from 'react';
 import type { IExtractStylesFuncArgs, ITheme as AtomsTheme } from '@bambooapp/bamboo-atoms';
 import type { StyleProp } from 'react-native';
+import type { Breakpoints } from 'src/components/Grid/types';
 
 export type ITheme = AtomsTheme & {
     light: MD3Theme;
     dark: MD3Theme;
+    grid: {
+        breakpoints: Partial<Breakpoints>;
+        numberOfColumns: number;
+    };
     resolveComponentStyles: (args: ResolveComponentStylesArgs) => StyleProp<any>;
 };
 

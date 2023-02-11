@@ -123,6 +123,16 @@ import type { ITheme, ProvideThemeArgs } from './types';
 const defaultThemeValue: Partial<ITheme> = {
     light: MD3LightTheme,
     dark: MD3DarkTheme,
+    grid: {
+        breakpoints: {
+            xs: 320,
+            sm: 576,
+            md: 768,
+            lg: 992,
+            xl: 1200,
+        },
+        numberOfColumns: 12,
+    },
     ActivityIndicator: activityIndicatorStyles,
     Button: buttonStyles,
     HorizontalDivider: horizontalDividerStyles,

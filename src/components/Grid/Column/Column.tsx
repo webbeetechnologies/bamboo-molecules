@@ -1,6 +1,7 @@
 import { FC, memo, PropsWithChildren, useMemo } from 'react';
 import { useWindowDimensions, ViewProps } from 'react-native';
-import { useMolecules } from '../../../hooks';
+import { useMolecules } from '../../../../src/hooks';
+import type { Breakpoints } from '../types';
 import { generateColStyles } from './utils';
 
 export type Props = ViewProps & {
@@ -11,26 +12,12 @@ export type Props = ViewProps & {
     /**
      * Reference breakpoints for the grid
      */
-    referenceBreakpoints: {
-        xs: number;
-        sm: number;
-        md: number;
-        lg: number;
-        xl: number;
-    };
+    referenceBreakpoints: Partial<Breakpoints>;
     /**
      * Number of columns to span
      * @default 1
      */
-    breakPoints?:
-        | number
-        | {
-              xs?: number;
-              sm?: number;
-              md?: number;
-              lg?: number;
-              xl?: number;
-          };
+    breakpoints?: number | Partial<Breakpoints>;
     /**
      * Name of module or field to render
      */
@@ -43,7 +30,7 @@ export type Props = ViewProps & {
 
 const Column: FC<PropsWithChildren<Props>> = ({
     numberOfColumns,
-    breakPoints,
+    breakpoints,
     children,
     alignment,
     referenceBreakpoints,
@@ -52,28 +39,28 @@ const Column: FC<PropsWithChildren<Props>> = ({
     const { View } = useMolecules();
     const { width } = useWindowDimensions();
     const colSize = useMemo(() => {
-        if (breakPoints === undefined) return 1;
-        if (typeof breakPoints === 'number') {
-            return breakPoints;
+        if (breakpoints === undefined) return 1;
+        if (typeof breakpoints === 'number') {
+            return breakpoints;
         } else {
-            if (breakPoints.xl && width > referenceBreakpoints.lg) {
-                return breakPoints.xl;
+            if (referenceBreakpoints.lg && breakpoints.xl && width > referenceBreakpoints.lg) {
+                return breakpoints.xl;
             }
-            if (breakPoints.lg && width > referenceBreakpoints.md) {
-                return breakPoints.lg;
+            if (referenceBreakpoints.md && breakpoints.lg && width > referenceBreakpoints.md) {
+                return breakpoints.lg;
             }
-            if (breakPoints.md && width > referenceBreakpoints.sm) {
-                return breakPoints.md;
+            if (referenceBreakpoints.sm && breakpoints.md && width > referenceBreakpoints.sm) {
+                return breakpoints.md;
             }
-            if (breakPoints.sm && width > referenceBreakpoints.xs) {
-                return breakPoints.sm;
+            if (referenceBreakpoints.xs && breakpoints.sm && width > referenceBreakpoints.xs) {
+                return breakpoints.sm;
             }
-            if (breakPoints.xs) {
-                return breakPoints.xs;
+            if (breakpoints.xs) {
+                return breakpoints.xs;
             }
             return numberOfColumns;
         }
-    }, [width, breakPoints]);
+    }, [width, breakpoints]);
 
     const colStyles = useMemo(() => generateColStyles(numberOfColumns), [numberOfColumns]);
     const styles = useMemo(

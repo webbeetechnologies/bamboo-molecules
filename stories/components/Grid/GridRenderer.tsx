@@ -120,7 +120,7 @@ const fieldData = {
         data: [
             {
                 name: 'table1',
-                breakPoints: 12,
+                breakpoints: 12,
             },
         ],
         renderer: GridRenderer,
@@ -131,21 +131,21 @@ const fieldData = {
         data: [
             {
                 name: 'card1',
-                breakPoints: {
+                breakpoints: {
                     md: 4,
                     sm: 6,
                 },
             },
             {
                 name: 'card2',
-                breakPoints: {
+                breakpoints: {
                     md: 4,
                     sm: 6,
                 },
             },
             {
                 name: 'card3',
-                breakPoints: {
+                breakpoints: {
                     md: 4,
                     sm: 6,
                 },
