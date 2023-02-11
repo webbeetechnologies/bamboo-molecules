@@ -19,6 +19,7 @@ WithNumberMask.args = {
         delimiter: ',',
         precision: 0,
         separator: '.',
+        suffix: ['%'],
     }),
     placeholder: 'enter numbers',
     label: 'number',

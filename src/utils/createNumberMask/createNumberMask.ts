@@ -3,7 +3,7 @@ import type { CreateNumberMaskProps } from 'react-native-mask-input/lib/typescri
 import type { MaskArray } from 'react-native-mask-input';
 
 interface Props extends Partial<CreateNumberMaskProps> {
-    suffix?: CreateNumberMaskProps['prefix'];
+    suffix?: string | string[];
     getDelimiterOffset?: (index: number) => number;
 }
 

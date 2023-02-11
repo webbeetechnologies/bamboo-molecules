@@ -101,6 +101,8 @@ import {
     ratingStyles,
     ratingItemStyles,
     linkStyles,
+    dateTimePickerStyles,
+    timepickerFieldStyles,
     navigationRailStyles,
     navigationRailHeaderStyles,
     navigationRailContentStyles,
@@ -165,6 +167,8 @@ const defaultThemeValue: Partial<ITheme> = {
 
     DatePickerInput: datePickerInputStyles,
 
+    DateTimePicker: dateTimePickerStyles,
+
     TimePickerModal: timePickerModalStyles,
 
     TimePicker: timePickerStyles,
@@ -174,6 +178,8 @@ const defaultThemeValue: Partial<ITheme> = {
     TimePicker_ClockHours: timePickerClockHoursStyles,
     TimePicker_ClockMinutes: timePickerClockMinutesStyles,
     TimePicker_AmPmSwitcher: timePickerAmPmSwitcherStyles,
+
+    TimePickerField: timepickerFieldStyles,
 
     OptionList: optionListStyles,
     ElementGroup: elementGroupStyles,

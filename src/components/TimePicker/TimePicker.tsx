@@ -11,13 +11,7 @@ import { View } from 'react-native';
 
 import { useComponentStyles, useControlledValue } from '../../hooks';
 import { format, parse } from '../../utils';
-import {
-    inputTypes,
-    PossibleClockTypes,
-    PossibleInputTypes,
-    toHourInputFormat,
-    toHourOutputFormat,
-} from './timeUtils';
+import { inputTypes, PossibleClockTypes, PossibleInputTypes, toHourInputFormat } from './timeUtils';
 import AnalogClock from './AnalogClock';
 import TimeInputs from './TimeInputs';
 
@@ -91,15 +85,19 @@ function TimePicker({
 
     const onChange = useCallback<onChangeFunc>(
         params => {
-            params.hours = toHourOutputFormat(params.hours, hours, is24Hour);
-
             const newDisplayMode = params.hours >= 12 ? 'PM' : 'AM';
 
             if (newDisplayMode !== displayMode) setDisplayMode(newDisplayMode);
 
-            onTimeChange?.({ time: `${params.hours}:${params.minutes}`, focused: params.focused });
+            onTimeChange?.({
+                time: `${`${params.hours}`.padStart(2, '0')}:${`${params.minutes}`.padStart(
+                    2,
+                    '0',
+                )}`,
+                focused: params.focused,
+            });
         },
-        [displayMode, hours, is24Hour, onTimeChange],
+        [displayMode, onTimeChange],
     );
 
     const memoizedValue = useMemo(
