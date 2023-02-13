@@ -40,7 +40,7 @@ const Grid = (
             _breakpoints: referenceBreakpoints ?? breakpoints,
             _numberOfColumns: numberOfColumns ?? defaultNumberOfColumns,
         };
-    }, [theme.grid, referenceBreakpoints]);
+    }, [theme.grid, referenceBreakpoints, numberOfColumns]);
 
     const renderItem = useCallback(
         ({ item }: { item: IColumnProps }) => (
@@ -51,7 +51,7 @@ const Grid = (
                 <MemoizedRenderer name={item.name} />
             </Column>
         ),
-        [],
+        [MemoizedRenderer, _breakpoints, _numberOfColumns],
     );
 
     return (

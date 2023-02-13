@@ -57,7 +57,7 @@ const Table = ({ style, data }: ViewProps & { data: { title: string; value: stri
                 <Text>{item.value}</Text>
             </View>
         ),
-        [],
+        [Text, View],
     );
     return (
         <Card style={style}>

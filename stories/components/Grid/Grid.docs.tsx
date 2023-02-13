@@ -1,7 +1,5 @@
 import { useMolecules, withDocsWrapper } from '../../common';
-import { Source, Canvas, Story } from '@storybook/addon-docs';
-import { Example as Grid } from './Grid';
-import GridRenderer from './GridRenderer';
+import { Source } from '@storybook/addon-docs';
 
 const DocsPage = () => {
     const { View, H1, H2, H3, Text, Code } = useMolecules();
