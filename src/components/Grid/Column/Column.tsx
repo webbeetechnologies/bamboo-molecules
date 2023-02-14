@@ -1,6 +1,6 @@
 import { FC, memo, PropsWithChildren, useMemo } from 'react';
 import { useWindowDimensions, ViewProps } from 'react-native';
-import { useMolecules } from '../../../../src/hooks';
+import { useMolecules } from '../../../hooks';
 import type { Breakpoints } from '../types';
 import { generateColStyles } from './utils';
 
@@ -60,7 +60,15 @@ const Column: FC<PropsWithChildren<Props>> = ({
             }
             return numberOfColumns;
         }
-    }, [width, breakpoints]);
+    }, [
+        breakpoints,
+        referenceBreakpoints.lg,
+        referenceBreakpoints.md,
+        referenceBreakpoints.sm,
+        referenceBreakpoints.xs,
+        width,
+        numberOfColumns,
+    ]);
 
     const colStyles = useMemo(() => generateColStyles(numberOfColumns), [numberOfColumns]);
     const styles = useMemo(
