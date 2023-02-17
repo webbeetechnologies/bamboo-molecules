@@ -1,8 +1,7 @@
 import { OverlayContainer } from '@react-native-aria/overlays';
 import { memo, useMemo, useState } from 'react';
 import { Platform, StyleSheet } from 'react-native';
-import { Modal } from 'react-native';
-import { useKeyboardDismissable } from '../../hooks';
+import { useKeyboardDismissable, useMolecules } from '../../hooks';
 import { ExitAnimationContext } from '../Animations';
 import type { OverlayProps } from './types';
 
@@ -15,6 +14,7 @@ const Overlay = ({
     isKeyboardDismissable = true,
     style,
 }: OverlayProps) => {
+    const { Modal, Portal } = useMolecules();
     const [exited, setExited] = useState(!isOpen);
 
     useKeyboardDismissable({
@@ -41,13 +41,11 @@ const Overlay = ({
     if (Platform.OS === 'android' && useRNModalOnAndroid) {
         return (
             <ExitAnimationContext.Provider value={value}>
-                <Modal
-                    transparent
-                    visible={isOpen}
-                    onRequestClose={onRequestClose}
-                    animationType={animationPreset}>
-                    {children}
-                </Modal>
+                <Portal>
+                    <Modal isOpen={isOpen} onClose={onRequestClose}>
+                        {children}
+                    </Modal>
+                </Portal>
             </ExitAnimationContext.Provider>
         );
     }
