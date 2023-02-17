@@ -8,8 +8,7 @@ import {
     useMemo,
 } from 'react';
 import type { ViewStyle } from 'react-native';
-import type { FlatList } from 'react-native';
-import type { ListRenderItemInfo } from '@shopify/flash-list';
+import type { FlatList, ListRenderItemInfo } from 'react-native';
 
 import {
     useComponentStyles,
