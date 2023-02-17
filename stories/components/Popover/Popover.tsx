@@ -2,7 +2,7 @@ import { FC, useRef } from 'react';
 import { useMolecules, useToggle } from '../../../src';
 import { Button, Popover, PopoverProps } from '../../../src/components';
 
-export const Example: FC<PopoverProps> = props => {
+export const Example: FC<Partial<PopoverProps>> = props => {
     const { View } = useMolecules();
     const triggerRef = useRef(null);
     const { state: isOpen, onToggle } = useToggle(false);

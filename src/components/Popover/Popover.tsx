@@ -1,7 +1,7 @@
-import { FC, forwardRef, memo, useId, useMemo, Suspense, lazy } from 'react';
+import { FC, forwardRef, memo, useId, useMemo, lazy, Suspense } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { useComponentStyles, useMolecules, usePlatformType, useTheme } from '../../hooks';
+import { useComponentStyles, useMolecules } from '../../hooks';
 
 import type { PopoverProps } from './types';
 import { Popper } from '../Popper';
@@ -48,11 +48,11 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                 exitTransition,
             });
 
-            const { arrowPropsWithStyle, ...popoverStyles } = useMemo(() => {
+            const { arrowPropsWithStyle, popoverStyles } = useMemo(() => {
                 const { arrow, ...rest } = styles;
 
                 return {
-                    ...rest,
+                    popoverStyles: rest,
                     arrowPropsWithStyle: {
                         ...arrowProps,
                         style: arrow,
@@ -74,15 +74,6 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                     headerId: `${popoverContentId}-header`,
                 };
             }, [onClose, initialFocusRef, finalFocusRef, popoverId]);
-
-            const components = useMolecules();
-            const platformType = usePlatformType();
-            const themeContext = useTheme();
-
-            const context = useMemo(() => {
-                const { resolveComponentStyles, extractStyles, ...theme } = themeContext;
-                return { resolveComponentStyles, extractStyles, theme, platformType, components };
-            }, [themeContext, components, platformType]);
 
             return (
                 <View ref={ref}>
@@ -106,7 +97,6 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                                 <PopoverContext.Provider value={popoverContextValue}>
                                     <Suspense>
                                         <PopperContent
-                                            context={context}
                                             style={popoverStyles.content}
                                             contentTextStyles={popoverStyles.contentText}
                                             arrowProps={arrowProps}
