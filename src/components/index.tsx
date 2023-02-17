@@ -163,3 +163,5 @@ export * from './FAB';
 export * from './Grid';
 
 export * from './OptionFlatList';
+
+export * from './DataTable';

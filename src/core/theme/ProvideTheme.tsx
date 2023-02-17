@@ -112,6 +112,9 @@ import {
     fabStyles,
     gridStyles,
     optionFlatListStyles,
+    dataTableStyles,
+    dataTableCellStyles,
+    dataTableRowStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -267,6 +270,9 @@ const defaultThemeValue: Partial<ITheme> = {
 
     Grid: gridStyles,
     OptionFlatList: optionFlatListStyles,
+    DataTable: dataTableStyles,
+    DataTable_Cell: dataTableCellStyles,
+    DataTable_Row: dataTableRowStyles,
 };
 
 export const defaultExtractStyles = memoize(

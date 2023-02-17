@@ -118,6 +118,9 @@ export {
     FABProps,
     OptionFlatList,
     GridProps,
+    DataTable,
+    DataTableProps,
+    useDataTableCell,
 } from './components';
 
 export {
