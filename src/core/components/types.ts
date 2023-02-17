@@ -58,6 +58,7 @@ import type {
     FABProps,
     GridProps,
     IOptionFlatList,
+    Portal,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -124,6 +125,7 @@ export interface DefaultComponents {
     FAB: ComponentType<FABProps>;
     Grid: ComponentType<GridProps>;
     OptionFlatList: IOptionFlatList;
+    Portal: typeof Portal;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

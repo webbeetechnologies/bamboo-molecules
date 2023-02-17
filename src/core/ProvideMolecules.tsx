@@ -4,6 +4,7 @@ import type { IExtractStylesFuncArgs } from '@bambooapp/bamboo-atoms';
 import { IComponentsProviderContext, ProvideComponents } from './components';
 import { ProvidePlatformType, PlatformType } from './platform';
 import { extendTheme, ITheme, ProvideTheme, ResolveComponentStylesArgs } from './theme';
+import { PortalHost } from '../components';
 import { PortalProvider } from './portal';
 
 export type ProvideMoleculesProps = {
@@ -31,9 +32,11 @@ export const ProvideMolecules = ({
                 theme={theme}
                 extractStyles={extractStyles}
                 resolveComponentStyles={resolveComponentStyles}>
-                <PortalProvider>
-                    <ProvideComponents components={components}>{children}</ProvideComponents>
-                </PortalProvider>
+                <ProvideComponents components={components}>
+                    <PortalHost>
+                        <PortalProvider>{children}</PortalProvider>
+                    </PortalHost>
+                </ProvideComponents>
             </ProvideTheme>
         </ProvidePlatformType>
     );
