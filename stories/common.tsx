@@ -153,15 +153,17 @@ export const generateSectionListData = (sectionsLength: number, dataLength: numb
     return arr;
 };
 
+type ManipulateOutputObject<T = any> = (i: number) => T;
+
 export const generateFlatListData = (
     dataLength: number,
-    manipulateOutputObj: (itemIndex: number) => { id: number; title: string } = i => ({
+    manipulateOutputObj: ManipulateOutputObject = i => ({
         id: i,
         title: `item ${i}`,
     }),
-) => {
+): ReturnType<typeof manipulateOutputObj>[] => {
     // Create an empty array
-    const arr: { id: number; title: string }[] = [];
+    const arr: ReturnType<typeof manipulateOutputObj>[] = [];
 
     // Loop n times
     for (let i = 0; i < dataLength; i++) {
