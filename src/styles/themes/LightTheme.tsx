@@ -42,7 +42,7 @@ export const generateLightThemeColors = (
         inverseSurface: palette.neutral20,
         inverseOnSurface: palette.neutral95,
         inversePrimary: palette.primary80,
-        backdrop: color(MD3Colors.neutralVariant20).alpha(0.4).rgb().string(),
+        backdrop: color(MD3Colors.neutralVariant20).alpha(0.4).hexa(),
         disabled: palette.neutral70,
         disabledOnBackground: color(palette.neutral0).alpha(0.12).rgb().string(),
         neutral1: palette.neutral100,
