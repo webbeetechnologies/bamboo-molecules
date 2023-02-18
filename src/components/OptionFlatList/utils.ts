@@ -6,7 +6,7 @@ type CustomProps = {
     searchInputContainer: ViewStyle;
 };
 
-export const optionListStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
+export const optionFlatListStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
     container: {
         flex: 1,
     },

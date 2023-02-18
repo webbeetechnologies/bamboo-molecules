@@ -121,6 +121,8 @@ export {
     NavigationRailItemProps,
     BadgeProps,
     FABProps,
+    OptionFlatList,
+    GridProps,
 } from './components';
 
 export {

@@ -110,6 +110,8 @@ import {
     navigationRailItemStyles,
     badgeStyles,
     fabStyles,
+    gridStyles,
+    optionFlatListStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -122,6 +124,16 @@ import type { ITheme, ProvideThemeArgs } from './types';
 const defaultThemeValue: Partial<ITheme> = {
     light: MD3LightTheme,
     dark: MD3DarkTheme,
+    grid: {
+        breakpoints: {
+            xs: 320,
+            sm: 576,
+            md: 768,
+            lg: 992,
+            xl: 1200,
+        },
+        numberOfColumns: 12,
+    },
     ActivityIndicator: activityIndicatorStyles,
     Button: buttonStyles,
     HorizontalDivider: horizontalDividerStyles,
@@ -252,6 +264,9 @@ const defaultThemeValue: Partial<ITheme> = {
     Badge: badgeStyles,
 
     FAB: fabStyles,
+
+    Grid: gridStyles,
+    OptionFlatList: optionFlatListStyles,
 };
 
 export const defaultExtractStyles = memoize(
