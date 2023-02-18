@@ -1,9 +1,9 @@
+import { StyleSheet, View } from 'react-native';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { generateFlatListData, ProvideMolecules } from '../../common';
 import { Example as ListItem, ListItemTitle } from '../ListItem/ListItem';
 
 import { Example } from './FlatList';
-import { View } from 'react-native';
 
 export default {
     title: 'components/FlatList',
@@ -18,10 +18,17 @@ export default {
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => (
-    <View style={{ minWidth: 300, maxHeight: 500 }}>
+    <View style={styles.container}>
         <Example {...args} />
     </View>
 );
+
+const styles = StyleSheet.create({
+    container: {
+        maxWidth: 300,
+        maxHeight: 500,
+    },
+});
 
 Default.args = {
     data: generateFlatListData(1000),

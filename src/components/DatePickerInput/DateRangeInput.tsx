@@ -2,8 +2,10 @@ import { useState, useCallback } from 'react';
 
 import { useMolecules } from '../../hooks';
 import DatePickerModal from '../DatePickerModal/DatePickerModal';
+import { StyleSheet } from 'react-native';
 
 // WORK IN PROGRESS
+// PLEASE IGNORE THIS FILE
 export default function DateRangeInput({
     locale,
     calendarIcon = 'calendar',
@@ -26,8 +28,8 @@ export default function DateRangeInput({
     );
 
     return (
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ flex: 1 }}>
+        <View style={styles.container}>
+            <View style={styles.textContainer}>
                 {/*<DatePickerInput*/}
                 {/*  value={''}*/}
                 {/*  keyboardType={'numeric'}*/}
@@ -38,12 +40,12 @@ export default function DateRangeInput({
                 <Text>Van</Text>
             </View>
             <View>
-                <Text style={{ fontSize: 16, marginLeft: 12, marginRight: 12 }}>to</Text>
-                <Text style={{ opacity: 0 }} accessible={false}>
+                <Text style={styles.text1}>to</Text>
+                <Text style={styles.text2} accessible={false}>
                     tot
                 </Text>
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={styles.textContainer}>
                 {/*<DatePickerInput*/}
                 {/*  // value={''}*/}
                 {/*  // keyboardType={'numeric'}*/}
@@ -55,7 +57,7 @@ export default function DateRangeInput({
             </View>
             <View>
                 <IconButton name={calendarIcon} onPress={() => setVisible(true)} />
-                <Text style={{ opacity: 0 }} accessible={false}>
+                <Text style={styles.text2} accessible={false}>
                     tot
                 </Text>
             </View>
@@ -71,3 +73,16 @@ export default function DateRangeInput({
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: { flexDirection: 'row', alignItems: 'center' },
+    textContainer: { flex: 1 },
+    text1: {
+        fontSize: 16,
+        marginLeft: 12,
+        marginRight: 12,
+    },
+    text2: {
+        opacity: 0,
+    },
+});
