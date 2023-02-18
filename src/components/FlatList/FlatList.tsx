@@ -3,12 +3,13 @@ import { StyleSheet, FlatListProps } from 'react-native';
 import { FlatList as GestureHandlerFlatList } from 'react-native-gesture-handler';
 import { useComponentStyles } from '../../hooks';
 
+export type FlatListRef<ItemType = any> = GestureHandlerFlatList<ItemType>;
+
 export type Props<TItem> = FlatListProps<TItem>;
 
 // To make a correct type inference
 export type IFlatList = <ItemType = any>(
-    props: PropsWithoutRef<FlatListProps<ItemType>> &
-        RefAttributes<GestureHandlerFlatList<ItemType>>,
+    props: PropsWithoutRef<FlatListProps<ItemType>> & RefAttributes<FlatListRef<ItemType>>,
 ) => ReactElement;
 
 function FlatList<T = any>(
