@@ -201,7 +201,7 @@ CardsInCollection.parameters = {
     const { Card, FlatGrid } = useMolecules();
 
     return (
-        <View style={{ minWidth: 600 }}>
+        <View style={{ maxWidth: 600 }}>
             <FlatGrid
                 itemDimension={150}
                 data={data}
