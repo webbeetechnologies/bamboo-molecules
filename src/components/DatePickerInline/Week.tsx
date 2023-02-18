@@ -1,8 +1,8 @@
 import { memo, Fragment } from 'react';
-import { View, ViewProps } from 'react-native';
+import type { ViewProps } from 'react-native';
 import { DisableWeekDaysType, showWeekDay } from './dateUtils';
 import Day, { EmptyDay } from './Day';
-import { useComponentStyles } from '../../hooks';
+import { useComponentStyles, useMolecules } from '../../hooks';
 
 type Props = ViewProps & {
     weekIndex: number;
@@ -33,6 +33,7 @@ const Week = ({
     style,
     ...rest
 }: Props) => {
+    const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePicker_Week', style);
 
     return (

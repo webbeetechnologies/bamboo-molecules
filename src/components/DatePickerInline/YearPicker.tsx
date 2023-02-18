@@ -1,7 +1,7 @@
 import { useRef, useEffect, memo, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
-import type { FlatList as GestureHandlerFlatList } from 'react-native-gesture-handler';
+import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
+import type { FlatListRef } from '../FlatList';
 import { range } from '../../utils/dateTimePicker';
 
 const ITEM_HEIGHT = 62;
@@ -19,9 +19,9 @@ export default function YearPicker({
     startYear: number;
     endYear: number;
 }) {
-    const { FlatList } = useMolecules();
+    const { FlatList, View } = useMolecules();
     const yearPickerStyles = useComponentStyles('DatePicker_YearPicker');
-    const flatList = useRef<GestureHandlerFlatList<number> | null>(null);
+    const flatList = useRef<FlatListRef<number> | null>(null);
     const years = range(isNaN(startYear) ? 1800 : startYear, isNaN(endYear) ? 2200 : endYear);
 
     // scroll to selected year
@@ -85,7 +85,7 @@ function YearPure({
     onPressYear: (newYear: number) => any;
     yearStyles: Record<string, any>;
 }) {
-    const { TouchableRipple, Text } = useMolecules();
+    const { TouchableRipple, Text, View } = useMolecules();
 
     const { containerStyle, yearInnerStyle, yearLabelStyle, yearButtonStyle } = useMemo(() => {
         const {

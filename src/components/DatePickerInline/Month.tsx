@@ -1,5 +1,4 @@
 import { useMemo, memo, useCallback } from 'react';
-import { View } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { format } from '../../utils';
@@ -38,7 +37,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         // locale,
         validRange,
     } = props;
-    const { TouchableRipple, Text, IconButton } = useMolecules();
+    const { TouchableRipple, Text, IconButton, View } = useMolecules();
     const monthStyles = useComponentStyles('DatePicker_Month');
 
     const realIndex = getRealIndex(index);
