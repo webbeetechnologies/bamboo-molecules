@@ -1,37 +1,21 @@
-import { useRef, useEffect, useMemo, memo, forwardRef } from 'react';
+import { useRef, useEffect, useMemo, memo, forwardRef, useCallback } from 'react';
 import { Animated, StyleSheet } from 'react-native';
 import setColor from 'color';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { CheckBoxBaseProps } from './types';
 
-export type Props = CheckBoxBaseProps & {};
+export type Props = Omit<CheckBoxBaseProps, 'value' | 'defaultValue'> & {
+    value: boolean;
+};
 
-// From https://material.io/design/motion/speed.html#duration
-// const ANIMATION_DURATION = 100;
-
-/**
- * Checkboxes allow the selection of multiple options from a set.
- * This component follows platform guidelines for Android, but can be used
- * on any platform.
- *
- * <div class="screenshots">
- *   <figure>
- *     <img src="screenshots/checkbox-enabled.android.png" />
- *     <figcaption>Enabled</figcaption>
- *   </figure>
- *   <figure>
- *     <img src="screenshots/checkbox-disabled.android.png" />
- *     <figcaption>Disabled</figcaption>
- *   </figure>
- * </div>
- */
 const CheckboxAndroid = (
     {
-        status,
+        value: checked,
+        indeterminate,
         disabled = false,
         size = 'md',
-        onChange,
+        onChange: onChangeProp,
         testID,
         style,
         color: colorProp,
@@ -44,14 +28,11 @@ const CheckboxAndroid = (
     const { current: scaleAnim } = useRef<Animated.Value>(new Animated.Value(1));
     const isFirstRendering = useRef<boolean>(true);
 
-    const checked = status === 'checked';
-    const indeterminate = status === 'indeterminate';
-
     const componentStyles = useComponentStyles('Checkbox', style, {
         variant: 'android',
         states: {
             disabled,
-            checked,
+            checked: checked && !indeterminate,
         },
         size,
     });
@@ -133,13 +114,19 @@ const CheckboxAndroid = (
                 useNativeDriver: false,
             }),
         ]).start();
-    }, [status, checked, scaleAnim, scale, animationDuration]);
+    }, [checked, scaleAnim, scale, animationDuration]);
+
+    const onChange = useCallback(() => {
+        onChangeProp?.(!checked);
+    }, [checked, onChangeProp]);
 
     const icon = indeterminate
         ? 'minus-box'
         : checked
         ? 'checkbox-marked'
         : 'checkbox-blank-outline';
+
+    const accessibilityState = useMemo(() => ({ disabled, checked }), [checked, disabled]);
 
     return (
         <TouchableRipple
@@ -149,7 +136,7 @@ const CheckboxAndroid = (
             onPress={onChange}
             disabled={disabled}
             accessibilityRole="checkbox"
-            accessibilityState={{ disabled, checked }}
+            accessibilityState={accessibilityState}
             accessibilityLiveRegion="polite"
             style={rippleContainerStyles}
             testID={testID}

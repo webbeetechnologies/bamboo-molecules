@@ -24,6 +24,7 @@ export {
     SurfaceProps,
     SwitchProps,
     CheckboxProps,
+    CheckboxItemProps,
     ListItemProps,
     FlatListProps,
     SectionListProps,

@@ -60,7 +60,7 @@ export { Backdrop, BackdropProps, backdropStyles } from './Backdrop';
 export * from './Animations';
 
 export { IconButton, IconButtonProps, iconButtonStyles } from './IconButton';
-export { default as Checkbox, CheckboxProps, checkboxStyles } from './Checkbox';
+export { default as Checkbox, CheckboxProps, checkboxStyles, CheckboxItemProps } from './Checkbox';
 export { TextInput, TextInputProps, textInputStyles } from './TextInput';
 export { NumberInput, NumberInputProps } from './NumberInput';
 export { FilePicker, FilePickerProps } from './FilePicker';
