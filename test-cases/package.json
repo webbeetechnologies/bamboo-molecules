@@ -11,7 +11,6 @@
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^0.17.0",
-    "@shopify/flash-list": "^1.4.0",
     "expo": "~46.0.16",
     "expo-font": "^10.2.0",
     "expo-modules-core": "^0.11.8",
@@ -21,8 +20,10 @@
     "react-dom": "18.0.0",
     "react-native": "0.69.6",
     "react-native-document-picker": "^8.1.2",
+    "react-native-gesture-handler": "^2.9.0",
     "react-native-paper": "5.0.0-rc.8",
-    "react-native-web": "~0.18.7"
+    "react-native-web": "~0.18.7",
+    "uuid": "3.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
