@@ -25,7 +25,7 @@ export const Default: ComponentStory<typeof Example> = args => (
 
 const styles = StyleSheet.create({
     container: {
-        maxWidth: 300,
+        minWidth: 300,
         maxHeight: 500,
     },
 });
