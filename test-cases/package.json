@@ -21,8 +21,10 @@
     "react-dom": "18.0.0",
     "react-native": "0.69.6",
     "react-native-document-picker": "^8.1.2",
+    "react-native-gesture-handler": "^2.9.0",
     "react-native-paper": "5.0.0-rc.8",
-    "react-native-web": "~0.18.7"
+    "react-native-web": "~0.18.7",
+    "uuid": "3.4"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",

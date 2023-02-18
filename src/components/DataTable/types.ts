@@ -1,5 +1,6 @@
-import type { ComponentType, ReactNode } from 'react';
+import type { ComponentPropsWithRef, ComponentType, ReactNode } from 'react';
 import type { FlatListProps, ScrollViewProps } from 'react-native';
+import type { ScrollView } from 'react-native';
 
 export type TDataTableColumn = {
     /**
@@ -29,7 +30,7 @@ export type TDataTableRow = {
 
 export interface DataTableComponentProps<T = any> {
     FlatListComponent?: ComponentType<FlatListProps<T>>;
-    ScrollViewComponent?: ComponentType<ScrollViewProps>;
+    ScrollViewComponent?: ComponentType<ComponentPropsWithRef<typeof ScrollView>>;
 }
 
 export type DataTableHeaderCellProps = {
@@ -42,18 +43,25 @@ export type DataTableCellProps = {
     rowIndex: number;
 } & DataTableHeaderCellProps;
 
-export type ScrollProps<T> = {
-    verticalScrollProps?: FlatListProps<T>;
+export type ScrollProps = {
+    verticalScrollProps?: Omit<FlatListProps<any>, 'data' | 'renderItem'>;
     horizontalScrollProps?: ScrollViewProps;
 };
 
 export interface DataTableProps<RecordType = any>
-    extends Partial<DataTableComponentProps<RecordType>>,
-        ScrollProps<RecordType> {
+    extends Omit<ScrollViewProps, 'children'>,
+        Partial<DataTableComponentProps<RecordType>>,
+        ScrollProps {
+    /**
+     *
+     * defaultColumnWidth
+     * @default 150
+     */
+    defaultColumnWidth?: number;
     /**
      *
      * Height of a row
-     * @default 40
+     * @default 30
      */
     rowHeight?: number;
 
@@ -77,17 +85,13 @@ export interface DataTableProps<RecordType = any>
 
     /**
      *
-     * @param row: The row that is rendered.
-     * @param column: The column which is rendered
-     * @param index: of the row that is rendered
+     * @param cell: { columnIndex: number, column: {id: string}, rowIndex: number, row: {id: string} }
      */
     renderCell: (cell: DataTableCellProps) => ReactNode;
 
     /**
      *
-     * @param row: The row that is rendered.
-     * @param column: The column which is rendered
-     * @param index: of the row that is rendered
+     * @param cell: { columnIndex: number, column: {id: string} }
      */
     renderHeader: (cell: DataTableHeaderCellProps) => ReactNode;
 }

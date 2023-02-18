@@ -6,7 +6,7 @@ import type { DataTableProps, TDataTableColumn, TDataTableRow } from '../types';
  * @param value: ContextValue
  * @param message: string
  */
-const useInvariant = <T,>(value: T, message: string): Exclude<T, null> => {
+const useInvariant = <T>(value: T, message: string): Exclude<T, null> => {
     if (value === null) {
         throw new Error(message);
     }
@@ -20,10 +20,12 @@ const useInvariant = <T,>(value: T, message: string): Exclude<T, null> => {
  * We do not want all the components to update when data changes.
  */
 
-type DataTableContextType = Omit<
-    DataTableProps,
-    'renderCell' | 'renderHeader' | 'FlatListComponent'
->;
+type DataTableContextType = Pick<
+    Required<DataTableProps>,
+    'records' | 'columns' | 'rowHeight' | 'defaultColumnWidth'
+> & {
+    tableWidth: number;
+};
 export const DataTableContext = createContext<DataTableContextType | null>(null);
 export const useDataTable = () =>
     useInvariant(
@@ -77,3 +79,8 @@ export const useDataTableCell = () =>
         useContext(DataTableCellContext),
         'Trying to read DataTableCell context outside the provider',
     );
+
+export const useDataTableColumnWidth = (_column: TDataTableColumn): number => {
+    // TODO: Add logic to get specific column width OR default width.
+    return useDataTable().defaultColumnWidth;
+};

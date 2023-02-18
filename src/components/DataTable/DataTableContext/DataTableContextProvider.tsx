@@ -2,7 +2,6 @@ import type { FC, PropsWithChildren } from 'react';
 import { memo, useMemo, useRef } from 'react';
 import { DataTableComponentContext, DataTableContext } from './DataTableContext';
 import type { DataTableProps } from '../types';
-import { Dimensions } from 'react-native';
 import { useMolecules } from '../../../hooks';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -10,19 +9,15 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
     ({
         records,
         columns,
-        rowHeight = 30,
         children,
+        rowHeight = 30,
+        defaultColumnWidth = 150,
         FlatListComponent: FlatListComponentProp,
         ScrollViewComponent: ScrollViewComponentProp,
         renderCell: renderCellProp,
         renderHeader: renderHeaderProp,
     }) => {
         const { FlatList } = useMolecules();
-
-        const columnHeight = useMemo(
-            () => Math.min(rowHeight * records.length, Dimensions.get('window').height),
-            [records.length, rowHeight],
-        );
 
         const FlatListComponent = useRef(
             FlatListComponentProp ?? (FlatList as Required<DataTableProps>['FlatListComponent']),
@@ -38,14 +33,16 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
             [FlatListComponent, ScrollViewComponent, renderCell, renderHeader],
         );
 
+        const tableWidth = Math.min(columns.length * defaultColumnWidth);
         const dataContext = useMemo(
             () => ({
                 records,
                 columns,
                 rowHeight,
-                columnHeight,
+                tableWidth,
+                defaultColumnWidth,
             }),
-            [records, columns, rowHeight, columnHeight],
+            [records, columns, rowHeight, tableWidth, defaultColumnWidth],
         );
 
         return (

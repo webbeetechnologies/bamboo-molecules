@@ -12,4 +12,8 @@ module.exports = {
         interactionsDebugger: true,
     },
     framework: '@storybook/react',
+    webpackFinal: async (config, { configType }) => {
+        config.devtool = 'source-map';
+        return config;
+    },
 };

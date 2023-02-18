@@ -1,4 +1,4 @@
-import { FC, memo, useMemo } from 'react';
+import { FC, Fragment, memo, useMemo } from 'react';
 import type { TDataTableColumn, TDataTableRow } from '../types';
 import {
     DataTableRowContext,
@@ -7,12 +7,11 @@ import {
 } from '../DataTableContext/DataTableContext';
 import { renderCell } from '../DataTableCell';
 import type { ListRenderItem } from 'react-native';
-import { keyExtractor } from '../utils';
 import { useComponentStyles } from '../../../hooks';
 
 const Row: FC<{ record: TDataTableRow; index: number }> = memo(props => {
     const { record, index } = props;
-    const { FlatListComponent } = useDataTableComponent<TDataTableColumn>();
+    const { ScrollViewComponent } = useDataTableComponent<TDataTableColumn>();
     const { columns = [], rowHeight } = useDataTable() || {};
 
     const rowStyle = useComponentStyles('DataTable_Row', [
@@ -29,21 +28,23 @@ const Row: FC<{ record: TDataTableRow; index: number }> = memo(props => {
 
     const rowContext = useMemo(() => ({ row: record, rowIndex: index }), [record, index]);
 
+    const result = useMemo(
+        () =>
+            columns.map((item, i) => (
+                <Fragment key={item.id}>{renderCell({ item, index: i })}</Fragment>
+            )),
+        [columns],
+    );
+
     return (
-        <DataTableRowContext.Provider value={rowContext}>
-            <FlatListComponent
-                horizontal
-                scrollEnabled={false}
-                showsHorizontalScrollIndicator={false}
-                style={rowStyle}
-                data={columns}
-                renderItem={renderCell}
-                keyExtractor={keyExtractor}
-            />
+        <DataTableRowContext.Provider value={rowContext} key={record.id}>
+            <ScrollViewComponent horizontal showsHorizontalScrollIndicator={false} style={rowStyle}>
+                {result}
+            </ScrollViewComponent>
         </DataTableRowContext.Provider>
     );
 });
 
 export const renderRow: ListRenderItem<TDataTableRow> = ({ item, index }) => (
-    <Row record={item} index={index} />
+    <Row record={item} index={index} key={item.id} />
 );
