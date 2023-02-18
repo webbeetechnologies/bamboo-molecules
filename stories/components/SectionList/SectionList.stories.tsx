@@ -1,9 +1,9 @@
+import { StyleSheet, Text, View } from 'react-native';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
+
 import { generateSectionListData, ProvideMolecules } from '../../common';
 import { Example as ListItem, ListItemTitle } from '../ListItem/ListItem';
-
 import { Example } from './SectionList';
-import { Text, View } from 'react-native';
 
 export default {
     title: 'components/SectionList',
@@ -18,7 +18,7 @@ export default {
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => (
-    <View style={{ minWidth: 300, maxHeight: 500 }}>
+    <View style={styles.container}>
         <Example {...args} />
     </View>
 );
@@ -30,10 +30,15 @@ Default.args = {
             <ListItemTitle>{item.title}</ListItemTitle>
         </ListItem>
     ),
-    renderSectionHeader: ({ section }: any) => (
-        <Text style={{ fontSize: 25 }}>{section.title}</Text>
-    ),
+    renderSectionHeader: ({ section }: any) => <Text style={styles.text}>{section.title}</Text>,
 };
+
+const styles = StyleSheet.create({
+    container: { minWidth: 300, maxHeight: 500 },
+    text: {
+        fontSize: 25,
+    },
+});
 
 Default.parameters = {
     docs: {

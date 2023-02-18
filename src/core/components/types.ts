@@ -58,6 +58,7 @@ import type {
     FABProps,
     GridProps,
     IOptionFlatList,
+    ScrollViewProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -124,6 +125,7 @@ export interface DefaultComponents {
     FAB: ComponentType<FABProps>;
     Grid: ComponentType<GridProps>;
     OptionFlatList: IOptionFlatList;
+    ScrollView: ComponentType<ScrollViewProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

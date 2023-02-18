@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { useComponentStyles } from '../../hooks';
+import { useComponentStyles, useMolecules } from '../../hooks';
 
 function DayRange({
     leftCrop,
@@ -15,6 +15,7 @@ function DayRange({
     const bothWays = inRange && leftCrop && rightCrop;
     const isCrop = inRange && (leftCrop || rightCrop) && !(leftCrop && rightCrop);
 
+    const { View } = useMolecules();
     const componentStyles = useComponentStyles(
         'DatePicker_DayRange',
         {},

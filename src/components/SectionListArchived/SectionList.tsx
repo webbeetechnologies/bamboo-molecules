@@ -1,6 +1,6 @@
 import { memo, forwardRef, useMemo, useCallback } from 'react';
+import type { ListRenderItemInfo } from 'react-native';
 import { omit } from '../../utils';
-import type { ListRenderItemInfo } from '@shopify/flash-list';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { Props, SectionItem, ISectionList, SectionItemType } from './types';
 
@@ -68,7 +68,7 @@ const SectionList = <TItem, TSection>(
     }, [sections]);
 
     const renderItem = useCallback(
-        ({ item, index, target, extraData }: ListRenderItemInfo<SectionItem<TItem, TSection>>) => {
+        ({ item, index, separators }: ListRenderItemInfo<SectionItem<TItem, TSection>>) => {
             const section = omit(item, '_type') as unknown as TSection; // removing _type property
 
             switch (item._type) {
@@ -86,15 +86,13 @@ const SectionList = <TItem, TSection>(
                               item: item.item,
                               section,
                               index,
-                              target,
-                              extraData,
+                              separators,
                           })
                         : renderItemProps?.({
                               item: item.item,
                               section,
                               index,
-                              target,
-                              extraData,
+                              separators,
                           });
 
                 case SectionItemType.Footer:

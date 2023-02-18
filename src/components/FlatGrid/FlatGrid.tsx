@@ -1,11 +1,11 @@
 import { memo, ReactElement, PropsWithoutRef, RefAttributes, useMemo, forwardRef } from 'react';
-import type { FlatList } from 'react-native';
 import { FlatGrid as SuperFlatGrid, FlatGridProps } from 'react-native-super-grid';
 import { useComponentStyles, useMolecules } from '../../hooks';
+import type { FlatListRef } from '../FlatList';
 
 export type IFlatGrid = <ItemType = any>(
     props: PropsWithoutRef<Omit<FlatGridProps<ItemType>, 'numColumns'>> &
-        RefAttributes<FlatList<ItemType>>,
+        RefAttributes<FlatListRef<ItemType>>,
 ) => ReactElement;
 
 const FlatGrid = (
