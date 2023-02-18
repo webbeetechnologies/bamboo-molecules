@@ -9,9 +9,9 @@ PODS:
     - ExpoModulesCore
   - EXFont (10.2.0):
     - ExpoModulesCore
-  - Expo (46.0.17):
+  - Expo (46.0.20):
     - ExpoModulesCore
-  - ExpoKeepAwake (10.2.0):
+  - ExpoKeepAwake (10.2.1):
     - ExpoModulesCore
   - ExpoModulesCore (0.11.8):
     - React-Core
@@ -238,7 +238,7 @@ PODS:
   - React-jsinspector (0.69.6)
   - React-logger (0.69.6):
     - glog
-  - react-native-document-picker (8.1.2):
+  - react-native-document-picker (8.1.3):
     - React-Core
   - React-perflogger (0.69.6)
   - React-RCTActionSheet (0.69.6):
@@ -452,8 +452,8 @@ SPEC CHECKSUMS:
   EXConstants: 7c44785d41d8e959d527d23d29444277a4d1ee73
   EXFileSystem: 927e0a8885aa9c49e50fc38eaba2c2389f2f1019
   EXFont: a5d80bd9b3452b2d5abbce2487da89b0150e6487
-  Expo: 4de8a31146bb0480353b3ed1850e015c4862625f
-  ExpoKeepAwake: 0e8f18142e71bbf2c7f6aa66ebed249ba1420320
+  Expo: c2afed3f226befffaed962e9bacb5e0296acd254
+  ExpoKeepAwake: 8b47e5358d54ea4922b630a74f2acb026ab7a28b
   ExpoModulesCore: 39ec590ce622289c060183aba57f77b1e73b4e11
   EXSplashScreen: 799bece80089219b2c989c1082d70f3b00995cda
   FBLazyVector: 739d2f9719faecb463c7aa191591af31c8c94182
@@ -474,7 +474,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: c61b60de03b3474e5749b8a8fd8e6507630d62c4
   React-jsinspector: eaacb698c5af7a99131bc1933806372c20222dfd
   React-logger: ebb4d31bbbe4f1a8a1a9b658d7429210b8f68160
-  react-native-document-picker: f5ec1a712ca2a975c233117f044817bb8393cad4
+  react-native-document-picker: 958e2bc82e128be69055be261aeac8d872c8d34c
   React-perflogger: 1fb1ad5333b43a5137afd7608695f7a42c5efd27
   React-RCTActionSheet: a435bd67689433575a1e5d7614b021d2c17f0726
   React-RCTAnimation: d097c5ed2d00735958508617555abd85183b94e2

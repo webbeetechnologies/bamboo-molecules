@@ -122,7 +122,7 @@ import {
 } from '../../utils';
 import type { ITheme, ProvideThemeArgs } from './types';
 import { usePrevious } from '../../hooks';
-import { clearStylesCache } from '../../utils/normalizeStyles';
+import { clearStylesCache } from '../../utils';
 
 const defaultThemeValue: Partial<ITheme> = {
     light: MD3LightTheme,

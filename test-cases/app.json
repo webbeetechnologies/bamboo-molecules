@@ -1,5 +1,6 @@
 {
   "expo": {
+    "jsEngine": "hermes",
     "name": "BambooMoleculesTests",
     "slug": "BambooMoleculesTests",
     "version": "1.0.0",

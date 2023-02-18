@@ -32,5 +32,4 @@ const normalizeStyles: StyleProp<any> | StyleProp<any>[] = normalizeStylesMemo(
     },
 );
 
-export const clearStylesCache = () => normalizeStyles.cache.clear();
 export default normalizeStyles;
