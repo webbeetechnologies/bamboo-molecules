@@ -1,6 +1,6 @@
 import { ComponentType, memo } from 'react';
-import { ScrollViewProps, View } from 'react-native';
-import { useComponentStyles } from '../../hooks';
+import type { ScrollViewProps } from 'react-native';
+import { useComponentStyles, useMolecules } from '../../hooks';
 
 export type Props = ScrollViewProps & {
     /**
@@ -9,17 +9,17 @@ export type Props = ScrollViewProps & {
     ContainerComponent?: ComponentType<any>;
 };
 
-const NavigationRailContent = memo(
-    ({ style, children, ContainerComponent = View, ...rest }: Props) => {
-        const componentStyles = useComponentStyles('NavigationRail_Content', style);
+const NavigationRailContent = memo(({ style, children, ContainerComponent, ...rest }: Props) => {
+    const { View } = useMolecules();
+    const Container = ContainerComponent || View;
+    const componentStyles = useComponentStyles('NavigationRail_Content', style);
 
-        return (
-            <ContainerComponent style={componentStyles} {...rest}>
-                {children}
-            </ContainerComponent>
-        );
-    },
-);
+    return (
+        <Container style={componentStyles} {...rest}>
+            {children}
+        </Container>
+    );
+});
 
 NavigationRailContent.displayName = 'NavigationRail_Content';
 

@@ -1,10 +1,10 @@
 import { memo, useRef, useEffect, useCallback } from 'react';
-import { View, TextInput as TextInputNative, Keyboard } from 'react-native';
+import { TextInput as TextInputNative, Keyboard } from 'react-native';
 
 import type { ModeType, ValidRangeType } from '../DatePickerInline';
 
 import DatePickerInputWithoutModal from '../DatePickerInput/DatePickerInputWithoutModal';
-import { useComponentStyles } from '../../hooks';
+import { useComponentStyles, useMolecules } from '../../hooks';
 import type { LocalState, LocalStateSingle, LocalStateRange } from './types';
 
 type Props = {
@@ -30,6 +30,7 @@ function CalendarEdit({
     validRange,
 }: // locale,
 Props) {
+    const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePickerModal_Edit');
 
     const dateInput = useRef<TextInputNative | null>(null);

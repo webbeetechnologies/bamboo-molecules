@@ -1,8 +1,9 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Text, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { generateSectionListData, ProvideMolecules } from '../../common';
 
 import { Example } from './SectionGrid';
+import { useMemo } from 'react';
 
 export default {
     title: 'components/SectionGrid',
@@ -16,18 +17,33 @@ export default {
     ],
 } as ComponentMeta<typeof Example>;
 
-export const Default: ComponentStory<typeof Example> = args => (
-    <View style={{ maxHeight: 500, maxWidth: useWindowDimensions().width }}>
-        <Example {...args} />
-    </View>
-);
+export const Default: ComponentStory<typeof Example> = args => {
+    const dimensions = useWindowDimensions();
+
+    const containerStyle = useMemo(
+        () => ({ maxHeight: 500, maxWidth: dimensions.width }),
+        [dimensions.width],
+    );
+
+    return (
+        <View style={containerStyle}>
+            <Example {...args} />
+        </View>
+    );
+};
 
 Default.args = {
     maxItemsPerRow: 3,
     sections: generateSectionListData(10, 100),
     renderItem: ({ item }: any) => <Text>{item.title}</Text>,
-    renderSectionHeader: ({ section }) => <Text style={{ fontSize: 20 }}>{section.title}</Text>,
+    renderSectionHeader: ({ section }) => <Text style={styles.text}>{section.title}</Text>,
 };
+
+const styles = StyleSheet.create({
+    text: {
+        fontSize: 20,
+    },
+});
 
 Default.parameters = {
     docs: {

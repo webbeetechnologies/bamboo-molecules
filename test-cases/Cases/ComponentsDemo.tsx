@@ -17,13 +17,8 @@ const Example = () => {
     const { colorMode, toggleColorMode } = useColorMode();
 
     return (
-        <View
-            style={{
-                backgroundColor: colorMode === 'light' ? '#fff' : '#424242',
-                margin: -15,
-                padding: 15,
-            }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View>
+            <View>
                 <Label>ColorMode - {colorMode}</Label>
                 <IconButton
                     size="lg"

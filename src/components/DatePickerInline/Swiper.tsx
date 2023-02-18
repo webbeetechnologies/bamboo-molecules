@@ -9,7 +9,7 @@ import {
     useMemo,
     CSSProperties,
 } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import {
     getIndexFromVerticalOffset,
@@ -19,7 +19,7 @@ import {
 } from './Month';
 
 import { beginOffset, estimatedMonthHeight, totalMonths } from './dateUtils';
-import { useLatest } from '../../hooks';
+import { useLatest, useMolecules } from '../../hooks';
 import { RenderProps, SwiperProps, useYearChange } from './SwiperUtils';
 import AutoSizer from './AutoSizer';
 
@@ -31,6 +31,7 @@ function Swiper({
     selectedYear,
     initialIndex,
 }: SwiperProps) {
+    const { View } = useMolecules();
     const isHorizontal = scrollMode === 'horizontal';
     const [index, setIndex] = useState(initialIndex);
 

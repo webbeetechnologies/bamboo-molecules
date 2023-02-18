@@ -1,4 +1,4 @@
-import { Dimensions, Text } from 'react-native';
+import { Dimensions, StyleSheet, Text } from 'react-native';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ProvideMolecules } from '../../common';
 import { Example as ListItem, ListItemTitle } from '../ListItem/ListItem';
@@ -32,22 +32,23 @@ Default.args = {
         </ListItem>
     ),
     renderSectionHeader: ({ section }: any) => (
-        <Text
-            style={{
-                fontSize: 16,
-                paddingHorizontal: 16,
-                paddingTop: 8,
-                paddingBottom: 4,
-                fontWeight: '600',
-            }}>
-            {section.title.toUpperCase()}
-        </Text>
+        <Text style={styles.text}>{section.title.toUpperCase()}</Text>
     ),
     actionSheetProps: {
         gestureEnabled: true,
         snapPoints: [30, 50, 100],
     },
 };
+
+const styles = StyleSheet.create({
+    text: {
+        fontSize: 16,
+        paddingHorizontal: 16,
+        paddingTop: 8,
+        paddingBottom: 4,
+        fontWeight: '600',
+    },
+});
 
 Default.parameters = {
     docs: {
