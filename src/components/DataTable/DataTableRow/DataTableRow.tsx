@@ -1,21 +1,17 @@
 import { FC, Fragment, memo, useMemo } from 'react';
-import type { TDataTableColumn, TDataTableRow } from '../types';
-import {
-    DataTableRowContext,
-    useDataTable,
-    useDataTableComponent,
-} from '../DataTableContext/DataTableContext';
+import type { TDataTableRow } from '../types';
+import { DataTableRowContext, useDataTable } from '../DataTableContext/DataTableContext';
 import { renderCell } from '../DataTableCell';
 import type { ListRenderItem } from 'react-native';
-import { useComponentStyles } from '../../../hooks';
+import { useComponentStyles, useMolecules } from '../../../hooks';
 
-const Row: FC<{ record: TDataTableRow; index: number }> = memo(props => {
+export const DataTableRow: FC<{ record: TDataTableRow; index: number }> = memo(props => {
     const { record, index } = props;
-    const { ScrollViewComponent } = useDataTableComponent<TDataTableColumn>();
-    const { columns = [], rowHeight } = useDataTable() || {};
+    const { View } = useMolecules();
+    const { columns = [] } = useDataTable() || {};
 
     const rowStyle = useComponentStyles('DataTable_Row', [
-        { height: rowHeight },
+        { flexDirection: 'row' },
         {
             states: {
                 disabled: false,
@@ -38,13 +34,11 @@ const Row: FC<{ record: TDataTableRow; index: number }> = memo(props => {
 
     return (
         <DataTableRowContext.Provider value={rowContext} key={record.id}>
-            <ScrollViewComponent horizontal showsHorizontalScrollIndicator={false} style={rowStyle}>
-                {result}
-            </ScrollViewComponent>
+            <View style={rowStyle}>{result}</View>
         </DataTableRowContext.Provider>
     );
 });
 
 export const renderRow: ListRenderItem<TDataTableRow> = ({ item, index }) => (
-    <Row record={item} index={index} key={item.id} />
+    <DataTableRow record={item} index={index} key={item.id} />
 );

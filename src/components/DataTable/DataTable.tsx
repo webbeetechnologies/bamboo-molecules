@@ -7,6 +7,7 @@ import { renderRow } from './DataTableRow';
 import { DataTableHeaderRow } from './DataTableHeader';
 import { defaultProps } from './defaults';
 import type { ScrollView } from 'react-native';
+import { useComponentStyles } from '../../hooks';
 
 const DataTableComponent = memo(
     forwardRef(
@@ -17,12 +18,12 @@ const DataTableComponent = memo(
             const { FlatListComponent, ScrollViewComponent } =
                 useDataTableComponent<TDataTableRow>();
             const { records = [], tableWidth } = useDataTable() || {};
+            const styles = useComponentStyles('DataTable');
 
             const {
                 style: vStyle,
                 windowSize = defaultProps.windowSize,
                 maxToRenderPerBatch = defaultProps.maxToRenderPerBatch,
-                snapToInterval = defaultProps.maxToRenderPerBatch,
                 keyExtractor: keyExtractorProp = defaultProps.keyExtractor,
                 ...vProps
             } = verticalScrollProps;
@@ -41,14 +42,17 @@ const DataTableComponent = memo(
             const stickyHeaderIndices = useMemo(() => [0], []);
 
             return (
-                <ScrollViewComponent {...horizontalScrollProps} horizontal={true} ref={ref}>
+                <ScrollViewComponent
+                    {...horizontalScrollProps}
+                    horizontal={true}
+                    ref={ref}
+                    style={styles}>
                     <FlatListComponent
                         {...vProps}
                         data={normalizedData}
                         windowSize={windowSize}
                         style={style}
                         maxToRenderPerBatch={maxToRenderPerBatch}
-                        snapToInterval={snapToInterval}
                         keyExtractor={keyExtractorProp}
                         renderItem={renderItem}
                         stickyHeaderIndices={stickyHeaderIndices}
@@ -65,7 +69,6 @@ const withDataTableContext = (Component: typeof DataTableComponent): FC<DataTabl
             const {
                 records,
                 columns,
-                rowHeight,
                 defaultColumnWidth,
                 FlatListComponent,
                 ScrollViewComponent,
@@ -77,7 +80,6 @@ const withDataTableContext = (Component: typeof DataTableComponent): FC<DataTabl
             const context = {
                 records,
                 columns,
-                rowHeight,
                 defaultColumnWidth,
                 FlatListComponent,
                 ScrollViewComponent,

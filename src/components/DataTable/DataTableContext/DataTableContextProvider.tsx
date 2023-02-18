@@ -10,7 +10,6 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         records,
         columns,
         children,
-        rowHeight = 30,
         defaultColumnWidth = 150,
         FlatListComponent: FlatListComponentProp,
         ScrollViewComponent: ScrollViewComponentProp,
@@ -38,11 +37,10 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
             () => ({
                 records,
                 columns,
-                rowHeight,
                 tableWidth,
                 defaultColumnWidth,
             }),
-            [records, columns, rowHeight, tableWidth, defaultColumnWidth],
+            [records, columns, tableWidth, defaultColumnWidth],
         );
 
         return (

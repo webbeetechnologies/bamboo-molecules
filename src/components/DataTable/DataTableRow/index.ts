@@ -7,6 +7,7 @@ export const dataTableRowStyles: ComponentStylePropWithResolvers<
     ViewStyle,
     'disabled' | 'selected' | 'hovered' | 'selected_hovered'
 > = {
+    padding: 'spacings.1',
     states: {
         disabled: {},
         selected: {},

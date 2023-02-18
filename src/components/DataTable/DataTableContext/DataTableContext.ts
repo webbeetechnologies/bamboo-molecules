@@ -22,7 +22,7 @@ const useInvariant = <T>(value: T, message: string): Exclude<T, null> => {
 
 type DataTableContextType = Pick<
     Required<DataTableProps>,
-    'records' | 'columns' | 'rowHeight' | 'defaultColumnWidth'
+    'records' | 'columns' | 'defaultColumnWidth'
 > & {
     tableWidth: number;
 };

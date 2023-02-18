@@ -58,12 +58,6 @@ export interface DataTableProps<RecordType = any>
      * @default 150
      */
     defaultColumnWidth?: number;
-    /**
-     *
-     * Height of a row
-     * @default 30
-     */
-    rowHeight?: number;
 
     /**
      *
