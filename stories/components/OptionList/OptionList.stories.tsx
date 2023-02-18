@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { generateSectionListData } from '../../common';
 
@@ -31,11 +31,18 @@ export const Default: ComponentStory<typeof Example> = args => {
     );
 
     return (
-        <View style={{ minWidth: 300, maxHeight: 500 }}>
+        <View style={styles.container}>
             <Example {...args} records={records} onQueryChange={onQueryChange} />
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        maxWidth: 300,
+        maxHeight: 500,
+    },
+});
 
 Default.args = {
     searchable: true,

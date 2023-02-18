@@ -148,16 +148,25 @@ export const Button = ({
     ...rest
 }: Props) => {
     const { TouchableRipple, Text } = useMolecules();
-    const { color, ...buttonStyles } = useComponentStyles('CustomButton', style);
+    const componentStyles = useComponentStyles('CustomButton', style);
+    
+    const { textStyle, buttonStyle } = useMemo(() => {
+         const { color: _color, ...restStyles } = componentStyles;
+         
+         return {
+           textStyle: { color },
+           buttonStyle: restStyles
+         }
+    }, [componentStyles])
 
     return (
         <TouchableRipple
-            style={buttonStyles}
+            style={buttonStyle}
             disabled={disabledProp}
             onPress={onPress}
             accessibilityRole="button"
             {...rest}>
-            <Text selectable={false} style={{ color }}>
+            <Text selectable={false} style={textStyle}>
                 Custom Button
             </Text>
         </TouchableRipple>
@@ -239,19 +248,29 @@ export const Button = ({
 }: Props) => {
     const disabled = disabledProp || !onPress; // we want the button to be in a disabled state if onPress is not provided
     const { TouchableRipple, Text } = useMolecules();
-    const { color, ...buttonStyles } = useComponentStyles('CustomButton', style, {
+    
+    const componentStyles = useComponentStyles('CustomButton', style, {
         variant: variant,
         states: { disabled },
     });
+    
+    const { textStyle, buttonStyle } = useMemo(() => {
+         const { color: _color, ...restStyles } = componentStyles;
+         
+         return {
+           textStyle: { color },
+           buttonStyle: restStyles
+         }
+    }, [componentStyles])
 
     return (
         <TouchableRipple
-            style={buttonStyles}
+            style={buttonStyle}
             disabled={disabledProp}
             onPress={onPress}
             accessibilityRole="button"
             {...rest}>
-            <Text selectable={false} style={{ color }}>
+            <Text selectable={false} style={textStyle}>
                 Custom Button
             </Text>
         </TouchableRipple>

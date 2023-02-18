@@ -15,11 +15,24 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<View>
-    <Text>Above</Text>
-    <HorizontalDivider spacing={10} {...props} />
-    <Text>Below</Text>
-</View>
+export const Example = () => {
+    const { View, Text } = useMolecules();
+
+    return (
+        <View style={styles.container}>
+            <Text>Left</Text>
+            <VerticalDivider bold spacing={10} />
+            <Text>Right</Text>
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+    },
+});
+
 `,
             language: 'tsx',
             type: 'auto',

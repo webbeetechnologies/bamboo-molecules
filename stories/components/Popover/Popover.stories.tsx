@@ -31,20 +31,28 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-const { Popover, View, Button } = useMolecules();
-const triggerRef = useRef(null);
-const [isOpen, onToggle] = useToggle(false);
+export const Example = () => {
+    const { View } = useMolecules();
+    const triggerRef = useRef(null);
+    const { state: isOpen, onToggle } = useToggle(false);
 
-return (
-    <>
-        <Button ref={triggerRef} onPress={onToggle}>
-            Show Popover
-        </Button>
-        <View style={{ padding: 100, backgroundColor: 'colors.surface' }}>
-            <Popover {...props} triggerRef={triggerRef} isOpen={isOpen} onClose={onToggle} />
-        </View>
-    </>
-);
+    return (
+        <>
+            <View style={styles.container}>
+                <Button ref={triggerRef} onPress={onToggle} testID={'trigger'}>
+                    Show Popover
+                </Button>
+                <Popover triggerRef={triggerRef} isOpen={isOpen} onClose={onToggle} />
+            </View>
+        </>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 'spacings.24',
+    },
+});
             `,
             language: 'tsx',
             type: 'auto',
@@ -69,20 +77,28 @@ PopoverControlled.parameters = {
     docs: {
         source: {
             code: `
-const { Popover, View, Button } = useMolecules();
-const triggerRef = useRef(null);
-const [isOpen, onToggle] = useToggle(false);
+export const Example = () => {
+    const { View } = useMolecules();
+    const triggerRef = useRef(null);
+    const { state: isOpen, onToggle } = useToggle(false);
 
-return (
-    <>
-        <Button ref={triggerRef} onPress={onToggle}>
-            Show Popover
-        </Button>
-        <View style={{ padding: 100, backgroundColor: 'colors.surface' }}>
-            <Popover {...props} triggerRef={triggerRef} isOpen={isOpen} onClose={onToggle} />
-        </View>
-    </>
-);
+    return (
+        <>
+            <View style={styles.container}>
+                <Button ref={triggerRef} onPress={onToggle} testID={'trigger'}>
+                    Show Popover
+                </Button>
+                <Popover triggerRef={triggerRef} isOpen={isOpen} onClose={onToggle} />
+            </View>
+        </>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 'spacings.24',
+    },
+});
             `,
             language: 'tsx',
             type: 'auto',
