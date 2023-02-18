@@ -1,16 +1,21 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { useCallback } from 'react';
+import { Image, ListRenderItemInfo, StyleSheet } from 'react-native';
 import { Card, Button, IconButton, FlatGrid, CardProps } from '../../../src/components';
+import { useMolecules } from '../../common';
 
 export const Example = (props: CardProps) => {
     return <Card {...props} />;
 };
 
 export const BasicCard = (props: CardProps) => {
+    const onMenuPress = useCallback(() => {}, []);
+    const onButtonPress = useCallback(() => {}, []);
+
     return (
-        <Card style={{ maxWidth: 400 }} variant="outlined" {...props}>
+        <Card style={basicCardStyles.card} variant="outlined" {...props}>
             <Card.Header testID="basic-header">
                 <IconButton name="account-circle-outline" size={28} />
-                <IconButton name="dots-vertical" size={20} onPress={() => {}} />
+                <IconButton name="dots-vertical" size={20} onPress={onMenuPress} />
             </Card.Header>
             <Card.Content>
                 <Card.Headline testID="basic-headline">Headline</Card.Headline>
@@ -20,10 +25,10 @@ export const BasicCard = (props: CardProps) => {
                 </Card.Text>
             </Card.Content>
             <Card.Actions testID="basic-actions">
-                <Button variant="outlined" onPress={() => {}} style={{ marginRight: 'spacings.2' }}>
+                <Button variant="outlined" onPress={onButtonPress} style={basicCardStyles.button}>
                     Action
                 </Button>
-                <Button variant="contained" onPress={() => {}}>
+                <Button variant="contained" onPress={onButtonPress}>
                     Action
                 </Button>
             </Card.Actions>
@@ -31,11 +36,21 @@ export const BasicCard = (props: CardProps) => {
     );
 };
 
+const basicCardStyles = StyleSheet.create({
+    card: {
+        maxWidth: 400,
+    },
+    button: { marginRight: 'spacings.2' },
+});
+
+const imageSource = { uri: 'https://picsum.photos/id/451/700' };
 export const CardWithMedia = (props: CardProps) => {
+    const onButtonPress = useCallback(() => {}, []);
+
     return (
-        <Card style={{ maxWidth: 400 }} variant="outlined" {...props}>
+        <Card style={cardsWithMediaStyles.card} variant="outlined" {...props}>
             <Card.Media>
-                <Image source={{ uri: 'https://picsum.photos/id/451/700' }} style={{ flex: 1 }} />
+                <Image source={imageSource} style={cardsWithMediaStyles.image} />
             </Card.Media>
             <Card.Content>
                 <Card.Headline>Headline</Card.Headline>
@@ -45,10 +60,13 @@ export const CardWithMedia = (props: CardProps) => {
                 </Card.Text>
             </Card.Content>
             <Card.Actions>
-                <Button variant="outlined" onPress={() => {}} style={{ marginRight: 'spacings.2' }}>
+                <Button
+                    variant="outlined"
+                    onPress={onButtonPress}
+                    style={cardsWithMediaStyles.button}>
                     Action
                 </Button>
-                <Button variant="contained" onPress={() => {}}>
+                <Button variant="contained" onPress={onButtonPress}>
                     Action
                 </Button>
             </Card.Actions>
@@ -56,7 +74,26 @@ export const CardWithMedia = (props: CardProps) => {
     );
 };
 
+const cardsWithMediaStyles = StyleSheet.create({
+    card: {
+        maxWidth: 400,
+    },
+    image: {
+        flex: 1,
+    },
+    button: {
+        marginRight: 'spacings.2',
+    },
+});
+
+const image1Source = { uri: 'https://picsum.photos/id/146/700' };
+const image2Source = { uri: 'https://picsum.photos/id/25/700' };
 export const ComposedCardExample = (props: CardProps) => {
+    const { View } = useMolecules();
+
+    const onButtonPress = useCallback(() => {}, []);
+    const onIconButtonPress = useCallback(() => {}, []);
+
     return (
         <Card style={styles.card} variant="outlined" {...props}>
             <Card.Header>
@@ -64,14 +101,8 @@ export const ComposedCardExample = (props: CardProps) => {
             </Card.Header>
             <Card.Content>
                 <Card.Media style={styles.media}>
-                    <Image
-                        source={{ uri: 'https://picsum.photos/id/146/700' }}
-                        style={styles.image1}
-                    />
-                    <Image
-                        source={{ uri: 'https://picsum.photos/id/25/700' }}
-                        style={styles.image2}
-                    />
+                    <Image source={image1Source} style={styles.image1} />
+                    <Image source={image2Source} style={styles.image2} />
                 </Card.Media>
                 <Card.Text>
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci at corporis
@@ -83,11 +114,11 @@ export const ComposedCardExample = (props: CardProps) => {
                     <Button
                         size="sm"
                         variant="contained-tonal"
-                        onPress={() => {}}
-                        style={{ marginRight: 'spacings.2' }}>
+                        onPress={onButtonPress}
+                        style={styles.button}>
                         Action
                     </Button>
-                    <Button variant="contained-tonal" size="sm" onPress={() => {}}>
+                    <Button variant="contained-tonal" size="sm" onPress={onButtonPress}>
                         Action
                     </Button>
                 </View>
@@ -95,8 +126,8 @@ export const ComposedCardExample = (props: CardProps) => {
                     <IconButton
                         name="phone-outline"
                         size={28}
-                        style={{ marginRight: 'spacings.2' }}
-                        onPress={() => {}}
+                        style={styles.button}
+                        onPress={onIconButtonPress}
                     />
                     <IconButton name="message-text-outline" size={28} onPress={() => {}} />
                 </View>
@@ -130,31 +161,64 @@ const styles = StyleSheet.create({
     actions: {
         justifyContent: 'space-between',
     },
+    button: {
+        marginRight: 'spacings.2',
+    },
 });
 
 export const CardsInCollection = () => {
+    const { View } = useMolecules();
+    const onPressCard = useCallback(() => {}, []);
+
+    const renderItem = useCallback(
+        ({ item }: ListRenderItemInfo<typeof data[number]>) => (
+            <Card
+                style={cardsInCollectionStyles.card}
+                variant="filled"
+                key={item.id}
+                onPress={onPressCard}>
+                <Card.Media style={cardsInCollectionStyles.imageContainer}>
+                    <Image source={{ uri: item.image }} style={cardsInCollectionStyles.image} />
+                </Card.Media>
+                <Card.Content>
+                    <Card.Subhead size="md" style={cardsInCollectionStyles.subHead}>
+                        {item.name}
+                    </Card.Subhead>
+                    <Card.Text>{item.size}</Card.Text>
+                </Card.Content>
+            </Card>
+        ),
+        [onPressCard],
+    );
+
     return (
-        <View style={{ minWidth: 600 }}>
-            <FlatGrid
-                itemDimension={150}
-                data={data}
-                renderItem={({ item }) => (
-                    <Card style={{ flex: 1 }} variant="filled" key={item.id} onPress={() => {}}>
-                        <Card.Media style={{ height: 180, marginBottom: 0 }}>
-                            <Image source={{ uri: item.image }} style={{ flex: 1 }} />
-                        </Card.Media>
-                        <Card.Content>
-                            <Card.Subhead size="md" style={{ marginBottom: 'spacings.1' }}>
-                                {item.name}
-                            </Card.Subhead>
-                            <Card.Text>{item.size}</Card.Text>
-                        </Card.Content>
-                    </Card>
-                )}
-            />
+        <View style={cardsInCollectionStyles.container}>
+            <FlatGrid itemDimension={150} data={data} renderItem={renderItem} />
         </View>
     );
 };
+
+const cardsInCollectionStyles = StyleSheet.create({
+    container: {
+        maxWidth: 600,
+    },
+    card: {
+        flex: 1,
+    },
+    imageContainer: {
+        height: 180,
+        marginBottom: 0,
+    },
+    image: {
+        flex: 1,
+    },
+    subHead: {
+        marginBottom: 'spacings.1',
+    },
+    button: {
+        marginRight: 'spacings.2',
+    },
+});
 
 const data = [
     {

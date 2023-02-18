@@ -1,6 +1,7 @@
 import { AccordionProps, AccordionHeaderElementProps, useMolecules } from '../../../src';
 import { Accordion, AccordionItem, Icon } from '../../../src/components';
 import { useCallback, useState } from 'react';
+import { StyleSheet } from 'react-native';
 
 export type Props = AccordionProps & {};
 
@@ -15,22 +16,22 @@ export const Example = (props: Props) => {
 
     return (
         <Accordion {...props}>
-            <AccordionItem style={{ width: 400 }} id="1">
+            <AccordionItem style={styles.item} id="1">
                 <AccordionItem.Header left={leftElement}>First Item</AccordionItem.Header>
                 <AccordionItem.Content>
-                    <View style={{ padding: 'spacings.4' }}>
-                        <Text style={{ fontSize: 16 }}>
+                    <View style={styles.content}>
+                        <Text style={styles.text}>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque
                             temporibus ut vero. Ducimus
                         </Text>
                     </View>
                 </AccordionItem.Content>
             </AccordionItem>
-            <AccordionItem style={{ width: 400 }} id="2">
+            <AccordionItem style={styles.item} id="2">
                 <AccordionItem.Header left={leftElement}>Second Item</AccordionItem.Header>
                 <AccordionItem.Content>
-                    <View style={{ padding: 'spacings.4' }}>
-                        <Text style={{ fontSize: 16 }}>
+                    <View style={styles.content}>
+                        <Text style={styles.text}>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque
                             temporibus ut vero. Ducimus
                         </Text>
@@ -63,7 +64,7 @@ export const ExampleControlled = (props: Props) => {
             expandedItemIds={expandedItems}
             onChange={onExpandedItemsChange}>
             <AccordionItem
-                style={{ width: 400 }}
+                style={styles.item}
                 id="1"
                 testID={`${props.testID || ''}-accordionItem-1`}>
                 <AccordionItem.Header
@@ -72,8 +73,8 @@ export const ExampleControlled = (props: Props) => {
                     First Item
                 </AccordionItem.Header>
                 <AccordionItem.Content testID={`${props.testID || ''}-accordionItem-1-content`}>
-                    <View style={{ padding: 'spacings.4' }}>
-                        <Text style={{ fontSize: 16 }}>
+                    <View style={styles.item}>
+                        <Text style={styles.text}>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque
                             temporibus ut vero. Ducimus
                         </Text>
@@ -81,7 +82,7 @@ export const ExampleControlled = (props: Props) => {
                 </AccordionItem.Content>
             </AccordionItem>
             <AccordionItem
-                style={{ width: 400 }}
+                style={styles.item}
                 id="2"
                 testID={`${props.testID || ''}-accordionItem-2`}>
                 <AccordionItem.Header
@@ -90,8 +91,8 @@ export const ExampleControlled = (props: Props) => {
                     Second Item
                 </AccordionItem.Header>
                 <AccordionItem.Content testID={`${props.testID || ''}-accordionItem-2-content`}>
-                    <View style={{ padding: 'spacings.4' }}>
-                        <Text style={{ fontSize: 16 }}>
+                    <View style={styles.content}>
+                        <Text style={styles.text}>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque
                             temporibus ut vero. Ducimus
                         </Text>
@@ -104,6 +105,7 @@ export const ExampleControlled = (props: Props) => {
 
 export const ExampleNestedAccordion = (props: Props) => {
     const { View, Text } = useMolecules();
+
     const leftElement = useCallback(
         ({ expanded, color }: AccordionHeaderElementProps) => (
             <Icon color={color} name={expanded ? 'chevron-up' : 'chevron-down'} size={24} />
@@ -113,43 +115,43 @@ export const ExampleNestedAccordion = (props: Props) => {
 
     return (
         <Accordion {...props}>
-            <AccordionItem style={{ width: 400 }} id="1">
+            <AccordionItem style={styles.item} id="1">
                 <AccordionItem.Header left={leftElement}>
                     Accordion (Accordion Group)
                 </AccordionItem.Header>
                 <AccordionItem.Content>
-                    <View style={{ padding: 'spacings.4' }}>
-                        <Text style={{ fontSize: 16 }}>
+                    <View style={styles.content}>
+                        <Text style={styles.text}>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque
                             temporibus ut vero. Ducimus
                         </Text>
                     </View>
                 </AccordionItem.Content>
             </AccordionItem>
-            <AccordionItem style={{ width: 400 }} id="2">
+            <AccordionItem style={styles.item} id="2">
                 <AccordionItem.Header left={leftElement}>AccordionItem</AccordionItem.Header>
                 <AccordionItem.Content>
                     <Accordion multiple>
-                        <AccordionItem style={{ width: 400 }} id="1">
+                        <AccordionItem style={styles.item} id="1">
                             <AccordionItem.Header left={leftElement}>
                                 Accordion Header
                             </AccordionItem.Header>
                             <AccordionItem.Content>
-                                <View style={{ padding: 'spacings.4' }}>
-                                    <Text style={{ fontSize: 16 }}>
+                                <View style={styles.content}>
+                                    <Text style={styles.text}>
                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                                         Atque temporibus ut vero. Ducimus
                                     </Text>
                                 </View>
                             </AccordionItem.Content>
                         </AccordionItem>
-                        <AccordionItem style={{ width: 400 }} id="2">
+                        <AccordionItem style={styles.item} id="2">
                             <AccordionItem.Header left={leftElement}>
                                 Accordion Content
                             </AccordionItem.Header>
                             <AccordionItem.Content>
-                                <View style={{ padding: 'spacings.4' }}>
-                                    <Text style={{ fontSize: 16 }}>
+                                <View style={styles.content}>
+                                    <Text style={styles.text}>
                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                                         Atque temporibus ut vero. Ducimus
                                     </Text>
@@ -162,3 +164,15 @@ export const ExampleNestedAccordion = (props: Props) => {
         </Accordion>
     );
 };
+
+const styles = StyleSheet.create({
+    item: {
+        width: 400,
+    },
+    content: {
+        padding: 'spacings.4',
+    },
+    text: {
+        fontSize: 16,
+    },
+});

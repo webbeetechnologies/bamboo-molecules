@@ -1,7 +1,7 @@
 import { memo, useState, useCallback, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { useComponentStyles, useLatest } from '../../hooks';
+import { useComponentStyles, useLatest, useMolecules } from '../../hooks';
 import { areDatesOnSameDay, dateToUnix, getEndOfDay, getInitialIndex } from './dateUtils';
 import Swiper from './Swiper';
 import Month from './Month';
@@ -32,7 +32,7 @@ function DatePickerInlineBase(props: DatePickerInlineBaseProps) {
         dateMode,
         style,
     } = props;
-
+    const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePickerInline', style);
 
     const scrollMode = mode === 'range' || mode === 'multiple' ? 'vertical' : 'horizontal';

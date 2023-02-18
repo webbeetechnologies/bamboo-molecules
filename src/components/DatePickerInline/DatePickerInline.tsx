@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from 'react';
-import { View, ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
 
-import { useComponentStyles, useControlledValue } from '../../hooks';
+import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type {
     LocalState,
     LocalStateMultiple,
@@ -26,6 +26,8 @@ const DatePickerInline = ({
     containerStyle: containerStyleProp,
     ...rest
 }: DatePickerInlineProps) => {
+    const { View } = useMolecules();
+
     const onInnerChange = useCallback(
         (params: any) => {
             onChange?.(params);

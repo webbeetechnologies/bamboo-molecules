@@ -2,6 +2,7 @@ import { memo, useCallback } from 'react';
 import type { ViewProps } from 'react-native';
 import type { GridProps } from '../../../src/components';
 import { useMolecules } from '../../../src/hooks';
+import { StyleSheet } from 'react-native';
 
 export type Props = {
     /**
@@ -52,7 +53,7 @@ const Table = ({ style, data }: ViewProps & { data: { title: string; value: stri
     const { View, Card, FlatList, Text } = useMolecules();
     const renderItem = useCallback(
         ({ item }: { item: { title: string; value: string } }) => (
-            <View>
+            <View style={styles.item}>
                 <Text>{item.title}</Text>
                 <Text>{item.value}</Text>
             </View>
@@ -154,5 +155,9 @@ const fieldData = {
         renderer: GridRenderer,
     },
 };
+
+const styles = StyleSheet.create({
+    item: { flex: 1 },
+});
 
 export default memo(GridRenderer);

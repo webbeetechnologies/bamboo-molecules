@@ -8,6 +8,7 @@ import {
     TouchableRippleProps,
 } from '../../../src';
 import { Card, TouchableRipple } from '../../../src/components';
+import { StyleSheet } from 'react-native';
 
 export type Props = TouchableRippleProps & {
     variant?: 'outlined' | 'text' | 'contained';
@@ -131,7 +132,7 @@ export const NestedThemeExample = (props: Props) => {
                 <Card.Content>
                     <Button {...props} componentName="CustomButton" children="I am primary" />
                     <ProvideMolecules theme={darkTheme}>
-                        <Card style={{ marginTop: 10 }}>
+                        <Card style={styles.card}>
                             <Card.Header>
                                 <Card.Headline>Dark Mode</Card.Headline>
                             </Card.Header>
@@ -154,3 +155,9 @@ export const NestedThemeExample = (props: Props) => {
         </ProvideMolecules>
     );
 };
+
+const styles = StyleSheet.create({
+    card: {
+        marginTop: 10,
+    },
+});

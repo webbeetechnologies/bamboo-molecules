@@ -1,5 +1,5 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { generateFlatListData, ProvideMolecules } from '../../common';
 
 import { Example } from './FlatGrid';
@@ -17,10 +17,17 @@ export default {
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => (
-    <View style={{ minWidth: 300, maxHeight: 500 }}>
+    <View style={styles.container}>
         <Example {...args} />
     </View>
 );
+
+const styles = StyleSheet.create({
+    container: {
+        maxWidth: 300,
+        maxHeight: 500,
+    },
+});
 
 Default.args = {
     itemDimension: 130,

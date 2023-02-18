@@ -112,6 +112,7 @@ import {
     fabStyles,
     gridStyles,
     optionFlatListStyles,
+    scrollViewStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -267,6 +268,8 @@ const defaultThemeValue: Partial<ITheme> = {
 
     Grid: gridStyles,
     OptionFlatList: optionFlatListStyles,
+
+    ScrollView: scrollViewStyles,
 };
 
 export const defaultExtractStyles = memoize(

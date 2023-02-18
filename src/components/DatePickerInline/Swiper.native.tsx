@@ -1,12 +1,8 @@
 import { memo, useRef, useCallback, useState, useMemo } from 'react';
-import {
-    NativeScrollEvent,
-    NativeSyntheticEvent,
-    ScrollView,
-    StyleSheet,
-    View,
-    ViewStyle,
-} from 'react-native';
+import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet, ViewStyle } from 'react-native';
+
+import { useMolecules } from '../../hooks';
+import type { ScrollViewRef } from '../ScrollView';
 import {
     getHorizontalMonthOffset,
     getIndexFromVerticalOffset,
@@ -14,7 +10,6 @@ import {
     getVerticalMonthsOffset,
     montHeaderHeight,
 } from './Month';
-
 import { SwiperProps, useYearChange } from './SwiperUtils';
 import { beginOffset, estimatedMonthHeight, totalMonths } from './dateUtils';
 import AutoSizer from './AutoSizer';
@@ -49,11 +44,14 @@ function SwiperInner({
 }: SwiperProps & { width: number; height: number }) {
     const idx = useRef<number>(initialIndex);
     const isHorizontal = scrollMode === 'horizontal';
+
+    const { View, ScrollView } = useMolecules();
+
     const [visibleIndexes, setVisibleIndexes] = useState<number[]>(
         getVisibleArray(initialIndex, { isHorizontal, height }),
     );
 
-    const parentRef = useRef<ScrollView | null>(null);
+    const parentRef = useRef<ScrollViewRef | null>(null);
 
     const scrollTo = useCallback(
         (index: number, animated: boolean) => {
