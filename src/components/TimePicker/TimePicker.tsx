@@ -7,9 +7,8 @@ import {
     useCallback,
     useMemo,
 } from 'react';
-import { View } from 'react-native';
 
-import { useComponentStyles, useControlledValue } from '../../hooks';
+import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import { format, parse } from '../../utils';
 import { inputTypes, PossibleClockTypes, PossibleInputTypes, toHourInputFormat } from './timeUtils';
 import AnalogClock from './AnalogClock';
@@ -54,6 +53,7 @@ function TimePicker({
     onTimeChange,
     isLandscape = false,
 }: Props) {
+    const { View } = useMolecules();
     const { hours, minutes } = useMemo(() => {
         const date = time ? parse(time, 'HH:mm', new Date()) : new Date();
 

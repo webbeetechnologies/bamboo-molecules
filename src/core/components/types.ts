@@ -58,6 +58,7 @@ import type {
     FABProps,
     GridProps,
     IOptionFlatList,
+    ScrollViewProps,
     DataTable,
 } from '../../components';
 
@@ -125,6 +126,7 @@ export interface DefaultComponents {
     FAB: ComponentType<FABProps>;
     Grid: ComponentType<GridProps>;
     OptionFlatList: IOptionFlatList;
+    ScrollView: ComponentType<ScrollViewProps>;
     DataTable: typeof DataTable;
 }
 

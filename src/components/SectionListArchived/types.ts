@@ -1,5 +1,6 @@
 import type { PropsWithoutRef, ReactElement, RefAttributes } from 'react';
-import type { FlashList, FlashListProps, ListRenderItemInfo } from '@shopify/flash-list';
+import type { FlatList as GestureHandlerFlatList } from 'react-native-gesture-handler';
+import type { FlatListProps, ListRenderItemInfo } from 'react-native';
 
 export type DefaultSectionT = {
     [key: string]: any;
@@ -25,7 +26,7 @@ export type SectionListRenderItemInfo<TItem, TSection> = ListRenderItemInfo<TIte
 
 // SectionList Props
 export type Props<TItem, TSection = DefaultSectionT> = Omit<
-    FlashListProps<SectionItem<TItem, TSection>>,
+    FlatListProps<SectionItem<TItem, TSection>>,
     'data' | 'renderItem' | 'stickyHeaderIndices'
 > & {
     sections: TSection[];
@@ -37,5 +38,6 @@ export type Props<TItem, TSection = DefaultSectionT> = Omit<
 
 // To make a correct type inference // TODO - ItemType is always any
 export type ISectionList = <ItemType = any, TSectionType = DefaultSectionT>(
-    props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<FlashList<ItemType>>,
+    props: PropsWithoutRef<Props<ItemType, TSectionType>> &
+        RefAttributes<GestureHandlerFlatList<ItemType>>,
 ) => ReactElement;

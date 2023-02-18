@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
-import { LayoutChangeEvent, StyleSheet, View } from 'react-native';
+import { LayoutChangeEvent, StyleSheet } from 'react-native';
+import { useMolecules } from '../../hooks';
 
 type WidthAndHeight = {
     width: number;
@@ -11,6 +12,7 @@ export default function AutoSizer({
 }: {
     children: ({ width, height }: WidthAndHeight) => any;
 }) {
+    const { View } = useMolecules();
     const [layout, setLayout] = useState<WidthAndHeight | null>(null);
 
     const onLayout = useCallback(

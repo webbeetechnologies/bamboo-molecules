@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import {
     ProvideTheme as AtomProvideTheme,
     extendTheme as extendThemeAtoms,
@@ -112,6 +112,7 @@ import {
     fabStyles,
     gridStyles,
     optionFlatListStyles,
+    scrollViewStyles,
     dataTableStyles,
     dataTableCellStyles,
     dataTableRowStyles,
@@ -125,6 +126,8 @@ import {
     resolveComponentStyles as defaultResolveComponentStyles,
 } from '../../utils';
 import type { ITheme, ProvideThemeArgs } from './types';
+import { usePrevious } from '../../hooks';
+import { clearStylesCache } from '../../utils';
 
 const defaultThemeValue: Partial<ITheme> = {
     light: MD3LightTheme,
@@ -272,6 +275,9 @@ const defaultThemeValue: Partial<ITheme> = {
 
     Grid: gridStyles,
     OptionFlatList: optionFlatListStyles,
+
+    ScrollView: scrollViewStyles,
+
     DataTable: dataTableStyles,
     DataTable_Cell: dataTableCellStyles,
     DataTable_Row: dataTableRowStyles,
@@ -300,6 +306,17 @@ export const ProvideTheme = ({
             resolveComponentStyles,
         }),
         [resolveComponentStyles, theme],
+    );
+
+    const memoizedThemeRef = usePrevious(memoizedTheme);
+
+    useEffect(
+        () => () => {
+            // When theme changes burst cache
+            if (memoizedThemeRef.current === memoizedTheme) return;
+            clearStylesCache();
+        },
+        [memoizedTheme, memoizedThemeRef],
     );
 
     return (

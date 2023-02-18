@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import { View, ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { DisableWeekDaysType } from './dateUtils';
@@ -26,7 +26,7 @@ function DatePickerInline({
     disableWeekDays,
     style: styleProp,
 }: CalendarHeaderProps) {
-    const { IconButton } = useMolecules();
+    const { IconButton, View } = useMolecules();
     const componentStyles = useComponentStyles('DatePicker_Header', styleProp);
 
     const isHorizontal = scrollMode === 'horizontal';

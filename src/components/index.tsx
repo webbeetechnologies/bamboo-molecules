@@ -30,7 +30,7 @@ export {
 } from './HorizontalDivider';
 export { VerticalDivider, verticalDividerStyles, VerticalDividerProps } from './VerticalDivider';
 export { Switch, switchStyles, SwitchProps } from './Switch';
-export { FlatList, FlatListProps, IFlatList, flatListStyles } from './FlatList';
+export { FlatList, FlatListProps, IFlatList, FlatListRef, flatListStyles } from './FlatList';
 
 export {
     SectionList,
@@ -163,5 +163,7 @@ export * from './FAB';
 export * from './Grid';
 
 export * from './OptionFlatList';
+
+export * from './ScrollView';
 
 export * from './DataTable';

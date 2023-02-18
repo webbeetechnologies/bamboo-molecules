@@ -1,9 +1,8 @@
 import { memo, useMemo } from 'react';
-import { View } from 'react-native';
 import { useMolecules, useComponentStyles } from '../../hooks';
 
 function DayName({ label }: { label: string }) {
-    const { Text } = useMolecules();
+    const { Text, View } = useMolecules();
     const componentStyles = useComponentStyles('DatePicker_DayName');
 
     const { dayNameStyle, textStyle } = useMemo(() => {

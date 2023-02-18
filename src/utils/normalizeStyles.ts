@@ -1,8 +1,8 @@
 import type { StyleProp } from 'react-native';
 import type { MD3Theme } from '../core/theme/types';
-import { get, memoize } from './lodash';
+import { createMemoizedFunction, get } from './lodash';
 
-const normalizeStylesMemo: typeof memoize = Object.assign(memoize);
+const normalizeStylesMemo = createMemoizedFunction();
 
 // normalize tokens inside the styles object and the subsequent objects inside it
 const normalizeStyles: StyleProp<any> | StyleProp<any>[] = normalizeStylesMemo(
@@ -34,7 +34,6 @@ const normalizeStyles: StyleProp<any> | StyleProp<any>[] = normalizeStylesMemo(
 
         return newStyles;
     },
-    (...args) => JSON.stringify(args), // creating a key combining all the args to memoize them
 );
 
 export default normalizeStyles;

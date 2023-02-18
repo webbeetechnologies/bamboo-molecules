@@ -1,9 +1,9 @@
 import deepmerge from 'ts-deepmerge';
 import type { ResolveComponentStylesArgs } from '../core/theme/types';
 import type { ComponentSize } from '../types';
-import { memoize } from './lodash';
+import { createMemoizedFunction } from './lodash';
 
-const resolveComponentStylesMemo: typeof memoize = Object.assign(memoize);
+const resolveComponentStylesMemo = createMemoizedFunction();
 
 export const resolveComponentStyles = resolveComponentStylesMemo(
     ({
@@ -33,7 +33,6 @@ export const resolveComponentStyles = resolveComponentStylesMemo(
             style,
         );
     },
-    (...args) => JSON.stringify(args), // creating a key combining all the args to memoize them
 );
 
 export const flattenStateStyles = (

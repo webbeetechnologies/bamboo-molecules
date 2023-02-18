@@ -15,12 +15,24 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-<TouchableRipple
-      style={{ width: 200, height: 100, backgroundColor: '#f1f1f1' }}
-      onPress={() => {}}
-      {...props}>
-      <Text>Touchable Ripple</Text>
-</TouchableRipple>
+export const Example = () => {
+    const { Text } = useMolecules();
+    const onPress = useCallback(() => {}, []);
+
+    return (
+        <TouchableRipple style={styles.container} onPress={onPress}>
+            <Text>Touchable Ripple</Text>
+        </TouchableRipple>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        width: 200,
+        height: 100,
+        backgroundColor: 'colors.surface',
+    },
+});
 `,
             language: 'tsx',
             type: 'auto',
