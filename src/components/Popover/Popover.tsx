@@ -22,7 +22,7 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                 // TODO: Implement trap focus functionality
                 // eslint-disable-next-line
                 trapFocus = true,
-                showArrow = true,
+                showArrow = false,
                 overlayStyles = {},
                 contentStyles = {},
                 contentTextStyles = {},
