@@ -1,11 +1,11 @@
 import { StyleSheet, View } from 'react-native';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { generateFlatListData } from '../../common';
 import { Example as ListItem, ListItemTitle } from '../ListItem/ListItem';
 
 import { Example } from './OptionFlatList';
 import { useArgs } from '@storybook/addons';
 import { useCallback, useMemo } from 'react';
+import { generateFlatListData } from '../../../__mocks__/generateFlatListData';
 
 export default {
     title: 'components/OptionFlatList',
