@@ -18,6 +18,10 @@ export const Example = (props: Props) => {
         ref.current?.navigate('profile');
     };
 
+    const onPressSettings = () => {
+        ref.current?.navigate('settings');
+    };
+
     const onGoBack = () => {
         ref.current?.goBack();
     };
@@ -25,27 +29,28 @@ export const Example = (props: Props) => {
     return (
         <NavigationStack ref={ref} initialRouteName="home" {...props}>
             <NavigationStack.Item name="home">
-                <View
-                    style={StyleSheet.flatten([
-                        styles.container,
-                        { backgroundColor: 'colors.surfaceVariant' },
-                    ])}>
+                <View style={styles.container}>
                     <Text style={styles.text}>Home</Text>
-                    <Button variant="outlined" onPress={onPressProfile}>
+                    <Button style={styles.button} variant="outlined" onPress={onPressProfile}>
                         Go To Profile
                     </Button>
                 </View>
             </NavigationStack.Item>
             <NavigationStack.Item name="profile">
-                <View
-                    style={StyleSheet.flatten([
-                        styles.container,
-                        {
-                            backgroundColor: 'colors.onNeutral1',
-                        },
-                    ])}>
+                <View style={styles.container}>
                     <Text style={styles.text}>Profile</Text>
-                    <Button variant="outlined" onPress={onGoBack}>
+                    <Button style={styles.button} variant="outlined" onPress={onPressSettings}>
+                        Go To Settings
+                    </Button>
+                    <Button style={styles.button} variant="outlined" onPress={onGoBack}>
+                        Go Back
+                    </Button>
+                </View>
+            </NavigationStack.Item>
+            <NavigationStack.Item name="settings">
+                <View style={styles.container}>
+                    <Text style={styles.text}>Settings</Text>
+                    <Button style={styles.button} variant="outlined" onPress={onGoBack}>
                         Go Back
                     </Button>
                 </View>
@@ -61,9 +66,13 @@ const styles = StyleSheet.create({
         padding: 'spacings.4',
         borderRadius: 'shapes.corner.medium' as unknown as number,
         textAlign: 'center',
+        backgroundColor: 'colors.surfaceVariant',
     },
     text: {
-        marginBottom: 'spacings.4',
+        marginBottom: 'spacings.8',
         fontSize: 'typescale.titleLarge.fontSize' as unknown as number,
+    },
+    button: {
+        marginBottom: 'spacings.4',
     },
 });
