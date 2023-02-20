@@ -6,9 +6,10 @@ import { View } from 'react-native';
 
 const mockArgs = getDataTableMockProps(2, 10);
 
+const viewStyle = { height: 200 };
 test('Count increments on press', done => {
     measurePerformance(
-        <View style={{ height: 200 }}>
+        <View style={viewStyle}>
             <DataTable {...mockArgs} />
         </View>,
         {

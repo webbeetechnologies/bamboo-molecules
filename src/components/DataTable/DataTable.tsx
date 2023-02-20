@@ -1,7 +1,7 @@
 import type { FC, ForwardedRef } from 'react';
 import { forwardRef, memo, useCallback, useMemo } from 'react';
 import type { DataTableProps, ScrollProps, TDataTableRow } from './types';
-import type { FlatListProps, ScrollView } from 'react-native';
+import type { ScrollView } from 'react-native';
 import { useComponentStyles } from '../../hooks';
 import { useDataTable, useDataTableComponent } from './DataTableContext/DataTableContext';
 import { defaultProps } from './defaults';
@@ -9,10 +9,6 @@ import { renderRow } from './DataTableRow';
 import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
 import { DataTableHeaderRow } from './DataTableHeader';
 import type { ScrollViewProps } from 'react-native';
-
-const CellRendererComponent: FlatListProps<any>['CellRendererComponent'] = ({ children }) => (
-    <>{children}</>
-);
 
 const DataTableComponent = memo(
     forwardRef(
@@ -36,7 +32,7 @@ const DataTableComponent = memo(
                 maxToRenderPerBatch = defaultProps.maxToRenderPerBatch,
                 keyExtractor: keyExtractorProp = defaultProps.keyExtractor,
                 ...vProps
-            } = verticalScrollProps;
+            } = { ...defaultProps, ...verticalScrollProps };
 
             const vStyle = useMemo(
                 () => [vStyleProp, { width: tableWidth }],
@@ -70,7 +66,6 @@ const DataTableComponent = memo(
                         keyExtractor={keyExtractorProp}
                         renderItem={renderItem}
                         stickyHeaderIndices={stickyHeaderIndices}
-                        CellRendererComponent={CellRendererComponent}
                     />
                 </ScrollViewComponent>
             );
