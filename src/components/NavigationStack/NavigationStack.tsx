@@ -7,9 +7,6 @@ import {
     forwardRef,
     memo,
     useImperativeHandle,
-    Children,
-    isValidElement,
-    FC,
 } from 'react';
 
 export type Props = {
@@ -25,42 +22,27 @@ export type NavigationStackHandle = {
     goBack: () => void;
 };
 
-const NavigationStack = ({ initialRouteName, children: childrenProp }: Props, ref: any) => {
-    // NavigationStack.Item can only be the direct children
-    const children = useMemo(
-        () =>
-            Children.map(childrenProp, child => child).reduce((context, child) => {
-                if (!isValidElement(child)) return context;
-
-                if ((child.type as FC).displayName !== 'NavigationStack.Item') {
-                    return context;
-                }
-
-                return [...context, child];
-            }, [] as ReactElement[]),
-        [childrenProp],
-    );
+const NavigationStack = ({ initialRouteName, children }: Props, ref: any) => {
     const [currentStack, setCurrentStack] = useState<string[]>([
-        initialRouteName || children[0]?.props?.name || '',
+        initialRouteName || (Array.isArray(children) ? children[0] : children)?.props?.name || '',
     ]);
     const currentRoute = currentStack[currentStack.length - 1] || '';
 
-    const push = useCallback(
-        (item: string) => {
-            setCurrentStack([...currentStack, item]);
-        },
-        [currentStack],
-    );
+    const push = useCallback((item: string) => {
+        setCurrentStack(prev => [...prev, item]);
+    }, []);
 
     const pop = useCallback(() => {
-        // we don't want to remove the last item in the stack
-        if (currentStack.length <= 1) return;
+        setCurrentStack(prev => {
+            // we don't want to remove the last item in the stack
+            if (prev.length <= 1) return prev;
 
-        const newStack = [...currentStack];
+            const newStack = [...prev];
 
-        newStack.pop();
-        setCurrentStack(newStack);
-    }, [currentStack]);
+            newStack.pop();
+            return newStack;
+        });
+    }, []);
 
     const contextValue = useMemo(
         () => ({
