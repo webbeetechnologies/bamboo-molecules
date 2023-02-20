@@ -1,34 +1,47 @@
 import type { FC, ForwardedRef } from 'react';
 import { forwardRef, memo, useCallback, useMemo } from 'react';
 import type { DataTableProps, ScrollProps, TDataTableRow } from './types';
-import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
-import { useDataTable, useDataTableComponent } from './DataTableContext/DataTableContext';
-import { renderRow } from './DataTableRow';
-import { DataTableHeaderRow } from './DataTableHeader';
-import { defaultProps } from './defaults';
-import type { ScrollView } from 'react-native';
+import type { FlatListProps, ScrollView } from 'react-native';
 import { useComponentStyles } from '../../hooks';
+import { useDataTable, useDataTableComponent } from './DataTableContext/DataTableContext';
+import { defaultProps } from './defaults';
+import { renderRow } from './DataTableRow';
+import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
+import { DataTableHeaderRow } from './DataTableHeader';
+import type { ScrollViewProps } from 'react-native';
+
+const CellRendererComponent: FlatListProps<any>['CellRendererComponent'] = ({ children }) => (
+    <>{children}</>
+);
 
 const DataTableComponent = memo(
     forwardRef(
         (
-            { verticalScrollProps = {}, horizontalScrollProps = {} }: ScrollProps,
+            {
+                verticalScrollProps = {},
+                horizontalScrollProps = {},
+                style: hStyleProp,
+                ...restScrollViewProps
+            }: ScrollProps & ScrollViewProps,
             ref: ForwardedRef<ScrollView>,
         ) => {
             const { FlatListComponent, ScrollViewComponent } =
                 useDataTableComponent<TDataTableRow>();
             const { records = [], tableWidth } = useDataTable() || {};
-            const styles = useComponentStyles('DataTable');
+            const hStyle = useComponentStyles('DataTable', [hStyleProp]);
 
             const {
-                style: vStyle,
+                style: vStyleProp,
                 windowSize = defaultProps.windowSize,
                 maxToRenderPerBatch = defaultProps.maxToRenderPerBatch,
                 keyExtractor: keyExtractorProp = defaultProps.keyExtractor,
                 ...vProps
             } = verticalScrollProps;
 
-            const style = useMemo(() => [vStyle, { width: tableWidth }], [vStyle, tableWidth]);
+            const vStyle = useMemo(
+                () => [vStyleProp, { width: tableWidth }],
+                [vStyleProp, tableWidth],
+            );
             const normalizedData = useMemo(() => [{ id: '__header__' }, ...records], [records]);
 
             const renderItem: typeof renderRow = useCallback(props => {
@@ -43,19 +56,21 @@ const DataTableComponent = memo(
 
             return (
                 <ScrollViewComponent
+                    {...restScrollViewProps}
                     {...horizontalScrollProps}
                     horizontal={true}
                     ref={ref}
-                    style={styles}>
+                    style={hStyle}>
                     <FlatListComponent
                         {...vProps}
                         data={normalizedData}
                         windowSize={windowSize}
-                        style={style}
+                        style={vStyle}
                         maxToRenderPerBatch={maxToRenderPerBatch}
                         keyExtractor={keyExtractorProp}
                         renderItem={renderItem}
                         stickyHeaderIndices={stickyHeaderIndices}
+                        CellRendererComponent={CellRendererComponent}
                     />
                 </ScrollViewComponent>
             );

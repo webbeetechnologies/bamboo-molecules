@@ -80,3 +80,4 @@ example/cache
 .yarn/install-state.gz
 
 coverage
+.reassure

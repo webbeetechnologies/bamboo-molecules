@@ -1,8 +1,8 @@
 import { ComponentType, FC, memo } from 'react';
 import type { DataTableCellProps, DataTableHeaderCellProps } from '../types';
-import { useMolecules } from '../../../../stories/common';
-import { generateFlatListData } from '__mocks__/generateFlatListData';
+import { generateFlatListData } from '../../../../__mocks__/generateFlatListData';
 import type { FlatListProps } from 'react-native';
+import { useMolecules } from '../../../hooks';
 
 export const CellRenderer: FC<DataTableCellProps> = memo(({ row, column }) => {
     const { Text } = useMolecules();
