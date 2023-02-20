@@ -7,43 +7,42 @@ export type Props = {
     children: ReactElement;
 };
 
-const NavigationStackItem = memo(({ name, children }: Props) => {
+const NavigationStackItemContainer = memo(({ name, children, ...rest }: Props) => {
     const { currentRoute } = useNavigation();
-    const opacityRef = useRef(new Animated.Value(currentRoute === name ? 1 : 0));
-
-    useEffect(() => {
-        if (currentRoute === name) {
-            opacityRef.current.setValue(0);
-
-            Animated.timing(opacityRef.current, {
-                toValue: 1,
-                duration: 250,
-                useNativeDriver: true,
-            }).start();
-
-            return;
-        }
-
-        if (currentRoute !== name) {
-            Animated.timing(opacityRef.current, {
-                toValue: 0,
-                duration: 250,
-                useNativeDriver: true,
-            }).start();
-        }
-    }, [currentRoute, name, opacityRef]);
-
-    const animatedViewStyle = useMemo(() => ({ opacity: opacityRef.current }), []);
 
     return (
-        <>
-            {currentRoute === name && (
-                <Animated.View style={animatedViewStyle}>{children}</Animated.View>
-            )}
-        </>
+        <NavigationStackItem isCurrentRoute={currentRoute === name} children={children} {...rest} />
     );
 });
 
-NavigationStackItem.displayName = 'NavigationStack.Item';
+const NavigationStackItem = memo(
+    ({ isCurrentRoute, children }: Omit<Props, 'name'> & { isCurrentRoute: boolean }) => {
+        const opacityRef = useRef(new Animated.Value(isCurrentRoute ? 1 : 0));
 
-export default NavigationStackItem;
+        useEffect(() => {
+            if (isCurrentRoute) {
+                opacityRef.current.setValue(0);
+            }
+
+            Animated.timing(opacityRef.current, {
+                toValue: isCurrentRoute ? 1 : 0,
+                duration: 250,
+                useNativeDriver: true,
+            }).start();
+        }, [isCurrentRoute, opacityRef]);
+
+        const animatedViewStyle = useMemo(() => ({ opacity: opacityRef.current }), []);
+
+        return (
+            <>
+                {isCurrentRoute && (
+                    <Animated.View style={animatedViewStyle}>{children}</Animated.View>
+                )}
+            </>
+        );
+    },
+);
+
+NavigationStackItemContainer.displayName = 'NavigationStack.Item';
+
+export default NavigationStackItemContainer;
