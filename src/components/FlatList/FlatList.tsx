@@ -1,13 +1,15 @@
 import { memo, useMemo, forwardRef, PropsWithoutRef, RefAttributes, ReactElement } from 'react';
-import { StyleSheet } from 'react-native';
-import { FlashList, FlashListProps } from '@shopify/flash-list';
+import { StyleSheet, FlatListProps } from 'react-native';
+import { FlatList as GestureHandlerFlatList } from 'react-native-gesture-handler';
 import { useComponentStyles } from '../../hooks';
 
-export type Props<TItem> = FlashListProps<TItem>;
+export type FlatListRef<ItemType = any> = GestureHandlerFlatList<ItemType>;
+
+export type Props<TItem> = FlatListProps<TItem>;
 
 // To make a correct type inference
 export type IFlatList = <ItemType = any>(
-    props: PropsWithoutRef<FlashListProps<ItemType>> & RefAttributes<FlashList<ItemType>>,
+    props: PropsWithoutRef<FlatListProps<ItemType>> & RefAttributes<FlatListRef<ItemType>>,
 ) => ReactElement;
 
 function FlatList<T = any>(
@@ -48,7 +50,7 @@ function FlatList<T = any>(
         }, [componentStyles]);
 
     return (
-        <FlashList
+        <GestureHandlerFlatList
             data={data}
             renderItem={renderItem}
             contentContainerStyle={contentContainerStyles}

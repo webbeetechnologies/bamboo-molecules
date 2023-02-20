@@ -20,16 +20,17 @@ Default.parameters = {
     docs: {
         source: {
             code: `
-    const { Accordion, AccordionItem, Icon, View, Text } = useMolecules();
+export const Example = () => {
+    const { View, Text } = useMolecules();
     const leftElement = useCallback(
         ({ expanded, color }: AccordionHeaderElementProps) => (
             <Icon color={color} name={expanded ? 'chevron-up' : 'chevron-down'} size={24} />
         ),
-        [Icon],
+        [],
     );
 
     return (
-        <Accordion multiple>
+        <Accordion>
             <AccordionItem style={styles.item} id="1">
                 <AccordionItem.Header left={leftElement}>First Item</AccordionItem.Header>
                 <AccordionItem.Content>
@@ -54,6 +55,19 @@ Default.parameters = {
             </AccordionItem>
         </Accordion>
     );
+};
+
+const styles = StyleSheet.create({
+    item: {
+        width: 400,
+    },
+    content: {
+        padding: 'spacings.4',
+    },
+    text: {
+        fontSize: 16,
+    },
+});
             `,
             language: 'tsx',
             type: 'auto',
@@ -74,12 +88,14 @@ Controlled.parameters = {
     docs: {
         source: {
             code: `
+export const ExampleControlled = () => {
+    const { View, Text } = useMolecules();
     const [expandedItems, setExpandedItems] = useState<string[]>([]);
     const leftElement = useCallback(
         ({ expanded, color }: AccordionHeaderElementProps) => (
             <Icon color={color} name={expanded ? 'chevron-up' : 'chevron-down'} size={24} />
         ),
-        [Icon],
+        [],
     );
 
     const onExpandedItemsChange = useCallback(
@@ -88,11 +104,19 @@ Controlled.parameters = {
     );
 
     return (
-        <Accordion multiple expandedItemIds={expandedItems} onChange={onExpandedItemsChange}>
-            <AccordionItem style={styles.item} id="1">
-                <AccordionItem.Header left={leftElement}>First Item</AccordionItem.Header>
+        <Accordion
+            multiple
+            expandedItemIds={expandedItems}
+            onChange={onExpandedItemsChange}>
+            <AccordionItem
+                style={styles.item}
+                id="1">
+                <AccordionItem.Header
+                    left={leftElement}>
+                    First Item
+                </AccordionItem.Header>
                 <AccordionItem.Content>
-                    <View style={styles.content}>
+                    <View style={styles.item}>
                         <Text style={styles.text}>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque
                             temporibus ut vero. Ducimus
@@ -100,8 +124,12 @@ Controlled.parameters = {
                     </View>
                 </AccordionItem.Content>
             </AccordionItem>
-            <AccordionItem style={styles.item} id="2">
-                <AccordionItem.Header left={leftElement}>Second Item</AccordionItem.Header>
+            <AccordionItem
+                style={styles.item}
+                id="2">
+                <AccordionItem.Header left={leftElement}>
+                    Second Item
+                </AccordionItem.Header>
                 <AccordionItem.Content>
                     <View style={styles.content}>
                         <Text style={styles.text}>
@@ -113,6 +141,19 @@ Controlled.parameters = {
             </AccordionItem>
         </Accordion>
     );
+};
+
+const styles = StyleSheet.create({
+    item: {
+        width: 400,
+    },
+    content: {
+        padding: 'spacings.4',
+    },
+    text: {
+        fontSize: 16,
+    },
+});
             `,
             language: 'tsx',
             type: 'auto',
@@ -132,16 +173,18 @@ NestedAccordion.parameters = {
     docs: {
         source: {
             code: `
-            const { Accordion, AccordionItem, Icon, View, Text } = useMolecules();
+export const ExampleNestedAccordion = () => {
+    const { View, Text } = useMolecules();
+
     const leftElement = useCallback(
         ({ expanded, color }: AccordionHeaderElementProps) => (
             <Icon color={color} name={expanded ? 'chevron-up' : 'chevron-down'} size={24} />
         ),
-        [Icon],
+        [],
     );
 
     return (
-        <Accordion multiple>
+        <Accordion>
             <AccordionItem style={styles.item} id="1">
                 <AccordionItem.Header left={leftElement}>
                     Accordion (Accordion Group)
@@ -190,6 +233,19 @@ NestedAccordion.parameters = {
             </AccordionItem>
         </Accordion>
     );
+};
+
+const styles = StyleSheet.create({
+    item: {
+        width: 400,
+    },
+    content: {
+        padding: 'spacings.4',
+    },
+    text: {
+        fontSize: 16,
+    },
+});
             `,
             language: 'tsx',
             type: 'auto',

@@ -122,10 +122,18 @@ const OptionList = <
         [TouchableRipple, onPressItem, renderItemProp, selectable],
     );
 
+    const keyExtractor = useCallback((item: TItem) => `${item.id}`, []);
+
     return (
         <View style={containerStyles}>
             <>{SearchField && <View style={searchInputContainerStyles}>{SearchField}</View>}</>
-            <SectionList {...rest} sections={records} renderItem={renderItem} style={style} />
+            <SectionList
+                keyExtractor={keyExtractor}
+                {...rest}
+                sections={records}
+                renderItem={renderItem}
+                style={style}
+            />
         </View>
     );
 };

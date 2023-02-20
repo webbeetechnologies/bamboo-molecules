@@ -67,6 +67,7 @@ import {
     FAB,
     Grid,
     OptionFlatList,
+    ScrollView,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -138,6 +139,7 @@ const defaultComponents: DefaultComponents = {
     FAB,
     Grid,
     OptionFlatList,
+    ScrollView,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

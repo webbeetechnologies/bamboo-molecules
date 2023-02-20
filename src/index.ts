@@ -26,6 +26,7 @@ export {
     CheckboxProps,
     ListItemProps,
     FlatListProps,
+    FlatListRef,
     SectionListProps,
     SectionListRenderItemInfo,
     SectionListRenderItem,
@@ -123,6 +124,8 @@ export {
     FABProps,
     OptionFlatList,
     GridProps,
+    ScrollViewProps,
+    ScrollViewRef,
 } from './components';
 
 export {

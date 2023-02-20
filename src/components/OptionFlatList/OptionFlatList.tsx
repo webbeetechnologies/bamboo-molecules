@@ -8,8 +8,7 @@ import {
     useMemo,
 } from 'react';
 import type { ViewStyle } from 'react-native';
-import type { FlatList } from 'react-native';
-import type { ListRenderItemInfo } from '@shopify/flash-list';
+import type { FlatList, ListRenderItemInfo } from 'react-native';
 
 import {
     useComponentStyles,
@@ -131,10 +130,18 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>({
         [TouchableRipple, onPressItem, renderItemProp, selectable],
     );
 
+    const keyExtractor = useCallback((item: TItem) => `${item.id}`, []);
+
     return (
         <View style={containerStyles}>
             <>{SearchField && <View style={searchInputContainerStyles}>{SearchField}</View>}</>
-            <FlatListComponent {...rest} data={records} renderItem={renderItem} style={style} />
+            <FlatListComponent
+                keyExtractor={keyExtractor}
+                {...rest}
+                data={records}
+                renderItem={renderItem}
+                style={style}
+            />
         </View>
     );
 };

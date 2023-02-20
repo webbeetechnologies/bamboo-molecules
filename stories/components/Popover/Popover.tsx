@@ -1,4 +1,5 @@
 import { FC, useRef } from 'react';
+import { StyleSheet } from 'react-native';
 import { useMolecules, useToggle } from '../../../src';
 import { Button, Popover, PopoverProps } from '../../../src/components';
 
@@ -9,7 +10,7 @@ export const Example: FC<PopoverProps> = props => {
 
     return (
         <>
-            <View style={{ padding: 100 }}>
+            <View style={styles.container}>
                 <Button ref={triggerRef} onPress={onToggle} testID={'trigger'}>
                     Show Popover
                 </Button>
@@ -28,3 +29,9 @@ export const PopoverContent = () => {
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 'spacings.24',
+    },
+});
