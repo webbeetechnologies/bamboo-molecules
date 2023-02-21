@@ -28,7 +28,7 @@ const Checkbox = (
         value: valueProp,
         onChange: onChangeProp,
         defaultValue,
-        disabled: disabled || !!indeterminate,
+        disabled: disabled,
     });
 
     const CheckboxComponent = platform === 'ios' ? CheckboxIOS : CheckboxAndroid;

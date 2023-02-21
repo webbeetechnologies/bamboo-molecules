@@ -54,7 +54,7 @@ const CheckboxItem = (
         value: valueProp,
         onChange: onChangeProp,
         defaultValue,
-        disabled: disabled || !!indeterminate,
+        disabled: disabled,
     });
     const componentStyles = useComponentStyles('Checkbox', styleProp, {
         variant: 'item',

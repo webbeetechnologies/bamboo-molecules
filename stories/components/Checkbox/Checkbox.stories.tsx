@@ -10,7 +10,6 @@ export default {
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;
 
 Default.args = {
-    indeterminate: false,
     disabled: false,
     defaultValue: true,
 };
