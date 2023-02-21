@@ -166,4 +166,6 @@ export * from './Grid';
 
 export * from './OptionFlatList';
 
+export * from './Portal';
+
 export * from './ScrollView';
