@@ -13,4 +13,5 @@ const Checkbox = Object.assign(
 export default Checkbox;
 
 export { Props as CheckboxProps } from './Checkbox';
+export { Props as CheckboxItemProps } from './CheckboxItem';
 export { defaultStyles as checkboxStyles } from './utils';
