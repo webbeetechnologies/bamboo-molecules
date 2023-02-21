@@ -23,8 +23,11 @@ export type NavigationStackHandle = {
 };
 
 const NavigationStack = ({ initialRouteName, children }: Props, ref: any) => {
-    const [currentStack, setCurrentStack] = useState<string[]>([
-        initialRouteName || (Array.isArray(children) ? children[0] : children)?.props?.name || '',
+    const [currentStack, setCurrentStack] = useState<string[]>(() => [
+        initialRouteName ||
+            (Array.isArray(children) ? children.find(child => !!child?.props?.name) : children)
+                ?.props?.name ||
+            '',
     ]);
     const currentRoute = currentStack[currentStack.length - 1] || '';
 
