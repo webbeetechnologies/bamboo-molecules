@@ -2202,9 +2202,9 @@ __metadata:
     ts-jest: ^29.0.3
     typescript: ~4.3.5
   peerDependencies:
-    react-native-document-picker: ^8.1.3
-    react-native-gesture-handler: ^2.9.0
-    react-native-vector-icons: ">9.2.0"
+    react-native-document-picker: "*"
+    react-native-gesture-handler: "*"
+    react-native-vector-icons: ">=9.2.0 < 19"
   languageName: unknown
   linkType: soft
 
@@ -4405,20 +4405,6 @@ __metadata:
     component-type: ^1.2.1
     join-component: ^1.1.0
   checksum: 8c4aacc903fb717619b69ca7eecf8d4a7b928661b0e835c9cd98f1b858a85ce62c348369ad9a52cb2df8df02578c0525a73fce4c69a42ac414d9554cc6be7117
-  languageName: node
-  linkType: hard
-
-"@shopify/flash-list@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@shopify/flash-list@npm:1.4.0"
-  dependencies:
-    recyclerlistview: 4.2.0
-    tslib: 2.4.0
-  peerDependencies:
-    "@babel/runtime": "*"
-    react: "*"
-    react-native: "*"
-  checksum: c6510b0d6ae6404fe92ede0c918ba184bc2b27ed39c627eebad16a6542792cb34e750e2004e1a9ce165f9d729f1af0555cba1e4c224fd52bfd2a600fdc9e2a65
   languageName: node
   linkType: hard
 
@@ -17792,7 +17778,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.debounce@npm:4.0.8, lodash.debounce@npm:^4.0.8":
+"lodash.debounce@npm:^4.0.8":
   version: 4.0.8
   resolution: "lodash.debounce@npm:4.0.8"
   checksum: a3f527d22c548f43ae31c861ada88b2637eb48ac6aa3eb56e82d44917971b8aa96fbb37aa60efea674dc4ee8c42074f90f7b1f772e9db375435f6c83a19b3bc6
@@ -21725,7 +21711,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.8.1, prop-types@npm:^15.0.0, prop-types@npm:^15.6.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.0.0, prop-types@npm:^15.6.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -22627,20 +22613,6 @@ __metadata:
   dependencies:
     minimatch: 3.0.4
   checksum: a6b22994d76458443d4a27f5fd7147ac63ad31bba972666a291d511d4d819ee40ff71ba7524c14f6a565b8cfaf7f48b318f971804b913cf538d58f04e25d1fee
-  languageName: node
-  linkType: hard
-
-"recyclerlistview@npm:4.2.0":
-  version: 4.2.0
-  resolution: "recyclerlistview@npm:4.2.0"
-  dependencies:
-    lodash.debounce: 4.0.8
-    prop-types: 15.8.1
-    ts-object-utils: 0.0.5
-  peerDependencies:
-    react: ">= 15.2.1"
-    react-native: ">= 0.30.0"
-  checksum: 6cba6a99fb487067c509112b94e3d4d3905d782bbcb7af2cffbd57c601a4650d670e4eee5fec18d195d58ff6ec01a47288c5510379a2f37da3c5fc0a58860441
   languageName: node
   linkType: hard
 
@@ -25045,7 +25017,6 @@ __metadata:
     "@babel/core": ^7.18.10
     "@expo/vector-icons": ^13.0.0
     "@expo/webpack-config": ^0.17.0
-    "@shopify/flash-list": ^1.4.0
     "@types/react": ~18.0.14
     "@types/react-native": ~0.69.1
     babel-loader: ^8.2.5
@@ -25060,9 +25031,11 @@ __metadata:
     react-dom: 18.0.0
     react-native: 0.69.6
     react-native-document-picker: ^8.1.2
+    react-native-gesture-handler: ^2.9.0
     react-native-paper: 5.0.0-rc.8
     react-native-web: ~0.18.7
     typescript: ~4.3.5
+    uuid: 3.4.0
   languageName: unknown
   linkType: soft
 
@@ -25391,13 +25364,6 @@ __metadata:
   bin:
     ts-jest: cli.js
   checksum: 541e51776d367fa2279af47f75af94b03e0538f1839ea9983de0f4ad7f188002f6eb1fc72440651d96daa62d25a7bc679a129c14e6ef291277eea9346751d56b
-  languageName: node
-  linkType: hard
-
-"ts-object-utils@npm:0.0.5":
-  version: 0.0.5
-  resolution: "ts-object-utils@npm:0.0.5"
-  checksum: 83c48fbdaba392fb2c01cea53b267ed5538d2bb44fc6c3eecc10bcfabc1780bfa6ec8569b52bbf0140d9b521d9049d5f15884e12286918244d463d854dbc73cb
   languageName: node
   linkType: hard
 
@@ -26124,7 +26090,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^3.3.2, uuid@npm:^3.4.0":
+"uuid@npm:3.4.0, uuid@npm:^3.3.2, uuid@npm:^3.4.0":
   version: 3.4.0
   resolution: "uuid@npm:3.4.0"
   bin:

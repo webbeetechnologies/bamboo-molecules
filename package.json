@@ -113,9 +113,9 @@
     "typescript": "~4.3.5"
   },
   "peerDependencies": {
-    "react-native-document-picker": "^8.1.3",
-    "react-native-gesture-handler": "^2.9.0",
-    "react-native-vector-icons": ">9.2.0"
+    "react-native-document-picker": "*",
+    "react-native-gesture-handler": "*",
+    "react-native-vector-icons": ">=9.2.0 < 19"
   },
   "react-native-builder-bob": {
     "source": "src",

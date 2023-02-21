@@ -14,6 +14,7 @@ export type ITheme = AtomsTheme & {
 };
 
 export type MD3Theme = {
+    themeName: string;
     dark: boolean;
     animation: {
         scale: number;

@@ -1,3 +1,5 @@
+import normalizeStyles from './normalizeStyles';
+import { resolveComponentStyles } from './resolveComponentStyles';
 export { default as normalizeStyles } from './normalizeStyles';
 export { resolveComponentStyles, flattenStateStyles } from './resolveComponentStyles';
 export { default as mergeRefs } from './mergeRefs';
@@ -21,3 +23,8 @@ export { BackgroundContext } from './backgroundContext';
 export { default as createNumberMask } from './createNumberMask/createNumberMask';
 
 export { addEventListener, addListener } from './addEventListener';
+
+export const clearStylesCache = () => {
+    normalizeStyles.cache.clear();
+    resolveComponentStyles.cache.clear();
+};

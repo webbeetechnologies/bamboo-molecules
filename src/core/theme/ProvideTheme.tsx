@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import {
     ProvideTheme as AtomProvideTheme,
     extendTheme as extendThemeAtoms,
@@ -121,6 +121,8 @@ import {
     resolveComponentStyles as defaultResolveComponentStyles,
 } from '../../utils';
 import type { ITheme, ProvideThemeArgs } from './types';
+import { usePrevious } from '../../hooks';
+import { clearStylesCache } from '../../utils';
 
 const defaultThemeValue: Partial<ITheme> = {
     light: MD3LightTheme,
@@ -293,6 +295,17 @@ export const ProvideTheme = ({
             resolveComponentStyles,
         }),
         [resolveComponentStyles, theme],
+    );
+
+    const memoizedThemeRef = usePrevious(memoizedTheme);
+
+    useEffect(
+        () => () => {
+            // When theme changes burst cache
+            if (memoizedThemeRef.current === memoizedTheme) return;
+            clearStylesCache();
+        },
+        [memoizedTheme, memoizedThemeRef],
     );
 
     return (
