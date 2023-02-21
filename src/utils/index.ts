@@ -22,6 +22,8 @@ export { BackgroundContext } from './backgroundContext';
 
 export { default as createNumberMask } from './createNumberMask/createNumberMask';
 
+export { addEventListener, addListener } from './addEventListener';
+
 export const clearStylesCache = () => {
     normalizeStyles.cache.clear();
     resolveComponentStyles.cache.clear();

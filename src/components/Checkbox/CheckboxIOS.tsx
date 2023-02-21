@@ -1,33 +1,20 @@
-import { forwardRef, memo, useMemo } from 'react';
+import { forwardRef, memo, useCallback, useMemo } from 'react';
 import setColor from 'color';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { CheckBoxBaseProps } from './types';
 
-export type Props = Omit<CheckBoxBaseProps, 'uncheckedColor'> & {};
+export type Props = Omit<CheckBoxBaseProps, 'uncheckedColor' | 'value' | 'defaultValue'> & {
+    value: boolean;
+};
 
-/**
- * Checkboxes allow the selection of multiple options from a set.
- * This component follows platform guidelines for iOS, but can be used
- * on any platform.
- *
- * <div class="screenshots">
- *   <figure>
- *     <img src="screenshots/checkbox-enabled.ios.png" />
- *     <figcaption>Enabled</figcaption>
- *   </figure>
- *   <figure>
- *     <img src="screenshots/checkbox-disabled.ios.png" />
- *     <figcaption>Disabled</figcaption>
- *   </figure>
- * </div>
- */
 const CheckboxIOS = (
     {
-        status,
+        value: checked,
+        indeterminate,
         disabled = false,
         size = 'sm',
-        onChange,
+        onChange: onChangeProp,
         color: colorProp,
         style,
         testID,
@@ -37,14 +24,11 @@ const CheckboxIOS = (
 ) => {
     const { TouchableRipple, Icon, View } = useMolecules();
 
-    const checked = status === 'checked';
-    const indeterminate = status === 'indeterminate';
-
     const componentStyles = useComponentStyles('Checkbox', style, {
         variant: 'ios',
         states: {
             disabled,
-            checked,
+            checked: checked && !indeterminate,
         },
         size,
     });
@@ -75,6 +59,10 @@ const CheckboxIOS = (
                 iconContainerStyles: { opacity: indeterminate || checked ? 1 : 0 },
             };
         }, [checked, colorProp, componentStyles, indeterminate]);
+
+    const onChange = useCallback(() => {
+        onChangeProp?.(!checked);
+    }, [checked, onChangeProp]);
 
     const icon = indeterminate ? 'minus' : 'check';
 

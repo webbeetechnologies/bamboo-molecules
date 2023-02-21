@@ -55,6 +55,7 @@ import {
     Drawer,
     Appbar,
     MaskedInput,
+    NavigationStack,
     Accordion,
     AccordionItem,
     Rating,
@@ -66,6 +67,7 @@ import {
     FAB,
     Grid,
     OptionFlatList,
+    Portal,
     ScrollView,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
@@ -128,6 +130,7 @@ const defaultComponents: DefaultComponents = {
     Drawer,
     Appbar,
     MaskedInput,
+    NavigationStack,
     Accordion,
     AccordionItem,
     Rating,
@@ -137,6 +140,7 @@ const defaultComponents: DefaultComponents = {
     FAB,
     Grid,
     OptionFlatList,
+    Portal,
     ScrollView,
 };
 
