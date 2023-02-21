@@ -80,8 +80,7 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                     <Overlay
                         style={popoverStyles.overlayStyles}
                         isOpen={isOpen}
-                        onRequestClose={onClose}
-                        useRNModalOnAndroid>
+                        onRequestClose={onClose}>
                         <PresenceTransition
                             initial={popoverStyles.initialTransition}
                             animate={popoverStyles.animateTransition}
