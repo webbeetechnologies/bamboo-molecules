@@ -3,9 +3,21 @@ import type { TouchableRippleProps } from '../TouchableRipple';
 
 export type CheckBoxBaseProps = Omit<TouchableRippleProps, 'children'> & {
     /**
-     * Status of checkbox.
+     * value of checkbox.
      */
-    status: 'checked' | 'unchecked' | 'indeterminate';
+    value?: boolean;
+    /**
+     * defaultValue of checkbox.
+     */
+    defaultValue?: boolean;
+    /**
+     * function execute when the value change i.e checkbox is press
+     */
+    onChange?: (newValue: boolean) => void;
+    /**
+     * Whether or not if it's in the indeterminate state, if true, it will override the value
+     */
+    indeterminate?: boolean;
     /**
      * Whether checkbox is disabled.
      */
@@ -15,10 +27,6 @@ export type CheckBoxBaseProps = Omit<TouchableRippleProps, 'children'> & {
      * Should be a number or a Design Token
      */
     size?: 'sm' | 'md' | 'lg';
-    /**
-     * Function to execute on press.
-     */
-    onChange?: () => void;
     /**
      * Custom color for unchecked checkbox.
      */

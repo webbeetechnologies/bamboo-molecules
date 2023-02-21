@@ -1,7 +1,8 @@
-import { forwardRef, memo, useMemo } from 'react';
-import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import { forwardRef, memo, useCallback, useMemo } from 'react';
+import { StyleProp, StyleSheet, TextStyle, ViewStyle } from 'react-native';
+import type { LabelProps } from '@bambooapp/bamboo-atoms';
 
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { CheckBoxBaseProps } from './types';
 import Checkbox from './Checkbox';
 
@@ -17,53 +18,47 @@ export type Props = CheckBoxBaseProps & {
     /**
      * Style that is passed to Container element.
      */
-    containerStyle?: StyleProp<ViewStyle>;
+    containerStyle?: ViewStyle;
+    /**
+     * props for the label
+     */
+    labelProps?: Omit<LabelProps, 'children' | 'style'>;
     /**
      * Checkbox control position.
      */
     position?: 'leading' | 'trailing';
 };
 
-/**
- * Checkbox.Item allows you to press the whole row (item) instead of only the Checkbox.
- *
- * ## Usage
- * ```js
- * import * as React from 'react';
- * import { View } from 'react-native';
- * import { Checkbox } from 'react-native-paper';
- *
- * const MyComponent = () => (
- *   <View>
- *     <Checkbox.Item label="Item" status="checked" />
- *   </View>
- * );
- *
- * export default MyComponent;
- *```
- */
-
 const CheckboxItem = (
     {
         style: styleProp,
         containerStyle,
-        status,
+        value: valueProp,
         label,
-        onChange,
+        onChange: onChangeProp,
+        defaultValue,
         labelStyle,
         testID,
-        position = 'trailing',
+        position = 'leading',
         accessibilityLabel = label,
         disabled = false,
         size = 'md',
+        labelProps,
+        indeterminate,
         ...props
     }: Props,
     ref: any,
 ) => {
     const { Text, TouchableRipple } = useMolecules();
+    const [value, onChange] = useControlledValue({
+        value: valueProp,
+        onChange: onChangeProp,
+        defaultValue,
+        disabled: disabled,
+    });
     const componentStyles = useComponentStyles('Checkbox', styleProp, {
         variant: 'item',
-        states: { disabled },
+        states: { disabled, checked: value && !indeterminate },
         size,
     });
 
@@ -91,6 +86,8 @@ const CheckboxItem = (
                 {
                     color: labelColor,
                     textAlign: isLeading ? 'right' : 'left',
+                    paddingLeft: isLeading ? 0 : 'spacings.2',
+                    paddingRight: !isLeading ? 0 : 'spacings.2',
                 },
                 fontSize ? { fontSize } : {},
                 labelStyle,
@@ -99,34 +96,50 @@ const CheckboxItem = (
         };
     }, [componentStyles, containerStyle, isLeading, labelStyle]);
 
+    const onPress = useCallback(() => {
+        onChange(!value);
+    }, [onChange, value]);
+
     const checkbox = useMemo(() => {
-        const checkboxProps = { ...props, status, disabled, size, style };
+        const checkboxProps = {
+            ...props,
+            indeterminate,
+            defaultValue: false,
+            value,
+            onChange,
+            disabled,
+            size,
+            style,
+        };
 
         return <Checkbox {...checkboxProps} />;
-    }, [props, status, disabled, size, style]);
+    }, [props, indeterminate, value, onChange, disabled, size, style]);
+
+    const accessibilityState = useMemo(
+        () => ({
+            checked: value,
+            disabled,
+        }),
+        [disabled, value],
+    );
 
     return (
         <TouchableRipple
+            style={containerStyles}
             accessibilityLabel={accessibilityLabel}
             accessibilityRole="checkbox"
-            accessibilityState={{
-                checked: status === 'checked',
-                disabled,
-            }}
-            onPress={onChange}
+            accessibilityState={accessibilityState}
+            onPress={onPress}
             testID={testID}
             disabled={disabled}
             ref={ref}>
-            <View
-                style={containerStyles}
-                pointerEvents="none"
-                importantForAccessibility="no-hide-descendants">
+            <>
                 {isLeading && checkbox}
-                <Text style={labelStyles} selectable={false}>
+                <Text selectable={false} {...labelProps} style={labelStyles}>
                     {label}
                 </Text>
                 {!isLeading && checkbox}
-            </View>
+            </>
         </TouchableRipple>
     );
 };

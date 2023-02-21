@@ -82,18 +82,12 @@ export const defaultStyles: ComponentStylePropWithVariants<
 
             sizes: {
                 sm: {
-                    paddingVertical: 'spacings.1',
-                    paddingHorizontal: 'spacings.4',
                     labelTypeScale: 'typescale.bodyMedium',
                 },
                 md: {
-                    paddingVertical: 'spacings.2',
-                    paddingHorizontal: 'spacings.4',
                     labelTypeScale: 'typescale.bodyLarge',
                 },
                 lg: {
-                    paddingVertical: 'spacings.3',
-                    paddingHorizontal: 'spacings.4',
                     labelTypeScale: 'typescale.bodyLarge',
                     fontSize: 'fontSizes.lg',
                 },

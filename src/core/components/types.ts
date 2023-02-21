@@ -47,6 +47,7 @@ import type {
     Drawer,
     Appbar,
     MaskedInputProps,
+    NavigationStack,
     AccordionItem,
     AccordionProps,
     RatingProps,
@@ -116,6 +117,7 @@ export interface DefaultComponents {
     Drawer: typeof Drawer;
     Appbar: typeof Appbar;
     MaskedInput: ComponentType<MaskedInputProps>;
+    NavigationStack: typeof NavigationStack;
     Accordion: ComponentType<AccordionProps>;
     AccordionItem: typeof AccordionItem;
     Rating: ComponentType<RatingProps>;
