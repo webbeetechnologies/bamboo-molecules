@@ -44,6 +44,7 @@ const CheckboxItem = (
         disabled = false,
         size = 'md',
         labelProps,
+        indeterminate,
         ...props
     }: Props,
     ref: any,
@@ -53,11 +54,11 @@ const CheckboxItem = (
         value: valueProp,
         onChange: onChangeProp,
         defaultValue,
-        disabled,
+        disabled: disabled || !!indeterminate,
     });
     const componentStyles = useComponentStyles('Checkbox', styleProp, {
         variant: 'item',
-        states: { disabled, checked: value },
+        states: { disabled, checked: value && !indeterminate },
         size,
     });
 
@@ -102,6 +103,7 @@ const CheckboxItem = (
     const checkbox = useMemo(() => {
         const checkboxProps = {
             ...props,
+            indeterminate,
             defaultValue: false,
             value,
             onChange,
@@ -111,7 +113,7 @@ const CheckboxItem = (
         };
 
         return <Checkbox {...checkboxProps} />;
-    }, [props, value, onChange, disabled, size, style]);
+    }, [props, indeterminate, value, onChange, disabled, size, style]);
 
     const accessibilityState = useMemo(
         () => ({
