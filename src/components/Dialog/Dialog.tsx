@@ -68,9 +68,9 @@ export type Props = ModalProps & {
  * export default MyComponent;
  * ```
  */
-const Dialog = ({ children, onClose, iconProps, contentStyle = {}, ...rest }: Props) => {
+const Dialog = ({ children, onClose, iconProps, style = {}, ...rest }: Props) => {
     const { Modal } = useMolecules();
-    const componentStyles = useComponentStyles('Dialog', { container: contentStyle });
+    const componentStyles = useComponentStyles('Dialog', { container: style });
 
     const { containerStyle, childStyle } = useMemo(() => {
         const { spacing, container } = componentStyles;
@@ -99,7 +99,7 @@ const Dialog = ({ children, onClose, iconProps, contentStyle = {}, ...rest }: Pr
     );
 
     return (
-        <Modal elevation={2} {...rest} onClose={onClose} contentStyle={containerStyle}>
+        <Modal elevation={2} {...rest} onClose={onClose} style={containerStyle}>
             <>
                 {iconProps ? <DialogIcon {...iconProps} /> : null}
                 {dialogChildren}

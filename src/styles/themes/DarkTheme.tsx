@@ -43,7 +43,7 @@ export const generateDarkThemeColors = (
         inverseSurface: palette.neutral90,
         inverseOnSurface: palette.neutral20,
         inversePrimary: palette.primary40,
-        backdrop: color(palette.neutralVariant20).alpha(0.4).rgb().string(),
+        backdrop: color(palette.neutralVariant20).alpha(0.4).hexa(),
         disabled: palette.neutral40,
         disabledOnBackground: color(palette.neutral100).alpha(0.1).rgb().string(),
         neutral1: palette.neutral70,
@@ -78,6 +78,7 @@ export const generateDarkThemeColors = (
 
 export const MD3DarkTheme: MD3Theme = {
     ...MD3LightTheme,
+    themeName: 'MD3DarkTheme',
     dark: true,
     colors: generateDarkThemeColors(ref.palette, ref.opacity),
 };

@@ -2,7 +2,10 @@ import type { StyleProp } from 'react-native';
 import type { MD3Theme } from '../core/theme/types';
 import { createMemoizedFunction, get } from './lodash';
 
-const normalizeStylesMemo = createMemoizedFunction();
+const normalizeStylesMemo = createMemoizedFunction({
+    resolver: (styles: StyleProp<any> | StyleProp<any>[], { themeName }: MD3Theme) =>
+        JSON.stringify(styles) + themeName,
+});
 
 // normalize tokens inside the styles object and the subsequent objects inside it
 const normalizeStyles: StyleProp<any> | StyleProp<any>[] = normalizeStylesMemo(

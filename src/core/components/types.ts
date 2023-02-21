@@ -47,6 +47,7 @@ import type {
     Drawer,
     Appbar,
     MaskedInputProps,
+    NavigationStack,
     AccordionItem,
     AccordionProps,
     RatingProps,
@@ -58,6 +59,7 @@ import type {
     FABProps,
     GridProps,
     IOptionFlatList,
+    Portal,
     ScrollViewProps,
     DataTable,
 } from '../../components';
@@ -116,6 +118,7 @@ export interface DefaultComponents {
     Drawer: typeof Drawer;
     Appbar: typeof Appbar;
     MaskedInput: ComponentType<MaskedInputProps>;
+    NavigationStack: typeof NavigationStack;
     Accordion: ComponentType<AccordionProps>;
     AccordionItem: typeof AccordionItem;
     Rating: ComponentType<RatingProps>;
@@ -126,6 +129,7 @@ export interface DefaultComponents {
     FAB: ComponentType<FABProps>;
     Grid: ComponentType<GridProps>;
     OptionFlatList: IOptionFlatList;
+    Portal: typeof Portal;
     ScrollView: ComponentType<ScrollViewProps>;
     DataTable: typeof DataTable;
 }

@@ -1,7 +1,6 @@
 import { OverlayContainer } from '@react-native-aria/overlays';
 import { memo, useMemo, useState } from 'react';
-import { Platform, StyleSheet } from 'react-native';
-import { Modal } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useKeyboardDismissable } from '../../hooks';
 import { ExitAnimationContext } from '../Animations';
 import type { OverlayProps } from './types';
@@ -11,7 +10,6 @@ const Overlay = ({
     children,
     onRequestClose,
     animationPreset = 'fade',
-    useRNModalOnAndroid = false,
     isKeyboardDismissable = true,
     style,
 }: OverlayProps) => {
@@ -37,20 +35,6 @@ const Overlay = ({
 
         return styles;
     }, [style, animationPreset, exited, isOpen]);
-
-    if (Platform.OS === 'android' && useRNModalOnAndroid) {
-        return (
-            <ExitAnimationContext.Provider value={value}>
-                <Modal
-                    transparent
-                    visible={isOpen}
-                    onRequestClose={onRequestClose}
-                    animationType={animationPreset}>
-                    {children}
-                </Modal>
-            </ExitAnimationContext.Provider>
-        );
-    }
 
     return (
         <ExitAnimationContext.Provider value={value}>

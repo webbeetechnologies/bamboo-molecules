@@ -1,35 +1,33 @@
-import { forwardRef, memo, useMemo } from 'react';
+import { useRef, useEffect, ReactNode, useCallback, useMemo, memo, forwardRef } from 'react';
 import {
-    Modal as NativeModal,
-    Platform,
-    TouchableWithoutFeedback,
-    ModalProps,
+    Animated,
+    BackHandler,
+    Easing,
+    NativeEventSubscription,
+    StyleProp,
     StyleSheet,
-    ViewStyle,
+    TouchableWithoutFeedback,
     useWindowDimensions,
+    ViewStyle,
 } from 'react-native';
-import type { SurfaceProps } from '../Surface';
+
+import type { MD3Elevation } from '../../core/theme/types';
+import { addEventListener } from '../../utils';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
-export type Props = Omit<ModalProps, 'visible' | 'onDismiss' | 'onRequestClose'> & {
+export type Props = {
     /**
-     * style for the contentContainer
+     * Determines whether clicking outside the modal dismiss it.
      */
-    style?: ViewStyle;
+    dismissible?: boolean;
     /**
-     * together with style prop, by setting width and height, can be used to position the modal content
+     * Accessibility label for the overlay. This is read by the screen reader when the user taps outside the modal.
      */
-    contentStyle?: ViewStyle;
-    /**
-     * Size of the modal
-     * md - width and height - auto
-     * lg - maxWidth:600, maxHeight:800
-     */
-    size?: 'md' | 'lg';
+    overlayAccessibilityLabel?: string;
     /**
      * content elevation
      */
-    elevation?: SurfaceProps['elevation'];
+    elevation?: MD3Elevation;
     /**
      * to determine whether the modal is visible or not
      */
@@ -38,77 +36,201 @@ export type Props = Omit<ModalProps, 'visible' | 'onDismiss' | 'onRequestClose'>
      * onClose function will be trigger when the modal is dismissed
      */
     onClose?: () => void;
+    /**
+     * Content of the `Modal`.
+     */
+    children: ReactNode;
+    /**
+     * Style for the content of the modal
+     */
+    contentContainerStyle?: StyleProp<ViewStyle>;
+    /**
+     * Size of the modal
+     * md - width and height - auto
+     * lg - maxWidth:600, maxHeight:800
+     */
+    size?: 'md' | 'lg';
+    /**
+     * Style for the wrapper of the modal.
+     * Use this prop to change the default wrapper style or to override safe area insets with marginTop and marginBottom.
+     */
+    style?: StyleProp<ViewStyle>;
+    /**
+     * Duration of the animations in the modal
+     * @default 220
+     * */
+    animationDuration?: number;
+    /**
+     * testID to be used on tests.
+     */
+    testID?: string;
 };
 
-const Modal = (
+const DEFAULT_DURATION = 220;
+
+function Modal(
     {
-        animationType,
-        style: styleProp,
-        children,
-        contentStyle: contentStyleProp,
-        size = 'md',
-        elevation = 2,
-        isOpen,
+        dismissible = true,
+        isOpen = false,
+        overlayAccessibilityLabel = 'Close modal',
         onClose,
-        ...rest
+        children,
+        contentContainerStyle: contentContainerStyleProp,
+        elevation,
+        size = 'md',
+        style,
+        animationDuration = DEFAULT_DURATION,
+        testID = 'modal',
     }: Props,
     ref: any,
-) => {
-    const { View, Surface } = useMolecules();
-    const componentStyles = useComponentStyles('Modal', styleProp, {
+) {
+    const { Surface, View } = useMolecules();
+    const componentStyles = useComponentStyles('Modal', style, {
         size,
     });
+
+    const visibleRef = useRef<boolean>(isOpen);
+    const subscriptionRef = useRef<NativeEventSubscription | undefined>(undefined);
+    const prevVisible = useRef<boolean | null>(null);
+    const opacityRef = useRef(new Animated.Value(isOpen ? 1 : 0));
+    const hideModalRef = useRef<() => void>(() => {});
+
     const dimensions = useWindowDimensions();
 
-    const { modalBackgroundStyle, contentContainerStyle, contentStyle } = useMemo(() => {
-        const { modalBackground, contentContainer, modalContent, ...restStyle } = componentStyles;
+    const { animationScale, backdropStyle, contentContainerStyle, contentStyle } = useMemo(() => {
+        const {
+            animationScale: _animationScale = 1,
+            backdrop,
+            contentContainer,
+            modalContent,
+            ...restStyle
+        } = componentStyles;
 
         return {
-            modalBackgroundStyle: [StyleSheet.absoluteFill, modalBackground],
-            contentContainerStyle: [StyleSheet.absoluteFill, contentContainer, restStyle],
-            contentStyle: [modalContent, { width: dimensions.width }, contentStyleProp],
+            animationScale: _animationScale,
+            backdropStyle: [
+                backdrop,
+                {
+                    // @ts-ignore to resolve maximum callstack exceeded issue
+                    // TODO - find out why this is happening(it isn't happening on contentStyle)
+                    opacity: opacityRef.current._value,
+                },
+            ],
+            contentContainerStyle: [
+                StyleSheet.absoluteFill,
+                contentContainer,
+                contentContainerStyleProp,
+            ],
+            contentStyle: [
+                modalContent,
+                { width: dimensions.width, opacity: opacityRef.current },
+                restStyle,
+            ],
             style: restStyle,
         };
-    }, [componentStyles, contentStyleProp, dimensions.width]);
+    }, [componentStyles, contentContainerStyleProp, dimensions.width, opacityRef]);
 
-    const animationTypeCalculated =
-        animationType ||
-        Platform.select({
-            web: 'none',
-            default: 'slide',
+    const handleBack = useCallback(() => {
+        if (dismissible) {
+            hideModalRef.current();
+        }
+        return true;
+    }, [dismissible]);
+
+    const showModal = useCallback(() => {
+        subscriptionRef.current?.remove();
+
+        subscriptionRef.current = addEventListener(BackHandler, 'hardwareBackPress', handleBack);
+
+        Animated.timing(opacityRef.current, {
+            toValue: 1,
+            duration: animationScale * animationDuration,
+            easing: Easing.out(Easing.cubic),
+            useNativeDriver: true,
+        }).start();
+    }, [animationDuration, animationScale, handleBack, opacityRef]);
+
+    const removeListeners = useCallback(() => {
+        if (subscriptionRef.current?.remove) {
+            subscriptionRef.current?.remove();
+
+            return;
+        }
+
+        BackHandler.removeEventListener('hardwareBackPress', handleBack);
+    }, [handleBack]);
+
+    const hideModal = useCallback(() => {
+        removeListeners();
+
+        Animated.timing(opacityRef.current, {
+            toValue: 0,
+            duration: animationScale * animationDuration,
+            easing: Easing.out(Easing.cubic),
+            useNativeDriver: true,
+        }).start(({ finished }) => {
+            if (!finished) {
+                return;
+            }
+
+            if (isOpen && onClose) {
+                onClose();
+            }
         });
+    }, [removeListeners, opacityRef, animationScale, animationDuration, isOpen, onClose]);
+
+    useEffect(() => {
+        hideModalRef.current = hideModal;
+    }, [hideModal]);
+
+    useEffect(() => {
+        visibleRef.current = isOpen;
+    });
+
+    useEffect(() => {
+        if (prevVisible.current !== isOpen) {
+            if (isOpen) {
+                showModal();
+            } else {
+                hideModal();
+            }
+        }
+        prevVisible.current = isOpen;
+    }, [hideModal, showModal, isOpen]);
+
+    useEffect(() => {
+        return removeListeners;
+    }, [removeListeners]);
+
+    if (!isOpen) return null;
 
     return (
-        <NativeModal
-            supportedOrientations={supportedOrientations}
-            animationType={animationTypeCalculated}
-            presentationStyle="overFullScreen"
-            transparent={true}
-            statusBarTranslucent={true}
-            {...rest}
-            visible={!!isOpen}
-            ref={ref}
-            onRequestClose={onClose}>
-            <>
-                <TouchableWithoutFeedback onPress={onClose}>
-                    <View style={modalBackgroundStyle} />
-                </TouchableWithoutFeedback>
-                <View style={contentContainerStyle} pointerEvents="box-none">
-                    <Surface style={contentStyle} elevation={elevation}>
-                        {children}
-                    </Surface>
-                </View>
-            </>
-        </NativeModal>
+        <Animated.View
+            pointerEvents={isOpen ? 'auto' : 'none'}
+            accessibilityViewIsModal
+            accessibilityLiveRegion="polite"
+            style={StyleSheet.absoluteFill}
+            onAccessibilityEscape={hideModal}
+            testID={testID}
+            ref={ref}>
+            <TouchableWithoutFeedback
+                accessibilityLabel={overlayAccessibilityLabel}
+                accessibilityRole="button"
+                disabled={!dismissible}
+                onPress={dismissible ? hideModal : undefined}
+                importantForAccessibility="no">
+                <Animated.View testID={`${testID}-backdrop`} style={backdropStyle} />
+            </TouchableWithoutFeedback>
+            <View
+                style={contentContainerStyle}
+                pointerEvents="box-none"
+                testID={`${testID}-contentContainer`}>
+                <Surface style={contentStyle} elevation={elevation} testID={`${testID}-content`}>
+                    {children}
+                </Surface>
+            </View>
+        </Animated.View>
     );
-};
-
-const supportedOrientations: any = [
-    'portrait',
-    'portrait-upside-down',
-    'landscape',
-    'landscape-left',
-    'landscape-right',
-];
+}
 
 export default memo(forwardRef(Modal));
