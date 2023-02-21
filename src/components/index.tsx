@@ -144,6 +144,8 @@ export * from './Appbar';
 
 export * from './MaskedInput';
 
+export * from './NavigationStack';
+
 export * from './Accordion';
 
 export * from './Rating';
