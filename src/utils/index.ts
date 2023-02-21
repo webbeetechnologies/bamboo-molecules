@@ -19,3 +19,5 @@ export * from './date-fns';
 export { BackgroundContext } from './backgroundContext';
 
 export { default as createNumberMask } from './createNumberMask/createNumberMask';
+
+export { addEventListener, addListener } from './addEventListener';

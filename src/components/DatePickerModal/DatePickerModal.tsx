@@ -7,28 +7,17 @@ import { DatePickerModalContent } from './DatePickerModalContent';
 import type { DatePickerModalProps } from './types';
 
 export function DatePickerModal(props: DatePickerModalProps) {
-    const { View, Modal } = useMolecules();
+    const { View, Modal, Portal } = useMolecules();
     const dimensions = useWindowDimensions();
 
     const {
         isOpen,
-        animationType,
         disableStatusBar,
         disableStatusBarPadding,
         mode = 'single',
         style: styleProp,
         ...rest
     } = props;
-
-    const animationTypeCalculated = useMemo<typeof animationType>(
-        () =>
-            animationType ||
-            Platform.select({
-                web: 'none',
-                default: 'slide',
-            }),
-        [animationType],
-    );
 
     const componentStyles = useComponentStyles('DatePickerModal', styleProp);
 
@@ -49,48 +38,38 @@ export function DatePickerModal(props: DatePickerModalProps) {
                 : 'light-content') as StatusBarStyle,
             modalContentStyle:
                 dimensions.width > 650
-                    ? { flex: 1 }
+                    ? { flex: 1, maxHeight: 600 }
                     : { flex: 1, maxWidth: undefined, maxHeight: undefined, borderRadius: 0 },
         };
     }, [componentStyles, dimensions.width]);
 
     return (
         <View style={containerStyle} pointerEvents="box-none">
-            <Modal
-                animationType={animationTypeCalculated}
-                transparent={true}
-                isOpen={isOpen}
-                onClose={rest.onClose}
-                presentationStyle="overFullScreen"
-                supportedOrientations={supportedOrientations}
-                contentStyle={modalContentStyle}
-                elevation={0}
-                statusBarTranslucent={true}>
-                <>
+            <Portal>
+                <Modal
+                    isOpen={isOpen}
+                    onClose={rest.onClose}
+                    style={modalContentStyle}
+                    elevation={0}>
                     <>
-                        {disableStatusBar ? null : (
-                            <StatusBar translucent={true} barStyle={barStyle} />
-                        )}
+                        <>
+                            {disableStatusBar ? null : (
+                                <StatusBar translucent={true} barStyle={barStyle} />
+                            )}
+                        </>
+
+                        <>{disableStatusBarPadding ? null : <View style={headerStyle} />}</>
+
+                        <DatePickerModalContent
+                            {...rest}
+                            mode={mode as any}
+                            disableSafeTop={disableStatusBar}
+                        />
                     </>
-
-                    <>{disableStatusBarPadding ? null : <View style={headerStyle} />}</>
-
-                    <DatePickerModalContent
-                        {...rest}
-                        mode={mode as any}
-                        disableSafeTop={disableStatusBar}
-                    />
-                </>
-            </Modal>
+                </Modal>
+            </Portal>
         </View>
     );
 }
-const supportedOrientations: any = [
-    'portrait',
-    'portrait-upside-down',
-    'landscape',
-    'landscape-left',
-    'landscape-right',
-];
 
 export default memo(DatePickerModal);

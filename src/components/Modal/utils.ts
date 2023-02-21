@@ -3,7 +3,8 @@ import type { ComponentStylePropWithVariants } from '../../types';
 
 type States = '';
 type CustomProps = {
-    modalBackground?: ViewStyle;
+    animationScale?: string;
+    backdrop?: ViewStyle;
     contentContainer?: ViewStyle;
     modalContent?: ViewStyle;
 };
@@ -11,17 +12,19 @@ type CustomSize = {
     modalContent?: ViewStyle;
 };
 
-export const defaultStyles: ComponentStylePropWithVariants<
+export const modalStyles: ComponentStylePropWithVariants<
     TextStyle,
     States,
     CustomProps,
     CustomSize
 > = {
-    modalBackground: {
+    animationScale: 'animation.scale',
+
+    backdrop: {
         flex: 1,
-        backgroundColor: 'colors.scrim',
-        opacity: 0.3,
+        backgroundColor: 'colors.backdrop',
     },
+
     contentContainer: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -36,14 +39,12 @@ export const defaultStyles: ComponentStylePropWithVariants<
         md: {
             modalContent: {
                 maxWidth: 400,
-                maxHeight: 600,
                 borderRadius: 10,
             },
         },
         lg: {
             modalContent: {
                 maxWidth: 600,
-                maxHeight: 800,
                 borderRadius: 10,
             },
         },

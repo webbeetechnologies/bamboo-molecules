@@ -13,7 +13,7 @@ import {
 import type { ModalProps } from '../Modal';
 import { format } from '../../utils';
 
-export type Props = ModalProps & {
+export type Props = Omit<ModalProps, 'children'> & {
     is24Hour?: boolean;
     label?: string;
     uppercase?: boolean;
@@ -21,7 +21,6 @@ export type Props = ModalProps & {
     confirmLabel?: string;
     time?: string;
     onConfirm: (time: string) => any;
-    animationType?: 'slide' | 'fade' | 'none';
     keyboardIcon?: string;
     clockIcon?: string;
     isLandscape?: boolean;
@@ -36,14 +35,13 @@ export function TimePickerModal({
     uppercase = false,
     cancelLabel = 'Cancel',
     confirmLabel = 'Ok',
-    animationType = 'none',
     is24Hour,
     keyboardIcon = 'keyboard-outline',
     clockIcon = 'clock-outline',
     isLandscape = false,
     ...rest
 }: Props) {
-    const { IconButton, Button, Modal, TimePicker, View, Text } = useMolecules();
+    const { IconButton, Button, Modal, Portal, TimePicker, View, Text } = useMolecules();
     const componentStyles = useComponentStyles('TimePickerModal');
 
     const [inputType, setInputType] = useState<PossibleInputTypes>(inputTypes.picker);
@@ -74,45 +72,42 @@ export function TimePickerModal({
     }, [timeProp]);
 
     return (
-        <Modal
-            {...rest}
-            animationType={animationType}
-            isOpen={isOpen}
-            contentStyle={componentStyles.modalContent}
-            onClose={onClose}>
-            <KeyboardAvoidingView style={componentStyles.keyboardView} behavior={'padding'}>
-                <View style={componentStyles.labelContainer}>
-                    <Text style={componentStyles.label}>
-                        {uppercase ? label.toUpperCase() : label}
-                    </Text>
-                </View>
-                <View style={componentStyles.timePickerContainer}>
-                    <TimePicker
-                        is24Hour={is24Hour}
-                        inputType={inputType}
-                        focused={focused}
-                        time={time}
-                        onTimeChange={onChange}
-                        onFocusInput={onFocusInput}
-                        isLandscape={isLandscape}
-                    />
-                </View>
-                <View style={componentStyles.footer}>
-                    <IconButton
-                        name={getTimeInputTypeIcon(inputType, {
-                            keyboard: keyboardIcon,
-                            picker: clockIcon,
-                        })}
-                        onPress={() => setInputType(reverseInputTypes[inputType])}
-                        style={componentStyles.inputTypeToggle}
-                        accessibilityLabel="toggle keyboard"
-                    />
-                    <View style={componentStyles.fill} />
-                    <Button onPress={onClose}>{cancelLabel}</Button>
-                    <Button onPress={onConfirm}>{confirmLabel}</Button>
-                </View>
-            </KeyboardAvoidingView>
-        </Modal>
+        <Portal>
+            <Modal {...rest} isOpen={isOpen} style={componentStyles.modalContent} onClose={onClose}>
+                <KeyboardAvoidingView style={componentStyles.keyboardView} behavior={'padding'}>
+                    <View style={componentStyles.labelContainer}>
+                        <Text style={componentStyles.label}>
+                            {uppercase ? label.toUpperCase() : label}
+                        </Text>
+                    </View>
+                    <View style={componentStyles.timePickerContainer}>
+                        <TimePicker
+                            is24Hour={is24Hour}
+                            inputType={inputType}
+                            focused={focused}
+                            time={time}
+                            onTimeChange={onChange}
+                            onFocusInput={onFocusInput}
+                            isLandscape={isLandscape}
+                        />
+                    </View>
+                    <View style={componentStyles.footer}>
+                        <IconButton
+                            name={getTimeInputTypeIcon(inputType, {
+                                keyboard: keyboardIcon,
+                                picker: clockIcon,
+                            })}
+                            onPress={() => setInputType(reverseInputTypes[inputType])}
+                            style={componentStyles.inputTypeToggle}
+                            accessibilityLabel="toggle keyboard"
+                        />
+                        <View style={componentStyles.fill} />
+                        <Button onPress={onClose}>{cancelLabel}</Button>
+                        <Button onPress={onConfirm}>{confirmLabel}</Button>
+                    </View>
+                </KeyboardAvoidingView>
+            </Modal>
+        </Portal>
     );
 }
 

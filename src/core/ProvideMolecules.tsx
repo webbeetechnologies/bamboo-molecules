@@ -33,9 +33,9 @@ export const ProvideMolecules = ({
                 extractStyles={extractStyles}
                 resolveComponentStyles={resolveComponentStyles}>
                 <ProvideComponents components={components}>
-                    <PortalHost>
-                        <PortalProvider>{children}</PortalProvider>
-                    </PortalHost>
+                    <PortalProvider>
+                        <PortalHost>{children}</PortalHost>
+                    </PortalProvider>
                 </ProvideComponents>
             </ProvideTheme>
         </ProvidePlatformType>

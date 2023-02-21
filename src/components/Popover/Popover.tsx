@@ -1,4 +1,4 @@
-import { FC, forwardRef, memo, useId, useMemo, lazy, Suspense } from 'react';
+import { FC, forwardRef, memo, useId, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
@@ -6,8 +6,7 @@ import { useComponentStyles, useMolecules } from '../../hooks';
 import type { PopoverProps } from './types';
 import { Popper } from '../Popper';
 import { PopoverContext } from './PopoverContext';
-
-const PopperContent = lazy(() => import('../Popper/PopperContent'));
+import PopperContent from '../Popper/PopperContent';
 
 export const popoverFactory = (componentName: string): FC<PopoverProps> =>
     forwardRef(
@@ -22,7 +21,7 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                 // TODO: Implement trap focus functionality
                 // eslint-disable-next-line
                 trapFocus = true,
-                showArrow = true,
+                showArrow = false,
                 overlayStyles = {},
                 contentStyles = {},
                 contentTextStyles = {},
@@ -80,8 +79,7 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                     <Overlay
                         style={popoverStyles.overlayStyles}
                         isOpen={isOpen}
-                        onRequestClose={onClose}
-                        useRNModalOnAndroid>
+                        onRequestClose={onClose}>
                         <PresenceTransition
                             initial={popoverStyles.initialTransition}
                             animate={popoverStyles.animateTransition}
@@ -95,17 +93,15 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                                 {...props}
                                 arrowProps={arrowPropsWithStyle}>
                                 <PopoverContext.Provider value={popoverContextValue}>
-                                    <Suspense>
-                                        <PopperContent
-                                            style={popoverStyles.content}
-                                            contentTextStyles={popoverStyles.contentText}
-                                            arrowProps={arrowProps}
-                                            showArrow={showArrow}>
-                                            {/* <FocusScope contain={trapFocus} restoreFocus> */}
-                                            {children}
-                                            {/* </FocusScope> */}
-                                        </PopperContent>
-                                    </Suspense>
+                                    <PopperContent
+                                        style={popoverStyles.content}
+                                        contentTextStyles={popoverStyles.contentText}
+                                        arrowProps={arrowProps}
+                                        showArrow={showArrow}>
+                                        {/* <FocusScope contain={trapFocus} restoreFocus> */}
+                                        {children}
+                                        {/* </FocusScope> */}
+                                    </PopperContent>
                                 </PopoverContext.Provider>
                             </Popper>
                         </PresenceTransition>
