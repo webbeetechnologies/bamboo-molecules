@@ -27,12 +27,15 @@ export const Example = (props: Props) => {
     };
 
     return (
-        <NavigationStack ref={ref} initialRouteName="home" {...props}>
+        <NavigationStack ref={ref} {...props}>
             <NavigationStack.Item name="home">
                 <View style={styles.container}>
                     <Text style={styles.text}>Home</Text>
                     <Button style={styles.button} variant="outlined" onPress={onPressProfile}>
                         Go To Profile
+                    </Button>
+                    <Button style={styles.button} variant="outlined" onPress={onPressSettings}>
+                        Go To Settings
                     </Button>
                 </View>
             </NavigationStack.Item>
