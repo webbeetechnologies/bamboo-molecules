@@ -3,7 +3,7 @@ import { Example as Button } from '../Button/Button';
 import { Example as TextInput } from '../TextInput/TextInput';
 import { Example as Icon } from '../Icon/Icon';
 
-import { Example } from './ElementGroup';
+import { Example, ExampleNestedElementGroup } from './ElementGroup';
 
 export default {
     title: 'components/ElementGroup',
@@ -56,6 +56,28 @@ TextInputElementGroup.args = {
 };
 
 TextInputElementGroup.parameters = {
+    docs: {
+        source: {
+            code: `
+<ElementGroup>
+        <TextInput variant="outlined" />
+        <Button variant="contained" onPress={() => {}}>
+            <Icon name="chevron-down" size={26} />
+        </Button>
+</ElementGroup>`,
+            language: 'tsx',
+            type: 'auto',
+        },
+    },
+};
+
+export const NestedElementGroup: ComponentStory<typeof ExampleNestedElementGroup> = args => (
+    <ExampleNestedElementGroup {...args} />
+);
+
+NestedElementGroup.args = {};
+
+NestedElementGroup.parameters = {
     docs: {
         source: {
             code: `
