@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
+import { isNil } from '../../utils';
 import { defaultStyles } from './utils';
 
 enum Orientation {
@@ -28,7 +29,7 @@ export const ElementGroup = (
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('ElementGroup', [
         style,
-        borderRadiusProp ? { borderRadius: borderRadiusProp } : {},
+        !isNil(borderRadiusProp) ? { borderRadius: borderRadiusProp } : {},
     ]);
 
     const { containerStyle, borderRadius } = useMemo(() => {
