@@ -1,8 +1,8 @@
 export const generateColStyles = (numCols: number) => {
-    let styles: any = {};
+    const styles: any = {};
     for (let i = 1; i <= numCols; i++) {
         styles[`col-${i}`] = {
-            flexGrow: i,
+            flex: i,
             flexShrink: 0,
         };
     }
