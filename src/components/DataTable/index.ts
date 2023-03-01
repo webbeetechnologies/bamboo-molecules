@@ -1,6 +1,12 @@
 import { DataCell } from './DataTableCell';
 
-export { DataTableProps, DataTableHeaderCellProps, DataTableCellProps } from './types';
+export {
+    DataTableProps,
+    RenderHeaderCellProps,
+    RenderCellProps,
+    DataCellProps,
+    DataHeaderCellProps,
+} from './types';
 import { DataTable as DataTableComponent } from './DataTable';
 import { DataHeaderCell } from './DataTableHeader';
 export * from './DataTableContext';

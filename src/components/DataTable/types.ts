@@ -33,15 +33,18 @@ export interface DataTableComponentProps<T = any> {
     ScrollViewComponent?: ComponentType<ComponentPropsWithRef<typeof ScrollView>>;
 }
 
-export type DataTableHeaderCellProps = {
+export type DataHeaderCellProps = ViewProps & { width: number };
+export type DataCellProps = ViewProps & { width: number };
+
+export type RenderHeaderCellProps = {
     columnIndex: number;
     column: TDataTableColumn;
 };
 
-export type DataTableCellProps = {
+export type RenderCellProps = {
     row: TDataTableRow;
     rowIndex: number;
-} & DataTableHeaderCellProps;
+} & RenderHeaderCellProps;
 
 export type ScrollProps = {
     verticalScrollProps?: Omit<FlatListProps<any>, 'data' | 'renderItem'>;
@@ -85,13 +88,13 @@ export interface DataTableProps<RecordType = any>
      *
      * @param cell: { columnIndex: number, column: {id: string}, rowIndex: number, row: {id: string} }
      */
-    renderCell: (cell: DataTableCellProps) => ReactNode;
+    renderCell: (cell: RenderCellProps) => ReactNode;
 
     /**
      *
      * @param cell: { columnIndex: number, column: {id: string} }
      */
-    renderHeader: (cell: DataTableHeaderCellProps) => ReactNode;
+    renderHeader: (cell: RenderHeaderCellProps) => ReactNode;
 
     /**
      * Props for the header cell.

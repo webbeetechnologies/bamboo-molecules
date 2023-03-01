@@ -1,10 +1,10 @@
 import { ComponentType, FC, memo } from 'react';
-import type { DataTableCellProps, DataTableHeaderCellProps } from '../types';
+import type { RenderCellProps, RenderHeaderCellProps } from '../types';
 import { generateFlatListData } from '../../../../__mocks__/generateFlatListData';
 import type { FlatListProps } from 'react-native';
 import { useMolecules } from '../../../hooks';
 
-export const CellRenderer: FC<DataTableCellProps> = memo(({ row, column }) => {
+export const CellRenderer: FC<RenderCellProps> = memo(({ row, column }) => {
     const { Text } = useMolecules();
     return (
         <Text>
@@ -13,7 +13,7 @@ export const CellRenderer: FC<DataTableCellProps> = memo(({ row, column }) => {
     );
 });
 
-export const HeaderRenderer: FC<DataTableHeaderCellProps> = memo(({ column }) => {
+export const HeaderRenderer: FC<RenderHeaderCellProps> = memo(({ column }) => {
     const { H4 } = useMolecules();
     return <H4>{column.title}</H4>;
 });
@@ -32,6 +32,6 @@ export const getDataTableMockProps = (
         title: `Row ${index}`,
     })),
     FlatListComponent,
-    renderCell: (props: DataTableCellProps) => <CellRenderer {...props} />,
-    renderHeader: (props: DataTableHeaderCellProps) => <HeaderRenderer {...props} />,
+    renderCell: (props: RenderCellProps) => <CellRenderer {...props} />,
+    renderHeader: (props: RenderHeaderCellProps) => <HeaderRenderer {...props} />,
 });

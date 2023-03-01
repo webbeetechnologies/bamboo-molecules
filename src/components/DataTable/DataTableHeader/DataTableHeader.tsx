@@ -1,11 +1,10 @@
 import { FC, Fragment, memo, useMemo } from 'react';
-import type { DataTableHeaderCellProps, TDataTableColumn } from '../types';
+import type { RenderHeaderCellProps, TDataTableColumn, DataHeaderCellProps } from '../types';
 import {
     useDataTable,
     useDataTableColumnWidth,
     useDataTableComponent,
 } from '../DataTableContext/DataTableContext';
-import type { ViewProps } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../../hooks';
 
 export const DataTableHeaderRow: FC = memo(() => {
@@ -33,7 +32,7 @@ export const DataTableHeaderRow: FC = memo(() => {
     );
 });
 
-const HeaderCellComponent: FC<DataTableHeaderCellProps> = memo(props => {
+const HeaderCellComponent: FC<RenderHeaderCellProps> = memo(props => {
     const { DataTable } = useMolecules();
     const { renderHeader } = useDataTableComponent();
     const width = useDataTableColumnWidth(props.column);
@@ -45,20 +44,18 @@ const renderHeaderCell = ({ item, index }: { item: TDataTableColumn; index: numb
     <HeaderCellComponent column={item} columnIndex={index} />
 );
 
-export const DataHeaderCell: FC<ViewProps & { width: number }> = memo(
-    ({ width, style, ...props }) => {
-        const { View } = useMolecules();
-        const { headerCellProps } = useDataTable() || {};
-        const headerCellStyles = useComponentStyles('DataTable_HeaderCell', [
-            headerCellProps?.style,
-            style,
-            { width },
-        ]);
+export const DataHeaderCell = memo(({ width, style, ...props }: DataHeaderCellProps) => {
+    const { View } = useMolecules();
+    const { headerCellProps } = useDataTable() || {};
+    const headerCellStyles = useComponentStyles('DataTable_HeaderCell', [
+        headerCellProps?.style,
+        style,
+        { width },
+    ]);
 
-        return (
-            <View {...headerCellProps} {...props} style={headerCellStyles}>
-                {props.children}
-            </View>
-        );
-    },
-);
+    return (
+        <View {...headerCellProps} {...props} style={headerCellStyles}>
+            {props.children}
+        </View>
+    );
+});

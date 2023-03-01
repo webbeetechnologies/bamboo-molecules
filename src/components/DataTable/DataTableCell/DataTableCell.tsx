@@ -7,8 +7,7 @@ import {
     useDataTableComponent,
     useDataTableRow,
 } from '../DataTableContext/DataTableContext';
-import type { DataTableProps, TDataTableColumn, TDataTableRow } from '../types';
-import type { ViewProps } from 'react-native';
+import type { DataTableProps, TDataTableColumn, TDataTableRow, DataCellProps } from '../types';
 
 type CellComponentProps = {
     column: TDataTableColumn;
@@ -60,7 +59,7 @@ const Cell: FC<{ column: TDataTableColumn; columnIndex: number }> = memo(props =
     return <CellComponent {...cellProps} />;
 });
 
-export const DataCell: FC<ViewProps & { width: number }> = memo(({ width, style, ...props }) => {
+export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
     const { View } = useMolecules();
     const { cellProps } = useDataTable();
 
