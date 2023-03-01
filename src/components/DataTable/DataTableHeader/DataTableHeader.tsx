@@ -7,8 +7,6 @@ import {
 } from '../DataTableContext/DataTableContext';
 import type { ViewProps } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../../hooks';
-import { extractTextStyle } from '../../../utils/extractTextStyles';
-import type { TextStyle, ViewStyle } from 'react-native';
 
 export const DataTableHeaderRow: FC = memo(() => {
     const { View } = useMolecules();
@@ -47,9 +45,9 @@ const renderHeaderCell = ({ item, index }: { item: TDataTableColumn; index: numb
     <HeaderCellComponent column={item} columnIndex={index} />
 );
 
-export const DataHeaderCell: FC<ViewProps & { style?: ViewStyle & TextStyle; width: number }> =
-    memo(({ width, style, ...props }) => {
-        const { View, Text } = useMolecules();
+export const DataHeaderCell: FC<ViewProps & { width: number }> = memo(
+    ({ width, style, ...props }) => {
+        const { View } = useMolecules();
         const { headerCellProps } = useDataTable() || {};
         const headerCellStyles = useComponentStyles('DataTable_HeaderCell', [
             headerCellProps?.style,
@@ -57,14 +55,10 @@ export const DataHeaderCell: FC<ViewProps & { style?: ViewStyle & TextStyle; wid
             { width },
         ]);
 
-        const [textStyle, viewStyle] = useMemo(
-            () => extractTextStyle(headerCellStyles),
-            [headerCellStyles],
-        );
-
         return (
-            <View {...headerCellProps} {...props} style={viewStyle}>
-                <Text style={textStyle}>{props.children}</Text>
+            <View {...headerCellProps} {...props} style={headerCellStyles}>
+                {props.children}
             </View>
         );
-    });
+    },
+);

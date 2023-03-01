@@ -1,7 +1,7 @@
 import { FC, Fragment, memo, useMemo } from 'react';
 import type { TDataTableRow } from '../types';
 import { DataTableRowContext, useDataTable } from '../DataTableContext/DataTableContext';
-import { renderCell } from '../DataTableCell';
+import { renderCellComponent } from '../DataTableCell';
 import type { ListRenderItem } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../../hooks';
 
@@ -28,7 +28,7 @@ export const DataTableRow: FC<{ record: TDataTableRow; index: number }> = memo(p
     const result = useMemo(
         () =>
             columns.map((item, i) => (
-                <Fragment key={item.id}>{renderCell({ item, index: i })}</Fragment>
+                <Fragment key={item.id}>{renderCellComponent({ item, index: i })}</Fragment>
             )),
         [columns],
     );

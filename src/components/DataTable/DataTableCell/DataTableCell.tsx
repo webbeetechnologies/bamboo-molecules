@@ -8,8 +8,7 @@ import {
     useDataTableRow,
 } from '../DataTableContext/DataTableContext';
 import type { DataTableProps, TDataTableColumn, TDataTableRow } from '../types';
-import type { TextStyle, ViewProps, ViewStyle } from 'react-native';
-import { extractTextStyle } from '../../../utils/extractTextStyles';
+import type { ViewProps } from 'react-native';
 
 type CellComponentProps = {
     column: TDataTableColumn;
@@ -61,26 +60,19 @@ const Cell: FC<{ column: TDataTableColumn; columnIndex: number }> = memo(props =
     return <CellComponent {...cellProps} />;
 });
 
-export const DataCell: FC<ViewProps & { style?: ViewStyle & TextStyle; width: number }> = memo(
-    ({ width, style, ...props }) => {
-        const { Text, View } = useMolecules();
-        const { cellProps } = useDataTable();
+export const DataCell: FC<ViewProps & { width: number }> = memo(({ width, style, ...props }) => {
+    const { View } = useMolecules();
+    const { cellProps } = useDataTable();
 
-        const cellStyles = useComponentStyles('DataTable_Cell', [
-            cellProps?.style,
-            style,
-            { width },
-        ]);
+    const cellStyles = useComponentStyles('DataTable_Cell', [cellProps?.style, style, { width }]);
 
-        const [textStyle, viewStyle] = useMemo(() => extractTextStyle(cellStyles), [cellStyles]);
-        return (
-            <View {...cellProps} {...props} style={viewStyle}>
-                <Text style={textStyle}>{props.children}</Text>
-            </View>
-        );
-    },
-);
+    return (
+        <View {...cellProps} {...props} style={cellStyles}>
+            {props.children}
+        </View>
+    );
+});
 
-export const renderCell = ({ item, index }: { item: TDataTableColumn; index: number }) => (
+export const renderCellComponent = ({ item, index }: { item: TDataTableColumn; index: number }) => (
     <Cell column={item} columnIndex={index} />
 );

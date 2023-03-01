@@ -10,5 +10,4 @@ export const dataTableHeaderStyles: ComponentStyleProp<ViewStyle> = {
 
 export const dataTableHeaderCellStyles: ComponentStyleProp<ViewStyle & TextStyle> = {
     padding: 'spacings.1',
-    color: 'colors.onSurface',
 };
