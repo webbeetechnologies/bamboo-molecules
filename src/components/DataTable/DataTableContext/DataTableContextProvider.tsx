@@ -15,6 +15,10 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         ScrollViewComponent: ScrollViewComponentProp,
         renderCell: renderCellProp,
         renderHeader: renderHeaderProp,
+        headerCellProps,
+        cellProps,
+        headerRowProps,
+        rowProps,
     }) => {
         const { FlatList } = useMolecules();
 
@@ -39,8 +43,21 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 columns,
                 tableWidth,
                 defaultColumnWidth,
+                headerCellProps,
+                cellProps,
+                headerRowProps,
+                rowProps,
             }),
-            [records, columns, tableWidth, defaultColumnWidth],
+            [
+                records,
+                columns,
+                tableWidth,
+                defaultColumnWidth,
+                headerCellProps,
+                cellProps,
+                headerRowProps,
+                rowProps,
+            ],
         );
 
         return (

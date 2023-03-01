@@ -8,9 +8,10 @@ import { useComponentStyles, useMolecules } from '../../../hooks';
 export const DataTableRow: FC<{ record: TDataTableRow; index: number }> = memo(props => {
     const { record, index } = props;
     const { View } = useMolecules();
-    const { columns = [] } = useDataTable() || {};
+    const { columns = [], rowProps } = useDataTable() || {};
 
     const rowStyle = useComponentStyles('DataTable_Row', [
+        rowProps?.style,
         { flexDirection: 'row' },
         {
             states: {
@@ -34,7 +35,9 @@ export const DataTableRow: FC<{ record: TDataTableRow; index: number }> = memo(p
 
     return (
         <DataTableRowContext.Provider value={rowContext} key={record.id}>
-            <View style={rowStyle}>{result}</View>
+            <View {...rowProps} style={rowStyle}>
+                {result}
+            </View>
         </DataTableRowContext.Provider>
     );
 });

@@ -84,6 +84,10 @@ const withDataTableContext = (Component: typeof DataTableComponent): FC<DataTabl
                 ScrollViewComponent,
                 renderCell,
                 renderHeader,
+                headerRowProps,
+                headerCellProps,
+                cellProps,
+                rowProps,
                 ...rest
             } = props;
 
@@ -95,6 +99,10 @@ const withDataTableContext = (Component: typeof DataTableComponent): FC<DataTabl
                 ScrollViewComponent,
                 renderCell,
                 renderHeader,
+                headerRowProps,
+                headerCellProps,
+                cellProps,
+                rowProps,
             };
 
             return (

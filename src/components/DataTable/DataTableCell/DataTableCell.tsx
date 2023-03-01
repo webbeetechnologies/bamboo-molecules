@@ -2,6 +2,7 @@ import { FC, memo, useMemo } from 'react';
 import { useComponentStyles, useMolecules } from '../../../hooks';
 import {
     DataTableCellContext,
+    useDataTable,
     useDataTableColumnWidth,
     useDataTableComponent,
     useDataTableRow,
@@ -62,11 +63,17 @@ const Column: FC<{ column: TDataTableColumn; columnIndex: number }> = memo(props
 export const DataCell: FC<ViewProps & { style?: ViewStyle & TextStyle; width: number }> = memo(
     ({ width, style, ...props }) => {
         const { Text, View } = useMolecules();
-        const cellStyles = useComponentStyles('DataTable_Cell', [style, { width }]);
+        const { cellProps } = useDataTable();
+
+        const cellStyles = useComponentStyles('DataTable_Cell', [
+            cellProps?.style,
+            style,
+            { width },
+        ]);
 
         const [textStyle, viewStyle] = useMemo(() => extractTextStyle(cellStyles), [cellStyles]);
         return (
-            <View {...props} style={viewStyle}>
+            <View {...cellProps} {...props} style={viewStyle}>
                 <Text style={textStyle}>{props.children}</Text>
             </View>
         );

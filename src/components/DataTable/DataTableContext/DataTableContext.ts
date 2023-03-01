@@ -23,9 +23,11 @@ const useInvariant = <T>(value: T, message: string): Exclude<T, null> => {
 type DataTableContextType = Pick<
     Required<DataTableProps>,
     'records' | 'columns' | 'defaultColumnWidth'
-> & {
-    tableWidth: number;
-};
+> &
+    Pick<DataTableProps, 'headerCellProps' | 'cellProps' | 'headerRowProps' | 'rowProps'> & {
+        tableWidth: number;
+    };
+
 export const DataTableContext = createContext<DataTableContextType | null>(null);
 export const useDataTable = () =>
     useInvariant(

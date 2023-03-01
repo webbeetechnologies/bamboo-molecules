@@ -1,10 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Example } from './DataTable';
-import { FlatList, View, ViewStyle } from 'react-native';
-import {
-    FlatList as RNGestureFlatList,
-    GestureHandlerRootView,
-} from 'react-native-gesture-handler';
+import { View, ViewStyle } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { getDataTableMockProps } from '../../../src/components/DataTable/__mocks__/getDataTableProps';
 
 // Root story aligns everything to center, it breaks the table component.
@@ -28,13 +25,7 @@ export const Default: ComponentStory<typeof Example> = args => (
         <Example {...args} />
     </View>
 );
-Default.args = getDataTableMockProps(1000, 10, RNGestureFlatList);
-
-export const DefaultFlatList: ComponentStory<typeof Example> = Default.bind({});
-DefaultFlatList.args = getDataTableMockProps(1000, 10, FlatList);
+Default.args = getDataTableMockProps(1000, 10);
 
 export const MoreColumnsLessRowsDefault: ComponentStory<typeof Example> = Default.bind({});
-MoreColumnsLessRowsDefault.args = getDataTableMockProps(10, 200, RNGestureFlatList);
-
-export const MoreColumnsLessRowsFlatList: ComponentStory<typeof Example> = Default.bind({});
-MoreColumnsLessRowsFlatList.args = getDataTableMockProps(10, 200, FlatList);
+MoreColumnsLessRowsDefault.args = getDataTableMockProps(10, 200);

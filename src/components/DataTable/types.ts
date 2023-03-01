@@ -1,5 +1,5 @@
 import type { ComponentPropsWithRef, ComponentType, ReactNode } from 'react';
-import type { FlatListProps, ScrollViewProps } from 'react-native';
+import type { FlatListProps, ScrollViewProps, ViewProps } from 'react-native';
 import type { ScrollView } from 'react-native';
 
 export type TDataTableColumn = {
@@ -88,4 +88,28 @@ export interface DataTableProps<RecordType = any>
      * @param cell: { columnIndex: number, column: {id: string} }
      */
     renderHeader: (cell: DataTableHeaderCellProps) => ReactNode;
+
+    /**
+     * Props for the header cell.
+     * Caution: Use memoized props for best performance
+     */
+    headerCellProps?: Omit<ViewProps, 'children'>;
+
+    /**
+     * Props for the data cell.
+     * Caution: Use memoized props for best performance
+     */
+    cellProps?: Omit<ViewProps, 'children'>;
+
+    /**
+     * Props for the header row.
+     * Caution: Use memoized props for best performance
+     */
+    headerRowProps?: Omit<ViewProps, 'children'>;
+
+    /**
+     * Props for the data row.
+     * Caution: Use memoized props for best performance
+     */
+    rowProps?: Omit<ViewProps, 'children'>;
 }
