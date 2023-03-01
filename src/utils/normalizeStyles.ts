@@ -16,7 +16,7 @@ const normalizeStyles: StyleProp<any> | StyleProp<any>[] = normalizeStylesMemo(
         }
 
         if (!styles) {
-            return null;
+            return undefined;
         }
 
         const newStyles = Object.assign({}, styles);
