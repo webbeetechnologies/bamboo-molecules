@@ -1,4 +1,4 @@
-import type { FC, ForwardedRef } from 'react';
+import type { ForwardedRef } from 'react';
 import { forwardRef, memo, useCallback, useMemo } from 'react';
 import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
 import type { ScrollView } from 'react-native';
@@ -80,9 +80,9 @@ const DataTableComponent = memo(
     ),
 );
 
-const withDataTableContext = (Component: typeof DataTableComponent): FC<DataTableProps> =>
+const withDataTableContext = (Component: typeof DataTableComponent) =>
     memo(
-        forwardRef((props, ref: ForwardedRef<ScrollView>) => {
+        forwardRef((props: DataTableProps, ref: ForwardedRef<ScrollView>) => {
             const {
                 records,
                 columns,
