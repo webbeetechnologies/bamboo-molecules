@@ -1,5 +1,10 @@
 import { FC, Fragment, memo, useMemo } from 'react';
-import type { RenderHeaderCellProps, TDataTableColumn, DataHeaderCellProps } from '../types';
+import type {
+    RenderHeaderCellProps,
+    TDataTableColumn,
+    DataHeaderCellProps,
+    DataTableProps,
+} from '../types';
 import {
     useDataTable,
     useDataTableColumnWidth,
@@ -7,29 +12,35 @@ import {
 } from '../DataTableContext/DataTableContext';
 import { useComponentStyles, useMolecules } from '../../../hooks';
 
-export const DataTableHeaderRow: FC = memo(() => {
-    const { View } = useMolecules();
-    const { columns = [], headerRowProps } = useDataTable() || {};
+const DataTableHeaderRowPresentation = memo(
+    ({ columns, headerRowProps }: Pick<DataTableProps, 'headerRowProps' | 'columns'>) => {
+        const { View } = useMolecules();
 
-    const headerStyle = useComponentStyles('DataTable_HeaderRow', [
-        headerRowProps?.style,
-        {
-            flexDirection: 'row',
-        },
-    ]);
-    const result = useMemo(
-        () =>
-            columns.map((item, i) => (
-                <Fragment key={item.id}>{renderHeaderCell({ item, index: i })}</Fragment>
-            )),
-        [columns],
-    );
+        const headerStyle = useComponentStyles('DataTable_HeaderRow', [
+            headerRowProps?.style,
+            {
+                flexDirection: 'row',
+            },
+        ]);
+        const result = useMemo(
+            () =>
+                columns.map((item, i) => (
+                    <Fragment key={item.id}>{renderHeaderCell({ item, index: i })}</Fragment>
+                )),
+            [columns],
+        );
 
-    return (
-        <View {...headerRowProps} style={headerStyle}>
-            {result}
-        </View>
-    );
+        return (
+            <View {...headerRowProps} style={headerStyle}>
+                {result}
+            </View>
+        );
+    },
+);
+
+export const DataTableHeaderRow = memo(() => {
+    const { columns = [], headerRowProps } = useDataTable();
+    return <DataTableHeaderRowPresentation columns={columns} headerRowProps={headerRowProps} />;
 });
 
 const HeaderCellComponent: FC<RenderHeaderCellProps> = memo(props => {
