@@ -9,10 +9,14 @@ export const dataTableRowStyles: ComponentStylePropWithResolvers<
 > = {
     padding: 'spacings.1',
     states: {
-        selected: {},
         hovered: {
             backgroundColor: 'colors.stateLayer.hover.primary',
         },
-        selected_hovered: {},
+        selected: {
+            backgroundColor: 'colors.stateLayer.hover.onPrimaryContainer',
+        },
+        selected_hovered: {
+            backgroundColor: 'colors.stateLayer.hover.onPrimaryContainer',
+        },
     },
 };

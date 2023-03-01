@@ -19,6 +19,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         cellProps,
         headerRowProps,
         rowProps,
+        selectedRows,
     }) => {
         const { FlatList } = useMolecules();
 
@@ -47,6 +48,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 cellProps,
                 headerRowProps,
                 rowProps,
+                selectedRows,
             }),
             [
                 records,
@@ -57,6 +59,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 cellProps,
                 headerRowProps,
                 rowProps,
+                selectedRows,
             ],
         );
 

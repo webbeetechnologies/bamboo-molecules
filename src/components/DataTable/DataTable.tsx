@@ -113,6 +113,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 headerCellProps,
                 cellProps,
                 rowProps,
+                selectedRows,
                 ...rest
             } = props;
 
@@ -128,6 +129,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 headerCellProps,
                 cellProps,
                 rowProps,
+                selectedRows,
             };
 
             return (

@@ -31,6 +31,11 @@ export const getDataTableMockProps = (
         id: `row-${index}`,
         title: `Row ${index}`,
     })),
+    selectedRows: {
+        'row-5': true,
+        'row-13': true,
+        'row-15': true,
+    },
     FlatListComponent,
     renderCell: (props: RenderCellProps) => <CellRenderer {...props} />,
     renderHeader: (props: RenderHeaderCellProps) => <HeaderRenderer {...props} />,

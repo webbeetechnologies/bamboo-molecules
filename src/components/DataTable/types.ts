@@ -119,4 +119,11 @@ export interface DataTableProps<RecordType = any>
      * Caution: Use memoized props for best performance
      */
     rowProps?: Omit<ViewProps, 'children'>;
+
+    /**
+     *
+     * if present, enables row selection in the table.
+     *
+     */
+    selectedRows?: Record<string, boolean> | false;
 }

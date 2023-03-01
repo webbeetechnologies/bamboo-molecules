@@ -6,10 +6,14 @@ import type { ListRenderItem } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../../hooks';
 import { CallbackActionState, withActionState } from '../../../hocs';
 
-type DataTableComponentProps = { record: TDataTableRow; index: number } & CallbackActionState;
+type DataTableComponentProps = { record: TDataTableRow; index: number };
 const DataTableComponentPresentation = memo(
-    (props: DataTableComponentProps & Pick<DataTableProps, 'rowProps' | 'columns'>) => {
-        const { record, index, hovered = false } = props;
+    (
+        props: DataTableComponentProps &
+            CallbackActionState &
+            Pick<DataTableProps, 'rowProps' | 'columns'> & { isSelected: boolean },
+    ) => {
+        const { record, index, isSelected, hovered = false } = props;
         const { View } = useMolecules();
 
         const rowStyle = useComponentStyles(
@@ -17,8 +21,8 @@ const DataTableComponentPresentation = memo(
             [props.rowProps?.style, { flexDirection: 'row' }],
             {
                 states: {
-                    selected_hovered: false,
-                    selected: false,
+                    selected_hovered: isSelected && hovered,
+                    selected: isSelected,
                     hovered,
                 },
             },
@@ -45,9 +49,16 @@ const DataTableComponentPresentation = memo(
 );
 
 const DataTableComponent = memo((props: DataTableComponentProps) => {
-    const { columns = [], rowProps } = useDataTable();
+    const { columns = [], rowProps, selectedRows } = useDataTable();
 
-    return <DataTableComponentPresentation {...props} columns={columns} rowProps={rowProps} />;
+    return (
+        <DataTableComponentPresentation
+            isSelected={!!selectedRows && Boolean(selectedRows[props.record.id])}
+            {...props}
+            columns={columns}
+            rowProps={rowProps}
+        />
+    );
 });
 
 export const DataTableRow = memo(withActionState(DataTableComponent));

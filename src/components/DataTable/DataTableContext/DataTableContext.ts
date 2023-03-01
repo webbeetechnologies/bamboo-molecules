@@ -24,7 +24,10 @@ type DataTableContextType = Pick<
     Required<DataTableProps>,
     'records' | 'columns' | 'defaultColumnWidth'
 > &
-    Pick<DataTableProps, 'headerCellProps' | 'cellProps' | 'headerRowProps' | 'rowProps'> & {
+    Pick<
+        DataTableProps,
+        'headerCellProps' | 'cellProps' | 'headerRowProps' | 'rowProps' | 'selectedRows'
+    > & {
         tableWidth: number;
     };
 
