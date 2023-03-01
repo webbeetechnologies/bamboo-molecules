@@ -5,13 +5,14 @@ export * from './DataTableRow';
 
 export const dataTableRowStyles: ComponentStylePropWithResolvers<
     ViewStyle,
-    'disabled' | 'selected' | 'hovered' | 'selected_hovered'
+    'selected' | 'hovered' | 'selected_hovered'
 > = {
     padding: 'spacings.1',
     states: {
-        disabled: {},
         selected: {},
-        hovered: {},
+        hovered: {
+            backgroundColor: 'colors.stateLayer.hover.primary',
+        },
         selected_hovered: {},
     },
 };
