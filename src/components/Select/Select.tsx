@@ -11,7 +11,7 @@ import {
     useRef,
     useState,
 } from 'react';
-import { LayoutChangeEvent, Pressable, SectionList, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, Pressable, SectionList, StyleSheet, ViewStyle } from 'react-native';
 import { useComponentStyles, useControlledValue, useMolecules, useToggle } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 import type { DropdownListProps } from '../DropdownList';
@@ -55,9 +55,9 @@ export type Props<
     | 'selectable'
     | 'selectedItem'
     | 'onSelectItemChange'
+    | 'style'
 > & {
     inputProps?: Omit<TextInputProps, 'editable'>;
-    containerStyle?: ViewStyle;
     renderItem?: SelectRenderItem<TItem>;
     dropdownTestID?: string;
     /*
@@ -77,6 +77,18 @@ export type Props<
      * if false, the popup can be controlled using the ref
      * */
     pressOpen?: boolean;
+    /**
+     * style will go through the TextInput
+     * */
+    style?: TextInputProps['style'];
+    /**
+     * style for the dropdownList
+     * */
+    dropdownListStyle?: ViewStyle;
+    /**
+     * style for the Pressable container
+     * */
+    containerStyle?: ViewStyle;
 };
 
 export type SelectHandles = {
@@ -86,7 +98,7 @@ export type SelectHandles = {
 
 const Select = <TItem extends DefaultItemT = DefaultItemT>(
     {
-        inputProps,
+        inputProps: _inputProps,
         popoverProps: _popoverProps,
         style,
         renderItem: renderItemProp,
@@ -98,12 +110,19 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
         onQueryChange,
         defaultValue = [],
         pressOpen = true,
+        containerStyle: containerStyleProp,
+        dropdownListStyle,
         ...rest
     }: Props<TItem>,
     ref: any,
 ) => {
     const { TextInput, IconButton, DropdownList, ListItem } = useMolecules();
-    const componentStyles = useComponentStyles('Select', style);
+    const componentStyles = useComponentStyles('Select', [
+        style,
+        {
+            containerStyle: containerStyleProp,
+        },
+    ]);
 
     const triggerRef = useRef(null);
 
@@ -203,6 +222,18 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
         onOpen();
     }, [onOpen, pressOpen]);
 
+    const { containerStyle, inputProps } = useMemo(() => {
+        const { containerStyle: _containerStyle, ...restStyle } = componentStyles;
+
+        return {
+            containerStyle: _containerStyle,
+            inputProps: {
+                ..._inputProps,
+                style: StyleSheet.flatten([restStyle, _inputProps?.style]),
+            },
+        };
+    }, [componentStyles, _inputProps]);
+
     // TODO - translate label
     return (
         <>
@@ -210,20 +241,21 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
                 ref={triggerRef}
                 onPress={onPress}
                 onLayout={onInputLayout}
-                style={componentStyles}
+                style={containerStyle}
                 testID={testID}>
                 <TextInput
                     label={'Select Item'}
                     right={<IconButton name="chevron-down" onPress={onToggle} />}
                     editable={false}
-                    {...(inputProps || {})}
                     value={inputValue}
+                    {...inputProps}
                 />
             </Pressable>
 
             <DropdownList
                 popoverProps={popoverProps}
                 {...rest}
+                style={dropdownListStyle}
                 renderItem={renderItem}
                 selection={selectionValue}
                 isOpen={isOpen}

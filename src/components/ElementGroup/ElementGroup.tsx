@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
+import { isNil } from '../../utils';
 import { defaultStyles } from './utils';
 
 enum Orientation {
@@ -28,11 +29,18 @@ export const ElementGroup = (
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('ElementGroup', [
         style,
-        borderRadiusProp ? { borderRadius: borderRadiusProp } : {},
+        !isNil(borderRadiusProp) ? { borderRadius: borderRadiusProp } : {},
     ]);
 
-    const { containerStyle, borderRadius } = useMemo(() => {
-        const { borderRadius: _borderRadius, ...restStyles } = componentStyles;
+    const { containerStyle, borderRadius, borderRadiuses } = useMemo(() => {
+        const {
+            borderRadius: _borderRadius,
+            borderTopLeftRadius,
+            borderTopRightRadius,
+            borderBottomLeftRadius,
+            borderBottomRightRadius,
+            ...restStyles
+        } = componentStyles;
 
         return {
             containerStyle: [
@@ -42,6 +50,12 @@ export const ElementGroup = (
                 restStyles,
             ],
             borderRadius: _borderRadius,
+            borderRadiuses: {
+                borderTopLeftRadius,
+                borderTopRightRadius,
+                borderBottomLeftRadius,
+                borderBottomRightRadius,
+            },
         };
     }, [componentStyles, orientation]);
 
@@ -62,12 +76,26 @@ export const ElementGroup = (
 
             const prop = isFirstChild ? 'first' : isLastChild ? 'last' : 'middle';
 
+            type KeyOfBorderRadiuses = keyof typeof borderRadiuses;
+
+            const mapBorderRadiusFromProp = {
+                [firstBorderProp]: !isNil(borderRadiuses[firstBorderProp as KeyOfBorderRadiuses])
+                    ? borderRadiuses[firstBorderProp as KeyOfBorderRadiuses]
+                    : borderRadius,
+                [lastBorderProp]: !isNil(borderRadiuses[lastBorderProp as KeyOfBorderRadiuses])
+                    ? borderRadiuses[lastBorderProp as KeyOfBorderRadiuses]
+                    : borderRadius,
+            };
+
             const borderRadiusStyles = {
                 first: {
-                    borderTopLeftRadius: borderRadius,
                     [firstBorderProp]: 0,
-                    [lastBorderProp]: borderRadius,
                     borderBottomRightRadius: 0,
+
+                    borderTopLeftRadius: !isNil(borderRadiuses.borderTopLeftRadius)
+                        ? borderRadiuses.borderTopLeftRadius
+                        : borderRadius,
+                    [lastBorderProp]: mapBorderRadiusFromProp[lastBorderProp],
                 },
                 middle: {
                     borderTopLeftRadius: 0,
@@ -77,9 +105,12 @@ export const ElementGroup = (
                 },
                 last: {
                     borderTopLeftRadius: 0,
-                    borderBottomRightRadius: borderRadius,
-                    [firstBorderProp]: borderRadius,
                     [lastBorderProp]: 0,
+
+                    borderBottomRightRadius: !isNil(borderRadiuses.borderBottomRightRadius)
+                        ? borderRadiuses.borderBottomRightRadius
+                        : borderRadius,
+                    [firstBorderProp]: mapBorderRadiusFromProp[firstBorderProp],
                 },
             };
 
@@ -88,7 +119,7 @@ export const ElementGroup = (
                 style: [StyleSheet.flatten(child.props.style || []), borderRadiusStyles[prop]],
             });
         });
-    }, [borderRadius, children, orientation]);
+    }, [borderRadius, borderRadiuses, children, orientation]);
 
     return (
         <View {...props} style={containerStyle} ref={ref}>

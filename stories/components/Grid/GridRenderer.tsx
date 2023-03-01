@@ -154,6 +154,33 @@ const fieldData = {
         ],
         renderer: GridRenderer,
     },
+    grid3: {
+        type: 'grid',
+        data: [
+            {
+                name: 'card1',
+                breakpoints: {
+                    md: 4,
+                    sm: 6,
+                },
+            },
+            {
+                name: 'grid2',
+                breakpoints: {
+                    md: 4,
+                    sm: 6,
+                },
+            },
+            {
+                name: 'card3',
+                breakpoints: {
+                    md: 4,
+                    sm: 6,
+                },
+            },
+        ],
+        renderer: GridRenderer,
+    },
 };
 
 const styles = StyleSheet.create({

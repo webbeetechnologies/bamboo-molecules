@@ -78,12 +78,11 @@ const Column: FC<PropsWithChildren<Props>> = ({
                 // set alignment
                 alignItems: alignment,
                 // calculate width based on colSize
-                flexBasis: `${(colSize / numberOfColumns) * 100}%`,
-                minWidth: (colSize / numberOfColumns) * width,
-                maxWidth: (colSize / numberOfColumns) * width,
+                minWidth: `${(colSize / numberOfColumns) * 100}%`,
+                maxWidth: `${(colSize / numberOfColumns) * 100}%`,
             },
         ],
-        [colSize, alignment, width, colStyles, numberOfColumns],
+        [colSize, alignment, colStyles, numberOfColumns],
     );
 
     return <View style={[styles, style]}>{children}</View>;

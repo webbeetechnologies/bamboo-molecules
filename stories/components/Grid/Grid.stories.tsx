@@ -19,7 +19,7 @@ Default.args = {
             },
         },
         {
-            name: 'grid2',
+            name: 'grid3',
             breakpoints: {
                 lg: 12,
             },
