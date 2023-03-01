@@ -1,6 +1,6 @@
 import type { FC, ForwardedRef } from 'react';
 import { forwardRef, memo, useCallback, useMemo } from 'react';
-import type { DataTableProps, ScrollProps, TDataTableRow } from './types';
+import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
 import type { ScrollView } from 'react-native';
 import { useComponentStyles } from '../../hooks';
 import { useDataTable, useDataTableComponent } from './DataTableContext/DataTableContext';
@@ -17,8 +17,9 @@ const DataTableComponent = memo(
                 verticalScrollProps = {},
                 horizontalScrollProps = {},
                 style: hStyleProp,
+                stickyRowIndices,
                 ...restScrollViewProps
-            }: ScrollProps & ScrollViewProps,
+            }: DataTableBase & ScrollViewProps,
             ref: ForwardedRef<ScrollView>,
         ) => {
             const { FlatListComponent, ScrollViewComponent } =
@@ -48,7 +49,13 @@ const DataTableComponent = memo(
                 );
             }, []);
 
-            const stickyHeaderIndices = useMemo(() => [0], []);
+            const stickyHeaderIndices = useMemo(
+                () =>
+                    stickyRowIndices
+                        ? Array.from(new Set([0, ...stickyRowIndices.map(x => x + 1)]))
+                        : [0],
+                [stickyRowIndices],
+            );
 
             return (
                 <ScrollViewComponent

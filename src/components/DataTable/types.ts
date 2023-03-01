@@ -48,10 +48,14 @@ export type ScrollProps = {
     horizontalScrollProps?: ScrollViewProps;
 };
 
+export type DataTableBase = ScrollProps & {
+    stickyRowIndices?: number[];
+};
+
 export interface DataTableProps<RecordType = any>
     extends Omit<ScrollViewProps, 'children'>,
         Partial<DataTableComponentProps<RecordType>>,
-        ScrollProps {
+        DataTableBase {
     /**
      *
      * defaultColumnWidth
