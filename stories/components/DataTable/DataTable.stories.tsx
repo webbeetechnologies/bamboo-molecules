@@ -3,6 +3,7 @@ import { Example } from './DataTable';
 import { View, ViewStyle } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { getDataTableMockProps } from '../../../src/components/DataTable/__mocks__/getDataTableProps';
+import DocsPage from './DataTable.docs';
 
 // Root story aligns everything to center, it breaks the table component.
 const gestureRootViewStyles = { flex: 0, alignSelf: 'flex-start' } as ViewStyle;
@@ -26,6 +27,16 @@ export const Default: ComponentStory<typeof Example> = args => (
     </View>
 );
 Default.args = getDataTableMockProps(1000, 10);
+Default.parameters = {
+    docs: {
+        page: DocsPage,
+    },
+};
 
 export const MoreColumnsLessRowsDefault: ComponentStory<typeof Example> = Default.bind({});
 MoreColumnsLessRowsDefault.args = getDataTableMockProps(10, 200);
+MoreColumnsLessRowsDefault.parameters = {
+    docs: {
+        page: DocsPage,
+    },
+};
