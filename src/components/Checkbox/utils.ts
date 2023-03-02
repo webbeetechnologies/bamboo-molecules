@@ -24,7 +24,6 @@ export const defaultStyles: ComponentStylePropWithVariants<
 > = {
     color: 'colors.onSurfaceVariant',
     uncheckedColor: 'colors.onSurfaceVariant',
-    animationScale: 'animation.scale',
     animationDuration: 'animation.durations.1',
 
     sizes: {
@@ -61,6 +60,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
             sizes: {},
         },
         android: {
+            animationScale: 'animation.scale',
             // we only want to width and height in android
             sizes: {
                 sm: {
