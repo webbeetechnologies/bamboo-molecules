@@ -2,11 +2,10 @@ import type { ReactElement, JSXElementConstructor, ReactNode } from 'react';
 import { render, RenderOptions } from '@testing-library/react-native';
 import { ProvideMolecules } from '../src';
 
-// @ts-ignore
-export const renderWithWrapper = (
-    component: ReactElement<any, string | JSXElementConstructor<any>>,
+export const renderWithWrapper = <P extends {} = {}>(
+    component: ReactElement<P, string | JSXElementConstructor<P>>,
     options?: RenderOptions,
-) => {
+): ReturnType<typeof render> => {
     const Wrapper = ({ children }: { children: ReactNode }) => (
         <ProvideMolecules>{children}</ProvideMolecules>
     );

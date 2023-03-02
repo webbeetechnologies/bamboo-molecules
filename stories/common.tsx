@@ -108,14 +108,15 @@ const DocLink = ({ style, href, ...rest }: DocLinkProps) => {
 
 const components = { Code, DocLink };
 
-export const withDocsWrapper = (Component: () => JSX.Element) => (props: typeof Component) => {
-    return (
-        // @ts-ignore
-        <DefaultProvideMolecules components={components} theme={theme}>
-            <Component {...props} />
-        </DefaultProvideMolecules>
-    );
-};
+export const withDocsWrapper =
+    <T extends {} = {}>(Component: ComponentType<T>) =>
+    (props: T) => {
+        return (
+            <DefaultProvideMolecules components={components} theme={theme}>
+                <Component {...props} />
+            </DefaultProvideMolecules>
+        );
+    };
 
 const storyTheme = extendTheme({
     colorMode: 'light',
