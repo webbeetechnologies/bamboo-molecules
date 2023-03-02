@@ -190,7 +190,9 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
                 ? !!selectionValue.find(item => item.id === info.item.id)
                 : selectionValue.id === info.item.id;
 
-            if (renderItemProp) renderItemProp({ ...info, selected });
+            if (renderItemProp) {
+                return renderItemProp({ ...info, selected });
+            }
 
             return (
                 <ListItem
