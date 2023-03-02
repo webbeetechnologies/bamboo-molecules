@@ -1,6 +1,5 @@
-import { forwardRef, memo } from 'react';
-import { useControlledValue, useCurrentTheme, usePlatformType } from '../../hooks';
-import { normalizeStyles } from '../../utils';
+import { forwardRef, memo, useMemo } from 'react';
+import { useControlledValue, useNormalizeStyles, usePlatformType } from '../../hooks';
 
 import CheckboxIOS from './CheckboxIOS';
 import CheckboxAndroid from './CheckboxAndroid';
@@ -21,8 +20,10 @@ const Checkbox = (
     ref: any,
 ) => {
     const platform = usePlatformType();
-    const currentTheme = useCurrentTheme();
-    const normalizedProps = normalizeStyles({ color, uncheckedColor }, currentTheme);
+    const normalizedProps = useNormalizeStyles(
+        useMemo(() => ({ color, uncheckedColor }), [color, uncheckedColor]),
+        'checkbox_base',
+    );
 
     const [value, onChange] = useControlledValue({
         value: valueProp,

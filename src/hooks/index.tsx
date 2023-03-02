@@ -1,6 +1,3 @@
-import { useTheme as useThemeAtoms } from '@bambooapp/bamboo-atoms';
-import type { ITheme } from '../core';
-
 export { useColorMode, useMediaQuery } from '@bambooapp/bamboo-atoms';
 export {
     useActive,
@@ -12,6 +9,8 @@ export {
     useScaledSize,
 } from 'react-native-web-hooks';
 
+export * from './useTheme';
+
 export { default as useMolecules } from './useMolecules';
 export { default as usePlatformType } from './usePlatformType';
 export { default as useComponentStyles } from './useComponentStyles';
@@ -22,10 +21,9 @@ export { default as useFilePicker } from './useFilePicker';
 export { default as useLatest } from './useLatest';
 export { default as usePrevious } from './usePrevious';
 export { default as useSearchable, UseSearchableProps } from './useSearchable';
+export { useNormalizeStyles } from './useNormalizeStyles';
 
 export * from './useKeyboardDismissable';
-
-export const useTheme: <T extends ITheme>() => T = useThemeAtoms;
 
 export { default as useSubcomponents, UseSubcomponentsProps } from './useSubcomponents';
 

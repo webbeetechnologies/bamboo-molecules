@@ -158,6 +158,7 @@ export {
     useMolecules,
     usePlatformType,
     useComponentStyles,
+    useNormalizeStyles,
     useTheme,
     useColorMode,
     useCurrentTheme,
