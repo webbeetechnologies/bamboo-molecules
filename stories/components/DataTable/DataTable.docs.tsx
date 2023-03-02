@@ -1,6 +1,7 @@
 import { useMolecules, withDocsWrapper } from '../../common';
 import { Source } from '@storybook/addon-docs';
-
+import DataTableDocsExample from './DataTable-docs-example';
+import { Fragment } from 'react';
 const DocsPage = () => {
     const { View, H1, H2, H3, Text, Code } = useMolecules();
 
@@ -93,31 +94,38 @@ const DocsPage = () => {
                 Create the <Code>renderer</Code> function that will be passed to the{' '}
                 <Code>Grid</Code> component. For example:
                 <Source language="tsx" code={firstCodeBlock} />
+                {'\n'}
             </Text>
+
+            <H2>
+                Demo{'\n'}
+                {'\n'}
+            </H2>
         </View>
     );
 };
 
 const firstCodeBlock = `
 import { memo, useMemo } from 'react';
-import { useMolecules, DataTableProps, RenderHeaderCellProps, RenderCellProps } from '../../../src';
+import { StyleSheet } from 'react-native';
+import { useMolecules, RenderHeaderCellProps, RenderCellProps } from '@bambooapp/bamboo-molecules';
+
 
 /**
  * Modules for demonstration purposes.
  */
 
-export const DataTableComponent = (props: DataTableProps) => {
-    const { DataTable } = useMolecules();
-    return <DataTable {...props} />;
-};
+const styles = StyleSheet.create({
+    dataRow: { alignItems: 'center' },
+    list: { flexDirection: 'row' as 'row', gap: 5 },
+});
 
 const ListRenderer = memo(({ data }: { data: string[] }) => {
-    const { Text, View } = useMolecules();
-    const viewStyles = useMemo(() => ({ flexDirection: 'row' as 'row', gap: 5 }), []);
+    const { Chip, View } = useMolecules();
     return (
-        <View style={viewStyles}>
+        <View style={styles.list}>
             {data.map(item => (
-                <Text>{item}</Text>
+                <Chip.Suggestion key={item} label={item} size="sm" />
             ))}
         </View>
     );
@@ -147,7 +155,12 @@ const renderHeader = (props: RenderHeaderCellProps) => {
     return <HeaderCell {...props} />;
 };
 
+const tableRowProps = {
+    style: styles.dataRow,
+};
 const TableRenderer = () => {
+    const { DataTable } = useMolecules();
+
     const records = useMemo(
         () => [
             { id: 'row-1', name: 'Steve Jobs', company: ['Apple'] },
@@ -175,10 +188,18 @@ const TableRenderer = () => {
         records,
     };
 
-    return <DataTableComponent {...props} />;
+    return <DataTable {...props} rowProps={tableRowProps} />;
 };
 
 export default memo(TableRenderer);
 `;
 
-export default withDocsWrapper(DocsPage);
+const Docs = withDocsWrapper(DocsPage);
+export default () => {
+    return (
+        <Fragment>
+            <Docs />
+            <DataTableDocsExample />
+        </Fragment>
+    );
+};
