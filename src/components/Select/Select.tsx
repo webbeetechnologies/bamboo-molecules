@@ -25,7 +25,7 @@ type DefaultItemT = {
     [key: string]: any;
 };
 
-type SelectRenderItemInfo<TItem> = SectionListRenderItemInfo<TItem> & {
+export type SelectRenderItemInfo<TItem> = SectionListRenderItemInfo<TItem> & {
     selected?: boolean;
 };
 
@@ -34,7 +34,7 @@ type DefaultSectionT<TItem> = {
     [key: string]: any;
 };
 
-type SelectRenderItem<TItem> = (info: SelectRenderItemInfo<TItem>) => ReactElement | null;
+export type SelectRenderItem<TItem> = (info: SelectRenderItemInfo<TItem>) => ReactElement | null;
 
 export type ISelect = <
     ItemType extends DefaultItemT = DefaultItemT,

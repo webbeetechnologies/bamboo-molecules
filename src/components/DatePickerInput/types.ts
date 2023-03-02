@@ -1,7 +1,8 @@
 import type { TextInputProps } from '../TextInput';
 import type { ValidRangeType } from '../DatePickerInline';
 
-export type DatePickerInputProps = {
+export interface DatePickerInputProps
+    extends Omit<TextInputProps, 'value' | 'onChange' | 'onChangeText'> {
     inputMode: 'start' | 'end';
     locale?: string;
     onChange?: (date: Date | null) => void;
@@ -15,8 +16,7 @@ export type DatePickerInputProps = {
      * We currently only accept the variations of dd MM yyyy
      * */
     dateFormat?: string;
-} & Omit<TextInputProps, 'value' | 'onChange' | 'onChangeText'>;
-
-export type DatePickerInputWithoutModalProps = Omit<DatePickerInputProps, 'withModal'> & {
+}
+export interface DatePickerInputWithoutModalProps extends Omit<DatePickerInputProps, 'withModal'> {
     inputButtons?: any;
-};
+}
