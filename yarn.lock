@@ -2120,19 +2120,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bambooapp/bamboo-atoms@npm:^0.0.19":
-  version: 0.0.19
-  resolution: "@bambooapp/bamboo-atoms@npm:0.0.19"
+"@bambooapp/bamboo-atoms@npm:^0.0.20":
+  version: 0.0.20
+  resolution: "@bambooapp/bamboo-atoms@npm:0.0.20"
   dependencies:
     lodash.isnil: ^4.0.0
     ts-deepmerge: ^3.0.0
-  peerDependencies:
-    "@types/react": ^16.6.0
-    "@types/react-native": ^0.60.0
-    react: ^16.6.0
-    react-dom: ^16.6.0
-    react-native: ^0.60.0
-  checksum: 3615a154bbb891c10cd7a8d0b8d1b60139d57f93de7cd3339b7789827708d68edd52580a9fa1fcf79278f68582a478c497618dbe772560851af4779d40cd2c9a
+  checksum: a1f79453e13236848bda73d8a6c06b97338a1e20d314fec941fd298e616dc05823528cb7d4679297b471e65756a0232c43c3faf2db87132d7887323915307d27
   languageName: node
   linkType: hard
 
@@ -2140,7 +2134,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@bambooapp/bamboo-molecules@workspace:."
   dependencies:
-    "@bambooapp/bamboo-atoms": ^0.0.19
+    "@bambooapp/bamboo-atoms": ^0.0.20
     "@react-native-aria/overlays": ^0.3.2
     "@react-native-community/eslint-config": ^3.1.0
     "@storybook/addon-coverage": ^0.0.7
@@ -2203,9 +2197,9 @@ __metadata:
     ts-jest: ^29.0.3
     typescript: ~4.3.5
   peerDependencies:
-    react-native-document-picker: "*"
-    react-native-gesture-handler: "*"
-    react-native-vector-icons: ">=9.2.0 < 19"
+    react-native-document-picker: ">=8.1.3"
+    react-native-gesture-handler: ">=2.9.0"
+    react-native-vector-icons: ">=9.2.0"
   languageName: unknown
   linkType: soft
 
