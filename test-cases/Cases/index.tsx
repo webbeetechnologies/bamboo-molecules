@@ -1,5 +1,6 @@
 import { StyleSheet, SafeAreaView, StatusBar, Platform } from 'react-native';
-import { useMolecules, ProvideMolecules } from 'bamboo-molecules';
+import { ProvideMolecules } from 'bamboo-molecules';
+import { DataTableDemo } from './DataTable';
 
 const style = StyleSheet.create({
     wrap: {
@@ -16,17 +17,17 @@ const style = StyleSheet.create({
     },
 });
 
-const Components = () => {
-    const { Button } = useMolecules();
-
-    return <Button variant="contained">Contained Button </Button>;
-};
+// const Components = () => {
+//     const { Button } = useMolecules();
+//
+//     return <Button variant="contained">Contained Button </Button>;
+// };
 
 export default () => {
     return (
         <ProvideMolecules>
             <SafeAreaView style={style.wrap}>
-                <Components />
+                <DataTableDemo />
             </SafeAreaView>
         </ProvideMolecules>
     );

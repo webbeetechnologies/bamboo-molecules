@@ -9,9 +9,9 @@ PODS:
     - ExpoModulesCore
   - EXFont (10.2.0):
     - ExpoModulesCore
-  - Expo (46.0.17):
+  - Expo (46.0.20):
     - ExpoModulesCore
-  - ExpoKeepAwake (10.2.0):
+  - ExpoKeepAwake (10.2.1):
     - ExpoModulesCore
   - ExpoModulesCore (0.11.8):
     - React-Core
@@ -238,7 +238,7 @@ PODS:
   - React-jsinspector (0.69.6)
   - React-logger (0.69.6):
     - glog
-  - react-native-document-picker (8.1.2):
+  - react-native-document-picker (8.1.3):
     - React-Core
   - React-perflogger (0.69.6)
   - React-RCTActionSheet (0.69.6):

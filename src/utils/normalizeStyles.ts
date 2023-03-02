@@ -15,6 +15,10 @@ const normalizeStyles: StyleProp<any> | StyleProp<any>[] = normalizeStylesMemo(
             return styles.map(styleObj => normalizeStyles(styleObj, currentTheme));
         }
 
+        if (!styles) {
+            return undefined;
+        }
+
         const newStyles = Object.assign({}, styles);
         const normalizableProperties = Object.keys(newStyles).filter(
             key =>

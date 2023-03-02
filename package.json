@@ -45,7 +45,8 @@
     "coverage": "cp coverage/storybook/coverage-storybook.json coverage/coverage-storybook.json && npx nyc report --reporter=html -t coverage --report-dir coverage/lcov-report",
     "test:coverage": "yarn test-jest --coverage && yarn test-storybook --coverage && yarn coverage",
     "build-storybook": "build-storybook",
-    "chromatic": "npx chromatic --project-token=934368a7f6c9"
+    "chromatic": "npx chromatic --project-token=934368a7f6c9",
+    "perf": "npx reassure"
   },
   "dependencies": {
     "@bambooapp/bamboo-atoms": "^0.0.19",
@@ -95,7 +96,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.1",
     "jest": "27",
-    "jest-environment-jsdom": "27",
     "jest-environment-node": "27",
     "jest-transform-stub": "^2.0.0",
     "prettier": "^2.7.1",
@@ -107,6 +107,8 @@
     "react-native-gesture-handler": "^2.9.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "^0.18.9",
+    "react-test-renderer": "^18.2.0",
+    "reassure": "^0.7.1",
     "storybook-addon-performance": "^0.16.1",
     "storybook-mock-date-decorator": "^1.0.0",
     "ts-jest": "^29.0.3",
@@ -150,7 +152,9 @@
       "json"
     ],
     "preset": "react-native",
-    "setupFiles": [],
+    "setupFiles": [
+      "./node_modules/react-native-gesture-handler/jestSetup.js"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/example",

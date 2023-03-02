@@ -69,6 +69,7 @@ import {
     OptionFlatList,
     Portal,
     ScrollView,
+    DataTable,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -142,6 +143,7 @@ const defaultComponents: DefaultComponents = {
     OptionFlatList,
     Portal,
     ScrollView,
+    DataTable,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

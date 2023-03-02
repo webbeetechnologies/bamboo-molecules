@@ -1,8 +1,9 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { View, Text, StyleSheet } from 'react-native';
-import { generateFlatListData, ProvideMolecules } from '../../common';
+import { ProvideMolecules } from '../../common';
 
 import { Example } from './FlatGrid';
+import { generateFlatListData } from '../../../__mocks__/generateFlatListData';
 
 export default {
     title: 'components/FlatGrid',

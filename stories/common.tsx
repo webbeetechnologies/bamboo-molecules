@@ -2,14 +2,15 @@ import type { ComponentType, ReactNode } from 'react';
 import {
     extendTheme,
     ProvideMolecules as DefaultProvideMolecules,
-    useMolecules as useMoleculesDefault,
-    useComponentStyles,
     TextProps,
+    useComponentStyles,
+    useMolecules as useMoleculesDefault,
 } from '../src';
 import { linkTo } from '@storybook/addon-links';
 
 import { addDecorator } from '@storybook/react';
 import { withPerformance } from 'storybook-addon-performance';
+import { generateFlatListData } from '../__mocks__/generateFlatListData';
 
 // creating theme styles similar to mdx
 export const theme = extendTheme({
@@ -107,14 +108,15 @@ const DocLink = ({ style, href, ...rest }: DocLinkProps) => {
 
 const components = { Code, DocLink };
 
-export const withDocsWrapper = (Component: () => JSX.Element) => (props: typeof Component) => {
-    return (
-        // @ts-ignore
-        <DefaultProvideMolecules components={components} theme={theme}>
-            <Component {...props} />
-        </DefaultProvideMolecules>
-    );
-};
+export const withDocsWrapper =
+    <T extends {} = {}>(Component: ComponentType<T>) =>
+    (props: T) => {
+        return (
+            <DefaultProvideMolecules components={components} theme={theme}>
+                <Component {...props} />
+            </DefaultProvideMolecules>
+        );
+    };
 
 const storyTheme = extendTheme({
     colorMode: 'light',
@@ -144,29 +146,6 @@ export const generateSectionListData = (sectionsLength: number, dataLength: numb
 
         // Create an object with the unique id, title, and data properties
         const obj = { id: sectionIndex, title, data };
-
-        // Push the object into the array
-        arr.push(obj);
-    }
-
-    // Return the array
-    return arr;
-};
-
-export const generateFlatListData = (
-    dataLength: number,
-    manipulateOutputObj: (itemIndex: number) => { id: number; title: string } = i => ({
-        id: i,
-        title: `item ${i}`,
-    }),
-) => {
-    // Create an empty array
-    const arr: { id: number; title: string }[] = [];
-
-    // Loop n times
-    for (let i = 0; i < dataLength; i++) {
-        // Create an object with the unique id, title, and data properties
-        const obj = manipulateOutputObj(i);
 
         // Push the object into the array
         arr.push(obj);

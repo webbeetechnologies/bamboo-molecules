@@ -113,6 +113,11 @@ import {
     gridStyles,
     optionFlatListStyles,
     scrollViewStyles,
+    dataTableStyles,
+    dataTableCellStyles,
+    dataTableRowStyles,
+    dataTableHeaderStyles,
+    dataTableHeaderCellStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -272,6 +277,12 @@ const defaultThemeValue: Partial<ITheme> = {
     OptionFlatList: optionFlatListStyles,
 
     ScrollView: scrollViewStyles,
+
+    DataTable: dataTableStyles,
+    DataTable_Cell: dataTableCellStyles,
+    DataTable_Row: dataTableRowStyles,
+    DataTable_HeaderRow: dataTableHeaderStyles,
+    DataTable_HeaderCell: dataTableHeaderCellStyles,
 };
 
 export const defaultExtractStyles = memoize(

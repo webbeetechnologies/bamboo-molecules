@@ -127,6 +127,11 @@ export {
     GridProps,
     ScrollViewProps,
     ScrollViewRef,
+    DataTable,
+    DataTableProps,
+    RenderHeaderCellProps,
+    RenderCellProps,
+    useDataTableCell,
 } from './components';
 
 export {

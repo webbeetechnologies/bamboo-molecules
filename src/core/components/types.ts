@@ -61,6 +61,7 @@ import type {
     IOptionFlatList,
     Portal,
     ScrollViewProps,
+    DataTable,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -130,6 +131,7 @@ export interface DefaultComponents {
     OptionFlatList: IOptionFlatList;
     Portal: typeof Portal;
     ScrollView: ComponentType<ScrollViewProps>;
+    DataTable: typeof DataTable;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

@@ -1,9 +1,10 @@
 import { StyleSheet, View } from 'react-native';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { generateFlatListData, ProvideMolecules } from '../../common';
+import { ProvideMolecules } from '../../common';
 import { Example as ListItem, ListItemTitle } from '../ListItem/ListItem';
 
 import { Example } from './FlatList';
+import { generateFlatListData } from '../../../__mocks__/generateFlatListData';
 
 export default {
     title: 'components/FlatList',

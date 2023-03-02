@@ -169,3 +169,5 @@ export * from './OptionFlatList';
 export * from './Portal';
 
 export * from './ScrollView';
+
+export * from './DataTable';
