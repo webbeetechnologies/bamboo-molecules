@@ -49,7 +49,7 @@
     "perf": "npx reassure"
   },
   "dependencies": {
-    "@bambooapp/bamboo-atoms": "^0.0.20",
+    "@bambooapp/bamboo-atoms": "^0.0.22",
     "@react-native-aria/overlays": "^0.3.2",
     "color": "^4.2.3",
     "date-fns": "^2.29.3",
