@@ -3,14 +3,29 @@ import type { MD3Theme } from '../core/theme/types';
 import { createMemoizedFunction, get } from './lodash';
 
 const normalizeStylesMemo = createMemoizedFunction({
-    resolver: (styles: StyleProp<any> | StyleProp<any>[], _, key: string) =>
-        `${key}_${JSON.stringify(styles)}`,
+    /**
+     *
+     * @param styles the style object to normalize
+     * @param currentTheme for switching between themes
+     * @param cacheKey to resolve unique values for different components
+     */
+    resolver: (
+        styles: StyleProp<any> | StyleProp<any>[],
+        { themeName }: MD3Theme,
+        cacheKey: string,
+    ) => `${cacheKey}_${themeName}_${JSON.stringify(styles)}`,
 });
 
 // normalize tokens inside the styles object and the subsequent objects inside it
 const normalizeStyles = normalizeStylesMemo(
+    /**
+     *
+     * @param styles the style object to normalize
+     * @param currentTheme for switching between themes
+     * @param cacheKey to resolve unique values for different components
+     */
     (styles: StyleProp<any> | StyleProp<any>[], currentTheme: MD3Theme, cacheKey: string) => {
-        // if the styles is an array, we want to normalize each entries
+        // if the styles is an array, we want to normalize each entry
         if (Array.isArray(styles)) {
             return styles.map(styleObj => normalizeStyles(styleObj, currentTheme, cacheKey));
         }
