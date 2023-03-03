@@ -45,7 +45,7 @@
     "coverage": "cp coverage/storybook/coverage-storybook.json coverage/coverage-storybook.json && npx nyc report --reporter=html -t coverage --report-dir coverage/lcov-report",
     "test:coverage": "yarn test-jest --coverage && yarn test-storybook --coverage && yarn coverage",
     "build-storybook": "build-storybook",
-    "chromatic": "npx chromatic --project-token=934368a7f6c9",
+    "chromatic": "npx chromatic --project-token=934368a7f6c9 --only-changed",
     "perf": "npx reassure"
   },
   "dependencies": {
