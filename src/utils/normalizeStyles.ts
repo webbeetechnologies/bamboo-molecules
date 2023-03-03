@@ -8,11 +8,11 @@ const normalizeStylesMemo = createMemoizedFunction({
 });
 
 // normalize tokens inside the styles object and the subsequent objects inside it
-const normalizeStyles: StyleProp<any> | StyleProp<any>[] = normalizeStylesMemo(
-    (styles: StyleProp<any> | StyleProp<any>[], currentTheme: MD3Theme, key: string) => {
+const normalizeStyles = normalizeStylesMemo(
+    (styles: StyleProp<any> | StyleProp<any>[], currentTheme: MD3Theme, cacheKey: string) => {
         // if the styles is an array, we want to normalize each entries
         if (Array.isArray(styles)) {
-            return styles.map(styleObj => normalizeStyles(styleObj, currentTheme), key);
+            return styles.map(styleObj => normalizeStyles(styleObj, currentTheme, cacheKey));
         }
 
         if (!styles) {
@@ -31,7 +31,7 @@ const normalizeStyles: StyleProp<any> | StyleProp<any>[] = normalizeStylesMemo(
                 newStyles[key] = get(currentTheme, newStyles[key], '');
             } else {
                 // it's an object // we want to normalize everything inside it as well
-                newStyles[key] = normalizeStyles(newStyles[key], currentTheme);
+                newStyles[key] = normalizeStyles(newStyles[key], currentTheme, cacheKey);
             }
         });
 
