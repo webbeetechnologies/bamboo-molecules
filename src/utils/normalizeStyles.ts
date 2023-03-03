@@ -3,16 +3,31 @@ import type { MD3Theme } from '../core/theme/types';
 import { createMemoizedFunction, get } from './lodash';
 
 const normalizeStylesMemo = createMemoizedFunction({
-    resolver: (styles: StyleProp<any> | StyleProp<any>[], { themeName }: MD3Theme) =>
-        JSON.stringify(styles) + themeName,
+    /**
+     *
+     * @param styles the style object to normalize
+     * @param currentTheme for switching between themes
+     * @param cacheKey to resolve unique values for different components
+     */
+    resolver: (
+        styles: StyleProp<any> | StyleProp<any>[],
+        { themeName }: MD3Theme,
+        cacheKey: string,
+    ) => `${cacheKey}_${themeName}_${JSON.stringify(styles)}`,
 });
 
 // normalize tokens inside the styles object and the subsequent objects inside it
-const normalizeStyles: StyleProp<any> | StyleProp<any>[] = normalizeStylesMemo(
-    (styles: StyleProp<any> | StyleProp<any>[], currentTheme: MD3Theme) => {
-        // if the styles is an array, we want to normalize each entries
+const normalizeStyles = normalizeStylesMemo(
+    /**
+     *
+     * @param styles the style object to normalize
+     * @param currentTheme for switching between themes
+     * @param cacheKey to resolve unique values for different components
+     */
+    (styles: StyleProp<any> | StyleProp<any>[], currentTheme: MD3Theme, cacheKey: string) => {
+        // if the styles is an array, we want to normalize each entry
         if (Array.isArray(styles)) {
-            return styles.map(styleObj => normalizeStyles(styleObj, currentTheme));
+            return styles.map(styleObj => normalizeStyles(styleObj, currentTheme, cacheKey));
         }
 
         if (!styles) {
@@ -31,7 +46,7 @@ const normalizeStyles: StyleProp<any> | StyleProp<any>[] = normalizeStylesMemo(
                 newStyles[key] = get(currentTheme, newStyles[key], '');
             } else {
                 // it's an object // we want to normalize everything inside it as well
-                newStyles[key] = normalizeStyles(newStyles[key], currentTheme);
+                newStyles[key] = normalizeStyles(newStyles[key], currentTheme, cacheKey);
             }
         });
 

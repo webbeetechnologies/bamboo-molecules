@@ -287,8 +287,12 @@ const defaultThemeValue: Partial<ITheme> = {
 
 export const defaultExtractStyles = memoize(
     ({ theme, componentName, colorMode, style }: IExtractStylesFuncArgs) => {
-        const normalizedComponentStyles = normalizeStyles(theme[componentName], theme[colorMode]);
-        const normalizedStyleProp = normalizeStyles(style, theme[colorMode]);
+        const normalizedComponentStyles = normalizeStyles(
+            theme[componentName],
+            theme[colorMode],
+            componentName,
+        );
+        const normalizedStyleProp = normalizeStyles(style, theme[colorMode], componentName);
 
         return { ...normalizedComponentStyles, ...normalizedStyleProp };
     },

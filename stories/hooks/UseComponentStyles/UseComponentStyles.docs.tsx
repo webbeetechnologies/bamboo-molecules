@@ -181,16 +181,10 @@ const unnormalizedStyles = {
     borderRadius: 'shapes.corner.extraSmall',
 }
 
-// here we create a hook that'll normalize the style objects
-const useNormalizeStyles = (styleObj) => {
-    const currentTheme = useCurrentTheme();
-    const normalizedStyles = normalizeStyles(styleObj, currentTheme);
-    
-    return normalizedStyles;
-}
+// You can use normalized styles using the useNormalizeStyles hook.
 
 const MyComponent = () => {
-    const myStyles = useNormalizeStyles(unnormalizedStyles);
+    const myStyles = useNormalizeStyles(unnormalizedStyles, 'my_component');
     console.log(myStyles); // object with normalized values
     
     return (

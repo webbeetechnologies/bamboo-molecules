@@ -1,7 +1,7 @@
 import { StyleProp, StyleSheet } from 'react-native';
 import type { ITheme } from '../core';
-import { normalizeStyles } from '../utils';
-import { useTheme, useColorMode } from './';
+import { useTheme } from './useTheme';
+import { useNormalizeStyles } from './useNormalizeStyles';
 
 const defaultStyleObject = {};
 
@@ -22,12 +22,10 @@ const useComponentStyles = (
 ) => {
     const { variant, states, size } = resolvers || {};
     const theme = useTheme<ITheme>();
-    const { colorMode } = useColorMode();
 
     const componentTheme = theme[componentName];
-    const currentTheme = theme[colorMode as string];
 
-    return normalizeStyles(
+    return useNormalizeStyles(
         theme.resolveComponentStyles({
             componentTheme,
             variant,
@@ -35,7 +33,7 @@ const useComponentStyles = (
             size,
             style: StyleSheet.flatten(style),
         }),
-        currentTheme,
+        componentName,
     );
 };
 
