@@ -28,3 +28,5 @@ export * from './useKeyboardDismissable';
 export { default as useSubcomponents, UseSubcomponentsProps } from './useSubcomponents';
 
 export * from './useMaskedInputProps';
+
+export * from './useQueryFilter';

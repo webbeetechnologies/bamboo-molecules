@@ -179,6 +179,8 @@ export {
     useScaledSize,
     useMaskedInputProps,
     UseMaskedInputProps,
+    useQueryFilter,
+    UseQueryFilterProps,
 } from './hooks';
 
 export {
