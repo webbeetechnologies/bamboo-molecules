@@ -19,7 +19,7 @@ import type { SectionListRenderItemInfo } from '../SectionList';
 
 type DefaultItemT = {
     id: string | number;
-    label: string;
+    label?: string;
     right?: ReactNode;
     left?: ReactNode;
     [key: string]: any;
@@ -63,15 +63,15 @@ export type Props<
     /*
      * Expects an array of TItem in multiple mode. If the item already exists in the array, it will be removed.
      * */
-    value?: TItem | TItem[];
+    value?: TItem | TItem[] | null;
     /*
      * default value for the uncontrolledState
      * */
-    defaultValue?: TItem | TItem[];
+    defaultValue?: TItem | TItem[] | null;
     /*
      * passes the current selectedItem. Will be an array in multiple mode
      * */
-    onChange?: (item: TItem | TItem[]) => void;
+    onChange?: (item: TItem | TItem[] | null) => void;
     /*
      * whether or not pressing the field will open the popup
      * if false, the popup can be controlled using the ref
@@ -89,6 +89,11 @@ export type Props<
      * style for the Pressable container
      * */
     containerStyle?: ViewStyle;
+    /**
+     * key for the label which will be displayed in input value and list-items of the dropdown list
+     * @default 'label'
+     * */
+    labelKey?: string;
 };
 
 export type SelectHandles = {
@@ -112,6 +117,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
         pressOpen = true,
         containerStyle: containerStyleProp,
         dropdownListStyle,
+        labelKey = 'label',
         ...rest
     }: Props<TItem>,
     ref: any,
@@ -126,7 +132,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
 
     const triggerRef = useRef(null);
 
-    const [selectionValue, onSelectionValueChange] = useControlledValue({
+    const [selectionValue, onSelectionValueChange] = useControlledValue<TItem | TItem[] | null>({
         value: valueProp,
         defaultValue,
         onChange: onChangeProp,
@@ -150,18 +156,18 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
         if (!selectionValue) return '';
 
         if (!Array.isArray(selectionValue) && Object.keys(selectionValue).length) {
-            return selectionValue.label;
+            return selectionValue[labelKey];
         }
 
         return selectionValue.reduce(
             (acc: string, current: TItem, index: number) =>
-                acc.concat(index === 0 ? `${current.label}` : `, ${current.label}`),
+                acc.concat(index === 0 ? `${current[labelKey]}` : `, ${current[labelKey]}`),
             '',
         );
-    }, [selectionValue]);
+    }, [labelKey, selectionValue]);
 
     const onSelectItemChange = useCallback(
-        (item: TItem | TItem[]) => {
+        (item: TItem | TItem[] | null) => {
             onSelectionValueChange(item);
         },
         [onSelectionValueChange],
@@ -186,9 +192,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
 
     const renderItem = useCallback(
         (info: SectionListRenderItemInfo<TItem>) => {
-            const selected = Array.isArray(selectionValue)
-                ? !!selectionValue.find(item => item.id === info.item.id)
-                : selectionValue.id === info.item.id;
+            const selected = isItemInSelection(selectionValue, info.item);
 
             if (renderItemProp) {
                 return renderItemProp({ ...info, selected });
@@ -200,11 +204,11 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
                     selected={selected}
                     right={info.item.right}
                     left={info.item.left}>
-                    <ListItem.Title>{info.item.label}</ListItem.Title>
+                    <ListItem.Title>{info.item[labelKey]}</ListItem.Title>
                 </ListItem>
             );
         },
-        [ListItem, renderItemProp, selectionValue],
+        [ListItem, labelKey, renderItemProp, selectionValue],
     );
 
     // passing the methods and merging with triggerRef so that element instance is also available in the ref (useful for using with components like Tooltip)
@@ -271,6 +275,22 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
             />
         </>
     );
+};
+
+const isItemInSelection = <TItem extends DefaultItemT = DefaultItemT>(
+    selectionValue: TItem | TItem[] | null,
+    item: TItem,
+) => {
+    // If selection is falsy (null, undefined, false, etc.), the item is not in the selection
+    if (!selectionValue) return false;
+
+    if (Array.isArray(selectionValue)) {
+        // If selection is an array, check if at least one item in the array has the same ID as the current item
+        return selectionValue.some(selectionItem => selectionItem.id === item.id);
+    }
+
+    // If selection is an object, check if its ID is the same as the current item's ID
+    return selectionValue?.id === item.id;
 };
 
 export default memo(forwardRef(Select)) as ISelect;

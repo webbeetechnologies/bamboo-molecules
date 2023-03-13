@@ -94,7 +94,7 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     }, [isOpen, setIsOpen]);
 
     const onSelectionChange = useCallback(
-        (item: TItem | TItem[]) => {
+        (item: TItem | TItem[] | null) => {
             onSelectionChangeProp?.(item);
 
             if (hideOnSelect) {

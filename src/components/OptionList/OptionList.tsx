@@ -40,11 +40,11 @@ export type Props<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = Use
         /*
          * Expects an array of TItem in multiple mode. If the item already exists in the array, it will be removed.
          * */
-        selection?: TItem | TItem[];
+        selection?: TItem | TItem[] | null;
         /*
          * passes the current selectedItem. Will be an array in multiple mode
          * */
-        onSelectionChange?: (item: TItem | TItem[]) => void;
+        onSelectionChange?: (item: TItem | TItem[] | null) => void;
     };
 
 const OptionList = <
@@ -68,7 +68,7 @@ const OptionList = <
 }: Props<TItem, TSection>) => {
     const { SectionList, View, TouchableRipple } = useMolecules();
     const SearchField = useSearchable({ query, onQueryChange, searchable, searchInputProps });
-    const [selection, onSelectionChange] = useControlledValue<TItem | TItem[]>({
+    const [selection, onSelectionChange] = useControlledValue<TItem | TItem[] | null>({
         value: selectionProp,
         onChange: onSelectionChangeProp,
     });

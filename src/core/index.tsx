@@ -15,4 +15,10 @@ export {
 
 export { PlatformTypeContext, ProvidePlatformType, PlatformType } from './platform';
 
-export { ProvideMolecules } from './ProvideMolecules';
+export {
+    ProvideMolecules,
+    ProvidePortal,
+    ProvideMoleculesWithoutPortal,
+    ProvidePortalProps,
+    ProvideMoleculesProps,
+} from './ProvideMolecules';
