@@ -1,5 +1,5 @@
 import { forwardRef, memo } from 'react';
-import type { ViewStyle } from 'react-native';
+import type { TextStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 import iconFactory from './iconFactory';
 import type { IconProps } from './types';
@@ -19,8 +19,9 @@ type CustomProps = {
     animationScale: string;
 };
 
-export const defaultStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProps> = {
+export const defaultStyles: ComponentStylePropWithVariants<TextStyle, '', CustomProps> = {
     animationScale: 'animation.scale',
+    color: 'colors.onSurface',
 };
 
 export default memo(forwardRef(Icon));
