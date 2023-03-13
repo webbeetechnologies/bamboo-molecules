@@ -33,10 +33,40 @@ export const ProvideMolecules = ({
                 extractStyles={extractStyles}
                 resolveComponentStyles={resolveComponentStyles}>
                 <ProvideComponents components={components}>
-                    <PortalProvider>
-                        <PortalHost>{children}</PortalHost>
-                    </PortalProvider>
+                    <ProvidePortal>{children}</ProvidePortal>
                 </ProvideComponents>
+            </ProvideTheme>
+        </ProvidePlatformType>
+    );
+};
+
+export type ProvidePortalProps = {
+    children: ReactNode;
+};
+
+export const ProvidePortal = ({ children }: ProvidePortalProps) => {
+    return (
+        <PortalProvider>
+            <PortalHost>{children}</PortalHost>
+        </PortalProvider>
+    );
+};
+
+export const ProvideMoleculesWithoutPortal = ({
+    platformType = 'android',
+    theme = defaultTheme,
+    components = {},
+    extractStyles,
+    resolveComponentStyles,
+    children,
+}: ProvideMoleculesProps) => {
+    return (
+        <ProvidePlatformType platformType={platformType}>
+            <ProvideTheme
+                theme={theme}
+                extractStyles={extractStyles}
+                resolveComponentStyles={resolveComponentStyles}>
+                <ProvideComponents components={components}>{children}</ProvideComponents>
             </ProvideTheme>
         </ProvidePlatformType>
     );

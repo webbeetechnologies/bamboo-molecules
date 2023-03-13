@@ -139,6 +139,8 @@ export {
 export {
     ProvideMolecules,
     ProvideComponents,
+    ProvidePortal,
+    ProvideMoleculesWithoutPortal,
     ConsumeComponents,
     extractComponents,
     PlatformTypeContext,
@@ -149,6 +151,8 @@ export {
     PlatformType,
     IComponentsProviderContext,
     ResolveComponentStylesArgs,
+    ProvideMoleculesProps,
+    ProvidePortalProps,
     extractStyles,
 } from './core';
 
