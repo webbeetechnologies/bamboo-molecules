@@ -129,6 +129,32 @@ import type { ITheme, ProvideThemeArgs } from './types';
 import { usePrevious } from '../../hooks';
 import { clearStylesCache } from '../../utils';
 
+const typographyComponentsKeys = [
+    'H1',
+    'H2',
+    'H3',
+    'H4',
+    'H5',
+    'H6',
+    'Heading',
+    'Italic',
+    'Label',
+    'Strikethrough',
+    'Strong',
+    'Text',
+    'Underline',
+];
+const typographyComponentStyles = typographyComponentsKeys.reduce(
+    (acc: Record<string, any>, current) => {
+        acc[current] = {
+            color: 'colors.onSurface',
+        };
+
+        return acc;
+    },
+    {},
+);
+
 const defaultThemeValue: Partial<ITheme> = {
     light: MD3LightTheme,
     dark: MD3DarkTheme,
@@ -142,6 +168,9 @@ const defaultThemeValue: Partial<ITheme> = {
         },
         numberOfColumns: 12,
     },
+
+    ...typographyComponentStyles,
+
     ActivityIndicator: activityIndicatorStyles,
     Button: buttonStyles,
     HorizontalDivider: horizontalDividerStyles,
