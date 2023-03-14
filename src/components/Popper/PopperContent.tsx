@@ -73,10 +73,9 @@ const PopperContent = (
     const restElements: ReactNode[] = [];
     let arrowElement: ReactElement | null = null;
 
-    const updatePositionRef = useRef(updatePosition);
     const onUpdate = useCallback(() => {
-        updatePositionRef.current();
-    }, []);
+        updatePosition();
+    }, [updatePosition]);
 
     useEffect(() => {
         if (isOpen) {
