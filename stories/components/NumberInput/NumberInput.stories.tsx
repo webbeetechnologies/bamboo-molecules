@@ -14,6 +14,8 @@ export const Default: ComponentStory<typeof Example> = args => <Example {...args
 Default.args = {
     placeholder: 'Placeholder',
     label: 'Enter numbers',
+    prefix: ['$'],
+    allowNegative: true,
 };
 
 Default.parameters = {
