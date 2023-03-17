@@ -1,6 +1,4 @@
 import { forwardRef, memo, useMemo } from 'react';
-import type { MaskArray } from 'react-native-mask-input';
-
 import { useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 import { createNumberMask } from '../../utils';
@@ -42,7 +40,7 @@ export type Props = Omit<TextInputProps, 'value' | 'defaultValue' | 'onChangeTex
     /**
      * Mask to be prefixed on the mask result
      * */
-    prefix?: MaskArray;
+    prefix?: string | string[];
     /**
      * Mask to be suffixed on the mask result
      * */
@@ -52,13 +50,13 @@ export type Props = Omit<TextInputProps, 'value' | 'defaultValue' | 'onChangeTex
 const NumberInput = (
     {
         keyboardType = 'numeric',
-        delimiter = '.',
+        delimiter = ',',
         precision = 2,
-        separator = '',
+        separator = '.',
         allowDecimals = true,
         allowNegative = true,
-        prefix,
-        suffix,
+        prefix = [],
+        suffix = '',
         ...rest
     }: Props,
     ref: any,
@@ -70,10 +68,11 @@ const NumberInput = (
                 delimiter,
                 precision: !allowDecimals ? 0 : precision,
                 separator,
-                prefix: prefix ? prefix : allowNegative ? [/^[\d+-]+$/] : [/^[\d+]+$/],
+                prefix,
+                allowNegative,
                 suffix,
             }),
-        [allowDecimals, allowNegative, delimiter, precision, prefix, suffix, separator],
+        [allowDecimals, allowNegative, delimiter, precision, prefix, separator, suffix],
     );
 
     return <MaskedInput mask={mask} {...rest} keyboardType={keyboardType} ref={ref} />;

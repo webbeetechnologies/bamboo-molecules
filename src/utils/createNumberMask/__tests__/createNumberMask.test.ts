@@ -1,6 +1,5 @@
 import { formatWithMask, MaskArray } from 'react-native-mask-input';
-import type { CreateNumberMaskProps } from 'react-native-mask-input/lib/typescript/src/createNumberMask.types';
-import createNumberMask from '../createNumberMask';
+import createNumberMask, { Props as CreateNumberMaskProps } from '../createNumberMask';
 
 interface Props extends Partial<CreateNumberMaskProps> {
     value: string;
@@ -16,6 +15,7 @@ const getMaskedValue = ({
     prefix,
     suffix,
     getDelimiterOffset,
+    allowNegative,
 }: Props) => {
     const mask = (
         createNumberMask({
@@ -25,6 +25,7 @@ const getMaskedValue = ({
             suffix,
             prefix,
             getDelimiterOffset,
+            allowNegative,
         }) as (value?: string) => MaskArray
     )(value);
 
@@ -141,6 +142,29 @@ describe('createNumberMask', () => {
             prefix: ['INR '],
             precision: 2,
             value: '98765432.10',
+            getDelimiterOffset: i => (i > 0 ? 2 : 3),
+        });
+
+        expect(masked).toBe('INR 9,87,65,432.10');
+    });
+
+    it('works with negative sign and prefix', () => {
+        const { masked } = getMaskedValue({
+            prefix: 'INR ',
+            precision: 2,
+            value: '-98765432.10',
+            getDelimiterOffset: i => (i > 0 ? 2 : 3),
+        });
+
+        expect(masked).toBe('-INR 9,87,65,432.10');
+    });
+
+    it('doesnt accept negative sign when allowNegative is false', () => {
+        const { masked } = getMaskedValue({
+            prefix: ['INR '],
+            allowNegative: false,
+            precision: 2,
+            value: '-98765432.10',
             getDelimiterOffset: i => (i > 0 ? 2 : 3),
         });
 

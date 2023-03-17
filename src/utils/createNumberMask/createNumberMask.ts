@@ -1,11 +1,18 @@
 import type { Mask } from 'react-native-mask-input/lib/typescript/src/formatWithMask.types';
 import type { CreateNumberMaskProps } from 'react-native-mask-input/lib/typescript/src/createNumberMask.types';
 import type { MaskArray } from 'react-native-mask-input';
+import { escapeRegex } from '../escapeRegex';
 
-interface Props extends Partial<CreateNumberMaskProps> {
+export interface Props extends Partial<Omit<CreateNumberMaskProps, 'prefix'>> {
+    prefix?: string | string[];
     suffix?: string | string[];
     getDelimiterOffset?: (index: number) => number;
+    allowNegative?: boolean;
+    optionalPrefix?: string | string[];
 }
+
+const joinIfStringArr = (value: string | string[]) =>
+    Array.isArray(value) ? value.join('') : value || '';
 
 export default function createNumberMask(props?: Props): Mask {
     const {
@@ -15,10 +22,32 @@ export default function createNumberMask(props?: Props): Mask {
         separator = '.',
         suffix = [],
         getDelimiterOffset = (_index: number) => 3,
+        allowNegative = true,
     } = props || {};
 
     return (value: string | number = '') => {
         value = String(value);
+
+        // the first prefix will allow plus sign, minus sign(if allowNegative is true), and the prefix from the args
+        let firstPrefix: string | RegExp = new RegExp(
+            `[+${allowNegative ? '\\-' : ''}${escapeRegex(joinIfStringArr(prefix))}]`,
+            'g',
+        );
+
+        // if the first value already included, plus or minus sign, the value that comes after it should be the prefix
+        // otherwise, it means the first value has the prefix (doesnt matter if it's an array)
+        let secondPrefix: string | string[] = ['+', '-'].includes(value[0]) ? prefix : [];
+
+        const hasMinusSign = allowNegative && value[0] === '-';
+        const hasMinusSignOrPlusSign = hasMinusSign || value[0] === '+';
+        const isFirstValueNumber = !Number.isNaN(value[0]);
+
+        // if the first value that has been entered is a number and not plus or minus sign, the prefix should be displayed before that value
+        if (isFirstValueNumber && !hasMinusSignOrPlusSign) {
+            firstPrefix = '';
+            secondPrefix = prefix;
+        }
+
         const shouldAddSeparatorOnMask = !!value && precision > 0 && !!separator;
         const [normalizedValue = '', ...mantissa] =
             shouldAddSeparatorOnMask || precision === 0 ? value.split(separator) : [value];
@@ -57,6 +86,6 @@ export default function createNumberMask(props?: Props): Mask {
             mask.push(separator, ...Array.from({ length: decimalLength }, () => /\d/));
         }
 
-        return [...prefix, ...mask, ...suffix];
+        return [firstPrefix, ...secondPrefix, ...mask, ...suffix];
     };
 }
