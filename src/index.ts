@@ -173,6 +173,10 @@ export {
     useLatest,
     useSearchable,
     UseSearchableProps,
+    usePrevious,
+    useSubcomponents,
+    useBackHandler,
+    useKeyboardDismissable,
     // react-native-web-hooks
     useActive,
     useFocus,

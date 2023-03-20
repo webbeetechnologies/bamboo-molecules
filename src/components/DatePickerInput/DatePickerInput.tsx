@@ -16,6 +16,7 @@ function DatePickerInput(
         inputMode,
         validRange,
         onChange = noop,
+        disabled = false,
         //locale = 'en',
         ...rest
     }: DatePickerInputProps,
@@ -49,6 +50,7 @@ function DatePickerInput(
                             style={styles.calendarButton}
                             name={calendarIcon}
                             onPress={onPressCalendarIcon}
+                            disabled={disabled}
                         />
 
                         <DatePickerInputModal
@@ -68,6 +70,7 @@ function DatePickerInput(
         [
             IconButton,
             calendarIcon,
+            disabled,
             locale,
             onDismiss,
             onInnerConfirm,
@@ -83,6 +86,7 @@ function DatePickerInput(
         <DatePickerInputWithoutModal
             ref={ref}
             {...rest}
+            disabled={disabled}
             value={value}
             inputMode={inputMode}
             validRange={validRange}

@@ -5,6 +5,7 @@ import { useComponentStyles, useMolecules, useToggle } from '../../hooks';
 import type { TimePickerModalProps } from '../TimePickerModal';
 import type { TextInputProps } from '../TextInput';
 import { timeFormat, getFormattedTime, getOutputTime } from './utils';
+import type { IconButtonProps } from '../IconButton';
 
 export type Props = TextInputProps & {
     time: string;
@@ -12,6 +13,7 @@ export type Props = TextInputProps & {
     is24Hour?: boolean;
     withModal?: boolean;
     modalProps?: Omit<TimePickerModalProps, 'time' | 'onConfirm' | 'isOpen' | 'onClose'>;
+    iconButtonProps?: Omit<Partial<IconButtonProps>, 'onPress'>;
 };
 
 const TimePickerField = (
@@ -23,6 +25,8 @@ const TimePickerField = (
         style,
         onBlur: onBlurProp,
         modalProps = {},
+        iconButtonProps = {},
+        disabled,
         ...rest
     }: Props,
     ref: any,
@@ -64,7 +68,12 @@ const TimePickerField = (
 
         return (
             <>
-                <IconButton name="clock-outline" onPress={onOpenModal} />
+                <IconButton
+                    name="clock-outline"
+                    onPress={onOpenModal}
+                    disabled={disabled}
+                    {...iconButtonProps}
+                />
                 <TimePickerModal
                     {...modalProps}
                     time={getFormattedTime({ time: time, is24Hour: true })}
@@ -78,6 +87,8 @@ const TimePickerField = (
     }, [
         IconButton,
         TimePickerModal,
+        disabled,
+        iconButtonProps,
         is24Hour,
         isOpen,
         modalProps,
@@ -98,6 +109,7 @@ const TimePickerField = (
             mask={currentTimeFormat.mask}
             label={currentTimeFormat.format}
             {...rest}
+            disabled={disabled}
             value={timeString}
             onChangeText={setTimeString}
             style={componentStyles}
