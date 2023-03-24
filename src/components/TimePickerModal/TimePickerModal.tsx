@@ -46,11 +46,7 @@ export function TimePickerModal({
 
     const [inputType, setInputType] = useState<PossibleInputTypes>(inputTypes.picker);
     const [focused, setFocused] = useState<PossibleClockTypes>(clockTypes.hours);
-    const [time, setTime] = useState(timeProp || format(new Date(), 'HH:mm'));
-
-    useEffect(() => {
-        setTime(time);
-    }, [setTime, time]);
+    const [time, setTime] = useState(() => timeProp || format(new Date(), 'HH:mm'));
 
     const onFocusInput = useCallback((type: PossibleClockTypes) => setFocused(type), []);
 
@@ -68,7 +64,7 @@ export function TimePickerModal({
     const onConfirm = useCallback(() => onConfirmProp(time), [onConfirmProp, time]);
 
     useEffect(() => {
-        setTime(timeProp || '');
+        setTime(timeProp || format(new Date(), 'HH:mm'));
     }, [timeProp]);
 
     return (

@@ -8,9 +8,9 @@ import { useComponentStyles } from '../../hooks';
 /**
  * Neutral component. Doesn't have platform specific styles
  */
-const Icon = ({ type = 'material-community', style, ...rest }: IconProps, ref: any) => {
+const Icon = ({ type = 'material-community', style, color, ...rest }: IconProps, ref: any) => {
     const IconComponent = iconFactory(type);
-    const componentStyles = useComponentStyles('Icon', style);
+    const componentStyles = useComponentStyles('Icon', [style, color ? { color } : {}]);
 
     return <IconComponent ref={ref} style={componentStyles} {...rest} />;
 };
