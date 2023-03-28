@@ -38,7 +38,7 @@ function DatePickerInputWithoutModal(
             style={componentStyles}
             {...rest}
             ref={ref}
-            label={label || dateFormat}
+            label={label}
             value={formattedValue}
             keyboardType={'number-pad'}
             mask={dateFormat}
