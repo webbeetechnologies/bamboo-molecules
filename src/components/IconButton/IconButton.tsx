@@ -84,7 +84,7 @@ const IconButton = (
     }: Props,
     ref: any,
 ) => {
-    const { TouchableRipple, Surface, Icon, View } = useMolecules();
+    const { TouchableRipple, Surface, Icon, StateLayer } = useMolecules();
     const IconComponent = animated ? CrossFadeIcon : Icon;
 
     const componentStyles = useComponentStyles(
@@ -185,7 +185,7 @@ const IconButton = (
                 {...rest}>
                 <>
                     <IconComponent color={iconColor} name={name} size={iconSize} type={type} />
-                    <View
+                    <StateLayer
                         testID={testID ? `${testID}-stateLayer` : ''}
                         {...stateLayerProps}
                         style={stateLayerStyle}

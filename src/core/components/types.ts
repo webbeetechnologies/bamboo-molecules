@@ -62,6 +62,7 @@ import type {
     Portal,
     ScrollViewProps,
     DataTable,
+    StateLayerProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -132,6 +133,7 @@ export interface DefaultComponents {
     Portal: typeof Portal;
     ScrollView: ComponentType<ScrollViewProps>;
     DataTable: typeof DataTable;
+    StateLayer: ComponentType<StateLayerProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

@@ -70,6 +70,7 @@ import {
     Portal,
     ScrollView,
     DataTable,
+    StateLayer,
 } from '../../components';
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -144,6 +145,7 @@ const defaultComponents: DefaultComponents = {
     Portal,
     ScrollView,
     DataTable,
+    StateLayer,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

@@ -1,6 +1,5 @@
 import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
-import { StyleSheet } from 'react-native';
 
 type CustomProps = {
     animationScale?: string; // because it's a design token
@@ -57,12 +56,6 @@ export const defaultStyles: ComponentStylePropWithVariants<
     },
     labelTextAddons: {
         marginHorizontal: 'spacings.4',
-    },
-
-    stateLayer: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'transparent',
-        zIndex: -1,
     },
 
     sizes: {

@@ -83,7 +83,7 @@ const FAB = (
     }: Props,
     ref: any,
 ) => {
-    const { Surface, TouchableRipple, Icon, Text, View } = useMolecules();
+    const { Surface, TouchableRipple, Icon, Text, StateLayer } = useMolecules();
 
     const initialElevation = useMemo(
         () => (elevationProp === undefined ? 3 : elevationProp),
@@ -185,7 +185,7 @@ const FAB = (
                             {label}
                         </Text>
                     )}
-                    <View
+                    <StateLayer
                         testID={testID ? `${testID}-stateLayer` : ''}
                         {...stateLayerProps}
                         style={stateLayerStyle}

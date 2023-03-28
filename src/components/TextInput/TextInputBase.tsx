@@ -44,7 +44,7 @@ const TextInputBase = ({
 }: InputBaseProps) => {
     const hasActiveOutline = parentState.focused || error;
 
-    const { View } = useMolecules();
+    const { View, StateLayer } = useMolecules();
     const { backgroundColor: parentBackground } = useContext(BackgroundContext);
 
     const labelWidth = parentState.labelLayout.width;
@@ -233,7 +233,7 @@ const TextInputBase = ({
                             style={styles.underlineStyle}
                         />
 
-                        <View
+                        <StateLayer
                             testID={testID ? `${testID}-stateLayer` : ''}
                             {...stateLayerProps}
                             style={styles.stateLayerStyle}

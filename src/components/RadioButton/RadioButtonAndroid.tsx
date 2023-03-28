@@ -74,7 +74,7 @@ const RadioButtonAndroid = (
     }: Props,
     ref: any,
 ) => {
-    const { TouchableRipple, View } = useMolecules();
+    const { TouchableRipple, View, StateLayer } = useMolecules();
 
     const { current: borderAnim } = useRef<Animated.Value>(new Animated.Value(BORDER_WIDTH));
 
@@ -192,7 +192,7 @@ const RadioButtonAndroid = (
                     ) : null}
                 </Animated.View>
 
-                <View
+                <StateLayer
                     testID={testID ? `${testID}-stateLayer` : ''}
                     {...stateLayerProps}
                     style={stateLayerStyle}

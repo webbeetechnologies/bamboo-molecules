@@ -38,12 +38,6 @@ export const chipStyles: ComponentStylePropWithVariants<ViewStyle, States, Custo
         leftElement: {},
         rightElement: {},
 
-        stateLayer: {
-            ...StyleSheet.absoluteFillObject,
-            backgroundColor: 'transparent',
-            zIndex: -1,
-        },
-
         variants: {
             outlined: {
                 container: {

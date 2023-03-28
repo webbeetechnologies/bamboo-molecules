@@ -1,4 +1,5 @@
-import { TextStyle, ViewStyle, StyleSheet } from 'react-native';
+import type { TextStyle, ViewStyle } from 'react-native';
+
 import type { ComponentStylePropWithVariants } from '../../types';
 
 type States = 'disabled' | 'checked' | 'hovered' | 'checkedAndHovered';
@@ -65,12 +66,6 @@ export const defaultStyles: ComponentStylePropWithVariants<
         },
         android: {
             animationScale: 'animation.scale',
-
-            stateLayer: {
-                ...StyleSheet.absoluteFillObject,
-                backgroundColor: 'transparent',
-                zIndex: -1,
-            },
 
             // we only want to width and height in android
             sizes: {

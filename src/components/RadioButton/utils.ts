@@ -1,6 +1,5 @@
 import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
-import { StyleSheet } from 'react-native';
 
 type States = 'disabled' | 'checked' | 'hovered' | 'checkedAndHovered';
 
@@ -42,12 +41,6 @@ export const radioButtonStyles: ComponentStylePropWithVariants<TextStyle, States
         height: 10,
         width: 10,
         borderRadius: 5,
-    },
-
-    stateLayer: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'transparent',
-        zIndex: -1,
     },
 
     states: {

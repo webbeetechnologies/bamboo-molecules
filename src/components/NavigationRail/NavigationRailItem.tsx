@@ -101,7 +101,7 @@ const NavigationRailItem = memo(
                 }: Props,
                 ref: any,
             ) => {
-                const { Badge, Icon, TouchableRipple, View, Text } = useMolecules();
+                const { Badge, Icon, TouchableRipple, StateLayer, Text } = useMolecules();
 
                 const componentStyles = useComponentStyles(
                     'NavigationRail_Item',
@@ -202,7 +202,7 @@ const NavigationRailItem = memo(
                                         />
                                     )}
                                 </Icon>
-                                <View
+                                <StateLayer
                                     testID={testID ? `${testID}-stateLayer` : ''}
                                     {...stateLayerProps}
                                     style={stateLayerStyle}

@@ -1,6 +1,5 @@
 import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
-import { StyleSheet } from 'react-native';
 
 export const navigationRailStyles: ComponentStylePropWithVariants<ViewStyle> = {
     width: 80,
@@ -72,8 +71,6 @@ export const navigationRailItemStyles: ComponentStylePropWithVariants<
     },
 
     stateLayer: {
-        ...StyleSheet.absoluteFillObject,
-        zIndex: -1,
         borderRadius: 'shapes.corner.full' as unknown as number,
     },
 

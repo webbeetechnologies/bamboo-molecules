@@ -33,7 +33,7 @@ const CheckboxAndroid = (
     }: Props,
     ref: any,
 ) => {
-    const { Icon, TouchableRipple, View } = useMolecules();
+    const { Icon, TouchableRipple, View, StateLayer } = useMolecules();
     const { current: scaleAnim } = useRef<Animated.Value>(new Animated.Value(1));
     const isFirstRendering = useRef<boolean>(true);
 
@@ -176,7 +176,7 @@ const CheckboxAndroid = (
                         <Animated.View style={animatedFillStyles} />
                     </View>
                 </Animated.View>
-                <View
+                <StateLayer
                     testID={testID ? `${testID}-stateLayer` : ''}
                     {...stateLayerProps}
                     style={stateLayerStyle}

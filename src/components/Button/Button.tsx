@@ -143,7 +143,7 @@ const Button = (
     }: Props,
     ref: any,
 ) => {
-    const { ActivityIndicator, TouchableRipple, Text, Icon, Surface } = useMolecules();
+    const { ActivityIndicator, TouchableRipple, Text, Icon, Surface, StateLayer } = useMolecules();
 
     const componentStyles = useComponentStyles(
         'Button',
@@ -326,7 +326,7 @@ const Button = (
                         {children}
                     </Text>
 
-                    <View
+                    <StateLayer
                         testID={testID ? `${testID}-stateLayer` : ''}
                         {...stateLayerProps}
                         style={stateLayerStyle}

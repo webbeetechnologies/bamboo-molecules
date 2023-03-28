@@ -93,12 +93,6 @@ export const defaultStyles: TextInputStyles = {
     outline: {},
     activeIndicator: {},
 
-    stateLayer: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'transparent',
-        zIndex: -1,
-    },
-
     variants: {
         outlined: {
             defaultLabelBackground: 'colors.surface',

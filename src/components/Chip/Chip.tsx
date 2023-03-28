@@ -134,7 +134,7 @@ const Chip = (
     }: Props,
     ref: any,
 ) => {
-    const { Surface, TouchableRipple, Text, View } = useMolecules();
+    const { Surface, TouchableRipple, Text, StateLayer } = useMolecules();
     const componentStyles = useComponentStyles(
         'Chip',
         [
@@ -246,7 +246,7 @@ const Chip = (
                         closeIconProps={closeIconProps}
                     />
 
-                    <View
+                    <StateLayer
                         testID={testID ? `${testID}-stateLayer` : ''}
                         {...stateLayerProps}
                         style={stateLayerStyle}
