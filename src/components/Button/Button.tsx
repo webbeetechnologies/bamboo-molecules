@@ -17,9 +17,6 @@ import { useMolecules, useComponentStyles } from '../../hooks';
 import type { IconType } from '../Icon';
 import type { SurfaceProps } from '../Surface';
 
-const initialElevation = 1;
-const activeElevation = 2;
-
 export type ButtonVariant = 'text' | 'outlined' | 'contained' | 'elevated' | 'contained-tonal';
 
 export type Props = Omit<SurfaceProps, 'style'> &
@@ -101,9 +98,13 @@ export type Props = Omit<SurfaceProps, 'style'> &
          */
         iconContainerStyle?: StyleProp<ViewStyle>;
         /*
-         *    Size
+         * Size
          * */
         size?: 'sm' | 'md' | 'lg';
+        /*
+         * Elevation level
+         * */
+        elevation?: number;
         /**
          * testID to be used on tests.
          */
@@ -139,6 +140,7 @@ const Button = (
         accessible,
         hovered = false,
         stateLayerProps = {},
+        elevation: elevationProp,
         ...rest
     }: Props,
     ref: any,
@@ -164,6 +166,13 @@ const Button = (
         },
         [variant],
     );
+
+    const initialElevation = useMemo(
+        () => (elevationProp === undefined ? (isVariant('elevated') ? 1 : 0) : elevationProp),
+        [elevationProp, isVariant],
+    );
+
+    const { current: elevation } = useRef<Animated.Value>(new Animated.Value(initialElevation));
 
     const {
         customLabelColor,
@@ -247,47 +256,25 @@ const Button = (
         stateLayerProps?.style,
     ]);
 
-    const isElevationEntitled = !disabled && isVariant('elevated');
-
-    const { current: elevation } = useRef<Animated.Value>(
-        new Animated.Value(isElevationEntitled ? initialElevation : 0),
-    );
-
     useEffect(() => {
-        elevation.setValue(isElevationEntitled ? initialElevation : 0);
-    }, [isElevationEntitled, elevation]);
+        if (disabled || !onPress || isVariant('outlined') || isVariant('text')) return;
 
-    const handlePressIn = () => {
-        onPressIn?.();
-        if (isVariant('elevated')) {
-            Animated.timing(elevation, {
-                toValue: activeElevation,
-                duration: 200 * animationScale,
-                useNativeDriver: true,
-            }).start();
-        }
-    };
-
-    const handlePressOut = () => {
-        onPressOut?.();
-        if (isVariant('elevated')) {
-            Animated.timing(elevation, {
-                toValue: initialElevation,
-                duration: 150 * animationScale,
-                useNativeDriver: true,
-            }).start();
-        }
-    };
+        Animated.timing(elevation, {
+            toValue: hovered ? initialElevation + 1 : initialElevation,
+            duration: 200 * animationScale,
+            useNativeDriver: false,
+        }).start();
+    }, [elevation, hovered, initialElevation, disabled, onPress, animationScale, isVariant]);
 
     return (
-        <Surface {...rest} style={surfaceStyle} elevation={elevation}>
+        <Surface {...rest} style={surfaceStyle} elevation={disabled ? 0 : elevation}>
             <TouchableRipple
                 borderless
                 delayPressIn={0}
                 onPress={onPress}
                 onLongPress={onLongPress}
-                onPressIn={handlePressIn}
-                onPressOut={handlePressOut}
+                onPressIn={onPressIn}
+                onPressOut={onPressOut}
                 accessibilityLabel={accessibilityLabel}
                 accessibilityHint={accessibilityHint}
                 accessibilityRole="button"

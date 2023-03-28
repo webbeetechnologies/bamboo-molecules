@@ -139,7 +139,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
 
             states: {
                 disabled: {
-                    backgroundColor: 'colors.surfaceDisabled',
+                    backgroundColor: 'colors.stateLayer.disabled.onSurface',
                     color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
@@ -155,7 +155,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
 
             states: {
                 disabled: {
-                    backgroundColor: 'colors.surfaceDisabled',
+                    backgroundColor: 'colors.stateLayer.disabled.onSurface',
                     color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
