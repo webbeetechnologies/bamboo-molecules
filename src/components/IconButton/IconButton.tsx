@@ -11,7 +11,7 @@ import type { TouchableRippleProps } from '../TouchableRipple';
 
 type IconButtonVariant = 'default' | 'outlined' | 'contained' | 'contained-tonal';
 
-export type Props = Omit<TouchableRippleProps, 'children'> &
+export type Props = Omit<TouchableRippleProps, 'children' | 'style'> &
     CallbackActionState & {
         /**
          * Icon to display.

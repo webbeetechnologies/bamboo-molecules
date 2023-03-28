@@ -22,7 +22,7 @@ const activeElevation = 2;
 
 export type ButtonVariant = 'text' | 'outlined' | 'contained' | 'elevated' | 'contained-tonal';
 
-export type Props = SurfaceProps &
+export type Props = Omit<SurfaceProps, 'style'> &
     CallbackActionState & {
         /**
          * Mode of the button. You can change the mode to adjust the styling to give it desired emphasis.
@@ -91,7 +91,7 @@ export type Props = SurfaceProps &
          * Use this prop to apply custom height and width and to set the icon on the right with `flexDirection: 'row-reverse'`.
          */
         contentStyle?: StyleProp<ViewStyle>;
-        style?: StyleProp<ViewStyle>;
+        style?: StyleProp<TextStyle>;
         /**
          * Style for the button text.
          */
