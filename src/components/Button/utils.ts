@@ -1,5 +1,6 @@
 import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
+import { StyleSheet } from 'react-native';
 
 type CustomProps = {
     animationScale?: string; // because it's a design token
@@ -10,6 +11,7 @@ type CustomProps = {
     label?: TextStyle;
     labelText?: TextStyle;
     labelTextAddons?: TextStyle;
+    stateLayer?: ViewStyle;
 };
 
 type CustomSizeProps = {
@@ -55,6 +57,12 @@ export const defaultStyles: ComponentStylePropWithVariants<
     },
     labelTextAddons: {
         marginHorizontal: 'spacings.4',
+    },
+
+    stateLayer: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'transparent',
+        zIndex: -1,
     },
 
     sizes: {
@@ -110,7 +118,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
                     color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
-                    backgroundColor: 'colors.primaryContainerOnHover',
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.primary',
+                    },
                 },
             },
         },
@@ -124,7 +134,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
                     color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
-                    backgroundColor: 'colors.primaryOnHover',
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.onPrimary',
+                    },
                 },
             },
         },
@@ -138,7 +150,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
                     color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
-                    backgroundColor: 'colors.primaryContainerOnHover',
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.primary',
+                    },
                 },
             },
         },
@@ -152,7 +166,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
                     color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
-                    backgroundColor: 'colors.secondaryContainerOnHover',
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.onSecondaryContainer',
+                    },
                 },
             },
         },

@@ -1,5 +1,6 @@
 import { forwardRef, memo, useMemo } from 'react';
 import type { StyleProp, GestureResponderEvent, TextStyle, ViewStyle } from 'react-native';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import color from 'color';
 
 import { useMolecules, useComponentStyles } from '../../hooks';
@@ -57,49 +58,12 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          * Style of the innerContainer
          */
         innerContainerStyle?: ViewStyle;
+        /**
+         * Props for the state layer
+         * */
+        stateLayerProps?: ViewProps;
     };
 
-/**
- * An icon button is a button which displays only an icon without a label.
- *
- * <div class="screenshots">
- *   <figure>
- *     <img class="small" src="screenshots/icon-button-1.png" />
- *     <figcaption>Default icon button</figcaption>
- *   </figure>
- *   <figure>
- *     <img class="small" src="screenshots/icon-button-2.png" />
- *     <figcaption>Contained icon button</figcaption>
- *   </figure>
- *   <figure>
- *     <img class="small" src="screenshots/icon-button-3.png" />
- *     <figcaption>Contained-tonal icon button</figcaption>
- *   </figure>
- *   <figure>
- *     <img class="small" src="screenshots/icon-button-4.png" />
- *     <figcaption>Outlined icon button</figcaption>
- *   </figure>
- * </div>
- *
- * ## Usage
- * ```js
- * import * as React from 'react';
- * import { IconButton, MD3Colors } from 'react-native-paper';
- *
- * const MyComponent = () => (
- *   <IconButton
- *     icon="camera"
- *     iconColor={MD3Colors.error50}
- *     size={20}
- *     onPress={() => console.log('Pressed')}
- *   />
- * );
- *
- * export default MyComponent;
- * ```
- *
- * @extends TouchableRipple props https://callstack.github.io/react-native-paper/touchable-ripple.html
- */
 const IconButton = (
     {
         name,
@@ -110,15 +74,17 @@ const IconButton = (
         onPress,
         selected = false,
         animated = false,
-        variant,
+        variant = 'default',
         style,
         hovered = false,
         innerContainerStyle: innerContainerStyleProp = {},
+        testID,
+        stateLayerProps = {},
         ...rest
     }: Props,
     ref: any,
 ) => {
-    const { TouchableRipple, Surface, Icon } = useMolecules();
+    const { TouchableRipple, Surface, Icon, View } = useMolecules();
     const IconComponent = animated ? CrossFadeIcon : Icon;
 
     const componentStyles = useComponentStyles(
@@ -150,6 +116,7 @@ const IconButton = (
         accessibilityState,
         innerContainerStyle,
         accessibilityTraits,
+        stateLayerStyle,
     } = useMemo(() => {
         const {
             color: _iconColor,
@@ -163,6 +130,7 @@ const IconButton = (
             whiteSpace,
             width,
             height,
+            stateLayer,
             ...iconButtonStyles
         } = componentStyles;
 
@@ -189,8 +157,9 @@ const IconButton = (
             ],
             accessibilityTraits: disabled ? ['button', 'disabled'] : 'button',
             accessibilityState: { disabled },
+            stateLayerStyle: [stateLayer, stateLayerProps?.style],
         };
-    }, [componentStyles, disabled, size]);
+    }, [componentStyles, disabled, size, stateLayerProps?.style]);
 
     return (
         <Surface style={containerStyle} elevation={0}>
@@ -212,8 +181,16 @@ const IconButton = (
                     TouchableRipple?.supported ? rippleSupportedHitSlop : rippleUnsupportedHitSlop
                 }
                 ref={ref}
+                testID={testID}
                 {...rest}>
-                <IconComponent color={iconColor} name={name} size={iconSize} type={type} />
+                <>
+                    <IconComponent color={iconColor} name={name} size={iconSize} type={type} />
+                    <View
+                        testID={testID ? `${testID}-stateLayer` : ''}
+                        {...stateLayerProps}
+                        style={stateLayerStyle}
+                    />
+                </>
             </TouchableRipple>
         </Surface>
     );

@@ -1,7 +1,8 @@
 import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
+import { StyleSheet } from 'react-native';
 
-type States = 'disabled' | 'checked';
+type States = 'disabled' | 'checked' | 'hovered' | 'checkedAndHovered';
 
 type CustomProps = {
     uncheckedColor?: string;
@@ -14,6 +15,7 @@ type CustomProps = {
     radioContainer?: ViewStyle;
     radio?: ViewStyle;
     dot?: ViewStyle;
+    stateLayer?: ViewStyle;
 };
 
 export const radioButtonStyles: ComponentStylePropWithVariants<TextStyle, States, CustomProps> = {
@@ -42,6 +44,12 @@ export const radioButtonStyles: ComponentStylePropWithVariants<TextStyle, States
         borderRadius: 5,
     },
 
+    stateLayer: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'transparent',
+        zIndex: -1,
+    },
+
     states: {
         checked: {
             color: 'colors.primary',
@@ -50,6 +58,18 @@ export const radioButtonStyles: ComponentStylePropWithVariants<TextStyle, States
             color: 'colors.onSurfaceDisabled',
             uncheckedColor: 'colors.onSurfaceDisabled',
             labelColor: 'colors.onSurfaceDisabled',
+        },
+
+        hovered: {
+            stateLayer: {
+                backgroundColor: 'colors.stateLayer.hover.onSurface',
+            },
+        },
+
+        checkedAndHovered: {
+            stateLayer: {
+                backgroundColor: 'colors.stateLayer.hover.primary',
+            },
         },
     },
 };

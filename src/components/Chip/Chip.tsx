@@ -1,5 +1,7 @@
-import { forwardRef, memo, ReactNode, useMemo } from 'react';
+import { forwardRef, memo, PropsWithoutRef, ReactNode, useMemo } from 'react';
 import type { GestureResponderEvent, TextStyle, ViewStyle } from 'react-native';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
+
 import type { MD3Elevation } from '../../core/theme/types';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { WithElements } from '../../types';
@@ -95,6 +97,10 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
         /**
          * Pass down testID from chip props to touchable for Detox tests.
          */
+        /**
+         * props for the stateLayer
+         */
+        stateLayerProps?: PropsWithoutRef<ViewProps>;
         testID?: string;
     };
 
@@ -122,11 +128,13 @@ const Chip = (
         accessibilityLabel,
         selectedColor: selectedColorProp,
         selectionBackgroundColor: selectionBackgroundColorProp,
+        stateLayerProps = {},
+        testID = 'chip',
         ...rest
     }: Props,
     ref: any,
 ) => {
-    const { Surface, TouchableRipple, Text } = useMolecules();
+    const { Surface, TouchableRipple, Text, View } = useMolecules();
     const componentStyles = useComponentStyles(
         'Chip',
         [
@@ -161,6 +169,7 @@ const Chip = (
         leftElementStyle,
         rightElementStyle,
         labelStyle,
+        stateLayerStyle,
     } = useMemo(() => {
         const {
             iconSize: _iconSize,
@@ -171,6 +180,7 @@ const Chip = (
             label: _labelStyle,
             selectionBackgroundColor,
             selectedColor,
+            stateLayer,
             ...restStyle
         } = componentStyles;
 
@@ -186,8 +196,9 @@ const Chip = (
             leftElementStyle: leftElement,
             rightElementStyle: rightElement,
             labelStyle: [_labelStyle, selected && selectedColor ? { color: selectedColor } : {}],
+            stateLayerStyle: [stateLayer, stateLayerProps?.style],
         };
-    }, [componentStyles, selected]);
+    }, [componentStyles, selected, stateLayerProps?.style]);
 
     const { accessibilityState, elevation } = useMemo(
         () => ({
@@ -210,7 +221,8 @@ const Chip = (
                 accessibilityLabel={accessibilityLabel}
                 accessibilityRole="button"
                 accessibilityState={accessibilityState}
-                ref={ref}>
+                ref={ref}
+                testID={testID}>
                 <>
                     <LeftElement
                         iconSize={iconSize}
@@ -232,6 +244,12 @@ const Chip = (
                         disabled={disabled}
                         onClose={onClose}
                         closeIconProps={closeIconProps}
+                    />
+
+                    <View
+                        testID={testID ? `${testID}-stateLayer` : ''}
+                        {...stateLayerProps}
+                        style={stateLayerStyle}
                     />
                 </>
             </TouchableRipple>

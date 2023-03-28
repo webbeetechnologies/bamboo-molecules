@@ -9,6 +9,7 @@ type CustomProps = {
     leftElement?: ViewStyle;
     rightElement?: ViewStyle;
     iconSize?: number;
+    stateLayer?: ViewStyle;
 };
 
 export type SizeProps = {
@@ -21,6 +22,7 @@ export const chipStyles: ComponentStylePropWithVariants<ViewStyle, States, Custo
     {
         container: {
             borderRadius: 'shapes.corner.small' as unknown as number,
+            backgroundColor: 'colors.surface',
         },
         touchableRippleContainer: {
             flex: 1,
@@ -35,6 +37,12 @@ export const chipStyles: ComponentStylePropWithVariants<ViewStyle, States, Custo
         },
         leftElement: {},
         rightElement: {},
+
+        stateLayer: {
+            ...StyleSheet.absoluteFillObject,
+            backgroundColor: 'transparent',
+            zIndex: -1,
+        },
 
         variants: {
             outlined: {
@@ -72,12 +80,14 @@ export const chipStyles: ComponentStylePropWithVariants<ViewStyle, States, Custo
                 },
             },
             hovered: {
-                container: {
-                    backgroundColor: 'colors.stateLayer.hovered.onSurfaceVariant',
+                stateLayer: {
+                    backgroundColor: 'colors.stateLayer.hover.onSurfaceVariant',
                 },
             },
             selectedAndHovered: {
-                backgroundColor: 'colors.stateLayer.hovered.onSecondaryContainer',
+                stateLayer: {
+                    backgroundColor: 'colors.stateLayer.hover.onSecondaryContainer',
+                },
             },
         },
 

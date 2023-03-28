@@ -8,6 +8,7 @@ import {
     useCallback,
     useMemo,
     memo,
+    PropsWithoutRef,
 } from 'react';
 import {
     Animated,
@@ -17,8 +18,9 @@ import {
     TextStyle,
     ViewStyle,
 } from 'react-native';
-import type { TextInputProps } from '@bambooapp/bamboo-atoms';
+import type { TextInputProps, ViewProps } from '@bambooapp/bamboo-atoms';
 
+import { withActionState, CallbackActionState } from '../../hocs';
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { WithElements } from '../../types';
 import TextInputBase from './TextInputBase';
@@ -36,6 +38,7 @@ type ElementProps = {
 type Element = ReactNode | ((props: ElementProps) => ReactNode);
 
 export type Props = TextInputProps &
+    CallbackActionState &
     WithElements<Element> & {
         /**
          * Variant of the TextInput.
@@ -160,6 +163,10 @@ export type Props = TextInputProps &
          */
         inputStyle?: StyleProp<TextStyle>;
         /**
+         * props for the stateLayer
+         */
+        stateLayerProps?: PropsWithoutRef<ViewProps>;
+        /**
          * testID to be used on tests.
          */
         testID?: string;
@@ -169,51 +176,6 @@ type TextInputHandles = Pick<
     NativeTextInput,
     'focus' | 'clear' | 'blur' | 'isFocused' | 'setNativeProps'
 >;
-
-/**
- * A component to allow users to input text.
- *
- * <div class="screenshots">
- *   <figure>
- *     <img src="screenshots/textinput-flat.focused.png" />
- *     <figcaption>Flat (focused)</figcaption>
- *   </figure>
- *   <figure>
- *     <img src="screenshots/textinput-flat.disabled.png" />
- *     <figcaption>Flat (disabled)</figcaption>
- *   </figure>
- *   <figure>
- *     <img src="screenshots/textinput-outlined.focused.png" />
- *     <figcaption>Outlined (focused)</figcaption>
- *   </figure>
- *   <figure>
- *     <img src="screenshots/textinput-outlined.disabled.png" />
- *     <figcaption>Outlined (disabled)</figcaption>
- *   </figure>
- * </div>
- *
- * ## Usage
- * ```js
- * import * as React from 'react';
- * import { TextInput } from 'react-native-paper';
- *
- * const MyComponent = () => {
- *   const [text, setText] = React.useState("");
- *
- *   return (
- *     <TextInput
- *       label="Email"
- *       value={text}
- *       onChangeText={text => setText(text)}
- *     />
- *   );
- * };
- *
- * export default MyComponent;
- * ```
- *
- * @extends TextInput props https://reactnative.dev/docs/textinput#props
- */
 
 const TextInput = forwardRef<TextInputHandles, Props>(
     (
@@ -235,6 +197,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             placeholderTextColor: placeholderTextColorProp,
             style,
             containerStyle,
+            hovered = false,
             ...rest
         }: Props,
         ref,
@@ -278,7 +241,11 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                 states: {
                     errorDisabled: errorProp && disabled,
                     disabled,
+                    errorFocusedAndHovered: errorProp && hovered && focused,
                     errorFocused: errorProp && focused,
+                    errorHovered: errorProp && hovered,
+                    hoveredAndFocused: hovered && focused,
+                    hovered,
                     focused: focused,
                     error: !!errorProp,
                 },
@@ -470,4 +437,4 @@ const TextInput = forwardRef<TextInputHandles, Props>(
     },
 );
 
-export default memo(TextInput);
+export default memo(withActionState(TextInput));

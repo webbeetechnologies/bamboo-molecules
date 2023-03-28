@@ -1,10 +1,11 @@
-import type { TextStyle, ViewStyle } from 'react-native';
+import { TextStyle, ViewStyle, StyleSheet } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
-type States = 'selectedAndDisabled' | 'disabled' | 'selected';
+type States = 'selectedAndDisabled' | 'disabled' | 'selected' | 'hovered' | 'selectedAndHovered';
 type CustomProps = {
     buttonSize?: string;
     innerContainer?: ViewStyle;
+    stateLayer?: ViewStyle;
     whiteSpace?: number;
 };
 
@@ -15,6 +16,12 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
     overflow: 'hidden',
 
     whiteSpace: 12,
+
+    stateLayer: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'transparent',
+        zIndex: -1,
+    },
 
     sizes: {
         xs: {
@@ -70,6 +77,18 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
                 selected: {
                     color: 'colors.primary',
                 },
+                selectedAndHovered: {
+                    color: 'colors.primary',
+
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.primary',
+                    },
+                },
+                hovered: {
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.onSurfaceVariant',
+                    },
+                },
             },
         },
         contained: {
@@ -88,6 +107,19 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
                     backgroundColor: 'colors.primary',
                     color: 'colors.onPrimary',
                 },
+                hovered: {
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.primary',
+                    },
+                },
+                selectedAndHovered: {
+                    backgroundColor: 'colors.primary',
+                    color: 'colors.onPrimary',
+
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.onPrimary',
+                    },
+                },
             },
         },
         'contained-tonal': {
@@ -105,6 +137,19 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
                 selected: {
                     backgroundColor: 'colors.secondaryContainer',
                     color: 'colors.onSecondaryContainer',
+                },
+                hovered: {
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.onSurfaceVariant',
+                    },
+                },
+                selectedAndHovered: {
+                    backgroundColor: 'colors.secondaryContainer',
+                    color: 'colors.onSecondaryContainer',
+
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.onSecondaryContainer',
+                    },
                 },
             },
         },
@@ -125,6 +170,20 @@ export const defaultStyles: ComponentStylePropWithVariants<TextStyle, States, Cu
                     backgroundColor: 'colors.inverseSurface',
                     color: 'colors.inverseOnSurface',
                     borderWidth: 0,
+                },
+                hovered: {
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.onSurfaceVariant',
+                    },
+                },
+                selectedAndHovered: {
+                    backgroundColor: 'colors.inverseSurface',
+                    color: 'colors.inverseOnSurface',
+                    borderWidth: 0,
+
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.inverseOnSurface',
+                    },
                 },
             },
         },

@@ -1,7 +1,7 @@
-import type { TextStyle } from 'react-native';
+import { TextStyle, ViewStyle, StyleSheet } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
-type States = 'disabled' | 'checked';
+type States = 'disabled' | 'checked' | 'hovered' | 'checkedAndHovered';
 type CustomProps = {
     color?: string;
     uncheckedColor?: string;
@@ -9,6 +9,7 @@ type CustomProps = {
     animationDuration?: string;
     labelColor?: string;
     labelTypeScale?: string;
+    stateLayer?: ViewStyle;
 };
 
 type CustomSizeProps = {
@@ -48,6 +49,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
         checked: {
             color: 'colors.primary',
         },
+        checkedAndHovered: {
+            color: 'colors.primary',
+        },
         disabled: {
             color: 'colors.onSurfaceDisabled',
             uncheckedColor: 'colors.onSurfaceDisabled',
@@ -61,6 +65,13 @@ export const defaultStyles: ComponentStylePropWithVariants<
         },
         android: {
             animationScale: 'animation.scale',
+
+            stateLayer: {
+                ...StyleSheet.absoluteFillObject,
+                backgroundColor: 'transparent',
+                zIndex: -1,
+            },
+
             // we only want to width and height in android
             sizes: {
                 sm: {
@@ -74,6 +85,20 @@ export const defaultStyles: ComponentStylePropWithVariants<
                 lg: {
                     width: 40,
                     height: 40,
+                },
+            },
+
+            states: {
+                hovered: {
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.onSurface',
+                    },
+                },
+
+                checkedAndHovered: {
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.primary',
+                    },
                 },
             },
         },

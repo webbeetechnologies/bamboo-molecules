@@ -1,37 +1,44 @@
-import { forwardRef, memo, useEffect, useMemo, useRef } from 'react';
+import { forwardRef, memo, PropsWithoutRef, useEffect, useMemo, useRef } from 'react';
 import { Animated, StyleSheet } from 'react-native';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
+import setColor from 'color';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { TouchableRippleProps } from '../TouchableRipple';
-import setColor from 'color';
+import { CallbackActionState, withActionState } from '../../hocs';
 
-export type Props = Omit<TouchableRippleProps, 'children'> & {
-    /**
-     * Status of radio button.
-     */
-    status?: 'checked' | 'unchecked';
-    /**
-     * Whether radio is disabled.
-     */
-    disabled?: boolean;
-    /**
-     * Custom color for unchecked radio.
-     */
-    uncheckedColor?: string;
-    /**
-     * Custom color for radio.
-     */
-    color?: string;
-    /**
-     * testID to be used on tests.
-     */
-    testID?: string;
-    /**
-     * passed from RadioButton component
-     */
-    checked: boolean;
-    onPress: (() => void) | undefined;
-};
+export type Props = Omit<TouchableRippleProps, 'children'> &
+    CallbackActionState & {
+        /**
+         * Status of radio button.
+         */
+        status?: 'checked' | 'unchecked';
+        /**
+         * Whether radio is disabled.
+         */
+        disabled?: boolean;
+        /**
+         * Custom color for unchecked radio.
+         */
+        uncheckedColor?: string;
+        /**
+         * Custom color for radio.
+         */
+        color?: string;
+        /**
+         * testID to be used on tests.
+         */
+        testID?: string;
+        /**
+         * passed from RadioButton component
+         */
+        checked: boolean;
+        onPress: (() => void) | undefined;
+        /**
+         * props for the stateLayer
+         */
+        stateLayerProps?: PropsWithoutRef<ViewProps>;
+    };
 
 const BORDER_WIDTH = 2;
 
@@ -53,7 +60,7 @@ const BORDER_WIDTH = 2;
  */
 const RadioButtonAndroid = (
     {
-        disabled,
+        disabled = false,
         status,
         testID,
         color: colorProp,
@@ -61,6 +68,8 @@ const RadioButtonAndroid = (
         style,
         checked,
         onPress,
+        stateLayerProps = {},
+        hovered = false,
         ...rest
     }: Props,
     ref: any,
@@ -75,8 +84,10 @@ const RadioButtonAndroid = (
 
     const componentStyles = useComponentStyles('RadioButton', style, {
         states: {
-            disabled: !!disabled,
+            disabled,
+            checkedAndHovered: checked && hovered,
             checked,
+            hovered,
         },
     });
 
@@ -88,6 +99,7 @@ const RadioButtonAndroid = (
         radioStyles,
         dotStyles,
         dotContainerStyles,
+        stateLayerStyle,
     } = useMemo(() => {
         const {
             color: checkedColor,
@@ -98,6 +110,7 @@ const RadioButtonAndroid = (
             radio,
             radioContainer,
             dot,
+            stateLayer,
             ...radioButtonStyles
         } = componentStyles;
 
@@ -124,8 +137,17 @@ const RadioButtonAndroid = (
                     transform: [{ scale: radioAnim }],
                 },
             ],
+            stateLayerStyle: [stateLayer, stateLayerProps?.style],
         };
-    }, [borderAnim, checked, colorProp, componentStyles, radioAnim, uncheckedColorProp]);
+    }, [
+        borderAnim,
+        checked,
+        colorProp,
+        componentStyles,
+        radioAnim,
+        stateLayerProps?.style,
+        uncheckedColorProp,
+    ]);
 
     useEffect(() => {
         // Do not run animation on very first rendering
@@ -161,17 +183,25 @@ const RadioButtonAndroid = (
             onPress={onPress}
             style={containerStyles}
             testID={testID}>
-            <Animated.View style={radioStyles}>
-                {checked ? (
-                    <View style={dotContainerStyles}>
-                        <Animated.View style={dotStyles} />
-                    </View>
-                ) : null}
-            </Animated.View>
+            <>
+                <Animated.View style={radioStyles}>
+                    {checked ? (
+                        <View style={dotContainerStyles}>
+                            <Animated.View style={dotStyles} />
+                        </View>
+                    ) : null}
+                </Animated.View>
+
+                <View
+                    testID={testID ? `${testID}-stateLayer` : ''}
+                    {...stateLayerProps}
+                    style={stateLayerStyle}
+                />
+            </>
         </TouchableRipple>
     );
 };
 
 RadioButtonAndroid.displayName = 'RadioButton_Android';
 
-export default memo(forwardRef(RadioButtonAndroid));
+export default memo(withActionState(forwardRef(RadioButtonAndroid)));

@@ -39,6 +39,7 @@ const TextInputBase = ({
     size,
     inputContainerStyle,
     inputStyle,
+    stateLayerProps = {},
     ...rest
 }: InputBaseProps) => {
     const hasActiveOutline = parentState.focused || error;
@@ -101,6 +102,7 @@ const TextInputBase = ({
             minimizedLabelFontSize,
             maximizedLabelFontSize,
             labelWiggleXOffset,
+            stateLayer,
             ...viewStyle
         } = componentStyles;
 
@@ -143,7 +145,7 @@ const TextInputBase = ({
             labelBackground:
                 variant === 'outlined'
                     ? parentBackground || backgroundColor || defaultLabelBackground
-                    : backgroundColor || defaultLabelBackground,
+                    : 'transparent',
 
             activeColor,
             baseLabelTranslateX:
@@ -203,6 +205,7 @@ const TextInputBase = ({
                 },
                 defaultStyles.patchContainer,
             ],
+            stateLayerStyle: [stateLayer, stateLayerProps?.style],
         };
     }, [
         componentStyles,
@@ -216,6 +219,7 @@ const TextInputBase = ({
         leftElementLayout.width,
         multiline,
         parentBackground,
+        stateLayerProps?.style,
         variant,
     ]);
 
@@ -223,7 +227,18 @@ const TextInputBase = ({
         <View style={styles.container}>
             <>
                 {variant === 'flat' && (
-                    <Animated.View testID="text-input-underline" style={styles.underlineStyle} />
+                    <>
+                        <Animated.View
+                            testID="text-input-underline"
+                            style={styles.underlineStyle}
+                        />
+
+                        <View
+                            testID={testID ? `${testID}-stateLayer` : ''}
+                            {...stateLayerProps}
+                            style={styles.stateLayerStyle}
+                        />
+                    </>
                 )}
                 {variant === 'outlined' && (
                     <Animated.View

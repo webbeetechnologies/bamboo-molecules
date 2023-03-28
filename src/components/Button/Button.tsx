@@ -1,5 +1,15 @@
-import { useEffect, useCallback, useRef, ReactNode, memo, useMemo, forwardRef } from 'react';
+import {
+    useEffect,
+    useCallback,
+    useRef,
+    ReactNode,
+    memo,
+    useMemo,
+    forwardRef,
+    PropsWithoutRef,
+} from 'react';
 import { Animated, View, ViewStyle, StyleSheet, StyleProp, TextStyle } from 'react-native';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import setColor from 'color';
 
 import { withActionState, CallbackActionState } from '../../hocs';
@@ -98,48 +108,12 @@ export type Props = SurfaceProps &
          * testID to be used on tests.
          */
         testID?: string;
+        /**
+         * props for the stateLayer
+         */
+        stateLayerProps?: PropsWithoutRef<ViewProps>;
     };
 
-/**
- * A button is component that the user can press to trigger an action.
- *
- * <div class="screenshots">
- *   <figure>
- *     <img src="screenshots/button-1.png" />
- *     <figcaption>Text button</figcaption>
- *   </figure>
- *   <figure>
- *     <img src="screenshots/button-2.png" />
- *     <figcaption>Outlined button</figcaption>
- *   </figure>
- *   <figure>
- *     <img src="screenshots/button-3.png" />
- *     <figcaption>Contained button</figcaption>
- *   </figure>
- *   <figure>
- *     <img src="screenshots/button-4.png" />
- *     <figcaption>Elevated button</figcaption>
- *   </figure>
- *   <figure>
- *     <img src="screenshots/button-5.png" />
- *     <figcaption>Contained-tonal button</figcaption>
- *   </figure>
- * </div>
- *
- * ## Usage
- * ```js
- * import * as React from 'react';
- * import { Button } from 'react-native-paper';
- *
- * const MyComponent = () => (
- *   <Button icon="camera" mode="contained" onPress={() => console.log('Pressed')}>
- *     Press me
- *   </Button>
- * );
- *
- * export default MyComponent;
- * ```
- */
 const Button = (
     {
         disabled = false,
@@ -163,7 +137,8 @@ const Button = (
         iconContainerStyle: iconContainerStyleProp,
         testID,
         accessible,
-        hovered,
+        hovered = false,
+        stateLayerProps = {},
         ...rest
     }: Props,
     ref: any,
@@ -176,8 +151,8 @@ const Button = (
         {
             variant,
             states: {
-                hovered: !disabled && !!hovered,
                 disabled,
+                hovered,
             },
             size,
         },
@@ -204,6 +179,7 @@ const Button = (
         viewStyle,
         iconContainerStyle,
         accessibilityState,
+        stateLayerStyle,
     } = useMemo(() => {
         const {
             backgroundColor: _backgroundColor,
@@ -222,6 +198,7 @@ const Button = (
             label,
             labelText,
             labelTextAddons,
+            stateLayer,
             ..._buttonStyles
         } = componentStyles;
 
@@ -256,6 +233,7 @@ const Button = (
                 labelStyle,
             ],
             accessibilityState: { disabled },
+            stateLayerStyle: [stateLayer, stateLayerProps?.style],
         };
     }, [
         componentStyles,
@@ -266,6 +244,7 @@ const Button = (
         isVariant,
         labelStyle,
         loading,
+        stateLayerProps?.style,
     ]);
 
     const isElevationEntitled = !disabled && isVariant('elevated');
@@ -346,6 +325,12 @@ const Button = (
                     <Text selectable={false} numberOfLines={1} style={textStyle}>
                         {children}
                     </Text>
+
+                    <View
+                        testID={testID ? `${testID}-stateLayer` : ''}
+                        {...stateLayerProps}
+                        style={stateLayerStyle}
+                    />
                 </View>
             </TouchableRipple>
         </Surface>
