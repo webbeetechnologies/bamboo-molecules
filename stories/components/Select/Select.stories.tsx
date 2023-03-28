@@ -2,7 +2,7 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 
-import { IconButton } from '../../../src/components';
+import { Icon } from '../../../src/components';
 import { delay } from '../../common';
 import { Example } from './Select';
 import { useArgs } from '@storybook/addons';
@@ -34,27 +34,27 @@ Default.args = {
                 {
                     id: 11,
                     name: 'Preview',
-                    left: <IconButton name="eye-outline" onPress={() => {}} />,
+                    left: <Icon name="eye-outline" size={24} />,
                 },
                 {
                     id: 12,
                     name: 'Share',
-                    left: <IconButton name="account-plus-outline" onPress={() => {}} />,
+                    left: <Icon name="account-plus-outline" size={24} />,
                 },
                 {
                     id: 13,
                     name: 'Get link',
-                    left: <IconButton name="link" onPress={() => {}} />,
+                    left: <Icon name="link" size={24} />,
                 },
                 {
                     id: 14,
                     name: 'Remove',
-                    left: <IconButton name="trash-can-outline" onPress={() => {}} />,
+                    left: <Icon name="trash-can-outline" size={24} />,
                 },
                 {
                     id: 15,
                     name: 'Download',
-                    left: <IconButton name="tray-arrow-down" onPress={() => {}} />,
+                    left: <Icon name="tray-arrow-down" size={24} />,
                 },
             ],
         },
