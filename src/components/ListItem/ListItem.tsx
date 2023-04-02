@@ -29,36 +29,13 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          * Whether the ListItem is selected or not
          */
         selected?: boolean;
+        /**
+         * Whether the ListItem is hoverable or not
+         * @default true if onPress is passed
+         */
+        hoverable?: boolean;
     };
 
-/**
- * A component to show tiles inside a List.
- *
- * <div class="screenshots">
- *   <img class="medium" src="screenshots/list-item-1.png" />
- *   <img class="medium" src="screenshots/list-item-2.png" />
- *   <img class="medium" src="screenshots/list-item-3.png" />
- * </div>
- *
- * ## Usage
- * ```js
- * import { useMolecules } from 'bamboo-molecule';
- *
- * const MyComponent = () => (
- *   const { ListItem } = useMolecules();
- *   <ListItem
- *     left={<Icon icon="folder" />}
- *   >
- *       <ListItem.Title>Headline</ListItem.Title>
- *       <ListItem.Description>Supporting Text</ListItem.Description>
- *   </ListItem>
- * );
- *
- * export default MyComponent;
- * ```
- *
- * @extends TouchableWithoutFeedback props https://reactnative.dev/docs/touchablewithoutfeedback#props
- */
 const ListItem = (
     {
         left,
@@ -71,18 +48,20 @@ const ListItem = (
         variant = 'default',
         selected = false,
         onPress,
+        hoverable: hoverableProp = false,
         ...props
     }: Props,
     ref: any,
 ) => {
     const { TouchableRipple, View, HorizontalDivider } = useMolecules();
-    const isPressable = !disabled && !!onPress;
+
+    const hoverable = hoverableProp || !!onPress;
 
     const componentStyles = useComponentStyles('ListItem', styleProp, {
         states: {
             selected,
             disabled,
-            hovered: hovered && isPressable,
+            hovered: hoverable && hovered,
         },
         variant,
     });
@@ -106,8 +85,8 @@ const ListItem = (
     }, [componentStyles]);
 
     const contextValue = useMemo(
-        () => ({ disabled, hovered: hovered && isPressable, selected, variant }),
-        [disabled, hovered, isPressable, selected, variant],
+        () => ({ disabled, hovered: hoverable && hovered, selected, variant }),
+        [disabled, hoverable, hovered, selected, variant],
     );
 
     return (

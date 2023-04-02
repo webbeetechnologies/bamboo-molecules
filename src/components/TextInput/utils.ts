@@ -5,6 +5,8 @@ type States =
     | 'disabled'
     | 'focused'
     | 'hovered'
+    | 'hoveredAndFocused'
+    | 'errorFocusedAndHovered'
     | 'error'
     | 'errorFocused'
     | 'errorHovered'
@@ -28,6 +30,7 @@ type CustomProps = {
     placeholder?: Record<string, string | number>;
     outline?: Record<string, string | number>;
     defaultLabelBackground?: string;
+    stateLayer?: ViewStyle;
 };
 
 type CustomSizeProps = {
@@ -127,6 +130,34 @@ export const defaultStyles: TextInputStyles = {
                     },
                 },
 
+                hovered: {
+                    outline: {
+                        borderColor: 'colors.onSurface',
+                    },
+                },
+
+                errorHovered: {
+                    outline: {
+                        borderColor: 'colors.onErrorContainer',
+                        backgroundColor: 'colors.surface',
+                    },
+                },
+
+                hoveredAndFocused: {
+                    outline: {
+                        borderWidth: 2,
+                        borderColor: 'colors.primary',
+                    },
+                },
+
+                errorFocusedAndHovered: {
+                    outline: {
+                        borderWidth: 2,
+                        borderColor: 'colors.error',
+                        backgroundColor: 'colors.surface',
+                    },
+                },
+
                 errorFocused: {
                     outline: {
                         borderWidth: 2,
@@ -196,6 +227,33 @@ export const defaultStyles: TextInputStyles = {
                     activeIndicator: {
                         height: 1,
                         backgroundColor: 'colors.onSurface',
+                    },
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.onSurface',
+                    },
+                },
+
+                errorHovered: {
+                    activeIndicator: {
+                        height: 1,
+                        backgroundColor: 'colors.onErrorContainer',
+                    },
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.onSurface',
+                    },
+                },
+
+                hoveredAndFocused: {
+                    activeIndicator: {
+                        height: 2,
+                        backgroundColor: 'colors.primary',
+                    },
+                },
+
+                errorFocusedAndHovered: {
+                    activeIndicator: {
+                        height: 2,
+                        backgroundColor: 'colors.error',
                     },
                 },
 
@@ -313,6 +371,23 @@ export const defaultStyles: TextInputStyles = {
         },
 
         errorFocused: {
+            activeColor: 'colors.error',
+
+            labelText: {
+                color: 'colors.error',
+            },
+            inputText: {
+                color: 'colors.onSurface',
+            },
+            leftElement: {
+                color: 'colors.onSurfaceVariant',
+            },
+            rightElement: {
+                color: 'colors.error',
+            },
+        },
+
+        errorFocusedAndHovered: {
             activeColor: 'colors.error',
 
             labelText: {

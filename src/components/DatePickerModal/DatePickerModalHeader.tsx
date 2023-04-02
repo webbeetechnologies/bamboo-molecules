@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Animated, SafeAreaView, ViewStyle } from 'react-native';
+import { Animated, SafeAreaView } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 
@@ -54,12 +54,12 @@ export default function DatePickerModalHeader(props: DatePickerModalHeaderProps)
                             name={closeIcon}
                             accessibilityLabel={'Close'}
                             onPress={props.onClose}
-                            style={iconButtonStyle as ViewStyle}
+                            style={iconButtonStyle}
                             testID="date-picker-close"
                         />
                         <Button
                             variant="contained"
-                            style={buttonStyle as ViewStyle}
+                            style={buttonStyle}
                             onPress={props.onSave}
                             disabled={props.saveLabelDisabled || false}
                             testID="dates-save">

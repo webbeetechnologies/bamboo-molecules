@@ -27,6 +27,7 @@ Default.args = {
     ),
     variant: 'default',
     selected: false,
+    onPress: () => {},
 };
 
 Default.parameters = {

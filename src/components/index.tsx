@@ -171,3 +171,5 @@ export * from './Portal';
 export * from './ScrollView';
 
 export * from './DataTable';
+
+export * from './StateLayer';

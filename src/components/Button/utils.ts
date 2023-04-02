@@ -10,6 +10,7 @@ type CustomProps = {
     label?: TextStyle;
     labelText?: TextStyle;
     labelTextAddons?: TextStyle;
+    stateLayer?: ViewStyle;
 };
 
 type CustomSizeProps = {
@@ -110,7 +111,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
                     color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
-                    backgroundColor: 'colors.primaryContainerOnHover',
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.primary',
+                    },
                 },
             },
         },
@@ -124,7 +127,9 @@ export const defaultStyles: ComponentStylePropWithVariants<
                     color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
-                    backgroundColor: 'colors.primaryOnHover',
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.onPrimary',
+                    },
                 },
             },
         },
@@ -134,11 +139,13 @@ export const defaultStyles: ComponentStylePropWithVariants<
 
             states: {
                 disabled: {
-                    backgroundColor: 'colors.surfaceDisabled',
+                    backgroundColor: 'colors.stateLayer.disabled.onSurface',
                     color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
-                    backgroundColor: 'colors.primaryContainerOnHover',
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.primary',
+                    },
                 },
             },
         },
@@ -148,11 +155,13 @@ export const defaultStyles: ComponentStylePropWithVariants<
 
             states: {
                 disabled: {
-                    backgroundColor: 'colors.surfaceDisabled',
+                    backgroundColor: 'colors.stateLayer.disabled.onSurface',
                     color: 'colors.stateLayer.disabled.onSurface_Level4',
                 },
                 hovered: {
-                    backgroundColor: 'colors.secondaryContainerOnHover',
+                    stateLayer: {
+                        backgroundColor: 'colors.stateLayer.hover.onSecondaryContainer',
+                    },
                 },
             },
         },

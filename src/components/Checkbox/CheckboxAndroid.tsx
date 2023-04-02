@@ -1,13 +1,20 @@
-import { useRef, useEffect, useMemo, memo, forwardRef, useCallback } from 'react';
+import { useRef, useEffect, useMemo, memo, forwardRef, useCallback, PropsWithoutRef } from 'react';
 import { Animated, StyleSheet } from 'react-native';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import setColor from 'color';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { CheckBoxBaseProps } from './types';
+import { CallbackActionState, withActionState } from '../../hocs';
 
-export type Props = Omit<CheckBoxBaseProps, 'value' | 'defaultValue'> & {
-    value: boolean;
-};
+export type Props = Omit<CheckBoxBaseProps, 'value' | 'defaultValue'> &
+    CallbackActionState & {
+        value: boolean;
+        /**
+         * props for the stateLayer
+         */
+        stateLayerProps?: PropsWithoutRef<ViewProps>;
+    };
 
 const CheckboxAndroid = (
     {
@@ -20,11 +27,13 @@ const CheckboxAndroid = (
         style,
         color: colorProp,
         uncheckedColor: uncheckedColorProp,
+        stateLayerProps = {},
+        hovered = false,
         ...rest
     }: Props,
     ref: any,
 ) => {
-    const { Icon, TouchableRipple, View } = useMolecules();
+    const { Icon, TouchableRipple, View, StateLayer } = useMolecules();
     const { current: scaleAnim } = useRef<Animated.Value>(new Animated.Value(1));
     const isFirstRendering = useRef<boolean>(true);
 
@@ -32,7 +41,9 @@ const CheckboxAndroid = (
         variant: 'android',
         states: {
             disabled,
+            checkedAndHovered: checked && !indeterminate && hovered,
             checked: checked && !indeterminate,
+            hovered,
         },
         size,
     });
@@ -52,6 +63,7 @@ const CheckboxAndroid = (
         filledContainerStyles,
         animatedContainerStyles,
         animatedFillStyles,
+        stateLayerStyle,
     } = useMemo(() => {
         const {
             color: checkedColor,
@@ -63,6 +75,7 @@ const CheckboxAndroid = (
             width,
             height,
             borderRadius,
+            stateLayer,
             ...checkboxStyles
         } = componentStyles;
 
@@ -92,8 +105,17 @@ const CheckboxAndroid = (
                 { borderColor: _color },
                 { borderWidth },
             ],
+            stateLayerStyle: [stateLayer, stateLayerProps?.style],
         };
-    }, [borderWidth, checked, colorProp, componentStyles, scaleAnim, uncheckedColorProp]);
+    }, [
+        borderWidth,
+        checked,
+        colorProp,
+        componentStyles,
+        scaleAnim,
+        stateLayerProps?.style,
+        uncheckedColorProp,
+    ]);
 
     useEffect(() => {
         // Do not run animation on very first rendering
@@ -141,18 +163,25 @@ const CheckboxAndroid = (
             style={rippleContainerStyles}
             testID={testID}
             ref={ref}>
-            <Animated.View style={animatedContainerStyles}>
-                <Icon
-                    allowFontScaling={false}
-                    type="material-community"
-                    name={icon}
-                    size={iconSize}
-                    color={color}
+            <>
+                <Animated.View style={animatedContainerStyles}>
+                    <Icon
+                        allowFontScaling={false}
+                        type="material-community"
+                        name={icon}
+                        size={iconSize}
+                        color={color}
+                    />
+                    <View style={filledContainerStyles}>
+                        <Animated.View style={animatedFillStyles} />
+                    </View>
+                </Animated.View>
+                <StateLayer
+                    testID={testID ? `${testID}-stateLayer` : ''}
+                    {...stateLayerProps}
+                    style={stateLayerStyle}
                 />
-                <View style={filledContainerStyles}>
-                    <Animated.View style={animatedFillStyles} />
-                </View>
-            </Animated.View>
+            </>
         </TouchableRipple>
     );
 };
@@ -164,4 +193,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(forwardRef(CheckboxAndroid));
+export default memo(withActionState(forwardRef(CheckboxAndroid)));

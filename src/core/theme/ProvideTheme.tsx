@@ -118,6 +118,7 @@ import {
     dataTableRowStyles,
     dataTableHeaderStyles,
     dataTableHeaderCellStyles,
+    stateLayerStyles,
 } from '../../components';
 import { MD3LightTheme, MD3DarkTheme } from '../../styles';
 import type { DeepPartial } from '../../types';
@@ -312,6 +313,8 @@ const defaultThemeValue: Partial<ITheme> = {
     DataTable_Row: dataTableRowStyles,
     DataTable_HeaderRow: dataTableHeaderStyles,
     DataTable_HeaderCell: dataTableHeaderCellStyles,
+
+    StateLayer: stateLayerStyles,
 };
 
 export const defaultExtractStyles = memoize(

@@ -1,6 +1,5 @@
 import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
-import { StyleSheet } from 'react-native';
 
 type States = 'hovered' | 'disabled';
 type CustomProps = {
@@ -27,12 +26,6 @@ export const fabStyles: ComponentStylePropWithVariants<
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-
-    stateLayer: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'transparent',
-        zIndex: -1,
     },
 
     states: {

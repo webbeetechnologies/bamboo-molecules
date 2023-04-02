@@ -48,6 +48,7 @@ SuggestionChip.args = {
     label: 'Suggestion Chip',
     variant: 'outlined',
     size: 'md',
+    onPress: () => {},
 };
 
 SuggestionChip.parameters = {
@@ -85,6 +86,7 @@ AssistChip.args = {
     variant: 'outlined',
     size: 'md',
     left: <Icon name="calendar" size={18} />,
+    onPress: () => {},
 };
 
 AssistChip.parameters = {
