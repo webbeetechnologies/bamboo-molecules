@@ -7,7 +7,7 @@ import { Linking } from 'react-native';
 
 export type Props = TextProps &
     CallbackActionState & {
-        href: string;
+        href?: string;
         disabled?: boolean;
     };
 
@@ -37,7 +37,7 @@ const Link = (
 
             onPressProp?.(e);
 
-            Linking.openURL(href);
+            if (href) Linking.openURL(href);
         },
         [disabled, onPressProp, href],
     );

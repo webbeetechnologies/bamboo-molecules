@@ -33,7 +33,7 @@ Default.parameters = {
 Default.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const defaultColor = 'rgb(103, 80, 164)';
-    const hoverColor = 'rgb(33, 0, 93)';
+    // const hoverColor = 'rgb(103, 80, 164)';
 
     await waitFor(() => canvas);
     const link = await canvas.getByTestId('LinkComponent-test');
@@ -44,7 +44,7 @@ Default.play = async ({ canvasElement }) => {
 
     await userEvent.hover(link);
 
-    await waitFor(() => expect(window.getComputedStyle(link).color).toBe(hoverColor));
+    await waitFor(() => expect(window.getComputedStyle(link).textDecorationLine).toBe('underline'));
 
     await userEvent.unhover(link);
 
