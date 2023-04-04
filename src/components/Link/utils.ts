@@ -7,10 +7,9 @@ export const linkStyles: ComponentStylePropWithVariants<TextStyle, States> = {
     // @ts-ignore
     cursor: 'pointer',
     color: 'colors.primary',
-    textDecorationLine: 'underline',
-    fontSize: 'typescale.bodyMedium.fontSize' as unknown as number,
-    fontWeight: 'typescale.bodyMedium.fontWeight' as unknown as TextStyle['fontWeight'],
-    lineHeight: 'typescale.bodyMedium.lineHeight' as unknown as number,
+    fontSize: 'typescale.labelLarge.fontSize' as unknown as number,
+    fontWeight: 'typescale.labelLarge.fontWeight' as unknown as TextStyle['fontWeight'],
+    lineHeight: 'typescale.labelLarge.lineHeight' as unknown as number,
 
     states: {
         disabled: {
@@ -20,7 +19,7 @@ export const linkStyles: ComponentStylePropWithVariants<TextStyle, States> = {
             cursor: 'default',
         },
         hovered: {
-            color: 'colors.onPrimaryContainer',
+            textDecorationLine: 'underline',
         },
     },
 };

@@ -30,3 +30,5 @@ export { default as useSubcomponents, UseSubcomponentsProps } from './useSubcomp
 export * from './useMaskedInputProps';
 
 export * from './useQueryFilter';
+
+export { default as useBreakpoints } from './useBreakpoints';
