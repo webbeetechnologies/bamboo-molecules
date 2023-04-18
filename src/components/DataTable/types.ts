@@ -2,18 +2,7 @@ import type { ComponentPropsWithRef, ComponentType, ReactNode } from 'react';
 import type { FlatListProps, ScrollViewProps, ViewProps } from 'react-native';
 import type { ScrollView } from 'react-native';
 
-export type TDataTableColumn = {
-    /**
-     * Unique identifier for the column
-     */
-    id: string;
-
-    /**
-     * Un-opinionated data structure for Columns
-     * Component consumer could choose to dump column meta: sort, width, or any other properties they think relevant to their table
-     */
-    [k: string]: any;
-};
+export type TDataTableColumn = string | number;
 
 export type TDataTableRow = {
     /**

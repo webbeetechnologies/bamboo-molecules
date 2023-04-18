@@ -8,14 +8,14 @@ export const CellRenderer: FC<RenderCellProps> = memo(({ row, column }) => {
     const { Text } = useMolecules();
     return (
         <Text>
-            {column.title} {row.title}
+            {column} {row.title}
         </Text>
     );
 });
 
 export const HeaderRenderer: FC<RenderHeaderCellProps> = memo(({ column }) => {
     const { H4 } = useMolecules();
-    return <H4>{column.title}</H4>;
+    return <H4>{column}</H4>;
 });
 
 export const getDataTableMockProps = (
@@ -23,10 +23,7 @@ export const getDataTableMockProps = (
     columns: number,
     FlatListComponent?: ComponentType<FlatListProps<any>>,
 ) => ({
-    columns: generateFlatListData(columns, index => ({
-        id: `column-${index}`,
-        title: `Column ${index}`,
-    })),
+    columns: generateFlatListData(columns, index => `column-${index}`),
     records: generateFlatListData(rows, index => ({
         id: `row-${index}`,
         title: `Row ${index}`,
