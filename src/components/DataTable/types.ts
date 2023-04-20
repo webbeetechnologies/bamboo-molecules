@@ -4,18 +4,7 @@ import type { ScrollView } from 'react-native';
 
 export type TDataTableColumn = string | number;
 
-export type TDataTableRow = {
-    /**
-     * Unique identifier for the column
-     */
-    id: string;
-
-    /**
-     * Un-opinionated data structure for Row
-     * Component consumer could choose to structure their data in any way they chose
-     */
-    [k: string]: any;
-};
+export type TDataTableRow = string | number;
 
 export interface DataTableComponentProps<T = any> {
     FlatListComponent?: ComponentType<FlatListProps<T>>;
