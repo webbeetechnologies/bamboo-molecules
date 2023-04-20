@@ -45,7 +45,7 @@ const DataTablePresentationComponent = memo(
 
         const renderItem: typeof renderRow = useCallback(props => {
             return props.index === 0 ? (
-                <DataTableHeaderRow key={props.item.id} />
+                <DataTableHeaderRow key={props.item} />
             ) : (
                 renderRow({ ...props, index: props.index - 1 })
             );

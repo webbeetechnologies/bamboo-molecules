@@ -8,7 +8,7 @@ export const CellRenderer: FC<RenderCellProps> = memo(({ row, column }) => {
     const { Text } = useMolecules();
     return (
         <Text>
-            {column} {row.title}
+            {column} {row}
         </Text>
     );
 });
@@ -24,10 +24,7 @@ export const getDataTableMockProps = (
     FlatListComponent?: ComponentType<FlatListProps<any>>,
 ) => ({
     columns: generateFlatListData(columns, index => `column-${index}`),
-    records: generateFlatListData(rows, index => ({
-        id: `row-${index}`,
-        title: `Row ${index}`,
-    })),
+    records: generateFlatListData(rows, index => `row-${index}`),
     selectedRows: {
         'row-5': true,
         'row-13': true,
