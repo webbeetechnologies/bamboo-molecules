@@ -33,7 +33,7 @@ const DataTableComponentPresentation = memo(
         const result = useMemo(
             () =>
                 props.columns.map((item, i) => (
-                    <Fragment key={item.id}>{renderCellComponent({ item, index: i })}</Fragment>
+                    <Fragment key={item}>{renderCellComponent({ item, index: i })}</Fragment>
                 )),
             [props.columns],
         );
