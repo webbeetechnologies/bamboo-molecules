@@ -25,7 +25,7 @@ const DataTableHeaderRowPresentation = memo(
         const result = useMemo(
             () =>
                 columns.map((item, i) => (
-                    <Fragment key={item.id}>{renderHeaderCell({ item, index: i })}</Fragment>
+                    <Fragment key={item}>{renderHeaderCell({ item, index: i })}</Fragment>
                 )),
             [columns],
         );

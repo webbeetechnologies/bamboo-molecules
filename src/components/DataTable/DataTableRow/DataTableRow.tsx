@@ -33,13 +33,13 @@ const DataTableComponentPresentation = memo(
         const result = useMemo(
             () =>
                 props.columns.map((item, i) => (
-                    <Fragment key={item.id}>{renderCellComponent({ item, index: i })}</Fragment>
+                    <Fragment key={item}>{renderCellComponent({ item, index: i })}</Fragment>
                 )),
             [props.columns],
         );
 
         return (
-            <DataTableRowContext.Provider value={rowContext} key={record.id}>
+            <DataTableRowContext.Provider value={rowContext} key={record}>
                 <View {...props.rowProps} style={rowStyle}>
                     {result}
                 </View>
@@ -53,7 +53,7 @@ const DataTableComponent = memo((props: DataTableComponentProps) => {
 
     return (
         <DataTableComponentPresentation
-            isSelected={!!selectedRows && Boolean(selectedRows[props.record.id])}
+            isSelected={!!selectedRows && Boolean(selectedRows[props.record])}
             {...props}
             columns={columns}
             rowProps={rowProps}
@@ -64,5 +64,5 @@ const DataTableComponent = memo((props: DataTableComponentProps) => {
 export const DataTableRow = memo(withActionState(DataTableComponent));
 
 export const renderRow: ListRenderItem<TDataTableRow> = ({ item, index }) => (
-    <DataTableRow record={item} index={index} key={item.id} />
+    <DataTableRow record={item} index={index} key={item} />
 );

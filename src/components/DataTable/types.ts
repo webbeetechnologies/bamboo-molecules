@@ -2,31 +2,9 @@ import type { ComponentPropsWithRef, ComponentType, ReactNode } from 'react';
 import type { FlatListProps, ScrollViewProps, ViewProps } from 'react-native';
 import type { ScrollView } from 'react-native';
 
-export type TDataTableColumn = {
-    /**
-     * Unique identifier for the column
-     */
-    id: string;
+export type TDataTableColumn = string | number;
 
-    /**
-     * Un-opinionated data structure for Columns
-     * Component consumer could choose to dump column meta: sort, width, or any other properties they think relevant to their table
-     */
-    [k: string]: any;
-};
-
-export type TDataTableRow = {
-    /**
-     * Unique identifier for the column
-     */
-    id: string;
-
-    /**
-     * Un-opinionated data structure for Row
-     * Component consumer could choose to structure their data in any way they chose
-     */
-    [k: string]: any;
-};
+export type TDataTableRow = string | number;
 
 export interface DataTableComponentProps<T = any> {
     FlatListComponent?: ComponentType<FlatListProps<T>>;
