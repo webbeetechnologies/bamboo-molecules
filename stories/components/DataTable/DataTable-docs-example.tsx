@@ -2,17 +2,16 @@ import { memo, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { useMolecules, RenderHeaderCellProps, RenderCellProps } from '../../../src';
 import { ProvideMolecules } from '../../common';
-import keyBy from "lodash.keyby";
-import type {TDataTableRow} from "../../../src/components/DataTable/types";
+import keyBy from 'lodash.keyby';
+import type { TDataTableRow } from '../../../src/components/DataTable/types';
 /**
  * Modules for demonstration purposes.
  */
 
-
 const columns = [
     { id: 'company', title: 'Company', type: 'list' },
     { id: 'name', title: 'Name', type: 'string' },
-]
+];
 
 const records = [
     { id: 'row-1', name: 'Steve Jobs', company: ['Apple'] },
@@ -21,7 +20,7 @@ const records = [
     { id: 'row-4', name: 'Satya Nadela', company: ['Microsoft'] },
     { id: 'row-5', name: 'Elon Musk', company: ['Tesla', 'SpaceX'] },
     { id: 'row-6', name: 'Tim Cook', company: ['Apple'] },
-]
+];
 
 const columnsMap = keyBy(columns, 'id');
 const recordsMap = keyBy(records, 'id');
@@ -57,7 +56,11 @@ const columnTypes = {
 
 const renderCell = ({ column, row }: RenderCellProps) => {
     const ColumnRenderer = columnTypes[getColumn(column).type as keyof typeof columnTypes];
-    return <ColumnRenderer data={getRow(row)[column as keyof typeof records[number]] as string & string[] } />;
+    return (
+        <ColumnRenderer
+            data={getRow(row)[column as keyof typeof records[number]] as string & string[]}
+        />
+    );
 };
 
 const HeaderCell = ({ column }: RenderHeaderCellProps) => {
@@ -75,8 +78,8 @@ const tableRowProps = {
 const TableRenderer = () => {
     const { DataTable } = useMolecules();
 
-    const records = useMemo(() => Object.keys(recordsMap), [])
-    const columns = useMemo(() => Object.keys(columnsMap), [])
+    const records = useMemo(() => Object.keys(recordsMap), []);
+    const columns = useMemo(() => Object.keys(columnsMap), []);
 
     const props = {
         renderCell,

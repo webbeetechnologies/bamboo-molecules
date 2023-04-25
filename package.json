@@ -37,7 +37,7 @@
     "run:testcases": "yarn workspace test-cases start",
     "test": "jest && yarn test-storybook",
     "test-jest": "jest",
-    "bundle": "rm -rf lib/* && yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
+    "bundle": "rm -rf lib && yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
     "do-release": "npm publish ./dist/bambooapp-bamboo-molecules-$npm_package_version.tgz --access=public",
     "release": "yarn bundle && yarn do-release",
     "storybook": "start-storybook -p 6006",
