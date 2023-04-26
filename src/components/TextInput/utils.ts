@@ -331,6 +331,14 @@ export const defaultStyles: TextInputStyles = {
 
         hovered: {},
 
+        hoveredAndFocused: {
+            activeColor: 'colors.primary',
+
+            labelText: {
+                color: 'colors.primary',
+            },
+        },
+
         disabled: {
             labelText: {
                 color: 'colors.onSurface',
