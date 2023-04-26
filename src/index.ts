@@ -150,6 +150,7 @@ export {
     ITheme,
     PlatformType,
     IComponentsProviderContext,
+    DefaultComponents,
     ResolveComponentStylesArgs,
     ProvideMoleculesProps,
     ProvidePortalProps,

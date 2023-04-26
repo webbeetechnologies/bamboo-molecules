@@ -149,6 +149,7 @@ const typographyComponentStyles = typographyComponentsKeys.reduce(
     (acc: Record<string, any>, current) => {
         acc[current] = {
             color: 'colors.onSurface',
+            fontFamily: 'typescale.bodyMedium.fontFamily',
         };
 
         return acc;
