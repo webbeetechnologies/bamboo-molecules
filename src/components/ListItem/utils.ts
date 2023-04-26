@@ -39,7 +39,7 @@ export const listItemStyles: ComponentStylePropWithVariants<ViewStyle, States, L
                 opacity: 0.38,
             },
             hovered: {
-                backgroundColor: 'colors.stateLayer.hover.onSurface',
+                backgroundColor: 'colors.stateLayer.hover.primary',
             },
 
             selected: {
