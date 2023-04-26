@@ -3,6 +3,7 @@ export {
     ConsumeComponents,
     IComponentsProviderContext,
     extractComponents,
+    DefaultComponents,
 } from './components';
 
 export {

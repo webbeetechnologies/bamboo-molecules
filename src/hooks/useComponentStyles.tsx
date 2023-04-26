@@ -1,5 +1,4 @@
 import { StyleProp, StyleSheet } from 'react-native';
-import type { ITheme } from '../core';
 import { useTheme } from './useTheme';
 import { useNormalizeStyles } from './useNormalizeStyles';
 
