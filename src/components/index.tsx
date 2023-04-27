@@ -173,3 +173,12 @@ export * from './ScrollView';
 export * from './DataTable';
 
 export * from './StateLayer';
+
+export {
+    MaterialToast,
+    ToastContainer,
+    MaterialToastProps,
+    ToastContainerProps,
+    Toast,
+    materialToastStyles,
+} from './Toast';
