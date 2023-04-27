@@ -63,6 +63,8 @@ import type {
     ScrollViewProps,
     DataTable,
     StateLayerProps,
+    MaterialToastProps,
+    ToastContainerProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -134,6 +136,8 @@ export interface DefaultComponents {
     ScrollView: ComponentType<ScrollViewProps>;
     DataTable: typeof DataTable;
     StateLayer: ComponentType<StateLayerProps>;
+    MaterialToast: ComponentType<MaterialToastProps>;
+    ToastContainer: ComponentType<ToastContainerProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
