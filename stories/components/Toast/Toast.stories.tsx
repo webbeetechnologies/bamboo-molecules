@@ -21,6 +21,10 @@ const toastConfig = {
   // you can add custom toasts here
 };
 
+/**
+* In order for the Toast to work, we need to add the ToastContainer at the top level or anywhere you can the Toast to render
+* for example, if you want to render the Toast inside the modal, you need to put the ToastContainer inside the Model.
+* */
 const App = () => {
   
     return (
