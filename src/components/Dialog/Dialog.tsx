@@ -69,7 +69,7 @@ export type Props = ModalProps & {
  * ```
  */
 const Dialog = ({ children, onClose, iconProps, style = {}, ...rest }: Props) => {
-    const { Modal } = useMolecules();
+    const { Modal, Portal } = useMolecules();
     const componentStyles = useComponentStyles('Dialog', { container: style });
 
     const { containerStyle, childStyle } = useMemo(() => {
@@ -99,12 +99,14 @@ const Dialog = ({ children, onClose, iconProps, style = {}, ...rest }: Props) =>
     );
 
     return (
-        <Modal elevation={2} {...rest} onClose={onClose} style={containerStyle}>
-            <>
-                {iconProps ? <DialogIcon {...iconProps} /> : null}
-                {dialogChildren}
-            </>
-        </Modal>
+        <Portal>
+            <Modal elevation={2} {...rest} onClose={onClose} style={containerStyle}>
+                <>
+                    {iconProps ? <DialogIcon {...iconProps} /> : null}
+                    {dialogChildren}
+                </>
+            </Modal>
+        </Portal>
     );
 };
 
