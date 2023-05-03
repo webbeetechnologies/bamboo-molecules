@@ -40,6 +40,8 @@ Default.parameters = {
             code: `
 import { useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
             
+            
+// We need to use the Portal if we want the modal to render outside the component tree            
 export const Example = () => {
     const { Button, View, Text, Portal } = useMolecules();
     const { state: isOpen, handleClose, handleOpen } = useToggle(false);
