@@ -69,6 +69,8 @@ export const getFormattedTime = ({ time, is24Hour }: { time: string; is24Hour: b
 };
 
 export const getOutputTime = ({ time, is24Hour }: { time: string; is24Hour: boolean }) => {
+    if (!time) return '';
+
     const formattedTime = sanitizeTimeString(getFormattedTime({ time, is24Hour }));
     const isPM = time.replace(/[\d:]/g, '').includes('p');
 

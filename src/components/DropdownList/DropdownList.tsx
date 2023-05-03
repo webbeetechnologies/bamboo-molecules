@@ -63,10 +63,11 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     containerStyle,
     triggerRef,
     hideOnSelect = true,
+    style,
     ...optionListProps
 }: Props<TItem>) => {
     const { OptionList, ActionSheet, Dialog, DropdownListPopover } = useMolecules();
-    const componentStyles = useComponentStyles('DropdownList');
+    const componentStyles = useComponentStyles('DropdownList', style);
 
     const resolvedMode = useResolvedMode(mode, records, optionsThreshold);
 

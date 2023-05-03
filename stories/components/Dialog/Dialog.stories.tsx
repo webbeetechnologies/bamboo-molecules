@@ -26,6 +26,7 @@ Default.parameters = {
 
     const iconProps = useMemo(() => ({ name: 'cellphone-check' }), []);
 
+// We need to use the Portal if we want the modal to render outside the component tree
     return (
         <Dialog iconProps={iconProps}>
             <Dialog.Title>Dialog with Hero Icon</Dialog.Title>
