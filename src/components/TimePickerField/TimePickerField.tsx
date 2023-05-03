@@ -53,14 +53,16 @@ const TimePickerField = (
         (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
             onBlurProp?.(e);
 
-            const outputTime = getOutputTime({ time: timeString, is24Hour });
+            if (disabled) return;
+
+            const outputTime = getOutputTime({ time: timeString || time, is24Hour });
             onTimeChangeProp(outputTime);
 
             if (time === outputTime) {
                 setTimeString(getFormattedTime({ time, is24Hour }));
             }
         },
-        [is24Hour, onBlurProp, onTimeChangeProp, time, timeString],
+        [disabled, is24Hour, onBlurProp, onTimeChangeProp, time, timeString],
     );
 
     const rightElement = useMemo(() => {
@@ -107,7 +109,7 @@ const TimePickerField = (
         <MaskedInput
             ref={ref}
             mask={currentTimeFormat.mask}
-            label={currentTimeFormat.format}
+            placeholder={currentTimeFormat.format}
             {...rest}
             disabled={disabled}
             value={timeString}

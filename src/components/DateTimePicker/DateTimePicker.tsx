@@ -43,7 +43,7 @@ const DateTimePicker = (
         onChange: onChangeProp,
     });
 
-    const timeString = useMemo(() => (date ? format(date, 'HH:mm') : ''), [date]);
+    const timeString = useMemo(() => (date ? format(date as Date, 'HH:mm') : ''), [date]);
 
     const onDateChange = useCallback(
         (newDate: Date | null) => {
@@ -63,6 +63,8 @@ const DateTimePicker = (
 
     const onTimeChange = useCallback(
         (time: string) => {
+            if (!time) return;
+
             const newTime = sanitizeTimeString(time);
 
             onChange(parse(newTime, 'HH:mm', date || new Date()));
