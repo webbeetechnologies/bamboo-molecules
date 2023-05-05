@@ -1,14 +1,14 @@
-import { FC, forwardRef, memo, useId, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { forwardRef, memo, useId, useImperativeHandle, useMemo } from 'react';
 
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { useComponentStyles, useKeyboardDismissable, useMolecules } from '../../hooks';
 
 import type { PopoverProps } from './types';
 import { Popper } from '../Popper';
 import { PopoverContext } from './PopoverContext';
 import PopperContent from '../Popper/PopperContent';
+import { StyleSheet } from 'react-native';
 
-export const popoverFactory = (componentName: string): FC<PopoverProps> =>
+export const popoverFactory = (componentName: string) =>
     forwardRef(
         (
             {
@@ -31,11 +31,13 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                 animateTransition = {},
                 exitTransition = {},
                 triggerRef,
+                isKeyboardDismissable = true,
                 ...props
-            },
+            }: PopoverProps,
             ref: any,
         ) => {
-            const { View, Overlay, PresenceTransition, Backdrop } = useMolecules();
+            const { Portal, Backdrop, Transition } = useMolecules();
+
             const styles = useComponentStyles(componentName, {
                 arrow: arrowProps?.style,
                 overlayStyles,
@@ -74,39 +76,44 @@ export const popoverFactory = (componentName: string): FC<PopoverProps> =>
                 };
             }, [onClose, initialFocusRef, finalFocusRef, popoverId]);
 
+            useImperativeHandle(ref, () => popoverContextValue);
+
+            useKeyboardDismissable({
+                enabled: isOpen && isKeyboardDismissable,
+                callback: onClose,
+            });
+
+            if (!isOpen) return null;
+
             return (
-                <View ref={ref}>
-                    <Overlay
-                        style={popoverStyles.overlayStyles}
-                        isOpen={isOpen}
-                        onRequestClose={onClose}>
-                        <PresenceTransition
-                            initial={popoverStyles.initialTransition}
-                            animate={popoverStyles.animateTransition}
-                            exit={popoverStyles.exitTransition}
-                            visible={isOpen}
-                            style={StyleSheet.absoluteFill}>
-                            <Backdrop onPress={onClose} style={popoverStyles.backdrop} />
-                            <Popper
-                                isOpen={isOpen as boolean}
-                                triggerRef={triggerRef}
-                                {...props}
-                                arrowProps={arrowPropsWithStyle}>
-                                <PopoverContext.Provider value={popoverContextValue}>
-                                    <PopperContent
-                                        style={popoverStyles.content}
-                                        contentTextStyles={popoverStyles.contentText}
-                                        arrowProps={arrowProps}
-                                        showArrow={showArrow}>
-                                        {/* <FocusScope contain={trapFocus} restoreFocus> */}
-                                        {children}
-                                        {/* </FocusScope> */}
-                                    </PopperContent>
-                                </PopoverContext.Provider>
-                            </Popper>
-                        </PresenceTransition>
-                    </Overlay>
-                </View>
+                <Portal>
+                    <Transition
+                        initial={popoverStyles.initialTransition}
+                        animate={popoverStyles.animateTransition}
+                        exit={popoverStyles.exitTransition}
+                        visible={isOpen}
+                        style={StyleSheet.absoluteFill}>
+                        <Backdrop onPress={onClose} style={popoverStyles.backdrop} />
+
+                        <Popper
+                            isOpen={isOpen}
+                            triggerRef={triggerRef}
+                            {...props}
+                            arrowProps={arrowPropsWithStyle}>
+                            <PopoverContext.Provider value={popoverContextValue}>
+                                <PopperContent
+                                    style={popoverStyles.content}
+                                    contentTextStyles={popoverStyles.contentText}
+                                    arrowProps={arrowProps}
+                                    showArrow={showArrow}>
+                                    {/* <FocusScope contain={trapFocus} restoreFocus> */}
+                                    {children}
+                                    {/* </FocusScope> */}
+                                </PopperContent>
+                            </PopoverContext.Provider>
+                        </Popper>
+                    </Transition>
+                </Portal>
             );
         },
     );

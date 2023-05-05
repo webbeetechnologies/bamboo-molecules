@@ -5,7 +5,6 @@ import { IComponentsProviderContext, ProvideComponents } from './components';
 import { ProvidePlatformType, PlatformType } from './platform';
 import { extendTheme, ITheme, ProvideTheme, ResolveComponentStylesArgs } from './theme';
 import { PortalHost } from '../components';
-import { PortalProvider } from './portal';
 
 export type ProvideMoleculesProps = {
     platformType?: PlatformType;
@@ -45,11 +44,7 @@ export type ProvidePortalProps = {
 };
 
 export const ProvidePortal = ({ children }: ProvidePortalProps) => {
-    return (
-        <PortalProvider>
-            <PortalHost>{children}</PortalHost>
-        </PortalProvider>
-    );
+    return <PortalHost>{children}</PortalHost>;
 };
 
 export const ProvideMoleculesWithoutPortal = ({
