@@ -55,7 +55,6 @@ export { FlatGrid, IFlatGrid, flatGridStyles, FlatGridProps } from './FlatGrid';
 export { SectionGrid, ISectionGrid, sectionGridStyles, SectionGridProps } from './SectionGrid';
 
 export { Popover, PopoverProps, popoverStyles } from './Popover';
-export { Overlay, OverlayProps } from './Overlay';
 export { Backdrop, BackdropProps, backdropStyles } from './Backdrop';
 export * from './Animations';
 

@@ -10,8 +10,6 @@ import type {
     ButtonProps,
     SwitchProps,
     VerticalDividerProps,
-    PresenceTransitionProps,
-    OverlayProps,
     PopoverProps,
     BackdropProps,
     TransitionProps,
@@ -82,8 +80,6 @@ export interface DefaultComponents {
     Button: ComponentType<ButtonProps>;
     Surface: ComponentType<SurfaceProps>;
     Switch: ComponentType<SwitchProps>;
-    Overlay: ComponentType<OverlayProps>;
-    PresenceTransition: ComponentType<PresenceTransitionProps>;
     Transition: ComponentType<TransitionProps>;
     Backdrop: ComponentType<BackdropProps>;
     Popover: ComponentType<PopoverProps>;

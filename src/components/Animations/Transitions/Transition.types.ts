@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import type { ViewProps } from 'react-native';
 
 export type IFadeProps = ViewProps & {
@@ -86,32 +85,4 @@ export interface TransitionProps extends ViewProps {
     animationExited?: boolean;
     children?: any;
     as?: any;
-}
-
-export interface PresenceTransitionProps extends ViewProps {
-    /**
-     * Callback invoked when transition is completed
-     */
-    onTransitionComplete?: (s: 'entered' | 'exited') => any;
-    /**
-     * Styles before the transition starts
-     */
-    initial?: ISupportedTransitions;
-    /**
-     * Entry animation styles
-     */
-    animate?: ITransitionStyleProps;
-    /**
-     * Exit animation styles
-     */
-    exit?: ITransitionStyleProps;
-    /**
-     * Determines whether to start the animation
-     */
-    visible?: boolean;
-    children?: ReactNode;
-    /**
-     * Accepts a Component to be rendered as Wrapper. Defaults to `View`
-     */
-    as?: ReactNode;
 }
