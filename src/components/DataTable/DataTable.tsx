@@ -99,45 +99,43 @@ const DataTableComponent = memo(
 );
 
 const withDataTableContext = (Component: typeof DataTableComponent) =>
-    memo(
-        forwardRef((props: DataTableProps, ref: ForwardedRef<ScrollView>) => {
-            const {
-                records,
-                columns,
-                defaultColumnWidth,
-                FlatListComponent,
-                ScrollViewComponent,
-                renderCell,
-                renderHeader,
-                headerRowProps,
-                headerCellProps,
-                cellProps,
-                rowProps,
-                selectedRows,
-                ...rest
-            } = props;
+    memo((props: DataTableProps) => {
+        const {
+            records,
+            columns,
+            defaultColumnWidth,
+            FlatListComponent,
+            ScrollViewComponent,
+            renderCell,
+            renderHeader,
+            headerRowProps,
+            headerCellProps,
+            cellProps,
+            rowProps,
+            selectedRows,
+            ...rest
+        } = props;
 
-            const context = {
-                records,
-                columns,
-                defaultColumnWidth,
-                FlatListComponent,
-                ScrollViewComponent,
-                renderCell,
-                renderHeader,
-                headerRowProps,
-                headerCellProps,
-                cellProps,
-                rowProps,
-                selectedRows,
-            };
+        const context = {
+            records,
+            columns,
+            defaultColumnWidth,
+            FlatListComponent,
+            ScrollViewComponent,
+            renderCell,
+            renderHeader,
+            headerRowProps,
+            headerCellProps,
+            cellProps,
+            rowProps,
+            selectedRows,
+        };
 
-            return (
-                <DataTableContextProvider {...context}>
-                    <Component {...rest} ref={ref} />
-                </DataTableContextProvider>
-            );
-        }),
-    );
+        return (
+            <DataTableContextProvider {...context}>
+                <Component {...rest} />
+            </DataTableContextProvider>
+        );
+    });
 
 export const DataTable = withDataTableContext(DataTableComponent);
