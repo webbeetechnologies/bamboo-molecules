@@ -21,6 +21,8 @@ export type PopoverProps = PropsWithChildren<
         initialTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
         animateTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
         exitTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
+
+        isKeyboardDismissable?: boolean;
     }
 >;
 
