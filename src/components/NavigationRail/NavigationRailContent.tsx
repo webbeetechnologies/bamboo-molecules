@@ -1,8 +1,8 @@
 import { ComponentType, memo } from 'react';
-import type { ScrollViewProps } from 'react-native';
+import type { ViewProps } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
-export type Props = ScrollViewProps & {
+export type Props = ViewProps & {
     /**
      * ContainerComponent prop allows to replace the default container used in DrawerContent - ScrollView
      * */
