@@ -39,6 +39,14 @@ export const ProvideMolecules = ({
     );
 };
 
+export type ProvidePortalProps = {
+    children: ReactNode;
+};
+
+export const ProvidePortal = ({ children }: ProvidePortalProps) => {
+    return <PortalProvider>{children}</PortalProvider>;
+};
+
 export const ProvideMoleculesWithoutPortal = ({
     platformType = 'android',
     theme = defaultTheme,
