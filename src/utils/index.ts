@@ -20,7 +20,9 @@ export * from './date-fns';
 
 export { BackgroundContext } from './backgroundContext';
 
-export { default as createNumberMask } from './createNumberMask/createNumberMask';
+export { createNumberMask, CreateNumberMaskProps } from './createNumberMask';
+export { formatNumberWithMask, FormatNumberWithMaskProps } from './formatNumberWithMask';
+export { normalizeToNumberString, NormalizeToNumberStringProps } from './normalizeToNumberString';
 
 export { addEventListener, addListener } from './addEventListener';
 
