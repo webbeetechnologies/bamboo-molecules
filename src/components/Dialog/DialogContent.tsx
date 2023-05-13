@@ -6,54 +6,26 @@ import { useComponentStyles, useMolecules } from '../../hooks';
 export type Props = ViewProps &
     ComponentPropsWithRef<ComponentType<ViewProps>> & {
         /**
+         * ContainerComponent prop allows to replace the default container used in DrawerContent - ScrollView
+         * */
+        ContainerComponent?: ComponentType<any>;
+        /**
          * Content of the `DialogContent`.
          */
         children: ReactNode;
         style?: StyleProp<ViewStyle>;
     };
 
-/**
- * A component to show content in a Dialog.
- *
- * <div class="screenshots">
- *   <figure>
- *     <img class="small" src="screenshots/dialog-content.png" />
- *   </figure>
- * </div>
- *
- *
- * ## Usage
- * ```js
- * import * as React from 'react';
- * import { Paragraph, Dialog, Portal } from 'react-native-paper';
- *
- * const MyComponent = () => {
- *   const [visible, setVisible] = React.useState(false);
- *
- *   const hideDialog = () => setVisible(false);
- *
- *   return (
- *     <Portal>
- *       <Dialog visible={visible} onDismiss={hideDialog}>
- *         <Dialog.Content>
- *           <Paragraph>This is simple dialog</Paragraph>
- *         </Dialog.Content>
- *       </Dialog>
- *     </Portal>
- *   );
- * };
- *
- * export default MyComponent;
- * ```
- */
-const DialogContent = ({ children, style, ...rest }: Props, ref: any) => {
+const DialogContent = ({ ContainerComponent, children, style, ...rest }: Props, ref: any) => {
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('Dialog_Content', style);
 
+    const Container = ContainerComponent || View;
+
     return (
-        <View {...rest} style={componentStyles} ref={ref}>
+        <Container {...rest} style={componentStyles} ref={ref}>
             {children}
-        </View>
+        </Container>
     );
 };
 
