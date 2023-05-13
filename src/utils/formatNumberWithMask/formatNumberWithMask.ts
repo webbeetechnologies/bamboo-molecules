@@ -2,7 +2,7 @@ import { formatWithMask } from 'react-native-mask-input';
 import { CreateNumberMaskProps, createNumberMask } from '../createNumberMask';
 
 export type FormatNumberWithMaskProps = CreateNumberMaskProps & {
-    number: string | null;
+    number: number | undefined | null;
 };
 
 export const formatNumberWithMask = ({
@@ -11,7 +11,8 @@ export const formatNumberWithMask = ({
     ...rest
 }: FormatNumberWithMaskProps) => {
     const numberMask = createNumberMask({ separator, ...rest });
-    const separatorReplacedNumber = (number || '').replace('.', separator);
+    const numberString = `${number || ''}`;
+    const separatorReplacedNumber = numberString.replace('.', separator);
 
     return formatWithMask({ text: separatorReplacedNumber, mask: numberMask }).masked;
 };

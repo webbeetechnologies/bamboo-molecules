@@ -42,4 +42,14 @@ describe('normalizeToNumberString', () => {
 
         expect(normalizedNumberString).toBe('0.22');
     });
+
+    it('should work with minus sign', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: 'test-124.525',
+            separator: '.',
+            allowNegative: true,
+        });
+
+        expect(normalizedNumberString).toBe('-124.525');
+    });
 });

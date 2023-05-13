@@ -9,7 +9,7 @@ describe('normalizeToNumberString', () => {
 
     it('should give correctly formatted number with currency symbol prefix and delimiter', () => {
         const normalizedNumberString = formatNumberWithMask({
-            number: '12455635',
+            number: 12455635,
             separator: '.',
             delimiter: ',',
             prefix: '$',
@@ -20,7 +20,7 @@ describe('normalizeToNumberString', () => {
 
     it('should give correctly formatted number with suffix and precision', () => {
         const normalizedNumberString = formatNumberWithMask({
-            number: '56.12524',
+            number: 56.12524,
             separator: '.',
             precision: 2,
             suffix: '%',
@@ -31,7 +31,7 @@ describe('normalizeToNumberString', () => {
 
     it('should correctly apply different separator without losing decimal place', () => {
         const normalizedNumberString = formatNumberWithMask({
-            number: '2322.22',
+            number: 2322.22,
             separator: ',',
             delimiter: '.',
             precision: 2,
