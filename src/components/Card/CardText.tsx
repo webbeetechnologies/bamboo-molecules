@@ -1,10 +1,12 @@
-import { memo } from 'react';
+import { forwardRef, memo } from 'react';
 import CardTypography, { Props as TypographyProps } from './CardTypography';
 
 export type Props = Omit<TypographyProps, 'variant'>;
 
-const CardText = ({ size = 'md', ...rest }: Props) => {
-    return <CardTypography selectable={false} size={size} {...rest} variant="text" />;
-};
+const CardText = memo(
+    forwardRef(({ size = 'md', ...rest }: Props, ref: any) => {
+        return <CardTypography ref={ref} selectable={false} size={size} {...rest} variant="text" />;
+    }),
+);
 
-export default memo(CardText);
+export default CardText;
