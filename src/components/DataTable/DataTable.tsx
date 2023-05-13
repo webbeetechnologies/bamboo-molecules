@@ -82,13 +82,14 @@ const DataTablePresentationComponent = memo(
 );
 
 const DataTableComponent = memo(
-    forwardRef((props: DataTableComponentProps) => {
+    forwardRef((props: DataTableComponentProps, ref: ForwardedRef<ScrollView>) => {
         const { records = [], tableWidth } = useDataTable() || {};
         const { FlatListComponent, ScrollViewComponent } = useDataTableComponent<TDataTableRow>();
 
         return (
             <DataTablePresentationComponent
                 {...props}
+                ref={ref}
                 records={records}
                 tableWidth={tableWidth}
                 FlatListComponent={FlatListComponent}
@@ -99,43 +100,45 @@ const DataTableComponent = memo(
 );
 
 const withDataTableContext = (Component: typeof DataTableComponent) =>
-    memo((props: DataTableProps) => {
-        const {
-            records,
-            columns,
-            defaultColumnWidth,
-            FlatListComponent,
-            ScrollViewComponent,
-            renderCell,
-            renderHeader,
-            headerRowProps,
-            headerCellProps,
-            cellProps,
-            rowProps,
-            selectedRows,
-            ...rest
-        } = props;
+    memo(
+        forwardRef((props: DataTableProps, ref: ForwardedRef<ScrollView>) => {
+            const {
+                records,
+                columns,
+                defaultColumnWidth,
+                FlatListComponent,
+                ScrollViewComponent,
+                renderCell,
+                renderHeader,
+                headerRowProps,
+                headerCellProps,
+                cellProps,
+                rowProps,
+                selectedRows,
+                ...rest
+            } = props;
 
-        const context = {
-            records,
-            columns,
-            defaultColumnWidth,
-            FlatListComponent,
-            ScrollViewComponent,
-            renderCell,
-            renderHeader,
-            headerRowProps,
-            headerCellProps,
-            cellProps,
-            rowProps,
-            selectedRows,
-        };
+            const context = {
+                records,
+                columns,
+                defaultColumnWidth,
+                FlatListComponent,
+                ScrollViewComponent,
+                renderCell,
+                renderHeader,
+                headerRowProps,
+                headerCellProps,
+                cellProps,
+                rowProps,
+                selectedRows,
+            };
 
-        return (
-            <DataTableContextProvider {...context}>
-                <Component {...rest} />
-            </DataTableContextProvider>
-        );
-    });
+            return (
+                <DataTableContextProvider {...context}>
+                    <Component {...rest} ref={ref} />
+                </DataTableContextProvider>
+            );
+        }),
+    );
 
 export const DataTable = withDataTableContext(DataTableComponent);
