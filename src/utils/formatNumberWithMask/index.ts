@@ -1,1 +1,1 @@
-export { formatNumberWithMask, FormatNumberWithMaskProps } from './formatNumberWithMask'
+export { formatNumberWithMask, FormatNumberWithMaskProps } from './formatNumberWithMask';
