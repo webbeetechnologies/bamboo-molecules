@@ -82,13 +82,14 @@ const DataTablePresentationComponent = memo(
 );
 
 const DataTableComponent = memo(
-    forwardRef((props: DataTableComponentProps) => {
+    forwardRef((props: DataTableComponentProps, ref: ForwardedRef<ScrollView>) => {
         const { records = [], tableWidth } = useDataTable() || {};
         const { FlatListComponent, ScrollViewComponent } = useDataTableComponent<TDataTableRow>();
 
         return (
             <DataTablePresentationComponent
                 {...props}
+                ref={ref}
                 records={records}
                 tableWidth={tableWidth}
                 FlatListComponent={FlatListComponent}
