@@ -1,8 +1,8 @@
-import { Portal, PortalProps } from '../../../src/components';
+import { Portal } from '../../../src/components';
 import { useMolecules } from '../../common';
 import { StyleSheet } from 'react-native';
 
-export type Props = PortalProps & {};
+export type Props = {};
 
 export const Example = (props: Props) => {
     const { View, Text } = useMolecules();

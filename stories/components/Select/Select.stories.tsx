@@ -5,8 +5,7 @@ import { expect } from '@storybook/jest';
 import { Icon } from '../../../src/components';
 import { delay } from '../../common';
 import { Example } from './Select';
-import { useArgs } from '@storybook/addons';
-import { useCallback } from 'react';
+import { useState } from 'react';
 
 export default {
     title: 'components/Select',
@@ -14,17 +13,10 @@ export default {
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => {
-    const [_, updatedArgs] = useArgs();
-    const onChange = useCallback(
-        (value: any) =>
-            updatedArgs({
-                ...args,
-                value: value,
-            }),
-        [args, updatedArgs],
-    );
+    const [value, setValue] = useState(null);
 
-    return <Example {...args} onChange={onChange} />;
+    // @ts-ignore
+    return <Example {...args} value={value} onChange={setValue} />;
 };
 
 Default.args = {

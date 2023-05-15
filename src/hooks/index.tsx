@@ -8,6 +8,7 @@ export {
     useREM,
     useScaledSize,
 } from 'react-native-web-hooks';
+export { usePortal } from '@gorhom/portal';
 
 export * from './useTheme';
 

@@ -1,10 +1,9 @@
-import { useCallback } from 'react';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { useArgs } from '@storybook/addons';
 
 import { Button } from '../../../src/components/Button';
 
 import { Example, ExampleWithSelectAndModal } from './Modal';
+import { useToggle } from '../../../src';
 
 export default {
     title: 'components/Modal',
@@ -12,20 +11,12 @@ export default {
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => {
-    const [_, updateArgs] = useArgs();
-
-    const onOpen = useCallback(() => {
-        updateArgs({ ...args, isOpen: true });
-    }, [args, updateArgs]);
-
-    const onClose = useCallback(() => {
-        updateArgs({ ...args, isOpen: false });
-    }, [args, updateArgs]);
+    const { state: isOpen, handleOpen, handleClose } = useToggle();
 
     return (
         <>
-            <Button onPress={onOpen}>Show Modal</Button>
-            <Example {...args} onClose={onClose} />
+            <Button onPress={handleOpen}>Show Modal</Button>
+            <Example {...args} isOpen={isOpen} onClose={handleClose} />
         </>
     );
 };
@@ -76,20 +67,12 @@ const styles = StyleSheet.create({
 };
 
 export const WithSelectAndPopover: ComponentStory<typeof ExampleWithSelectAndModal> = args => {
-    const [_, updateArgs] = useArgs();
-
-    const onOpen = useCallback(() => {
-        updateArgs({ ...args, isOpen: true });
-    }, [args, updateArgs]);
-
-    const onClose = useCallback(() => {
-        updateArgs({ ...args, isOpen: false });
-    }, [args, updateArgs]);
+    const { state: isOpen, handleOpen, handleClose } = useToggle();
 
     return (
         <>
-            <Button onPress={onOpen}>Show Modal</Button>
-            <ExampleWithSelectAndModal {...args} onClose={onClose} />
+            <Button onPress={handleOpen}>Show Modal</Button>
+            <ExampleWithSelectAndModal {...args} isOpen={isOpen} onClose={handleClose} />
         </>
     );
 };

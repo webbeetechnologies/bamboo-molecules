@@ -2135,6 +2135,7 @@ __metadata:
   resolution: "@bambooapp/bamboo-molecules@workspace:."
   dependencies:
     "@bambooapp/bamboo-atoms": ^0.0.22
+    "@gorhom/portal": ^1.0.14
     "@react-native-aria/overlays": ^0.3.2
     "@react-native-community/eslint-config": ^3.1.0
     "@storybook/addon-coverage": ^0.0.7
@@ -2976,6 +2977,18 @@ __metadata:
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
   checksum: 4059f790e2d07bf3c3ff3e0fec0daa8144fe35c1f6e0111c9921bd32106adaa97a4ab096ad7dab1e28ee6a9060083c4d1a4ada42a7f5f3f7a96b8812e2b757c1
+  languageName: node
+  linkType: hard
+
+"@gorhom/portal@npm:^1.0.14":
+  version: 1.0.14
+  resolution: "@gorhom/portal@npm:1.0.14"
+  dependencies:
+    nanoid: ^3.3.1
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 227bb96a2db854ab29bb9da8d4f3823c7f7448358de459709dd1b78522110da564c9a8734c6bc7d7153ed7c99320e0fb5d60b420c2ebb75ecaf2f0d757f410f9
   languageName: node
   linkType: hard
 

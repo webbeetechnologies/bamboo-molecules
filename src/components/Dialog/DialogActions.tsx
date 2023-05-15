@@ -8,10 +8,12 @@ import {
     useMemo,
     memo,
     forwardRef,
+    ReactElement,
 } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
+import { StyleSheet } from 'react-native';
 
 export type Props = ViewProps &
     ComponentPropsWithRef<ComponentType<ViewProps>> & {
@@ -75,10 +77,13 @@ const DialogActions = (
         return {
             spacing: _spacing,
             containerStyle: container,
-            childrenProps: (i: number) => ({
-                style: {
-                    marginLeft: i === 0 ? 0 : spacing,
-                },
+            childrenProps: (i: number, child: ReactElement) => ({
+                style: StyleSheet.flatten([
+                    {
+                        marginLeft: i === 0 ? 0 : spacing,
+                    },
+                    child.props?.style,
+                ]),
             }),
         };
     }, [componentStyles]);
@@ -86,7 +91,7 @@ const DialogActions = (
     return (
         <View {...rest} style={containerStyle} ref={ref}>
             {Children.map(children, (child, i) =>
-                isValidElement(child) ? cloneElement(child, childrenProps(i)) : child,
+                isValidElement(child) ? cloneElement(child, childrenProps(i, child)) : child,
             )}
         </View>
     );
