@@ -217,6 +217,8 @@ export {
     DocumentResult,
     documentTypes,
     BackgroundContext,
+    formatNumberWithMask,
+    normalizeToNumberString,
 } from './utils';
 
 export { ComponentStylePropWithVariants, WithElements } from './types';
