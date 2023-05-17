@@ -15,6 +15,20 @@ describe('normalizeToNumberString', () => {
 
         expect(normalizedNumberString).toBe('22.22');
     });
+    it('should give a correct output integer value without prefix', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: '1223',
+        });
+
+        expect(normalizedNumberString).toBe('1223');
+    });
+    it('should give correct value even if it is zero', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: '0',
+        });
+
+        expect(normalizedNumberString).toBe('0');
+    });
 
     it('should give a correct output if the input string contains characters and trailing dots', () => {
         const normalizedNumberString = normalizeToNumberString({
