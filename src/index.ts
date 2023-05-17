@@ -194,6 +194,9 @@ export {
     UseMaskedInputProps,
     useQueryFilter,
     UseQueryFilterProps,
+    useHandleNumberFormat,
+    UseHandleNumberFormatProps,
+    NumberMaskConfig,
 } from './hooks';
 
 export {

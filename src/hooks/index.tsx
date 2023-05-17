@@ -33,3 +33,9 @@ export * from './useMaskedInputProps';
 export * from './useQueryFilter';
 
 export { default as useBreakpoints } from './useBreakpoints';
+
+export {
+    default as useHandleNumberFormat,
+    UseHandleNumberFormatProps,
+    NumberMaskConfig,
+} from './useHandleNumberFormat';
