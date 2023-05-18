@@ -71,14 +71,29 @@ describe('normalizeToNumberString', () => {
 
         expect(normalizedNumberString).toBe('');
     });
-    it('should', () => {
+    it('should work if the user passed empty string', () => {
         const normalizedNumberString = formatNumberWithMask({
             number: '',
             separator: '.',
-            precision: 2,
-            suffix: '%',
         });
 
         expect(normalizedNumberString).toBe('');
+    });
+    it('should work if the user passed NaN', () => {
+        const normalizedNumberString = formatNumberWithMask({
+            number: NaN,
+            separator: '.',
+        });
+
+        expect(normalizedNumberString).toBe('');
+    });
+    it('should work if the user passed number string', () => {
+        const normalizedNumberString = formatNumberWithMask({
+            number: '13.422',
+            separator: '.',
+            precision: 2,
+        });
+
+        expect(normalizedNumberString).toBe('13.42');
     });
 });
