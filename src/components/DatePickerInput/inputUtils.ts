@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useRangeChecker } from '../DatePickerInline/dateUtils';
 import type { ValidRangeType } from '../DatePickerInline';
@@ -19,8 +19,8 @@ export default function useDateInput({
     inputMode: 'start' | 'end';
     dateFormat: string;
 }) {
-    const { isDisabled, isWithinValidRange, validStart, validEnd } = useRangeChecker(validRange);
-    const [error, setError] = useState<null | string>(null);
+    const { isDisabled, isWithinValidRange } = useRangeChecker(validRange);
+    // const [error, setError] = useState<null | string>(null);
 
     const formattedValue = useMemo(() => {
         try {
@@ -36,7 +36,7 @@ export default function useDateInput({
 
             if (!isValid(parsedDate)) {
                 // TODO: Translate
-                setError(`Date format must be ${dateFormat}`);
+                // setError(`Date format must be ${dateFormat}`);
                 onChange?.(new Date('Invalid Date'));
 
                 return;
@@ -46,41 +46,41 @@ export default function useDateInput({
 
             if (isDisabled(finalDate)) {
                 // TODO: Translate
-                setError('Day is not allowed');
+                // setError('Day is not allowed');
                 onChange?.(new Date('Invalid Date'));
 
                 return;
             }
             if (!isWithinValidRange(finalDate)) {
                 // TODO: Translate
-                const errors =
-                    validStart && validEnd
-                        ? [
-                              `${`Must be between ${format(validStart, dateFormat)} - ${format(
-                                  validEnd,
-                                  dateFormat,
-                              )})`}`,
-                          ]
-                        : [
-                              validStart ? `Must be later then ${validStart}` : '',
-                              validEnd ? `Must be earlier then ${validEnd}` : '',
-                          ];
+                // const errors =
+                //     validStart && validEnd
+                //         ? [
+                //               `${`Must be between ${format(validStart, dateFormat)} - ${format(
+                //                   validEnd,
+                //                   dateFormat,
+                //               )})`}`,
+                //           ]
+                //         : [
+                //               validStart ? `Must be later then ${validStart}` : '',
+                //               validEnd ? `Must be earlier then ${validEnd}` : '',
+                //           ];
 
-                setError(errors.filter(n => n).join(' '));
+                // setError(errors.filter(n => n).join(' '));
                 onChange?.(new Date('Invalid Date'));
 
                 return;
             }
 
             onChange?.(finalDate);
-            setError(null);
+            // setError(null);
         },
-        [dateFormat, inputMode, isDisabled, isWithinValidRange, onChange, validEnd, validStart],
+        [dateFormat, inputMode, isDisabled, isWithinValidRange, onChange],
     );
 
     return {
         onChange,
-        error,
+        // error,
         formattedValue,
         onChangeText,
     };
