@@ -23,7 +23,8 @@ function DatePickerInputWithoutModal(
     const componentStyles = useComponentStyles('DatePickerInput', style);
 
     const theme = useCurrentTheme();
-    const { formattedValue, onChangeText, error } = useDateInput({
+    // TODO - revisit error
+    const { formattedValue, onChangeText } = useDateInput({
         // locale,
         value,
         validRange,
@@ -44,9 +45,9 @@ function DatePickerInputWithoutModal(
             mask={dateFormat}
             onChangeText={onChangeText}
             keyboardAppearance={theme.dark ? 'dark' : 'default'}
-            error={formattedValue ? !!error : false}
+            // error={formattedValue ? !!error : false}
             right={inputButtons}
-            supportingText={formattedValue ? error || undefined : undefined}
+            // supportingText={formattedValue ? error || undefined : undefined}
         />
     );
 }
