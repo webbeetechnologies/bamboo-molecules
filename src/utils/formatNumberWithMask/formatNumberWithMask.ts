@@ -3,7 +3,7 @@ import { CreateNumberMaskProps, createNumberMask } from '../createNumberMask';
 import { isNil } from '../lodash';
 
 export type FormatNumberWithMaskProps = CreateNumberMaskProps & {
-    number: number | undefined | null;
+    number: number | string | undefined | null;
 };
 
 export const formatNumberWithMask = ({
@@ -14,7 +14,11 @@ export const formatNumberWithMask = ({
     ...rest
 }: FormatNumberWithMaskProps) => {
     const numberMask = createNumberMask({ separator, suffix, ...rest });
-    const numberString = `${!isNil(number) ? Number(number).toFixed(precision) : ''}`;
+    const numberString = `${
+        isNil(number) || number === '' || isNaN(Number(number))
+            ? ''
+            : Number(number).toFixed(precision)
+    }`;
     const separatorReplacedNumber =
         numberString.replace('.', separator) + (numberString ? suffix : '');
 
