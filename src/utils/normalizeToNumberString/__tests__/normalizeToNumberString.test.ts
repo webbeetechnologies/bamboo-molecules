@@ -6,6 +6,12 @@ describe('normalizeToNumberString', () => {
 
         expect(normalizedNumberString).toBe('');
     });
+    it('should still work if the input is null or undefined', () => {
+        // @ts-ignore
+        const normalizedNumberString = normalizeToNumberString({ text: null, separator: '.' });
+
+        expect(normalizedNumberString).toBe('');
+    });
 
     it('should give a correct output if the input string contains characters', () => {
         const normalizedNumberString = normalizeToNumberString({
@@ -14,6 +20,20 @@ describe('normalizeToNumberString', () => {
         });
 
         expect(normalizedNumberString).toBe('22.22');
+    });
+    it('should give a correct output integer value without prefix', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: '1223',
+        });
+
+        expect(normalizedNumberString).toBe('1223');
+    });
+    it('should give correct value even if it is zero', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: '0',
+        });
+
+        expect(normalizedNumberString).toBe('0');
     });
 
     it('should give a correct output if the input string contains characters and trailing dots', () => {
@@ -43,7 +63,7 @@ describe('normalizeToNumberString', () => {
         expect(normalizedNumberString).toBe('0.22');
     });
 
-    it('should work with minus sign', () => {
+    it('should display the minus sign if it is in front of then numbers', () => {
         const normalizedNumberString = normalizeToNumberString({
             text: 'test-124.525',
             separator: '.',
@@ -51,5 +71,34 @@ describe('normalizeToNumberString', () => {
         });
 
         expect(normalizedNumberString).toBe('-124.525');
+    });
+
+    it('should work with prefix that includes the same characters as separator', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: 'Rs.124.525',
+            separator: '.',
+            prefix: 'Rs.',
+        });
+
+        expect(normalizedNumberString).toBe('124.525');
+    });
+    it('should work with suffix', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: '52.25%',
+            separator: '.',
+            suffix: '%',
+        });
+
+        expect(normalizedNumberString).toBe('52.25');
+    });
+    it('should discard the minus sign if it is in between the numbers', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: '$123-353.23',
+            separator: '.',
+            prefix: '$',
+            allowNegative: true,
+        });
+
+        expect(normalizedNumberString).toBe('123353.23');
     });
 });
