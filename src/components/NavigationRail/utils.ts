@@ -13,8 +13,6 @@ export const navigationRailHeaderStyles: ComponentStylePropWithVariants<ViewStyl
 
 export const navigationRailContentStyles: ComponentStylePropWithVariants<ViewStyle> = {
     flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
 };
 
 export const navigationRailFooterStyles: ComponentStylePropWithVariants<ViewStyle> = {
