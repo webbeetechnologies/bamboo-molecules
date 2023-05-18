@@ -20,13 +20,16 @@ describe('normalizeToNumberString', () => {
 
     it('should give correctly formatted number with suffix and precision', () => {
         const normalizedNumberString = formatNumberWithMask({
-            number: 56.12524,
-            separator: '.',
+            number: 12123.23,
+            allowNegative: true,
+            delimiter: '',
             precision: 2,
+            prefix: '',
+            separator: '.',
             suffix: '%',
         });
 
-        expect(normalizedNumberString).toBe('56.12%');
+        expect(normalizedNumberString).toBe('12123.23%');
     });
 
     it('should correctly apply different separator without losing decimal place', () => {
@@ -38,5 +41,24 @@ describe('normalizeToNumberString', () => {
         });
 
         expect(normalizedNumberString).toBe('2.322,22');
+    });
+    it('should give correct decimal points if the number is integer', () => {
+        const normalizedNumberString = formatNumberWithMask({
+            number: 1,
+            separator: '.',
+            precision: 2,
+        });
+
+        expect(normalizedNumberString).toBe('1.00');
+    });
+    it('should give correct decimal points if the number is integer and has prefix', () => {
+        const normalizedNumberString = formatNumberWithMask({
+            number: 12,
+            separator: '.',
+            precision: 2,
+            suffix: '%',
+        });
+
+        expect(normalizedNumberString).toBe('12.00%');
     });
 });
