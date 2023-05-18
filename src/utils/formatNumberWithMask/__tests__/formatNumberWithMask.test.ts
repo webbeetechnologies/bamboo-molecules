@@ -61,4 +61,14 @@ describe('normalizeToNumberString', () => {
 
         expect(normalizedNumberString).toBe('12.00%');
     });
+    it('should return empty string if the number is null and suffix is there', () => {
+        const normalizedNumberString = formatNumberWithMask({
+            number: null,
+            separator: '.',
+            precision: 2,
+            suffix: '%',
+        });
+
+        expect(normalizedNumberString).toBe('');
+    });
 });
