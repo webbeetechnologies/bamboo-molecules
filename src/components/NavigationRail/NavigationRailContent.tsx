@@ -1,15 +1,15 @@
-import { ComponentType, memo } from 'react';
-import type { ViewProps } from 'react-native';
+import type { ComponentType } from 'react';
+import type { ScrollViewProps } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
-export type Props = ViewProps & {
+export type Props = ScrollViewProps & {
     /**
      * ContainerComponent prop allows to replace the default container used in DrawerContent - ScrollView
      * */
     ContainerComponent?: ComponentType<any>;
 };
 
-const NavigationRailContent = memo(({ style, children, ContainerComponent, ...rest }: Props) => {
+const NavigationRailContent = ({ style, children, ContainerComponent, ...rest }: Props) => {
     const { View } = useMolecules();
     const Container = ContainerComponent || View;
     const componentStyles = useComponentStyles('NavigationRail_Content', style);
@@ -19,7 +19,7 @@ const NavigationRailContent = memo(({ style, children, ContainerComponent, ...re
             {children}
         </Container>
     );
-});
+};
 
 NavigationRailContent.displayName = 'NavigationRail_Content';
 
