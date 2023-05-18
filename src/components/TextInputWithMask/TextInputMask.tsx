@@ -9,7 +9,7 @@ export type Props = TextInputProps & {
 
 // TODO - make it more universal
 function TextInputWithMask(
-    { onChangeText: onChangeTextProp, value, mask, ...rest }: Props,
+    { onChangeText: onChangeTextProp, value = '', mask, ...rest }: Props,
     ref: any,
 ) {
     const { TextInput } = useMolecules();
@@ -19,19 +19,27 @@ function TextInputWithMask(
         (text: string) => {
             const enhancedText = enhanceTextWithMask(text, mask, controlledValue);
             setControlledValue(enhancedText);
-
-            if (text.length === mask.length) {
-                onChangeTextProp && onChangeTextProp(text);
-            }
         },
-        [controlledValue, mask, onChangeTextProp],
+        [controlledValue, mask],
     );
+
+    const onBlur = useCallback(() => {
+        onChangeTextProp?.(controlledValue);
+    }, [controlledValue, onChangeTextProp]);
 
     useEffect(() => {
         setControlledValue(value || '');
     }, [value]);
 
-    return <TextInput ref={ref} {...rest} value={controlledValue} onChangeText={onChangeText} />;
+    return (
+        <TextInput
+            ref={ref}
+            {...rest}
+            value={controlledValue}
+            onChangeText={onChangeText}
+            onBlur={onBlur}
+        />
+    );
 }
 
 export default forwardRef(TextInputWithMask);
