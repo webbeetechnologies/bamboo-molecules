@@ -15,7 +15,8 @@ export const formatNumberWithMask = ({
 }: FormatNumberWithMaskProps) => {
     const numberMask = createNumberMask({ separator, suffix, ...rest });
     const numberString = `${!isNil(number) ? Number(number).toFixed(precision) : ''}`;
-    const separatorReplacedNumber = numberString.replace('.', separator) + suffix;
+    const separatorReplacedNumber =
+        numberString.replace('.', separator) + (numberString ? suffix : '');
 
     return formatWithMask({ text: separatorReplacedNumber, mask: numberMask }).masked;
 };
