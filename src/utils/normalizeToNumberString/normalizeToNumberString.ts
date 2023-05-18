@@ -16,22 +16,26 @@ const checkAndReplaceAll = (text: string, searchValue: string, replaceValue: str
 
 // TODO - Need to improvement this, later this should also work with mathematical constants like e
 export const normalizeToNumberString = ({
-    text,
+    text: _text,
     prefix = '',
     suffix = '',
     separator = '',
     allowNegative = false,
 }: NormalizeToNumberStringProps) => {
+    const text = _text || '';
+
     const removedSuffixAndPrefix = checkAndRemove(checkAndRemove(text, prefix), suffix);
 
     const separatorReplacedText = checkAndReplaceAll(removedSuffixAndPrefix, separator, '.');
 
-    // TODO - only add minus sign if it's in front of a number and not in between or behind
-    const prefixText = allowNegative && text.includes('-') ? '-' : '';
+    const textWithNumbersDotsAndMinusSign = separatorReplacedText.replace(/[^0-9.-]/g, '');
 
-    const textWithNumbersAndDotsOnly = separatorReplacedText.replace(/[^0-9.]/g, '');
+    // after removing everything we expect the minus sign to be in front of the number if it's exists
+    const prefixText = allowNegative && textWithNumbersDotsAndMinusSign[0] === '-' ? '-' : '';
 
-    const number = parseFloat(textWithNumbersAndDotsOnly);
+    const numberText = textWithNumbersDotsAndMinusSign.replace(/[^0-9.]/g, '');
 
-    return `${prefixText}${!isNil(number) ? number : ''}`;
+    const number = parseFloat(numberText);
+
+    return `${prefixText}${!isNil(number) && !isNaN(number) ? number : ''}`;
 };
