@@ -101,4 +101,20 @@ describe('normalizeToNumberString', () => {
 
         expect(normalizedNumberString).toBe('123353.23');
     });
+    it('should give me empty string if the text is empty string', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: '',
+        });
+
+        expect(normalizedNumberString).toBe('');
+    });
+    it('should give me empty string if the text result in empty string after normalization', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: '-$',
+            prefix: '$',
+            allowNegative: true,
+        });
+
+        expect(normalizedNumberString).toBe('');
+    });
 });
