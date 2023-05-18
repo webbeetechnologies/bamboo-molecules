@@ -30,12 +30,17 @@ export const normalizeToNumberString = ({
 
     const textWithNumbersDotsAndMinusSign = separatorReplacedText.replace(/[^0-9.-]/g, '');
 
-    // after removing everything we expect the minus sign to be in front of the number if it's exists
-    const prefixText = allowNegative && textWithNumbersDotsAndMinusSign[0] === '-' ? '-' : '';
-
     const numberText = textWithNumbersDotsAndMinusSign.replace(/[^0-9.]/g, '');
 
     const number = parseFloat(numberText);
 
-    return `${prefixText}${!isNil(number) && !isNaN(number) ? number : ''}`;
+    const outputNumberString = !isNil(number) && !isNaN(number) ? number : '';
+
+    // after removing everything we expect the minus sign to be in front of the number if it's exists and if the number exists
+    const prefixText =
+        allowNegative && outputNumberString && textWithNumbersDotsAndMinusSign[0] === '-'
+            ? '-'
+            : '';
+
+    return `${prefixText}${outputNumberString}`;
 };

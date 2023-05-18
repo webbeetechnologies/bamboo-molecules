@@ -37,7 +37,13 @@ const useHandleNumberFormat = <T extends DefaultPropsT = DefaultPropsT>({
 
     const onChangeText = useCallback(
         (text: string) => {
-            onChangeTextProp(+normalizeToNumberString({ text, ...config }));
+            const normalizedNumberString = normalizeToNumberString({ text, ...config });
+
+            onChangeTextProp(
+                normalizedNumberString === ''
+                    ? null
+                    : +normalizeToNumberString({ text, ...config }),
+            );
             setDisplayValue(text);
         },
         [config, onChangeTextProp],
