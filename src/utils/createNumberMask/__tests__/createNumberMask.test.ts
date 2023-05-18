@@ -30,7 +30,7 @@ const getMaskedValue = ({
     )(value);
 
     return formatWithMask({
-        text: value,
+        text: value && [value, ...(suffix ?? ([] as string[]))].join(''),
         mask,
     });
 };
@@ -99,8 +99,9 @@ describe('createNumberMask', () => {
         const { masked } = getMaskedValue({
             suffix: ['%'],
             precision: 2,
-            value: '100.20%',
+            value: '100.20',
         });
+
         expect(masked).toBe('100.20%');
     });
 

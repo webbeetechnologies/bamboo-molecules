@@ -9,11 +9,13 @@ export type FormatNumberWithMaskProps = CreateNumberMaskProps & {
 export const formatNumberWithMask = ({
     number,
     separator = '.',
+    suffix = '',
+    precision = 0,
     ...rest
 }: FormatNumberWithMaskProps) => {
-    const numberMask = createNumberMask({ separator, ...rest });
-    const numberString = `${!isNil(number) ? number : ''}`;
-    const separatorReplacedNumber = numberString.replace('.', separator);
+    const numberMask = createNumberMask({ separator, suffix, ...rest });
+    const numberString = `${!isNil(number) ? Number(number).toFixed(precision) : ''}`;
+    const separatorReplacedNumber = numberString.replace('.', separator) + suffix;
 
     return formatWithMask({ text: separatorReplacedNumber, mask: numberMask }).masked;
 };
