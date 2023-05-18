@@ -71,4 +71,14 @@ describe('normalizeToNumberString', () => {
 
         expect(normalizedNumberString).toBe('');
     });
+    it('should', () => {
+        const normalizedNumberString = formatNumberWithMask({
+            number: '',
+            separator: '.',
+            precision: 2,
+            suffix: '%',
+        });
+
+        expect(normalizedNumberString).toBe('');
+    });
 });
