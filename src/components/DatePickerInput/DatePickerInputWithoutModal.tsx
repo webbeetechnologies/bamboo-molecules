@@ -44,9 +44,9 @@ function DatePickerInputWithoutModal(
             mask={dateFormat}
             onChangeText={onChangeText}
             keyboardAppearance={theme.dark ? 'dark' : 'default'}
-            error={!!error}
+            error={formattedValue ? !!error : false}
             right={inputButtons}
-            supportingText={error || undefined}
+            supportingText={formattedValue ? error || undefined : undefined}
         />
     );
 }

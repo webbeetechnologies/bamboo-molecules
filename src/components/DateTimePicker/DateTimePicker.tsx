@@ -1,10 +1,11 @@
-import { forwardRef, memo, useCallback, useMemo } from 'react';
+import { forwardRef, memo, useCallback, useEffect, useMemo } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { set, format, parse } from 'date-fns';
 
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { DatePickerInputProps } from '../DatePickerInput';
 import { TimePickerFieldProps, sanitizeTimeString } from '../TimePickerField';
+import { isValid } from '../../utils';
 
 export type Props = ViewProps & {
     is24Hour?: boolean;
@@ -43,7 +44,7 @@ const DateTimePicker = (
         onChange: onChangeProp,
     });
 
-    const timeString = useMemo(() => (date ? format(date as Date, 'HH:mm') : ''), [date]);
+    const timeString = useMemo(() => (date && isValid(date) ? format(date, 'HH:mm') : ''), [date]);
 
     const onDateChange = useCallback(
         (newDate: Date | null) => {
@@ -51,6 +52,11 @@ const DateTimePicker = (
 
             if (!date) {
                 onChange(newDate);
+                return;
+            }
+
+            if (!isValid(newDate)) {
+                onChange(null);
                 return;
             }
 
@@ -71,6 +77,12 @@ const DateTimePicker = (
         },
         [date, onChange],
     );
+
+    useEffect(() => {
+        if (isValid(date)) return;
+
+        onChange(null);
+    }, [date, onChange]);
 
     return (
         <>
