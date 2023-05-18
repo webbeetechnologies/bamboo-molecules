@@ -66,4 +66,23 @@ describe('normalizeToNumberString', () => {
 
         expect(normalizedNumberString).toBe('-124.525');
     });
+
+    it('should work with prefix that includes the same characters as separator', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: 'Rs.124.525',
+            separator: '.',
+            prefix: 'Rs.',
+        });
+
+        expect(normalizedNumberString).toBe('124.525');
+    });
+    it('should work with suffix', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: '52.25%',
+            separator: '.',
+            suffix: '%',
+        });
+
+        expect(normalizedNumberString).toBe('52.25');
+    });
 });
