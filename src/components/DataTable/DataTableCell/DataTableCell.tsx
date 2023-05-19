@@ -63,7 +63,7 @@ export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
     const { View } = useMolecules();
     const { cellProps } = useDataTable();
 
-    const cellStyles = useComponentStyles('DataTable_Cell', [cellProps?.style, style, { width }]);
+    const cellStyles = useComponentStyles('DataTable_Cell', [{ width }, cellProps?.style, style]);
 
     return (
         <View {...cellProps} {...props} style={cellStyles}>
