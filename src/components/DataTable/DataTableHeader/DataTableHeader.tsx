@@ -59,9 +59,9 @@ export const DataHeaderCell = memo(({ width, style, ...props }: DataHeaderCellPr
     const { View } = useMolecules();
     const { headerCellProps } = useDataTable() || {};
     const headerCellStyles = useComponentStyles('DataTable_HeaderCell', [
+        { width },
         headerCellProps?.style,
         style,
-        { width },
     ]);
 
     return (
