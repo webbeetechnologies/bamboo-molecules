@@ -40,7 +40,7 @@ const DataTablePresentationComponent = memo(
         } = { ...defaultProps, ...verticalScrollProps };
 
         const hStyle = useComponentStyles('DataTable', [hStyleProp]);
-        const vStyle = useMemo(() => [vStyleProp, { width: tableWidth }], [vStyleProp, tableWidth]);
+        const vStyle = useMemo(() => [{ width: tableWidth }, vStyleProp], [vStyleProp, tableWidth]);
         const normalizedData = useMemo(() => [{ id: '__header__' }, ...records], [records]);
 
         const renderItem: typeof renderRow = useCallback(props => {
