@@ -48,7 +48,11 @@ const DateTimePicker = (
 
     const onDateChange = useCallback(
         (newDate: Date | null) => {
-            if (!newDate) return;
+            if (!newDate) {
+                onChange(null);
+
+                return;
+            }
 
             if (!date) {
                 onChange(newDate);
@@ -62,7 +66,7 @@ const DateTimePicker = (
 
             const [day, month, year] = format(newDate, 'dd/MM/yyyy').split('/');
 
-            onChange(set(date, { date: +day, month: +month, year: +year }));
+            onChange(set(date, { date: +day, month: +month - 1, year: +year }));
         },
         [date, onChange],
     );
@@ -73,7 +77,7 @@ const DateTimePicker = (
 
             const newTime = sanitizeTimeString(time);
 
-            onChange(parse(newTime, 'HH:mm', date || new Date()));
+            onChange(date ? parse(newTime, 'HH:mm', date) : null);
         },
         [date, onChange],
     );

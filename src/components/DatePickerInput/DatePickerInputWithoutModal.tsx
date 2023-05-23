@@ -1,4 +1,4 @@
-import { forwardRef, memo } from 'react';
+import { forwardRef, memo, useCallback, useImperativeHandle, useRef } from 'react';
 
 import { useComponentStyles, useCurrentTheme, useMolecules } from '../../hooks';
 import useDateInput from './inputUtils';
@@ -8,7 +8,7 @@ function DatePickerInputWithoutModal(
     {
         label,
         value,
-        onChange,
+        onChange: onChangeProp,
         // locale = 'en',
         validRange,
         inputMode,
@@ -23,6 +23,18 @@ function DatePickerInputWithoutModal(
     const componentStyles = useComponentStyles('DatePickerInput', style);
 
     const theme = useCurrentTheme();
+
+    const inputRef = useRef(null);
+
+    const onChange = useCallback(
+        (date: Date | null) => {
+            onChangeProp?.(date);
+
+            if (!date) (inputRef.current as any)?.setDisplayValue('');
+        },
+        [onChangeProp],
+    );
+
     // TODO - revisit error
     const { formattedValue, onChangeText } = useDateInput({
         // locale,
@@ -33,12 +45,14 @@ function DatePickerInputWithoutModal(
         dateFormat,
     });
 
+    useImperativeHandle(ref, () => inputRef);
+
     return (
         <TextInputWithMask
             placeholder={dateFormat}
             style={componentStyles}
             {...rest}
-            ref={ref}
+            ref={inputRef}
             label={label}
             value={formattedValue}
             keyboardType={'number-pad'}
