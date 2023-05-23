@@ -12,7 +12,7 @@ export default function useDateInput({
     onChange,
     dateFormat,
 }: {
-    onChange?: (d: Date) => void;
+    onChange?: (d: Date | null) => void;
     // locale: undefined | string;
     value?: Date | null;
     validRange?: ValidRangeType;
@@ -24,7 +24,7 @@ export default function useDateInput({
 
     const formattedValue = useMemo(() => {
         try {
-            return !isNil(value) ? format(value, dateFormat) : '';
+            return !isNil(value) ? format(value, dateFormat) || '' : '';
         } catch (e) {
             return '';
         }
@@ -37,7 +37,7 @@ export default function useDateInput({
             if (!isValid(parsedDate)) {
                 // TODO: Translate
                 // setError(`Date format must be ${dateFormat}`);
-                onChange?.(new Date('Invalid Date'));
+                onChange?.(null);
 
                 return;
             }
@@ -47,7 +47,7 @@ export default function useDateInput({
             if (isDisabled(finalDate)) {
                 // TODO: Translate
                 // setError('Day is not allowed');
-                onChange?.(new Date('Invalid Date'));
+                onChange?.(null);
 
                 return;
             }
@@ -67,7 +67,7 @@ export default function useDateInput({
                 //           ];
 
                 // setError(errors.filter(n => n).join(' '));
-                onChange?.(new Date('Invalid Date'));
+                onChange?.(null);
 
                 return;
             }
