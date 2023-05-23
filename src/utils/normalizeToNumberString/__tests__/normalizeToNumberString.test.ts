@@ -117,4 +117,20 @@ describe('normalizeToNumberString', () => {
 
         expect(normalizedNumberString).toBe('');
     });
+    it('should correctly apply precision and remove unnecessary decimal points', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: '12.24',
+            precision: 0,
+        });
+
+        expect(normalizedNumberString).toBe('12');
+    });
+    it('should correctly apply non-zero precision', () => {
+        const normalizedNumberString = normalizeToNumberString({
+            text: '12.24',
+            precision: 3,
+        });
+
+        expect(normalizedNumberString).toBe('12.240');
+    });
 });
