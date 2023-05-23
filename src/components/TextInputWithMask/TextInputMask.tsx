@@ -1,4 +1,4 @@
-import { useState, useEffect, forwardRef, useCallback } from 'react';
+import { useState, useEffect, forwardRef, useCallback, useImperativeHandle } from 'react';
 import { useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 import { enhanceTextWithMask } from './utils';
@@ -30,6 +30,10 @@ function TextInputWithMask(
     useEffect(() => {
         setControlledValue(value || '');
     }, [value]);
+
+    useImperativeHandle(ref, () => ({
+        setDisplayValue: setControlledValue,
+    }));
 
     return (
         <TextInput
