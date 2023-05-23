@@ -91,9 +91,9 @@ describe('normalizeToNumberString', () => {
         const normalizedNumberString = formatNumberWithMask({
             number: '13.422',
             separator: '.',
-            precision: 2,
+            precision: 3,
         });
 
-        expect(normalizedNumberString).toBe('13.42');
+        expect(normalizedNumberString).toBe('13.422');
     });
 });

@@ -13,7 +13,7 @@ export const formatNumberWithMask = ({
     precision = 0,
     ...rest
 }: FormatNumberWithMaskProps) => {
-    const numberMask = createNumberMask({ separator, suffix, ...rest });
+    const numberMask = createNumberMask({ separator, suffix, precision, ...rest });
     const numberString = `${
         isNil(number) || number === '' || isNaN(Number(number))
             ? ''
