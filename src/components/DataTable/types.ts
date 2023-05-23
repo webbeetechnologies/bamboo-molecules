@@ -2,9 +2,9 @@ import type { ComponentPropsWithRef, ComponentType, ReactNode } from 'react';
 import type { FlatListProps, ScrollViewProps, ViewProps } from 'react-native';
 import type { ScrollView } from 'react-native';
 
-export type TDataTableColumn = string | number;
+export type TDataTableColumn = string;
 
-export type TDataTableRow = string | number;
+export type TDataTableRow = string;
 
 export interface DataTableComponentProps<T = any> {
     FlatListComponent?: ComponentType<FlatListProps<T>>;
