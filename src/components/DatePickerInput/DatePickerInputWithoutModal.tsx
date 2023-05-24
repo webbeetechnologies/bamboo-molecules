@@ -45,7 +45,7 @@ function DatePickerInputWithoutModal(
         dateFormat,
     });
 
-    useImperativeHandle(ref, () => inputRef);
+    useImperativeHandle(ref, () => inputRef.current);
 
     return (
         <TextInputWithMask
