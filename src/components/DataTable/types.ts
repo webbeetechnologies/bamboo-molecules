@@ -96,7 +96,7 @@ export interface DataTableProps<RecordType = any>
      * Props for the data row.
      * Caution: Use memoized props for best performance
      */
-    rowProps?: Omit<ViewProps, 'children'>;
+    rowProps?: Omit<ViewProps, 'children'> & { size?: string };
 
     /**
      *
@@ -104,4 +104,11 @@ export interface DataTableProps<RecordType = any>
      *
      */
     selectedRows?: Record<string, boolean> | false;
+
+    /**
+     *
+     * if present, allows you to set the size of all the rows.
+     *
+     */
+    rowSize?: string;
 }
