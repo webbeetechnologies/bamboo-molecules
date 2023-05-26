@@ -26,7 +26,7 @@ type DataTableContextType = Pick<
 > &
     Pick<
         DataTableProps,
-        'headerCellProps' | 'cellProps' | 'headerRowProps' | 'rowProps' | 'selectedRows'
+        'headerCellProps' | 'cellProps' | 'headerRowProps' | 'rowProps' | 'selectedRows' | 'rowSize'
     > & {
         tableWidth: number;
     };

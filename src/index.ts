@@ -134,6 +134,8 @@ export {
     RenderHeaderCellProps,
     RenderCellProps,
     useDataTableCell,
+    useDataTable,
+    useDataTableRow,
     ToastContainer,
     ToastContainerProps,
     Toast,

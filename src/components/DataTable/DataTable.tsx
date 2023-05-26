@@ -115,6 +115,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 cellProps,
                 rowProps,
                 selectedRows,
+                rowSize,
                 ...rest
             } = props;
 
@@ -131,6 +132,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 cellProps,
                 rowProps,
                 selectedRows,
+                rowSize,
             };
 
             return (

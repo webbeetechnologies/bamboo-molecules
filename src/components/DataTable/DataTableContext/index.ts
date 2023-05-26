@@ -1,1 +1,1 @@
-export { useDataTableCell } from './DataTableContext';
+export { useDataTableCell, useDataTable, useDataTableRow } from './DataTableContext';

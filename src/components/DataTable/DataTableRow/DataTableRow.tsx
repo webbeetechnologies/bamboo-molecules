@@ -11,15 +11,16 @@ const DataTableComponentPresentation = memo(
     (
         props: DataTableComponentProps &
             CallbackActionState &
-            Pick<DataTableProps, 'rowProps' | 'columns'> & { isSelected: boolean },
+            Pick<DataTableProps, 'rowSize' | 'rowProps' | 'columns'> & { isSelected: boolean },
     ) => {
-        const { record, index, isSelected, hovered = false } = props;
+        const { record, index, isSelected, hovered = false, rowSize } = props;
         const { View } = useMolecules();
 
         const rowStyle = useComponentStyles(
             'DataTable_Row',
             [props.rowProps?.style, { flexDirection: 'row' }],
             {
+                size: props.rowProps?.size ?? rowSize,
                 states: {
                     selected_hovered: isSelected && hovered,
                     selected: isSelected,
@@ -49,7 +50,7 @@ const DataTableComponentPresentation = memo(
 );
 
 const DataTableComponent = memo((props: DataTableComponentProps) => {
-    const { columns = [], rowProps, selectedRows } = useDataTable();
+    const { columns = [], rowSize, rowProps, selectedRows } = useDataTable();
 
     return (
         <DataTableComponentPresentation
@@ -57,6 +58,7 @@ const DataTableComponent = memo((props: DataTableComponentProps) => {
             {...props}
             columns={columns}
             rowProps={rowProps}
+            rowSize={rowSize}
         />
     );
 });
