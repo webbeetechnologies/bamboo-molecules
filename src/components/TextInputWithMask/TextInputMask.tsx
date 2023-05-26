@@ -1,4 +1,4 @@
-import { useState, useEffect, forwardRef, useCallback } from 'react';
+import { useState, useEffect, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 import { enhanceTextWithMask } from './utils';
@@ -14,6 +14,8 @@ function TextInputWithMask(
 ) {
     const { TextInput } = useMolecules();
     const [controlledValue, setControlledValue] = useState<string>(value || '');
+
+    const inputRef = useRef(null);
 
     const onChangeText = useCallback(
         (text: string) => {
@@ -31,9 +33,14 @@ function TextInputWithMask(
         setControlledValue(value || '');
     }, [value]);
 
+    useImperativeHandle(ref, () => ({
+        setDisplayValue: setControlledValue,
+        ...(inputRef?.current || {}),
+    }));
+
     return (
         <TextInput
-            ref={ref}
+            ref={inputRef}
             {...rest}
             value={controlledValue}
             onChangeText={onChangeText}

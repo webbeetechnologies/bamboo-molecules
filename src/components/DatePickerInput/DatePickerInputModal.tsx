@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import type { DatePickerModalProps } from '../DatePickerModal';
 import { useMolecules } from '../../hooks';
 
@@ -29,6 +29,10 @@ const DatePickerInputModal = ({
 
         onCloseProp?.();
     }, [date, onCloseProp]);
+
+    useEffect(() => {
+        onValueChange(date);
+    }, [date]);
 
     return (
         <DatePickerModal

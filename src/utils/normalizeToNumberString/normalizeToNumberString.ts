@@ -6,6 +6,7 @@ export type NormalizeToNumberStringProps = {
     suffix?: string;
     separator?: string;
     allowNegative?: boolean;
+    precision?: number;
 };
 
 const checkAndRemove = (text: string, searchValue: string): string =>
@@ -21,6 +22,7 @@ export const normalizeToNumberString = ({
     suffix = '',
     separator = '',
     allowNegative = false,
+    precision = 0,
 }: NormalizeToNumberStringProps) => {
     const text = _text || '';
 
@@ -34,7 +36,7 @@ export const normalizeToNumberString = ({
 
     const number = parseFloat(numberText);
 
-    const outputNumberString = !isNil(number) && !isNaN(number) ? number : '';
+    const outputNumberString = !isNil(number) && !isNaN(number) ? number.toFixed(precision) : '';
 
     // after removing everything we expect the minus sign to be in front of the number if it's exists and if the number exists
     const prefixText =

@@ -13,12 +13,12 @@ export const formatNumberWithMask = ({
     precision = 0,
     ...rest
 }: FormatNumberWithMaskProps) => {
-    const numberMask = createNumberMask({ separator, suffix, ...rest });
-    const numberString = `${
-        isNil(number) || number === '' || isNaN(Number(number))
-            ? ''
-            : Number(number).toFixed(precision)
-    }`;
+    if (isNil(number) || number === '' || isNaN(Number(number))) return '';
+
+    const numberMask = createNumberMask({ separator, suffix, precision, ...rest });
+
+    const numberString = `${Number(number).toFixed(precision)}`;
+
     const separatorReplacedNumber =
         numberString.replace('.', separator) + (numberString ? suffix : '');
 
