@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, memo, RefAttributes } from 'react';
+import { ForwardedRef, forwardRef, memo, RefAttributes, useMemo } from 'react';
 import type { ScrollViewProps } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -8,10 +8,32 @@ export type ScrollViewRef = ScrollView;
 
 export type Props = ScrollViewProps & RefAttributes<ScrollViewRef> & {};
 
-const ComponentTemplate = ({ style, ...rest }: Props, ref: ForwardedRef<ScrollViewRef>) => {
-    const componentStyles = useComponentStyles('ScrollView', style);
+const ComponentTemplate = (
+    { style, contentContainerStyle: contentContainerStyleProp, ...rest }: Props,
+    ref: ForwardedRef<ScrollViewRef>,
+) => {
+    const componentStyles = useComponentStyles('ScrollView', [
+        style,
+        { contentContainerStyle: contentContainerStyleProp },
+    ]);
 
-    return <ScrollView ref={ref} style={componentStyles} {...rest} />;
+    const { containerStyle, contentContainerStyle } = useMemo(() => {
+        const { contentContainerStyle: _contentContainerStyle, ...restStyle } = componentStyles;
+
+        return {
+            containerStyle: restStyle,
+            contentContainerStyle: _contentContainerStyle,
+        };
+    }, [componentStyles]);
+
+    return (
+        <ScrollView
+            ref={ref}
+            style={containerStyle}
+            contentContainerStyle={contentContainerStyle}
+            {...rest}
+        />
+    );
 };
 
 export default memo(forwardRef(ComponentTemplate));
