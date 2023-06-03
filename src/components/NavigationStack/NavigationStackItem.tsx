@@ -40,7 +40,10 @@ const NavigationStackItem = memo(
             }).start();
         }, [isCurrentRoute, opacityRef]);
 
-        const animatedViewStyle = useMemo(() => [{ opacity: opacityRef.current }, styles], []);
+        const animatedViewStyle = useMemo(
+            () => [{ opacity: opacityRef.current }, styles],
+            [styles],
+        );
 
         return (
             <>

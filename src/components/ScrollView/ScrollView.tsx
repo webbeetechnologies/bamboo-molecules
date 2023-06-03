@@ -24,7 +24,7 @@ const ComponentTemplate = (
             containerStyle: restStyle,
             contentContainerStyle: _contentContainerStyle,
         };
-    }, []);
+    }, [componentStyles]);
 
     return (
         <ScrollView
