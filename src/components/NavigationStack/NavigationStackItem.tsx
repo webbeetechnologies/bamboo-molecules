@@ -2,7 +2,7 @@ import { memo, ReactElement, useEffect, useMemo, useRef } from 'react';
 import { Animated } from 'react-native';
 import { useNavigation } from './utils';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
-import {useComponentStyles} from "../../hooks";
+import { useComponentStyles } from '../../hooks';
 
 export type Props = ViewProps & {
     name: string;
@@ -18,7 +18,12 @@ const NavigationStackItemContainer = memo(({ name, children, ...rest }: Props) =
 });
 
 const NavigationStackItem = memo(
-    ({ isCurrentRoute, children, style, ...rest }: Omit<Props, 'name'> & { isCurrentRoute: boolean }) => {
+    ({
+        isCurrentRoute,
+        children,
+        style,
+        ...rest
+    }: Omit<Props, 'name'> & { isCurrentRoute: boolean }) => {
         const styles = useComponentStyles('NavigationStackItem', style);
 
         const opacityRef = useRef(new Animated.Value(isCurrentRoute ? 1 : 0));
@@ -35,12 +40,14 @@ const NavigationStackItem = memo(
             }).start();
         }, [isCurrentRoute, opacityRef]);
 
-        const animatedViewStyle = useMemo(() => ([{ opacity: opacityRef.current }, styles]), []);
+        const animatedViewStyle = useMemo(() => [{ opacity: opacityRef.current }, styles], []);
 
         return (
             <>
                 {isCurrentRoute && (
-                    <Animated.View style={animatedViewStyle} {...rest}>{children}</Animated.View>
+                    <Animated.View style={animatedViewStyle} {...rest}>
+                        {children}
+                    </Animated.View>
                 )}
             </>
         );
