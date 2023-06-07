@@ -150,7 +150,10 @@
   },
   "eslintIgnore": [
     "node_modules/",
-    "lib/"
+    "lib/",
+    "test-cases/node_modules",
+    "dist",
+    "cache"
   ],
   "jest": {
     "coverageReporters": [
