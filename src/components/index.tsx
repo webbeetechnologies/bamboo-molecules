@@ -181,3 +181,5 @@ export {
     Toast,
     materialToastStyles,
 } from './Toast';
+
+export * from './Menu';
