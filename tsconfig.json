@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "paths": {
+      "@bambooapp/bamboo-molecules": ["./src/index.ts"],
+      "@bambooapp/bamboo-molecules/datagrid": ["./src/datagrid/index.ts"],
+    },
     "declaration": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
