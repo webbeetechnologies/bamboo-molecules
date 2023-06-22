@@ -47,6 +47,7 @@ export const generateDarkThemeColors = (
         disabled: palette.neutral40,
         disabledOnBackground: color(palette.neutral100).alpha(0.1).rgb().string(),
         neutral1: palette.neutral70,
+        lines: palette.neutral90, // #E4E1E6
         onNeutral1: palette.neutral40,
         elevation: {
             level0: 'transparent',

@@ -92,6 +92,7 @@ export type MD3Colors = {
     inversePrimary: string;
     backdrop: string;
     elevation: MD3ElevationColors;
+    lines: string;
 };
 
 export type MD3Shapes = {

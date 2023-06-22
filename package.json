@@ -53,6 +53,7 @@
     "@bambooapp/bamboo-atoms": "^0.0.22",
     "@gorhom/portal": "^1.0.14",
     "@react-native-aria/overlays": "^0.3.2",
+    "@sharcoux/slider": "^6.1.2",
     "color": "^4.2.3",
     "date-fns": "^2.29.3",
     "lodash.get": "^4.4.2",

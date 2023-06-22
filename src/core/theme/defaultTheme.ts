@@ -94,6 +94,7 @@ import {
     sectionGridStyles,
     sectionListStyles,
     selectStyles,
+    sliderStyles,
     stateLayerStyles,
     surfaceStyles,
     switchStyles,
@@ -303,4 +304,6 @@ export const defaultThemeValue: Partial<ITheme> = {
     StateLayer: stateLayerStyles,
 
     MaterialToast: materialToastStyles,
+
+    Slider: sliderStyles,
 };
