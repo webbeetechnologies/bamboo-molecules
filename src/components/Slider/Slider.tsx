@@ -5,15 +5,32 @@ import { useComponentStyles } from '../../hooks';
 
 export type Props = SliderProps & {};
 
-const ComponentTemplate = ({ style, ...rest }: Props) => {
-    const componentStyles = useComponentStyles('Slider', [style]);
+const ComponentTemplate = ({
+    style,
+    thumbTintColor: thumbTintColorProp,
+    minimumTrackTintColor: minimumTrackTintColorProp,
+    maximumTrackTintColor: maximumTrackTintColorProp,
+    ...rest
+}: Props) => {
+    const componentStyles = useComponentStyles('Slider', [
+        style,
+        {
+            ...(thumbTintColorProp ? { thumbTintColor: thumbTintColorProp } : {}),
+            ...(minimumTrackTintColorProp
+                ? { minimumTrackTintColor: minimumTrackTintColorProp }
+                : {}),
+            ...(maximumTrackTintColorProp
+                ? { maximumTrackTintColor: maximumTrackTintColorProp }
+                : {}),
+        },
+    ]);
 
     const { colorProps, sliderStyles } = useMemo(() => {
         const {
             thumbTintColor: _thumbTintColor,
             minimumTrackTintColor: _minimumTrackTintColor,
             maximumTrackTintColor: _maximumTrackTintColor,
-            slider: _sliderStyles,
+            ..._sliderStyles
         } = componentStyles;
 
         return {

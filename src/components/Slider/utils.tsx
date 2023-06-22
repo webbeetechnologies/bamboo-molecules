@@ -1,22 +1,34 @@
 import type { ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
-type CustomProp = {
+type BaseStyleProp = {
     thumbTintColor: string;
-    minimumTrackTintColor: string;
-    maximumTrackTintColor: string;
-
-    slider: ViewStyle;
 };
 
-export const sliderStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomProp> = {
+type SliderStyleProp = {
+    minimumTrackTintColor: string;
+    maximumTrackTintColor: string;
+} & BaseStyleProp;
+
+export const sliderStyles: ComponentStylePropWithVariants<ViewStyle, '', SliderStyleProp> = {
     thumbTintColor: 'colors.primary',
     minimumTrackTintColor: 'colors.primary',
     maximumTrackTintColor: 'colors.lines',
 
     // TODO: Implement enabled/disabled states
 
-    slider: {
-        minWidth: 100,
-    },
+    minWidth: 100,
+};
+
+type RangeStyleProp = {
+    inboundColor: string;
+} & BaseStyleProp;
+
+export const rangeSliderStyles: ComponentStylePropWithVariants<ViewStyle, '', RangeStyleProp> = {
+    thumbTintColor: 'colors.primary',
+    inboundColor: 'colors.primary',
+
+    // TODO: Implement enabled/disabled states
+
+    minWidth: 100,
 };

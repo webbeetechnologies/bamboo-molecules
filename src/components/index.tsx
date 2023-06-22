@@ -171,7 +171,14 @@ export * from './ScrollView';
 
 export * from './DataTable';
 
-export { Slider, SliderProps, sliderStyles, RangeSlider, RangeSliderProps } from './Slider';
+export {
+    Slider,
+    SliderProps,
+    sliderStyles,
+    rangeSliderStyles,
+    RangeSlider,
+    RangeSliderProps,
+} from './Slider';
 
 export * from './StateLayer';
 
