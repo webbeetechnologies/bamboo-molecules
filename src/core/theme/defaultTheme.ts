@@ -77,6 +77,7 @@ import {
     listItemStyles,
     listItemTitleStyles,
     modalStyles,
+    navigationStackItemStyles,
     navigationRailContentStyles,
     navigationRailFooterStyles,
     navigationRailHeaderStyles,
@@ -304,6 +305,8 @@ export const defaultThemeValue: Partial<ITheme> = {
     StateLayer: stateLayerStyles,
 
     MaterialToast: materialToastStyles,
+
+    NavigationStackItem: navigationStackItemStyles,
 
     Slider: sliderStyles,
 };

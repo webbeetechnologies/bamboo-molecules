@@ -7,4 +7,4 @@ export const NavigationStack = Object.assign(NavigationStackComponent, {
 
 export { Props as NavigationStackProps, NavigationStackHandle } from './NavigationStack';
 export { Props as NavigationStackItemProps } from './NavigationStackItem';
-export { useNavigation, useRoute } from './utils';
+export { useNavigation, useRoute, navigationStackItemStyles } from './utils';
