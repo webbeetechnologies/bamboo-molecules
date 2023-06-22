@@ -2138,6 +2138,7 @@ __metadata:
     "@gorhom/portal": ^1.0.14
     "@react-native-aria/overlays": ^0.3.2
     "@react-native-community/eslint-config": ^3.1.0
+    "@sharcoux/slider": ^6.1.2
     "@storybook/addon-coverage": ^0.0.7
     "@storybook/addon-essentials": ^6.5.16
     "@storybook/addon-interactions": ^6.5.16
@@ -4547,6 +4548,18 @@ __metadata:
     component-type: ^1.2.1
     join-component: ^1.1.0
   checksum: 8c4aacc903fb717619b69ca7eecf8d4a7b928661b0e835c9cd98f1b858a85ce62c348369ad9a52cb2df8df02578c0525a73fce4c69a42ac414d9554cc6be7117
+  languageName: node
+  linkType: hard
+
+"@sharcoux/slider@npm:^6.1.2":
+  version: 6.1.2
+  resolution: "@sharcoux/slider@npm:6.1.2"
+  peerDependencies:
+    react: ">=16.13.1"
+    react-dom: ">=16.13.1"
+    react-native: ^0.61.4
+    react-native-web: ">=0.13.4"
+  checksum: 0c13297ba29434e7579825f5dc641efe92f1ebd3b173fd64d17bc9324d072cfc133f82a1127ea131cef20fe462b1cd53991fa21438ac15184ea12493d957bbaf
   languageName: node
   linkType: hard
 
