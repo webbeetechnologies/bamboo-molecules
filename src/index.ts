@@ -140,7 +140,9 @@ export {
     ToastContainerProps,
     Toast,
     MaterialToast,
+    Slider,
     SliderProps,
+    RangeSlider,
     RangeSliderProps,
 } from './components';
 

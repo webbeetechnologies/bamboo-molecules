@@ -63,6 +63,8 @@ import type {
     StateLayerProps,
     MaterialToastProps,
     ToastContainerProps,
+    SliderProps,
+    RangeSliderProps,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -134,6 +136,8 @@ export interface DefaultComponents {
     StateLayer: ComponentType<StateLayerProps>;
     MaterialToast: ComponentType<MaterialToastProps>;
     ToastContainer: ComponentType<ToastContainerProps>;
+    Slider: ComponentType<SliderProps>;
+    RangeSlider: ComponentType<RangeSliderProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
