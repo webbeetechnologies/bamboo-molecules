@@ -115,6 +115,7 @@ import {
     verticalDividerStyles,
 } from '../../components';
 import { materialToastStyles } from '../../components/Toast/utils';
+import { menuStyles, menuItemStyles } from '../../components/Menu/utils';
 import { MD3DarkTheme, MD3LightTheme } from '../../styles';
 import type { ITheme } from './types';
 
@@ -308,6 +309,9 @@ export const defaultThemeValue: Partial<ITheme> = {
     MaterialToast: materialToastStyles,
 
     NavigationStackItem: navigationStackItemStyles,
+
+    Menu: menuStyles,
+    MenuItem: menuItemStyles,
 
     Slider: sliderStyles,
     RangeSlider: rangeSliderStyles,

@@ -73,6 +73,7 @@ import {
     ToastContainer,
     Slider,
     RangeSlider,
+    Menu,
 } from '../../components';
 
 import type { DefaultComponents, ProvideComponentsProps } from './types';
@@ -151,6 +152,7 @@ const defaultComponents: DefaultComponents = {
     ToastContainer,
     Slider,
     RangeSlider,
+    Menu,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

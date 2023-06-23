@@ -65,6 +65,7 @@ import type {
     ToastContainerProps,
     SliderProps,
     RangeSliderProps,
+    Menu,
 } from '../../components';
 
 export type ProvideComponentsProps = {
@@ -138,6 +139,7 @@ export interface DefaultComponents {
     ToastContainer: ComponentType<ToastContainerProps>;
     Slider: ComponentType<SliderProps>;
     RangeSlider: ComponentType<RangeSliderProps>;
+    Menu: typeof Menu;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
