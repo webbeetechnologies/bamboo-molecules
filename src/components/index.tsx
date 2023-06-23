@@ -182,13 +182,6 @@ export {
 
 export * from './StateLayer';
 
-export {
-    MaterialToast,
-    ToastContainer,
-    MaterialToastProps,
-    ToastContainerProps,
-    Toast,
-    materialToastStyles,
-} from './Toast';
-
 export * from './Menu';
+
+export * from './Avatar';
