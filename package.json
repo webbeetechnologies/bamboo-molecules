@@ -1,6 +1,6 @@
 {
   "name": "@bambooapp/bamboo-molecules",
-  "version": "0.1.55",
+  "version": "0.1.56",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/webbeetechnologies/bamboo-molecules.git"
@@ -151,7 +151,10 @@
   },
   "eslintIgnore": [
     "node_modules/",
-    "lib/"
+    "lib/",
+    "test-cases/node_modules",
+    "dist",
+    "cache"
   ],
   "jest": {
     "coverageReporters": [

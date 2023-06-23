@@ -71,6 +71,7 @@ import {
     StateLayer,
     MaterialToast,
     ToastContainer,
+    Menu,
 } from '../../components';
 
 import type { DefaultComponents, ProvideComponentsProps } from './types';
@@ -147,6 +148,7 @@ const defaultComponents: DefaultComponents = {
     StateLayer,
     MaterialToast,
     ToastContainer,
+    Menu,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
