@@ -124,7 +124,7 @@ const AvatarInner = memo(
         const normalizeLabel = useMemo(() => {
             const { firstWord, lastWord } = extractFirstAndLastWord(labelProp || '');
 
-            return `${firstWord[0] || ''}${lastWord[0] || ''}`;
+            return `${firstWord[0] || ''}${lastWord[0] || firstWord[1] || ''}`;
         }, [labelProp]);
 
         const onImageLoadFailed = useCallback(
@@ -171,8 +171,8 @@ const extractFirstAndLastWord = (text: string) => {
     const words = text.split(' ');
 
     return {
-        firstWord: words[0],
-        lastWord: words[words.length - 1],
+        firstWord: words[0] || '',
+        lastWord: words.length <= 1 ? '' : words[words.length - 1],
     };
 };
 
