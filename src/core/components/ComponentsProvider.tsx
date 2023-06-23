@@ -71,6 +71,8 @@ import {
     StateLayer,
     MaterialToast,
     ToastContainer,
+    Slider,
+    RangeSlider,
     Menu,
 } from '../../components';
 
@@ -148,6 +150,8 @@ const defaultComponents: DefaultComponents = {
     StateLayer,
     MaterialToast,
     ToastContainer,
+    Slider,
+    RangeSlider,
     Menu,
 };
 

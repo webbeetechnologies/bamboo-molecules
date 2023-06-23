@@ -63,6 +63,8 @@ import type {
     StateLayerProps,
     MaterialToastProps,
     ToastContainerProps,
+    SliderProps,
+    RangeSliderProps,
     Menu,
 } from '../../components';
 
@@ -135,6 +137,8 @@ export interface DefaultComponents {
     StateLayer: ComponentType<StateLayerProps>;
     MaterialToast: ComponentType<MaterialToastProps>;
     ToastContainer: ComponentType<ToastContainerProps>;
+    Slider: ComponentType<SliderProps>;
+    RangeSlider: ComponentType<RangeSliderProps>;
     Menu: typeof Menu;
 }
 
