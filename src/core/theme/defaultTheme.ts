@@ -113,9 +113,11 @@ import {
     tooltipStyles,
     touchableRippleStyles,
     verticalDividerStyles,
+    avatarStyles,
+    menuStyles,
+    menuItemStyles,
 } from '../../components';
 import { materialToastStyles } from '../../components/Toast/utils';
-import { menuStyles, menuItemStyles } from '../../components/Menu/utils';
 import { MD3DarkTheme, MD3LightTheme } from '../../styles';
 import type { ITheme } from './types';
 
@@ -315,4 +317,6 @@ export const defaultThemeValue: Partial<ITheme> = {
 
     Slider: sliderStyles,
     RangeSlider: rangeSliderStyles,
+
+    Avatar: avatarStyles,
 };
