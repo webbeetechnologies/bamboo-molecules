@@ -1,8 +1,8 @@
-import type { ReactElement } from 'react';
-import type { TextInputProps } from '../components';
-import { useMolecules } from './index';
+import { memo, useCallback, useMemo, ReactElement } from 'react';
+
+import type { TextInputProps, TextInputElementProps } from '../components';
+import useMolecules from './useMolecules';
 import useControlledValue from './useControlledValue';
-import { useCallback, useMemo } from 'react';
 
 export interface UseSearchableProps {
     searchable?: boolean;
@@ -17,7 +17,6 @@ const useSearchable = ({
     query,
     searchInputProps,
 }: UseSearchableProps = {}): ReactElement<TextInputProps> | null => {
-    const { TextInput, IconButton } = useMolecules();
     const [value, onValueChange] = useControlledValue({
         value: query || '',
         defaultValue: '', // to disable the useControlledValue inside TextInput
@@ -29,32 +28,50 @@ const useSearchable = ({
         onValueChange('');
     }, [onValueChange]);
 
-    return useMemo(
-        () =>
-            searchable && onQueryChange ? (
-                <TextInput
-                    right={({ forceFocus }) => (
-                        <IconButton
-                            name={value ? 'close-circle-outline' : 'magnify'}
-                            onPress={value ? onPressClear : forceFocus}
-                        />
-                    )}
-                    {...searchInputProps}
-                    value={value}
-                    onChangeText={onValueChange}
-                />
-            ) : null,
-        [
-            IconButton,
-            TextInput,
-            onPressClear,
-            onQueryChange,
-            onValueChange,
-            searchInputProps,
-            searchable,
-            value,
-        ],
-    );
+    return useMemo(() => {
+        if (!searchable || !onQueryChange) return null;
+
+        return (
+            <SearchInput
+                onPressClear={onPressClear}
+                {...searchInputProps}
+                value={value}
+                onChangeText={onValueChange}
+            />
+        );
+    }, [onPressClear, onQueryChange, onValueChange, searchInputProps, searchable, value]);
 };
+
+const SearchInput = memo(
+    ({
+        value,
+        onChangeText,
+        onPressClear,
+        ...rest
+    }: TextInputProps & { onPressClear: () => void }) => {
+        const { TextInput, IconButton } = useMolecules();
+
+        const right = useCallback(
+            ({ color, forceFocus }: TextInputElementProps) => (
+                <IconButton
+                    name={value ? 'close-circle-outline' : 'magnify'}
+                    onPress={value ? onPressClear : forceFocus}
+                    color={color}
+                />
+            ),
+            [IconButton, onPressClear, value],
+        );
+
+        return (
+            <TextInput
+                right={right}
+                autoFocus
+                {...rest}
+                value={value}
+                onChangeText={onChangeText}
+            />
+        );
+    },
+);
 
 export default useSearchable;

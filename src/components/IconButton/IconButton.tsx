@@ -55,6 +55,10 @@ export type Props = Omit<TouchableRippleProps, 'children' | 'style'> &
          */
         style?: StyleProp<TextStyle>;
         /**
+         * color of the icon
+         */
+        color?: string;
+        /**
          * Style of the innerContainer
          */
         innerContainerStyle?: ViewStyle;
@@ -68,6 +72,7 @@ const IconButton = (
     {
         name,
         size = 24,
+        color: colorProp,
         type,
         accessibilityLabel,
         disabled = false,
@@ -94,6 +99,7 @@ const IconButton = (
             {
                 innerContainer: innerContainerStyleProp,
             },
+            colorProp ? { color: colorProp } : {},
         ],
         {
             variant,

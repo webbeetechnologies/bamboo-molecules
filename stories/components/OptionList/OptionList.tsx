@@ -22,7 +22,7 @@ export const Example = (props: Props) => {
     );
 
     return (
-        <OptionList renderItem={renderItem} renderSectionHeader={renderSectionHeader} {...props} />
+        <OptionList {...props} renderItem={renderItem} renderSectionHeader={renderSectionHeader} />
     );
 };
 
