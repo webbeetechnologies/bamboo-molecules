@@ -1,4 +1,12 @@
-import { memo, PropsWithoutRef, ReactElement, RefAttributes, useCallback, useMemo } from 'react';
+import {
+    memo,
+    PropsWithoutRef,
+    ReactElement,
+    ReactNode,
+    RefAttributes,
+    useCallback,
+    useMemo,
+} from 'react';
 import type { ViewStyle, SectionList } from 'react-native';
 import {
     useComponentStyles,
@@ -25,7 +33,7 @@ export type IOptionList = <ItemType = DefaultItemT, TSectionType = DefaultSectio
 ) => ReactElement;
 
 export type Props<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = UseSearchableProps &
-    Omit<SectionListProps<TItem, TSection>, 'sections'> & {
+    Omit<SectionListProps<TItem, TSection>, 'sections' | 'renderItem'> & {
         records: TSection[];
         containerStyle?: ViewStyle;
         searchInputContainerStyle?: ViewStyle;
@@ -45,6 +53,9 @@ export type Props<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = Use
          * passes the current selectedItem. Will be an array in multiple mode
          * */
         onSelectionChange?: (item: TItem | TItem[] | null) => void;
+        renderItem: (
+            info: SectionListRenderItemInfo<TItem, TSection> & { onPress: () => void },
+        ) => ReactNode;
     };
 
 const OptionList = <
@@ -66,7 +77,7 @@ const OptionList = <
     renderItem: renderItemProp,
     ...rest
 }: Props<TItem, TSection>) => {
-    const { SectionList, View, TouchableRipple } = useMolecules();
+    const { SectionList, View } = useMolecules();
     const SearchField = useSearchable({ query, onQueryChange, searchable, searchInputProps });
     const [selection, onSelectionChange] = useControlledValue<TItem | TItem[] | null>({
         value: selectionProp,
@@ -111,15 +122,16 @@ const OptionList = <
         (info: SectionListRenderItemInfo<TItem, TSection>) => {
             if (!renderItemProp) return null;
 
-            return selectable && info.item?.selectable !== false ? (
-                <TouchableRipple onPress={() => onPressItem(info.item)}>
-                    {renderItemProp(info)}
-                </TouchableRipple>
-            ) : (
-                renderItemProp(info)
+            return (
+                <OptionListItem
+                    renderItem={renderItem}
+                    info={info}
+                    onPressItem={onPressItem}
+                    selectable={selectable}
+                />
             );
         },
-        [TouchableRipple, onPressItem, renderItemProp, selectable],
+        [onPressItem, renderItemProp, selectable],
     );
 
     const keyExtractor = useCallback((item: TItem) => `${item.id}`, []);
@@ -131,11 +143,50 @@ const OptionList = <
                 keyExtractor={keyExtractor}
                 {...rest}
                 sections={records}
-                renderItem={renderItem}
+                renderItem={renderItem as SectionListProps['renderItem']}
                 style={style}
             />
         </View>
     );
+};
+
+type OptionListItemProps<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = Pick<
+    Props<TItem, TSection>,
+    'renderItem'
+> & {
+    info: SectionListRenderItemInfo<TItem, TSection>;
+    onPressItem?: (item: TItem) => void;
+    selectable?: boolean;
+};
+
+const OptionListItem = <
+    TItem extends DefaultItemT = DefaultItemT,
+    TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
+>({
+    info,
+    renderItem,
+    selectable,
+    onPressItem,
+}: OptionListItemProps<TItem, TSection>) => {
+    const { TouchableRipple } = useMolecules();
+
+    const onPress = useCallback(() => {
+        onPressItem?.(info.item);
+    }, [info.item, onPressItem]);
+
+    const renderItemInfo = useMemo(
+        () => ({
+            ...info,
+            onPress,
+        }),
+        [info, onPress],
+    );
+
+    if (selectable && info.item?.selectable !== false) {
+        return <TouchableRipple onPress={onPress}>{renderItem(renderItemInfo)}</TouchableRipple>;
+    }
+
+    return <>{renderItem(renderItemInfo)}</>;
 };
 
 export default memo(OptionList) as IOptionList;

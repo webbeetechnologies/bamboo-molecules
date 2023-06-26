@@ -53,8 +53,8 @@ export type Props<
     | 'isOpen'
     | 'setIsOpen'
     | 'selectable'
-    | 'selectedItem'
-    | 'onSelectItemChange'
+    | 'selection'
+    | 'onSelectionchange'
     | 'style'
 > & {
     inputProps?: Omit<TextInputProps, 'editable'>;
@@ -94,6 +94,10 @@ export type Props<
      * @default 'label'
      * */
     labelKey?: string;
+    /**
+     * maxHeight of the list
+     * */
+    maxHeight?: number;
 };
 
 export type SelectHandles = {

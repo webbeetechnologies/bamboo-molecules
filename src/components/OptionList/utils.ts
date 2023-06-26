@@ -10,5 +10,7 @@ export const optionListStyles: ComponentStylePropWithVariants<ViewStyle, '', Cus
     container: {
         flex: 1,
     },
-    searchInputContainer: {},
+    searchInputContainer: {
+        backgroundColor: 'colors.surface',
+    },
 };
