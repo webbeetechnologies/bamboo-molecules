@@ -120,11 +120,9 @@ const OptionList = <
 
     const renderItem = useCallback(
         (info: SectionListRenderItemInfo<TItem, TSection>) => {
-            if (!renderItemProp) return null;
-
             return (
                 <OptionListItem
-                    renderItem={renderItem}
+                    renderItem={renderItemProp}
                     info={info}
                     onPressItem={onPressItem}
                     selectable={selectable}
