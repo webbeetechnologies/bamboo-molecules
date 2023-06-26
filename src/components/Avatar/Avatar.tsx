@@ -1,5 +1,5 @@
 import type { TextProps, ViewProps } from '@bambooapp/bamboo-atoms';
-import { forwardRef, memo, useCallback, useMemo, useState } from 'react';
+import { forwardRef, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import type { ImageErrorEventData, ImageProps, NativeSyntheticEvent } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
@@ -104,13 +104,15 @@ type AvatarInnerProps = Pick<
     size: number;
 };
 
+const emptyObj = {};
+
 const AvatarInner = memo(
     ({
         imageStyle,
         source,
         iconStyle,
         labelStyle,
-        imageProps,
+        imageProps = emptyObj,
         iconProps,
         labelProps,
         iconName,
@@ -121,6 +123,8 @@ const AvatarInner = memo(
         const { Image, Icon, Text } = useMolecules();
         const [isImageFailed, setIsImageFailed] = useState(false);
 
+        const { onError } = imageProps;
+
         const normalizeLabel = useMemo(() => {
             const { firstWord, lastWord } = extractFirstAndLastWord(labelProp || '');
 
@@ -129,12 +133,18 @@ const AvatarInner = memo(
 
         const onImageLoadFailed = useCallback(
             (e: NativeSyntheticEvent<ImageErrorEventData>) => {
-                imageProps?.onError?.(e);
+                onError?.(e);
 
                 setIsImageFailed(true);
             },
-            [imageProps],
+            [onError],
         );
+
+        useEffect(() => {
+            if (!isImageFailed) return;
+
+            setIsImageFailed(false);
+        }, [source, isImageFailed]);
 
         if (source && !isImageFailed) {
             return (
