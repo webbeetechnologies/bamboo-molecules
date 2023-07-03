@@ -1,5 +1,6 @@
 import {
     ComponentType,
+    forwardRef,
     memo,
     PropsWithoutRef,
     ReactElement,
@@ -18,6 +19,7 @@ import {
     UseSearchableProps,
 } from '../../hooks';
 import type { FlatListProps } from '../FlatList';
+import withKeyboardAccessibility from '../../hocs/withKeyboardAccessibility';
 
 type DefaultItemT = {
     id: string | number;
@@ -54,23 +56,26 @@ export type Props<TItem extends DefaultItemT = DefaultItemT> = UseSearchableProp
         customFlatList?: ComponentType<FlatListProps<TItem>>;
     };
 
-const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>({
-    query,
-    onQueryChange,
-    searchInputProps,
-    searchable,
-    containerStyle = {},
-    searchInputContainerStyle = {},
-    style: styleProp,
-    records,
-    multiple = false,
-    selectable,
-    selection: selectionProp,
-    onSelectionChange: onSelectionChangeProp,
-    renderItem: renderItemProp,
-    customFlatList: CustomFlatList,
-    ...rest
-}: Props<TItem>) => {
+const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
+    {
+        query,
+        onQueryChange,
+        searchInputProps,
+        searchable,
+        containerStyle = {},
+        searchInputContainerStyle = {},
+        style: styleProp,
+        records,
+        multiple = false,
+        selectable,
+        selection: selectionProp,
+        onSelectionChange: onSelectionChangeProp,
+        renderItem: renderItemProp,
+        customFlatList: CustomFlatList,
+        ...rest
+    }: Props<TItem>,
+    ref: any,
+) => {
     const { FlatList, View, TouchableRipple } = useMolecules();
     const FlatListComponent = CustomFlatList || FlatList;
 
@@ -136,6 +141,7 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>({
         <View style={containerStyles}>
             <>{SearchField && <View style={searchInputContainerStyles}>{SearchField}</View>}</>
             <FlatListComponent
+                ref={ref}
                 keyExtractor={keyExtractor}
                 {...rest}
                 data={records}
@@ -146,4 +152,6 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>({
     );
 };
 
-export default memo(OptionFlatList) as IOptionFlatList;
+export default memo(
+    withKeyboardAccessibility(forwardRef(OptionFlatList), 'records', true),
+) as IOptionFlatList;

@@ -206,6 +206,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
                 <ListItem
                     variant="menuItem"
                     hoverable
+                    hovered={info.focused}
                     selected={selected}
                     right={info.item.right}
                     left={info.item.left}>

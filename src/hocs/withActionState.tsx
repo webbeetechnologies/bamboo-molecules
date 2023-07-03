@@ -12,17 +12,23 @@ export type CallbackActionState = {
 
 // P is for type-assertion of the wrapped component props
 // only works for Web
-const withActionState = <P,>(Component: ComponentType<P>) =>
+const withActionState = <P extends CallbackActionState>(Component: ComponentType<P>) =>
     forwardRef((props: P, ref: any) => {
-        const { actionStateContainerProps, ...rest } = props as P & {
+        const {
+            actionStateContainerProps,
+            hovered: hoveredProp,
+            focused: focusedProp,
+            pressed: pressedProp,
+            ...rest
+        } = props as P & {
             actionStateContainerProps?: PropsWithoutRef<ViewProps>;
         };
         const { View } = useMolecules();
 
         const actionsRef = useRef(null);
-        const hovered = useHover(actionsRef);
-        const pressed = useActive(actionsRef);
-        const focused = useFocus(actionsRef);
+        const hovered = useHover(actionsRef) || hoveredProp;
+        const pressed = useActive(actionsRef) || pressedProp;
+        const focused = useFocus(actionsRef) || focusedProp;
 
         return (
             <View ref={actionsRef} {...actionStateContainerProps}>

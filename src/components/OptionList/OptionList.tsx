@@ -1,10 +1,13 @@
 import {
+    createContext,
+    forwardRef,
     memo,
     PropsWithoutRef,
     ReactElement,
     ReactNode,
     RefAttributes,
     useCallback,
+    useContext,
     useMemo,
 } from 'react';
 import type { ViewStyle, SectionList } from 'react-native';
@@ -16,6 +19,7 @@ import {
     UseSearchableProps,
 } from '../../hooks';
 import type { SectionListProps, SectionListRenderItemInfo } from '../SectionList';
+import withKeyboardAccessibility, { useStore } from '../../hocs/withKeyboardAccessibility';
 
 type DefaultSectionT<TItem> = {
     data: TItem[];
@@ -54,29 +58,35 @@ export type Props<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = Use
          * */
         onSelectionChange?: (item: TItem | TItem[] | null) => void;
         renderItem: (
-            info: SectionListRenderItemInfo<TItem, TSection> & { onPress: () => void },
+            info: SectionListRenderItemInfo<TItem, TSection> & {
+                onPress: () => void;
+                focused: boolean;
+            },
         ) => ReactNode;
     };
 
 const OptionList = <
     TItem extends DefaultItemT = DefaultItemT,
     TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
->({
-    query,
-    onQueryChange,
-    searchInputProps,
-    searchable,
-    containerStyle = {},
-    searchInputContainerStyle = {},
-    style: styleProp,
-    records,
-    multiple = false,
-    selectable,
-    selection: selectionProp,
-    onSelectionChange: onSelectionChangeProp,
-    renderItem: renderItemProp,
-    ...rest
-}: Props<TItem, TSection>) => {
+>(
+    {
+        query,
+        onQueryChange,
+        searchInputProps,
+        searchable,
+        containerStyle = {},
+        searchInputContainerStyle = {},
+        style: styleProp,
+        records,
+        multiple = false,
+        selectable,
+        selection: selectionProp,
+        onSelectionChange: onSelectionChangeProp,
+        renderItem: renderItemProp,
+        ...rest
+    }: Props<TItem, TSection>,
+    ref: any,
+) => {
     const { SectionList, View } = useMolecules();
     const SearchField = useSearchable({ query, onQueryChange, searchable, searchInputProps });
     const [selection, onSelectionChange] = useControlledValue<TItem | TItem[] | null>({
@@ -121,12 +131,15 @@ const OptionList = <
     const renderItem = useCallback(
         (info: SectionListRenderItemInfo<TItem, TSection>) => {
             return (
-                <OptionListItem
-                    renderItem={renderItemProp}
-                    info={info}
-                    onPressItem={onPressItem}
-                    selectable={selectable}
-                />
+                <IsFocusedProvider index={info.index}>
+                    <OptionListItem
+                        // TODO - fix ts issues
+                        renderItem={renderItemProp as Props['renderItem']}
+                        info={info as unknown as OptionListItemProps['info']}
+                        onPressItem={onPressItem as OptionListItemProps['onPressItem']}
+                        selectable={selectable}
+                    />
+                </IsFocusedProvider>
             );
         },
         [onPressItem, renderItemProp, selectable],
@@ -138,6 +151,7 @@ const OptionList = <
         <View style={containerStyles}>
             <>{SearchField && <View style={searchInputContainerStyles}>{SearchField}</View>}</>
             <SectionList
+                ref={ref}
                 keyExtractor={keyExtractor}
                 {...rest}
                 sections={records}
@@ -157,34 +171,51 @@ type OptionListItemProps<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>
     selectable?: boolean;
 };
 
-const OptionListItem = <
-    TItem extends DefaultItemT = DefaultItemT,
-    TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
->({
-    info,
-    renderItem,
-    selectable,
-    onPressItem,
-}: OptionListItemProps<TItem, TSection>) => {
-    const { TouchableRipple } = useMolecules();
+const OptionListItem = memo(
+    <
+        TItem extends DefaultItemT = DefaultItemT,
+        TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
+    >({
+        info,
+        renderItem,
+        selectable,
+        onPressItem,
+    }: OptionListItemProps<TItem, TSection>) => {
+        const { TouchableRipple } = useMolecules();
 
-    const onPress = useCallback(() => {
-        onPressItem?.(info.item);
-    }, [info.item, onPressItem]);
+        const focused = useContext(IsFocusedContext);
 
-    const renderItemInfo = useMemo(
-        () => ({
-            ...info,
-            onPress,
-        }),
-        [info, onPress],
-    );
+        const onPress = useCallback(() => {
+            onPressItem?.(info.item);
+        }, [info.item, onPressItem]);
 
-    if (selectable && info.item?.selectable !== false) {
-        return <TouchableRipple onPress={onPress}>{renderItem(renderItemInfo)}</TouchableRipple>;
-    }
+        const renderItemInfo = useMemo(
+            () => ({
+                ...info,
+                focused,
+                onPress,
+            }),
+            [focused, info, onPress],
+        );
 
-    return <>{renderItem(renderItemInfo)}</>;
-};
+        if (selectable && info.item?.selectable !== false) {
+            return (
+                <TouchableRipple onPress={onPress}>{renderItem(renderItemInfo)}</TouchableRipple>
+            );
+        }
 
-export default memo(OptionList) as IOptionList;
+        return <>{renderItem(renderItemInfo)}</>;
+    },
+);
+
+const IsFocusedProvider = memo(({ index, children }: { index: number; children: ReactNode }) => {
+    const [focused] = useStore(state => {
+        return state.currentIndex === index;
+    });
+
+    return <IsFocusedContext.Provider value={focused}>{children}</IsFocusedContext.Provider>;
+});
+
+const IsFocusedContext = createContext(false);
+
+export default memo(withKeyboardAccessibility(forwardRef(OptionList))) as IOptionList;
