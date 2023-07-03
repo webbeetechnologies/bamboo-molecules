@@ -199,10 +199,14 @@ const Wrapper = memo(
         }, [currentIndex, listRef]);
 
         useEffect(() => {
-            window.addEventListener('keydown', onKeyPress, true);
+            const controller = new AbortController();
+            window.addEventListener('keydown', onKeyPress, {
+                capture: true,
+                signal: controller.signal,
+            });
 
             return () => {
-                window.removeEventListener('keydown', onKeyPress);
+                controller.abort();
             };
         }, [onKeyPress]);
 
