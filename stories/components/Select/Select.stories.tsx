@@ -50,6 +50,15 @@ Default.args = {
                 },
             ],
         },
+        {
+            data: [
+                {
+                    id: 16,
+                    name: 'Test',
+                    left: <Icon name="eye-outline" size={24} />,
+                },
+            ],
+        },
     ],
     actionSheetProps: {
         gestureEnabled: true,

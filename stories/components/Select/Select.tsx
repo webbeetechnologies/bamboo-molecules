@@ -7,5 +7,5 @@ export const Example = (props: Props) => {
     const { Select } = useMolecules();
     const [query, setQuery] = useState('');
 
-    return <Select {...props} searchable query={query} onQueryChange={setQuery} />;
+    return <Select {...props} query={query} onQueryChange={setQuery} />;
 };
