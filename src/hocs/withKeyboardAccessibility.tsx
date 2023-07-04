@@ -71,7 +71,7 @@ export function useStore<SelectorOutput>(
 }
 
 const withKeyboardAccessibility = <P extends Record<string, any>>(
-    Component: ComponentType<any>,
+    Component: ComponentType<P>,
     key: string = 'records',
     isFlat: boolean = false,
 ) =>

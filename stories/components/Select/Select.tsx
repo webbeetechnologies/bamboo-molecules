@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 export type Props = SelectProps & {};
 
-export const Example = (props: Props) => {
+export const Example = ({ onCancel: _, ...props }: Props) => {
     const { Select } = useMolecules();
     const [query, setQuery] = useState('');
 
