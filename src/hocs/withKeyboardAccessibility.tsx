@@ -205,6 +205,8 @@ const AccessibilityWrapper = memo(
 
         useEffect(() => {
             if (listRef && !!listRef.current) {
+                if (currentIndex < 0 || currentIndex > length - 1) return;
+
                 if (isFlat) {
                     (listRef as RefObject<FlatList>).current?.scrollToIndex?.({
                         index: currentIndex || 0,
