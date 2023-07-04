@@ -141,6 +141,8 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     return (
         <WrapperComponent {...(props as any)}>
             <OptionList
+                enableKeyboardNavigation
+                onCancel={onClose}
                 {...optionListProps}
                 style={listStyles}
                 records={records}

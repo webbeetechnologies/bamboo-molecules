@@ -1,4 +1,5 @@
 import {
+    forwardRef,
     memo,
     PropsWithoutRef,
     ReactElement,
@@ -16,6 +17,8 @@ import {
     UseSearchableProps,
 } from '../../hooks';
 import type { SectionListProps, SectionListRenderItemInfo } from '../SectionList';
+import withKeyboardAccessibility, { useStore } from '../../hocs/withKeyboardAccessibility';
+import { typedMemo } from '../../hocs';
 
 type DefaultSectionT<TItem> = {
     data: TItem[];
@@ -24,6 +27,14 @@ type DefaultSectionT<TItem> = {
 
 type DefaultItemT = {
     id: string | number;
+    [key: string]: any;
+};
+
+export type OptionListRenderItemInfo<
+    TItem = DefaultItemT,
+    TSection = DefaultSectionT<TItem>,
+> = SectionListRenderItemInfo<TItem, TSection> & {
+    focused: boolean;
     [key: string]: any;
 };
 
@@ -54,29 +65,54 @@ export type Props<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = Use
          * */
         onSelectionChange?: (item: TItem | TItem[] | null) => void;
         renderItem: (
-            info: SectionListRenderItemInfo<TItem, TSection> & { onPress: () => void },
+            info: SectionListRenderItemInfo<TItem, TSection> & {
+                onPress: () => void;
+                focused: boolean;
+            },
         ) => ReactNode;
+        enableKeyboardNavigation?: boolean;
+        onCancel?: () => void;
     };
+
+const getIdToIndexMapFromRecords = <
+    TItem extends DefaultItemT = DefaultItemT,
+    TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
+>(
+    records: TSection[],
+) => {
+    const flattenRecords = records.reduce((acc, item, sectionIndex: Number) => {
+        return acc.concat((item.data || []).map((t: any) => ({ ...t, sectionIndex })));
+    }, [] as TItem[]);
+
+    return flattenRecords.reduce((acc, item, currentIndex) => {
+        acc[item.id] = currentIndex;
+
+        return acc;
+    }, {} as Record<number | string, number>);
+};
 
 const OptionList = <
     TItem extends DefaultItemT = DefaultItemT,
     TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
->({
-    query,
-    onQueryChange,
-    searchInputProps,
-    searchable,
-    containerStyle = {},
-    searchInputContainerStyle = {},
-    style: styleProp,
-    records,
-    multiple = false,
-    selectable,
-    selection: selectionProp,
-    onSelectionChange: onSelectionChangeProp,
-    renderItem: renderItemProp,
-    ...rest
-}: Props<TItem, TSection>) => {
+>(
+    {
+        query,
+        onQueryChange,
+        searchInputProps,
+        searchable,
+        containerStyle = {},
+        searchInputContainerStyle = {},
+        style: styleProp,
+        records,
+        multiple = false,
+        selectable,
+        selection: selectionProp,
+        onSelectionChange: onSelectionChangeProp,
+        renderItem: renderItemProp,
+        ...rest
+    }: Props<TItem, TSection>,
+    ref: any,
+) => {
     const { SectionList, View } = useMolecules();
     const SearchField = useSearchable({ query, onQueryChange, searchable, searchInputProps });
     const [selection, onSelectionChange] = useControlledValue<TItem | TItem[] | null>({
@@ -97,6 +133,9 @@ const OptionList = <
             style: [restStyle, styleProp],
         };
     }, [componentStyles, styleProp]);
+
+    // To get the actual flatten indexes
+    const idToIndexMap = useMemo(() => getIdToIndexMapFromRecords(records), [records]);
 
     const onPressItem = useCallback(
         (item: TItem) => {
@@ -122,14 +161,16 @@ const OptionList = <
         (info: SectionListRenderItemInfo<TItem, TSection>) => {
             return (
                 <OptionListItem
+                    // TODO - fix ts issues
                     renderItem={renderItemProp}
                     info={info}
+                    index={idToIndexMap[info.item.id as keyof typeof idToIndexMap] as number}
                     onPressItem={onPressItem}
                     selectable={selectable}
                 />
             );
         },
-        [onPressItem, renderItemProp, selectable],
+        [idToIndexMap, onPressItem, renderItemProp, selectable],
     );
 
     const keyExtractor = useCallback((item: TItem) => `${item.id}`, []);
@@ -138,6 +179,7 @@ const OptionList = <
         <View style={containerStyles}>
             <>{SearchField && <View style={searchInputContainerStyles}>{SearchField}</View>}</>
             <SectionList
+                ref={ref}
                 keyExtractor={keyExtractor}
                 {...rest}
                 sections={records}
@@ -155,36 +197,46 @@ type OptionListItemProps<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>
     info: SectionListRenderItemInfo<TItem, TSection>;
     onPressItem?: (item: TItem) => void;
     selectable?: boolean;
+    index: number;
 };
 
-const OptionListItem = <
-    TItem extends DefaultItemT = DefaultItemT,
-    TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
->({
-    info,
-    renderItem,
-    selectable,
-    onPressItem,
-}: OptionListItemProps<TItem, TSection>) => {
-    const { TouchableRipple } = useMolecules();
+const OptionListItem = typedMemo(
+    <
+        TItem extends DefaultItemT = DefaultItemT,
+        TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
+    >({
+        info,
+        renderItem,
+        selectable,
+        onPressItem,
+        index,
+    }: OptionListItemProps<TItem, TSection>) => {
+        const { TouchableRipple } = useMolecules();
 
-    const onPress = useCallback(() => {
-        onPressItem?.(info.item);
-    }, [info.item, onPressItem]);
+        const [focused] = useStore(state => {
+            return state.currentIndex === index;
+        });
+        const onPress = useCallback(() => {
+            onPressItem?.(info.item);
+        }, [info.item, onPressItem]);
 
-    const renderItemInfo = useMemo(
-        () => ({
-            ...info,
-            onPress,
-        }),
-        [info, onPress],
-    );
+        const renderItemInfo = useMemo(
+            () => ({
+                ...info,
+                focused,
+                onPress,
+            }),
+            [focused, info, onPress],
+        );
 
-    if (selectable && info.item?.selectable !== false) {
-        return <TouchableRipple onPress={onPress}>{renderItem(renderItemInfo)}</TouchableRipple>;
-    }
+        if (selectable && info.item?.selectable !== false) {
+            return (
+                <TouchableRipple onPress={onPress}>{renderItem(renderItemInfo)}</TouchableRipple>
+            );
+        }
 
-    return <>{renderItem(renderItemInfo)}</>;
-};
+        return <>{renderItem(renderItemInfo)}</>;
+    },
+);
 
-export default memo(OptionList) as IOptionList;
+export default memo(withKeyboardAccessibility(forwardRef(OptionList))) as IOptionList;
