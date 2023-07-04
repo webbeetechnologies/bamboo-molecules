@@ -70,7 +70,7 @@ export type Props<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = Use
                 focused: boolean;
             },
         ) => ReactNode;
-        withKeyboardAccessibility?: boolean;
+        enableKeyboardNavigation?: boolean;
         onCancel?: () => void;
     };
 

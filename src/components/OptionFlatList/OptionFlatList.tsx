@@ -66,7 +66,7 @@ export type Props<TItem extends DefaultItemT = DefaultItemT> = UseSearchableProp
                 focused: boolean;
             },
         ) => ReactNode;
-        withKeyboardAccessibility?: boolean;
+        enableKeyboardNavigation?: boolean;
         onCancel?: () => void;
     };
 

@@ -141,7 +141,7 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     return (
         <WrapperComponent {...(props as any)}>
             <OptionList
-                withKeyboardAccessibility
+                enableKeyboardNavigation
                 onCancel={onClose}
                 {...optionListProps}
                 style={listStyles}

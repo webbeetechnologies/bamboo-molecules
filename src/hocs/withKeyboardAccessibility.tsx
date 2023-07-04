@@ -75,7 +75,7 @@ const withKeyboardAccessibility = <P extends Record<string, any>>(
     key: string = 'records',
     isFlat: boolean = false,
 ) =>
-    forwardRef((props: P, ref: any) => {
+    forwardRef(({ enableKeyboardNavigation, onCancel, ...props }: P, ref: any) => {
         const componentRef = useRef<FlatList | SectionList>(null);
         const records = props[key] as any[];
 
@@ -124,24 +124,23 @@ const withKeyboardAccessibility = <P extends Record<string, any>>(
         useImperativeHandle(ref, () => componentRef.current);
 
         const Wrapper =
-            props.withKeyboardAccessibility && Platform.OS === 'web'
-                ? AccessibilityWrapper
-                : Fragment;
+            enableKeyboardNavigation && Platform.OS === 'web' ? AccessibilityWrapper : Fragment;
 
         const accessibilityWrapperProps =
-            props.withKeyboardAccessibility && Platform.OS === 'web'
+            enableKeyboardNavigation && Platform.OS === 'web'
                 ? {
                       listRef: componentRef as any,
                       listLength: length,
                       onSelectItem: onSelectItem,
                       isFlat,
-                      onCancel: props.onCancel,
+                      onCancel,
                   }
                 : {};
 
         return (
             <Provider>
-                <Wrapper {...(accessibilityWrapperProps as AccessibilityWrapperProps)}>
+                <Wrapper
+                    {...(accessibilityWrapperProps as Omit<AccessibilityWrapperProps, 'children'>)}>
                     <Component {...(props as P)} ref={componentRef} />
                 </Wrapper>
             </Provider>
