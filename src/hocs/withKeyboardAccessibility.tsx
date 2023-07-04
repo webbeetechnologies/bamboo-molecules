@@ -2,6 +2,7 @@ import {
     ComponentType,
     createContext,
     forwardRef,
+    Fragment,
     memo,
     ReactNode,
     RefObject,
@@ -14,6 +15,8 @@ import {
     useSyncExternalStore,
 } from 'react';
 import type { FlatList } from 'react-native';
+import type { SectionList } from 'react-native';
+import { Platform } from 'react-native';
 
 export type Store = {
     currentIndex: number;
@@ -73,7 +76,7 @@ const withKeyboardAccessibility = <P extends Record<string, any>>(
     isFlat: boolean = false,
 ) =>
     forwardRef((props: P, ref: any) => {
-        const componentRef = useRef<FlatList>(null);
+        const componentRef = useRef<FlatList | SectionList>(null);
         const records = props[key] as any[];
 
         const recordsIndexMap = useMemo(() => {
@@ -81,8 +84,10 @@ const withKeyboardAccessibility = <P extends Record<string, any>>(
 
             const flattenRecords = isFlat
                 ? records
-                : records.reduce((acc, item) => {
-                      return acc.concat(item.data || []);
+                : records.reduce((acc, item, sectionIndex) => {
+                      return acc.concat(
+                          (item.data || []).map((t: any) => ({ ...t, sectionIndex })),
+                      );
                   }, [] as any[]);
 
             return flattenRecords.reduce((acc: Record<number, any>, item: any, i: number) => {
@@ -95,7 +100,7 @@ const withKeyboardAccessibility = <P extends Record<string, any>>(
         const length = useMemo(() => {
             if (!isFlat) {
                 return records.reduce((acc, item) => {
-                    acc = item.data.length;
+                    acc += item.data.length;
                     return acc;
                 }, 0);
             }
@@ -118,92 +123,110 @@ const withKeyboardAccessibility = <P extends Record<string, any>>(
 
         useImperativeHandle(ref, () => componentRef.current);
 
+        const Wrapper =
+            props.withKeyboardAccessibility && Platform.OS === 'web'
+                ? AccessibilityWrapper
+                : Fragment;
+
+        const accessibilityWrapperProps =
+            props.withKeyboardAccessibility && Platform.OS === 'web'
+                ? {
+                      listRef: componentRef as any,
+                      listLength: length,
+                      onSelectItem: onSelectItem,
+                      isFlat,
+                      onCancel: props.onCancel,
+                  }
+                : {};
+
         return (
             <Provider>
-                <Wrapper
-                    listRef={componentRef}
-                    listLength={length}
-                    onSelectItem={onSelectItem}
-                    isFlat={isFlat}>
+                <Wrapper {...(accessibilityWrapperProps as AccessibilityWrapperProps)}>
                     <Component {...(props as P)} ref={componentRef} />
                 </Wrapper>
             </Provider>
         );
     });
 
-const Wrapper = memo(
+type AccessibilityWrapperProps = {
+    children: ReactNode;
+    listRef: RefObject<FlatList> | RefObject<SectionList>;
+    listLength: number;
+    onSelectItem: (index: number) => void;
+    isFlat: boolean;
+    onCancel?: () => void;
+};
+
+const AccessibilityWrapper = memo(
     ({
         children,
         listRef,
         listLength,
         onSelectItem,
-    }: {
-        children: ReactNode;
-        listRef: RefObject<FlatList>;
-        listLength: number;
-        onSelectItem: (index: number) => void;
-        isFlat: boolean;
-    }) => {
+        isFlat,
+        onCancel,
+    }: AccessibilityWrapperProps) => {
         const [currentIndex, setStore] = useStore(state => state.currentIndex);
 
         const currentIndexRef = useContext(StoreContext)!.store;
 
+        const keyToFunctionMap = useMemo(
+            () => ({
+                ArrowUp: () =>
+                    setStore(prev => ({
+                        currentIndex:
+                            prev.currentIndex === null || prev.currentIndex === 0
+                                ? listLength - 1
+                                : prev.currentIndex - 1,
+                    })),
+                ArrowDown: () =>
+                    setStore(prev => ({
+                        currentIndex:
+                            prev.currentIndex === null || prev.currentIndex === listLength - 1
+                                ? 0
+                                : prev.currentIndex + 1,
+                    })),
+                Enter: () => onSelectItem(currentIndexRef.current.currentIndex),
+                Escape: () => onCancel?.(),
+            }),
+            [currentIndexRef, listLength, onCancel, onSelectItem, setStore],
+        );
+
         const onKeyPress = useCallback(
             (e: KeyboardEvent) => {
-                switch (e.key) {
-                    case 'ArrowUp':
-                        e.preventDefault();
+                const keyFunction = keyToFunctionMap[e.key as keyof typeof keyToFunctionMap];
 
-                        return setStore(prev => ({
-                            currentIndex:
-                                prev.currentIndex === null || prev.currentIndex === 0
-                                    ? listLength - 1
-                                    : prev.currentIndex - 1,
-                        }));
-                    case 'ArrowDown':
-                        e.preventDefault();
+                if (!keyFunction) return;
 
-                        return setStore(prev => ({
-                            currentIndex:
-                                prev.currentIndex === null || prev.currentIndex === listLength - 1
-                                    ? 0
-                                    : prev.currentIndex + 1,
-                        }));
-
-                    case 'Enter':
-                        e.preventDefault();
-
-                        return onSelectItem(currentIndexRef.current.currentIndex);
-                }
-
-                // setPressedKey(_key);
+                e.preventDefault();
+                keyFunction();
             },
-            [currentIndexRef, listLength, onSelectItem, setStore],
+            [keyToFunctionMap],
         );
 
         useEffect(() => {
             if (listRef && !!listRef.current) {
-                listRef.current?.scrollToIndex?.({
-                    index: currentIndex || 0,
-                    animated: false,
-                });
-
-                // else {
-                //     (listRef as RefObject<SectionList>).current?.scrollToLocation({
-                //         animated: false,
-                //         sectionIndex: 0,
-                //         itemIndex: currentIndex,
-                //     });
-                // }
+                if (isFlat) {
+                    (listRef as RefObject<FlatList>).current?.scrollToIndex?.({
+                        index: currentIndex || 0,
+                        animated: false,
+                    });
+                } else {
+                    (listRef as RefObject<SectionList>).current?.scrollToLocation({
+                        animated: false,
+                        sectionIndex: 0,
+                        itemIndex: currentIndex,
+                    });
+                }
             }
-        }, [currentIndex, listRef]);
+        }, [currentIndex, isFlat, listRef]);
 
         useEffect(() => {
             const controller = new AbortController();
             window.addEventListener('keydown', onKeyPress, {
                 capture: true,
                 signal: controller.signal,
-            });
+            } as AddEventListenerOptions);
 
             return () => {
                 controller.abort();
