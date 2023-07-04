@@ -30,6 +30,14 @@ type DefaultItemT = {
     [key: string]: any;
 };
 
+export type OptionListRenderItemInfo<
+    TItem = DefaultItemT,
+    TSection = DefaultSectionT<TItem>,
+> = SectionListRenderItemInfo<TItem, TSection> & {
+    focused: boolean;
+    [key: string]: any;
+};
+
 // To make a correct type inference
 export type IOptionList = <ItemType = DefaultItemT, TSectionType = DefaultSectionT<ItemType>>(
     props: PropsWithoutRef<Props<ItemType, TSectionType>> & RefAttributes<SectionList<ItemType>>,

@@ -1,2 +1,7 @@
-export { default as OptionList, Props as OptionListProps, IOptionList } from './OptionList';
+export {
+    default as OptionList,
+    Props as OptionListProps,
+    IOptionList,
+    OptionListRenderItemInfo,
+} from './OptionList';
 export { optionListStyles } from './utils';

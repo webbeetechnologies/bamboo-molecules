@@ -34,6 +34,10 @@ export type IOptionFlatList = <ItemType extends DefaultItemT = DefaultItemT>(
     props: PropsWithoutRef<Props<ItemType> & RefAttributes<FlatList<ItemType>>>,
 ) => ReactElement;
 
+export type OptionFlatListRenderItemInfo<TItem = DefaultItemT> = ListRenderItemInfo<TItem> & {
+    focused: boolean;
+};
+
 export type Props<TItem extends DefaultItemT = DefaultItemT> = UseSearchableProps &
     Omit<FlatListProps<TItem>, 'sections' | 'renderItem'> & {
         records: TItem[];

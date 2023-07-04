@@ -63,8 +63,10 @@ const DataTableComponent = memo((props: DataTableComponentProps) => {
     );
 });
 
+// @ts-ignore // TODO - fix ts issue @elvisduru
 export const DataTableRow = memo(withActionState(DataTableComponent));
 
 export const renderRow: ListRenderItem<TDataTableRow> = ({ item, index }) => (
+    // @ts-ignore // TODO - fix ts issue @elvisduru
     <DataTableRow record={item} index={index} key={item} />
 );
