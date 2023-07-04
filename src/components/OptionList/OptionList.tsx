@@ -1,5 +1,4 @@
 import {
-    createContext,
     forwardRef,
     memo,
     PropsWithoutRef,
@@ -7,7 +6,6 @@ import {
     ReactNode,
     RefAttributes,
     useCallback,
-    useContext,
     useMemo,
 } from 'react';
 import type { ViewStyle, SectionList } from 'react-native';
@@ -20,6 +18,7 @@ import {
 } from '../../hooks';
 import type { SectionListProps, SectionListRenderItemInfo } from '../SectionList';
 import withKeyboardAccessibility, { useStore } from '../../hocs/withKeyboardAccessibility';
+import { typedMemo } from '../../hocs';
 
 type DefaultSectionT<TItem> = {
     data: TItem[];
@@ -63,7 +62,26 @@ export type Props<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = Use
                 focused: boolean;
             },
         ) => ReactNode;
+        withKeyboardAccessibility?: boolean;
+        onCancel?: () => void;
     };
+
+const getIdToIndexMapFromRecords = <
+    TItem extends DefaultItemT = DefaultItemT,
+    TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
+>(
+    records: TSection[],
+) => {
+    const flattenRecords = records.reduce((acc, item, sectionIndex: Number) => {
+        return acc.concat((item.data || []).map((t: any) => ({ ...t, sectionIndex })));
+    }, [] as TItem[]);
+
+    return flattenRecords.reduce((acc, item, currentIndex) => {
+        acc[item.id] = currentIndex;
+
+        return acc;
+    }, {} as Record<number | string, number>);
+};
 
 const OptionList = <
     TItem extends DefaultItemT = DefaultItemT,
@@ -108,6 +126,9 @@ const OptionList = <
         };
     }, [componentStyles, styleProp]);
 
+    // To get the actual flatten indexes
+    const idToIndexMap = useMemo(() => getIdToIndexMapFromRecords(records), [records]);
+
     const onPressItem = useCallback(
         (item: TItem) => {
             const isSelected = Array.isArray(selection)
@@ -131,18 +152,17 @@ const OptionList = <
     const renderItem = useCallback(
         (info: SectionListRenderItemInfo<TItem, TSection>) => {
             return (
-                <IsFocusedProvider index={info.index}>
-                    <OptionListItem
-                        // TODO - fix ts issues
-                        renderItem={renderItemProp as Props['renderItem']}
-                        info={info as unknown as OptionListItemProps['info']}
-                        onPressItem={onPressItem as OptionListItemProps['onPressItem']}
-                        selectable={selectable}
-                    />
-                </IsFocusedProvider>
+                <OptionListItem
+                    // TODO - fix ts issues
+                    renderItem={renderItemProp}
+                    info={info}
+                    index={idToIndexMap[info.item.id as keyof typeof idToIndexMap] as number}
+                    onPressItem={onPressItem}
+                    selectable={selectable}
+                />
             );
         },
-        [onPressItem, renderItemProp, selectable],
+        [idToIndexMap, onPressItem, renderItemProp, selectable],
     );
 
     const keyExtractor = useCallback((item: TItem) => `${item.id}`, []);
@@ -169,9 +189,10 @@ type OptionListItemProps<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>
     info: SectionListRenderItemInfo<TItem, TSection>;
     onPressItem?: (item: TItem) => void;
     selectable?: boolean;
+    index: number;
 };
 
-const OptionListItem = memo(
+const OptionListItem = typedMemo(
     <
         TItem extends DefaultItemT = DefaultItemT,
         TSection extends DefaultSectionT<TItem> = DefaultSectionT<TItem>,
@@ -180,11 +201,13 @@ const OptionListItem = memo(
         renderItem,
         selectable,
         onPressItem,
+        index,
     }: OptionListItemProps<TItem, TSection>) => {
         const { TouchableRipple } = useMolecules();
 
-        const focused = useContext(IsFocusedContext);
-
+        const [focused] = useStore(state => {
+            return state.currentIndex === index;
+        });
         const onPress = useCallback(() => {
             onPressItem?.(info.item);
         }, [info.item, onPressItem]);
@@ -207,15 +230,5 @@ const OptionListItem = memo(
         return <>{renderItem(renderItemInfo)}</>;
     },
 );
-
-const IsFocusedProvider = memo(({ index, children }: { index: number; children: ReactNode }) => {
-    const [focused] = useStore(state => {
-        return state.currentIndex === index;
-    });
-
-    return <IsFocusedContext.Provider value={focused}>{children}</IsFocusedContext.Provider>;
-});
-
-const IsFocusedContext = createContext(false);
 
 export default memo(withKeyboardAccessibility(forwardRef(OptionList))) as IOptionList;
