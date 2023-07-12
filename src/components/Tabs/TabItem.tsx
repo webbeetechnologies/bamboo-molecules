@@ -1,5 +1,5 @@
 import type { TouchableRippleProps } from '../TouchableRipple';
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { LayoutChangeEvent, TextStyle, ViewStyle } from 'react-native';
 import type { IconType, IconProps } from '../Icon';
@@ -40,7 +40,7 @@ export type TabItemProps = Omit<TouchableRippleProps, 'children'> &
         iconProps?: Omit<IconProps, 'name' | 'type'>;
         iconStyle?: TextStyle;
         contentsContainerStyle?: ViewStyle;
-        contentsContainerProps?: Omit<ViewProps, 'children' | 'style'>;
+        contentsContainerProps?: Omit<ViewProps, 'children' | 'style' | 'onLayout'>;
         onLayoutContent?: (e: LayoutChangeEvent) => void;
     };
 
@@ -53,7 +53,7 @@ const TabItemWithActionState = withActionState(
         label,
         style,
         onLayout,
-        onLayoutContent: onLayoutContentProp,
+        onLayoutContent,
         iconName,
         iconType,
         iconProps,
@@ -134,14 +134,6 @@ const TabItemWithActionState = withActionState(
                 accessibilityValue: typeof label === 'string' ? { text: label } : undefined,
             }),
             [active, label],
-        );
-
-        const onLayoutContent = useCallback(
-            (e: LayoutChangeEvent) => {
-                onLayoutContentProp?.(e);
-                contentsContainerProps?.onLayout?.(e);
-            },
-            [contentsContainerProps, onLayoutContentProp],
         );
 
         return (

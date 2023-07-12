@@ -68,6 +68,7 @@ export const TabBase = ({
     dividerStyle: dividerStyleProp = emptyObj,
     dividerProps,
     activeColor: activeColorProp,
+    testID,
     ...rest
 }: TabsProps) => {
     const { View, ScrollView, HorizontalDivider } = useMolecules();
@@ -113,21 +114,50 @@ export const TabBase = ({
 
     const valueIndex = nameToIndexMap[value];
 
-    const animationRef = useRef(new Animated.Value(0));
+    const positionAnimationRef = useRef(new Animated.Value(0));
+    const widthAnimationRef = useRef(new Animated.Value(0));
     const scrollViewRef = useRef<RNScrollView>(null);
     const scrollViewPosition = useRef(0);
 
-    const tabItemPositions = useRef<
-        Array<{ position: number; width: number; contentWidth: number }>
-    >([]);
+    const tabItemPositions = useRef<Array<{ width: number; contentWidth: number }>>([]);
     const [tabContainerWidth, setTabContainerWidth] = useState(0);
+
+    const itemPositionsMap = useMemo(() => {
+        return tabItemPositions.current.reduce((acc, item, index) => {
+            const previousItemsWidth = tabItemPositions.current.reduce((totalWidth, _item, i) => {
+                if (index <= i) return totalWidth;
+
+                totalWidth += _item.width || 0;
+
+                return totalWidth;
+            }, 0);
+
+            acc[index] =
+                variant === 'primary'
+                    ? previousItemsWidth + (item.width - item.contentWidth) / 2
+                    : previousItemsWidth;
+
+            return acc;
+        }, {} as Record<number, number>);
+        // to make useMemo in sync with the ref
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [variant, tabItemPositions.current.length]);
+
+    const itemWidthsMap = useMemo(() => {
+        return tabItemPositions.current.reduce((acc, item, index) => {
+            acc[index] = variant === 'primary' ? item.contentWidth : item.width;
+
+            return acc;
+        }, {} as Record<number, number>);
+        // to make useMemo in sync with the ref
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [variant, tabItemPositions.current.length]);
 
     const scrollHandler = useCallback(
         (currValue: number) => {
             if (tabItemPositions.current.length > currValue) {
-                const itemStartPosition =
-                    currValue === 0 ? 0 : tabItemPositions.current[currValue - 1].position;
-                const itemEndPosition = tabItemPositions.current[currValue].position;
+                const itemStartPosition = currValue === 0 ? 0 : itemPositionsMap[currValue - 1];
+                const itemEndPosition = itemPositionsMap[currValue];
 
                 const scrollCurrentPosition = scrollViewPosition.current;
                 const tabContainerCurrentWidth = tabContainerWidth;
@@ -147,46 +177,55 @@ export const TabBase = ({
                 });
             }
         },
-        [tabContainerWidth],
+        [itemPositionsMap, tabContainerWidth],
     );
 
     useEffect(() => {
-        Animated.timing(animationRef.current, {
+        Animated.timing(positionAnimationRef.current, {
             toValue: valueIndex,
             useNativeDriver: true,
             duration: 170,
         }).start();
 
         scrollable && requestAnimationFrame(() => scrollHandler(valueIndex));
-    }, [animationRef, scrollHandler, valueIndex, scrollable]);
+    }, [positionAnimationRef, scrollHandler, valueIndex, scrollable]);
+
+    useEffect(() => {
+        Animated.timing(widthAnimationRef.current, {
+            toValue: valueIndex,
+            useNativeDriver: true,
+            duration: 170,
+        }).start();
+    }, [positionAnimationRef, scrollHandler, valueIndex]);
 
     const onScrollHandler = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
         scrollViewPosition.current = event.nativeEvent.contentOffset.x;
     }, []);
 
+    const transitionInterpolateWithMap = useCallback(
+        (obj: Record<any, number>) => {
+            const countItems = validChildren.length;
+            if (countItems < 2 || !tabItemPositions.current.length) {
+                return 0;
+            }
+            const inputRange = Array.from(Array(countItems).keys());
+            const outputRange = Object.values(obj);
+
+            return positionAnimationRef.current.interpolate({
+                inputRange,
+                outputRange,
+            });
+        },
+        [validChildren.length],
+    );
+
     const indicatorTransitionInterpolate = useMemo(() => {
-        const countItems = validChildren.length;
-        if (countItems < 2 || !tabItemPositions.current.length) {
-            return 0;
-        }
-        const inputRange = Array.from(Array(countItems).keys());
-        const outputRange = tabItemPositions.current.map(({ position }) => position);
+        return transitionInterpolateWithMap(itemPositionsMap);
+    }, [transitionInterpolateWithMap, itemPositionsMap]);
 
-        return animationRef.current.interpolate({
-            inputRange,
-            outputRange,
-        });
-        // to make useMemo in sync with the ref
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [animationRef, variant, validChildren, tabItemPositions.current.length]);
-
-    const WIDTH = useMemo(() => {
-        return variant === 'primary'
-            ? tabItemPositions.current[valueIndex]?.contentWidth
-            : tabItemPositions.current[valueIndex]?.width;
-        // to make useMemo in sync with the ref
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value, variant, tabItemPositions.current.length]);
+    const widthTransitionInterpolate = useMemo(() => {
+        return transitionInterpolateWithMap(itemWidthsMap);
+    }, [transitionInterpolateWithMap, itemWidthsMap]);
 
     const { containerStyle, itemsContainerStyle, dividerStyle, indicatorStyle } = useMemo(() => {
         const { indicator, itemsContainer, divider, activeColor, ...restStyle } = componentStyles;
@@ -204,11 +243,11 @@ export const TabBase = ({
                             translateX: indicatorTransitionInterpolate,
                         },
                     ],
-                    width: WIDTH,
+                    width: widthTransitionInterpolate,
                 },
             ],
         };
-    }, [WIDTH, componentStyles, indicatorTransitionInterpolate]);
+    }, [widthTransitionInterpolate, componentStyles, indicatorTransitionInterpolate]);
 
     const Container = scrollable ? ScrollView : View;
     const containerProps = scrollable
@@ -225,55 +264,44 @@ export const TabBase = ({
         setTabContainerWidth(layout.width);
     }, []);
 
-    const onLayoutItem = useCallback(
-        (event: LayoutChangeEvent, index: number) => {
-            const { width } = event.nativeEvent.layout;
+    const onLayoutItem = useCallback((event: LayoutChangeEvent, index: number) => {
+        const { width } = event.nativeEvent.layout;
 
-            const previousItemsWidth = tabItemPositions.current.reduce((acc, item, i) => {
-                if (index <= i) return acc;
+        const currentItemPosition = tabItemPositions.current[index];
 
-                acc += item.width || 0;
+        tabItemPositions.current[index] = {
+            ...currentItemPosition,
+            width: width,
+        };
+    }, []);
 
-                return acc;
-            }, 0);
+    const onLayoutText = useCallback((event: LayoutChangeEvent, index: number) => {
+        const { width } = event.nativeEvent.layout;
 
-            const currentItemPosition = tabItemPositions.current[index];
+        const currentItemPosition = tabItemPositions.current[index];
 
-            tabItemPositions.current[index] = {
-                ...currentItemPosition,
-                position:
-                    variant === 'primary'
-                        ? previousItemsWidth + (width - currentItemPosition?.contentWidth) / 2
-                        : previousItemsWidth,
-                width: width,
-            };
-        },
-        [variant],
-    );
-
-    const onLayoutText = useCallback(
-        (event: LayoutChangeEvent, index: number) => {
-            if (variant !== 'primary') return;
-
-            const { width } = event.nativeEvent.layout;
-
-            const currentItemPosition = tabItemPositions.current[index];
-
-            tabItemPositions.current[index] = {
-                ...currentItemPosition,
-                contentWidth: width,
-            };
-        },
-        [variant],
-    );
+        tabItemPositions.current[index] = {
+            ...currentItemPosition,
+            contentWidth: width,
+        };
+    }, []);
 
     return (
-        <View {...rest} style={containerStyle} accessibilityRole="tablist" onLayout={onLayout}>
+        <View
+            {...rest}
+            testID={testID}
+            style={containerStyle}
+            accessibilityRole="tablist"
+            onLayout={onLayout}>
             <>
-                <Container {...containerProps} style={itemsContainerStyle}>
+                <Container
+                    testID={testID && `${testID}--inner-container`}
+                    {...containerProps}
+                    style={itemsContainerStyle}>
                     {validChildren.map((child, index) => (
                         <ChildItem
                             key={(child as ReactElement).props?.name}
+                            testID={testID && `${testID}--tab-item`}
                             index={index}
                             value={value}
                             child={child as ReactElement<TabItemProps>}
@@ -285,14 +313,33 @@ export const TabBase = ({
                     ))}
 
                     {!disableIndicator && (
-                        <Animated.View {...indicatorProps} style={indicatorStyle} />
+                        <Animated.View
+                            testID={testID && `${testID}--active-indicator`}
+                            {...indicatorProps}
+                            style={indicatorStyle}
+                        />
                     )}
                 </Container>
 
-                <HorizontalDivider {...dividerProps} style={dividerStyle} />
+                <HorizontalDivider
+                    testID={testID && `${testID}--divider`}
+                    {...dividerProps}
+                    style={dividerStyle}
+                />
             </>
         </View>
     );
+};
+
+type ChildItemProps = {
+    variant: TabsProps['variant'];
+    child: ReactElement<TabItemProps>;
+    onChange: TabsProps['onChange'];
+    onLayout: (event: LayoutChangeEvent, index: number) => void;
+    onLayoutContent: (event: LayoutChangeEvent, index: number) => void;
+    value: string;
+    index: number;
+    testID?: string;
 };
 
 const ChildItem = memo(
@@ -304,15 +351,8 @@ const ChildItem = memo(
         onLayoutContent: onLayoutContentProp,
         variant,
         index,
-    }: {
-        variant: TabsProps['variant'];
-        child: ReactElement<TabItemProps>;
-        onChange: TabsProps['onChange'];
-        onLayout: (event: LayoutChangeEvent, index: number) => void;
-        onLayoutContent: (event: LayoutChangeEvent, index: number) => void;
-        value: string;
-        index: number;
-    }) => {
+        testID,
+    }: ChildItemProps) => {
         const name = child.props?.name;
 
         const onPress = useCallback(() => {
@@ -339,6 +379,7 @@ const ChildItem = memo(
             active: name === value,
             onLayoutContent,
             variant,
+            testID,
         });
     },
 );
