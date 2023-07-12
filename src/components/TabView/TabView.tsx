@@ -171,6 +171,7 @@ export const TabViewBase = ({
 
     return (
         <View
+            // eslint-disable-next-line react-native/no-inline-styles
             style={[styles.container, { minHeight: 300, overflow: 'hidden' }, containerStyle]}
             onLayout={({ nativeEvent: { layout } }) => {
                 setContainerWidth(layout.width);
