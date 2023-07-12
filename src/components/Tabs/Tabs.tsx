@@ -117,9 +117,9 @@ export const TabBase = ({
     const scrollViewRef = useRef<RNScrollView>(null);
     const scrollViewPosition = useRef(0);
 
-    const tabItemPositions = useRef<Array<{ position: number; width: number; textWidth: number }>>(
-        [],
-    );
+    const tabItemPositions = useRef<
+        Array<{ position: number; width: number; contentWidth: number }>
+    >([]);
     const [tabContainerWidth, setTabContainerWidth] = useState(0);
 
     const scrollHandler = useCallback(
@@ -182,7 +182,7 @@ export const TabBase = ({
 
     const WIDTH = useMemo(() => {
         return variant === 'primary'
-            ? tabItemPositions.current[valueIndex]?.textWidth
+            ? tabItemPositions.current[valueIndex]?.contentWidth
             : tabItemPositions.current[valueIndex]?.width;
         // to make useMemo in sync with the ref
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -229,7 +229,7 @@ export const TabBase = ({
         (event: LayoutChangeEvent, index: number) => {
             const { width } = event.nativeEvent.layout;
 
-            const previousItemWidth = tabItemPositions.current.reduce((acc, item, i) => {
+            const previousItemsWidth = tabItemPositions.current.reduce((acc, item, i) => {
                 if (index <= i) return acc;
 
                 acc += item.width || 0;
@@ -243,8 +243,8 @@ export const TabBase = ({
                 ...currentItemPosition,
                 position:
                     variant === 'primary'
-                        ? previousItemWidth + (width - currentItemPosition?.textWidth) / 2
-                        : previousItemWidth,
+                        ? previousItemsWidth + (width - currentItemPosition?.contentWidth) / 2
+                        : previousItemsWidth,
                 width: width,
             };
         },
@@ -261,7 +261,7 @@ export const TabBase = ({
 
             tabItemPositions.current[index] = {
                 ...currentItemPosition,
-                textWidth: width,
+                contentWidth: width,
             };
         },
         [variant],
