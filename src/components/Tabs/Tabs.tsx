@@ -27,19 +27,29 @@ import { noop } from '../../utils';
 import type { HorizontalDividerProps } from '../HorizontalDivider';
 
 export type TabsProps = ViewProps & {
-    /** Child position index value. */
+    /**
+     * child tab name
+     * */
     value?: string;
-
-    /** Makes Tab Scrolling */
+    /**
+     * defaultValue to preselected for uncontrolled mode
+     * */
+    defaultValue?: string;
+    /**
+     * to enable scroll
+     * */
     scrollable?: boolean;
-
-    /** On Index Change Callback. */
+    /**
+     * on name change callback.
+     * */
     onChange?: (value: string) => void;
-
-    /** Disable the indicator below. */
+    /**
+     * Disable the active indicator below.
+     * */
     disableIndicator?: boolean;
-
-    /** Additional styling for tab indicator. */
+    /**
+     * Additional styling for tab indicator.
+     * */
     indicatorStyle?: StyleProp<ViewStyle>;
 
     indicatorProps?: Omit<ViewStyle, 'style'>;
@@ -58,6 +68,7 @@ const emptyObj = {};
 export const TabBase = ({
     children,
     value: valueProp,
+    defaultValue,
     scrollable = false,
     onChange: onChangeProp = noop,
     indicatorStyle: indicatorStyleProp = emptyObj,
@@ -109,7 +120,7 @@ export const TabBase = ({
     const [value, onChange] = useControlledValue({
         value: valueProp,
         onChange: onChangeProp,
-        defaultValue: (validChildren[0] as ReactElement)?.props?.name,
+        defaultValue: defaultValue || (validChildren[0] as ReactElement)?.props?.name,
     });
 
     const valueIndex = nameToIndexMap[value];

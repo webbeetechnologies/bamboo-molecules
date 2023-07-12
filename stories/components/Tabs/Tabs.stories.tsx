@@ -14,6 +14,7 @@ Default.args = {
         width: 360,
     },
     variant: 'primary',
+    defaultValue: 'explore',
 };
 
 Default.parameters = {
