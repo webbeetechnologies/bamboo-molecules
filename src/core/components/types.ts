@@ -65,6 +65,7 @@ import type {
     RangeSliderProps,
     Menu,
     AvatarProps,
+    Tabs,
 } from '../../components';
 
 import type { MaterialToastProps, ToastContainerProps } from '../../components/Toast';
@@ -142,6 +143,7 @@ export interface DefaultComponents {
     RangeSlider: ComponentType<RangeSliderProps>;
     Menu: typeof Menu;
     Avatar: ComponentType<AvatarProps>;
+    Tabs: typeof Tabs;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

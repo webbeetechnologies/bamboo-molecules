@@ -73,6 +73,7 @@ import {
     RangeSlider,
     Menu,
     Avatar,
+    Tabs,
 } from '../../components';
 
 import { MaterialToast, ToastContainer } from '../../components/Toast';
@@ -155,6 +156,7 @@ const defaultComponents: DefaultComponents = {
     RangeSlider,
     Menu,
     Avatar,
+    Tabs,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {
