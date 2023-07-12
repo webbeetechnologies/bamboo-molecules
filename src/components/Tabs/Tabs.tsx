@@ -124,13 +124,15 @@ export const TabBase = ({
 
     const itemPositionsMap = useMemo(() => {
         return tabItemPositions.current.reduce((acc, item, index) => {
-            const previousItemsWidth = tabItemPositions.current.reduce((totalWidth, _item, i) => {
-                if (index <= i) return totalWidth;
+            const previousItemsWidth = tabItemPositions.current
+                .slice(0, index)
+                .reduce((totalWidth, _item, i) => {
+                    if (index <= i) return totalWidth;
 
-                totalWidth += _item.width || 0;
+                    totalWidth += _item.width || 0;
 
-                return totalWidth;
-            }, 0);
+                    return totalWidth;
+                }, 0);
 
             acc[index] =
                 variant === 'primary'
