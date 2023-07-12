@@ -217,7 +217,8 @@ export const TabBase = ({
         (obj: Record<any, number>) => {
             const countItems = validChildren.length;
             if (countItems < 2 || !tabItemPositions.current.length) {
-                return 0;
+                // if there's only one item, use the value of that
+                return Object.values(obj)[0] || 0;
             }
             const inputRange = Array.from(Array(countItems).keys());
             const outputRange = Object.values(obj);
