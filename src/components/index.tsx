@@ -185,3 +185,5 @@ export * from './StateLayer';
 export * from './Menu';
 
 export * from './Avatar';
+
+export * from './Tabs';
