@@ -11,6 +11,6 @@ const MenuDivider = memo(({ spacing = 8, ...rest }: Props) => {
     return <HorizontalDivider spacing={spacing} {...rest} />;
 });
 
-MenuDivider.displayName = 'MenuDivider';
+MenuDivider.displayName = 'Menu_Divider';
 
 export default MenuDivider;
