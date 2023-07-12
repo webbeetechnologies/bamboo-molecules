@@ -126,7 +126,7 @@ export const TabBase = ({
         return tabItemPositions.current.reduce((acc, item, index) => {
             const previousItemsWidth = tabItemPositions.current
                 .slice(0, index)
-                .reduce((totalWidth, _item, i) => {
+                .reduce((totalWidth, _item) => {
                     totalWidth += _item.width || 0;
 
                     return totalWidth;
