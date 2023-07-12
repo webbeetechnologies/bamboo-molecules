@@ -23,7 +23,7 @@ Default.parameters = {
             code: `
 export const Example = () => {
     return (
-        <Tabs>
+        <Tabs defaultValue="explore">
             <Tabs.Item
                 name="flight"
                 label="Flightsasfaf"
