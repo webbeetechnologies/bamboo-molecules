@@ -14,6 +14,7 @@ Default.args = {
         width: 360,
     },
     variant: 'primary',
+    defaultValue: 'explore',
 };
 
 Default.parameters = {
@@ -22,7 +23,7 @@ Default.parameters = {
             code: `
 export const Example = () => {
     return (
-        <Tabs>
+        <Tabs defaultValue="explore">
             <Tabs.Item
                 name="flight"
                 label="Flightsasfaf"
