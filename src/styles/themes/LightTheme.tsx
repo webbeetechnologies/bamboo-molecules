@@ -47,6 +47,7 @@ export const generateLightThemeColors = (
         disabledOnBackground: color(palette.neutral0).alpha(0.12).rgb().string(),
         neutral1: palette.neutral100,
         onNeutral1: palette.neutral70,
+        lines: palette.neutral90, // #E4E1E6
         elevation: {
             level0: 'transparent',
             // Note: Color values with transparency cause RN to transfer shadows to children nodes

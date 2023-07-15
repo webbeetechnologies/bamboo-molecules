@@ -29,7 +29,7 @@ import type { RenderProps, TextInputLabelProp, TextInputSize } from './types';
 const BLUR_ANIMATION_DURATION = 180;
 const FOCUS_ANIMATION_DURATION = 150;
 
-type ElementProps = {
+export type ElementProps = {
     color: string;
     forceFocus: () => void;
     focused: boolean;

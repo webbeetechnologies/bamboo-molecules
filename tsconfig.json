@@ -31,5 +31,5 @@
     "**/*.tsx",
     "**/*.mdx"
   ],
-  "exclude": ["lib/**/*", "example", "test-cases"]
+  "exclude": ["lib/**/*", "example", "test-cases", "dist/**/*"]
 }

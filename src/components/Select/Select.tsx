@@ -16,6 +16,7 @@ import { useComponentStyles, useControlledValue, useMolecules, useToggle } from 
 import type { TextInputProps } from '../TextInput';
 import type { DropdownListProps } from '../DropdownList';
 import type { SectionListRenderItemInfo } from '../SectionList';
+import type { OptionListRenderItemInfo } from '../OptionList';
 
 type DefaultItemT = {
     id: string | number;
@@ -34,7 +35,9 @@ type DefaultSectionT<TItem> = {
     [key: string]: any;
 };
 
-export type SelectRenderItem<TItem> = (info: SelectRenderItemInfo<TItem>) => ReactElement | null;
+export type SelectRenderItem<TItem> = (
+    info: OptionListRenderItemInfo<TItem>,
+) => ReactElement | null;
 
 export type ISelect = <
     ItemType extends DefaultItemT = DefaultItemT,
@@ -53,8 +56,8 @@ export type Props<
     | 'isOpen'
     | 'setIsOpen'
     | 'selectable'
-    | 'selectedItem'
-    | 'onSelectItemChange'
+    | 'selection'
+    | 'onSelectionchange'
     | 'style'
 > & {
     inputProps?: Omit<TextInputProps, 'editable'>;
@@ -94,6 +97,10 @@ export type Props<
      * @default 'label'
      * */
     labelKey?: string;
+    /**
+     * maxHeight of the list
+     * */
+    maxHeight?: number;
 };
 
 export type SelectHandles = {
@@ -191,17 +198,18 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
     );
 
     const renderItem = useCallback(
-        (info: SectionListRenderItemInfo<TItem>) => {
+        (info: OptionListRenderItemInfo<TItem>) => {
             const selected = isItemInSelection(selectionValue, info.item);
 
             if (renderItemProp) {
-                return renderItemProp({ ...info, selected });
+                return renderItemProp({ ...info });
             }
 
             return (
                 <ListItem
                     variant="menuItem"
                     hoverable
+                    hovered={info.focused}
                     selected={selected}
                     right={info.item.right}
                     left={info.item.left}>

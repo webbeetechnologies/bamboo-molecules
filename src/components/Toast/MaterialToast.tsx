@@ -3,8 +3,8 @@ import type { ViewStyle } from 'react-native';
 import { TextProps, useColorMode, ViewProps } from '@bambooapp/bamboo-atoms';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
-import { extendTheme } from '../../core/theme/extendTheme';
 import { ProvideTheme } from '../../core/theme/ProvideTheme';
+import { extendTheme } from '../../core/theme/extendTheme';
 import type { SurfaceProps } from '../Surface';
 import type { ButtonProps } from '../Button';
 import type { IconButtonProps } from '../IconButton';

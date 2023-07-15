@@ -1,5 +1,5 @@
 import type { ViewStyle } from 'react-native';
-import type { ComponentStylePropWithVariants } from 'src/types';
+import type { ComponentStylePropWithVariants } from '../../types';
 
 type CustomProps = {
     grid: ViewStyle;

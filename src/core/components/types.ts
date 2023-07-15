@@ -61,9 +61,14 @@ import type {
     ScrollViewProps,
     DataTable,
     StateLayerProps,
-    MaterialToastProps,
-    ToastContainerProps,
+    SliderProps,
+    RangeSliderProps,
+    Menu,
+    AvatarProps,
+    Tabs,
 } from '../../components';
+
+import type { MaterialToastProps, ToastContainerProps } from '../../components/Toast';
 
 export type ProvideComponentsProps = {
     components?: Partial<IComponentsProviderContext>;
@@ -134,6 +139,11 @@ export interface DefaultComponents {
     StateLayer: ComponentType<StateLayerProps>;
     MaterialToast: ComponentType<MaterialToastProps>;
     ToastContainer: ComponentType<ToastContainerProps>;
+    Slider: ComponentType<SliderProps>;
+    RangeSlider: ComponentType<RangeSliderProps>;
+    Menu: typeof Menu;
+    Avatar: ComponentType<AvatarProps>;
+    Tabs: typeof Tabs;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};

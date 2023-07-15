@@ -10,7 +10,10 @@ export type Props = TouchableRippleProps &
         variant?: 'elevated' | 'outlined' | 'filled';
         touchableContainerStyle?: ViewStyle;
         elevation?: MD3Elevation;
+        disableOnHoverElevation?: boolean;
     };
+
+const emptyObj = {};
 
 const Card = (
     {
@@ -21,7 +24,8 @@ const Card = (
         style,
         elevation: elevationProp,
         children,
-        touchableContainerStyle = {},
+        touchableContainerStyle = emptyObj,
+        disableOnHoverElevation = false,
         ...rest
     }: Props,
     ref: any,
@@ -66,11 +70,12 @@ const Card = (
         if (disabled || !rest?.onPress) return;
 
         Animated.timing(elevation, {
-            toValue: hovered ? initialElevation + 1 : initialElevation,
+            toValue: hovered && !disableOnHoverElevation ? initialElevation + 1 : initialElevation,
             duration: styles.animationDuration,
             useNativeDriver: false,
         }).start();
     }, [
+        disableOnHoverElevation,
         variant,
         elevation,
         hovered,

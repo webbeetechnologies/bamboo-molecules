@@ -137,11 +137,21 @@ export {
     useDataTableCell,
     useDataTable,
     useDataTableRow,
+    Slider,
+    SliderProps,
+    RangeSlider,
+    RangeSliderProps,
+    AvatarProps,
+} from './components';
+
+// to avoid circular dependencies
+export {
+    MaterialToast,
     ToastContainer,
+    MaterialToastProps,
     ToastContainerProps,
     Toast,
-    MaterialToast,
-} from './components';
+} from './components/Toast';
 
 export {
     ProvideMolecules,
