@@ -42,6 +42,6 @@ MoreColumnsLessRowsDefault.parameters = {
     },
 };
 
-export const DataTableScrollTest: ComponentStory<typeof Example> = DataTableScroll;
+export const DataTableScrollTest: ComponentStory<typeof DataTableScroll> = DataTableScroll;
 DataTableScrollTest.args = getDataTableMockProps(2000, 50);
 DataTableScrollTest.parameters = {};
