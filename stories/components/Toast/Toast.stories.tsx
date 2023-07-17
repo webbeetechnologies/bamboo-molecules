@@ -1,10 +1,19 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Example } from './Toast';
+import { ToastContainer } from '../../../src';
 
 export default {
     title: 'components/Toast',
     component: Example,
+    decorators: [
+        Story => (
+            <>
+                <Story />
+                <ToastContainer />
+            </>
+        ),
+    ],
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => <Example {...args} />;

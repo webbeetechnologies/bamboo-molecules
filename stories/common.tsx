@@ -3,7 +3,6 @@ import {
     extendTheme,
     ProvideMolecules as DefaultProvideMolecules,
     TextProps,
-    ToastContainer,
     useComponentStyles,
     useMolecules as useMoleculesDefault,
 } from '../src';
@@ -78,7 +77,6 @@ export const useMolecules = () => useMoleculesDefault<InjectedComponentTypes>();
 addDecorator(Story => (
     <ProvideMolecules>
         <Story />
-        <ToastContainer />
     </ProvideMolecules>
 ));
 
