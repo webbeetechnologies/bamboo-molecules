@@ -97,11 +97,13 @@ function MonthPure({
                 accessibilityLabel={String(month)}
                 style={monthButtonStyle}>
                 <View style={monthInnerStyle}>
-                    {selected ?
+                    {selected ? (
                         <View style={styles.checkIconView}>
-                            <Icon name='check' size={24}/>
+                            <Icon name="check" size={24} />
                         </View>
-                    : <View style={styles.spacer}/>}
+                    ) : (
+                        <View style={styles.spacer} />
+                    )}
                     <Text style={monthLabelStyle} selectable={false}>
                         {MONTHS_DATA[month]}
                     </Text>
@@ -120,11 +122,11 @@ const styles = StyleSheet.create({
     },
 
     checkIconView: {
-        marginHorizontal: 'spacings.4'
+        marginHorizontal: 'spacings.4',
     },
-    
+
     spacer: {
-        width: 54 
+        width: 54,
     },
 
     list: {

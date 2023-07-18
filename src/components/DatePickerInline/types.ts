@@ -20,7 +20,7 @@ export interface BaseMonthProps {
     onPrev?: () => any;
     onNext?: () => any;
     selectedMonth?: number;
-    selectedYear? : number;
+    selectedYear?: number;
     selectingMonth?: boolean;
     onPressMonth?: (month: number) => void;
 }

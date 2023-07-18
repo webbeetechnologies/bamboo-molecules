@@ -2,7 +2,6 @@ import { useCallback, useRef, useState } from 'react';
 import { DatePickerDocked, DatePickerDockedProps } from '../../../src/components';
 import { useMolecules, useToggle } from '../../common';
 
-
 export type Props = DatePickerDockedProps & {};
 
 export const Example = (props: Props) => {
@@ -27,7 +26,14 @@ export const ControlledExample = (props: Props) => {
             <Button variant="text" ref={triggerRef} onPress={onToggle} testID={'trigger'}>
                 Select Date
             </Button>
-            <DatePickerDocked {...props} {...data} onChange={onChange} isOpen={isOpen} triggerRef={triggerRef} onToggle={onToggle}/>
+            <DatePickerDocked
+                {...props}
+                {...data}
+                onChange={onChange}
+                isOpen={isOpen}
+                triggerRef={triggerRef}
+                onToggle={onToggle}
+            />
         </>
     );
 };

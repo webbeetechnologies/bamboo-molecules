@@ -1,7 +1,20 @@
-import type { TextStyle, ViewStyle } from "react-native";
-import type { ComponentStylePropWithVariants } from "src/types";
+import type { TextStyle, ViewStyle } from 'react-native';
+import type { ComponentStylePropWithVariants } from 'src/types';
 
-export const MONTHS_DATA = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+export const MONTHS_DATA = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+];
 
 type States = '';
 
@@ -12,7 +25,11 @@ type CustomProps = {
     container?: ViewStyle;
 };
 
-export const datePickerDockedStyles: ComponentStylePropWithVariants<TextStyle, States, CustomProps> = {
+export const datePickerDockedStyles: ComponentStylePropWithVariants<
+    TextStyle,
+    States,
+    CustomProps
+> = {
     roundness: 'shapes.corner.extraSmall',
     headerBackgroundColor: 'colors.surface',
 
@@ -71,8 +88,8 @@ export const datePickerDockedHeaderStyles: ComponentStylePropWithVariants<
         borderRadius: 'shapes.corner.extraSmall' as unknown as number,
     },
     daysWrapperStyle: {
-        marginHorizontal: 'spacings.3'
-    }
+        marginHorizontal: 'spacings.3',
+    },
 };
 
 type DatePickerMonthPickerCustomProps = {
@@ -94,7 +111,7 @@ export const datePickerMonthPickerStyles: ComponentStylePropWithVariants<
     month: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
     },
     selectedMonth: { color: 'colors.onPrimary' },
     monthButton: {

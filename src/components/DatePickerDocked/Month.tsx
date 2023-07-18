@@ -40,22 +40,25 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         selectedMonth,
         selectedYear,
         onPrev,
-        onNext
+        onNext,
     } = props;
     const { TouchableRipple, Text, IconButton, View } = useMolecules();
     const monthStyles = useComponentStyles('DatePicker_Month');
 
     const realIndex = getRealIndex(index);
-    
+
     const { isDisabled, isWithinValidRange } = useRangeChecker(validRange);
 
     const { monthName, month, year } = useMemo(() => {
         const md = addMonths(new Date(), realIndex);
-        const monthName = MONTHS_DATA[selectedMonth !== undefined ? selectedMonth : 0].substring(0,3)
+        const monthNameStr = MONTHS_DATA[selectedMonth !== undefined ? selectedMonth : 0].substring(
+            0,
+            3,
+        );
         const y = selectedYear || md.getFullYear();
         const m = selectedMonth !== undefined ? selectedMonth : md.getMonth();
 
-        return { monthName, month: m, year: y };
+        return { monthName: monthNameStr, month: m, year: y };
     }, [realIndex, selectedMonth, selectedYear]);
 
     const grid = useMemo(
@@ -73,7 +76,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
                 date,
                 monthGrid,
             }),
-        [year, month, selectedMonth,  index, isDisabled, mode, isWithinValidRange, startDate, endDate, dates, date],
+        [year, month, index, isDisabled, mode, isWithinValidRange, startDate, endDate, dates, date],
     );
 
     const {
@@ -84,7 +87,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         monthLabelStyle,
         iconContainerStyle,
         buttonContainerStyle,
-        weekContainerStyle
+        weekContainerStyle,
     } = useMemo(() => {
         const {
             monthLabel: _monthLabel,
@@ -92,7 +95,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
             yearButtonInner,
             month: _monthStyle,
             monthHeader,
-            buttonContainerStyle
+            buttonContainerStyle: _buttonContainerStyle,
         } = monthStyles;
         const { typescale, ...monthLabel } = _monthLabel;
 
@@ -100,34 +103,29 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
             monthStyle: [_monthStyle, { height: getMonthHeight(scrollMode, index) }],
             headerStyle: [
                 monthHeader,
-                { 
+                {
                     marginLeft: 'spacings.4',
                     marginTop: monthHeaderSingleMarginTop,
-                    marginBottom: monthHeaderSingleMarginBottom, 
+                    marginBottom: monthHeaderSingleMarginBottom,
                 },
             ],
-            buttonContainerStyle,
+            buttonContainerStyle: _buttonContainerStyle,
             monthButtonStyle: monthButton,
             monthInnerStyle: [yearButtonInner, { paddingLeft: 'spacings.2' }],
             monthLabelStyle: [monthLabel, typescale],
             iconContainerStyle: { opacity: 1 },
-            weekContainerStyle: { marginHorizontal: 'spacings.3' }
+            weekContainerStyle: { marginHorizontal: 'spacings.3' },
         };
     }, [index, monthStyles, scrollMode]);
 
-    const onPressDropdown = useCallback(
-        () => {
-            onPressMonth && onPressMonth(month)
-        },
-        [onPressMonth, month],
-    );
+    const onPressDropdown = useCallback(() => {
+        onPressMonth && onPressMonth(month);
+    }, [onPressMonth, month]);
 
     return (
         <View style={monthStyle}>
             <View style={headerStyle}>
-                <View
-                    style={buttonContainerStyle}
-                    pointerEvents={'box-none'}>
+                <View style={buttonContainerStyle} pointerEvents={'box-none'}>
                     <View style={iconContainerStyle}>
                         <IconButton
                             name="chevron-left"

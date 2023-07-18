@@ -31,7 +31,7 @@ function DatePickerDockedHeader({
     year,
     onPressYear,
     selectingYear,
-    selectingMonth
+    selectingMonth,
 }: CalendarHeaderProps) {
     const { IconButton, View, TouchableRipple, Text } = useMolecules();
     const componentStyles = useComponentStyles('DatePicker_DockedHeader', styleProp);
@@ -52,10 +52,10 @@ function DatePickerDockedHeader({
             buttonContainer,
             buttonWrapper,
             spacer,
-            yearButtonStyle,
-            yearInnerStyle,
-            yearLabelStyle,
-            daysWrapperStyle,
+            yearButtonStyle: yearButton,
+            yearInnerStyle: yearInner,
+            yearLabelStyle: yearLabel,
+            daysWrapperStyle: daysWrapper,
             ...rest
         } = componentStyles;
 
@@ -64,11 +64,11 @@ function DatePickerDockedHeader({
             buttonContainerStyle: buttonContainer,
             buttonWrapperStyle: buttonWrapper,
             spacerStyle: spacer,
-            yearButtonStyle: [yearButtonStyle, { alignSelf: 'center' }],
-            yearInnerStyle: [yearInnerStyle, { paddingLeft: 0 }],
-            yearLabelStyle,
+            yearButtonStyle: [yearButton, { alignSelf: 'center' }],
+            yearInnerStyle: [yearInner, { paddingLeft: 0 }],
+            yearLabelStyle: yearLabel,
             iconContainerStyle: { opacity: 1 },
-            daysWrapperStyle
+            daysWrapperStyle: daysWrapper,
         };
     }, [componentStyles]);
 
@@ -85,7 +85,7 @@ function DatePickerDockedHeader({
                         size="sm"
                         accessibilityLabel={'Previous'}
                         onPress={onPrev}
-                        disabled={year == 1800 || selectingYear || selectingMonth}
+                        disabled={year === 1800 || selectingYear || selectingMonth}
                     />
                 </View>
                 <TouchableRipple
@@ -114,7 +114,7 @@ function DatePickerDockedHeader({
                         size="sm"
                         accessibilityLabel={'Next'}
                         onPress={onNext}
-                        disabled={year == 2200 || selectingYear || selectingMonth}
+                        disabled={year === 2200 || selectingYear || selectingMonth}
                     />
                 </View>
             </View>

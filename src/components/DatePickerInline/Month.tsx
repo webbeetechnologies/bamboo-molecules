@@ -106,7 +106,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
     }, [index, isHorizontal, monthStyles, scrollMode]);
 
     const onPressDropdown = useCallback(
-        () => ((isHorizontal && onPressYear) ? onPressYear(year) : undefined),
+        () => (isHorizontal && onPressYear ? onPressYear(year) : undefined),
         [isHorizontal, onPressYear, year],
     );
 

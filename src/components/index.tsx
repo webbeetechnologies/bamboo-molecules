@@ -95,7 +95,13 @@ export {
 
 export { DatePickerInput, DatePickerInputProps, datePickerInputStyles } from './DatePickerInput';
 
-export { DatePickerDocked, datePickerDockedStyles, datePickerMonthPickerStyles, datePickerDockedHeaderStyles, DatePickerDockedProps } from './DatePickerDocked'
+export {
+    DatePickerDocked,
+    datePickerDockedStyles,
+    datePickerMonthPickerStyles,
+    datePickerDockedHeaderStyles,
+    DatePickerDockedProps,
+} from './DatePickerDocked';
 
 export {
     TimePicker,
