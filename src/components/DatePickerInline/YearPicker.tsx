@@ -19,7 +19,7 @@ export default function YearPicker({
     startYear: number;
     endYear: number;
 }) {
-    const { FlatList, View } = useMolecules();
+    const { FlatList, View, HorizontalDivider } = useMolecules();
     const yearPickerStyles = useComponentStyles('DatePicker_YearPicker');
     const flatList = useRef<FlatListRef<number> | null>(null);
     const years = range(isNaN(startYear) ? 1800 : startYear, isNaN(endYear) ? 2200 : endYear);
@@ -53,6 +53,7 @@ export default function YearPicker({
         <>
             {selectingYear && (
                 <View style={containerStyle} pointerEvents={selectingYear ? 'auto' : 'none'}>
+                    <HorizontalDivider />
                     <FlatList<number>
                         ref={flatList}
                         style={styles.list}

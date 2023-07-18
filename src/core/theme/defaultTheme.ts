@@ -40,10 +40,13 @@ import {
     datePickerModalHeaderBackgroundStyles,
     datePickerModalHeaderStyles,
     datePickerModalStyles,
+    datePickerDockedStyles,
+    datePickerDockedHeaderStyles,
     datePickerMonthStyles,
     datePickerStyles,
     datePickerWeekStyles,
     datePickerYearPickerStyles,
+    datePickerMonthPickerStyles,
     dateTimePickerStyles,
     dialogActionsStyles,
     dialogContentStyles,
@@ -194,10 +197,12 @@ export const defaultThemeValue: Partial<ITheme> = {
 
     DatePickerInline: datePickerStyles,
     DatePicker_YearPicker: datePickerYearPickerStyles,
+    DatePicker_MonthPicker: datePickerMonthPickerStyles,
     DatePicker_Month: datePickerMonthStyles,
     DatePicker_Day: datePickerDayStyles,
     DatePicker_DayEmpty: datePickerDayEmptyStyles,
     DatePicker_Header: datePickerHeaderStyles,
+    DatePicker_DockedHeader: datePickerDockedHeaderStyles,
     DatePicker_DayName: dateDayNameStyles,
     DatePicker_DayRange: datePickerDayRangeStyles,
     DatePicker_Week: datePickerWeekStyles,
@@ -207,6 +212,8 @@ export const defaultThemeValue: Partial<ITheme> = {
     DatePickerModal_ContentHeader: datePickerModalContentHeaderStyles,
     DatePickerModal_HeaderBackground: datePickerModalHeaderBackgroundStyles,
     DatePickerModal_Edit: datePickerModalEditStyles,
+
+    DatePickerDocked: datePickerDockedStyles,
 
     DatePickerInput: datePickerInputStyles,
 

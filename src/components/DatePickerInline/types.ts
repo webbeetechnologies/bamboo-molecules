@@ -7,8 +7,8 @@ export interface BaseMonthProps {
     disableWeekDays?: DisableWeekDaysType;
     mode: ModeType;
     index: number;
-    onPressYear: (year: number) => any;
-    selectingYear: boolean;
+    onPressYear?: (year: number) => any;
+    selectingYear?: boolean;
     onPressDate: (date: Date) => any;
     validRange?: ValidRangeType;
 
@@ -17,6 +17,12 @@ export interface BaseMonthProps {
     endDate?: CalendarDate;
     date?: CalendarDate;
     dates?: CalendarDates;
+    onPrev?: () => any;
+    onNext?: () => any;
+    selectedMonth?: number;
+    selectedYear? : number;
+    selectingMonth?: boolean;
+    onPressMonth?: (month: number) => void;
 }
 
 export interface MonthRangeProps extends BaseMonthProps {

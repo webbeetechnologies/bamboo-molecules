@@ -2,7 +2,7 @@ import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 import { daySize } from './dateUtils';
 import { dayNamesHeight } from './DayNames';
-import { montHeaderHeight, weekMargin } from './Month';
+import { montHeaderHeight } from './Month';
 
 type States = '';
 
@@ -30,6 +30,8 @@ type DatePickerMonthCustomProps = {
     emptyDay?: ViewStyle;
     month?: ViewStyle;
     monthHeader?: ViewStyle;
+    monthButton?: ViewStyle;
+    buttonContainerStyle?: ViewStyle;
 };
 
 export const datePickerMonthStyles: ComponentStylePropWithVariants<
@@ -58,6 +60,13 @@ export const datePickerMonthStyles: ComponentStylePropWithVariants<
         justifyContent: 'center',
         overflow: 'hidden',
     },
+
+    backgroundColor: 'colors.surface',
+    monthButton: {
+        borderRadius: 46 / 2,
+        overflow: 'hidden',
+    },
+    buttonContainerStyle: { flexDirection: 'row', alignItems: 'center' },
 };
 
 type DatePickerYearPickerCustomProps = {
@@ -191,7 +200,6 @@ export const datePickerDayEmptyStyles: ComponentStylePropWithVariants<ViewStyle>
 
 export const datePickerWeekStyles: ComponentStylePropWithVariants<ViewStyle> = {
     flexDirection: 'row',
-    marginBottom: weekMargin,
     height: daySize,
 };
 
@@ -200,6 +208,9 @@ type DatePickerHeaderCustomProps = {
     buttonContainer: ViewStyle;
     buttonWrapper: ViewStyle;
     spacer: ViewStyle;
+    yearButtonStyle?: ViewStyle;
+    yearInnerStyle?: ViewStyle;
+    yearLabelStyle?: TextStyle & { typescale?: string };
 };
 
 export const datePickerHeaderStyles: ComponentStylePropWithVariants<
@@ -223,6 +234,21 @@ export const datePickerHeaderStyles: ComponentStylePropWithVariants<
     },
     buttonWrapper: {},
     spacer: { flex: 1 },
+    yearLabelStyle: {
+        typescale: 'typescale.bodyMedium',
+        opacity: 0.7,
+    },
+    yearButtonStyle: {
+        alignSelf: 'flex-start',
+        marginLeft: 6,
+        borderRadius: 'shapes.corner.extraSmall' as unknown as number,
+    },
+    yearInnerStyle: {
+        paddingLeft: 'spacings.4',
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 'shapes.corner.extraSmall' as unknown as number,
+    },
 };
 
 type DatePickerDayNameCustomProps = {
