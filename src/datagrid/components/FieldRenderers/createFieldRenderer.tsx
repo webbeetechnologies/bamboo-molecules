@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { ErrorBoundary } from '../ErrorBoundary';
 import { typedMemo } from '../../hocs';
 import { noop } from '../../utils';
-import { useFieldType } from '../../core/FieldTypesProvider';
+import { useFieldType } from '../../contexts';
 import type { FieldTypeRenderer, RendererType } from '../../types';
 
 type CreateFieldRendererArgs = {

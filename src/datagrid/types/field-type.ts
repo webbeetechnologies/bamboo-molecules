@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react';
 import type { IconType } from '@bambooapp/bamboo-molecules';
 
-export type RendererType = 'ViewRenderer' | 'EditRenderer';
+export type RendererType = 'ValueRenderer' | 'EditorRenderer';
 
 export type FieldType<T = unknown, C extends {} = {}> = {
     type: string;
@@ -12,7 +12,8 @@ export type FieldType<T = unknown, C extends {} = {}> = {
     };
     ValueRenderer: FieldTypeRenderer<T, C>;
     EditorRenderer: FieldTypeRenderer<T, C>;
-    readonlyEditorRenderer?: boolean;
+    readonly?: boolean;
+    displayEditorOnHover?: boolean;
     // fieldEditorRenderer: ReactElement;
     // fieldEditorValidator: ReactElement;
     validator?: (value: any) => any;
