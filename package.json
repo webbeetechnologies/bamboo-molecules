@@ -25,6 +25,7 @@
   "files": [
     "lib",
     "src",
+    "fast-context",
     "components",
     "!**/__tests__",
     "!**/__fixtures__",
