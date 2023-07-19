@@ -22,7 +22,7 @@ export interface BaseMonthProps {
     selectedMonth?: number;
     selectedYear?: number;
     selectingMonth?: boolean;
-    onPressMonth?: (month: number) => void;
+    onPressDropdown?: (type: 'month' | 'year' | undefined) => void;
 }
 
 export interface MonthRangeProps extends BaseMonthProps {

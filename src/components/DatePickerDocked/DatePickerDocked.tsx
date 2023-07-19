@@ -2,7 +2,7 @@ import { memo, useState, useCallback, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useComponentStyles, useLatest, useMolecules } from '../../hooks';
-import { getEndOfDay, getInitialIndex } from '../DatePickerInline/dateUtils';
+import { getInitialIndex } from '../DatePickerInline/dateUtils';
 import Swiper from '../DatePickerInline/Swiper';
 import Month from './Month';
 import CalendarHeader from './DatePickerDockedHeader';
@@ -10,6 +10,7 @@ import YearPicker from '../DatePickerInline/YearPicker';
 import type { SingleChange, RangeChange, MultiChange } from '../DatePickerInline/types';
 import MonthPicker from './MonthPicker';
 import type { DatePickerDockedProps } from './types';
+import { setMonth, setYear } from 'date-fns';
 
 const MonthComponent = memo(Month);
 const CalendarHeaderComponent = memo(CalendarHeader);
@@ -24,9 +25,7 @@ function DatePickerDocked(props: DatePickerDockedProps) {
         disableWeekDays,
         startYear,
         endYear,
-        dates,
         validRange,
-        dateMode,
         style,
         triggerRef,
         onToggle,
@@ -36,61 +35,62 @@ function DatePickerDocked(props: DatePickerDockedProps) {
     const componentStyles = useComponentStyles('DatePickerDocked', style);
 
     const scrollMode = 'horizontal';
-    const localDate = new Date();
 
-    const [selectedYear, setSelectedYear] = useState<number>(
-        date?.getFullYear() || localDate.getFullYear(),
-    );
-    const [selectingYear, setSelectingYear] = useState<boolean>(false);
-    const [selectedMonth, setSelectedMonth] = useState<number>(
-        date?.getMonth() || localDate.getMonth(),
-    );
-    const [selectingMonth, setSelectingMonth] = useState<boolean>(false);
+    const [localDate, setLocalDate] = useState<Date>(date || new Date());
     const [pickerType, setPickerType] = useState<'month' | 'year' | undefined>(undefined);
+
+    const onPressDropdown = useCallback(
+        (type: 'month' | 'year' | undefined) => {
+            if (!pickerType) {
+                setPickerType(type);
+            } else {
+                setPickerType(undefined);
+            }
+        },
+        [setPickerType, pickerType],
+    );
 
     const onPressYear = useCallback(
         (year: number) => {
-            setPickerType('year');
-            setSelectedYear(year);
-            setSelectingYear(prev => !prev);
+            setPickerType(undefined);
+            setLocalDate(prevDate => setYear(prevDate, year));
         },
-        [setSelectingYear, setPickerType],
+        [setPickerType, setLocalDate],
     );
 
     const onPressMonth = useCallback(
         (month: number) => {
-            setPickerType('month');
-            setSelectedMonth(month);
-            setSelectingMonth(prev => !prev);
+            setPickerType(undefined);
+            setLocalDate(prevDate => setMonth(prevDate, month));
         },
-        [setSelectingMonth, setPickerType],
+        [setPickerType, setLocalDate],
     );
 
     const onPrevYear = useCallback(() => {
-        setSelectedYear(prev => prev - 1);
-    }, [setSelectedYear]);
+        setLocalDate(prevDate => setYear(prevDate, prevDate.getFullYear() - 1));
+    }, [setLocalDate]);
 
     const onNextYear = useCallback(() => {
-        setSelectedYear(prev => prev + 1);
-    }, [setSelectedYear]);
+        setLocalDate(prevDate => setYear(prevDate, prevDate.getFullYear() + 1));
+    }, [setLocalDate]);
 
     const onPrevMonth = useCallback(() => {
-        if (selectedMonth === 0) {
-            setSelectedYear(prevYear => prevYear - 1);
-            setSelectedMonth(11);
+        if (localDate.getMonth() === 0) {
+            onPrevYear();
+            setLocalDate(prevDate => setMonth(prevDate, 11));
         } else {
-            setSelectedMonth(prev => prev - 1);
+            setLocalDate(prevDate => setMonth(prevDate, prevDate.getMonth() - 1));
         }
-    }, [setSelectedMonth, setSelectedYear, selectedMonth]);
+    }, [onPrevYear, setLocalDate, localDate]);
 
     const onNextMonth = useCallback(() => {
-        if (selectedMonth === 11) {
-            setSelectedYear(prevYear => prevYear + 1);
-            setSelectedMonth(0);
+        if (localDate.getMonth() === 11) {
+            onNextYear();
+            setLocalDate(prevDate => setMonth(prevDate, 0));
         } else {
-            setSelectedMonth(prev => prev + 1);
+            setLocalDate(prevDate => setMonth(prevDate, prevDate.getMonth() + 1));
         }
-    }, [setSelectedMonth, setSelectedYear, selectedMonth]);
+    }, [onNextYear, setLocalDate, localDate]);
 
     // prevent re-rendering all months when something changed we only need the
     // latest version of the props and we don't want the useCallback to change
@@ -99,19 +99,19 @@ function DatePickerDocked(props: DatePickerDockedProps) {
     const onPressDate = useCallback(
         (d: Date) => {
             (onChangeRef.current as SingleChange)({
-                date: dateMode === 'start' ? d : getEndOfDay(d),
+                date: d,
             });
             onToggle();
         },
-        [dateMode, onChangeRef, onToggle],
+        [onChangeRef, onToggle],
     );
 
     const { containerStyle, firstDate } = useMemo(() => {
         return {
             containerStyle: [styles.root, componentStyles],
-            firstDate: startDate || date || dates?.[0],
+            firstDate: startDate || localDate,
         };
-    }, [componentStyles, date, dates, startDate]);
+    }, [componentStyles, localDate, startDate]);
 
     return (
         <Popover
@@ -122,7 +122,7 @@ function DatePickerDocked(props: DatePickerDockedProps) {
             <View style={containerStyle}>
                 <Swiper
                     initialIndex={getInitialIndex(firstDate)}
-                    selectedYear={selectedYear}
+                    selectedYear={localDate.getFullYear()}
                     scrollMode={scrollMode}
                     renderItem={({ index }) => (
                         <MonthComponent
@@ -133,12 +133,11 @@ function DatePickerDocked(props: DatePickerDockedProps) {
                             startDate={startDate}
                             endDate={endDate}
                             date={date}
-                            dates={dates}
-                            onPressMonth={onPressMonth}
-                            selectedMonth={selectedMonth}
-                            selectedYear={selectedYear}
-                            selectingMonth={selectingMonth}
-                            selectingYear={selectingYear}
+                            onPressDropdown={onPressDropdown}
+                            selectedMonth={localDate.getMonth()}
+                            selectedYear={localDate.getFullYear()}
+                            selectingMonth={pickerType === 'month'}
+                            selectingYear={pickerType === 'year'}
                             onPressDate={onPressDate}
                             scrollMode={scrollMode}
                             disableWeekDays={disableWeekDays}
@@ -152,17 +151,17 @@ function DatePickerDocked(props: DatePickerDockedProps) {
                             onNext={onNextYear}
                             scrollMode={scrollMode}
                             disableWeekDays={disableWeekDays}
-                            year={selectedYear || 1800}
-                            onPressYear={onPressYear}
-                            selectingYear={selectingYear}
-                            selectingMonth={selectingMonth}
+                            year={localDate.getFullYear()}
+                            onPressDropdown={onPressDropdown}
+                            selectingYear={pickerType === 'year'}
+                            selectingMonth={pickerType === 'month'}
                         />
                     )}
                 />
                 {pickerType === 'year' && (
                     <YearPicker
-                        selectedYear={selectedYear}
-                        selectingYear={selectingYear}
+                        selectedYear={localDate.getFullYear()}
+                        selectingYear={pickerType === 'year'}
                         onPressYear={onPressYear}
                         startYear={startYear || 1800}
                         endYear={endYear || 2200}
@@ -170,8 +169,8 @@ function DatePickerDocked(props: DatePickerDockedProps) {
                 )}
                 {pickerType === 'month' && (
                     <MonthPicker
-                        selectedMonth={selectedMonth}
-                        selectingMonth={selectingMonth}
+                        selectedMonth={localDate.getMonth()}
+                        selectingMonth={pickerType === 'month'}
                         onPressMonth={onPressMonth}
                     />
                 )}

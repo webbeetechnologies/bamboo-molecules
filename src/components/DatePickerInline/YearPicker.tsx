@@ -2,7 +2,7 @@ import { useRef, useEffect, memo, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { FlatListRef } from '../FlatList';
-import { range } from '../../utils/dateTimePicker';
+import { getYearRange } from '../../utils';
 
 const ITEM_HEIGHT = 62;
 
@@ -22,7 +22,7 @@ export default function YearPicker({
     const { FlatList, View, HorizontalDivider } = useMolecules();
     const yearPickerStyles = useComponentStyles('DatePicker_YearPicker');
     const flatList = useRef<FlatListRef<number> | null>(null);
-    const years = range(isNaN(startYear) ? 1800 : startYear, isNaN(endYear) ? 2200 : endYear);
+    const years = getYearRange(startYear, endYear);
 
     // scroll to selected year
     useEffect(() => {

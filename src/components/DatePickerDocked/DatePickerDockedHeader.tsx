@@ -4,6 +4,7 @@ import type { ViewStyle } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { DisableWeekDaysType } from '../DatePickerInline/dateUtils';
 import DayNames, { dayNamesHeight } from '../DatePickerInline/DayNames';
+import HeaderItem from './HeaderItem';
 
 const buttonContainerHeight = 56;
 const buttonContainerMarginTop = 4;
@@ -17,7 +18,7 @@ export type CalendarHeaderProps = {
     disableWeekDays?: DisableWeekDaysType;
     style?: ViewStyle;
     year: number;
-    onPressYear: (year: number) => void;
+    onPressDropdown: (type: 'month' | 'year' | undefined) => void;
     selectingYear: boolean;
     selectingMonth: boolean;
 };
@@ -29,95 +30,38 @@ function DatePickerDockedHeader({
     disableWeekDays,
     style: styleProp,
     year,
-    onPressYear,
+    onPressDropdown,
     selectingYear,
     selectingMonth,
 }: CalendarHeaderProps) {
-    const { IconButton, View, TouchableRipple, Text } = useMolecules();
+    const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePickerDocked_Header', styleProp);
 
-    const {
-        containerStyle,
-        buttonContainerStyle,
-        buttonWrapperStyle,
-        spacerStyle,
-        yearButtonStyle,
-        yearInnerStyle,
-        yearLabelStyle,
-        iconContainerStyle,
-        daysWrapperStyle,
-    } = useMemo(() => {
-        const {
-            datePickerHeader,
-            buttonContainer,
-            buttonWrapper,
-            spacer,
-            yearButtonStyle: yearButton,
-            yearInnerStyle: yearInner,
-            yearLabelStyle: yearLabel,
-            daysWrapperStyle: daysWrapper,
-            ...rest
-        } = componentStyles;
+    const { containerStyle, daysWrapperStyle } = useMemo(() => {
+        const { datePickerHeader, daysWrapperStyle: daysWrapper, ...rest } = componentStyles;
 
         return {
             containerStyle: [datePickerHeader, rest],
-            buttonContainerStyle: buttonContainer,
-            buttonWrapperStyle: buttonWrapper,
-            spacerStyle: spacer,
-            yearButtonStyle: yearButton,
-            yearInnerStyle: yearInner,
-            yearLabelStyle: yearLabel,
-            iconContainerStyle: { opacity: 1 },
             daysWrapperStyle: daysWrapper,
         };
     }, [componentStyles]);
 
-    const onPressDropdown = useCallback(() => onPressYear(year), [onPressYear, year]);
+    const handlePressDropDown = useCallback(
+        (type: 'month' | 'year' | undefined) => onPressDropdown(type),
+        [onPressDropdown],
+    );
 
     return (
         <View style={containerStyle} pointerEvents={'box-none'}>
-            <View style={buttonContainerStyle} pointerEvents={'box-none'}>
-                <View style={spacerStyle} pointerEvents={'box-none'} />
-                <View style={buttonWrapperStyle}>
-                    <IconButton
-                        type="material-community"
-                        name="chevron-left"
-                        size="sm"
-                        accessibilityLabel={'Previous'}
-                        onPress={onPrev}
-                        disabled={year === 1800 || selectingYear || selectingMonth}
-                    />
-                </View>
-                <TouchableRipple
-                    disabled={selectingMonth}
-                    onPress={onPressDropdown}
-                    accessibilityRole="button"
-                    accessibilityLabel={`${year}`}
-                    style={yearButtonStyle}>
-                    <View style={yearInnerStyle}>
-                        <Text style={yearLabelStyle} selectable={false}>
-                            {year}
-                        </Text>
-                        <View style={iconContainerStyle}>
-                            <IconButton
-                                onPress={onPressDropdown}
-                                name={selectingYear ? 'menu-up' : 'menu-down'}
-                                size="xs"
-                                disabled={selectingMonth}
-                            />
-                        </View>
-                    </View>
-                </TouchableRipple>
-                <View style={buttonWrapperStyle}>
-                    <IconButton
-                        name="chevron-right"
-                        size="sm"
-                        accessibilityLabel={'Next'}
-                        onPress={onNext}
-                        disabled={year === 2200 || selectingYear || selectingMonth}
-                    />
-                </View>
-            </View>
+            <HeaderItem
+                onNext={onNext}
+                onPrev={onPrev}
+                disabled={selectingMonth}
+                selecting={selectingYear || selectingMonth}
+                type="year"
+                value={year}
+                onPressDropdown={handlePressDropDown}
+            />
             <View style={daysWrapperStyle}>
                 <DayNames disableWeekDays={disableWeekDays} locale={locale} />
             </View>

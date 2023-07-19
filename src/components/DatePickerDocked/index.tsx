@@ -4,5 +4,6 @@ export {
     datePickerMonthPickerStyles,
     datePickerDockedHeaderStyles,
     datePickerDockedMonthStyles,
+    datePickerHeaderItemStyles,
 } from './utils';
 export { DatePickerDockedProps } from './types';

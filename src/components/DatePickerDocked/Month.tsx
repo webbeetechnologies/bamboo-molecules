@@ -18,6 +18,7 @@ import { dayNamesHeight } from '../DatePickerInline/DayNames';
 import type { MonthMultiProps, MonthRangeProps, MonthSingleProps } from '../DatePickerInline/types';
 import Week from '../DatePickerInline/Week';
 import { MONTHS_DATA } from './utils';
+import HeaderItem from './HeaderItem';
 
 export type Props = MonthSingleProps | MonthRangeProps | MonthMultiProps;
 
@@ -29,20 +30,19 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         dates,
         startDate,
         endDate,
-        onPressMonth,
+        onPressDropdown,
         selectingMonth,
         selectingYear,
         onPressDate,
         scrollMode,
         disableWeekDays,
-        // locale,
         validRange,
         selectedMonth,
         selectedYear,
         onPrev,
         onNext,
     } = props;
-    const { TouchableRipple, Text, IconButton, View } = useMolecules();
+    const { View } = useMolecules();
     const monthStyles = useComponentStyles('DatePicker_Month');
 
     const realIndex = getRealIndex(index);
@@ -79,92 +79,43 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         [year, month, index, isDisabled, mode, isWithinValidRange, startDate, endDate, dates, date],
     );
 
-    const {
-        monthStyle,
-        headerStyle,
-        monthButtonStyle,
-        monthInnerStyle,
-        monthLabelStyle,
-        iconContainerStyle,
-        buttonContainerStyle,
-        weekContainerStyle,
-    } = useMemo(() => {
-        const {
-            monthLabel: _monthLabel,
-            monthButton,
-            yearButtonInner,
-            month: _monthStyle,
-            monthHeader,
-            buttonContainerStyle: _buttonContainerStyle,
-        } = monthStyles;
-        const { typescale, ...monthLabel } = _monthLabel;
+    const { monthStyle, headerStyle, weekContainerStyle } = useMemo(() => {
+        const { monthLabel: _monthLabel, month: _monthStyle, monthHeader } = monthStyles;
 
         return {
             monthStyle: [_monthStyle, { height: getMonthHeight(scrollMode, index) }],
             headerStyle: [
                 monthHeader,
                 {
+                    alignItems: 'flex-start',
                     marginLeft: 'spacings.4',
                     marginTop: monthHeaderSingleMarginTop,
                     marginBottom: monthHeaderSingleMarginBottom,
                 },
             ],
-            buttonContainerStyle: _buttonContainerStyle,
-            monthButtonStyle: monthButton,
-            monthInnerStyle: [yearButtonInner, { paddingLeft: 'spacings.2' }],
-            monthLabelStyle: [monthLabel, typescale],
-            iconContainerStyle: { opacity: 1 },
             weekContainerStyle: { marginHorizontal: 'spacings.3' },
         };
     }, [index, monthStyles, scrollMode]);
 
-    const onPressDropdown = useCallback(() => {
-        onPressMonth && onPressMonth(month);
-    }, [onPressMonth, month]);
+    const handlePressDropdown = useCallback(
+        (type: 'month' | 'year' | undefined) => {
+            onPressDropdown && onPressDropdown(type);
+        },
+        [onPressDropdown],
+    );
 
     return (
         <View style={monthStyle}>
             <View style={headerStyle}>
-                <View style={buttonContainerStyle} pointerEvents={'box-none'}>
-                    <View style={iconContainerStyle}>
-                        <IconButton
-                            name="chevron-left"
-                            size="sm"
-                            accessibilityLabel={'Previous'}
-                            onPress={onPrev}
-                            disabled={selectingMonth || selectingYear}
-                        />
-                    </View>
-                    <TouchableRipple
-                        disabled={selectingYear}
-                        onPress={onPressDropdown}
-                        accessibilityRole="button"
-                        accessibilityLabel={monthName}
-                        style={monthButtonStyle}>
-                        <View style={monthInnerStyle}>
-                            <Text style={monthLabelStyle} selectable={false}>
-                                {monthName}
-                            </Text>
-                            <View style={iconContainerStyle}>
-                                <IconButton
-                                    onPress={onPressDropdown}
-                                    name={selectingMonth ? 'menu-up' : 'menu-down'}
-                                    size="xs"
-                                    disabled={selectingYear}
-                                />
-                            </View>
-                        </View>
-                    </TouchableRipple>
-                    <View style={iconContainerStyle}>
-                        <IconButton
-                            name="chevron-right"
-                            size="sm"
-                            accessibilityLabel={'Next'}
-                            onPress={onNext}
-                            disabled={selectingMonth || selectingYear}
-                        />
-                    </View>
-                </View>
+                <HeaderItem
+                    disabled={!!selectingYear}
+                    onNext={onNext as any}
+                    onPrev={onPrev as any}
+                    value={monthName}
+                    onPressDropdown={handlePressDropdown}
+                    selecting={!!selectingMonth || !!selectingYear}
+                    type="month"
+                />
             </View>
 
             {grid.map(({ weekIndex, generatedDays }) => (

@@ -41,12 +41,6 @@ export const datePickerDockedStyles: ComponentStylePropWithVariants<
 
 type DatePickerHeaderCustomProps = {
     datePickerHeader: ViewStyle;
-    buttonContainer: ViewStyle;
-    buttonWrapper: ViewStyle;
-    spacer: ViewStyle;
-    yearButtonStyle?: ViewStyle;
-    yearInnerStyle?: ViewStyle;
-    yearLabelStyle?: TextStyle & { typescale?: string };
     daysWrapperStyle?: ViewStyle;
 };
 
@@ -62,6 +56,26 @@ export const datePickerDockedHeaderStyles: ComponentStylePropWithVariants<
         left: 0,
         zIndex: 10,
     },
+    daysWrapperStyle: {
+        marginHorizontal: 'spacings.3',
+    },
+};
+
+type DatePickerHeaderItemCustomProps = {
+    buttonContainer: ViewStyle;
+    buttonWrapper: ViewStyle;
+    spacer: ViewStyle;
+    buttonStyle?: ViewStyle;
+    innerStyle?: ViewStyle;
+    labelStyle?: TextStyle & { typescale?: string };
+    emtpyView: ViewStyle;
+};
+
+export const datePickerHeaderItemStyles: ComponentStylePropWithVariants<
+    TextStyle,
+    '',
+    DatePickerHeaderItemCustomProps
+> = {
     buttonContainer: {
         height: 46,
         marginTop: 'spacings.2',
@@ -72,23 +86,23 @@ export const datePickerDockedHeaderStyles: ComponentStylePropWithVariants<
     },
     buttonWrapper: {},
     spacer: { flex: 1 },
-    yearLabelStyle: {
+    labelStyle: {
         typescale: 'typescale.bodyMedium',
         opacity: 0.7,
     },
-    yearButtonStyle: {
+    buttonStyle: {
         alignSelf: 'center',
         marginLeft: 6,
         borderRadius: 'shapes.corner.extraSmall' as unknown as number,
     },
-    yearInnerStyle: {
+    innerStyle: {
         paddingLeft: 0,
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 'shapes.corner.extraSmall' as unknown as number,
     },
-    daysWrapperStyle: {
-        marginHorizontal: 'spacings.3',
+    emtpyView: {
+        width: 30,
     },
 };
 
