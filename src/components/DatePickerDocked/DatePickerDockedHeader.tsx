@@ -13,24 +13,22 @@ const buttonContainerMarginBottom = 8;
 export type CalendarHeaderProps = {
     locale?: string;
     scrollMode: 'horizontal' | 'vertical';
-    onPrev: () => any;
-    onNext: () => any;
     disableWeekDays?: DisableWeekDaysType;
     style?: ViewStyle;
     year: number;
     onPressDropdown: (type: 'month' | 'year' | undefined) => void;
+    onChange: (value: number, type: 'month' | 'year') => void;
     selectingYear: boolean;
     selectingMonth: boolean;
 };
 
 function DatePickerDockedHeader({
     locale = 'en',
-    onPrev,
-    onNext,
     disableWeekDays,
     style: styleProp,
     year,
     onPressDropdown,
+    onChange,
     selectingYear,
     selectingMonth,
 }: CalendarHeaderProps) {
@@ -51,11 +49,19 @@ function DatePickerDockedHeader({
         [onPressDropdown],
     );
 
+    const handleOnPrevious = useCallback(() => {
+        onChange(year - 1, 'year');
+    }, [onChange, year]);
+
+    const handleOnNext = useCallback(() => {
+        onChange(year + 1, 'year');
+    }, [onChange, year]);
+
     return (
         <View style={containerStyle} pointerEvents={'box-none'}>
             <HeaderItem
-                onNext={onNext}
-                onPrev={onPrev}
+                onNext={handleOnNext}
+                onPrev={handleOnPrevious}
                 disabled={selectingMonth}
                 selecting={selectingYear || selectingMonth}
                 type="year"

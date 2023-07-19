@@ -39,8 +39,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         validRange,
         selectedMonth,
         selectedYear,
-        onPrev,
-        onNext,
+        onChange,
     } = props;
     const { View } = useMolecules();
     const monthStyles = useComponentStyles('DatePicker_Month');
@@ -104,13 +103,21 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         [onPressDropdown],
     );
 
+    const handleOnPrevious = useCallback(() => {
+        onChange && onChange(month - 1, 'month');
+    }, [onChange, month]);
+
+    const handleOnNext = useCallback(() => {
+        onChange && onChange(month + 1, 'month');
+    }, [onChange, month]);
+
     return (
         <View style={monthStyle}>
             <View style={headerStyle}>
                 <HeaderItem
                     disabled={!!selectingYear}
-                    onNext={onNext as any}
-                    onPrev={onPrev as any}
+                    onNext={handleOnNext}
+                    onPrev={handleOnPrevious}
                     value={monthName}
                     onPressDropdown={handlePressDropdown}
                     selecting={!!selectingMonth || !!selectingYear}

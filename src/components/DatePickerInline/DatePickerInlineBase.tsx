@@ -134,7 +134,7 @@ function DatePickerInlineBase(props: DatePickerInlineBaseProps) {
                 <YearPicker
                     selectedYear={selectedYear}
                     selectingYear={selectingYear}
-                    onPressYear={onPressYear}
+                    onChange={onPressYear}
                     startYear={startYear || 1800}
                     endYear={endYear || 2200}
                 />

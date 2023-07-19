@@ -96,7 +96,7 @@ export const datePickerHeaderItemStyles: ComponentStylePropWithVariants<
         borderRadius: 'shapes.corner.extraSmall' as unknown as number,
     },
     innerStyle: {
-        paddingLeft: 0,
+        paddingLeft: 'spacings.0',
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 'shapes.corner.extraSmall' as unknown as number,

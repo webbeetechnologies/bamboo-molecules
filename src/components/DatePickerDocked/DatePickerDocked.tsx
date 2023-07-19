@@ -23,8 +23,8 @@ function DatePickerDocked(props: DatePickerDockedProps) {
         endDate,
         date,
         disableWeekDays,
-        startYear,
-        endYear,
+        startYear = 1800,
+        endYear = 2200,
         validRange,
         style,
         triggerRef,
@@ -50,47 +50,29 @@ function DatePickerDocked(props: DatePickerDockedProps) {
         [setPickerType, pickerType],
     );
 
-    const onPressYear = useCallback(
-        (year: number) => {
+    const onDateChange = useCallback(
+        (value: number, type: 'month' | 'year') => {
             setPickerType(undefined);
-            setLocalDate(prevDate => setYear(prevDate, year));
+            if (type === 'month') {
+                if (value > 11) {
+                    if (localDate.getFullYear() !== endYear) {
+                        setLocalDate(prevDate => setYear(prevDate, prevDate.getFullYear() + 1));
+                        setLocalDate(prevDate => setMonth(prevDate, 0));
+                    }
+                } else if (value < 0) {
+                    if (localDate.getFullYear() !== startYear) {
+                        setLocalDate(prevDate => setYear(prevDate, prevDate.getFullYear() - 1));
+                        setLocalDate(prevDate => setMonth(prevDate, 11));
+                    }
+                } else {
+                    setLocalDate(prevDate => setMonth(prevDate, value));
+                }
+            } else {
+                setLocalDate(prevDate => setYear(prevDate, value));
+            }
         },
-        [setPickerType, setLocalDate],
+        [setPickerType, setLocalDate, localDate, startYear, endYear],
     );
-
-    const onPressMonth = useCallback(
-        (month: number) => {
-            setPickerType(undefined);
-            setLocalDate(prevDate => setMonth(prevDate, month));
-        },
-        [setPickerType, setLocalDate],
-    );
-
-    const onPrevYear = useCallback(() => {
-        setLocalDate(prevDate => setYear(prevDate, prevDate.getFullYear() - 1));
-    }, [setLocalDate]);
-
-    const onNextYear = useCallback(() => {
-        setLocalDate(prevDate => setYear(prevDate, prevDate.getFullYear() + 1));
-    }, [setLocalDate]);
-
-    const onPrevMonth = useCallback(() => {
-        if (localDate.getMonth() === 0) {
-            onPrevYear();
-            setLocalDate(prevDate => setMonth(prevDate, 11));
-        } else {
-            setLocalDate(prevDate => setMonth(prevDate, prevDate.getMonth() - 1));
-        }
-    }, [onPrevYear, setLocalDate, localDate]);
-
-    const onNextMonth = useCallback(() => {
-        if (localDate.getMonth() === 11) {
-            onNextYear();
-            setLocalDate(prevDate => setMonth(prevDate, 0));
-        } else {
-            setLocalDate(prevDate => setMonth(prevDate, prevDate.getMonth() + 1));
-        }
-    }, [onNextYear, setLocalDate, localDate]);
 
     // prevent re-rendering all months when something changed we only need the
     // latest version of the props and we don't want the useCallback to change
@@ -141,14 +123,12 @@ function DatePickerDocked(props: DatePickerDockedProps) {
                             onPressDate={onPressDate}
                             scrollMode={scrollMode}
                             disableWeekDays={disableWeekDays}
-                            onPrev={onPrevMonth}
-                            onNext={onNextMonth}
+                            onChange={onDateChange}
                         />
                     )}
                     renderHeader={() => (
                         <CalendarHeaderComponent
-                            onPrev={onPrevYear}
-                            onNext={onNextYear}
+                            onChange={onDateChange}
                             scrollMode={scrollMode}
                             disableWeekDays={disableWeekDays}
                             year={localDate.getFullYear()}
@@ -162,16 +142,16 @@ function DatePickerDocked(props: DatePickerDockedProps) {
                     <YearPicker
                         selectedYear={localDate.getFullYear()}
                         selectingYear={pickerType === 'year'}
-                        onPressYear={onPressYear}
-                        startYear={startYear || 1800}
-                        endYear={endYear || 2200}
+                        onChange={onDateChange}
+                        startYear={startYear}
+                        endYear={endYear}
                     />
                 )}
                 {pickerType === 'month' && (
                     <MonthPicker
                         selectedMonth={localDate.getMonth()}
                         selectingMonth={pickerType === 'month'}
-                        onPressMonth={onPressMonth}
+                        onChange={onDateChange}
                     />
                 )}
             </View>

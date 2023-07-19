@@ -8,11 +8,11 @@ import { MONTHS_DATA } from './utils';
 export default function MonthPicker({
     selectedMonth,
     selectingMonth,
-    onPressMonth,
+    onChange,
 }: {
     selectedMonth: number | undefined;
     selectingMonth: boolean;
-    onPressMonth: (month: number) => any;
+    onChange: (month: number, type: 'month' | 'year') => any;
 }) {
     const { FlatList, View, HorizontalDivider } = useMolecules();
     const monthPickerStyles = useComponentStyles('DatePickerDocked_MonthPicker');
@@ -33,6 +33,13 @@ export default function MonthPicker({
         };
     }, [selectingMonth, monthPickerStyles]);
 
+    const handleOnChange = useCallback(
+        (month: number) => {
+            onChange(month, 'month');
+        },
+        [onChange],
+    );
+
     return (
         <>
             {selectingMonth && (
@@ -46,7 +53,7 @@ export default function MonthPicker({
                             <Month
                                 month={item}
                                 selected={selectedMonth === item}
-                                onPressMonth={onPressMonth}
+                                onPressMonth={handleOnChange}
                                 monthStyles={monthStyle}
                             />
                         )}

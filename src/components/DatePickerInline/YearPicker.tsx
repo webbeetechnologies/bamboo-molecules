@@ -1,4 +1,4 @@
-import { useRef, useEffect, memo, useMemo } from 'react';
+import { useRef, useEffect, memo, useMemo, useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { FlatListRef } from '../FlatList';
@@ -9,15 +9,15 @@ const ITEM_HEIGHT = 62;
 export default function YearPicker({
     selectedYear,
     selectingYear,
-    onPressYear,
+    onChange,
     startYear,
     endYear,
 }: {
     selectedYear: number | undefined;
     selectingYear: boolean;
-    onPressYear: (year: number) => any;
-    startYear: number;
-    endYear: number;
+    onChange: (year: number, type: 'month' | 'year') => any;
+    startYear?: number;
+    endYear?: number;
 }) {
     const { FlatList, View, HorizontalDivider } = useMolecules();
     const yearPickerStyles = useComponentStyles('DatePicker_YearPicker');
@@ -27,13 +27,13 @@ export default function YearPicker({
     // scroll to selected year
     useEffect(() => {
         if (flatList.current && selectingYear && selectedYear) {
-            const indexToGo = selectedYear - startYear;
+            const indexToGo = selectedYear - years[0];
             flatList.current.scrollToOffset({
                 offset: (indexToGo / 3) * ITEM_HEIGHT - ITEM_HEIGHT,
                 animated: false,
             });
         }
-    }, [flatList, selectedYear, selectingYear, startYear]);
+    }, [flatList, selectedYear, selectingYear, years]);
 
     const { containerStyle, yearStyle } = useMemo(() => {
         const { backgroundColor, ...rest } = yearPickerStyles;
@@ -49,6 +49,13 @@ export default function YearPicker({
         };
     }, [selectingYear, yearPickerStyles]);
 
+    const handleOnChange = useCallback(
+        (year: number) => {
+            onChange(year, 'year');
+        },
+        [onChange],
+    );
+
     return (
         <>
             {selectingYear && (
@@ -62,7 +69,7 @@ export default function YearPicker({
                             <Year
                                 year={item}
                                 selected={selectedYear === item}
-                                onPressYear={onPressYear}
+                                onPressYear={handleOnChange}
                                 yearStyles={yearStyle}
                             />
                         )}

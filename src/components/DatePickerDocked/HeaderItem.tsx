@@ -67,8 +67,10 @@ function HeaderItem({
                         type="material-community"
                         name="chevron-left"
                         size="sm"
+                        // Todo: Translate
                         accessibilityLabel={'Previous'}
                         onPress={onPrev}
+                        disabled={value === 1800}
                     />
                 </View>
             ) : (
@@ -99,8 +101,10 @@ function HeaderItem({
                     <IconButton
                         name="chevron-right"
                         size="sm"
+                        // Todo: Translate
                         accessibilityLabel={'Next'}
                         onPress={onNext}
+                        disabled={value === 2200}
                     />
                 </View>
             ) : (
