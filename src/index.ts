@@ -72,6 +72,7 @@ export {
     CardTextProps,
     CardActionsProps,
     CardHeaderProps,
+    Select,
     SelectProps,
     SelectHandles,
     SelectRenderItem,
