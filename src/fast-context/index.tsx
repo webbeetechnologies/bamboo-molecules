@@ -10,14 +10,10 @@ import {
 } from 'react';
 import typedMemo from '../hocs/typedMemo';
 
-export type Store = {
-    currentIndex: number;
-};
-
-type UseStoreDataReturnType<IStore extends Record<string, any> = {}> = {
-    get: () => IStore;
-    set: (value: (prev: IStore) => Partial<IStore>) => void;
-    store: MutableRefObject<IStore>;
+type UseStoreDataReturnType<T> = {
+    get: () => T;
+    set: (value: (prev: T) => Partial<T>) => void;
+    store: MutableRefObject<T>;
     subscribe: (callback: () => void) => () => void;
 };
 
@@ -50,30 +46,36 @@ const useStoreData = <IStore extends Record<string, any> = {}>(
     };
 };
 
-export const createFastContext = <IStore extends Record<string, any> = {}, TDefaultValue = any>(
-    defaultValue: TDefaultValue,
-) => createContext<UseStoreDataReturnType<IStore> | TDefaultValue>(defaultValue);
+// TODO - fix typescript issues
+export const createFastContext = <T,>(defaultValue: T) => {
+    const context = createContext<UseStoreDataReturnType<T>>(
+        defaultValue as unknown as UseStoreDataReturnType<T>,
+    );
 
-export const createProvider = <IStore extends Record<string, any> = {}>(
-    StoreContext: Context<IStore>,
-) =>
-    typedMemo(({ value, children }: { value: IStore; children: ReactNode }) => {
+    return {
+        // this will never cause rerender if we use it with useContext because it's just a ref
+        RefContext: context,
+        Provider: createProvider<T>(context as unknown as Context<T>),
+        useSelector: createUseContext<T>(context as unknown as Context<T>),
+    };
+};
+
+export const createProvider = <T,>(StoreContext: Context<T>) =>
+    typedMemo(({ value, children }: { value: T; children: ReactNode }) => {
         return (
-            <StoreContext.Provider value={useStoreData<IStore>(value) as any}>
+            <StoreContext.Provider value={useStoreData<T>(value) as any}>
                 {children}
             </StoreContext.Provider>
         );
     });
 
-export const createUseContext = <IStore extends Record<string, any>>(
-    _Context: Context<UseStoreDataReturnType<IStore> | null>,
-) => {
-    return <SelectorOutput,>(selector: (store: IStore) => SelectorOutput) =>
-        useStore<SelectorOutput, IStore>(_Context, selector);
+export const createUseContext = <T,>(_Context: Context<T>) => {
+    return <SelectorOutput,>(selector: (store: T) => SelectorOutput) =>
+        useStore<SelectorOutput, T>(_Context, selector);
 };
 
 export function useStore<SelectorOutput, IStore extends Record<string, any> = {}>(
-    _Context: Context<UseStoreDataReturnType<IStore> | null>,
+    _Context: Context<IStore>,
     selector: (store: IStore) => SelectorOutput,
 ): [SelectorOutput, (value: (prev: IStore) => Partial<IStore>) => void] {
     const store = useContext(_Context);
