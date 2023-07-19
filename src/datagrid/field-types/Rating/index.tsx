@@ -3,12 +3,13 @@ import EditorRenderer from './EditorRenderer';
 import ValueRenderer from './ValueRenderer';
 import type { Value, Config } from './types';
 
-export const SingleLineTextFieldType: FieldType<Value, Config> = {
-    type: 'singleLineText',
-    title: 'Single line text',
+export const RatingFieldType: FieldType<Value, Config> = {
+    type: 'rating',
+    title: 'Rating',
     icon: {
-        name: 'format-letter-case',
+        name: 'star-outline',
     },
     EditorRenderer,
     ValueRenderer,
+    displayEditorOnHover: true,
 };

@@ -3,12 +3,13 @@ import EditorRenderer from './EditorRenderer';
 import ValueRenderer from './ValueRenderer';
 import type { Value, Config } from './types';
 
-export const SingleLineTextFieldType: FieldType<Value, Config> = {
-    type: 'singleLineText',
-    title: 'Single line text',
+export const CheckboxFieldType: FieldType<Value, Config> = {
+    type: 'checkbox',
+    title: 'Checkbox',
     icon: {
-        name: 'format-letter-case',
+        name: 'checkbox-outline',
     },
     EditorRenderer,
     ValueRenderer,
+    displayEditorOnHover: true,
 };

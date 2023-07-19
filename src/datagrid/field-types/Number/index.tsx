@@ -3,11 +3,11 @@ import EditorRenderer from './EditorRenderer';
 import ValueRenderer from './ValueRenderer';
 import type { Value, Config } from './types';
 
-export const SingleLineTextFieldType: FieldType<Value, Config> = {
-    type: 'singleLineText',
-    title: 'Single line text',
+export const NumberFieldType: FieldType<Value, Config> = {
+    type: 'number',
+    title: 'Number',
     icon: {
-        name: 'format-letter-case',
+        name: 'pound',
     },
     EditorRenderer,
     ValueRenderer,
