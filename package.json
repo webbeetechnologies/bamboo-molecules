@@ -24,6 +24,8 @@
   },
   "files": [
     "lib",
+    "src",
+    "components",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
