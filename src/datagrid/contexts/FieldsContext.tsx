@@ -2,7 +2,11 @@ import { memo, ReactNode, useMemo } from 'react';
 import type { Field } from '../types';
 import { keyBy } from '../../utils';
 
-import { createFastContext, createUseContext, createProvider } from '@bambooapp/bamboo-molecules';
+import {
+    createFastContext,
+    createUseContext,
+    createProvider,
+} from '@bambooapp/bamboo-molecules/fast-context';
 
 export type FieldConfigs = Record<
     string,

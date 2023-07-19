@@ -2,7 +2,11 @@ import { memo, ReactNode, useCallback, useMemo } from 'react';
 import type { Row } from '../types';
 import { keyBy } from '../../utils';
 
-import { createFastContext, createUseContext, createProvider } from '@bambooapp/bamboo-molecules';
+import {
+    createFastContext,
+    createUseContext,
+    createProvider,
+} from '@bambooapp/bamboo-molecules/fast-context';
 
 export type RecordsContextType = {
     records: Record<string, Row>;
