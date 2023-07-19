@@ -12,63 +12,23 @@ import {
     useImperativeHandle,
     useMemo,
     useRef,
-    useSyncExternalStore,
 } from 'react';
 import type { FlatList } from 'react-native';
 import type { SectionList } from 'react-native';
 import { Platform } from 'react-native';
+import { createFastContext, createProvider, createUseContext } from '../fast-context';
 
 export type Store = {
     currentIndex: number;
 };
 
-function useStoreData() {
-    const store = useRef({
-        currentIndex: 0,
-    });
+const defaultValue = { currentIndex: 0 };
 
-    const get = useCallback(() => store.current, []);
+const StoreContext = createFastContext<Store>(null);
 
-    const subscribers = useRef(new Set<() => void>());
+const Provider = createProvider<Store>(StoreContext);
 
-    const set = useCallback((value: (prev: Store) => Partial<Store>) => {
-        store.current = { ...store.current, ...value(store.current) };
-
-        subscribers.current.forEach(callback => callback());
-    }, []);
-
-    const subscribe = useCallback((callback: () => void) => {
-        subscribers.current.add(callback);
-
-        return () => subscribers.current.delete(callback);
-    }, []);
-
-    return {
-        get,
-        set,
-        subscribe,
-        store,
-    };
-}
-
-const StoreContext = createContext<ReturnType<typeof useStoreData> | null>(null);
-
-function Provider({ children }: { children: ReactNode }) {
-    return <StoreContext.Provider value={useStoreData()}>{children}</StoreContext.Provider>;
-}
-
-export function useStore<SelectorOutput>(
-    selector: (store: Store) => SelectorOutput,
-): [SelectorOutput, (value: (prev: Store) => Partial<Store>) => void] {
-    const store = useContext(StoreContext);
-    if (!store) {
-        throw new Error('Store not found');
-    }
-
-    const state = useSyncExternalStore(store.subscribe, () => selector(store.get()));
-
-    return [state, store.set];
-}
+export const useStore = createUseContext<Store>(StoreContext);
 
 const withKeyboardAccessibility = <P extends Record<string, any>>(
     Component: ComponentType<P>,
@@ -138,7 +98,7 @@ const withKeyboardAccessibility = <P extends Record<string, any>>(
                 : {};
 
         return (
-            <Provider>
+            <Provider value={defaultValue}>
                 <Wrapper
                     {...(accessibilityWrapperProps as Omit<AccessibilityWrapperProps, 'children'>)}>
                     <Component {...(props as P)} ref={componentRef} />
