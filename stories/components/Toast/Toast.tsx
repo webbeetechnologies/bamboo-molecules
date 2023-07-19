@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
-import { useMolecules, Toast } from '../../../src';
-import type { MaterialToastProps } from '../../../src/components';
+import { useMolecules, Toast, MaterialToastProps } from '../../../src';
 
 export type Props = MaterialToastProps & {};
 

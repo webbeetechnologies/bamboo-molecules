@@ -48,6 +48,8 @@ export type Props<
     actionSheetProps?: Omit<ActionSheetProps, 'children' | 'isOpen' | 'onClose' | 'onOpen'>;
     dialogProps?: Omit<DialogProps, 'isOpen' | 'children'>;
     triggerRef: any;
+
+    maxHeight?: number;
 };
 
 const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
@@ -63,7 +65,9 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     containerStyle,
     triggerRef,
     hideOnSelect = true,
+    maxHeight,
     style,
+    onQueryChange,
     ...optionListProps
 }: Props<TItem>) => {
     const { OptionList, ActionSheet, Dialog, DropdownListPopover } = useMolecules();
@@ -78,8 +82,9 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
             resolvedMode === DropdownListMode.Popover ? popoverContainer : {},
             restStyles,
             containerStyle,
+            maxHeight ? { maxHeight } : {},
         ]);
-    }, [componentStyles, resolvedMode, containerStyle]);
+    }, [componentStyles, resolvedMode, containerStyle, maxHeight]);
 
     const [isOpen, setIsOpen] = useControlledValue({
         value: isOpenProp,
@@ -87,8 +92,12 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     });
 
     const onClose = useCallback(() => {
-        if (isOpen) setIsOpen(false);
-    }, [isOpen, setIsOpen]);
+        if (isOpen) {
+            setIsOpen(false);
+
+            onQueryChange?.('');
+        }
+    }, [isOpen, onQueryChange, setIsOpen]);
 
     const onOpen = useCallback(() => {
         if (!isOpen) setIsOpen(true);
@@ -100,9 +109,10 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
 
             if (hideOnSelect) {
                 setIsOpen(false);
+                onQueryChange?.('');
             }
         },
-        [onSelectionChangeProp, hideOnSelect, setIsOpen],
+        [onSelectionChangeProp, hideOnSelect, setIsOpen, onQueryChange],
     );
 
     const [WrapperComponent, props] = useMemo(() => {
@@ -131,10 +141,13 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     return (
         <WrapperComponent {...(props as any)}>
             <OptionList
+                enableKeyboardNavigation
+                onCancel={onClose}
                 {...optionListProps}
+                style={listStyles}
                 records={records}
                 onSelectionChange={onSelectionChange}
-                style={listStyles}
+                onQueryChange={onQueryChange}
             />
         </WrapperComponent>
     );

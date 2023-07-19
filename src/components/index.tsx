@@ -60,7 +60,7 @@ export * from './Animations';
 
 export { IconButton, IconButtonProps, iconButtonStyles } from './IconButton';
 export { default as Checkbox, CheckboxProps, checkboxStyles, CheckboxItemProps } from './Checkbox';
-export { TextInput, TextInputProps, textInputStyles } from './TextInput';
+export { TextInput, TextInputProps, TextInputElementProps, textInputStyles } from './TextInput';
 export { NumberInput, NumberInputProps } from './NumberInput';
 export { FilePicker, FilePickerProps } from './FilePicker';
 export { HelperText, HelperTextProps, helperTextStyles } from './HelperText';
@@ -182,13 +182,8 @@ export {
 
 export * from './StateLayer';
 
-export {
-    MaterialToast,
-    ToastContainer,
-    MaterialToastProps,
-    ToastContainerProps,
-    Toast,
-    materialToastStyles,
-} from './Toast';
-
 export * from './Menu';
+
+export * from './Avatar';
+
+export * from './Tabs';

@@ -40,7 +40,7 @@ const _MenuItem = (
     const { closeOnSelect, onClose } = useContext(MenuContext);
 
     const componentStyles = useComponentStyles(
-        'MenuItem',
+        'Menu_Item',
         [{ text: textProps?.style || {} }, style],
         {
             size,
@@ -114,6 +114,6 @@ const _MenuItem = (
 
 const MenuItem = memo(withActionState(forwardRef(_MenuItem)));
 
-MenuItem.displayName = 'MenuItem';
+MenuItem.displayName = 'Menu_Item';
 
 export default MenuItem;

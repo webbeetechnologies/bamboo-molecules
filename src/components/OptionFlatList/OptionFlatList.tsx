@@ -1,8 +1,10 @@
 import {
     ComponentType,
+    forwardRef,
     memo,
     PropsWithoutRef,
     ReactElement,
+    ReactNode,
     RefAttributes,
     useCallback,
     useMemo,
@@ -18,6 +20,8 @@ import {
     UseSearchableProps,
 } from '../../hooks';
 import type { FlatListProps } from '../FlatList';
+import withKeyboardAccessibility, { useStore } from '../../hocs/withKeyboardAccessibility';
+import { typedMemo } from '../../hocs';
 
 type DefaultItemT = {
     id: string | number;
@@ -30,8 +34,12 @@ export type IOptionFlatList = <ItemType extends DefaultItemT = DefaultItemT>(
     props: PropsWithoutRef<Props<ItemType> & RefAttributes<FlatList<ItemType>>>,
 ) => ReactElement;
 
+export type OptionFlatListRenderItemInfo<TItem = DefaultItemT> = ListRenderItemInfo<TItem> & {
+    focused: boolean;
+};
+
 export type Props<TItem extends DefaultItemT = DefaultItemT> = UseSearchableProps &
-    Omit<FlatListProps<TItem>, 'sections'> & {
+    Omit<FlatListProps<TItem>, 'sections' | 'renderItem'> & {
         records: TItem[];
         containerStyle?: ViewStyle;
         searchInputContainerStyle?: ViewStyle;
@@ -52,26 +60,37 @@ export type Props<TItem extends DefaultItemT = DefaultItemT> = UseSearchableProp
          * */
         onSelectionChange?: (item: TItem | TItem[]) => void;
         customFlatList?: ComponentType<FlatListProps<TItem>>;
+        renderItem: (
+            info: ListRenderItemInfo<TItem> & {
+                onPress: () => void;
+                focused: boolean;
+            },
+        ) => ReactNode;
+        enableKeyboardNavigation?: boolean;
+        onCancel?: () => void;
     };
 
-const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>({
-    query,
-    onQueryChange,
-    searchInputProps,
-    searchable,
-    containerStyle = {},
-    searchInputContainerStyle = {},
-    style: styleProp,
-    records,
-    multiple = false,
-    selectable,
-    selection: selectionProp,
-    onSelectionChange: onSelectionChangeProp,
-    renderItem: renderItemProp,
-    customFlatList: CustomFlatList,
-    ...rest
-}: Props<TItem>) => {
-    const { FlatList, View, TouchableRipple } = useMolecules();
+const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
+    {
+        query,
+        onQueryChange,
+        searchInputProps,
+        searchable,
+        containerStyle = {},
+        searchInputContainerStyle = {},
+        style: styleProp,
+        records,
+        multiple = false,
+        selectable,
+        selection: selectionProp,
+        onSelectionChange: onSelectionChangeProp,
+        renderItem: renderItemProp,
+        customFlatList: CustomFlatList,
+        ...rest
+    }: Props<TItem>,
+    ref: any,
+) => {
+    const { FlatList, View } = useMolecules();
     const FlatListComponent = CustomFlatList || FlatList;
 
     const SearchField = useSearchable({ query, onQueryChange, searchable, searchInputProps });
@@ -117,17 +136,16 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>({
 
     const renderItem = useCallback(
         (info: ListRenderItemInfo<TItem>) => {
-            if (!renderItemProp) return null;
-
-            return selectable && info.item?.selectable !== false ? (
-                <TouchableRipple onPress={() => onPressItem(info.item)}>
-                    {renderItemProp(info)}
-                </TouchableRipple>
-            ) : (
-                renderItemProp(info)
+            return (
+                <OptionListItem
+                    renderItem={renderItemProp}
+                    info={info}
+                    onPressItem={onPressItem}
+                    selectable={selectable}
+                />
             );
         },
-        [TouchableRipple, onPressItem, renderItemProp, selectable],
+        [onPressItem, renderItemProp, selectable],
     );
 
     const keyExtractor = useCallback((item: TItem) => `${item.id}`, []);
@@ -136,6 +154,7 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>({
         <View style={containerStyles}>
             <>{SearchField && <View style={searchInputContainerStyles}>{SearchField}</View>}</>
             <FlatListComponent
+                ref={ref}
                 keyExtractor={keyExtractor}
                 {...rest}
                 data={records}
@@ -146,4 +165,50 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>({
     );
 };
 
-export default memo(OptionFlatList) as IOptionFlatList;
+type OptionListItemProps<TItem extends DefaultItemT = DefaultItemT> = Pick<
+    Props<TItem>,
+    'renderItem'
+> & {
+    info: ListRenderItemInfo<TItem>;
+    onPressItem?: (item: TItem) => void;
+    selectable?: boolean;
+};
+
+const OptionListItem = typedMemo(
+    <TItem extends DefaultItemT = DefaultItemT>({
+        info,
+        renderItem,
+        selectable,
+        onPressItem,
+    }: OptionListItemProps<TItem>) => {
+        const { TouchableRipple } = useMolecules();
+
+        const [focused] = useStore(state => {
+            return state.currentIndex === info.index;
+        });
+        const onPress = useCallback(() => {
+            onPressItem?.(info.item);
+        }, [info.item, onPressItem]);
+
+        const renderItemInfo = useMemo(
+            () => ({
+                ...info,
+                focused,
+                onPress,
+            }),
+            [focused, info, onPress],
+        );
+
+        if (selectable && info.item?.selectable !== false) {
+            return (
+                <TouchableRipple onPress={onPress}>{renderItem(renderItemInfo)}</TouchableRipple>
+            );
+        }
+
+        return <>{renderItem(renderItemInfo)}</>;
+    },
+);
+
+export default memo(
+    withKeyboardAccessibility(forwardRef(OptionFlatList), 'records', true),
+) as IOptionFlatList;

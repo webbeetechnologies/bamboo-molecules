@@ -1,8 +1,8 @@
 import { useRef, useEffect, ReactNode, useMemo, useState, useCallback } from 'react';
 import { Animated, LayoutChangeEvent, StyleProp, TextStyle } from 'react-native';
+import type { TextProps } from '@bambooapp/bamboo-atoms';
 
 import { useComponentStyles } from '../../hooks';
-import type { TextProps } from '../index';
 
 export type Props = TextProps & {
     /**

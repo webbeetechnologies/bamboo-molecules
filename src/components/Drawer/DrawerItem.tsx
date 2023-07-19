@@ -4,7 +4,8 @@ import type { WithElements } from '../../types';
 import type { TouchableRippleProps } from '../TouchableRipple';
 import type { CallbackActionState } from '../../hocs';
 import { withActionState } from '../../hocs';
-import type { ViewStyle } from 'react-native';
+import type { TextStyle, ViewStyle } from 'react-native';
+import type { TextProps } from '@bambooapp/bamboo-atoms';
 
 export type DrawerItemElementProps = { color: string };
 
@@ -20,8 +21,11 @@ export type Props = Omit<TouchableRippleProps, 'children' | 'disabled'> &
         leftElementContainerStyle?: ViewStyle;
         rightElementContainerStyle?: ViewStyle;
         contentStyle?: ViewStyle;
-        labelStyle?: ViewStyle;
+        labelStyle?: TextStyle;
+        labelProps?: Omit<TextProps, 'children' | 'style'>;
     };
+
+const emptyObj = {};
 
 const DrawerItem = (
     {
@@ -32,10 +36,11 @@ const DrawerItem = (
         style,
         active = false,
         hovered = false,
-        leftElementContainerStyle = {},
-        rightElementContainerStyle = {},
-        labelStyle: labelStyleProp = {},
-        contentStyle: contentStyleProp = {},
+        leftElementContainerStyle = emptyObj,
+        rightElementContainerStyle = emptyObj,
+        labelStyle: labelStyleProp = emptyObj,
+        contentStyle: contentStyleProp = emptyObj,
+        labelProps,
         ...rest
     }: Props,
     ref: any,
@@ -124,7 +129,7 @@ const DrawerItem = (
             <>
                 {leftElement}
                 <View style={contentStyle}>
-                    <Text style={labelStyle} selectable={false}>
+                    <Text style={labelStyle} selectable={false} {...labelProps}>
                         {label}
                     </Text>
                     {children}

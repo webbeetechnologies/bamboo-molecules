@@ -69,12 +69,14 @@ import {
     ScrollView,
     DataTable,
     StateLayer,
-    MaterialToast,
-    ToastContainer,
     Slider,
     RangeSlider,
     Menu,
+    Avatar,
+    Tabs,
 } from '../../components';
+
+import { MaterialToast, ToastContainer } from '../../components/Toast';
 
 import type { DefaultComponents, ProvideComponentsProps } from './types';
 
@@ -153,6 +155,8 @@ const defaultComponents: DefaultComponents = {
     Slider,
     RangeSlider,
     Menu,
+    Avatar,
+    Tabs,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

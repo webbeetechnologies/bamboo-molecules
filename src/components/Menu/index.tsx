@@ -11,4 +11,4 @@ Menu.displayName = 'Menu';
 
 export { Props as MenuProps } from './Menu';
 export { Props as MenuItemProps } from './MenuItem';
-export { menuStyles } from './utils';
+export { menuStyles, menuItemStyles } from './utils';

@@ -1,20 +1,20 @@
 import { ForwardedRef, forwardRef, memo, RefAttributes, useMemo } from 'react';
 import type { ScrollViewProps } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView as RNScrollView } from 'react-native-gesture-handler';
 
 import { useComponentStyles } from '../../hooks';
 
-export type ScrollViewRef = ScrollView;
+export type ScrollViewRef = RNScrollView;
 
 export type Props = ScrollViewProps & RefAttributes<ScrollViewRef> & {};
 
-const ComponentTemplate = (
+const ScrollView = (
     { style, contentContainerStyle: contentContainerStyleProp, ...rest }: Props,
     ref: ForwardedRef<ScrollViewRef>,
 ) => {
     const componentStyles = useComponentStyles('ScrollView', [
         style,
-        { contentContainerStyle: contentContainerStyleProp },
+        { contentContainerStyle: contentContainerStyleProp || {} },
     ]);
 
     const { containerStyle, contentContainerStyle } = useMemo(() => {
@@ -27,7 +27,7 @@ const ComponentTemplate = (
     }, [componentStyles]);
 
     return (
-        <ScrollView
+        <RNScrollView
             ref={ref}
             style={containerStyle}
             contentContainerStyle={contentContainerStyle}
@@ -36,4 +36,4 @@ const ComponentTemplate = (
     );
 };
 
-export default memo(forwardRef(ComponentTemplate));
+export default memo(forwardRef(ScrollView));
