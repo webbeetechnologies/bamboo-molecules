@@ -34,7 +34,7 @@ function DatePickerDockedHeader({
     selectingMonth,
 }: CalendarHeaderProps) {
     const { IconButton, View, TouchableRipple, Text } = useMolecules();
-    const componentStyles = useComponentStyles('DatePicker_DockedHeader', styleProp);
+    const componentStyles = useComponentStyles('DatePickerDocked_Header', styleProp);
 
     const {
         containerStyle,
@@ -64,8 +64,8 @@ function DatePickerDockedHeader({
             buttonContainerStyle: buttonContainer,
             buttonWrapperStyle: buttonWrapper,
             spacerStyle: spacer,
-            yearButtonStyle: [yearButton, { alignSelf: 'center' }],
-            yearInnerStyle: [yearInner, { paddingLeft: 0 }],
+            yearButtonStyle: yearButton,
+            yearInnerStyle: yearInner,
             yearLabelStyle: yearLabel,
             iconContainerStyle: { opacity: 1 },
             daysWrapperStyle: daysWrapper,

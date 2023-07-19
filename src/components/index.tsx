@@ -99,6 +99,7 @@ export {
     DatePickerDocked,
     datePickerDockedStyles,
     datePickerMonthPickerStyles,
+    datePickerDockedMonthStyles,
     datePickerDockedHeaderStyles,
     DatePickerDockedProps,
 } from './DatePickerDocked';

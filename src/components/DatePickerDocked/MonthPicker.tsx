@@ -1,4 +1,4 @@
-import { useRef, memo, useMemo } from 'react';
+import { useRef, memo, useMemo, useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { FlatListRef } from '../FlatList';
@@ -15,7 +15,7 @@ export default function MonthPicker({
     onPressMonth: (month: number) => any;
 }) {
     const { FlatList, View, HorizontalDivider } = useMolecules();
-    const monthPickerStyles = useComponentStyles('DatePicker_MonthPicker');
+    const monthPickerStyles = useComponentStyles('DatePickerDocked_MonthPicker');
     const flatList = useRef<FlatListRef<number> | null>(null);
     const months = range(0, 11);
 
@@ -70,8 +70,18 @@ function MonthPure({
     monthStyles: Record<string, any>;
 }) {
     const { TouchableRipple, Text, View, Icon } = useMolecules();
-
-    const { containerStyle, monthInnerStyle, monthLabelStyle, monthButtonStyle } = useMemo(() => {
+    const montLocalStyles = useComponentStyles('DatePickerDocked_Month', monthStyles, {
+        states: {
+            selected,
+        },
+    });
+    const {
+        containerStyle,
+        monthInnerStyle,
+        monthLabelStyle,
+        monthButtonStyle,
+        accessibilityState,
+    } = useMemo(() => {
         const {
             month: monthStyle,
             monthInner,
@@ -79,22 +89,28 @@ function MonthPure({
             selectedMonth,
             selectedMonthInner,
             monthButton,
-        } = monthStyles;
+        } = montLocalStyles;
 
         return {
             containerStyle: monthStyle,
             monthInnerStyle: [monthInner, selected ? selectedMonthInner : null],
             monthLabelStyle: [monthLabel, selected ? selectedMonth : null],
             monthButtonStyle: monthButton,
+            accessibilityState: { selected },
         };
-    }, [selected, monthStyles]);
+    }, [selected, montLocalStyles]);
+
+    const handleMonthPress = useCallback(() => {
+        onPressMonth(month);
+    }, [onPressMonth, month]);
 
     return (
         <View style={containerStyle}>
             <TouchableRipple
-                onPress={() => onPressMonth(month)}
+                onPress={handleMonthPress}
                 accessibilityRole="button"
                 accessibilityLabel={String(month)}
+                accessibilityState={accessibilityState}
                 style={monthButtonStyle}>
                 <View style={monthInnerStyle}>
                     {selected ? (

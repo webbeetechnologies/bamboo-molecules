@@ -77,12 +77,12 @@ export const datePickerDockedHeaderStyles: ComponentStylePropWithVariants<
         opacity: 0.7,
     },
     yearButtonStyle: {
-        alignSelf: 'flex-start',
+        alignSelf: 'center',
         marginLeft: 6,
         borderRadius: 'shapes.corner.extraSmall' as unknown as number,
     },
     yearInnerStyle: {
-        paddingLeft: 'spacings.4',
+        paddingLeft: 0,
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 'shapes.corner.extraSmall' as unknown as number,
@@ -113,7 +113,7 @@ export const datePickerMonthPickerStyles: ComponentStylePropWithVariants<
         justifyContent: 'center',
         alignItems: 'flex-start',
     },
-    selectedMonth: { color: 'colors.onPrimary' },
+    selectedMonth: { color: 'colors.onSurface' },
     monthButton: {
         width: '100%',
         overflow: 'hidden',
@@ -124,7 +124,38 @@ export const datePickerMonthPickerStyles: ComponentStylePropWithVariants<
         justifyContent: 'flex-start',
         flexDirection: 'row',
     },
-    selectedMonthInner: { backgroundColor: 'colors.primary' },
+    selectedMonthInner: { backgroundColor: 'colors.surfaceVariant' },
+    monthLabel: {
+        fontSize: 16,
+    },
+};
+
+type DatePickerMonthCustomProps = DatePickerMonthPickerCustomProps;
+
+export const datePickerDockedMonthStyles: ComponentStylePropWithVariants<
+    TextStyle,
+    'selected',
+    DatePickerMonthCustomProps
+> = {
+    backgroundColor: 'colors.surface',
+
+    month: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+    },
+    selectedMonth: { color: 'colors.onSurface' },
+    monthButton: {
+        width: '100%',
+        overflow: 'hidden',
+    },
+    monthInner: {
+        height: 46,
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        flexDirection: 'row',
+    },
+    selectedMonthInner: { backgroundColor: 'colors.surfaceVariant' },
     monthLabel: {
         fontSize: 16,
     },

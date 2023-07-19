@@ -11,6 +11,9 @@ import type { SingleChange, RangeChange, MultiChange } from '../DatePickerInline
 import MonthPicker from './MonthPicker';
 import type { DatePickerDockedProps } from './types';
 
+const MonthComponent = memo(Month);
+const CalendarHeaderComponent = memo(CalendarHeader);
+
 function DatePickerDocked(props: DatePickerDockedProps) {
     const {
         locale = 'en',
@@ -122,10 +125,9 @@ function DatePickerDocked(props: DatePickerDockedProps) {
                     selectedYear={selectedYear}
                     scrollMode={scrollMode}
                     renderItem={({ index }) => (
-                        <Month
+                        <MonthComponent
                             locale={locale}
                             mode="single"
-                            key={index}
                             validRange={validRange}
                             index={index}
                             startDate={startDate}
@@ -145,7 +147,7 @@ function DatePickerDocked(props: DatePickerDockedProps) {
                         />
                     )}
                     renderHeader={() => (
-                        <CalendarHeader
+                        <CalendarHeaderComponent
                             onPrev={onPrevYear}
                             onNext={onNextYear}
                             scrollMode={scrollMode}
