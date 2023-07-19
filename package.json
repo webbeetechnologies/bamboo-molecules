@@ -1,6 +1,6 @@
 {
   "name": "@bambooapp/bamboo-molecules",
-  "version": "0.1.64",
+  "version": "0.1.65",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/webbeetechnologies/bamboo-molecules.git"
@@ -26,6 +26,7 @@
     "lib",
     "src",
     "datagrid",
+    "components",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
