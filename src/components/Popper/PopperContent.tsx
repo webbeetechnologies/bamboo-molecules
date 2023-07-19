@@ -155,9 +155,7 @@ const PopperContent = (
                     />
                 ))}
             <Surface elevation={2} style={containerStyle} {...rest} ref={ref} onLayout={onUpdate}>
-                <Text style={contentTextStyles} numberOfLines={1}>
-                    {restElements}
-                </Text>
+                <Text style={contentTextStyles}>{restElements}</Text>
             </Surface>
         </View>
     );
