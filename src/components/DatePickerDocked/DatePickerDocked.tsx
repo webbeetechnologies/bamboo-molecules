@@ -1,13 +1,12 @@
 import { memo, useCallback, useMemo, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { useComponentStyles, useLatest, useMolecules } from '../../hooks';
+import { useComponentStyles, useMolecules } from '../../hooks';
 import { getInitialIndex } from '../DatePickerInline/dateUtils';
 import Swiper from '../DatePickerInline/Swiper';
 import Month from './Month';
 import CalendarHeader from './DatePickerDockedHeader';
 import YearPicker from '../DatePickerInline/YearPicker';
-import type { SingleChange, RangeChange, MultiChange } from '../DatePickerInline/types';
 import MonthPicker from './MonthPicker';
 import type { DatePickerDockedProps } from './types';
 import { setMonth, setYear } from 'date-fns';
@@ -39,13 +38,13 @@ function DatePickerDocked(props: DatePickerDockedProps) {
             isOpen={isOpen}
             onClose={onToggle}>
             <Provider value={defaultValue}>
-                <DatePickerDockedBase {...props} />
+                <DatePickerDockedBaseComponent {...props} />
             </Provider>
         </Popover>
     );
 }
 
-function DatePickerDockedBase(props: DatePickerDockedProps) {
+const DatePickerDockedBase = (props: DatePickerDockedProps) => {
     const {
         locale = 'en',
         onChange,
@@ -108,18 +107,12 @@ function DatePickerDockedBase(props: DatePickerDockedProps) {
         [localDate, setStore, endDateYear, startDateYear],
     );
 
-    // prevent re-rendering all months when something changed we only need the
-    // latest version of the props and we don't want the useCallback to change
-    const onChangeRef = useLatest<RangeChange | SingleChange | MultiChange | undefined>(onChange);
-
     const onPressDate = useCallback(
         (d: Date) => {
-            (onChangeRef.current as SingleChange)({
-                date: d,
-            });
+            onChange && onChange({ date: d });
             onToggle();
         },
-        [onChangeRef, onToggle],
+        [onChange, onToggle],
     );
 
     const { containerStyle, firstDate } = useMemo(() => {
@@ -174,7 +167,9 @@ function DatePickerDockedBase(props: DatePickerDockedProps) {
             {pickerType === 'month' && <MonthPicker onChange={onDateChange} />}
         </View>
     );
-}
+};
+
+const DatePickerDockedBaseComponent = memo(DatePickerDockedBase);
 
 const styles = StyleSheet.create({
     root: { flex: 1 },

@@ -1,11 +1,12 @@
-import { useCallback, useState, forwardRef, memo, useMemo } from 'react';
+import { useCallback, useState, forwardRef, memo, useMemo, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { useMolecules, useLatest } from '../../hooks';
+import { useMolecules, useLatest, useToggle } from '../../hooks';
 import { noop } from '../../utils';
 import DatePickerInputWithoutModal from './DatePickerInputWithoutModal';
 import DatePickerInputModal from './DatePickerInputModal';
 import type { DatePickerInputProps } from './types';
+import { DatePickerDocked } from '../DatePickerDocked';
 
 function DatePickerInput(
     {
@@ -17,12 +18,17 @@ function DatePickerInput(
         validRange,
         onChange = noop,
         disabled = false,
+        pickerMode,
+        startYear,
+        endYear,
         //locale = 'en',
         ...rest
     }: DatePickerInputProps,
     ref: any,
 ) {
     const { IconButton } = useMolecules();
+    const triggerRef = useRef(null);
+    const { state: isOpen, onToggle } = useToggle(false);
     const [visible, setVisible] = useState<boolean>(false);
 
     const onDismiss = useCallback(() => {
@@ -39,7 +45,12 @@ function DatePickerInput(
         [setVisible, onChangeRef],
     );
 
-    const onPressCalendarIcon = useCallback(() => setVisible(true), []);
+    const onPressCalendarIcon = useCallback(() => {
+        if (pickerMode === 'popover') {
+            onToggle();
+        }
+        setVisible(true);
+    }, [pickerMode, onToggle]);
 
     const rightElement = useMemo(
         () => (
@@ -52,17 +63,29 @@ function DatePickerInput(
                             onPress={onPressCalendarIcon}
                             disabled={disabled}
                         />
-
-                        <DatePickerInputModal
-                            date={value}
-                            mode="single"
-                            isOpen={visible}
-                            onClose={onDismiss}
-                            onConfirm={onInnerConfirm}
-                            locale={locale}
-                            // dateMode={inputMode}
-                            validRange={validRange}
-                        />
+                        {pickerMode === 'modal' ? (
+                            <DatePickerInputModal
+                                date={value}
+                                mode="single"
+                                isOpen={visible}
+                                onClose={onDismiss}
+                                onConfirm={onInnerConfirm}
+                                locale={locale}
+                                // dateMode={inputMode}
+                                validRange={validRange}
+                            />
+                        ) : (
+                            <DatePickerDocked
+                                date={value}
+                                locale={locale}
+                                startYear={startYear}
+                                endYear={endYear}
+                                onChange={onInnerConfirm}
+                                isOpen={isOpen}
+                                onToggle={onToggle}
+                                triggerRef={triggerRef}
+                            />
+                        )}
                     </>
                 ) : null}
             </>
@@ -71,10 +94,15 @@ function DatePickerInput(
             IconButton,
             calendarIcon,
             disabled,
+            endYear,
+            isOpen,
             locale,
             onDismiss,
             onInnerConfirm,
             onPressCalendarIcon,
+            onToggle,
+            pickerMode,
+            startYear,
             validRange,
             value,
             visible,

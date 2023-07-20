@@ -15,8 +15,9 @@ export const Controlled: ComponentStory<typeof ControlledExample> = args => (
 );
 
 Controlled.args = {
-    mode: 'single',
     locale: 'en',
+    pickerMode: 'popover',
+    label: 'date',
 };
 
 Controlled.parameters = {
