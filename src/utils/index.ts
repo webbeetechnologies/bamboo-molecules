@@ -31,4 +31,4 @@ export const clearStylesCache = () => {
     resolveComponentStyles.cache.clear();
 };
 
-export { getYearRange } from './getyearRange';
+export { getYearRange } from './getYearRange';

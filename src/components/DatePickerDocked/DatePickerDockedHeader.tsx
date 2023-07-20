@@ -5,6 +5,8 @@ import { useComponentStyles, useMolecules } from '../../hooks';
 import type { DisableWeekDaysType } from '../DatePickerInline/dateUtils';
 import DayNames, { dayNamesHeight } from '../DatePickerInline/DayNames';
 import HeaderItem from './HeaderItem';
+import { useStore } from './DatePickerDocked';
+import { setYear } from 'date-fns';
 
 const buttonContainerHeight = 56;
 const buttonContainerMarginTop = 4;
@@ -12,27 +14,18 @@ const buttonContainerMarginBottom = 8;
 
 export type CalendarHeaderProps = {
     locale?: string;
-    scrollMode: 'horizontal' | 'vertical';
     disableWeekDays?: DisableWeekDaysType;
     style?: ViewStyle;
-    year: number;
-    onPressDropdown: (type: 'month' | 'year' | undefined) => void;
-    onChange: (value: number, type: 'month' | 'year') => void;
-    selectingYear: boolean;
-    selectingMonth: boolean;
 };
 
 function DatePickerDockedHeader({
     locale = 'en',
     disableWeekDays,
     style: styleProp,
-    year,
-    onPressDropdown,
-    onChange,
-    selectingYear,
-    selectingMonth,
 }: CalendarHeaderProps) {
     const { View } = useMolecules();
+    const [{ localDate, pickerType }, setStore] = useStore(state => state);
+
     const componentStyles = useComponentStyles('DatePickerDocked_Header', styleProp);
 
     const { containerStyle, daysWrapperStyle } = useMemo(() => {
@@ -44,29 +37,28 @@ function DatePickerDockedHeader({
         };
     }, [componentStyles]);
 
-    const handlePressDropDown = useCallback(
-        (type: 'month' | 'year' | undefined) => onPressDropdown(type),
-        [onPressDropdown],
-    );
-
     const handleOnPrevious = useCallback(() => {
-        onChange(year - 1, 'year');
-    }, [onChange, year]);
+        setStore(prev => ({
+            ...prev,
+            localDate: setYear(prev.localDate, prev.localDate.getFullYear() - 1),
+        }));
+    }, [setStore]);
 
     const handleOnNext = useCallback(() => {
-        onChange(year + 1, 'year');
-    }, [onChange, year]);
+        setStore(prev => ({
+            ...prev,
+            localDate: setYear(prev.localDate, prev.localDate.getFullYear() + 1),
+        }));
+    }, [setStore]);
 
     return (
         <View style={containerStyle} pointerEvents={'box-none'}>
             <HeaderItem
                 onNext={handleOnNext}
                 onPrev={handleOnPrevious}
-                disabled={selectingMonth}
-                selecting={selectingYear || selectingMonth}
+                selecting={!!pickerType}
                 type="year"
-                value={year}
-                onPressDropdown={handlePressDropDown}
+                value={localDate.getFullYear()}
             />
             <View style={daysWrapperStyle}>
                 <DayNames disableWeekDays={disableWeekDays} locale={locale} />

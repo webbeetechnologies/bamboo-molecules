@@ -1,26 +1,25 @@
 import { useComponentStyles } from '@bambooapp/bamboo-atoms';
 import { memo, useCallback, useMemo } from 'react';
 import { useMolecules } from '../../hooks';
+import { useStore } from './DatePickerDocked';
 
 function HeaderItem({
     value,
     onNext,
     onPrev,
-    disabled,
-    onPressDropdown,
     selecting,
     type,
 }: {
     value: number | string;
     onNext: () => any;
     onPrev: () => any;
-    disabled: boolean;
     type: 'month' | 'year' | undefined;
-    onPressDropdown: (type: 'month' | 'year' | undefined) => void;
     selecting: boolean;
 }) {
     const { View, IconButton, TouchableRipple, Text } = useMolecules();
+    const [{ startDateYear, endDateYear, pickerType }, setStore] = useStore(state => state);
     const headerItemStyles = useComponentStyles('DatePicker_HeaderItem');
+    const disabled = pickerType && pickerType !== type;
 
     const {
         buttonContainerStyle,
@@ -30,7 +29,7 @@ function HeaderItem({
         innerStyle,
         labelStyle,
         iconContainerStyle,
-        emtpyViewStyle,
+        emptyViewStyle,
     } = useMemo(() => {
         const {
             buttonContainer,
@@ -50,13 +49,16 @@ function HeaderItem({
             innerStyle: _innerStyle,
             labelStyle: _labelStyle,
             iconContainerStyle: { opacity: 1 },
-            emtpyViewStyle: emtpyView,
+            emptyViewStyle: emtpyView,
         };
     }, [headerItemStyles]);
 
     const handlePressDropDown = useCallback(() => {
-        onPressDropdown(type);
-    }, [onPressDropdown, type]);
+        setStore(prev => ({
+            ...prev,
+            pickerType: pickerType ? undefined : type,
+        }));
+    }, [setStore, type, pickerType]);
 
     return (
         <View style={buttonContainerStyle} pointerEvents={'box-none'}>
@@ -70,11 +72,11 @@ function HeaderItem({
                         // Todo: Translate
                         accessibilityLabel={'Previous'}
                         onPress={onPrev}
-                        disabled={value === 1800}
+                        disabled={value === startDateYear}
                     />
                 </View>
             ) : (
-                <View style={emtpyViewStyle} />
+                <View style={emptyViewStyle} />
             )}
             <TouchableRipple
                 disabled={disabled}
@@ -89,7 +91,7 @@ function HeaderItem({
                     <View style={iconContainerStyle}>
                         <IconButton
                             onPress={handlePressDropDown}
-                            name={selecting ? 'menu-up' : 'menu-down'}
+                            name={selecting && type === pickerType ? 'menu-up' : 'menu-down'}
                             size="xs"
                             disabled={disabled}
                         />
@@ -104,11 +106,11 @@ function HeaderItem({
                         // Todo: Translate
                         accessibilityLabel={'Next'}
                         onPress={onNext}
-                        disabled={value === 2200}
+                        disabled={value === endDateYear}
                     />
                 </View>
             ) : (
-                <View style={emtpyViewStyle} />
+                <View style={emptyViewStyle} />
             )}
         </View>
     );

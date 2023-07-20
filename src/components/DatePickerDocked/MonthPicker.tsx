@@ -4,20 +4,19 @@ import { useComponentStyles, useMolecules } from '../../hooks';
 import type { FlatListRef } from '../FlatList';
 import { range } from '../../utils/dateTimePicker';
 import { MONTHS_DATA } from './utils';
+import { useStore } from './DatePickerDocked';
 
 export default function MonthPicker({
-    selectedMonth,
-    selectingMonth,
     onChange,
 }: {
-    selectedMonth: number | undefined;
-    selectingMonth: boolean;
     onChange: (month: number, type: 'month' | 'year') => any;
 }) {
+    const [{ localDate, pickerType }] = useStore(state => state);
     const { FlatList, View, HorizontalDivider } = useMolecules();
     const monthPickerStyles = useComponentStyles('DatePickerDocked_MonthPicker');
     const flatList = useRef<FlatListRef<number> | null>(null);
     const months = range(0, 11);
+    const selectingMonth = pickerType === 'month';
 
     const { containerStyle, monthStyle } = useMemo(() => {
         const { backgroundColor, ...rest } = monthPickerStyles;
@@ -45,30 +44,30 @@ export default function MonthPicker({
             return (
                 <Month
                     month={item}
-                    selected={selectedMonth === item}
+                    selected={localDate.getMonth() === item}
                     onPressMonth={handleOnChange}
                     monthStyles={monthStyle}
                 />
             );
         },
-        [selectedMonth, handleOnChange, monthStyle],
+        [localDate, handleOnChange, monthStyle],
     );
 
+    if (!selectingMonth) {
+        return null;
+    }
+
     return (
-        <>
-            {selectingMonth && (
-                <View style={containerStyle} pointerEvents={selectingMonth ? 'auto' : 'none'}>
-                    <HorizontalDivider />
-                    <FlatList<number>
-                        ref={flatList}
-                        style={styles.list}
-                        data={months}
-                        renderItem={renderItem}
-                        keyExtractor={item => `${item}`}
-                    />
-                </View>
-            )}
-        </>
+        <View style={containerStyle} pointerEvents={selectingMonth ? 'auto' : 'none'}>
+            <HorizontalDivider />
+            <FlatList<number>
+                ref={flatList}
+                style={styles.list}
+                data={months}
+                renderItem={renderItem}
+                keyExtractor={item => `${item}`}
+            />
+        </View>
     );
 }
 

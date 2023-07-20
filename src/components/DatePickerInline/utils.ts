@@ -138,6 +138,7 @@ export const datePickerDayStyles: ComponentStylePropWithVariants<
     button: {
         width: daySize,
         height: daySize,
+        marginTop: 'spacings.2',
         overflow: 'hidden',
         borderRadius: daySize / 2,
     },

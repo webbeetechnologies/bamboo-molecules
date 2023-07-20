@@ -2,9 +2,7 @@ import { useMemo, memo, useCallback } from 'react';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import {
-    addMonths,
     daySize,
-    getRealIndex,
     getGridCount,
     gridCounts,
     startAtIndex,
@@ -17,8 +15,9 @@ import { getCalendarHeaderHeight } from '../DatePickerInline/DatePickerInlineHea
 import { dayNamesHeight } from '../DatePickerInline/DayNames';
 import type { MonthMultiProps, MonthRangeProps, MonthSingleProps } from '../DatePickerInline/types';
 import Week from '../DatePickerInline/Week';
-import { MONTHS_DATA } from './utils';
 import HeaderItem from './HeaderItem';
+import { useStore } from './DatePickerDocked';
+import { format, setMonth } from 'date-fns';
 
 export type Props = MonthSingleProps | MonthRangeProps | MonthMultiProps;
 
@@ -26,39 +25,27 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
     const {
         index,
         mode,
-        date,
         dates,
         startDate,
         endDate,
-        onPressDropdown,
-        selectingMonth,
-        selectingYear,
         onPressDate,
         scrollMode,
         disableWeekDays,
         validRange,
-        selectedMonth,
-        selectedYear,
-        onChange,
     } = props;
     const { View } = useMolecules();
+    const [{ localDate, pickerType }, setStore] = useStore(state => state);
     const monthStyles = useComponentStyles('DatePicker_Month');
-
-    const realIndex = getRealIndex(index);
 
     const { isDisabled, isWithinValidRange } = useRangeChecker(validRange);
 
     const { monthName, month, year } = useMemo(() => {
-        const md = addMonths(new Date(), realIndex);
-        const monthNameStr = MONTHS_DATA[selectedMonth !== undefined ? selectedMonth : 0].substring(
-            0,
-            3,
-        );
-        const y = selectedYear || md.getFullYear();
-        const m = selectedMonth !== undefined ? selectedMonth : md.getMonth();
+        const monthNameStr = format(localDate, 'MMM');
+        const y = localDate.getFullYear();
+        const m = localDate.getMonth();
 
         return { monthName: monthNameStr, month: m, year: y };
-    }, [realIndex, selectedMonth, selectedYear]);
+    }, [localDate]);
 
     const grid = useMemo(
         () =>
@@ -72,10 +59,21 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
                 startDate,
                 endDate,
                 dates,
-                date,
+                date: localDate,
                 monthGrid,
             }),
-        [year, month, index, isDisabled, mode, isWithinValidRange, startDate, endDate, dates, date],
+        [
+            year,
+            month,
+            index,
+            isDisabled,
+            mode,
+            isWithinValidRange,
+            startDate,
+            endDate,
+            dates,
+            localDate,
+        ],
     );
 
     const { monthStyle, headerStyle, weekContainerStyle } = useMemo(() => {
@@ -96,31 +94,28 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         };
     }, [index, monthStyles, scrollMode]);
 
-    const handlePressDropdown = useCallback(
-        (type: 'month' | 'year' | undefined) => {
-            onPressDropdown && onPressDropdown(type);
-        },
-        [onPressDropdown],
-    );
-
     const handleOnPrevious = useCallback(() => {
-        onChange && onChange(month - 1, 'month');
-    }, [onChange, month]);
+        setStore(prev => ({
+            ...prev,
+            localDate: setMonth(prev.localDate, prev.localDate.getMonth() - 1),
+        }));
+    }, [setStore]);
 
     const handleOnNext = useCallback(() => {
-        onChange && onChange(month + 1, 'month');
-    }, [onChange, month]);
+        setStore(prev => ({
+            ...prev,
+            localDate: setMonth(prev.localDate, prev.localDate.getMonth() + 1),
+        }));
+    }, [setStore]);
 
     return (
         <View style={monthStyle}>
             <View style={headerStyle}>
                 <HeaderItem
-                    disabled={!!selectingYear}
                     onNext={handleOnNext}
                     onPrev={handleOnPrevious}
                     value={monthName}
-                    onPressDropdown={handlePressDropdown}
-                    selecting={!!selectingMonth || !!selectingYear}
+                    selecting={!!pickerType}
                     type="month"
                 />
             </View>
@@ -142,7 +137,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
 // TODO make it flexible
 export const weekMargin = 6;
 export const weekSize = daySize + weekMargin;
-export const montHeaderHeight = 46;
+export const montHeaderHeight = 56;
 export const monthHeaderSingleMarginTop = 4;
 export const monthHeaderSingleMarginBottom = 8 + 22 + 12;
 export const monthHeaderSingleHeight = monthHeaderSingleMarginTop + monthHeaderSingleMarginBottom;
