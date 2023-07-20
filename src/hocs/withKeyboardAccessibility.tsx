@@ -16,7 +16,7 @@ import {
 import type { FlatList } from 'react-native';
 import type { SectionList } from 'react-native';
 import { Platform } from 'react-native';
-import { createFastContext, createProvider, createUseContext } from '../fast-context';
+import { createFastContext } from '../fast-context';
 
 export type Store = {
     currentIndex: number;
@@ -24,11 +24,7 @@ export type Store = {
 
 const defaultValue = { currentIndex: 0 };
 
-const StoreContext = createFastContext<Store>(null);
-
-const Provider = createProvider<Store>(StoreContext);
-
-export const useStore = createUseContext<Store>(StoreContext);
+const { RefContext, Provider, useSelector } = createFastContext<Store>(defaultValue);
 
 const withKeyboardAccessibility = <P extends Record<string, any>>(
     Component: ComponentType<P>,
@@ -125,9 +121,9 @@ const AccessibilityWrapper = memo(
         isFlat,
         onCancel,
     }: AccessibilityWrapperProps) => {
-        const [currentIndex, setStore] = useStore(state => state.currentIndex);
+        const [currentIndex, setStore] = useSelector(state => state.currentIndex);
 
-        const currentIndexRef = useContext(StoreContext)!.store;
+        const currentIndexRef = useContext(RefContext).store;
 
         const keyToFunctionMap = useMemo(
             () => ({
@@ -219,5 +215,7 @@ export const KeyboardAccessibilityContext = createContext<{
 }>({
     checkIsCurrentIndex: (_index: number) => false,
 });
+
+export const useStore = useSelector;
 
 export default withKeyboardAccessibility;
