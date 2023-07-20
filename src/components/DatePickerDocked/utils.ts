@@ -158,7 +158,6 @@ export const datePickerDockedMonthStyles: ComponentStylePropWithVariants<
         justifyContent: 'center',
         alignItems: 'flex-start',
     },
-    selectedMonth: { color: 'colors.onSurface' },
     monthButton: {
         width: '100%',
         overflow: 'hidden',
@@ -169,8 +168,13 @@ export const datePickerDockedMonthStyles: ComponentStylePropWithVariants<
         justifyContent: 'flex-start',
         flexDirection: 'row',
     },
-    selectedMonthInner: { backgroundColor: 'colors.surfaceVariant' },
     monthLabel: {
         fontSize: 16,
+    },
+    states: {
+        selected: {
+            monthInner: { backgroundColor: 'colors.surfaceVariant' },
+            monthLabel: { color: 'colors.onSurface' },
+        },
     },
 };

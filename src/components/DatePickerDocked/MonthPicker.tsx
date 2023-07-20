@@ -96,19 +96,12 @@ function MonthPure({
         monthButtonStyle,
         accessibilityState,
     } = useMemo(() => {
-        const {
-            month: monthStyle,
-            monthInner,
-            monthLabel,
-            selectedMonth,
-            selectedMonthInner,
-            monthButton,
-        } = montLocalStyles;
+        const { month: monthStyle, monthInner, monthLabel, monthButton } = montLocalStyles;
 
         return {
             containerStyle: monthStyle,
-            monthInnerStyle: [monthInner, selected ? selectedMonthInner : null],
-            monthLabelStyle: [monthLabel, selected ? selectedMonth : null],
+            monthInnerStyle: monthInner,
+            monthLabelStyle: monthLabel,
             monthButtonStyle: monthButton,
             accessibilityState: { selected },
         };
