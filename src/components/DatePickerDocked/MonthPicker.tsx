@@ -40,6 +40,20 @@ export default function MonthPicker({
         [onChange],
     );
 
+    const renderItem = useCallback(
+        ({ item }: { item: number }) => {
+            return (
+                <Month
+                    month={item}
+                    selected={selectedMonth === item}
+                    onPressMonth={handleOnChange}
+                    monthStyles={monthStyle}
+                />
+            );
+        },
+        [selectedMonth, handleOnChange, monthStyle],
+    );
+
     return (
         <>
             {selectingMonth && (
@@ -49,14 +63,7 @@ export default function MonthPicker({
                         ref={flatList}
                         style={styles.list}
                         data={months}
-                        renderItem={({ item }) => (
-                            <Month
-                                month={item}
-                                selected={selectedMonth === item}
-                                onPressMonth={handleOnChange}
-                                monthStyles={monthStyle}
-                            />
-                        )}
+                        renderItem={renderItem}
                         keyExtractor={item => `${item}`}
                     />
                 </View>

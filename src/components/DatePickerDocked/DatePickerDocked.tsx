@@ -95,6 +95,58 @@ function DatePickerDocked(props: DatePickerDockedProps) {
         };
     }, [componentStyles, localDate, startDate]);
 
+    const renderMonthComponent = useCallback(
+        ({ index }: { index: number }) => {
+            return (
+                <MonthComponent
+                    locale={locale}
+                    mode="single"
+                    validRange={validRange}
+                    index={index}
+                    startDate={startDate}
+                    endDate={endDate}
+                    date={date}
+                    onPressDropdown={onPressDropdown}
+                    selectedMonth={localDate.getMonth()}
+                    selectedYear={localDate.getFullYear()}
+                    selectingMonth={pickerType === 'month'}
+                    selectingYear={pickerType === 'year'}
+                    onPressDate={onPressDate}
+                    scrollMode={scrollMode}
+                    disableWeekDays={disableWeekDays}
+                    onChange={onDateChange}
+                />
+            );
+        },
+        [
+            date,
+            disableWeekDays,
+            endDate,
+            localDate,
+            locale,
+            onDateChange,
+            onPressDate,
+            onPressDropdown,
+            pickerType,
+            startDate,
+            validRange,
+        ],
+    );
+
+    const renderCalenderHeader = useCallback(() => {
+        return (
+            <CalendarHeaderComponent
+                onChange={onDateChange}
+                scrollMode={scrollMode}
+                disableWeekDays={disableWeekDays}
+                year={localDate.getFullYear()}
+                onPressDropdown={onPressDropdown}
+                selectingYear={pickerType === 'year'}
+                selectingMonth={pickerType === 'month'}
+            />
+        );
+    }, [disableWeekDays, localDate, onDateChange, onPressDropdown, pickerType]);
+
     return (
         <Popover
             contentStyles={styles.popoverContainer}
@@ -106,37 +158,8 @@ function DatePickerDocked(props: DatePickerDockedProps) {
                     initialIndex={getInitialIndex(firstDate)}
                     selectedYear={localDate.getFullYear()}
                     scrollMode={scrollMode}
-                    renderItem={({ index }) => (
-                        <MonthComponent
-                            locale={locale}
-                            mode="single"
-                            validRange={validRange}
-                            index={index}
-                            startDate={startDate}
-                            endDate={endDate}
-                            date={date}
-                            onPressDropdown={onPressDropdown}
-                            selectedMonth={localDate.getMonth()}
-                            selectedYear={localDate.getFullYear()}
-                            selectingMonth={pickerType === 'month'}
-                            selectingYear={pickerType === 'year'}
-                            onPressDate={onPressDate}
-                            scrollMode={scrollMode}
-                            disableWeekDays={disableWeekDays}
-                            onChange={onDateChange}
-                        />
-                    )}
-                    renderHeader={() => (
-                        <CalendarHeaderComponent
-                            onChange={onDateChange}
-                            scrollMode={scrollMode}
-                            disableWeekDays={disableWeekDays}
-                            year={localDate.getFullYear()}
-                            onPressDropdown={onPressDropdown}
-                            selectingYear={pickerType === 'year'}
-                            selectingMonth={pickerType === 'month'}
-                        />
-                    )}
+                    renderItem={renderMonthComponent}
+                    renderHeader={renderCalenderHeader}
                 />
                 {pickerType === 'year' && (
                     <YearPicker
