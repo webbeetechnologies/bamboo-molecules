@@ -92,6 +92,8 @@ export const datePickerYearPickerStyles: ComponentStylePropWithVariants<
         height: 46,
         alignItems: 'center',
         justifyContent: 'center',
+        marginLeft: 'spacings.4',
+        marginRight: 'spacings.4',
     },
     yearInner: {
         borderRadius: 'shapes.corner.extraLarge' as unknown as number,

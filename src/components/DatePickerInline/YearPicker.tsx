@@ -96,7 +96,7 @@ function YearPure({
     onPressYear: (newYear: number) => any;
     yearStyles: Record<string, any>;
 }) {
-    const { Text, ListItem } = useMolecules();
+    const { ListItem } = useMolecules();
 
     const yearLocalStyles = useComponentStyles('DatePicker_YearItem', yearStyles, {
         states: {
@@ -124,9 +124,9 @@ function YearPure({
             accessibilityLabel={String(year)}
             style={yearButtonStyle}
             testID="year">
-            <Text style={yearLabelStyle} selectable={false}>
+            <ListItem.Title style={yearLabelStyle} selectable={false}>
                 {year}
-            </Text>
+            </ListItem.Title>
         </ListItem>
     );
 }
