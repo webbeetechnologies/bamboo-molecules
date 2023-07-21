@@ -21,7 +21,7 @@ import {
 } from '../../hooks';
 import type { FlatListProps } from '../FlatList';
 import withKeyboardAccessibility, {
-    useCurrentIndexStore,
+    useCurrentIndexStoreValue,
 } from '../../hocs/withKeyboardAccessibility';
 import { typedMemo } from '../../hocs';
 
@@ -185,7 +185,7 @@ const OptionListItem = typedMemo(
     }: OptionListItemProps<TItem>) => {
         const { TouchableRipple } = useMolecules();
 
-        const [focused] = useCurrentIndexStore(state => {
+        const focused = useCurrentIndexStoreValue(state => {
             return state.currentIndex === info.index;
         });
         const onPress = useCallback(() => {

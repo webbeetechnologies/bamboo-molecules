@@ -26,7 +26,8 @@ const {
     useStoreRef,
     Provider,
     useContext: useFastContext,
-} = createFastContext<Store>(defaultValue);
+    useContextValue,
+} = createFastContext<Store>();
 
 const withKeyboardAccessibility = <P extends Record<string, any>>(
     Component: ComponentType<P>,
@@ -96,7 +97,7 @@ const withKeyboardAccessibility = <P extends Record<string, any>>(
                 : {};
 
         return (
-            <Provider defaultValue={defaultValue}>
+            <Provider value={defaultValue}>
                 <Wrapper
                     {...(accessibilityWrapperProps as Omit<AccessibilityWrapperProps, 'children'>)}>
                     <Component {...(props as P)} ref={componentRef} />
@@ -198,5 +199,6 @@ const AccessibilityWrapper = memo(
 );
 
 export const useCurrentIndexStore = useFastContext;
+export const useCurrentIndexStoreValue = useContextValue;
 
 export default withKeyboardAccessibility;
