@@ -31,4 +31,5 @@ export {
     datePickerDayRangeStyles,
     datePickerDayEmptyStyles,
     datePickerWeekStyles,
+    datePickerYearItemStyles,
 } from './utils';

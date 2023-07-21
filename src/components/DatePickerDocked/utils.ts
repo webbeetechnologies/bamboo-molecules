@@ -1,21 +1,6 @@
 import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from 'src/types';
 
-export const MONTHS_DATA = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-];
-
 type States = '';
 
 type CustomProps = {
@@ -149,20 +134,17 @@ export const datePickerDockedMonthStyles: ComponentStylePropWithVariants<
 > = {
     backgroundColor: 'colors.surface',
 
-    month: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-    },
     monthButton: {
         width: '100%',
         overflow: 'hidden',
+        padding: 'spacings.0',
     },
     monthInner: {
         height: 46,
         alignItems: 'center',
         justifyContent: 'flex-start',
         flexDirection: 'row',
+        padding: 'spacings.0',
     },
     monthLabel: {
         fontSize: 16,

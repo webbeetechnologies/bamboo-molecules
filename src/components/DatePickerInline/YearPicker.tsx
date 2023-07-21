@@ -15,7 +15,10 @@ export default function YearPicker() {
     const { FlatList, View, HorizontalDivider } = useMolecules();
     const yearPickerStyles = useComponentStyles('DatePicker_YearPicker');
     const flatList = useRef<FlatListRef<number> | null>(null);
-    const years = getYearRange(startDateYear, endDateYear);
+    const years = useMemo(
+        () => getYearRange(startDateYear, endDateYear),
+        [startDateYear, endDateYear],
+    );
     const selectingYear = pickerType === 'year';
     const selectedYear = localDate.getFullYear();
 
@@ -31,13 +34,14 @@ export default function YearPicker() {
     }, [flatList, selectedYear, selectingYear, years]);
 
     const { containerStyle, yearStyle } = useMemo(() => {
-        const { backgroundColor, ...rest } = yearPickerStyles;
+        const { backgroundColor, yearContainer, ...rest } = yearPickerStyles;
 
         return {
             containerStyle: [
                 StyleSheet.absoluteFill,
                 styles.root,
                 { backgroundColor },
+                yearContainer,
                 selectingYear ? styles.opacity1 : styles.opacity0,
             ],
             yearStyle: rest,
@@ -92,40 +96,38 @@ function YearPure({
     onPressYear: (newYear: number) => any;
     yearStyles: Record<string, any>;
 }) {
-    const { TouchableRipple, Text, View } = useMolecules();
+    const { Text, ListItem } = useMolecules();
 
-    const { containerStyle, yearInnerStyle, yearLabelStyle, yearButtonStyle } = useMemo(() => {
-        const {
-            year: yearStyle,
-            yearInner,
-            yearLabel,
-            selectedYear,
-            selectedYearInner,
-            yearButton,
-        } = yearStyles;
+    const yearLocalStyles = useComponentStyles('DatePicker_YearItem', yearStyles, {
+        states: {
+            selected,
+        },
+    });
+    const { yearLabelStyle, yearButtonStyle } = useMemo(() => {
+        const { yearInner, yearLabel, yearButton } = yearLocalStyles;
 
         return {
-            containerStyle: yearStyle,
-            yearInnerStyle: [yearInner, selected ? selectedYearInner : null],
-            yearLabelStyle: [yearLabel, selected ? selectedYear : null],
+            yearInnerStyle: yearInner,
+            yearLabelStyle: yearLabel,
             yearButtonStyle: yearButton,
         };
-    }, [selected, yearStyles]);
+    }, [yearLocalStyles]);
+
+    const handlePressYear = useCallback(() => {
+        onPressYear(year);
+    }, [year, onPressYear]);
 
     return (
-        <View style={containerStyle}>
-            <TouchableRipple
-                onPress={() => onPressYear(year)}
-                accessibilityRole="button"
-                accessibilityLabel={String(year)}
-                style={yearButtonStyle}>
-                <View style={yearInnerStyle}>
-                    <Text style={yearLabelStyle} selectable={false}>
-                        {year}
-                    </Text>
-                </View>
-            </TouchableRipple>
-        </View>
+        <ListItem
+            onPress={handlePressYear}
+            accessibilityRole="button"
+            accessibilityLabel={String(year)}
+            style={yearButtonStyle}
+            testID="year">
+            <Text style={yearLabelStyle} selectable={false}>
+                {year}
+            </Text>
+        </ListItem>
     );
 }
 const Year = memo(YearPure);

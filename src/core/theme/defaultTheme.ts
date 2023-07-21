@@ -48,6 +48,7 @@ import {
     datePickerStyles,
     datePickerWeekStyles,
     datePickerYearPickerStyles,
+    datePickerYearItemStyles,
     datePickerMonthPickerStyles,
     dateTimePickerStyles,
     dialogActionsStyles,
@@ -199,6 +200,7 @@ export const defaultThemeValue: Partial<ITheme> = {
 
     DatePickerInline: datePickerStyles,
     DatePicker_YearPicker: datePickerYearPickerStyles,
+    DatePicker_YearItem: datePickerYearItemStyles,
     DatePickerDocked_MonthPicker: datePickerMonthPickerStyles,
     DatePickerDocked_Month: datePickerDockedMonthStyles,
     DatePicker_Month: datePickerMonthStyles,

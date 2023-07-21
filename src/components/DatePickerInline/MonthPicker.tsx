@@ -3,9 +3,8 @@ import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { FlatListRef } from '../FlatList';
 import { range } from '../../utils/dateTimePicker';
-import { MONTHS_DATA } from '../DatePickerDocked/utils';
 import { useStore } from './DatePickerInlineBase';
-import { setYear } from 'date-fns';
+import { format, setMonth } from 'date-fns';
 
 export default function MonthPicker() {
     const [{ localDate, pickerType }, setStore] = useStore(state => state);
@@ -31,7 +30,10 @@ export default function MonthPicker() {
 
     const handleOnChange = useCallback(
         (month: number) => {
-            setStore(prev => ({ localDate: setYear(prev.localDate, month) }));
+            setStore(prev => ({
+                localDate: setMonth(prev.localDate, month),
+                pickerType: undefined,
+            }));
         },
         [setStore],
     );
@@ -79,56 +81,49 @@ function MonthPure({
     onPressMonth: (newMonth: number) => any;
     monthStyles: Record<string, any>;
 }) {
-    const { TouchableRipple, Text, View, Icon } = useMolecules();
+    const { Text, View, Icon, ListItem } = useMolecules();
     const montLocalStyles = useComponentStyles('DatePickerDocked_Month', monthStyles, {
         states: {
             selected,
         },
     });
-    const {
-        containerStyle,
-        monthInnerStyle,
-        monthLabelStyle,
-        monthButtonStyle,
-        accessibilityState,
-    } = useMemo(() => {
-        const { month: monthStyle, monthInner, monthLabel, monthButton } = montLocalStyles;
+    const { monthInnerStyle, monthLabelStyle, monthButtonStyle, accessibilityState } =
+        useMemo(() => {
+            const { monthInner, monthLabel, monthButton } = montLocalStyles;
 
-        return {
-            containerStyle: monthStyle,
-            monthInnerStyle: monthInner,
-            monthLabelStyle: monthLabel,
-            monthButtonStyle: monthButton,
-            accessibilityState: { selected },
-        };
-    }, [selected, montLocalStyles]);
+            return {
+                monthInnerStyle: monthInner,
+                monthLabelStyle: monthLabel,
+                monthButtonStyle: monthButton,
+                accessibilityState: { selected },
+            };
+        }, [selected, montLocalStyles]);
 
     const handleMonthPress = useCallback(() => {
         onPressMonth(month);
     }, [onPressMonth, month]);
 
     return (
-        <View style={containerStyle}>
-            <TouchableRipple
-                onPress={handleMonthPress}
-                accessibilityRole="button"
-                accessibilityLabel={String(month)}
-                accessibilityState={accessibilityState}
-                style={monthButtonStyle}>
-                <View style={monthInnerStyle}>
-                    {selected ? (
-                        <View style={styles.checkIconView}>
-                            <Icon name="check" size={24} />
-                        </View>
-                    ) : (
-                        <View style={styles.spacer} />
-                    )}
-                    <Text style={monthLabelStyle} selectable={false}>
-                        {MONTHS_DATA[month]}
-                    </Text>
-                </View>
-            </TouchableRipple>
-        </View>
+        <ListItem
+            onPress={handleMonthPress}
+            accessibilityRole="button"
+            accessibilityLabel={String(month)}
+            accessibilityState={accessibilityState}
+            style={monthButtonStyle}
+            testID="month">
+            <View style={monthInnerStyle}>
+                {selected ? (
+                    <View style={styles.checkIconView}>
+                        <Icon name="check" size={24} />
+                    </View>
+                ) : (
+                    <View style={styles.spacer} />
+                )}
+                <Text style={monthLabelStyle} selectable={false}>
+                    {format(new Date(2000, month, 1), 'MMMM')}
+                </Text>
+            </View>
+        </ListItem>
     );
 }
 const Month = memo(MonthPure);

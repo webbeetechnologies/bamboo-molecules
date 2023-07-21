@@ -18,7 +18,7 @@ function DatePickerInput(
         validRange,
         onChange = noop,
         disabled = false,
-        pickerMode,
+        pickerMode = 'modal',
         startYear,
         endYear,
         //locale = 'en',
@@ -46,11 +46,50 @@ function DatePickerInput(
     );
 
     const onPressCalendarIcon = useCallback(() => {
-        if (pickerMode === 'popover') {
+        if (pickerMode === 'docked') {
             onToggle();
         }
         setVisible(true);
     }, [pickerMode, onToggle]);
+
+    const renderers = useMemo(() => {
+        return {
+            modal: (
+                <DatePickerInputModal
+                    date={value}
+                    mode="single"
+                    isOpen={visible}
+                    onClose={onDismiss}
+                    onConfirm={onInnerConfirm}
+                    locale={locale}
+                    validRange={validRange}
+                />
+            ),
+            docked: (
+                <DatePickerDocked
+                    date={value}
+                    locale={locale}
+                    startYear={startYear}
+                    endYear={endYear}
+                    onChange={onInnerConfirm}
+                    isOpen={isOpen}
+                    onToggle={onToggle}
+                    triggerRef={triggerRef}
+                />
+            ),
+        };
+    }, [
+        endYear,
+        isOpen,
+        locale,
+        onDismiss,
+        onInnerConfirm,
+        onToggle,
+        startYear,
+        validRange,
+        value,
+        visible,
+    ]);
 
     const rightElement = useMemo(
         () => (
@@ -64,51 +103,12 @@ function DatePickerInput(
                             onPress={onPressCalendarIcon}
                             disabled={disabled}
                         />
-                        {pickerMode === 'modal' ? (
-                            <DatePickerInputModal
-                                date={value}
-                                mode="single"
-                                isOpen={visible}
-                                onClose={onDismiss}
-                                onConfirm={onInnerConfirm}
-                                locale={locale}
-                                // dateMode={inputMode}
-                                validRange={validRange}
-                            />
-                        ) : (
-                            <DatePickerDocked
-                                date={value}
-                                locale={locale}
-                                startYear={startYear}
-                                endYear={endYear}
-                                onChange={onInnerConfirm}
-                                isOpen={isOpen}
-                                onToggle={onToggle}
-                                triggerRef={triggerRef}
-                            />
-                        )}
+                        {renderers[pickerMode]}
                     </>
                 ) : null}
             </>
         ),
-        [
-            IconButton,
-            calendarIcon,
-            disabled,
-            endYear,
-            isOpen,
-            locale,
-            onDismiss,
-            onInnerConfirm,
-            onPressCalendarIcon,
-            onToggle,
-            pickerMode,
-            startYear,
-            validRange,
-            value,
-            visible,
-            withModal,
-        ],
+        [IconButton, calendarIcon, disabled, onPressCalendarIcon, pickerMode, renderers, withModal],
     );
 
     return (
