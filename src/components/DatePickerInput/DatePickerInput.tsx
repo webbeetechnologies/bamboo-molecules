@@ -58,6 +58,7 @@ function DatePickerInput(
                 {withModal ? (
                     <>
                         <IconButton
+                            ref={triggerRef}
                             style={styles.calendarButton}
                             name={calendarIcon}
                             onPress={onPressCalendarIcon}

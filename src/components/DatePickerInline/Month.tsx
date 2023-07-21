@@ -36,6 +36,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         disableWeekDays,
         // locale,
         validRange,
+        isDocked,
     } = props;
     const { TouchableRipple, Text, IconButton, View } = useMolecules();
     const monthStyles = useComponentStyles('DatePicker_Month');
@@ -46,11 +47,11 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
 
     const { monthName, month, year } = useMemo(() => {
         const md = addMonths(new Date(), realIndex);
-        const y = md.getFullYear();
-        const m = md.getMonth();
+        const y = isDocked && date ? date?.getFullYear() : md.getFullYear();
+        const m = isDocked && date ? date?.getMonth() : md.getMonth();
 
-        return { monthName: format(md, 'LLLL'), month: m, year: y };
-    }, [realIndex]);
+        return { monthName: format(isDocked && date ? date : md, 'LLLL'), month: m, year: y };
+    }, [realIndex, isDocked, date]);
 
     const grid = useMemo(
         () =>
@@ -71,12 +72,12 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
     );
 
     const {
-        monthStyle,
         headerStyle,
         yearButtonStyle,
         yearInnerStyle,
         monthLabelStyle,
         iconContainerStyle,
+        weekContainerStyle,
     } = useMemo(() => {
         const {
             monthLabel: _monthLabel,
@@ -93,6 +94,8 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
                 monthHeader,
                 isHorizontal
                     ? {
+                          alignItems: isDocked && 'flex-start',
+                          marginLeft: isDocked && 'spacings.4',
                           marginTop: monthHeaderSingleMarginTop,
                           marginBottom: monthHeaderSingleMarginBottom,
                       }
@@ -102,36 +105,39 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
             yearInnerStyle: yearButtonInner,
             monthLabelStyle: [monthLabel, typescale],
             iconContainerStyle: { opacity: isHorizontal ? 1 : 0 },
+            weekContainerStyle: { marginHorizontal: 'spacings.3' },
         };
-    }, [index, isHorizontal, monthStyles, scrollMode]);
+    }, [index, isHorizontal, monthStyles, scrollMode, isDocked]);
 
     const onPressDropdown = useCallback(
-        () => (isHorizontal && onPressYear ? onPressYear(year) : undefined),
-        [isHorizontal, onPressYear, year],
+        () => onPressYear && onPressYear(year),
+        [onPressYear, year],
     );
 
     return (
-        <View style={monthStyle}>
-            <View style={headerStyle}>
-                <TouchableRipple
-                    disabled={!isHorizontal}
-                    onPress={onPressDropdown}
-                    accessibilityRole="button"
-                    accessibilityLabel={`${monthName} ${year}`}
-                    style={yearButtonStyle}>
-                    <View style={yearInnerStyle}>
-                        <Text style={monthLabelStyle} selectable={false}>
-                            {monthName} {year}
-                        </Text>
-                        <View style={iconContainerStyle}>
-                            <IconButton
-                                onPress={onPressDropdown}
-                                name={selectingYear ? 'chevron-up' : 'chevron-down'}
-                            />
+        <View>
+            {!isHorizontal && (
+                <View style={headerStyle}>
+                    <TouchableRipple
+                        disabled={!isHorizontal}
+                        onPress={onPressDropdown}
+                        accessibilityRole="button"
+                        accessibilityLabel={`${monthName} ${year}`}
+                        style={yearButtonStyle}>
+                        <View style={yearInnerStyle}>
+                            <Text style={monthLabelStyle} selectable={false}>
+                                {monthName} {year}
+                            </Text>
+                            <View style={iconContainerStyle}>
+                                <IconButton
+                                    onPress={onPressDropdown}
+                                    name={selectingYear ? 'chevron-up' : 'chevron-down'}
+                                />
+                            </View>
                         </View>
-                    </View>
-                </TouchableRipple>
-            </View>
+                    </TouchableRipple>
+                </View>
+            )}
 
             {grid.map(({ weekIndex, generatedDays }) => (
                 <Week
@@ -140,6 +146,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
                     generatedDays={generatedDays}
                     disableWeekDays={disableWeekDays}
                     onPressDate={onPressDate}
+                    style={isDocked && weekContainerStyle}
                 />
             ))}
         </View>
@@ -151,7 +158,7 @@ export const weekMargin = 6;
 export const weekSize = daySize + weekMargin;
 export const montHeaderHeight = 56;
 export const monthHeaderSingleMarginTop = 4;
-export const monthHeaderSingleMarginBottom = 8 + 44 + 12;
+export const monthHeaderSingleMarginBottom = 8 + 22 + 12;
 export const monthHeaderSingleHeight = monthHeaderSingleMarginTop + monthHeaderSingleMarginBottom;
 
 const monthGrid = (index: number) => {

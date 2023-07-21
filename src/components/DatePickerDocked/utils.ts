@@ -50,11 +50,10 @@ export const datePickerDockedHeaderStyles: ComponentStylePropWithVariants<
     DatePickerHeaderCustomProps
 > = {
     datePickerHeader: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        left: 0,
-        zIndex: 10,
+        position: 'relative',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
     },
     daysWrapperStyle: {
         marginHorizontal: 'spacings.3',
@@ -78,9 +77,7 @@ export const datePickerHeaderItemStyles: ComponentStylePropWithVariants<
 > = {
     buttonContainer: {
         height: 46,
-        marginTop: 'spacings.2',
-        marginBottom: 'spacings.2',
-        marginRight: 'spacings.4',
+        width: '50%',
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -92,7 +89,6 @@ export const datePickerHeaderItemStyles: ComponentStylePropWithVariants<
     },
     buttonStyle: {
         alignSelf: 'center',
-        marginLeft: 6,
         borderRadius: 'shapes.corner.extraSmall' as unknown as number,
     },
     innerStyle: {

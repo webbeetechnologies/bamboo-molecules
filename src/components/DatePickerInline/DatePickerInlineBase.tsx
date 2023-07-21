@@ -25,8 +25,8 @@ function DatePickerInlineBase(props: DatePickerInlineBaseProps) {
         endDate,
         date,
         disableWeekDays,
-        startYear,
-        endYear,
+        startYear = 1800,
+        endYear = 2200,
         dates,
         validRange,
         dateMode,
@@ -97,38 +97,70 @@ function DatePickerInlineBase(props: DatePickerInlineBaseProps) {
         };
     }, [componentStyles, date, dates, startDate]);
 
+    const renderMonthComponent = useCallback(
+        ({ index }: { index: number }) => {
+            return (
+                <Month
+                    locale={locale}
+                    mode={mode}
+                    key={index}
+                    validRange={validRange}
+                    index={index}
+                    startDate={startDate}
+                    endDate={endDate}
+                    date={date}
+                    dates={dates}
+                    onPressYear={onPressYear}
+                    selectingYear={selectingYear}
+                    onPressDate={onPressDate}
+                    scrollMode={scrollMode}
+                    disableWeekDays={disableWeekDays}
+                />
+            );
+        },
+        [
+            date,
+            dates,
+            disableWeekDays,
+            endDate,
+            locale,
+            mode,
+            onPressDate,
+            onPressYear,
+            scrollMode,
+            selectingYear,
+            startDate,
+            validRange,
+        ],
+    );
+
+    const renderCalenderHeader = useCallback(
+        ({ index, onPrev, onNext }: { index: number; onPrev: () => void; onNext: () => void }) => {
+            return (
+                <CalendarHeader
+                    index={index}
+                    onPrev={onPrev}
+                    onNext={onNext}
+                    scrollMode={scrollMode}
+                    onPressYear={onPressYear}
+                    selectingYear={selectingYear}
+                    startYear={startYear}
+                    endYear={endYear}
+                    disableWeekDays={disableWeekDays}
+                />
+            );
+        },
+        [disableWeekDays, endYear, onPressYear, scrollMode, selectingYear, startYear],
+    );
+
     return (
         <View style={containerStyle}>
             <Swiper
                 initialIndex={getInitialIndex(firstDate)}
                 selectedYear={selectedYear}
                 scrollMode={scrollMode}
-                renderItem={({ index }) => (
-                    <Month
-                        locale={locale}
-                        mode={mode}
-                        key={index}
-                        validRange={validRange}
-                        index={index}
-                        startDate={startDate}
-                        endDate={endDate}
-                        date={date}
-                        dates={dates}
-                        onPressYear={onPressYear}
-                        selectingYear={selectingYear}
-                        onPressDate={onPressDate}
-                        scrollMode={scrollMode}
-                        disableWeekDays={disableWeekDays}
-                    />
-                )}
-                renderHeader={({ onPrev, onNext }) => (
-                    <CalendarHeader
-                        onPrev={onPrev}
-                        onNext={onNext}
-                        scrollMode={scrollMode}
-                        disableWeekDays={disableWeekDays}
-                    />
-                )}
+                renderItem={renderMonthComponent}
+                renderHeader={renderCalenderHeader}
             />
             {scrollMode === 'horizontal' ? (
                 <YearPicker

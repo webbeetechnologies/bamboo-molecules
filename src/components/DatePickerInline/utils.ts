@@ -138,7 +138,6 @@ export const datePickerDayStyles: ComponentStylePropWithVariants<
     button: {
         width: daySize,
         height: daySize,
-        marginTop: 'spacings.2',
         overflow: 'hidden',
         borderRadius: daySize / 2,
     },
@@ -220,11 +219,10 @@ export const datePickerHeaderStyles: ComponentStylePropWithVariants<
     DatePickerHeaderCustomProps
 > = {
     datePickerHeader: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        left: 0,
-        zIndex: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginHorizontal: 'spacings.5',
     },
     buttonContainer: {
         height: 56,

@@ -24,6 +24,7 @@ export interface BaseMonthProps {
     selectingMonth?: boolean;
     onPressDropdown?: (type: 'month' | 'year' | undefined) => void;
     onChange?: (value: number, type: 'month' | 'year') => void;
+    isDocked?: boolean;
 }
 
 export interface MonthRangeProps extends BaseMonthProps {

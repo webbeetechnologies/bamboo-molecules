@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { getInitialIndex } from '../DatePickerInline/dateUtils';
 import Swiper from '../DatePickerInline/Swiper';
-import Month from './Month';
+import Month from '../DatePickerInline/Month';
 import CalendarHeader from './DatePickerDockedHeader';
 import YearPicker from '../DatePickerInline/YearPicker';
 import MonthPicker from './MonthPicker';
@@ -33,6 +33,7 @@ function DatePickerDocked(props: DatePickerDockedProps) {
     const { triggerRef, isOpen, onToggle } = props;
     return (
         <Popover
+            placement="bottom right"
             contentStyles={styles.popoverContainer}
             triggerRef={triggerRef}
             isOpen={isOpen}
@@ -59,9 +60,7 @@ const DatePickerDockedBase = (props: DatePickerDockedProps) => {
         onToggle,
     } = props;
 
-    const [{ localDate, pickerType, endDateYear, startDateYear }, setStore] = useSelector(
-        state => state,
-    );
+    const [{ localDate, pickerType }, setStore] = useSelector(state => state);
 
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePickerDocked', style);
@@ -82,19 +81,7 @@ const DatePickerDockedBase = (props: DatePickerDockedProps) => {
         (value: number, type: 'month' | 'year') => {
             let newDate = localDate;
             if (type === 'month') {
-                if (value > 11) {
-                    if (localDate.getFullYear() !== endDateYear) {
-                        newDate = setYear(localDate, localDate.getFullYear() + 1);
-                        newDate = setMonth(localDate, 0);
-                    }
-                } else if (value < 0) {
-                    if (localDate.getFullYear() !== startDateYear) {
-                        newDate = setYear(localDate, localDate.getFullYear() - 1);
-                        newDate = setMonth(localDate, 11);
-                    }
-                } else {
-                    newDate = setMonth(localDate, value);
-                }
+                newDate = setMonth(localDate, value);
             } else {
                 newDate = setYear(localDate, value);
             }
@@ -104,7 +91,7 @@ const DatePickerDockedBase = (props: DatePickerDockedProps) => {
                 pickerType: undefined,
             }));
         },
-        [localDate, setStore, endDateYear, startDateYear],
+        [localDate, setStore],
     );
 
     const onPressDate = useCallback(
@@ -132,14 +119,15 @@ const DatePickerDockedBase = (props: DatePickerDockedProps) => {
                     index={index}
                     startDate={startDate}
                     endDate={endDate}
-                    date={date}
+                    date={localDate}
                     onPressDate={onPressDate}
                     scrollMode={scrollMode}
                     disableWeekDays={disableWeekDays}
+                    isDocked
                 />
             );
         },
-        [date, disableWeekDays, endDate, locale, onPressDate, startDate, validRange],
+        [localDate, disableWeekDays, endDate, locale, onPressDate, startDate, validRange],
     );
 
     const renderCalenderHeader = useCallback(() => {
