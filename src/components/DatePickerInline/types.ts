@@ -7,30 +7,17 @@ export interface BaseMonthProps {
     disableWeekDays?: DisableWeekDaysType;
     mode: ModeType;
     index: number;
-    onPressYear?: (year: number) => any;
-    selectingYear?: boolean;
     onPressDate: (date: Date) => any;
     validRange?: ValidRangeType;
 
     // some of these should be required in final implementation
-    startDate?: CalendarDate;
-    endDate?: CalendarDate;
     date?: CalendarDate;
     dates?: CalendarDates;
-    onPrev?: () => any;
-    onNext?: () => any;
-    selectedMonth?: number;
-    selectedYear?: number;
-    selectingMonth?: boolean;
-    onPressDropdown?: (type: 'month' | 'year' | undefined) => void;
-    onChange?: (value: number, type: 'month' | 'year') => void;
     isDocked?: boolean;
 }
 
 export interface MonthRangeProps extends BaseMonthProps {
     mode: 'range';
-    startDate: CalendarDate;
-    endDate: CalendarDate;
 }
 
 export interface MonthSingleProps extends BaseMonthProps {
@@ -64,8 +51,9 @@ export type BaseDatePickerProps = {
     startDate?: CalendarDate;
     endDate?: CalendarDate;
     dateMode?: 'start' | 'end';
-
     style?: ViewStyle;
+    isDocked?: boolean;
+    onToggle?: () => void;
 };
 
 export type CalendarDate = Date | null | undefined;

@@ -5,8 +5,8 @@ import { useComponentStyles, useMolecules } from '../../hooks';
 import type { DisableWeekDaysType } from '../DatePickerInline/dateUtils';
 import DayNames, { dayNamesHeight } from '../DatePickerInline/DayNames';
 import HeaderItem from '../DatePickerInline/HeaderItem';
-import { useStore } from './DatePickerDocked';
-import { add, format, setMonth, setYear } from 'date-fns';
+import { useStore } from '../DatePickerInline/DatePickerInlineBase';
+import { add, format } from 'date-fns';
 
 const buttonContainerHeight = 56;
 const buttonContainerMarginTop = 4;
@@ -27,7 +27,6 @@ function DatePickerDockedHeader({
     const [{ localDate, pickerType, startDateYear, endDateYear }, setStore] = useStore(
         state => state,
     );
-
     const componentStyles = useComponentStyles('DatePickerDocked_Header', styleProp);
 
     const { monthName } = useMemo(() => {
@@ -54,49 +53,36 @@ function DatePickerDockedHeader({
         [setStore, pickerType],
     );
 
-    const handleOnPrevious = useCallback(
-        (type?: 'month' | 'year') => {
-            let newDate = localDate;
-            if (type === 'month') {
-                if (newDate.getMonth() === 0) {
-                    if (newDate.getFullYear() !== startDateYear) {
-                        newDate = add(newDate, { years: -1, months: -1 });
-                    }
-                } else {
-                    newDate = setMonth(newDate, newDate.getMonth() - 1);
-                }
-            } else {
-                newDate = setYear(newDate, newDate.getFullYear() - 1);
+    const isNotInRange = useCallback(
+        (date: Date) => {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            if (year < startDateYear || year > endDateYear || month > 11 || month < 0) {
+                return true;
             }
-            setStore(prev => ({
-                ...prev,
-                localDate: newDate,
-            }));
+            return false;
         },
-        [localDate, setStore, startDateYear],
+        [startDateYear, endDateYear],
     );
 
-    const handleOnNext = useCallback(
-        (type?: 'month' | 'year') => {
+    const handleChange = useCallback(
+        (offset: number, type?: 'month' | 'year') => {
             let newDate = localDate;
-            if (type === 'month') {
-                if (newDate.getMonth() === 11) {
-                    if (newDate.getFullYear() !== endDateYear) {
-                        newDate = add(newDate, { years: 1, months: 1 });
-                    }
-                } else {
-                    newDate = setMonth(newDate, newDate.getMonth() + 1);
-                }
-            } else {
-                newDate = setYear(newDate, newDate.getFullYear() + 1);
-            }
+            const prop = type === 'month' ? 'months' : 'years';
+            newDate = add(newDate, { [prop]: offset });
+
+            if (isNotInRange(newDate)) return;
+
             setStore(prev => ({
                 ...prev,
                 localDate: newDate,
             }));
         },
-        [localDate, setStore, endDateYear],
+        [isNotInRange, localDate, setStore],
     );
+
+    const handleChangePrevious = useMemo(() => handleChange.bind(null, -1), [handleChange]);
+    const handleChangeNext = useMemo(() => handleChange.bind(null, 1), [handleChange]);
 
     return (
         <View>
@@ -105,22 +91,18 @@ function DatePickerDockedHeader({
                     selecting={!!pickerType}
                     type="month"
                     value={monthName}
-                    onNext={handleOnNext}
-                    onPrev={handleOnPrevious}
+                    onNext={handleChangeNext}
+                    onPrev={handleChangePrevious}
                     onPressDropdown={handlePressDropDown}
-                    startYear={startDateYear}
-                    endYear={endDateYear}
                     pickerType={pickerType}
                 />
                 <HeaderItem
                     selecting={!!pickerType}
                     type="year"
                     value={localDate.getFullYear()}
-                    onNext={handleOnNext}
-                    onPrev={handleOnPrevious}
+                    onNext={handleChangeNext}
+                    onPrev={handleChangePrevious}
                     onPressDropdown={handlePressDropDown}
-                    startYear={startDateYear}
-                    endYear={endDateYear}
                     pickerType={pickerType}
                 />
             </View>

@@ -3,15 +3,12 @@ import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { FlatListRef } from '../FlatList';
 import { range } from '../../utils/dateTimePicker';
-import { MONTHS_DATA } from './utils';
-import { useStore } from './DatePickerDocked';
+import { MONTHS_DATA } from '../DatePickerDocked/utils';
+import { useStore } from './DatePickerInlineBase';
+import { setYear } from 'date-fns';
 
-export default function MonthPicker({
-    onChange,
-}: {
-    onChange: (month: number, type: 'month' | 'year') => any;
-}) {
-    const [{ localDate, pickerType }] = useStore(state => state);
+export default function MonthPicker() {
+    const [{ localDate, pickerType }, setStore] = useStore(state => state);
     const { FlatList, View, HorizontalDivider } = useMolecules();
     const monthPickerStyles = useComponentStyles('DatePickerDocked_MonthPicker');
     const flatList = useRef<FlatListRef<number> | null>(null);
@@ -34,9 +31,9 @@ export default function MonthPicker({
 
     const handleOnChange = useCallback(
         (month: number) => {
-            onChange(month, 'month');
+            setStore(prev => ({ localDate: setYear(prev.localDate, month) }));
         },
-        [onChange],
+        [setStore],
     );
 
     const renderItem = useCallback(

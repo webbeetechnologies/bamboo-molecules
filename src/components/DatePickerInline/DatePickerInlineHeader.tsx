@@ -2,55 +2,40 @@ import { memo, useCallback, useMemo } from 'react';
 import type { ViewStyle } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
-import { getRealIndex, DisableWeekDaysType, addMonths } from './dateUtils';
 import DayNames, { dayNamesHeight } from './DayNames';
 import HeaderItem from './HeaderItem';
-import { format } from 'date-fns';
+import { add, format } from 'date-fns';
+import { useStore } from './DatePickerInlineBase';
+import type { DisableWeekDaysType } from './dateUtils';
 
 const buttonContainerHeight = 56;
 const buttonContainerMarginTop = 4;
 const buttonContainerMarginBottom = 8;
 
 export type CalendarHeaderProps = {
-    index: number;
     locale?: string;
     scrollMode: 'horizontal' | 'vertical';
-    onPrev: () => any;
-    onNext: () => any;
     disableWeekDays?: DisableWeekDaysType;
     style?: ViewStyle;
-    onPressYear: (year: number) => void;
-    selectingYear: boolean;
-    startYear: number;
-    endYear: number;
 };
 
-function DatePickerInline({
-    index,
+function DatePickerInlineHeader({
     locale = 'en',
     scrollMode,
-    onPrev,
-    onNext,
     disableWeekDays,
-    onPressYear,
-    startYear,
-    endYear,
-    selectingYear,
     style: styleProp,
 }: CalendarHeaderProps) {
+    const [{ localDate, pickerType }, setStore] = useStore(state => state);
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePicker_Header', styleProp);
 
     const isHorizontal = scrollMode === 'horizontal';
 
-    const realIndex = getRealIndex(index);
-
     const { monthName, year } = useMemo(() => {
-        const md = addMonths(new Date(), realIndex);
-        const y = md.getFullYear();
+        const y = localDate.getFullYear();
 
-        return { monthName: format(md, 'LLLL'), year: y };
-    }, [realIndex]);
+        return { monthName: format(localDate, 'LLLL'), year: y };
+    }, [localDate]);
 
     const { containerStyle } = useMemo(() => {
         const { datePickerHeader, buttonContainer, buttonWrapper, spacer, ...rest } =
@@ -65,8 +50,17 @@ function DatePickerInline({
     }, [componentStyles]);
 
     const handleOnYearPress = useCallback(() => {
-        isHorizontal && onPressYear ? onPressYear(year) : undefined;
-    }, [isHorizontal, onPressYear, year]);
+        isHorizontal &&
+            setStore(prev => ({ ...prev, pickerType: prev.pickerType ? undefined : 'year' }));
+    }, [isHorizontal, setStore]);
+
+    const handleOnPrev = useCallback(() => {
+        setStore(prev => ({ ...prev, localDate: add(prev.localDate, { months: -1 }) }));
+    }, [setStore]);
+
+    const handleOnNext = useCallback(() => {
+        setStore(prev => ({ ...prev, localDate: add(prev.localDate, { months: 1 }) }));
+    }, [setStore]);
 
     return (
         <View pointerEvents={'box-none'}>
@@ -77,18 +71,14 @@ function DatePickerInline({
                             onPressDropdown={handleOnYearPress}
                             type="year"
                             value={`${monthName} ${year}`}
-                            startYear={startYear}
-                            endYear={endYear}
                             pickerType="year"
-                            selecting={selectingYear}
+                            selecting={pickerType === 'year'}
                         />
                         <HeaderItem
-                            onNext={onNext}
-                            onPrev={onPrev}
+                            onNext={handleOnNext}
+                            onPrev={handleOnPrev}
                             selecting={false}
                             value={year}
-                            startYear={startYear}
-                            endYear={endYear}
                             pickerType="year"
                         />
                     </View>
@@ -111,4 +101,4 @@ export function getCalendarHeaderHeight(scrollMode: 'horizontal' | 'vertical') {
     return dayNamesHeight;
 }
 
-export default memo(DatePickerInline);
+export default memo(DatePickerInlineHeader);

@@ -1,11 +1,9 @@
-import { useMemo, memo, useCallback } from 'react';
+import { useMemo, memo } from 'react';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { format } from '../../utils';
 import {
-    addMonths,
     daySize,
-    getRealIndex,
     getGridCount,
     gridCounts,
     startAtIndex,
@@ -18,6 +16,7 @@ import { getCalendarHeaderHeight } from './DatePickerInlineHeader';
 import { dayNamesHeight } from './DayNames';
 import type { MonthMultiProps, MonthRangeProps, MonthSingleProps } from './types';
 import Week from './Week';
+import { useStore } from './DatePickerInlineBase';
 
 export type Props = MonthSingleProps | MonthRangeProps | MonthMultiProps;
 
@@ -27,31 +26,25 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         mode,
         date,
         dates,
-        startDate,
-        endDate,
-        onPressYear,
-        selectingYear,
         onPressDate,
         scrollMode,
         disableWeekDays,
-        // locale,
         validRange,
         isDocked,
     } = props;
-    const { TouchableRipple, Text, IconButton, View } = useMolecules();
+    const [{ localDate, startDate, endDate }] = useStore(state => state);
+    const { Text, View } = useMolecules();
     const monthStyles = useComponentStyles('DatePicker_Month');
 
-    const realIndex = getRealIndex(index);
     const isHorizontal = scrollMode === 'horizontal';
     const { isDisabled, isWithinValidRange } = useRangeChecker(validRange);
 
     const { monthName, month, year } = useMemo(() => {
-        const md = addMonths(new Date(), realIndex);
-        const y = isDocked && date ? date?.getFullYear() : md.getFullYear();
-        const m = isDocked && date ? date?.getMonth() : md.getMonth();
+        const y = localDate.getFullYear();
+        const m = localDate.getMonth();
 
-        return { monthName: format(isDocked && date ? date : md, 'LLLL'), month: m, year: y };
-    }, [realIndex, isDocked, date]);
+        return { monthName: format(localDate, 'LLLL'), month: m, year: y };
+    }, [localDate]);
 
     const grid = useMemo(
         () =>
@@ -71,71 +64,48 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         [year, month, index, isDisabled, mode, isWithinValidRange, startDate, endDate, dates, date],
     );
 
-    const {
-        headerStyle,
-        yearButtonStyle,
-        yearInnerStyle,
-        monthLabelStyle,
-        iconContainerStyle,
-        weekContainerStyle,
-    } = useMemo(() => {
-        const {
-            monthLabel: _monthLabel,
-            yearButton,
-            yearButtonInner,
-            month: _monthStyle,
-            monthHeader,
-        } = monthStyles;
-        const { typescale, ...monthLabel } = _monthLabel;
-
-        return {
-            monthStyle: [_monthStyle, { height: getMonthHeight(scrollMode, index) }],
-            headerStyle: [
+    const { headerStyle, yearButtonStyle, yearInnerStyle, monthLabelStyle, weekContainerStyle } =
+        useMemo(() => {
+            const {
+                monthLabel: _monthLabel,
+                yearButton,
+                yearButtonInner,
+                month: _monthStyle,
                 monthHeader,
-                isHorizontal
-                    ? {
-                          alignItems: isDocked && 'flex-start',
-                          marginLeft: isDocked && 'spacings.4',
-                          marginTop: monthHeaderSingleMarginTop,
-                          marginBottom: monthHeaderSingleMarginBottom,
-                      }
-                    : null,
-            ],
-            yearButtonStyle: yearButton,
-            yearInnerStyle: yearButtonInner,
-            monthLabelStyle: [monthLabel, typescale],
-            iconContainerStyle: { opacity: isHorizontal ? 1 : 0 },
-            weekContainerStyle: { marginHorizontal: 'spacings.3' },
-        };
-    }, [index, isHorizontal, monthStyles, scrollMode, isDocked]);
+            } = monthStyles;
+            const { typescale, ...monthLabel } = _monthLabel;
 
-    const onPressDropdown = useCallback(
-        () => onPressYear && onPressYear(year),
-        [onPressYear, year],
-    );
+            return {
+                monthStyle: [_monthStyle, { height: getMonthHeight(scrollMode, index) }],
+                headerStyle: [
+                    monthHeader,
+                    isHorizontal
+                        ? {
+                              alignItems: isDocked && 'flex-start',
+                              marginLeft: isDocked && 'spacings.4',
+                              marginTop: monthHeaderSingleMarginTop,
+                              marginBottom: monthHeaderSingleMarginBottom,
+                          }
+                        : null,
+                ],
+                yearButtonStyle: yearButton,
+                yearInnerStyle: yearButtonInner,
+                monthLabelStyle: [monthLabel, typescale],
+                weekContainerStyle: { marginHorizontal: 'spacings.3' },
+            };
+        }, [index, isHorizontal, monthStyles, scrollMode, isDocked]);
 
     return (
         <View>
             {!isHorizontal && (
                 <View style={headerStyle}>
-                    <TouchableRipple
-                        disabled={!isHorizontal}
-                        onPress={onPressDropdown}
-                        accessibilityRole="button"
-                        accessibilityLabel={`${monthName} ${year}`}
-                        style={yearButtonStyle}>
+                    <View accessibilityLabel={`${monthName} ${year}`} style={yearButtonStyle}>
                         <View style={yearInnerStyle}>
                             <Text style={monthLabelStyle} selectable={false}>
                                 {monthName} {year}
                             </Text>
-                            <View style={iconContainerStyle}>
-                                <IconButton
-                                    onPress={onPressDropdown}
-                                    name={selectingYear ? 'chevron-up' : 'chevron-down'}
-                                />
-                            </View>
                         </View>
-                    </TouchableRipple>
+                    </View>
                 </View>
             )}
 

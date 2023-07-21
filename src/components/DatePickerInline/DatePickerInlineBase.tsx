@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useComponentStyles, useLatest, useMolecules } from '../../hooks';
@@ -15,37 +15,72 @@ import type {
     MultiChange,
     CalendarDates,
 } from './types';
+import { createFastContext } from '../../fast-context';
+import MonthPicker from './MonthPicker';
+import DatePickerDockedHeader from '../DatePickerDocked/DatePickerDockedHeader';
+
+export type Store = {
+    localDate: Date;
+    startDateYear: number;
+    endDateYear: number;
+    pickerType: 'month' | 'year' | undefined;
+    startDate: CalendarDate;
+    endDate: CalendarDate;
+};
+
+const defaultValue = {
+    localDate: new Date(),
+    startDateYear: 1800,
+    endDateYear: 2200,
+    pickerType: undefined,
+    startDate: new Date(),
+    endDate: new Date(),
+};
+
+const { Provider, useSelector } = createFastContext<Store>(defaultValue);
 
 function DatePickerInlineBase(props: DatePickerInlineBaseProps) {
+    return (
+        <Provider value={defaultValue}>
+            <DatePickerInlineComponent {...props} />
+        </Provider>
+    );
+}
+
+function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
     const {
         locale = 'en',
         mode = 'single',
         onChange,
-        startDate,
-        endDate,
-        date,
-        disableWeekDays,
         startYear = 1800,
         endYear = 2200,
+        date,
+        disableWeekDays,
         dates,
         validRange,
         dateMode,
         style,
+        isDocked,
+        onToggle,
     } = props;
+    const [{ pickerType, startDate, endDate }, setStore] = useSelector(state => state);
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePickerInline', style);
 
     const scrollMode = mode === 'range' || mode === 'multiple' ? 'vertical' : 'horizontal';
+    const isHorizontal = scrollMode === 'horizontal';
 
-    const [selectedYear, setSelectedYear] = useState<number | undefined>(undefined);
-    const [selectingYear, setSelectingYear] = useState<boolean>(false);
-    const onPressYear = useCallback(
-        (year: number) => {
-            setSelectedYear(year);
-            setSelectingYear(prev => !prev);
-        },
-        [setSelectingYear],
-    );
+    useEffect(() => {
+        setStore(prev => ({
+            ...prev,
+            localDate: date || new Date(),
+            startDateYear: startYear,
+            endDateYear: endYear,
+            startDate: props.startDate,
+            endDate: props.endDate,
+        }));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // prevent re-rendering all months when something changed we only need the
     // latest version of the props and we don't want the useCallback to change
@@ -86,8 +121,9 @@ function DatePickerInlineBase(props: DatePickerInlineBaseProps) {
                     change: exists ? 'removed' : 'added',
                 });
             }
+            onToggle && onToggle();
         },
-        [mode, dateMode, onChangeRef, startDateRef, endDateRef, datesRef],
+        [mode, dateMode, onChangeRef, startDateRef, endDateRef, datesRef, onToggle],
     );
 
     const { containerStyle, firstDate } = useMemo(() => {
@@ -98,79 +134,47 @@ function DatePickerInlineBase(props: DatePickerInlineBaseProps) {
     }, [componentStyles, date, dates, startDate]);
 
     const renderMonthComponent = useCallback(
-        ({ index }: { index: number }) => {
+        (index: number) => {
             return (
                 <Month
                     locale={locale}
                     mode={mode}
-                    key={index}
                     validRange={validRange}
                     index={index}
-                    startDate={startDate}
-                    endDate={endDate}
                     date={date}
                     dates={dates}
-                    onPressYear={onPressYear}
-                    selectingYear={selectingYear}
                     onPressDate={onPressDate}
                     scrollMode={scrollMode}
                     disableWeekDays={disableWeekDays}
+                    isDocked={isDocked}
                 />
             );
         },
-        [
-            date,
-            dates,
-            disableWeekDays,
-            endDate,
-            locale,
-            mode,
-            onPressDate,
-            onPressYear,
-            scrollMode,
-            selectingYear,
-            startDate,
-            validRange,
-        ],
+        [date, dates, disableWeekDays, locale, mode, onPressDate, scrollMode, validRange, isDocked],
     );
 
-    const renderCalenderHeader = useCallback(
-        ({ index, onPrev, onNext }: { index: number; onPrev: () => void; onNext: () => void }) => {
-            return (
-                <CalendarHeader
-                    index={index}
-                    onPrev={onPrev}
-                    onNext={onNext}
-                    scrollMode={scrollMode}
-                    onPressYear={onPressYear}
-                    selectingYear={selectingYear}
-                    startYear={startYear}
-                    endYear={endYear}
-                    disableWeekDays={disableWeekDays}
-                />
-            );
-        },
-        [disableWeekDays, endYear, onPressYear, scrollMode, selectingYear, startYear],
-    );
+    const renderCalenderHeader = useCallback(() => {
+        return isDocked ? (
+            <DatePickerDockedHeader disableWeekDays={disableWeekDays} locale={locale} />
+        ) : (
+            <CalendarHeader
+                scrollMode={scrollMode}
+                disableWeekDays={disableWeekDays}
+                locale={locale}
+            />
+        );
+    }, [disableWeekDays, scrollMode, isDocked, locale]);
 
     return (
         <View style={containerStyle}>
             <Swiper
                 initialIndex={getInitialIndex(firstDate)}
-                selectedYear={selectedYear}
                 scrollMode={scrollMode}
                 renderItem={renderMonthComponent}
                 renderHeader={renderCalenderHeader}
             />
-            {scrollMode === 'horizontal' ? (
-                <YearPicker
-                    selectedYear={selectedYear}
-                    selectingYear={selectingYear}
-                    onChange={onPressYear}
-                    startYear={startYear || 1800}
-                    endYear={endYear || 2200}
-                />
-            ) : null}
+            {isHorizontal && pickerType === 'year' && <YearPicker />}
+            {isHorizontal && pickerType === 'month' && <MonthPicker />}
         </View>
     );
 }
@@ -178,5 +182,8 @@ function DatePickerInlineBase(props: DatePickerInlineBaseProps) {
 const styles = StyleSheet.create({
     root: { flex: 1 },
 });
+
+export const useStore = useSelector;
+const DatePickerInlineComponent = memo(DatePickerInlineBaseChild);
 
 export default memo(DatePickerInlineBase);

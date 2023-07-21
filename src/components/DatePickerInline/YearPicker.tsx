@@ -3,26 +3,21 @@ import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { FlatListRef } from '../FlatList';
 import { getYearRange } from '../../utils';
+import { useStore } from './DatePickerInlineBase';
+import { setYear } from 'date-fns';
 
 const ITEM_HEIGHT = 62;
 
-export default function YearPicker({
-    selectedYear,
-    selectingYear,
-    onChange,
-    startYear,
-    endYear,
-}: {
-    selectedYear: number | undefined;
-    selectingYear: boolean;
-    onChange: (year: number, type: 'month' | 'year') => any;
-    startYear?: number;
-    endYear?: number;
-}) {
+export default function YearPicker() {
+    const [{ startDateYear, endDateYear, localDate, pickerType }, setStore] = useStore(
+        state => state,
+    );
     const { FlatList, View, HorizontalDivider } = useMolecules();
     const yearPickerStyles = useComponentStyles('DatePicker_YearPicker');
     const flatList = useRef<FlatListRef<number> | null>(null);
-    const years = getYearRange(startYear, endYear);
+    const years = getYearRange(startDateYear, endDateYear);
+    const selectingYear = pickerType === 'year';
+    const selectedYear = localDate.getFullYear();
 
     // scroll to selected year
     useEffect(() => {
@@ -51,9 +46,13 @@ export default function YearPicker({
 
     const handleOnChange = useCallback(
         (year: number) => {
-            onChange(year, 'year');
+            setStore(prev => ({
+                ...prev,
+                localDate: setYear(prev.localDate, year),
+                pickerType: undefined,
+            }));
         },
-        [onChange],
+        [setStore],
     );
 
     return (

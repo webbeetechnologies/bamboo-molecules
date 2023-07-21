@@ -1,13 +1,12 @@
 import { useComponentStyles } from '@bambooapp/bamboo-atoms';
 import { memo, useCallback, useMemo } from 'react';
 import { useMolecules } from '../../hooks';
+import { useStore } from './DatePickerInlineBase';
 
 function HeaderItem({
     value,
     selecting,
     type,
-    endYear,
-    startYear,
     pickerType,
     onPressDropdown,
     onNext,
@@ -17,12 +16,11 @@ function HeaderItem({
     type?: 'month' | 'year';
     selecting?: boolean;
     pickerType: 'month' | 'year' | undefined;
-    startYear: number;
-    endYear: number;
     onPressDropdown?: (type: 'month' | 'year') => void;
     onNext?: (type: 'month' | 'year' | undefined) => void;
     onPrev?: (type: 'month' | 'year' | undefined) => void;
 }) {
+    const [{ startDateYear, endDateYear }] = useStore(state => state);
     const { View, IconButton, TouchableRipple, Text } = useMolecules();
     const headerItemStyles = useComponentStyles('DatePicker_HeaderItem');
     const disabled = pickerType && pickerType !== type;
@@ -87,7 +85,7 @@ function HeaderItem({
                         // Todo: Translate
                         accessibilityLabel={'Previous'}
                         onPress={handleOnPrevious}
-                        disabled={value === startYear}
+                        disabled={value === startDateYear}
                     />
                 </View>
             )}
@@ -121,7 +119,7 @@ function HeaderItem({
                         // Todo: Translate
                         accessibilityLabel={'Next'}
                         onPress={handleOnNext}
-                        disabled={value === endYear}
+                        disabled={value === endDateYear}
                     />
                 </View>
             )}
