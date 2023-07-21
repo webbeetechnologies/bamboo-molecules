@@ -1,13 +1,11 @@
 import {
     ComponentType,
-    createContext,
     forwardRef,
     Fragment,
     memo,
     ReactNode,
     RefObject,
     useCallback,
-    useContext,
     useEffect,
     useImperativeHandle,
     useMemo,
@@ -24,7 +22,11 @@ export type Store = {
 
 const defaultValue = { currentIndex: 0 };
 
-const { RefContext, Provider, useSelector } = createFastContext<Store>(defaultValue);
+const {
+    useStoreRef,
+    Provider,
+    useContext: useFastContext,
+} = createFastContext<Store>(defaultValue);
 
 const withKeyboardAccessibility = <P extends Record<string, any>>(
     Component: ComponentType<P>,
@@ -94,7 +96,7 @@ const withKeyboardAccessibility = <P extends Record<string, any>>(
                 : {};
 
         return (
-            <Provider value={defaultValue}>
+            <Provider defaultValue={defaultValue}>
                 <Wrapper
                     {...(accessibilityWrapperProps as Omit<AccessibilityWrapperProps, 'children'>)}>
                     <Component {...(props as P)} ref={componentRef} />
@@ -121,9 +123,10 @@ const AccessibilityWrapper = memo(
         isFlat,
         onCancel,
     }: AccessibilityWrapperProps) => {
-        const [currentIndex, setStore] = useSelector(state => state.currentIndex);
+        const [currentIndex, setStore] = useFastContext(state => state.currentIndex);
 
-        const currentIndexRef = useContext(RefContext).store;
+        // use the ref here to avoid recreation of the keyToFunctionMap function
+        const { store: currentIndexRef } = useStoreRef();
 
         const keyToFunctionMap = useMemo(
             () => ({
@@ -190,32 +193,10 @@ const AccessibilityWrapper = memo(
             };
         }, [onKeyPress]);
 
-        const checkIsCurrentIndex = useCallback(
-            (index: number) => index === currentIndex,
-            [currentIndex],
-        );
-
-        const contextValue = useMemo(
-            () => ({
-                checkIsCurrentIndex,
-            }),
-            [checkIsCurrentIndex],
-        );
-
-        return (
-            <KeyboardAccessibilityContext.Provider value={contextValue}>
-                {children}
-            </KeyboardAccessibilityContext.Provider>
-        );
+        return <>{children}</>;
     },
 );
 
-export const KeyboardAccessibilityContext = createContext<{
-    checkIsCurrentIndex: (index: number) => boolean;
-}>({
-    checkIsCurrentIndex: (_index: number) => false,
-});
-
-export const useStore = useSelector;
+export const useCurrentIndexStore = useFastContext;
 
 export default withKeyboardAccessibility;
