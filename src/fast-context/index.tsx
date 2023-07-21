@@ -54,16 +54,17 @@ export const createFastContext = <T,>(defaultValue: T) => {
 
     return {
         // this will never cause rerender if we use it with useContext because it's just a ref
-        RefContext: context,
+        useStoreRef: createUseRefContext(context),
         Provider: createProvider<T>(context as unknown as Context<T>),
-        useSelector: createUseContext<T>(context as unknown as Context<T>),
+        // returns an array, first item is getter and the second item is setter
+        useContext: createUseContext<T>(context as unknown as Context<T>),
     };
 };
 
 export const createProvider = <T,>(StoreContext: Context<T>) =>
-    typedMemo(({ value, children }: { value: T; children: ReactNode }) => {
+    typedMemo(({ defaultValue, children }: { defaultValue: T; children: ReactNode }) => {
         return (
-            <StoreContext.Provider value={useStoreData<T>(value) as any}>
+            <StoreContext.Provider value={useStoreData<T>(defaultValue) as any}>
                 {children}
             </StoreContext.Provider>
         );
@@ -72,6 +73,10 @@ export const createProvider = <T,>(StoreContext: Context<T>) =>
 export const createUseContext = <T,>(_Context: Context<T>) => {
     return <SelectorOutput,>(selector: (store: T) => SelectorOutput) =>
         useStore<SelectorOutput, T>(_Context, selector);
+};
+
+export const createUseRefContext = <T,>(_Context: Context<UseStoreDataReturnType<T>>) => {
+    return () => useContext<UseStoreDataReturnType<T>>(_Context);
 };
 
 export function useStore<SelectorOutput, IStore extends Record<string, any> = {}>(
