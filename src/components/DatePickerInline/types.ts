@@ -13,11 +13,15 @@ export interface BaseMonthProps {
     // some of these should be required in final implementation
     date?: CalendarDate;
     dates?: CalendarDates;
+    startDate?: CalendarDate;
+    endDate?: CalendarDate;
     isDocked?: boolean;
 }
 
 export interface MonthRangeProps extends BaseMonthProps {
     mode: 'range';
+    startDate: CalendarDate;
+    endDate: CalendarDate;
 }
 
 export interface MonthSingleProps extends BaseMonthProps {

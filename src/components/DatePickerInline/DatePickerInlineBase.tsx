@@ -24,8 +24,6 @@ export type Store = {
     startDateYear: number;
     endDateYear: number;
     pickerType: 'month' | 'year' | undefined;
-    startDate: CalendarDate;
-    endDate: CalendarDate;
 };
 
 const defaultValue = {
@@ -33,8 +31,6 @@ const defaultValue = {
     startDateYear: 1800,
     endDateYear: 2200,
     pickerType: undefined,
-    startDate: new Date(),
-    endDate: new Date(),
 };
 
 const { Provider, useSelector } = createFastContext<Store>(defaultValue);
@@ -54,6 +50,8 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
         onChange,
         startYear = 1800,
         endYear = 2200,
+        startDate,
+        endDate,
         date,
         disableWeekDays,
         dates,
@@ -63,7 +61,7 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
         isDocked,
         onToggle,
     } = props;
-    const [{ pickerType, startDate, endDate }, setStore] = useSelector(state => state);
+    const [{ pickerType }, setStore] = useSelector(state => state);
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePickerInline', style);
 
@@ -143,6 +141,8 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
                     index={index}
                     date={date}
                     dates={dates}
+                    startDate={startDate}
+                    endDate={endDate}
                     onPressDate={onPressDate}
                     scrollMode={scrollMode}
                     disableWeekDays={disableWeekDays}
@@ -150,7 +150,19 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
                 />
             );
         },
-        [date, dates, disableWeekDays, locale, mode, onPressDate, scrollMode, validRange, isDocked],
+        [
+            locale,
+            mode,
+            validRange,
+            date,
+            dates,
+            startDate,
+            endDate,
+            onPressDate,
+            scrollMode,
+            disableWeekDays,
+            isDocked,
+        ],
     );
 
     const renderCalenderHeader = useCallback(() => {

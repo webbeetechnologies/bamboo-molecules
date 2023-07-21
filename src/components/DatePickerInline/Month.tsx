@@ -11,6 +11,8 @@ import {
     estimatedMonthHeight,
     useRangeChecker,
     generateCalendarGrid,
+    getRealIndex,
+    addMonths,
 } from './dateUtils';
 import { getCalendarHeaderHeight } from './DatePickerInlineHeader';
 import { dayNamesHeight } from './DayNames';
@@ -26,25 +28,29 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         mode,
         date,
         dates,
+        startDate,
+        endDate,
         onPressDate,
         scrollMode,
         disableWeekDays,
         validRange,
         isDocked,
     } = props;
-    const [{ localDate, startDate, endDate }] = useStore(state => state);
+    const [{ localDate }] = useStore(state => state);
     const { Text, View } = useMolecules();
     const monthStyles = useComponentStyles('DatePicker_Month');
 
+    const realIndex = getRealIndex(index);
     const isHorizontal = scrollMode === 'horizontal';
     const { isDisabled, isWithinValidRange } = useRangeChecker(validRange);
 
     const { monthName, month, year } = useMemo(() => {
-        const y = localDate.getFullYear();
-        const m = localDate.getMonth();
+        const md = addMonths(new Date(), realIndex);
+        const y = mode === 'single' ? localDate.getFullYear() : md.getFullYear();
+        const m = mode === 'single' ? localDate.getMonth() : md.getMonth();
 
-        return { monthName: format(localDate, 'LLLL'), month: m, year: y };
-    }, [localDate]);
+        return { monthName: format(md, 'LLLL'), month: m, year: y };
+    }, [realIndex, localDate, mode]);
 
     const grid = useMemo(
         () =>
