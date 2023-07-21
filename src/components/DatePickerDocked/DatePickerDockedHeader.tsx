@@ -6,7 +6,7 @@ import type { DisableWeekDaysType } from '../DatePickerInline/dateUtils';
 import DayNames, { dayNamesHeight } from '../DatePickerInline/DayNames';
 import HeaderItem from '../DatePickerInline/HeaderItem';
 import { useStore } from './DatePickerDocked';
-import { format, setMonth, setYear } from 'date-fns';
+import { add, format, setMonth, setYear } from 'date-fns';
 
 const buttonContainerHeight = 56;
 const buttonContainerMarginTop = 4;
@@ -60,8 +60,7 @@ function DatePickerDockedHeader({
             if (type === 'month') {
                 if (newDate.getMonth() === 0) {
                     if (newDate.getFullYear() !== startDateYear) {
-                        newDate = setMonth(newDate, 11);
-                        newDate = setYear(newDate, newDate.getFullYear() - 1);
+                        newDate = add(newDate, { years: -1, months: -1 });
                     }
                 } else {
                     newDate = setMonth(newDate, newDate.getMonth() - 1);
@@ -83,8 +82,7 @@ function DatePickerDockedHeader({
             if (type === 'month') {
                 if (newDate.getMonth() === 11) {
                     if (newDate.getFullYear() !== endDateYear) {
-                        newDate = setMonth(newDate, 0);
-                        newDate = setYear(newDate, newDate.getFullYear() + 1);
+                        newDate = add(newDate, { years: 1, months: 1 });
                     }
                 } else {
                     newDate = setMonth(newDate, newDate.getMonth() + 1);
