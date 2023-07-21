@@ -10,6 +10,10 @@ import {
 import typedMemo from '../hocs/typedMemo';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
 
+type StoreDataType = Record<string, any>;
+
+type SelectorOutputType<IStore, SelectorOutput> = (store: IStore) => SelectorOutput;
+
 type UseStoreDataReturnType<T> = {
     get: () => T;
     set: (value: (prev: T) => Partial<T>) => void;
@@ -17,7 +21,7 @@ type UseStoreDataReturnType<T> = {
     subscribe: (callback: () => void) => () => void;
 };
 
-const useStoreData = <IStore extends Record<string, any> = {}>(
+const useStoreData = <IStore extends StoreDataType>(
     defaultValue: IStore,
 ): UseStoreDataReturnType<IStore> => {
     const store = useRef<IStore>(defaultValue as IStore);
@@ -46,43 +50,75 @@ const useStoreData = <IStore extends Record<string, any> = {}>(
     };
 };
 
-// TODO - fix typescript issues
-export const createFastContext = <T extends Record<string, any> = {}>(defaultValue: T) => {
-    const context = createContext<UseStoreDataReturnType<T>>(
-        defaultValue as unknown as UseStoreDataReturnType<T>,
-    );
+export const createFastContext = <T extends StoreDataType = {}>() => {
+    const context = createContext<UseStoreDataReturnType<T> | null>(null);
 
     return {
-        // this will never cause rerender if we use it with useContext because it's just a ref
+        /**
+         * using the value from here will never cause a rerender as context is based on refs.
+         */
         useStoreRef: createUseRefContext(context),
-        Provider: createProvider<T>(context as unknown as Context<T>),
-        // returns an array, first item is getter and the second item is setter
-        useContext: createUseContext<T>(context as unknown as Context<T>),
+
+        /**
+         *
+         * the value is memoized and thus changing the value will have no effect.
+         * use key prop to unmount and remount if necessary. alternatively use set from the context to update the value.
+         *
+         */
+        Provider: createProvider<T>(context as Context<UseStoreDataReturnType<T>>),
+
+        /**
+         *
+         * @param selector
+         * @param equalityCheck
+         * @returns tuple, first item is return value of the selector and the second item is setter
+         *
+         */
+        useContext: <SelectorOutput,>(
+            selector: SelectorOutputType<T, SelectorOutput>,
+            equalityCheck = Object.is,
+        ) => useStore(context as Context<UseStoreDataReturnType<T>>, selector, equalityCheck),
+
+        /**
+         *
+         * @param selector
+         * @param equalityCheck
+         * @returns return value of the selector
+         *
+         */
+        useContextValue: <SelectorOutput,>(
+            selector: SelectorOutputType<T, SelectorOutput>,
+            equalityCheck = Object.is,
+        ) => useStoreValue(context as Context<UseStoreDataReturnType<T>>, selector, equalityCheck),
     };
 };
 
-export const createProvider = <T extends Record<string, any> = {}>(StoreContext: Context<T>) =>
-    typedMemo(({ defaultValue, children }: { defaultValue: T; children: ReactNode }) => {
+export const createProvider = <T extends Record<string, any> = {}>(
+    StoreContext: Context<UseStoreDataReturnType<T>>,
+) =>
+    typedMemo(({ value, children }: { value: T; children: ReactNode }) => {
         return (
-            <StoreContext.Provider value={useStoreData<T>(defaultValue) as any}>
+            <StoreContext.Provider value={useStoreData<T>(value) as any}>
                 {children}
             </StoreContext.Provider>
         );
     });
 
-export const createUseContext = <T extends Record<string, any> = {}>(_Context: Context<T>) => {
-    return <SelectorOutput,>(selector: (store: T) => SelectorOutput) =>
-        useStore<SelectorOutput, T>(_Context, selector);
+export const createUseRefContext = <T,>(_Context: Context<UseStoreDataReturnType<T> | null>) => {
+    return () => {
+        const value = useContext<UseStoreDataReturnType<T> | null>(_Context);
+        if (value === null)
+            throw 'Fast Context requires the value to be wrapped in a Provider with a value.';
+
+        return value;
+    };
 };
 
-export const createUseRefContext = <T,>(_Context: Context<UseStoreDataReturnType<T>>) => {
-    return () => useContext<UseStoreDataReturnType<T>>(_Context);
-};
-
-export function useStore<SelectorOutput, IStore extends Record<string, any> = {}>(
-    _Context: Context<IStore>,
-    selector: (store: IStore) => SelectorOutput,
-): [SelectorOutput, (value: (prev: IStore) => Partial<IStore>) => void] {
+export const useStore = <IStore extends StoreDataType, SelectorOutput>(
+    _Context: Context<UseStoreDataReturnType<IStore>>,
+    selector: SelectorOutputType<IStore, SelectorOutput>,
+    equalityFn = Object.is,
+): [SelectorOutput, (value: (prev: IStore) => Partial<IStore>) => void] => {
     const store = useContext(_Context);
     if (!store) {
         throw new Error('Store not found');
@@ -97,7 +133,16 @@ export function useStore<SelectorOutput, IStore extends Record<string, any> = {}
         snapshot => {
             return selector(snapshot);
         },
+        equalityFn,
     );
 
     return [state, store.set];
-}
+};
+
+export const useStoreValue = <IStore extends StoreDataType, SelectorOutput>(
+    _Context: Context<UseStoreDataReturnType<IStore>>,
+    selector: SelectorOutputType<IStore, SelectorOutput>,
+    equalityFn = Object.is,
+) => {
+    return useStore(_Context, selector, equalityFn)[0];
+};
