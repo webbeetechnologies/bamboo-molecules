@@ -17,7 +17,9 @@ import {
     UseSearchableProps,
 } from '../../hooks';
 import type { SectionListProps, SectionListRenderItemInfo } from '../SectionList';
-import withKeyboardAccessibility, { useStore } from '../../hocs/withKeyboardAccessibility';
+import withKeyboardAccessibility, {
+    useCurrentIndexStore,
+} from '../../hocs/withKeyboardAccessibility';
 import { typedMemo } from '../../hocs';
 
 type DefaultSectionT<TItem> = {
@@ -213,7 +215,7 @@ const OptionListItem = typedMemo(
     }: OptionListItemProps<TItem, TSection>) => {
         const { TouchableRipple } = useMolecules();
 
-        const [focused] = useStore(state => {
+        const [focused] = useCurrentIndexStore(state => {
             return state.currentIndex === index;
         });
         const onPress = useCallback(() => {
