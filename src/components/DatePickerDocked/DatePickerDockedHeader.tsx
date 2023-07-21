@@ -29,9 +29,8 @@ function DatePickerDockedHeader({
     );
     const componentStyles = useComponentStyles('DatePickerDocked_Header', styleProp);
 
-    const { monthName } = useMemo(() => {
-        const monthNameStr = format(localDate, 'MMM');
-        return { monthName: monthNameStr };
+    const monthName = useMemo(() => {
+        return format(localDate, 'MMM');
     }, [localDate]);
 
     const { containerStyle, daysWrapperStyle } = useMemo(() => {
