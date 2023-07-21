@@ -2,11 +2,7 @@ import { memo, ReactNode, useMemo } from 'react';
 import type { Field } from '../types';
 import { keyBy } from '../../utils';
 
-import {
-    createFastContext,
-    createUseContext,
-    createProvider,
-} from '@bambooapp/bamboo-molecules/fast-context';
+import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
 export type FieldConfigs = Record<
     string,
@@ -21,9 +17,8 @@ export type FieldsContextType = {
     fieldsConfigs: FieldConfigs;
 };
 
-const FieldsContext = createFastContext<FieldsContextType>({ fields: [], fieldsConfigs: {} });
-
-const FieldsContextProvider = createProvider(FieldsContext);
+const { Provider: FieldsContextProvider, useContext: useFieldsSelector } =
+    createFastContext<FieldsContextType>();
 
 const emptyObj = {};
 
@@ -47,8 +42,6 @@ export const FieldsProvider = memo(
     },
 );
 
-const useFieldContext = createUseContext(FieldsContext);
-
 const fieldSelector = (id: string, fields: Field[]) => {
     const fieldsMapById = keyBy(fields, 'id');
 
@@ -60,7 +53,7 @@ const fieldSelector = (id: string, fields: Field[]) => {
 };
 
 export const useField = (id: string) => {
-    const [field] = useFieldContext(store => {
+    const [field] = useFieldsSelector(store => {
         return fieldSelector(id, store.fields);
     });
 
@@ -72,7 +65,7 @@ const fieldConfigSelector = (id: string, fieldsConfigs: FieldConfigs) => {
 };
 
 export const useFieldConfigs = (id: string) => {
-    const [fieldConfigs] = useFieldContext(store => {
+    const [fieldConfigs] = useFieldsSelector(store => {
         return fieldConfigSelector(id, store.fieldsConfigs);
     });
 

@@ -1,14 +1,23 @@
-import type { ForwardedRef } from 'react';
-import { forwardRef, memo, useCallback, useMemo } from 'react';
+import { forwardRef, memo, useCallback, useMemo, ForwardedRef } from 'react';
 import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
-import type { ScrollView } from 'react-native';
+import type {
+    NativeScrollEvent,
+    NativeSyntheticEvent,
+    ScrollView,
+    ScrollViewProps,
+    ViewToken,
+} from 'react-native';
 import { useComponentStyles } from '../../hooks';
-import { useDataTable, useDataTableComponent } from './DataTableContext/DataTableContext';
+import {
+    useDataTable,
+    useDataTableColumnWidth,
+    useDataTableComponent,
+} from './DataTableContext/DataTableContext';
 import { defaultProps } from './defaults';
 import { renderRow } from './DataTableRow';
 import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
 import { DataTableHeaderRow } from './DataTableHeader';
-import type { ScrollViewProps } from 'react-native';
+import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
 type DataTableComponentProps = DataTableBase & ScrollViewProps;
 type DataTablePresentationProps = DataTableComponentProps &
@@ -16,6 +25,35 @@ type DataTablePresentationProps = DataTableComponentProps &
         Required<DataTableProps>,
         'FlatListComponent' | 'ScrollViewComponent'
     >;
+
+const {
+    useStoreRef,
+    Provider: HorizontalScrollIndexProvider,
+    useContextValue,
+} = createFastContext<typeof defaultValue>();
+
+const defaultValue = { x: 0, y: 0, viewItemIds: [] as string[], scrollXVelocity: 0 };
+
+export const useIsCellWithinBounds = (left: number, id: string) => {
+    const cellWidth = useDataTableColumnWidth(`_name-${1}`);
+
+    const checkLeft = (x: number, offset: number) => left + cellWidth >= x - offset;
+    const checkRight = (x: number, offset: number) => left <= x + offset + 500;
+    const isViewableItem = (viewItemIds: string[]) => viewItemIds.includes(id);
+
+    return useContextValue(
+        ({ x, viewItemIds }) =>
+            checkLeft(x, isViewableItem(viewItemIds) ? 500 : 0) &&
+            checkRight(x, isViewableItem(viewItemIds) ? 500 : 0),
+    );
+};
+
+export const useRowWithinBounds = (top: number) => {
+    const checkTop = useCallback((y: number, offset: number) => top + 40 >= y - offset, [top]);
+    const checkBottom = useCallback((y: number, offset: number) => top <= y + offset + 500, [top]);
+
+    return useContextValue(({ y }) => checkTop(y, 500) && checkBottom(y, 500));
+};
 
 const DataTablePresentationComponent = memo(
     forwardRef((props: DataTablePresentationProps, ref: ForwardedRef<ScrollView>) => {
@@ -26,6 +64,7 @@ const DataTablePresentationComponent = memo(
             stickyRowIndices,
             records,
             tableWidth,
+            // tableHeight,
             FlatListComponent,
             ScrollViewComponent,
             ...restScrollViewProps
@@ -43,6 +82,8 @@ const DataTablePresentationComponent = memo(
         const vStyle = useMemo(() => [{ width: tableWidth }, vStyleProp], [vStyleProp, tableWidth]);
         const normalizedData = useMemo(() => [{ id: '__header__' }, ...records], [records]);
 
+        const { store, set: setStore } = useStoreRef();
+
         const renderItem: typeof renderRow = useCallback(props => {
             return props.index === 0 ? (
                 <DataTableHeaderRow key={props.item} />
@@ -59,13 +100,48 @@ const DataTablePresentationComponent = memo(
             [stickyRowIndices],
         );
 
+        const onScroll = useCallback(
+            (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+                setStore(() => ({
+                    x: e.nativeEvent.contentOffset.x,
+                    scrollXVelocity: e.nativeEvent.contentOffset.x - store.current.x,
+                }));
+            },
+            [setStore, store],
+        );
+
+        const onFlatListScroll = useCallback(
+            (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+                setStore(() => ({ y: e.nativeEvent.contentOffset.y }));
+            },
+            [setStore],
+        );
+
+        const onViewableItemsChanged = useCallback(
+            ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+                setStore(() => ({
+                    viewItemIds: viewableItems.map(item => item.item),
+                }));
+            },
+            [setStore],
+        );
+
         return (
             <ScrollViewComponent
                 {...restScrollViewProps}
                 {...horizontalScrollProps}
+                onScroll={onScroll}
+                scrollEventThrottle={16}
                 horizontal={true}
                 ref={ref}
                 style={hStyle}>
+                {/*<ScrollViewComponent*/}
+                {/*    scrollEventThrottle={16}*/}
+                {/*    horizontal={false}*/}
+                {/*    onScroll={onFlatListScroll}>*/}
+                {/*    {normalizedData.map((item, index) => renderItem({ index, item }))}*/}
+                {/*</ScrollViewComponent>*/}
+
                 <FlatListComponent
                     {...vProps}
                     data={normalizedData}
@@ -75,6 +151,8 @@ const DataTablePresentationComponent = memo(
                     keyExtractor={keyExtractorProp}
                     renderItem={renderItem}
                     stickyHeaderIndices={stickyHeaderIndices}
+                    onScroll={onFlatListScroll}
+                    onViewableItemsChanged={onViewableItemsChanged}
                 />
             </ScrollViewComponent>
         );
@@ -92,6 +170,7 @@ const DataTableComponent = memo(
                 ref={ref}
                 records={records}
                 tableWidth={tableWidth}
+                // tableHeight={tableHeight}
                 FlatListComponent={FlatListComponent}
                 ScrollViewComponent={ScrollViewComponent}
             />
@@ -137,7 +216,9 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
 
             return (
                 <DataTableContextProvider {...context}>
-                    <Component {...rest} ref={ref} />
+                    <HorizontalScrollIndexProvider value={defaultValue}>
+                        <Component {...rest} ref={ref} />
+                    </HorizontalScrollIndexProvider>
                 </DataTableContextProvider>
             );
         }),

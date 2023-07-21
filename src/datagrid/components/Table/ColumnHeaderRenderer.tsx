@@ -3,6 +3,8 @@ import { RenderHeaderCellProps, useMolecules } from '@bambooapp/bamboo-molecules
 import { useFieldType } from '../../contexts';
 import { StyleSheet, TextStyle } from 'react-native';
 import { useField } from '../../contexts';
+import { withVirtualization } from '../../hocs';
+
 // import { ADD_FIELD_COL_ID, SELECTION_COL_ID } from './utils';
 // import RowSelectionItem from './RowSelectionItem';
 
@@ -70,4 +72,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(ColumnHeaderRenderer);
+export default memo(withVirtualization(ColumnHeaderRenderer));

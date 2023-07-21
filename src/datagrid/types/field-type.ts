@@ -22,14 +22,11 @@ export type FieldType<T = unknown, C extends {} = {}> = {
 
 export type FieldTypes = Record<string, FieldType>;
 
-export interface FieldRendererProps<T = unknown, C extends {} = Record<string, any>> {
+export interface FieldRendererProps<T = unknown> {
     value: T;
-    onChange: (value: T) => void;
-    config: C;
+    [key: string]: any;
 }
 
-export type FieldTypeRenderer<
-    T = unknown,
-    C extends {} = {},
-    P extends Record<string, any> = {},
-> = ComponentType<P & FieldRendererProps<T, C>>;
+export type FieldTypeRenderer<T = unknown, P extends Record<string, any> = {}> = ComponentType<
+    P & FieldRendererProps<T>
+>;

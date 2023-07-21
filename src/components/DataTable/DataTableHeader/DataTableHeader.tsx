@@ -22,6 +22,7 @@ const DataTableHeaderRowPresentation = memo(
                 flexDirection: 'row',
             },
         ]);
+
         const result = useMemo(
             () =>
                 columns.map((item, i) => (

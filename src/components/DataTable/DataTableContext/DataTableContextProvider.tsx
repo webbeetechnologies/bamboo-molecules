@@ -39,11 +39,14 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         );
 
         const tableWidth = Math.min(columns.length * defaultColumnWidth);
+        // const tableHeight = Math.min(records.length * 40);
+
         const dataContext = useMemo(
             () => ({
                 records,
                 columns,
                 tableWidth,
+                // tableHeight,
                 defaultColumnWidth,
                 headerCellProps,
                 cellProps,
@@ -51,11 +54,24 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 rowProps,
                 selectedRows,
                 rowSize,
+                cellXOffsets: columns.reduce(
+                    (leftArray, _column, i) =>
+                        i === 0
+                            ? leftArray
+                            : [...leftArray, leftArray.at(-1)! + defaultColumnWidth],
+                    [0],
+                ),
+                cellYOffsets: records.reduce(
+                    (topArray, _record, i) =>
+                        i === 0 ? topArray : [...topArray, topArray.at(-1)! + 40],
+                    [32],
+                ),
             }),
             [
                 records,
                 columns,
                 tableWidth,
+                // tableHeight,
                 defaultColumnWidth,
                 headerCellProps,
                 cellProps,

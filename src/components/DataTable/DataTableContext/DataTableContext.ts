@@ -29,6 +29,9 @@ type DataTableContextType = Pick<
         'headerCellProps' | 'cellProps' | 'headerRowProps' | 'rowProps' | 'selectedRows' | 'rowSize'
     > & {
         tableWidth: number;
+        // tableHeight: number;
+        cellXOffsets: number[];
+        cellYOffsets: number[];
     };
 
 export const DataTableContext = createContext<DataTableContextType | null>(null);

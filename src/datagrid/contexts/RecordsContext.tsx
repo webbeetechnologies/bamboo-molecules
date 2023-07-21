@@ -2,26 +2,22 @@ import { memo, ReactNode, useCallback, useMemo } from 'react';
 import type { Row } from '../types';
 import { keyBy } from '../../utils';
 
-import {
-    createFastContext,
-    createUseContext,
-    createProvider,
-} from '@bambooapp/bamboo-molecules/fast-context';
+import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
 export type RecordsContextType = {
     records: Record<string, Row>;
     focusedCell: { recordId: string; fieldId: string } | null;
 };
 
-const RecordsContext = createFastContext<RecordsContextType>({ records: {}, focusedCell: null });
-
-const RecordsContextProvider = createProvider(RecordsContext);
+const { Provider: RecordsContextProvider, useContext: useRecordsSelector } =
+    createFastContext<RecordsContextType>();
 
 export const RecordsProvider = memo(
     ({ records, children }: { records: Row[]; children: ReactNode }) => {
         const contextValue = useMemo(
             () => ({
                 records: keyBy(records, 'id'),
+                focusedCell: null,
             }),
             [records],
         );
@@ -29,8 +25,6 @@ export const RecordsProvider = memo(
         return <RecordsContextProvider value={contextValue}>{children}</RecordsContextProvider>;
     },
 );
-
-const useRecordContext = createUseContext(RecordsContext);
 
 const recordSelector = (id: string, records: Record<string, Row>) => {
     if (!records[id]) {
@@ -41,7 +35,7 @@ const recordSelector = (id: string, records: Record<string, Row>) => {
 };
 
 export const useRecord = (id: string): [Row, (value: any) => void] => {
-    const [record, setStore] = useRecordContext(store => {
+    const [record, setStore] = useRecordsSelector(store => {
         return recordSelector(id, store.records);
     });
 
@@ -52,7 +46,7 @@ export const useRecord = (id: string): [Row, (value: any) => void] => {
                 records: {
                     ...prev.records,
                     [id]: {
-                        ...prev[id],
+                        ...prev.records[id],
                         ...value,
                     },
                 },
@@ -68,7 +62,7 @@ export const useFocusedCell = (
     recordId: string,
     fieldId: string,
 ): [boolean, (cell: RecordsContextType['focusedCell']) => void] => {
-    const [isFocused, setStore] = useRecordContext(store => {
+    const [isFocused, setStore] = useRecordsSelector(store => {
         return store.focusedCell?.recordId === recordId && store.focusedCell?.fieldId === fieldId;
     });
 
@@ -94,7 +88,7 @@ const cellValueSelector = (id: string, fieldId: string, records: Record<string, 
 };
 
 export const useCellValue = (id: string, fieldId: string) => {
-    const [value, setStore] = useRecordContext(store => {
+    const [value, setStore] = useRecordsSelector(store => {
         return cellValueSelector(id, fieldId, store.records);
     });
 

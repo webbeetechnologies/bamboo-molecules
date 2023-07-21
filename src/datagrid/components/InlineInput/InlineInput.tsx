@@ -36,10 +36,10 @@ const InlineInput = ({
 
 const styles = StyleSheet.create({
     container: {
-        height: '100%',
+        flex: 1,
     },
     innerContainer: {
-        height: '100%',
+        flex: 1,
         flexDirection: 'row',
     },
     input: {
