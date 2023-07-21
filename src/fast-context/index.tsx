@@ -5,10 +5,10 @@ import {
     useCallback,
     useContext,
     useRef,
-    useSyncExternalStore,
     Context,
 } from 'react';
 import typedMemo from '../hocs/typedMemo';
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
 
 type UseStoreDataReturnType<T> = {
     get: () => T;
@@ -47,7 +47,7 @@ const useStoreData = <IStore extends Record<string, any> = {}>(
 };
 
 // TODO - fix typescript issues
-export const createFastContext = <T,>(defaultValue: T) => {
+export const createFastContext = <T extends Record<string, any> = {}>(defaultValue: T) => {
     const context = createContext<UseStoreDataReturnType<T>>(
         defaultValue as unknown as UseStoreDataReturnType<T>,
     );
@@ -61,7 +61,7 @@ export const createFastContext = <T,>(defaultValue: T) => {
     };
 };
 
-export const createProvider = <T,>(StoreContext: Context<T>) =>
+export const createProvider = <T extends Record<string, any> = {}>(StoreContext: Context<T>) =>
     typedMemo(({ defaultValue, children }: { defaultValue: T; children: ReactNode }) => {
         return (
             <StoreContext.Provider value={useStoreData<T>(defaultValue) as any}>
@@ -70,7 +70,7 @@ export const createProvider = <T,>(StoreContext: Context<T>) =>
         );
     });
 
-export const createUseContext = <T,>(_Context: Context<T>) => {
+export const createUseContext = <T extends Record<string, any> = {}>(_Context: Context<T>) => {
     return <SelectorOutput,>(selector: (store: T) => SelectorOutput) =>
         useStore<SelectorOutput, T>(_Context, selector);
 };
@@ -88,7 +88,16 @@ export function useStore<SelectorOutput, IStore extends Record<string, any> = {}
         throw new Error('Store not found');
     }
 
-    const state = useSyncExternalStore(store.subscribe, () => selector(store.get()));
+    const state = useSyncExternalStoreWithSelector(
+        store.subscribe,
+        () => {
+            return store.get();
+        },
+        undefined,
+        snapshot => {
+            return selector(snapshot);
+        },
+    );
 
     return [state, store.set];
 }
