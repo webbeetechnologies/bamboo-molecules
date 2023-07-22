@@ -3,10 +3,9 @@ import { TextInputProps, useHandleNumberFormat } from '@bambooapp/bamboo-molecul
 
 import { InlineInput } from '../../components/InlineInput';
 import type { FieldRendererProps } from '../../types';
-import type { Value, Config } from './types';
+import type { Value } from './types';
 
-export type Props = FieldRendererProps<Value, Config> &
-    Omit<TextInputProps, 'value' | 'onChange'> & {};
+export type Props = FieldRendererProps<Value> & Omit<TextInputProps, 'value' | 'onChange'> & {};
 
 const NumberFieldEditorRenderer = ({ value: valueProp = null, onChange, ...rest }: Props) => {
     const numberFieldProps = useHandleNumberFormat({

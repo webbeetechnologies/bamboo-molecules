@@ -2,14 +2,32 @@ import { memo } from 'react';
 import { RatingProps, useMolecules } from '@bambooapp/bamboo-molecules';
 
 import type { FieldRendererProps } from '../../types';
-import type { Value, Config } from './types';
+import type { Value } from './types';
+import { StyleSheet } from 'react-native';
 
-export type Props = FieldRendererProps<Value, Config> & RatingProps & {};
+export type Props = FieldRendererProps<Value> & RatingProps & {};
 
-const RatingFieldEditorRenderer = ({ value, onChange, ...rest }: Props) => {
-    const { Rating } = useMolecules();
+const RatingFieldEditorRenderer = ({ value, onChange, count, color, readonly, ...rest }: Props) => {
+    const { View, Rating } = useMolecules();
 
-    return <Rating {...rest} value={value || 0} onChange={onChange} />;
+    return (
+        <View style={styles.container} {...rest}>
+            <Rating
+                {...rest}
+                value={value || 0}
+                count={count}
+                color={color}
+                onChange={onChange}
+                readonly={readonly}
+            />
+        </View>
+    );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        overflow: 'hidden',
+    },
+});
 
 export default memo(RatingFieldEditorRenderer);

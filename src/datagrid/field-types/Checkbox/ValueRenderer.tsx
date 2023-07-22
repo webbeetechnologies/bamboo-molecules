@@ -1,16 +1,14 @@
 import { memo } from 'react';
 import type { FieldRendererProps } from '../../types';
-import { CheckboxProps, useMolecules } from '@bambooapp/bamboo-molecules';
+import type { CheckboxProps } from '@bambooapp/bamboo-molecules';
 
-import type { Value, Config } from './types';
+import type { Value } from './types';
+import CheckboxEditorRenderer from './EditorRenderer';
 
-export type Props = Omit<FieldRendererProps<Value, Config>, 'onChange'> &
-    Omit<CheckboxProps, 'value' | 'onChange'> & {};
+export type Props = Omit<FieldRendererProps<Value>, 'onChange'> & Omit<CheckboxProps, 'value'> & {};
 
 const CheckboxValueRenderer = ({ value, ...rest }: Props) => {
-    const { Checkbox } = useMolecules();
-
-    return <Checkbox value={!!value} size="sm" {...rest} disabled />;
+    return <CheckboxEditorRenderer value={!!value} {...rest} disabled />;
 };
 
 export default memo(CheckboxValueRenderer);

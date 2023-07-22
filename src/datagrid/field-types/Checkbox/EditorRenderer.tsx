@@ -1,16 +1,29 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import type { FieldRendererProps } from '../../types';
 import { CheckboxProps, useMolecules } from '@bambooapp/bamboo-molecules';
 
-import type { Value, Config } from './types';
+import type { Value } from './types';
+import { StyleSheet } from 'react-native';
 
-export type Props = FieldRendererProps<Value, Config> &
-    Omit<CheckboxProps, 'value' | 'onChange'> & {};
+export type Props = FieldRendererProps<Value> & Omit<CheckboxProps, 'value'> & {};
 
-const CheckboxEditorRenderer = ({ value, ...rest }: Props) => {
-    const { Checkbox } = useMolecules();
+const CheckboxEditorRenderer = ({ value, style, ...rest }: Props) => {
+    const { Checkbox, View } = useMolecules();
 
-    return <Checkbox value={!!value} size="sm" {...rest} />;
+    const containerStyle = useMemo(() => [styles.container, style], [style]);
+
+    return (
+        <View style={containerStyle}>
+            <Checkbox value={!!value} size="sm" {...rest} />
+        </View>
+    );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        justifyContent: 'center',
+        alignSelf: 'flex-start',
+    },
+});
 
 export default memo(CheckboxEditorRenderer);

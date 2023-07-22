@@ -2,10 +2,9 @@ import { memo, useMemo } from 'react';
 import type { FieldRendererProps } from '../../types';
 import { TextInputProps, formatNumberWithMask, useMolecules } from '@bambooapp/bamboo-molecules';
 
-import type { Value, Config } from './types';
+import type { Value } from './types';
 
-export type Props = FieldRendererProps<Value, Config> &
-    Omit<TextInputProps, 'value' | 'onChange'> & {};
+export type Props = FieldRendererProps<Value> & Omit<TextInputProps, 'value' | 'onChange'> & {};
 
 const NumberFieldValueRenderer = ({ value: valueProp = null, ...rest }: Props) => {
     const { Text } = useMolecules();
@@ -17,7 +16,11 @@ const NumberFieldValueRenderer = ({ value: valueProp = null, ...rest }: Props) =
         });
     }, [valueProp]);
 
-    return <Text {...rest}>{formattedValue}</Text>;
+    return (
+        <Text {...rest} numberOfLines={1}>
+            {formattedValue}
+        </Text>
+    );
 };
 
 export default memo(NumberFieldValueRenderer);

@@ -1,23 +1,14 @@
 import { memo } from 'react';
-import { RatingProps, useMolecules } from '@bambooapp/bamboo-molecules';
+import type { RatingProps } from '@bambooapp/bamboo-molecules';
 
 import type { FieldRendererProps } from '../../types';
-import type { Value, Config } from './types';
+import type { Value } from './types';
+import RatingFieldEditorRenderer from './EditorRenderer';
 
-export type Props = FieldRendererProps<Value, Config> & RatingProps & {};
+export type Props = FieldRendererProps<Value> & RatingProps & {};
 
-const RatingFieldValueRenderer = ({ value, onChange, ...rest }: Props) => {
-    const { Rating } = useMolecules();
-
-    return (
-        <Rating
-            {...rest}
-            value={value || 0}
-            activeColor="colors.onSurfaceVariant"
-            onChange={onChange}
-            readonly
-        />
-    );
+const RatingFieldValueRenderer = (props: Props) => {
+    return <RatingFieldEditorRenderer {...props} readonly activeColor="colors.onSurfaceVariant" />;
 };
 
 export default memo(RatingFieldValueRenderer);
