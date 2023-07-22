@@ -5,6 +5,7 @@ import { renderCellComponent } from '../DataTableCell';
 import type { ListRenderItem } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../../hooks';
 import { CallbackActionState, withActionState } from '../../../hocs';
+// import { useRowWithinBounds } from '../DataTable';
 
 type DataTableComponentProps = { record: TDataTableRow; index: number };
 const DataTableComponentPresentation = memo(
@@ -50,7 +51,17 @@ const DataTableComponentPresentation = memo(
 );
 
 const DataTableComponent = memo((props: DataTableComponentProps) => {
-    const { columns = [], rowSize, rowProps, selectedRows } = useDataTable();
+    const { columns, rowSize, rowProps, selectedRows } = useDataTable(store => ({
+        columns: store.columns || [],
+        rowSize: store.rowSize,
+        rowProps: store.rowProps,
+        selectedRows: store.selectedRows,
+    }));
+    //
+    // const { cellYOffsets } = useDataTable();
+    // const isRowWithinBounds = useRowWithinBounds(cellYOffsets[props.index]);
+    //
+    // if (!isRowWithinBounds) return null;
 
     return (
         <DataTableComponentPresentation
@@ -58,6 +69,15 @@ const DataTableComponent = memo((props: DataTableComponentProps) => {
             {...props}
             columns={columns}
             rowProps={rowProps}
+            // rowProps={{
+            //     ...rowProps,
+            //     style: {
+            //         position: 'absolute',
+            //         top: cellYOffsets[props.index],
+            //         height: 40,
+            //         width: '100%',
+            //     },
+            // }}
             rowSize={rowSize}
         />
     );

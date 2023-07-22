@@ -3,11 +3,13 @@ import { useComponentStyles, useMolecules } from '../../../hooks';
 import {
     DataTableCellContext,
     useDataTable,
+    useDataTableCell,
     useDataTableColumnWidth,
     useDataTableComponent,
     useDataTableRow,
 } from '../DataTableContext/DataTableContext';
 import type { DataTableProps, TDataTableColumn, TDataTableRow, DataCellProps } from '../types';
+import { useIsCellWithinBounds } from '../DataTable';
 
 type CellComponentProps = {
     column: TDataTableColumn;
@@ -17,6 +19,37 @@ type CellComponentProps = {
     renderCell: DataTableProps['renderCell'];
     width: number;
 };
+
+// Used as DataTable.Cell - Can be replaced with Molecules
+export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
+    const { View } = useMolecules();
+
+    const { columnIndex, column, row } = useDataTableCell();
+    const { cellProps, cellXOffsets } = useDataTable(store => ({
+        cellProps: store.cellProps,
+        cellXOffsets: store.cellXOffsets,
+    }));
+
+    const cellStyles = useComponentStyles('DataTable_Cell', [
+        { width },
+        { position: 'absolute', left: cellXOffsets[columnIndex] },
+        cellProps?.style,
+        style,
+    ]);
+
+    const isWithinBounds = useIsCellWithinBounds(cellXOffsets[columnIndex], row, column);
+
+    if (!isWithinBounds) return <></>;
+
+    return (
+        <>
+            <View {...cellProps} {...props} style={cellStyles}>
+                {props.children}
+            </View>
+        </>
+    );
+});
+
 export const CellComponent = memo((props: CellComponentProps) => {
     const { DataTable } = useMolecules();
 
@@ -57,19 +90,6 @@ const Cell: FC<{ column: TDataTableColumn; columnIndex: number }> = memo(props =
         width,
     };
     return <CellComponent {...cellProps} />;
-});
-
-export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
-    const { View } = useMolecules();
-    const { cellProps } = useDataTable();
-
-    const cellStyles = useComponentStyles('DataTable_Cell', [{ width }, cellProps?.style, style]);
-
-    return (
-        <View {...cellProps} {...props} style={cellStyles}>
-            {props.children}
-        </View>
-    );
 });
 
 export const renderCellComponent = ({ item, index }: { item: TDataTableColumn; index: number }) => (

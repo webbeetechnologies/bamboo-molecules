@@ -1,3 +1,4 @@
+const path = require('path');
 module.exports = api => {
     api.cache(true);
     const presets = [['babel-preset-expo', { jsxRuntime: 'automatic' }]];
@@ -8,6 +9,9 @@ module.exports = api => {
             {
                 root: ['./src'],
                 extensions: ['.ios.js', '.android.js', '.js', '.jsx', '.ts', '.tsx', '.json'],
+                alias: {
+                    '@bambooapp/bamboo-molecules': path.resolve(__dirname, './src/'),
+                },
             },
         ],
     ];

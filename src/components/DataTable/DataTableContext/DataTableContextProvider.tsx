@@ -1,9 +1,26 @@
 import type { FC, PropsWithChildren } from 'react';
 import { memo, useMemo, useRef } from 'react';
-import { DataTableComponentContext, DataTableContext } from './DataTableContext';
-import type { DataTableProps } from '../types';
-import { useMolecules } from '../../../hooks';
 import { ScrollView } from 'react-native-gesture-handler';
+
+import { useMolecules } from '../../../hooks';
+import type { DataTableProps, TDataTableColumn } from '../types';
+import { DataTableComponentContext, DataTableProvider } from './DataTableContext';
+
+const calculateXOffset = (
+    columns: TDataTableColumn[],
+    columnWidths: Record<TDataTableColumn, number> | undefined,
+    defaultColumnWidth: number,
+) =>
+    columns.reduce(
+        (leftArray, _column, i) => {
+            if (i === 0) return leftArray;
+
+            const previousColumnWidth = columnWidths?.[columns[i - 1]] || defaultColumnWidth;
+
+            return [...leftArray, leftArray.at(-1)! + previousColumnWidth];
+        },
+        [0],
+    );
 
 export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = memo(
     ({
@@ -21,6 +38,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         rowProps,
         selectedRows,
         rowSize,
+        columnWidths,
     }) => {
         const { FlatList } = useMolecules();
 
@@ -38,12 +56,20 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
             [FlatListComponent, ScrollViewComponent, renderCell, renderHeader],
         );
 
-        const tableWidth = Math.min(columns.length * defaultColumnWidth);
+        const tableWidth = useMemo(() => {
+            return columns.reduce(
+                (acc, column) => acc + (columnWidths?.[column] ?? defaultColumnWidth),
+                0,
+            );
+        }, [columnWidths, columns, defaultColumnWidth]);
+        // const tableHeight = Math.min(records.length * 40);
+
         const dataContext = useMemo(
             () => ({
                 records,
                 columns,
                 tableWidth,
+                // tableHeight,
                 defaultColumnWidth,
                 headerCellProps,
                 cellProps,
@@ -51,6 +77,9 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 rowProps,
                 selectedRows,
                 rowSize,
+                cellXOffsets: calculateXOffset(columns, columnWidths, defaultColumnWidth),
+                columnWidths,
+                windowWidth: 0,
             }),
             [
                 records,
@@ -63,14 +92,13 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 rowProps,
                 selectedRows,
                 rowSize,
+                columnWidths,
             ],
         );
 
         return (
             <DataTableComponentContext.Provider value={components}>
-                <DataTableContext.Provider value={dataContext}>
-                    {children}
-                </DataTableContext.Provider>
+                <DataTableProvider value={dataContext}>{children}</DataTableProvider>
             </DataTableComponentContext.Provider>
         );
     },

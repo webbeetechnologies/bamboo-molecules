@@ -69,7 +69,7 @@ export type Props = ViewProps & {
     /**
      * props for to pass down to all the icons
      * */
-    iconProps: Omit<IconProps, 'name' | 'type' | 'color'>;
+    iconProps?: Omit<IconProps, 'name' | 'type' | 'color'>;
     /**
      * display tooltips
      * */

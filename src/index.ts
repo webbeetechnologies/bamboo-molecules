@@ -14,6 +14,7 @@ export {
     ItalicProps,
     ViewProps,
     IconProps,
+    IconType,
     PopoverProps,
     IconButtonProps,
     ActivityIndicatorProps,
@@ -141,6 +142,8 @@ export {
     RangeSlider,
     RangeSliderProps,
     AvatarProps,
+    MenuProps,
+    MenuItemProps,
 } from './components';
 
 // to avoid circular dependencies

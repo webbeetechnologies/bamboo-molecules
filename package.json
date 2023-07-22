@@ -25,6 +25,7 @@
   "files": [
     "lib",
     "src",
+    "datagrid",
     "fast-context",
     "components",
     "!**/__tests__",

@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react';
+import { createFastContext } from '../../../fast-context';
 import type { DataTableProps, TDataTableColumn, TDataTableRow } from '../types';
 
 /**
@@ -29,15 +30,21 @@ type DataTableContextType = Pick<
         'headerCellProps' | 'cellProps' | 'headerRowProps' | 'rowProps' | 'selectedRows' | 'rowSize'
     > & {
         tableWidth: number;
+        windowWidth: number;
+        /*
+         * columnIds as keys
+         * */
+        columnWidths?: Record<TDataTableColumn, number>;
+        // tableHeight: number;
+        cellXOffsets: number[];
     };
 
-export const DataTableContext = createContext<DataTableContextType | null>(null);
-export const useDataTable = () =>
-    useInvariant(
-        useContext(DataTableContext),
-        'Trying to read DataTable context outside the provider',
-    );
-
+export const {
+    useContext: useDataTableStore,
+    useContextValue: useDataTable,
+    Provider: DataTableProvider,
+    useStoreRef: useDataTableStoreRef,
+} = createFastContext<DataTableContextType>(true);
 /**
  *
  * Context for all the Components: ScrollView, FlatList, renderHeader and renderCell.
@@ -86,6 +93,7 @@ export const useDataTableCell = () =>
     );
 
 export const useDataTableColumnWidth = (_column: TDataTableColumn): number => {
-    // TODO: Add logic to get specific column width OR default width.
-    return useDataTable().defaultColumnWidth;
+    return useDataTable(({ columnWidths, defaultColumnWidth }) =>
+        columnWidths && columnWidths?.[_column] ? columnWidths[_column] : defaultColumnWidth,
+    );
 };

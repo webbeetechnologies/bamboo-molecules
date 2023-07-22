@@ -22,6 +22,7 @@ const DataTableHeaderRowPresentation = memo(
                 flexDirection: 'row',
             },
         ]);
+
         const result = useMemo(
             () =>
                 columns.map((item, i) => (
@@ -39,7 +40,10 @@ const DataTableHeaderRowPresentation = memo(
 );
 
 export const DataTableHeaderRow = memo(() => {
-    const { columns = [], headerRowProps } = useDataTable();
+    const { columns, headerRowProps } = useDataTable(store => ({
+        columns: store.columns || [],
+        headerRowProps: store.headerRowProps,
+    }));
     return <DataTableHeaderRowPresentation columns={columns} headerRowProps={headerRowProps} />;
 });
 
@@ -57,7 +61,9 @@ const renderHeaderCell = ({ item, index }: { item: TDataTableColumn; index: numb
 
 export const DataHeaderCell = memo(({ width, style, ...props }: DataHeaderCellProps) => {
     const { View } = useMolecules();
-    const { headerCellProps } = useDataTable() || {};
+    const { headerCellProps } = useDataTable(store => ({
+        headerCellProps: store.headerCellProps,
+    }));
     const headerCellStyles = useComponentStyles('DataTable_HeaderCell', [
         { width },
         headerCellProps?.style,

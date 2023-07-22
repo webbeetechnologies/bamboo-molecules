@@ -12,7 +12,9 @@ export interface DataTableComponentProps<T = any> {
 }
 
 export type DataHeaderCellProps = ViewProps & { width: number };
-export type DataCellProps = ViewProps & { width: number };
+export type DataCellProps = ViewProps & {
+    width: number;
+};
 
 export type RenderHeaderCellProps = {
     columnIndex: number;
@@ -111,4 +113,5 @@ export interface DataTableProps<RecordType = any>
      *
      */
     rowSize?: string;
+    columnWidths?: Record<TDataTableColumn, number>;
 }
