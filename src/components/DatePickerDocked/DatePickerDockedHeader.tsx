@@ -45,11 +45,11 @@ function DatePickerDockedHeader({
 
     const handlePressDropDown = useCallback(
         (type: 'month' | 'year') => {
-            setStore(() => ({
-                pickerType: pickerType ? undefined : type,
+            setStore(prev => ({
+                pickerType: prev.pickerType ? undefined : type,
             }));
         },
-        [setStore, pickerType],
+        [setStore],
     );
 
     const isNotInRange = useCallback(
