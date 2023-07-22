@@ -1,2 +1,2 @@
 export * from './types';
-export { Table } from './components/Table';
+export { default as DataGrid } from './DataGrid';
