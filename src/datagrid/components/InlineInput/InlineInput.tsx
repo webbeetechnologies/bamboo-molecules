@@ -1,5 +1,6 @@
 import { memo, useMemo } from 'react';
-import { TextInputProps, useMolecules } from '@bambooapp/bamboo-molecules';
+import type { TextInputProps } from '../../../components';
+import { useMolecules } from '../../../hooks';
 import { StyleSheet } from 'react-native';
 
 const InlineInput = ({

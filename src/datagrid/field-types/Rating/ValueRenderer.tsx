@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { RatingProps } from '@bambooapp/bamboo-molecules';
+import type { RatingProps } from '../../../components';
 
 import type { FieldRendererProps } from '../../types';
 import type { Value } from './types';

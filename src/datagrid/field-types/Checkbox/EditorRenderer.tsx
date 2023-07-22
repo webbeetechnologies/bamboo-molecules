@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react';
 import type { FieldRendererProps } from '../../types';
-import { CheckboxProps, useMolecules } from '@bambooapp/bamboo-molecules';
+import { useMolecules } from '../../../hooks';
+import type { CheckboxProps } from '../../../components';
 
 import type { Value } from './types';
 import { StyleSheet } from 'react-native';

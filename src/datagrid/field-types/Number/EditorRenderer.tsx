@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { TextInputProps, useHandleNumberFormat } from '@bambooapp/bamboo-molecules';
+import type { TextInputProps } from '../../../components';
+import { useHandleNumberFormat } from '../../../hooks';
 
 import { InlineInput } from '../../components/InlineInput';
 import type { FieldRendererProps } from '../../types';

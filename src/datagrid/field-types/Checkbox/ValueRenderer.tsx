@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import type { FieldRendererProps } from '../../types';
-import type { CheckboxProps } from '@bambooapp/bamboo-molecules';
+import type { CheckboxProps } from '../../../components';
 
 import type { Value } from './types';
 import CheckboxEditorRenderer from './EditorRenderer';

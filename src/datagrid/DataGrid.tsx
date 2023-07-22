@@ -1,14 +1,13 @@
-import {
+import type {
     DataTableProps,
     MenuProps,
     RenderCellProps,
     RenderHeaderCellProps,
-    useMolecules,
-} from '@bambooapp/bamboo-molecules';
+} from '../components';
+import { useMolecules } from '../hooks';
 import { ComponentType, ReactNode, useCallback, useMemo, useRef } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { StyleSheet } from 'react-native';
-import { FieldTypes as DefaultFieldTypes } from './field-types';
 
 import {
     FieldTypesProvider,
@@ -22,11 +21,15 @@ import { typedMemo } from './hocs';
 import { ContextMenu, ColumnHeaderCell, CellRenderer } from './components';
 import { useContextMenu } from './hooks';
 import type { FieldTypes } from './types';
+import { FieldTypes as DefaultFieldTypes } from './field-types';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
 
-type Props = Omit<DataTableProps, 'title' | 'records' | 'renderHeader' | 'renderCell' | 'columns'> &
+export type Props = Omit<
+    DataTableProps,
+    'title' | 'records' | 'renderHeader' | 'renderCell' | 'columns'
+> &
     Omit<ViewProps, 'ref'> &
     HooksContextType & {
         onEndReached?: () => void;
@@ -34,9 +37,11 @@ type Props = Omit<DataTableProps, 'title' | 'records' | 'renderHeader' | 'render
         rowIds: string[];
         fieldTypes?: FieldTypes;
         contextMenuProps?: ContextMenuProps;
+        renderHeader?: DataTableProps['renderHeader'];
+        renderCell?: DataTableProps['renderCell'];
     };
 
-type ContextMenuProps = Partial<MenuProps> & {
+export type ContextMenuProps = Partial<MenuProps> & {
     isOpen: boolean;
     handleContextMenuOpen: (payload: {
         type: 'column' | 'cell';

@@ -1,12 +1,9 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Pressable } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
-import {
-    CallbackActionState,
-    RenderCellProps,
-    useMolecules,
-    withActionState,
-} from '@bambooapp/bamboo-molecules';
+import { CallbackActionState, withActionState } from '../../../hocs';
+import { useMolecules } from '../../../hooks';
+import type { RenderCellProps } from '../../../components';
 
 import { useFieldType, useTableManagerStoreRef, useFocusedCell, useHooks } from '../../contexts';
 import { useContextMenu } from '../../hooks';

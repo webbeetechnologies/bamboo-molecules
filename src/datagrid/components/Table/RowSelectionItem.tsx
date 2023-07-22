@@ -1,5 +1,6 @@
 import { memo, useCallback } from 'react';
-import { CallbackActionState, useMolecules, withActionState } from '@bambooapp/bamboo-molecules';
+import { useMolecules } from '../../../hooks';
+import { CallbackActionState, withActionState } from '../../../hocs';
 
 export type RowSelectionItemProps = {
     index: number;

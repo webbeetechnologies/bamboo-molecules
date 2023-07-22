@@ -1,7 +1,8 @@
 import { memo, useMemo } from 'react';
 import type { FieldRendererProps } from '../../types';
-import { TextInputProps, formatNumberWithMask, useMolecules } from '@bambooapp/bamboo-molecules';
-
+import type { TextInputProps } from '../../../components';
+import { useMolecules } from '../../../hooks';
+import { formatNumberWithMask } from '../../../utils';
 import type { Value } from './types';
 
 export type Props = FieldRendererProps<Value> & Omit<TextInputProps, 'value' | 'onChange'> & {};

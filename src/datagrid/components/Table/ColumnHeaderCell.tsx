@@ -1,7 +1,8 @@
 import { memo, ReactNode, useCallback, useMemo, useRef } from 'react';
 import { StyleSheet, TextStyle } from 'react-native';
 import type { TextProps, ViewProps } from '@bambooapp/bamboo-atoms';
-import { IconProps, RenderHeaderCellProps, useMolecules } from '@bambooapp/bamboo-molecules';
+import type { IconProps, RenderHeaderCellProps } from '../../../components';
+import { useMolecules } from '../../../hooks';
 
 import { useFieldType, useHooks, useTableManagerStoreRef } from '../../contexts';
 import { withVirtualization } from '../../hocs';

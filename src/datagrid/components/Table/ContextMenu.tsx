@@ -1,4 +1,5 @@
-import { useMolecules, MenuProps } from '@bambooapp/bamboo-molecules';
+import { useMolecules } from '../../../hooks';
+import type { MenuProps } from '../../../components';
 import { memo, ReactElement, ReactNode } from 'react';
 
 import { useTableManagerStoreRef } from '../../contexts';
