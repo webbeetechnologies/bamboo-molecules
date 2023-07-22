@@ -1,6 +1,6 @@
 import { memo, ReactNode, useMemo } from 'react';
-import type { Field } from '../types';
-import { keyBy } from '../../utils';
+import type { Field } from '../../../../src/datagrid/types';
+import { keyBy } from '../../../../src/utils';
 
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 

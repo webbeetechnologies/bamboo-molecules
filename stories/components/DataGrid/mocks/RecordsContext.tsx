@@ -1,6 +1,6 @@
 import { memo, ReactNode, useCallback, useMemo } from 'react';
-import type { Row } from '../types';
-import { keyBy } from '../../utils';
+import type { Row } from '../../../../src/datagrid/types';
+import { keyBy } from '../../../../src/utils';
 
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
@@ -92,5 +92,5 @@ export const useCellValue = (id: string, fieldId: string) => {
         [fieldId, id, setStore],
     );
 
-    return [value, setCellValue];
+    return [value, setCellValue] as [typeof value, typeof setCellValue];
 };
