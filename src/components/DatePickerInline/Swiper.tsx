@@ -20,52 +20,18 @@ import {
 
 import { beginOffset, estimatedMonthHeight, totalMonths } from './dateUtils';
 import { useLatest, useMolecules } from '../../hooks';
-import { RenderProps, SwiperProps, useYearChange } from './SwiperUtils';
 import AutoSizer from './AutoSizer';
+import type { SwiperProps } from './SwiperUtils';
 
-function Swiper({
-    scrollMode,
-    renderItem,
-    renderHeader,
-    renderFooter,
-    selectedYear,
-    initialIndex,
-}: SwiperProps) {
+function Swiper({ scrollMode, renderItem, renderHeader, renderFooter, initialIndex }: SwiperProps) {
     const { View } = useMolecules();
     const isHorizontal = scrollMode === 'horizontal';
-    const [index, setIndex] = useState(initialIndex);
-
-    const onPrev = useCallback(() => {
-        setIndex(prev => prev - 1);
-    }, [setIndex]);
-
-    const onNext = useCallback(() => {
-        setIndex(prev => prev + 1);
-    }, [setIndex]);
-
-    const renderProps = {
-        index,
-        onPrev,
-        onNext,
-    };
-    const indexRef = useLatest(index);
-    useYearChange(
-        newIndex => {
-            if (newIndex) {
-                setIndex(newIndex);
-            }
-        },
-        {
-            selectedYear,
-            currentIndexRef: indexRef,
-        },
-    );
 
     return (
         <>
-            {renderHeader && renderHeader(renderProps)}
+            {renderHeader && renderHeader()}
             {isHorizontal ? (
-                <View style={styles.flex1}>{renderItem({ index, onPrev, onNext })}</View>
+                <View style={styles.flex1}>{renderItem(initialIndex)}</View>
             ) : (
                 <AutoSizer>
                     {({ width, height }) => (
@@ -79,7 +45,7 @@ function Swiper({
                     )}
                 </AutoSizer>
             )}
-            {renderFooter && renderFooter(renderProps)}
+            {renderFooter && renderFooter()}
         </>
     );
 }
@@ -93,7 +59,7 @@ function VerticalScroller({
     estimatedHeight,
     renderItem,
 }: {
-    renderItem: (renderProps: RenderProps) => any;
+    renderItem: (index: number) => any;
     width: number;
     height: number;
     initialIndex: number;
@@ -164,19 +130,13 @@ function VerticalScroller({
             <div style={innerContainerStyle as CSSProperties}>
                 {[0, 1, 2, 3, 4].map(vi => (
                     <div key={vi} style={itemContainerStyle(vi) as CSSProperties}>
-                        {renderItem({
-                            index: visibleIndexes[vi],
-                            onPrev: empty,
-                            onNext: empty,
-                        })}
+                        {renderItem(visibleIndexes[vi])}
                     </div>
                 ))}
             </div>
         </div>
     );
 }
-
-const empty = () => null;
 
 const styles = StyleSheet.create({
     flex1: {

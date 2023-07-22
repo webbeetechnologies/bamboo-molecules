@@ -1,9 +1,12 @@
-import { memo, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import type { ViewStyle } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
-import type { DisableWeekDaysType } from './dateUtils';
 import DayNames, { dayNamesHeight } from './DayNames';
+import HeaderItem from './HeaderItem';
+import { add, format } from 'date-fns';
+import { useDatePickerStore, useDatePickerStoreValue } from './DatePickerInlineBase';
+import type { DisableWeekDaysType } from './dateUtils';
 
 const buttonContainerHeight = 56;
 const buttonContainerMarginTop = 4;
@@ -12,62 +15,77 @@ const buttonContainerMarginBottom = 8;
 export type CalendarHeaderProps = {
     locale?: string;
     scrollMode: 'horizontal' | 'vertical';
-    onPrev: () => any;
-    onNext: () => any;
     disableWeekDays?: DisableWeekDaysType;
     style?: ViewStyle;
 };
 
-function DatePickerInline({
+function DatePickerInlineHeader({
     locale = 'en',
     scrollMode,
-    onPrev,
-    onNext,
     disableWeekDays,
     style: styleProp,
 }: CalendarHeaderProps) {
-    const { IconButton, View } = useMolecules();
+    const [_, setStore] = useDatePickerStore(state => state);
+    const { localDate, isYearPickerType } = useDatePickerStoreValue(state => ({
+        localDate: state.localDate,
+        isYearPickerType: state.pickerType === 'year',
+    }));
+    const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePicker_Header', styleProp);
 
     const isHorizontal = scrollMode === 'horizontal';
 
-    const { containerStyle, buttonContainerStyle, buttonWrapperStyle, spacerStyle } =
-        useMemo(() => {
-            const { datePickerHeader, buttonContainer, buttonWrapper, spacer, ...rest } =
-                componentStyles;
+    const { monthName, year } = useMemo(() => {
+        const y = localDate.getFullYear();
 
-            return {
-                containerStyle: [datePickerHeader, rest],
-                buttonContainerStyle: buttonContainer,
-                buttonWrapperStyle: buttonWrapper,
-                spacerStyle: spacer,
-            };
-        }, [componentStyles]);
+        return { monthName: format(localDate, 'LLLL'), year: y };
+    }, [localDate]);
+
+    const { containerStyle } = useMemo(() => {
+        const { datePickerHeader, buttonContainer, buttonWrapper, spacer, ...rest } =
+            componentStyles;
+
+        return {
+            containerStyle: [datePickerHeader, rest],
+            buttonContainerStyle: buttonContainer,
+            buttonWrapperStyle: buttonWrapper,
+            spacerStyle: spacer,
+        };
+    }, [componentStyles]);
+
+    const handleOnYearPress = useCallback(() => {
+        isHorizontal && setStore(prev => ({ pickerType: prev.pickerType ? undefined : 'year' }));
+    }, [isHorizontal, setStore]);
+
+    const handleOnPrev = useCallback(() => {
+        setStore(prev => ({ localDate: add(prev.localDate, { months: -1 }) }));
+    }, [setStore]);
+
+    const handleOnNext = useCallback(() => {
+        setStore(prev => ({ localDate: add(prev.localDate, { months: 1 }) }));
+    }, [setStore]);
 
     return (
-        <View style={containerStyle} pointerEvents={'box-none'}>
+        <View pointerEvents={'box-none'}>
             <>
-                {isHorizontal ? (
-                    <View style={buttonContainerStyle} pointerEvents={'box-none'}>
-                        <View style={spacerStyle} pointerEvents={'box-none'} />
-                        <View style={buttonWrapperStyle}>
-                            <IconButton
-                                type="material-community"
-                                name="chevron-left"
-                                accessibilityLabel={'Previous'}
-                                onPress={onPrev}
-                            />
-                        </View>
-
-                        <View style={buttonWrapperStyle}>
-                            <IconButton
-                                name="chevron-right"
-                                accessibilityLabel={'Next'}
-                                onPress={onNext}
-                            />
-                        </View>
+                {isHorizontal && (
+                    <View style={containerStyle}>
+                        <HeaderItem
+                            onPressDropdown={handleOnYearPress}
+                            type="year"
+                            value={`${monthName} ${year}`}
+                            pickerType="year"
+                            selecting={isYearPickerType}
+                        />
+                        <HeaderItem
+                            onNext={handleOnNext}
+                            onPrev={handleOnPrev}
+                            selecting={false}
+                            value={year}
+                            pickerType="year"
+                        />
                     </View>
-                ) : null}
+                )}
             </>
             <DayNames disableWeekDays={disableWeekDays} locale={locale} />
         </View>
@@ -86,4 +104,4 @@ export function getCalendarHeaderHeight(scrollMode: 'horizontal' | 'vertical') {
     return dayNamesHeight;
 }
 
-export default memo(DatePickerInline);
+export default memo(DatePickerInlineHeader);

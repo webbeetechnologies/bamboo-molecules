@@ -132,7 +132,7 @@ export const gridCounts = new Array<number | undefined>(totalMonths);
 export function getGridCount(index: number) {
     const cHeight = gridCounts[index];
     if (cHeight) {
-        return cHeight;
+        return cHeight + 1;
     }
     const monthDate = addMonths(new Date(), getRealIndex(index));
     const h = getGridCountForDate(monthDate);

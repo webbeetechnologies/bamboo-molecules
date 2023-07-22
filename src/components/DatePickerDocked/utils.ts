@@ -1,21 +1,6 @@
 import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from 'src/types';
 
-export const MONTHS_DATA = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-];
-
 type States = '';
 
 type CustomProps = {
@@ -50,11 +35,10 @@ export const datePickerDockedHeaderStyles: ComponentStylePropWithVariants<
     DatePickerHeaderCustomProps
 > = {
     datePickerHeader: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        left: 0,
-        zIndex: 10,
+        position: 'relative',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
     },
     daysWrapperStyle: {
         marginHorizontal: 'spacings.3',
@@ -78,9 +62,7 @@ export const datePickerHeaderItemStyles: ComponentStylePropWithVariants<
 > = {
     buttonContainer: {
         height: 46,
-        marginTop: 'spacings.2',
-        marginBottom: 'spacings.2',
-        marginRight: 'spacings.4',
+        width: '50%',
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -92,7 +74,6 @@ export const datePickerHeaderItemStyles: ComponentStylePropWithVariants<
     },
     buttonStyle: {
         alignSelf: 'center',
-        marginLeft: 6,
         borderRadius: 'shapes.corner.extraSmall' as unknown as number,
     },
     innerStyle: {
@@ -146,35 +127,55 @@ export const datePickerMonthPickerStyles: ComponentStylePropWithVariants<
 
 type DatePickerMonthCustomProps = DatePickerMonthPickerCustomProps;
 
-export const datePickerDockedMonthStyles: ComponentStylePropWithVariants<
+export const datePickerDockedMonthItemStyles: ComponentStylePropWithVariants<
     TextStyle,
     'selected',
     DatePickerMonthCustomProps
 > = {
     backgroundColor: 'colors.surface',
 
-    month: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-    },
     monthButton: {
         width: '100%',
         overflow: 'hidden',
+        padding: 'spacings.0',
     },
     monthInner: {
         height: 46,
         alignItems: 'center',
         justifyContent: 'flex-start',
         flexDirection: 'row',
+        padding: 'spacings.0',
     },
     monthLabel: {
         fontSize: 16,
     },
     states: {
         selected: {
-            monthInner: { backgroundColor: 'colors.surfaceVariant' },
+            monthButton: { backgroundColor: 'colors.surfaceVariant' },
             monthLabel: { color: 'colors.onSurface' },
         },
+    },
+};
+
+type DatePickerDockedMonthCustomProps = {
+    dockedHeaderStyle?: ViewStyle;
+    weekContainerStyle?: ViewStyle;
+    backDropStyle?: ViewStyle;
+};
+
+export const datePickerDockedMonthStyles: ComponentStylePropWithVariants<
+    TextStyle,
+    '',
+    DatePickerDockedMonthCustomProps
+> = {
+    dockedHeaderStyle: {
+        alignItems: 'flex-start',
+        marginLeft: 'spacings.4',
+    },
+    weekContainerStyle: {
+        marginHorizontal: 'spacings.3',
+    },
+    backDropStyle: {
+        backgroundColor: 'transparent',
     },
 };

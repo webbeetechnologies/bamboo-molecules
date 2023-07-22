@@ -17,6 +17,7 @@ import type {
     LocalStateMultiple,
 } from './types';
 import { useControlledValue } from '../../hooks';
+import DatePickerInlineHeader from '../DatePickerInline/DatePickerInlineHeader';
 
 type Props =
     | DatePickerModalContentSingleProps
@@ -129,6 +130,7 @@ export function DatePickerModalContent(props: Props) {
                         dateMode={dateMode}
                         startYear={startYear}
                         endYear={endYear}
+                        HeaderComponent={DatePickerInlineHeader}
                     />
                 }
                 calendarEdit={

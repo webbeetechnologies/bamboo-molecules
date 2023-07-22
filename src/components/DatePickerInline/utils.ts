@@ -63,18 +63,16 @@ export const datePickerMonthStyles: ComponentStylePropWithVariants<
 
     backgroundColor: 'colors.surface',
     monthButton: {
-        borderRadius: 46 / 2,
+        borderRadius: 'shapes.corner.extraLarge' as unknown as number,
         overflow: 'hidden',
     },
     buttonContainerStyle: { flexDirection: 'row', alignItems: 'center' },
 };
 
 type DatePickerYearPickerCustomProps = {
-    year?: TextStyle;
-    selectedYear?: TextStyle;
+    yearContainer?: ViewStyle;
     yearButton?: ViewStyle;
     yearInner?: ViewStyle;
-    selectedYearInner?: ViewStyle;
     yearLabel?: TextStyle;
 };
 
@@ -85,24 +83,23 @@ export const datePickerYearPickerStyles: ComponentStylePropWithVariants<
 > = {
     backgroundColor: 'colors.surface',
 
-    year: {
-        flex: 1,
-        marginLeft: 16,
-        marginRight: 16,
-        justifyContent: 'center',
+    yearContainer: {
+        alignItems: 'center',
     },
-    selectedYear: { color: 'colors.onPrimary' },
     yearButton: {
-        borderRadius: 46 / 2,
+        borderRadius: 'shapes.corner.extraLarge' as unknown as number,
         overflow: 'hidden',
-    },
-    yearInner: {
-        borderRadius: 46 / 2,
         height: 46,
         alignItems: 'center',
         justifyContent: 'center',
+        marginLeft: 'spacings.4',
+        marginRight: 'spacings.4',
     },
-    selectedYearInner: { backgroundColor: 'colors.primary' },
+    yearInner: {
+        borderRadius: 'shapes.corner.extraLarge' as unknown as number,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     yearLabel: {
         fontSize: 16,
     },
@@ -138,7 +135,6 @@ export const datePickerDayStyles: ComponentStylePropWithVariants<
     button: {
         width: daySize,
         height: daySize,
-        marginTop: 'spacings.2',
         overflow: 'hidden',
         borderRadius: daySize / 2,
     },
@@ -220,11 +216,10 @@ export const datePickerHeaderStyles: ComponentStylePropWithVariants<
     DatePickerHeaderCustomProps
 > = {
     datePickerHeader: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        left: 0,
-        zIndex: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginHorizontal: 'spacings.5',
     },
     buttonContainer: {
         height: 56,
@@ -339,6 +334,21 @@ export const datePickerDayRangeStyles: ComponentStylePropWithVariants<
             container: {
                 backgroundColor: undefined,
             },
+        },
+    },
+};
+
+type DatePickerYearItemCustomProps = DatePickerYearPickerCustomProps;
+
+export const datePickerYearItemStyles: ComponentStylePropWithVariants<
+    TextStyle,
+    'selected',
+    DatePickerYearItemCustomProps
+> = {
+    states: {
+        selected: {
+            yearButton: { backgroundColor: 'colors.primary' },
+            yearLabel: { color: 'colors.onPrimary' },
         },
     },
 };

@@ -4,9 +4,9 @@ import type { ViewStyle } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { DisableWeekDaysType } from '../DatePickerInline/dateUtils';
 import DayNames, { dayNamesHeight } from '../DatePickerInline/DayNames';
-import HeaderItem from './HeaderItem';
-import { useStore } from './DatePickerDocked';
-import { setYear } from 'date-fns';
+import HeaderItem from '../DatePickerInline/HeaderItem';
+import { useDatePickerStore } from '../DatePickerInline/DatePickerInlineBase';
+import { add, format } from 'date-fns';
 
 const buttonContainerHeight = 56;
 const buttonContainerMarginTop = 4;
@@ -24,9 +24,15 @@ function DatePickerDockedHeader({
     style: styleProp,
 }: CalendarHeaderProps) {
     const { View } = useMolecules();
-    const [{ localDate, pickerType }, setStore] = useStore(state => state);
+    const [{ localDate, pickerType, startDateYear, endDateYear }, setStore] = useDatePickerStore(
+        state => state,
+    );
 
     const componentStyles = useComponentStyles('DatePickerDocked_Header', styleProp);
+
+    const monthName = useMemo(() => {
+        return format(localDate, 'MMM');
+    }, [localDate]);
 
     const { containerStyle, daysWrapperStyle } = useMemo(() => {
         const { datePickerHeader, daysWrapperStyle: daysWrapper, ...rest } = componentStyles;
@@ -37,29 +43,67 @@ function DatePickerDockedHeader({
         };
     }, [componentStyles]);
 
-    const handleOnPrevious = useCallback(() => {
-        setStore(prev => ({
-            ...prev,
-            localDate: setYear(prev.localDate, prev.localDate.getFullYear() - 1),
-        }));
-    }, [setStore]);
+    const handlePressDropDown = useCallback(
+        (type: 'month' | 'year') => {
+            setStore(prev => ({
+                pickerType: prev.pickerType ? undefined : type,
+            }));
+        },
+        [setStore],
+    );
 
-    const handleOnNext = useCallback(() => {
-        setStore(prev => ({
-            ...prev,
-            localDate: setYear(prev.localDate, prev.localDate.getFullYear() + 1),
-        }));
-    }, [setStore]);
+    const isNotInRange = useCallback(
+        (date: Date) => {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            if (year < startDateYear || year > endDateYear || month > 11 || month < 0) {
+                return true;
+            }
+            return false;
+        },
+        [startDateYear, endDateYear],
+    );
+
+    const handleChange = useCallback(
+        (offset: number, type?: 'month' | 'year') => {
+            let newDate = localDate;
+            const prop = type === 'month' ? 'months' : 'years';
+            newDate = add(newDate, { [prop]: offset });
+
+            if (isNotInRange(newDate)) return;
+
+            setStore(() => ({
+                localDate: newDate,
+            }));
+        },
+        [isNotInRange, localDate, setStore],
+    );
+
+    const handleChangePrevious = useMemo(() => handleChange.bind(null, -1), [handleChange]);
+    const handleChangeNext = useMemo(() => handleChange.bind(null, 1), [handleChange]);
 
     return (
-        <View style={containerStyle} pointerEvents={'box-none'}>
-            <HeaderItem
-                onNext={handleOnNext}
-                onPrev={handleOnPrevious}
-                selecting={!!pickerType}
-                type="year"
-                value={localDate.getFullYear()}
-            />
+        <View>
+            <View style={containerStyle} pointerEvents={'box-none'}>
+                <HeaderItem
+                    selecting={!!pickerType}
+                    type="month"
+                    value={monthName}
+                    onNext={handleChangeNext}
+                    onPrev={handleChangePrevious}
+                    onPressDropdown={handlePressDropDown}
+                    pickerType={pickerType}
+                />
+                <HeaderItem
+                    selecting={!!pickerType}
+                    type="year"
+                    value={localDate.getFullYear()}
+                    onNext={handleChangeNext}
+                    onPrev={handleChangePrevious}
+                    onPressDropdown={handlePressDropDown}
+                    pickerType={pickerType}
+                />
+            </View>
             <View style={daysWrapperStyle}>
                 <DayNames disableWeekDays={disableWeekDays} locale={locale} />
             </View>

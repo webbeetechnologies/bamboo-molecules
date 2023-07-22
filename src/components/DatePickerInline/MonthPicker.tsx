@@ -3,20 +3,19 @@ import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { FlatListRef } from '../FlatList';
 import { range } from '../../utils/dateTimePicker';
-import { MONTHS_DATA } from './utils';
-import { useStore } from './DatePickerDocked';
+import { useDatePickerStore, useDatePickerStoreValue } from './DatePickerInlineBase';
+import { format, setMonth } from 'date-fns';
 
-export default function MonthPicker({
-    onChange,
-}: {
-    onChange: (month: number, type: 'month' | 'year') => any;
-}) {
-    const [{ localDate, pickerType }] = useStore(state => state);
+export default function MonthPicker() {
+    const [_, setStore] = useDatePickerStore(state => state);
+    const { localDate, selectingMonth } = useDatePickerStoreValue(state => ({
+        localDate: state.localDate,
+        selectingMonth: state.pickerType === 'month',
+    }));
     const { FlatList, View, HorizontalDivider } = useMolecules();
     const monthPickerStyles = useComponentStyles('DatePickerDocked_MonthPicker');
     const flatList = useRef<FlatListRef<number> | null>(null);
     const months = range(0, 11);
-    const selectingMonth = pickerType === 'month';
 
     const { containerStyle, monthStyle } = useMemo(() => {
         const { backgroundColor, ...rest } = monthPickerStyles;
@@ -34,9 +33,12 @@ export default function MonthPicker({
 
     const handleOnChange = useCallback(
         (month: number) => {
-            onChange(month, 'month');
+            setStore(prev => ({
+                localDate: setMonth(prev.localDate, month),
+                pickerType: undefined,
+            }));
         },
-        [onChange],
+        [setStore],
     );
 
     const renderItem = useCallback(
@@ -82,56 +84,51 @@ function MonthPure({
     onPressMonth: (newMonth: number) => any;
     monthStyles: Record<string, any>;
 }) {
-    const { TouchableRipple, Text, View, Icon } = useMolecules();
-    const montLocalStyles = useComponentStyles('DatePickerDocked_Month', monthStyles, {
+    const { Text, View, Icon, ListItem } = useMolecules();
+    const montLocalStyles = useComponentStyles('DatePickerDocked_MonthItem', monthStyles, {
         states: {
             selected,
         },
     });
-    const {
-        containerStyle,
-        monthInnerStyle,
-        monthLabelStyle,
-        monthButtonStyle,
-        accessibilityState,
-    } = useMemo(() => {
-        const { month: monthStyle, monthInner, monthLabel, monthButton } = montLocalStyles;
+    const { monthInnerStyle, monthLabelStyle, monthButtonStyle, accessibilityState } =
+        useMemo(() => {
+            const { monthInner, monthLabel, monthButton } = montLocalStyles;
 
-        return {
-            containerStyle: monthStyle,
-            monthInnerStyle: monthInner,
-            monthLabelStyle: monthLabel,
-            monthButtonStyle: monthButton,
-            accessibilityState: { selected },
-        };
-    }, [selected, montLocalStyles]);
+            return {
+                monthInnerStyle: monthInner,
+                monthLabelStyle: monthLabel,
+                monthButtonStyle: monthButton,
+                accessibilityState: { selected },
+            };
+        }, [selected, montLocalStyles]);
 
     const handleMonthPress = useCallback(() => {
         onPressMonth(month);
     }, [onPressMonth, month]);
 
     return (
-        <View style={containerStyle}>
-            <TouchableRipple
-                onPress={handleMonthPress}
-                accessibilityRole="button"
-                accessibilityLabel={String(month)}
-                accessibilityState={accessibilityState}
-                style={monthButtonStyle}>
-                <View style={monthInnerStyle}>
-                    {selected ? (
-                        <View style={styles.checkIconView}>
-                            <Icon name="check" size={24} />
-                        </View>
-                    ) : (
-                        <View style={styles.spacer} />
-                    )}
-                    <Text style={monthLabelStyle} selectable={false}>
-                        {MONTHS_DATA[month]}
-                    </Text>
-                </View>
-            </TouchableRipple>
-        </View>
+        <ListItem
+            onPress={handleMonthPress}
+            accessibilityRole="button"
+            accessibilityLabel={String(month)}
+            accessibilityState={accessibilityState}
+            style={monthButtonStyle}
+            testID={`pick-month-${month}`}
+            left={
+                selected ? (
+                    <View style={styles.checkIconView}>
+                        <Icon name="check" size={24} />
+                    </View>
+                ) : (
+                    <View style={styles.spacer} />
+                )
+            }>
+            <View style={monthInnerStyle}>
+                <Text style={monthLabelStyle} selectable={false}>
+                    {format(new Date(2000, month, 1), 'MMMM')}
+                </Text>
+            </View>
+        </ListItem>
     );
 }
 const Month = memo(MonthPure);
@@ -144,11 +141,11 @@ const styles = StyleSheet.create({
     },
 
     checkIconView: {
-        marginHorizontal: 'spacings.4',
+        marginLeft: 'spacings.4',
     },
 
     spacer: {
-        width: 54,
+        width: 44,
     },
 
     list: {

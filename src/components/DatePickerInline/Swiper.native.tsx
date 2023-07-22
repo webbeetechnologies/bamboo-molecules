@@ -10,9 +10,9 @@ import {
     getVerticalMonthsOffset,
     montHeaderHeight,
 } from './Month';
-import { SwiperProps, useYearChange } from './SwiperUtils';
 import { beginOffset, estimatedMonthHeight, totalMonths } from './dateUtils';
 import AutoSizer from './AutoSizer';
+import type { SwiperProps } from './SwiperUtils';
 
 function getVisibleArray(
     i: number,
@@ -37,7 +37,6 @@ function SwiperInner({
     renderItem,
     renderHeader,
     renderFooter,
-    selectedYear,
     initialIndex,
     width,
     height,
@@ -82,14 +81,6 @@ function SwiperInner({
         [parentRef, isHorizontal, width, height],
     );
 
-    const onPrev = useCallback(() => {
-        scrollTo(idx.current - 1, true);
-    }, [scrollTo, idx]);
-
-    const onNext = useCallback(() => {
-        scrollTo(idx.current + 1, true);
-    }, [scrollTo, idx]);
-
     const scrollToInitial = useCallback(() => {
         scrollTo(idx.current, false);
     }, [scrollTo]);
@@ -112,24 +103,6 @@ function SwiperInner({
             }
         },
         [idx, height, isHorizontal],
-    );
-
-    const renderProps = {
-        index: 0,
-        onPrev,
-        onNext,
-    };
-
-    useYearChange(
-        newIndex => {
-            if (newIndex) {
-                scrollTo(newIndex, false);
-            }
-        },
-        {
-            selectedYear,
-            currentIndexRef: idx,
-        },
     );
 
     const { innerContainerStyle, itemContainerStyle } = useMemo(() => {
@@ -172,18 +145,14 @@ function SwiperInner({
                     {visibleIndexes
                         ? new Array(visibleIndexes.length).fill(undefined).map((_, vi) => (
                               <View key={vi} style={itemContainerStyle(vi) as ViewStyle}>
-                                  {renderItem({
-                                      index: visibleIndexes[vi],
-                                      onPrev: onPrev,
-                                      onNext: onNext,
-                                  })}
+                                  {renderItem(visibleIndexes[vi])}
                               </View>
                           ))
                         : null}
                 </View>
             </ScrollView>
-            {renderHeader && renderHeader(renderProps)}
-            {renderFooter && renderFooter(renderProps)}
+            {renderHeader && renderHeader()}
+            {renderFooter && renderFooter()}
         </>
     );
 }
