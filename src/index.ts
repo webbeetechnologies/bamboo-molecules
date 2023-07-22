@@ -142,6 +142,8 @@ export {
     RangeSlider,
     RangeSliderProps,
     AvatarProps,
+    MenuProps,
+    MenuItemProps,
 } from './components';
 
 // to avoid circular dependencies

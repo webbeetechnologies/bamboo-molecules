@@ -1,23 +1,26 @@
 import { forwardRef, memo, useCallback, useMemo, ForwardedRef } from 'react';
 import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
 import type {
+    LayoutChangeEvent,
     NativeScrollEvent,
     NativeSyntheticEvent,
     ScrollView,
     ScrollViewProps,
     ViewToken,
 } from 'react-native';
+
 import { useComponentStyles } from '../../hooks';
+import { createFastContext } from '../../fast-context';
 import {
     useDataTable,
     useDataTableColumnWidth,
     useDataTableComponent,
+    useDataTableStoreRef,
 } from './DataTableContext/DataTableContext';
 import { defaultProps } from './defaults';
 import { renderRow } from './DataTableRow';
 import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
 import { DataTableHeaderRow } from './DataTableHeader';
-import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
 type DataTableComponentProps = DataTableBase & ScrollViewProps;
 type DataTablePresentationProps = DataTableComponentProps &
@@ -33,18 +36,20 @@ const {
 } = createFastContext<typeof defaultValue>();
 
 const defaultValue = { x: 0, y: 0, viewItemIds: [] as string[], scrollXVelocity: 0 };
+const defaultOffset = 500;
 
-export const useIsCellWithinBounds = (left: number, id: string) => {
-    const cellWidth = useDataTableColumnWidth(`_name-${1}`);
+export const useIsCellWithinBounds = (left: number, rowId: string, columnId: string) => {
+    const cellWidth = useDataTableColumnWidth(columnId);
+    const windowWidth = useDataTable(store => store.windowWidth);
 
     const checkLeft = (x: number, offset: number) => left + cellWidth >= x - offset;
-    const checkRight = (x: number, offset: number) => left <= x + offset + 500;
-    const isViewableItem = (viewItemIds: string[]) => viewItemIds.includes(id);
+    const checkRight = (x: number, offset: number) => left <= x + offset + windowWidth;
+    const isViewableItem = (viewItemIds: string[]) => viewItemIds.includes(rowId);
 
     return useContextValue(
         ({ x, viewItemIds }) =>
-            checkLeft(x, isViewableItem(viewItemIds) ? 500 : 0) &&
-            checkRight(x, isViewableItem(viewItemIds) ? 500 : 0),
+            checkLeft(x, isViewableItem(viewItemIds) ? defaultOffset : 0) &&
+            checkRight(x, isViewableItem(viewItemIds) ? defaultOffset : 0),
     );
 };
 
@@ -83,6 +88,7 @@ const DataTablePresentationComponent = memo(
         const normalizedData = useMemo(() => [{ id: '__header__' }, ...records], [records]);
 
         const { store, set: setStore } = useStoreRef();
+        const { set: setDataTableStore } = useDataTableStoreRef();
 
         const renderItem: typeof renderRow = useCallback(props => {
             return props.index === 0 ? (
@@ -126,6 +132,15 @@ const DataTablePresentationComponent = memo(
             [setStore],
         );
 
+        const onLayout = useCallback(
+            (e: LayoutChangeEvent) => {
+                setDataTableStore(() => ({
+                    windowWidth: e.nativeEvent.layout.width,
+                }));
+            },
+            [setDataTableStore],
+        );
+
         return (
             <ScrollViewComponent
                 {...restScrollViewProps}
@@ -134,7 +149,8 @@ const DataTablePresentationComponent = memo(
                 scrollEventThrottle={16}
                 horizontal={true}
                 ref={ref}
-                style={hStyle}>
+                style={hStyle}
+                onLayout={onLayout}>
                 {/*<ScrollViewComponent*/}
                 {/*    scrollEventThrottle={16}*/}
                 {/*    horizontal={false}*/}
@@ -161,7 +177,10 @@ const DataTablePresentationComponent = memo(
 
 const DataTableComponent = memo(
     forwardRef((props: DataTableComponentProps, ref: ForwardedRef<ScrollView>) => {
-        const { records = [], tableWidth } = useDataTable() || {};
+        const { records = [], tableWidth } = useDataTable(store => ({
+            records: store.records || [],
+            tableWidth: store.tableWidth,
+        }));
         const { FlatListComponent, ScrollViewComponent } = useDataTableComponent<TDataTableRow>();
 
         return (
@@ -195,6 +214,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 rowProps,
                 selectedRows,
                 rowSize,
+                columnWidths,
                 ...rest
             } = props;
 
@@ -212,6 +232,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 rowProps,
                 selectedRows,
                 rowSize,
+                columnWidths,
             };
 
             return (

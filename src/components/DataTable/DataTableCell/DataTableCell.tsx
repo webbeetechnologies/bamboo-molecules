@@ -20,29 +20,34 @@ type CellComponentProps = {
 };
 
 // Used as DataTable.Cell - Can be replaced with Molecules
-export const DataCell = memo(({ width, style, columnIndex, row, ...props }: DataCellProps) => {
-    const { View } = useMolecules();
-    const { cellProps, cellXOffsets } = useDataTable();
+export const DataCell = memo(
+    ({ width, style, columnIndex, row, column, ...props }: DataCellProps) => {
+        const { View } = useMolecules();
+        const { cellProps, cellXOffsets } = useDataTable(store => ({
+            cellProps: store.cellProps,
+            cellXOffsets: store.cellXOffsets,
+        }));
 
-    const cellStyles = useComponentStyles('DataTable_Cell', [
-        { width },
-        { position: 'absolute', left: cellXOffsets[columnIndex] },
-        cellProps?.style,
-        style,
-    ]);
+        const cellStyles = useComponentStyles('DataTable_Cell', [
+            { width },
+            { position: 'absolute', left: cellXOffsets[columnIndex] },
+            cellProps?.style,
+            style,
+        ]);
 
-    const isWithinBounds = useIsCellWithinBounds(cellXOffsets[columnIndex], row);
+        const isWithinBounds = useIsCellWithinBounds(cellXOffsets[columnIndex], row, column);
 
-    if (!isWithinBounds) return <></>;
+        if (!isWithinBounds) return <></>;
 
-    return (
-        <>
-            <View {...cellProps} {...props} style={cellStyles}>
-                {props.children}
-            </View>
-        </>
-    );
-});
+        return (
+            <>
+                <View {...cellProps} {...props} style={cellStyles}>
+                    {props.children}
+                </View>
+            </>
+        );
+    },
+);
 
 export const CellComponent = memo((props: CellComponentProps) => {
     const { DataTable } = useMolecules();
@@ -65,7 +70,7 @@ export const CellComponent = memo((props: CellComponentProps) => {
             {/**
              * TODO: Adopt custom column width
              */}
-            <DataTable.Cell width={width} columnIndex={columnIndex} row={row}>
+            <DataTable.Cell width={width} columnIndex={columnIndex} row={row} column={column}>
                 {cell}
             </DataTable.Cell>
         </DataTableCellContext.Provider>

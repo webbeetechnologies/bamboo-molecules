@@ -51,7 +51,12 @@ const DataTableComponentPresentation = memo(
 );
 
 const DataTableComponent = memo((props: DataTableComponentProps) => {
-    const { columns = [], rowSize, rowProps, selectedRows } = useDataTable();
+    const { columns, rowSize, rowProps, selectedRows } = useDataTable(store => ({
+        columns: store.columns || [],
+        rowSize: store.rowSize,
+        rowProps: store.rowProps,
+        selectedRows: store.selectedRows,
+    }));
     //
     // const { cellYOffsets } = useDataTable();
     // const isRowWithinBounds = useRowWithinBounds(cellYOffsets[props.index]);
