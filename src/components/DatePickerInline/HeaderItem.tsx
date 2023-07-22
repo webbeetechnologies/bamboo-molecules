@@ -96,14 +96,12 @@ function HeaderItem({
                         <Text style={labelStyle} selectable={false}>
                             {value}
                         </Text>
-                        <View>
-                            <IconButton
-                                onPress={handlePressDropDown}
-                                name={selecting && type === pickerType ? 'menu-up' : 'menu-down'}
-                                size="xs"
-                                disabled={disabled}
-                            />
-                        </View>
+                        <IconButton
+                            onPress={handlePressDropDown}
+                            name={selecting && type === pickerType ? 'menu-up' : 'menu-down'}
+                            size="xs"
+                            disabled={disabled}
+                        />
                     </View>
                 </TouchableRipple>
             )}
