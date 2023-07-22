@@ -100,6 +100,7 @@ import {
     stateLayerStyles,
     surfaceStyles,
     switchStyles,
+    newSwitchStyles,
     textInputStyles,
     timePickerAmPmSwitcherStyles,
     timePickerClockHoursStyles,
@@ -175,6 +176,7 @@ export const defaultThemeValue: Partial<ITheme> = {
     TouchableRipple: touchableRippleStyles,
     Surface: surfaceStyles,
     Switch: switchStyles,
+    NewSwitch: newSwitchStyles,
 
     ListItem: listItemStyles,
     ListItemTitle: listItemTitleStyles,
