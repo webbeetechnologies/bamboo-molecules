@@ -6,7 +6,6 @@ import {
     ToastContainer,
     useComponentStyles,
     useMolecules as useMoleculesDefault,
-    useToggle as useToggleDefault,
 } from '../src';
 import { linkTo } from '@storybook/addon-links';
 
@@ -75,7 +74,6 @@ export interface InjectedComponentTypes {
 }
 
 export const useMolecules = () => useMoleculesDefault<InjectedComponentTypes>();
-export const useToggle = (initialValue: boolean) => useToggleDefault(initialValue);
 
 addDecorator(Story => (
     <ProvideMolecules>
