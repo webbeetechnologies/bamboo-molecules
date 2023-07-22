@@ -60,7 +60,7 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
         onToggle,
         monthStyle,
     } = props;
-    const [{ pickerType }, setStore] = useFastContext(state => ({ pickerType: state.pickerType }));
+    const [pickerType, setStore] = useFastContext(state => state.pickerType);
 
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePickerInline', style);

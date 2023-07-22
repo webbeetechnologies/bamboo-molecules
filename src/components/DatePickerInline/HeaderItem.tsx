@@ -28,42 +28,35 @@ function HeaderItem({
     const headerItemStyles = useComponentStyles('DatePicker_HeaderItem');
     const disabled = pickerType && pickerType !== type;
 
-    const {
-        buttonContainerStyle,
-        buttonWrapperStyle,
-        buttonStyle,
-        innerStyle,
-        labelStyle,
-        iconContainerStyle,
-    } = useMemo(() => {
-        const {
-            buttonContainer,
-            buttonWrapper,
-            spacer,
-            buttonStyle: _buttonStyle,
-            innerStyle: _innerStyle,
-            labelStyle: _labelStyle,
-        } = headerItemStyles;
-
-        return {
-            buttonContainerStyle: [
+    const { buttonContainerStyle, buttonWrapperStyle, buttonStyle, innerStyle, labelStyle } =
+        useMemo(() => {
+            const {
                 buttonContainer,
-                {
-                    justifyContent: !onPressDropdown
-                        ? 'flex-end'
-                        : !onNext
-                        ? 'flex-start'
-                        : 'center',
-                },
-            ],
-            buttonWrapperStyle: buttonWrapper,
-            spacerStyle: spacer,
-            buttonStyle: _buttonStyle,
-            innerStyle: _innerStyle,
-            labelStyle: _labelStyle,
-            iconContainerStyle: { opacity: 1 },
-        };
-    }, [headerItemStyles, onNext, onPressDropdown]);
+                buttonWrapper,
+                spacer,
+                buttonStyle: _buttonStyle,
+                innerStyle: _innerStyle,
+                labelStyle: _labelStyle,
+            } = headerItemStyles;
+
+            return {
+                buttonContainerStyle: [
+                    buttonContainer,
+                    {
+                        justifyContent: !onPressDropdown
+                            ? 'flex-end'
+                            : !onNext
+                            ? 'flex-start'
+                            : 'center',
+                    },
+                ],
+                buttonWrapperStyle: buttonWrapper,
+                spacerStyle: spacer,
+                buttonStyle: _buttonStyle,
+                innerStyle: _innerStyle,
+                labelStyle: _labelStyle,
+            };
+        }, [headerItemStyles, onNext, onPressDropdown]);
 
     const handlePressDropDown = useCallback(() => {
         type && onPressDropdown && onPressDropdown(type);
@@ -103,7 +96,7 @@ function HeaderItem({
                         <Text style={labelStyle} selectable={false}>
                             {value}
                         </Text>
-                        <View style={iconContainerStyle}>
+                        <View>
                             <IconButton
                                 onPress={handlePressDropDown}
                                 name={selecting && type === pickerType ? 'menu-up' : 'menu-down'}
