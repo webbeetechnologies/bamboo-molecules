@@ -1,6 +1,6 @@
 import { memo, MutableRefObject, ReactNode, useCallback, useMemo } from 'react';
 
-import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
+import { createFastContext } from '../../fast-context';
 
 export type TableManagerContextType = {
     focusedCell: { rowId?: string; columnId: string; type: 'column' | 'cell' } | null;

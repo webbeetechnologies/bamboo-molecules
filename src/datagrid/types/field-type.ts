@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import type { IconType } from '@bambooapp/bamboo-molecules';
+import type { IconType } from '../../components';
 
 export type RendererType = 'ValueRenderer' | 'EditorRenderer';
 

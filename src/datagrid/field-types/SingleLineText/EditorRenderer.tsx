@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react';
-import type { TextInputProps } from '@bambooapp/bamboo-molecules';
+import type { TextInputProps } from '../../../components';
 
 import { InlineInput } from '../../components/InlineInput';
 import type { FieldRendererProps } from '../../types';

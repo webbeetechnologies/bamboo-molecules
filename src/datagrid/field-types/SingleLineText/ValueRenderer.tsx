@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import type { FieldRendererProps } from '../../types';
-import { TextInputProps, useMolecules } from '@bambooapp/bamboo-molecules';
+import type { TextInputProps } from '../../../components';
+import { useMolecules } from '../../../hooks';
 
 import type { Value } from './types';
 

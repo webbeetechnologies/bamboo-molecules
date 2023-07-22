@@ -1,4 +1,4 @@
-import { useMolecules } from '@bambooapp/bamboo-molecules';
+import { useMolecules } from '../../../hooks';
 import { FC, PropsWithChildren, PureComponent } from 'react';
 
 export class ErrorBoundary extends PureComponent<PropsWithChildren<{ defaultMessage?: string }>> {

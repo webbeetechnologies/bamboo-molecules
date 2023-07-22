@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { RatingProps, useMolecules } from '@bambooapp/bamboo-molecules';
-
+import type { RatingProps } from '../../../components';
+import { useMolecules } from '../../../hooks';
 import type { FieldRendererProps } from '../../types';
 import type { Value } from './types';
 import { StyleSheet } from 'react-native';
