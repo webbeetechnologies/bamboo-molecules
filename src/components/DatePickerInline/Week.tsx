@@ -34,7 +34,6 @@ const Week = ({
     ...rest
 }: Props) => {
     const { View } = useMolecules();
-    console.log(generatedDays);
     const componentStyles = useComponentStyles('DatePicker_Week', style);
 
     return (
