@@ -3,6 +3,7 @@ import { useComponentStyles, useMolecules } from '../../../hooks';
 import {
     DataTableCellContext,
     useDataTable,
+    useDataTableCell,
     useDataTableColumnWidth,
     useDataTableComponent,
     useDataTableRow,
@@ -20,34 +21,34 @@ type CellComponentProps = {
 };
 
 // Used as DataTable.Cell - Can be replaced with Molecules
-export const DataCell = memo(
-    ({ width, style, columnIndex, row, column, ...props }: DataCellProps) => {
-        const { View } = useMolecules();
-        const { cellProps, cellXOffsets } = useDataTable(store => ({
-            cellProps: store.cellProps,
-            cellXOffsets: store.cellXOffsets,
-        }));
+export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
+    const { View } = useMolecules();
 
-        const cellStyles = useComponentStyles('DataTable_Cell', [
-            { width },
-            { position: 'absolute', left: cellXOffsets[columnIndex] },
-            cellProps?.style,
-            style,
-        ]);
+    const { columnIndex, column, row } = useDataTableCell();
+    const { cellProps, cellXOffsets } = useDataTable(store => ({
+        cellProps: store.cellProps,
+        cellXOffsets: store.cellXOffsets,
+    }));
 
-        const isWithinBounds = useIsCellWithinBounds(cellXOffsets[columnIndex], row, column);
+    const cellStyles = useComponentStyles('DataTable_Cell', [
+        { width },
+        { position: 'absolute', left: cellXOffsets[columnIndex] },
+        cellProps?.style,
+        style,
+    ]);
 
-        if (!isWithinBounds) return <></>;
+    const isWithinBounds = useIsCellWithinBounds(cellXOffsets[columnIndex], row, column);
 
-        return (
-            <>
-                <View {...cellProps} {...props} style={cellStyles}>
-                    {props.children}
-                </View>
-            </>
-        );
-    },
-);
+    if (!isWithinBounds) return <></>;
+
+    return (
+        <>
+            <View {...cellProps} {...props} style={cellStyles}>
+                {props.children}
+            </View>
+        </>
+    );
+});
 
 export const CellComponent = memo((props: CellComponentProps) => {
     const { DataTable } = useMolecules();
@@ -70,9 +71,7 @@ export const CellComponent = memo((props: CellComponentProps) => {
             {/**
              * TODO: Adopt custom column width
              */}
-            <DataTable.Cell width={width} columnIndex={columnIndex} row={row} column={column}>
-                {cell}
-            </DataTable.Cell>
+            <DataTable.Cell width={width}>{cell}</DataTable.Cell>
         </DataTableCellContext.Provider>
     );
 });

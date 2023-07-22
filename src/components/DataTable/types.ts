@@ -14,9 +14,6 @@ export interface DataTableComponentProps<T = any> {
 export type DataHeaderCellProps = ViewProps & { width: number };
 export type DataCellProps = ViewProps & {
     width: number;
-    columnIndex: number;
-    row: TDataTableRow;
-    column: TDataTableColumn;
 };
 
 export type RenderHeaderCellProps = {
