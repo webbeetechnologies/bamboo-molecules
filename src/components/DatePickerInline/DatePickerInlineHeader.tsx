@@ -5,7 +5,7 @@ import { useComponentStyles, useMolecules } from '../../hooks';
 import DayNames, { dayNamesHeight } from './DayNames';
 import HeaderItem from './HeaderItem';
 import { add, format } from 'date-fns';
-import { useStore } from './DatePickerInlineBase';
+import { useDatePickerStore, useDatePickerStoreValue } from './DatePickerInlineBase';
 import type { DisableWeekDaysType } from './dateUtils';
 
 const buttonContainerHeight = 56;
@@ -25,7 +25,11 @@ function DatePickerInlineHeader({
     disableWeekDays,
     style: styleProp,
 }: CalendarHeaderProps) {
-    const [{ localDate, pickerType }, setStore] = useStore(state => state);
+    const [_, setStore] = useDatePickerStore(state => state);
+    const { localDate, isYearPickerType } = useDatePickerStoreValue(state => ({
+        localDate: state.localDate,
+        isYearPickerType: state.pickerType === 'year',
+    }));
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePicker_Header', styleProp);
 
@@ -50,16 +54,15 @@ function DatePickerInlineHeader({
     }, [componentStyles]);
 
     const handleOnYearPress = useCallback(() => {
-        isHorizontal &&
-            setStore(prev => ({ ...prev, pickerType: prev.pickerType ? undefined : 'year' }));
+        isHorizontal && setStore(prev => ({ pickerType: prev.pickerType ? undefined : 'year' }));
     }, [isHorizontal, setStore]);
 
     const handleOnPrev = useCallback(() => {
-        setStore(prev => ({ ...prev, localDate: add(prev.localDate, { months: -1 }) }));
+        setStore(prev => ({ localDate: add(prev.localDate, { months: -1 }) }));
     }, [setStore]);
 
     const handleOnNext = useCallback(() => {
-        setStore(prev => ({ ...prev, localDate: add(prev.localDate, { months: 1 }) }));
+        setStore(prev => ({ localDate: add(prev.localDate, { months: 1 }) }));
     }, [setStore]);
 
     return (
@@ -72,7 +75,7 @@ function DatePickerInlineHeader({
                             type="year"
                             value={`${monthName} ${year}`}
                             pickerType="year"
-                            selecting={pickerType === 'year'}
+                            selecting={isYearPickerType}
                         />
                         <HeaderItem
                             onNext={handleOnNext}

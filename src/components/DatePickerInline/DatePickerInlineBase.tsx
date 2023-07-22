@@ -5,7 +5,6 @@ import { useComponentStyles, useLatest, useMolecules } from '../../hooks';
 import { areDatesOnSameDay, dateToUnix, getEndOfDay, getInitialIndex } from './dateUtils';
 import Swiper from './Swiper';
 import Month from './Month';
-import CalendarHeader from './DatePickerInlineHeader';
 import YearPicker from './YearPicker';
 import type {
     DatePickerInlineBaseProps,
@@ -17,7 +16,6 @@ import type {
 } from './types';
 import { createFastContext } from '../../fast-context';
 import MonthPicker from './MonthPicker';
-import DatePickerDockedHeader from '../DatePickerDocked/DatePickerDockedHeader';
 
 export type Store = {
     localDate: Date;
@@ -33,7 +31,7 @@ const defaultValue = {
     pickerType: undefined,
 };
 
-const { Provider, useSelector } = createFastContext<Store>(defaultValue);
+const { Provider, useContext: useFastContext, useContextValue } = createFastContext<Store>();
 
 function DatePickerInlineBase(props: DatePickerInlineBaseProps) {
     return (
@@ -58,10 +56,13 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
         validRange,
         dateMode,
         style,
-        isDocked,
+        HeaderComponent,
         onToggle,
+        monthStyle,
     } = props;
-    const [{ pickerType }, setStore] = useSelector(state => state);
+    const [_, setStore] = useFastContext(state => state);
+    const pickerType = useContextValue(state => state.pickerType);
+
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePickerInline', style);
 
@@ -69,13 +70,10 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
     const isHorizontal = scrollMode === 'horizontal';
 
     useEffect(() => {
-        setStore(prev => ({
-            ...prev,
+        setStore(() => ({
             localDate: date || new Date(),
             startDateYear: startYear,
             endDateYear: endYear,
-            startDate: props.startDate,
-            endDate: props.endDate,
         }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -119,7 +117,7 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
                     change: exists ? 'removed' : 'added',
                 });
             }
-            onToggle && onToggle();
+            onToggle?.();
         },
         [mode, dateMode, onChangeRef, startDateRef, endDateRef, datesRef, onToggle],
     );
@@ -146,7 +144,7 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
                     onPressDate={onPressDate}
                     scrollMode={scrollMode}
                     disableWeekDays={disableWeekDays}
-                    isDocked={isDocked}
+                    customMonthStyles={monthStyle}
                 />
             );
         },
@@ -161,21 +159,19 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
             onPressDate,
             scrollMode,
             disableWeekDays,
-            isDocked,
+            monthStyle,
         ],
     );
 
     const renderCalenderHeader = useCallback(() => {
-        return isDocked ? (
-            <DatePickerDockedHeader disableWeekDays={disableWeekDays} locale={locale} />
-        ) : (
-            <CalendarHeader
+        return (
+            <HeaderComponent
                 scrollMode={scrollMode}
                 disableWeekDays={disableWeekDays}
                 locale={locale}
             />
         );
-    }, [disableWeekDays, scrollMode, isDocked, locale]);
+    }, [HeaderComponent, scrollMode, disableWeekDays, locale]);
 
     return (
         <View style={containerStyle}>
@@ -195,7 +191,9 @@ const styles = StyleSheet.create({
     root: { flex: 1 },
 });
 
-export const useStore = useSelector;
+export const useDatePickerStore = useFastContext;
+export const useDatePickerStoreValue = useContextValue;
+
 const DatePickerInlineComponent = memo(DatePickerInlineBaseChild);
 
 export default memo(DatePickerInlineBase);

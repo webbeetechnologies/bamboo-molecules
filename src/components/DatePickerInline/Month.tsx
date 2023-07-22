@@ -1,4 +1,4 @@
-import { useMemo, memo } from 'react';
+import { useMemo, memo, useCallback } from 'react';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { format } from '../../utils';
@@ -18,7 +18,7 @@ import { getCalendarHeaderHeight } from './DatePickerInlineHeader';
 import { dayNamesHeight } from './DayNames';
 import type { MonthMultiProps, MonthRangeProps, MonthSingleProps } from './types';
 import Week from './Week';
-import { useStore } from './DatePickerInlineBase';
+import { useDatePickerStoreValue } from './DatePickerInlineBase';
 
 export type Props = MonthSingleProps | MonthRangeProps | MonthMultiProps;
 
@@ -34,11 +34,11 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         scrollMode,
         disableWeekDays,
         validRange,
-        isDocked,
+        customMonthStyles,
     } = props;
-    const [{ localDate }] = useStore(state => state);
+    const localDate = useDatePickerStoreValue(state => state.localDate);
     const { Text, View } = useMolecules();
-    const monthStyles = useComponentStyles('DatePicker_Month');
+    const monthStyles = useComponentStyles('DatePicker_Month', customMonthStyles);
 
     const realIndex = getRealIndex(index);
     const isHorizontal = scrollMode === 'horizontal';
@@ -78,32 +78,34 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
                 yearButtonInner,
                 month: _monthStyle,
                 monthHeader,
+                dockedHeaderStyle,
+                weekContainerStyle: weekContainer,
             } = monthStyles;
             const { typescale, ...monthLabel } = _monthLabel;
 
             return {
-                monthStyle: [_monthStyle, { height: getMonthHeight(scrollMode, index) }],
                 headerStyle: [
                     monthHeader,
                     isHorizontal
-                        ? {
-                              alignItems: isDocked && 'flex-start',
-                              marginLeft: isDocked && 'spacings.4',
-                              marginTop: monthHeaderSingleMarginTop,
-                              marginBottom: monthHeaderSingleMarginBottom,
-                          }
+                        ? [
+                              dockedHeaderStyle,
+                              {
+                                  marginTop: monthHeaderSingleMarginTop,
+                                  marginBottom: monthHeaderSingleMarginBottom,
+                              },
+                          ]
                         : null,
                 ],
                 yearButtonStyle: yearButton,
                 yearInnerStyle: yearButtonInner,
                 monthLabelStyle: [monthLabel, typescale],
-                weekContainerStyle: { marginHorizontal: 'spacings.3' },
+                weekContainerStyle: weekContainer,
             };
-        }, [index, isHorizontal, monthStyles, scrollMode, isDocked]);
+        }, [isHorizontal, monthStyles]);
 
-    return (
-        <View>
-            {!isHorizontal && (
+    const renderHeader = useCallback(() => {
+        if (!isHorizontal) {
+            return (
                 <View style={headerStyle}>
                     <View accessibilityLabel={`${monthName} ${year}`} style={yearButtonStyle}>
                         <View style={yearInnerStyle}>
@@ -113,8 +115,24 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
                         </View>
                     </View>
                 </View>
-            )}
+            );
+        }
+        return null;
+    }, [
+        Text,
+        View,
+        headerStyle,
+        isHorizontal,
+        monthLabelStyle,
+        monthName,
+        year,
+        yearButtonStyle,
+        yearInnerStyle,
+    ]);
 
+    return (
+        <View>
+            {renderHeader()}
             {grid.map(({ weekIndex, generatedDays }) => (
                 <Week
                     key={weekIndex}
@@ -122,7 +140,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
                     generatedDays={generatedDays}
                     disableWeekDays={disableWeekDays}
                     onPressDate={onPressDate}
-                    style={isDocked && weekContainerStyle}
+                    style={weekContainerStyle}
                 />
             ))}
         </View>

@@ -1,12 +1,14 @@
 import { memo } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { useMolecules } from '../../hooks';
+import { useComponentStyles, useMolecules } from '../../hooks';
 import type { DatePickerDockedProps } from './types';
 import { DatePickerInlineBase } from '../DatePickerInline';
+import DatePickerDockedHeader from './DatePickerDockedHeader';
 
 const DatePickerDocked = (props: DatePickerDockedProps) => {
     const { triggerRef, isOpen, onToggle } = props;
+    const dockedMonthStyles = useComponentStyles('DatePickerDocked_Month');
     const { Popover } = useMolecules();
     return (
         <Popover
@@ -15,7 +17,12 @@ const DatePickerDocked = (props: DatePickerDockedProps) => {
             triggerRef={triggerRef}
             isOpen={isOpen}
             onClose={onToggle}>
-            <DatePickerInlineBase {...props} isDocked onToggle={onToggle} />
+            <DatePickerInlineBase
+                {...props}
+                HeaderComponent={DatePickerDockedHeader}
+                onToggle={onToggle}
+                monthStyle={dockedMonthStyles}
+            />
         </Popover>
     );
 };

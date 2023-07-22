@@ -5,7 +5,7 @@ import { useComponentStyles, useMolecules } from '../../hooks';
 import type { DisableWeekDaysType } from '../DatePickerInline/dateUtils';
 import DayNames, { dayNamesHeight } from '../DatePickerInline/DayNames';
 import HeaderItem from '../DatePickerInline/HeaderItem';
-import { useStore } from '../DatePickerInline/DatePickerInlineBase';
+import { useDatePickerStore } from '../DatePickerInline/DatePickerInlineBase';
 import { add, format } from 'date-fns';
 
 const buttonContainerHeight = 56;
@@ -24,9 +24,10 @@ function DatePickerDockedHeader({
     style: styleProp,
 }: CalendarHeaderProps) {
     const { View } = useMolecules();
-    const [{ localDate, pickerType, startDateYear, endDateYear }, setStore] = useStore(
+    const [{ localDate, pickerType, startDateYear, endDateYear }, setStore] = useDatePickerStore(
         state => state,
     );
+
     const componentStyles = useComponentStyles('DatePickerDocked_Header', styleProp);
 
     const monthName = useMemo(() => {
@@ -44,8 +45,7 @@ function DatePickerDockedHeader({
 
     const handlePressDropDown = useCallback(
         (type: 'month' | 'year') => {
-            setStore(prev => ({
-                ...prev,
+            setStore(() => ({
                 pickerType: pickerType ? undefined : type,
             }));
         },
@@ -72,8 +72,7 @@ function DatePickerDockedHeader({
 
             if (isNotInRange(newDate)) return;
 
-            setStore(prev => ({
-                ...prev,
+            setStore(() => ({
                 localDate: newDate,
             }));
         },

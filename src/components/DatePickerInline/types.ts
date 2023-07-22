@@ -1,5 +1,7 @@
 import type { ViewStyle } from 'react-native';
 import type { DisableWeekDaysType } from './dateUtils';
+import type { MemoExoticComponent } from 'react';
+import type { CalendarHeaderProps } from './DatePickerInlineHeader';
 
 export interface BaseMonthProps {
     locale: undefined | string;
@@ -9,13 +11,13 @@ export interface BaseMonthProps {
     index: number;
     onPressDate: (date: Date) => any;
     validRange?: ValidRangeType;
+    customMonthStyles?: Record<string, any>;
 
     // some of these should be required in final implementation
     date?: CalendarDate;
     dates?: CalendarDates;
     startDate?: CalendarDate;
     endDate?: CalendarDate;
-    isDocked?: boolean;
 }
 
 export interface MonthRangeProps extends BaseMonthProps {
@@ -48,6 +50,8 @@ export type BaseDatePickerProps = {
     validRange?: ValidRangeType;
     startYear?: number;
     endYear?: number;
+    HeaderComponent: MemoExoticComponent<CalendarHeaderProps | any>;
+    monthStyle?: Record<string, any>;
 
     // here they are optional but in final implemenation they are required
     date?: CalendarDate;
@@ -56,7 +60,6 @@ export type BaseDatePickerProps = {
     endDate?: CalendarDate;
     dateMode?: 'start' | 'end';
     style?: ViewStyle;
-    isDocked?: boolean;
     onToggle?: () => void;
 };
 

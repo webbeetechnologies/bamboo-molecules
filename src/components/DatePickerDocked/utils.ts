@@ -127,7 +127,7 @@ export const datePickerMonthPickerStyles: ComponentStylePropWithVariants<
 
 type DatePickerMonthCustomProps = DatePickerMonthPickerCustomProps;
 
-export const datePickerDockedMonthStyles: ComponentStylePropWithVariants<
+export const datePickerDockedMonthItemStyles: ComponentStylePropWithVariants<
     TextStyle,
     'selected',
     DatePickerMonthCustomProps
@@ -151,8 +151,27 @@ export const datePickerDockedMonthStyles: ComponentStylePropWithVariants<
     },
     states: {
         selected: {
-            monthInner: { backgroundColor: 'colors.surfaceVariant' },
+            monthButton: { backgroundColor: 'colors.surfaceVariant' },
             monthLabel: { color: 'colors.onSurface' },
         },
+    },
+};
+
+type DatePickerDockedMonthCustomProps = {
+    dockedHeaderStyle?: ViewStyle;
+    weekContainerStyle?: ViewStyle;
+};
+
+export const datePickerDockedMonthStyles: ComponentStylePropWithVariants<
+    TextStyle,
+    '',
+    DatePickerDockedMonthCustomProps
+> = {
+    dockedHeaderStyle: {
+        alignItems: 'flex-start',
+        marginLeft: 'spacings.4',
+    },
+    weekContainerStyle: {
+        marginHorizontal: 'spacings.3',
     },
 };

@@ -3,13 +3,13 @@ import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { FlatListRef } from '../FlatList';
 import { getYearRange } from '../../utils';
-import { useStore } from './DatePickerInlineBase';
+import { useDatePickerStore } from './DatePickerInlineBase';
 import { setYear } from 'date-fns';
 
 const ITEM_HEIGHT = 62;
 
 export default function YearPicker() {
-    const [{ startDateYear, endDateYear, localDate, pickerType }, setStore] = useStore(
+    const [{ startDateYear, endDateYear, localDate, pickerType }, setStore] = useDatePickerStore(
         state => state,
     );
     const { FlatList, View, HorizontalDivider } = useMolecules();
@@ -51,7 +51,6 @@ export default function YearPicker() {
     const handleOnChange = useCallback(
         (year: number) => {
             setStore(prev => ({
-                ...prev,
                 localDate: setYear(prev.localDate, year),
                 pickerType: undefined,
             }));
@@ -123,7 +122,7 @@ function YearPure({
             accessibilityRole="button"
             accessibilityLabel={String(year)}
             style={yearButtonStyle}
-            testID="year">
+            testID={`pick-year-${year}`}>
             <ListItem.Title style={yearLabelStyle} selectable={false}>
                 {year}
             </ListItem.Title>

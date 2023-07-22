@@ -3,16 +3,19 @@ import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { FlatListRef } from '../FlatList';
 import { range } from '../../utils/dateTimePicker';
-import { useStore } from './DatePickerInlineBase';
+import { useDatePickerStore, useDatePickerStoreValue } from './DatePickerInlineBase';
 import { format, setMonth } from 'date-fns';
 
 export default function MonthPicker() {
-    const [{ localDate, pickerType }, setStore] = useStore(state => state);
+    const [_, setStore] = useDatePickerStore(state => state);
+    const { localDate, selectingMonth } = useDatePickerStoreValue(state => ({
+        localDate: state.localDate,
+        selectingMonth: state.pickerType === 'month',
+    }));
     const { FlatList, View, HorizontalDivider } = useMolecules();
     const monthPickerStyles = useComponentStyles('DatePickerDocked_MonthPicker');
     const flatList = useRef<FlatListRef<number> | null>(null);
     const months = range(0, 11);
-    const selectingMonth = pickerType === 'month';
 
     const { containerStyle, monthStyle } = useMemo(() => {
         const { backgroundColor, ...rest } = monthPickerStyles;
@@ -82,7 +85,7 @@ function MonthPure({
     monthStyles: Record<string, any>;
 }) {
     const { Text, View, Icon, ListItem } = useMolecules();
-    const montLocalStyles = useComponentStyles('DatePickerDocked_Month', monthStyles, {
+    const montLocalStyles = useComponentStyles('DatePickerDocked_MonthItem', monthStyles, {
         states: {
             selected,
         },
@@ -110,15 +113,17 @@ function MonthPure({
             accessibilityLabel={String(month)}
             accessibilityState={accessibilityState}
             style={monthButtonStyle}
-            testID="month">
-            <View style={monthInnerStyle}>
-                {selected ? (
+            testID={`pick-month-${month}`}
+            left={
+                selected ? (
                     <View style={styles.checkIconView}>
                         <Icon name="check" size={24} />
                     </View>
                 ) : (
                     <View style={styles.spacer} />
-                )}
+                )
+            }>
+            <View style={monthInnerStyle}>
                 <Text style={monthLabelStyle} selectable={false}>
                     {format(new Date(2000, month, 1), 'MMMM')}
                 </Text>
@@ -136,11 +141,11 @@ const styles = StyleSheet.create({
     },
 
     checkIconView: {
-        marginHorizontal: 'spacings.4',
+        marginLeft: 'spacings.4',
     },
 
     spacer: {
-        width: 54,
+        width: 44,
     },
 
     list: {

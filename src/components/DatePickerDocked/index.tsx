@@ -3,6 +3,7 @@ export {
     datePickerDockedStyles,
     datePickerMonthPickerStyles,
     datePickerDockedHeaderStyles,
+    datePickerDockedMonthItemStyles,
     datePickerDockedMonthStyles,
     datePickerHeaderItemStyles,
 } from './utils';

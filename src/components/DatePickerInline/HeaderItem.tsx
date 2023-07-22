@@ -1,7 +1,7 @@
 import { useComponentStyles } from '@bambooapp/bamboo-atoms';
 import { memo, useCallback, useMemo } from 'react';
 import { useMolecules } from '../../hooks';
-import { useStore } from './DatePickerInlineBase';
+import { useDatePickerStoreValue } from './DatePickerInlineBase';
 
 function HeaderItem({
     value,
@@ -20,7 +20,10 @@ function HeaderItem({
     onNext?: (type: 'month' | 'year' | undefined) => void;
     onPrev?: (type: 'month' | 'year' | undefined) => void;
 }) {
-    const [{ startDateYear, endDateYear }] = useStore(state => state);
+    const { startDateYear, endDateYear } = useDatePickerStoreValue(state => ({
+        startDateYear: state.startDateYear,
+        endDateYear: state.endDateYear,
+    }));
     const { View, IconButton, TouchableRipple, Text } = useMolecules();
     const headerItemStyles = useComponentStyles('DatePicker_HeaderItem');
     const disabled = pickerType && pickerType !== type;
