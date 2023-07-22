@@ -79,6 +79,7 @@ export {
     datePickerDayRangeStyles,
     datePickerDayEmptyStyles,
     datePickerWeekStyles,
+    datePickerYearItemStyles,
     CalendarDate,
     CalendarDates,
 } from './DatePickerInline';
@@ -94,6 +95,17 @@ export {
 } from './DatePickerModal';
 
 export { DatePickerInput, DatePickerInputProps, datePickerInputStyles } from './DatePickerInput';
+
+export {
+    DatePickerDocked,
+    datePickerDockedStyles,
+    datePickerMonthPickerStyles,
+    datePickerDockedMonthItemStyles,
+    datePickerHeaderItemStyles,
+    datePickerDockedMonthStyles,
+    datePickerDockedHeaderStyles,
+    DatePickerDockedProps,
+} from './DatePickerDocked';
 
 export {
     TimePicker,

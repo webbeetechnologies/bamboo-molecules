@@ -16,6 +16,9 @@ export interface DatePickerInputProps
      * We currently only accept the variations of dd MM yyyy
      * */
     dateFormat?: string;
+    pickerMode?: 'docked' | 'modal';
+    startYear?: number;
+    endYear?: number;
 }
 export interface DatePickerInputWithoutModalProps extends Omit<DatePickerInputProps, 'withModal'> {
     inputButtons?: any;

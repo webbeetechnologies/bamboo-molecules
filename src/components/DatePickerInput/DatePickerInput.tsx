@@ -1,11 +1,12 @@
-import { useCallback, useState, forwardRef, memo, useMemo } from 'react';
+import { useCallback, useState, forwardRef, memo, useMemo, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { useMolecules, useLatest } from '../../hooks';
+import { useMolecules, useLatest, useToggle } from '../../hooks';
 import { noop } from '../../utils';
 import DatePickerInputWithoutModal from './DatePickerInputWithoutModal';
 import DatePickerInputModal from './DatePickerInputModal';
 import type { DatePickerInputProps } from './types';
+import { DatePickerDocked } from '../DatePickerDocked';
 
 function DatePickerInput(
     {
@@ -17,12 +18,17 @@ function DatePickerInput(
         validRange,
         onChange = noop,
         disabled = false,
+        pickerMode = 'modal',
+        startYear,
+        endYear,
         //locale = 'en',
         ...rest
     }: DatePickerInputProps,
     ref: any,
 ) {
     const { IconButton } = useMolecules();
+    const triggerRef = useRef(null);
+    const { state: isOpen, onToggle } = useToggle(false);
     const [visible, setVisible] = useState<boolean>(false);
 
     const onDismiss = useCallback(() => {
@@ -39,7 +45,51 @@ function DatePickerInput(
         [setVisible, onChangeRef],
     );
 
-    const onPressCalendarIcon = useCallback(() => setVisible(true), []);
+    const onPressCalendarIcon = useCallback(() => {
+        if (pickerMode === 'docked') {
+            onToggle();
+        }
+        setVisible(true);
+    }, [pickerMode, onToggle]);
+
+    const renderers = useMemo(() => {
+        return {
+            modal: (
+                <DatePickerInputModal
+                    date={value}
+                    mode="single"
+                    isOpen={visible}
+                    onClose={onDismiss}
+                    onConfirm={onInnerConfirm}
+                    locale={locale}
+                    validRange={validRange}
+                />
+            ),
+            docked: (
+                <DatePickerDocked
+                    date={value}
+                    locale={locale}
+                    startYear={startYear}
+                    endYear={endYear}
+                    onChange={onInnerConfirm}
+                    isOpen={isOpen}
+                    onToggle={onToggle}
+                    triggerRef={triggerRef}
+                />
+            ),
+        };
+    }, [
+        endYear,
+        isOpen,
+        locale,
+        onDismiss,
+        onInnerConfirm,
+        onToggle,
+        startYear,
+        validRange,
+        value,
+        visible,
+    ]);
 
     const rightElement = useMemo(
         () => (
@@ -47,39 +97,18 @@ function DatePickerInput(
                 {withModal ? (
                     <>
                         <IconButton
+                            ref={triggerRef}
                             style={styles.calendarButton}
                             name={calendarIcon}
                             onPress={onPressCalendarIcon}
                             disabled={disabled}
                         />
-
-                        <DatePickerInputModal
-                            date={value}
-                            mode="single"
-                            isOpen={visible}
-                            onClose={onDismiss}
-                            onConfirm={onInnerConfirm}
-                            locale={locale}
-                            // dateMode={inputMode}
-                            validRange={validRange}
-                        />
+                        {renderers[pickerMode]}
                     </>
                 ) : null}
             </>
         ),
-        [
-            IconButton,
-            calendarIcon,
-            disabled,
-            locale,
-            onDismiss,
-            onInnerConfirm,
-            onPressCalendarIcon,
-            validRange,
-            value,
-            visible,
-            withModal,
-        ],
+        [IconButton, calendarIcon, disabled, onPressCalendarIcon, pickerMode, renderers, withModal],
     );
 
     return (

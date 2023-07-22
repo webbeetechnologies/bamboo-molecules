@@ -26,10 +26,11 @@ type PopperContentProps = SurfaceProps & {
     arrowProps?: ViewProps;
     showArrow?: boolean;
     contentTextStyles?: TextStyle;
+    numberOfLines?: number;
 };
 
 const PopperContent = (
-    { children, style, showArrow, contentTextStyles, ...rest }: PopperContentProps,
+    { children, style, showArrow, contentTextStyles, numberOfLines, ...rest }: PopperContentProps,
     ref: any,
 ) => {
     const { Text, View, Surface } = useMolecules();
@@ -155,7 +156,7 @@ const PopperContent = (
                     />
                 ))}
             <Surface elevation={2} style={containerStyle} {...rest} ref={ref} onLayout={onUpdate}>
-                <Text style={contentTextStyles} numberOfLines={1}>
+                <Text style={contentTextStyles} numberOfLines={numberOfLines}>
                     {restElements}
                 </Text>
             </Surface>

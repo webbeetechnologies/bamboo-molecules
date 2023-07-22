@@ -121,8 +121,9 @@ export function isLeapYear({ year }: { year: number }) {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 }
 
-export const daySize = 46;
+export const daySize = 40;
 export const estimatedMonthHeight = 360;
+// TODO This number startAtIndex is not adding any significance to the date picker, So we probably will change the logic.
 export const startAtIndex = 1200;
 export const totalMonths = startAtIndex * 2;
 export const beginOffset = estimatedMonthHeight * startAtIndex;
@@ -131,7 +132,7 @@ export const gridCounts = new Array<number | undefined>(totalMonths);
 export function getGridCount(index: number) {
     const cHeight = gridCounts[index];
     if (cHeight) {
-        return cHeight;
+        return cHeight + 1;
     }
     const monthDate = addMonths(new Date(), getRealIndex(index));
     const h = getGridCountForDate(monthDate);

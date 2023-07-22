@@ -2,19 +2,12 @@ import { MutableRefObject, useEffect } from 'react';
 import { useLatest } from '../../hooks';
 import { addMonths, differenceInMonths, getRealIndex, startAtIndex } from './dateUtils';
 
-export type RenderProps = {
-    index: number;
-    onNext: () => any;
-    onPrev: () => any;
-};
-
 export type SwiperProps = {
     initialIndex: number;
     scrollMode: 'horizontal' | 'vertical';
-    renderItem: (renderProps: RenderProps) => any;
-    renderHeader?: (renderProps: RenderProps) => any;
-    renderFooter?: (renderProps: RenderProps) => any;
-    selectedYear: number | undefined;
+    renderItem: (index: number) => any;
+    renderHeader?: () => any;
+    renderFooter?: () => any;
 };
 
 export function useYearChange(

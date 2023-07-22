@@ -1,58 +1,68 @@
-import { useRef, useEffect, memo, useMemo } from 'react';
+import { useRef, useEffect, memo, useMemo, useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { FlatListRef } from '../FlatList';
-import { range } from '../../utils/dateTimePicker';
+import { getYearRange } from '../../utils';
+import { useDatePickerStore } from './DatePickerInlineBase';
+import { setYear } from 'date-fns';
 
 const ITEM_HEIGHT = 62;
 
-export default function YearPicker({
-    selectedYear,
-    selectingYear,
-    onPressYear,
-    startYear,
-    endYear,
-}: {
-    selectedYear: number | undefined;
-    selectingYear: boolean;
-    onPressYear: (year: number) => any;
-    startYear: number;
-    endYear: number;
-}) {
-    const { FlatList, View } = useMolecules();
+export default function YearPicker() {
+    const [{ startDateYear, endDateYear, localDate, pickerType }, setStore] = useDatePickerStore(
+        state => state,
+    );
+    const { FlatList, View, HorizontalDivider } = useMolecules();
     const yearPickerStyles = useComponentStyles('DatePicker_YearPicker');
     const flatList = useRef<FlatListRef<number> | null>(null);
-    const years = range(isNaN(startYear) ? 1800 : startYear, isNaN(endYear) ? 2200 : endYear);
+    const years = useMemo(
+        () => getYearRange(startDateYear, endDateYear),
+        [startDateYear, endDateYear],
+    );
+    const selectingYear = pickerType === 'year';
+    const selectedYear = localDate.getFullYear();
 
     // scroll to selected year
     useEffect(() => {
         if (flatList.current && selectingYear && selectedYear) {
-            const indexToGo = selectedYear - startYear;
+            const indexToGo = selectedYear - years[0];
             flatList.current.scrollToOffset({
                 offset: (indexToGo / 3) * ITEM_HEIGHT - ITEM_HEIGHT,
                 animated: false,
             });
         }
-    }, [flatList, selectedYear, selectingYear, startYear]);
+    }, [flatList, selectedYear, selectingYear, years]);
 
     const { containerStyle, yearStyle } = useMemo(() => {
-        const { backgroundColor, ...rest } = yearPickerStyles;
+        const { backgroundColor, yearContainer, ...rest } = yearPickerStyles;
 
         return {
             containerStyle: [
                 StyleSheet.absoluteFill,
                 styles.root,
                 { backgroundColor },
+                yearContainer,
                 selectingYear ? styles.opacity1 : styles.opacity0,
             ],
             yearStyle: rest,
         };
     }, [selectingYear, yearPickerStyles]);
 
+    const handleOnChange = useCallback(
+        (year: number) => {
+            setStore(prev => ({
+                localDate: setYear(prev.localDate, year),
+                pickerType: undefined,
+            }));
+        },
+        [setStore],
+    );
+
     return (
         <>
             {selectingYear && (
                 <View style={containerStyle} pointerEvents={selectingYear ? 'auto' : 'none'}>
+                    <HorizontalDivider />
                     <FlatList<number>
                         ref={flatList}
                         style={styles.list}
@@ -61,7 +71,7 @@ export default function YearPicker({
                             <Year
                                 year={item}
                                 selected={selectedYear === item}
-                                onPressYear={onPressYear}
+                                onPressYear={handleOnChange}
                                 yearStyles={yearStyle}
                             />
                         )}
@@ -85,40 +95,38 @@ function YearPure({
     onPressYear: (newYear: number) => any;
     yearStyles: Record<string, any>;
 }) {
-    const { TouchableRipple, Text, View } = useMolecules();
+    const { ListItem } = useMolecules();
 
-    const { containerStyle, yearInnerStyle, yearLabelStyle, yearButtonStyle } = useMemo(() => {
-        const {
-            year: yearStyle,
-            yearInner,
-            yearLabel,
-            selectedYear,
-            selectedYearInner,
-            yearButton,
-        } = yearStyles;
+    const yearLocalStyles = useComponentStyles('DatePicker_YearItem', yearStyles, {
+        states: {
+            selected,
+        },
+    });
+    const { yearLabelStyle, yearButtonStyle } = useMemo(() => {
+        const { yearInner, yearLabel, yearButton } = yearLocalStyles;
 
         return {
-            containerStyle: yearStyle,
-            yearInnerStyle: [yearInner, selected ? selectedYearInner : null],
-            yearLabelStyle: [yearLabel, selected ? selectedYear : null],
+            yearInnerStyle: yearInner,
+            yearLabelStyle: yearLabel,
             yearButtonStyle: yearButton,
         };
-    }, [selected, yearStyles]);
+    }, [yearLocalStyles]);
+
+    const handlePressYear = useCallback(() => {
+        onPressYear(year);
+    }, [year, onPressYear]);
 
     return (
-        <View style={containerStyle}>
-            <TouchableRipple
-                onPress={() => onPressYear(year)}
-                accessibilityRole="button"
-                accessibilityLabel={String(year)}
-                style={yearButtonStyle}>
-                <View style={yearInnerStyle}>
-                    <Text style={yearLabelStyle} selectable={false}>
-                        {year}
-                    </Text>
-                </View>
-            </TouchableRipple>
-        </View>
+        <ListItem
+            onPress={handlePressYear}
+            accessibilityRole="button"
+            accessibilityLabel={String(year)}
+            style={yearButtonStyle}
+            testID={`pick-year-${year}`}>
+            <ListItem.Title style={yearLabelStyle} selectable={false}>
+                {year}
+            </ListItem.Title>
+        </ListItem>
     );
 }
 const Year = memo(YearPure);
