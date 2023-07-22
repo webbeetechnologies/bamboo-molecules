@@ -4,7 +4,6 @@ import {
     RenderCellProps,
     RenderHeaderCellProps,
     useMolecules,
-    useToggle,
 } from '@bambooapp/bamboo-molecules';
 import { ComponentType, ReactNode, useCallback, useMemo, useRef } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
@@ -38,10 +37,12 @@ type Props = Omit<DataTableProps, 'title' | 'records' | 'renderHeader' | 'render
     };
 
 type ContextMenuProps = Partial<MenuProps> & {
-    callback?: (payload: {
+    isOpen: boolean;
+    handleContextMenuOpen: (payload: {
         type: 'column' | 'cell';
         selection: { columnId?: string; rowId?: string };
-    }) => { shouldPrevent?: boolean } | void;
+    }) => void;
+    onClose: () => void;
     children?: ReactNode;
 };
 
@@ -60,10 +61,9 @@ const DataGrid = ({
 }: Props) => {
     const { DataTable } = useMolecules();
 
-    const { state: isOpen, handleOpen, handleClose } = useToggle();
     const { store } = useTableManagerStoreRef();
 
-    const { callback: contextCall, ...restContextMenuProps } =
+    const { handleContextMenuOpen, isOpen, onClose, ...restContextMenuProps } =
         contextMenuProps || (emptyObj as ContextMenuProps);
 
     const shouldContextMenuDisplayed = useShouldContextMenuDisplayed();
@@ -102,21 +102,14 @@ const DataGrid = ({
     const onContextMenuOpen = useCallback(
         (e: any) => {
             e.preventDefault();
-            if (!shouldContextMenuDisplayed || !contextCall) return;
 
-            if (!store.current.focusedCell) return;
+            if (!shouldContextMenuDisplayed || !store.current.focusedCell) return;
 
             const { type, ...focusedCell } = store.current.focusedCell;
 
-            const response = contextCall({ type: type, selection: focusedCell });
-
-            if (response && response.shouldPrevent) {
-                return;
-            }
-
-            handleOpen();
+            handleContextMenuOpen({ type: type, selection: focusedCell });
         },
-        [contextCall, handleOpen, shouldContextMenuDisplayed, store],
+        [handleContextMenuOpen, shouldContextMenuDisplayed, store],
     );
 
     useContextMenu({ ref, callback: onContextMenuOpen });
@@ -141,7 +134,7 @@ const DataGrid = ({
             />
 
             {shouldContextMenuDisplayed && (
-                <ContextMenu isOpen={isOpen} onClose={handleClose} {...restContextMenuProps} />
+                <ContextMenu isOpen={isOpen} onClose={onClose} {...restContextMenuProps} />
             )}
         </>
     );
@@ -167,7 +160,7 @@ const withContextProviders = (Component: ComponentType<Props>) => {
             <FieldTypesProvider value={fieldTypes}>
                 <HooksProvider value={hooksContextValue}>
                     <TableManagerProvider withContextMenu={!!contextMenuProps}>
-                        {/*@ts-ignore*/}
+                        {/* @ts-ignore - we don't want to pass down unnecessary props */}
                         <Component {...rest} contextMenuProps={contextMenuProps} />
                     </TableManagerProvider>
                 </HooksProvider>
