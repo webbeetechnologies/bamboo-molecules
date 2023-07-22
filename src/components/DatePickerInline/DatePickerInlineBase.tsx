@@ -164,13 +164,16 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
     );
 
     const renderCalenderHeader = useCallback(() => {
-        return (
-            <HeaderComponent
-                scrollMode={scrollMode}
-                disableWeekDays={disableWeekDays}
-                locale={locale}
-            />
-        );
+        if (HeaderComponent) {
+            return (
+                <HeaderComponent
+                    scrollMode={scrollMode}
+                    disableWeekDays={disableWeekDays}
+                    locale={locale}
+                />
+            );
+        }
+        return null;
     }, [HeaderComponent, scrollMode, disableWeekDays, locale]);
 
     return (

@@ -50,7 +50,7 @@ export type BaseDatePickerProps = {
     validRange?: ValidRangeType;
     startYear?: number;
     endYear?: number;
-    HeaderComponent: MemoExoticComponent<CalendarHeaderProps | any>;
+    HeaderComponent?: MemoExoticComponent<CalendarHeaderProps | any>;
     monthStyle?: Record<string, any>;
 
     // here they are optional but in final implemenation they are required
