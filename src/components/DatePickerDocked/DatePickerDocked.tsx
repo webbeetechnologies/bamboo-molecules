@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
@@ -10,9 +10,19 @@ const DatePickerDocked = (props: DatePickerDockedProps) => {
     const { triggerRef, isOpen, onToggle } = props;
     const dockedMonthStyles = useComponentStyles('DatePickerDocked_Month');
     const { Popover } = useMolecules();
+
+    const { backDropStyle } = useMemo(() => {
+        const { backDropStyle: _backDropStyle } = dockedMonthStyles;
+
+        return {
+            backDropStyle: _backDropStyle,
+        };
+    }, [dockedMonthStyles]);
+
     return (
         <Popover
             placement="bottom right"
+            backdropStyles={backDropStyle}
             contentStyles={styles.popoverContainer}
             triggerRef={triggerRef}
             isOpen={isOpen}

@@ -160,6 +160,7 @@ export const datePickerDockedMonthItemStyles: ComponentStylePropWithVariants<
 type DatePickerDockedMonthCustomProps = {
     dockedHeaderStyle?: ViewStyle;
     weekContainerStyle?: ViewStyle;
+    backDropStyle?: ViewStyle;
 };
 
 export const datePickerDockedMonthStyles: ComponentStylePropWithVariants<
@@ -173,5 +174,8 @@ export const datePickerDockedMonthStyles: ComponentStylePropWithVariants<
     },
     weekContainerStyle: {
         marginHorizontal: 'spacings.3',
+    },
+    backDropStyle: {
+        backgroundColor: 'transparent',
     },
 };
