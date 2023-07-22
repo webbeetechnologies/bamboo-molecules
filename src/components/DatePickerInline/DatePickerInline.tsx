@@ -10,6 +10,7 @@ import type {
 } from '../DatePickerModal/types';
 import DatePickerInlineBase from './DatePickerInlineBase';
 import type { DatePickerInlineBaseProps } from './types';
+import DatePickerInlineHeader from './DatePickerInlineHeader';
 
 export type DatePickerInlineProps = DatePickerInlineBaseProps & {
     containerStyle?: ViewStyle;
@@ -61,6 +62,7 @@ const DatePickerInline = ({
                 date={(state as LocalStateSingle)?.date}
                 onChange={onStateChange as typeof onInnerChange}
                 dates={(state as LocalStateMultiple)?.dates}
+                HeaderComponent={DatePickerInlineHeader}
             />
         </View>
     );
