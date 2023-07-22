@@ -6,18 +6,19 @@ import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
 export type RecordsContextType = {
     records: Record<string, Row>;
-    focusedCell: { recordId: string; fieldId: string } | null;
 };
 
-const { Provider: RecordsContextProvider, useContext: useRecordsSelector } =
-    createFastContext<RecordsContextType>();
+const {
+    Provider: RecordsContextProvider,
+    useContext: useRecordsSelector,
+    useStoreRef,
+} = createFastContext<RecordsContextType>();
 
 export const RecordsProvider = memo(
     ({ records, children }: { records: Row[]; children: ReactNode }) => {
         const contextValue = useMemo(
             () => ({
                 records: keyBy(records, 'id'),
-                focusedCell: null,
             }),
             [records],
         );
@@ -25,6 +26,8 @@ export const RecordsProvider = memo(
         return <RecordsContextProvider value={contextValue}>{children}</RecordsContextProvider>;
     },
 );
+
+export const useRecordsStoreRef = useStoreRef;
 
 const recordSelector = (id: string, records: Record<string, Row>) => {
     if (!records[id]) {
@@ -56,27 +59,6 @@ export const useRecord = (id: string): [Row, (value: any) => void] => {
     );
 
     return [record, setRecordValue];
-};
-
-export const useFocusedCell = (
-    recordId: string,
-    fieldId: string,
-): [boolean, (cell: RecordsContextType['focusedCell']) => void] => {
-    const [isFocused, setStore] = useRecordsSelector(store => {
-        return store.focusedCell?.recordId === recordId && store.focusedCell?.fieldId === fieldId;
-    });
-
-    const setFocusedCell = useCallback(
-        (cell: RecordsContextType['focusedCell']) => {
-            setStore(prev => ({
-                ...prev,
-                focusedCell: cell,
-            }));
-        },
-        [setStore],
-    );
-
-    return [isFocused, setFocusedCell];
 };
 
 const cellValueSelector = (id: string, fieldId: string, records: Record<string, Row>) => {

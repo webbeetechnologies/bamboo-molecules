@@ -1,5 +1,5 @@
 import type { Field } from '@bambooapp/bamboo-molecules/datagrid';
-import { generateFlatListData } from '../../../__mocks__/generateFlatListData';
+import { generateFlatListData } from '../../../../__mocks__/generateFlatListData';
 
 // import { SELECTION_COL_ID } from '../../../src/datagrid/components/Table/utils';
 

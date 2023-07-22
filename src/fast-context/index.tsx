@@ -6,6 +6,7 @@ import {
     useContext,
     useRef,
     Context,
+    useEffect,
 } from 'react';
 import typedMemo from '../hocs/typedMemo';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
@@ -22,18 +23,20 @@ type UseStoreDataReturnType<T> = {
 };
 
 const useStoreData = <IStore extends StoreDataType>(
-    defaultValue: IStore,
+    value: IStore,
+    watch: boolean = false,
 ): UseStoreDataReturnType<IStore> => {
-    const store = useRef<IStore>(defaultValue as IStore);
+    const store = useRef<IStore>(value as IStore);
+    const watchRef = useRef(watch);
 
     const get = useCallback(() => store.current, []);
 
     const subscribers = useRef(new Set<() => void>());
 
-    const set = useCallback((value: (prev: IStore) => Partial<IStore>) => {
-        store.current = { ...store.current, ...value(store.current) };
+    const set = useCallback((callback: (prev: IStore) => Partial<IStore>) => {
+        store.current = { ...store.current, ...callback(store.current) };
 
-        subscribers.current.forEach(callback => callback());
+        subscribers.current.forEach(subscriber => subscriber());
     }, []);
 
     const subscribe = useCallback((callback: () => void) => {
@@ -41,6 +44,12 @@ const useStoreData = <IStore extends StoreDataType>(
 
         return () => subscribers.current.delete(callback);
     }, []);
+
+    useEffect(() => {
+        if (!watchRef.current || !value) return;
+
+        set(() => value);
+    }, [value, set]);
 
     return {
         get,
@@ -50,7 +59,7 @@ const useStoreData = <IStore extends StoreDataType>(
     };
 };
 
-export const createFastContext = <T extends StoreDataType = {}>() => {
+export const createFastContext = <T extends StoreDataType = {}>(watch: boolean = false) => {
     const context = createContext<UseStoreDataReturnType<T> | null>(null);
 
     return {
@@ -65,7 +74,7 @@ export const createFastContext = <T extends StoreDataType = {}>() => {
          * use key prop to unmount and remount if necessary. alternatively use set from the context to update the value.
          *
          */
-        Provider: createProvider<T>(context as Context<UseStoreDataReturnType<T>>),
+        Provider: createProvider<T>(context as Context<UseStoreDataReturnType<T>>, watch),
 
         /**
          *
@@ -95,10 +104,11 @@ export const createFastContext = <T extends StoreDataType = {}>() => {
 
 export const createProvider = <T extends Record<string, any> = {}>(
     StoreContext: Context<UseStoreDataReturnType<T>>,
+    watch: boolean,
 ) =>
     typedMemo(({ value, children }: { value: T; children: ReactNode }) => {
         return (
-            <StoreContext.Provider value={useStoreData<T>(value) as any}>
+            <StoreContext.Provider value={useStoreData<T>(value, watch) as any}>
                 {children}
             </StoreContext.Provider>
         );
