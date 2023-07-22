@@ -1,5 +1,6 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Pressable } from 'react-native';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import {
     CallbackActionState,
     RenderCellProps,
@@ -7,35 +8,22 @@ import {
     withActionState,
 } from '@bambooapp/bamboo-molecules';
 
-import { useCellValue, useField, useFieldType } from '../../contexts';
+import { useFieldType, useTableManagerStoreRef, useFocusedCell, useHooks } from '../../contexts';
+import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
-import { useFocusedCell } from '../../contexts/RecordsContext';
-// import { withVirtualization } from '../../hocs';
-// import { ADD_FIELD_COL_ID, SELECTION_COL_ID } from './utils';
-// import RowSelectionItem from './RowSelectionItem';
 
-export type Props = RenderCellProps & CallbackActionState & {};
-//
-// const withCorrectRenderer = <T,>(Component: ComponentType<T>) => {
-//     return (props: T) => {
-//         switch (props.column) {
-//             case SELECTION_COL_ID:
-//                 return <RowSelectionItem {...props} index={props.rowIndex} />;
-//
-//             case ADD_FIELD_COL_ID:
-//                 return null;
-//             default:
-//                 return <Component {...props} />;
-//         }
-//     };
-// };
+export type Props = RenderCellProps & CallbackActionState & ViewProps & {};
 
 const CellRenderer = ({ hovered, column, row, columnIndex }: Props, ref: any) => {
     const { View, StateLayer } = useMolecules();
 
+    const cellRef = useRef<any>(null);
+
+    const { useField, useCellValue } = useHooks();
     const { type, ...restField } = useField(column);
     const { readonly, displayEditorOnHover } = useFieldType(type);
     const [isFocused, setFocusedCell] = useFocusedCell(row, column);
+    const { set: setTableManagerStore } = useTableManagerStoreRef();
     // const [{ width = 140 }] = useFieldConfigs(column);
 
     const isTappedRef = useRef(0);
@@ -43,6 +31,10 @@ const CellRenderer = ({ hovered, column, row, columnIndex }: Props, ref: any) =>
     const [isEditing, setIsEditing] = useState(false);
 
     const [value, setValue] = useCellValue(row, column);
+
+    const onFocus = useCallback(() => {
+        setFocusedCell({ columnId: column, rowId: row, type: 'cell' });
+    }, [column, row, setFocusedCell]);
 
     const onPress = useCallback(() => {
         const delta = new Date().getTime() - isTappedRef.current;
@@ -57,8 +49,8 @@ const CellRenderer = ({ hovered, column, row, columnIndex }: Props, ref: any) =>
 
         isTappedRef.current = new Date().getTime();
 
-        setFocusedCell({ fieldId: column, recordId: row });
-    }, [column, displayEditorOnHover, readonly, row, setFocusedCell]);
+        onFocus();
+    }, [displayEditorOnHover, onFocus, readonly]);
 
     const displayViewRenderer = useMemo(() => {
         if (readonly) return true;
@@ -86,17 +78,18 @@ const CellRenderer = ({ hovered, column, row, columnIndex }: Props, ref: any) =>
         setIsEditing(false);
     }, [isEditing, isFocused]);
 
-    // useEffect(() => {
-    //     console.log(`CellRenderer${column}-${row} - mounted`);
-    //
-    //     return () => {
-    //         console.log(`CellRenderer${column}-${row} - unmounted`);
-    //     };
-    // }, [column, row]);
+    const handleContextMenu = useCallback(() => {
+        onFocus();
+        setTableManagerStore(() => ({
+            focusedCellRef: cellRef,
+        }));
+    }, [onFocus, setTableManagerStore]);
+
+    useContextMenu({ ref: cellRef, callback: handleContextMenu });
 
     return (
-        <Pressable onPress={onPress} style={styles.cellContainer}>
-            <View ref={ref} style={containerStyle} collapsable={false}>
+        <Pressable ref={cellRef} onPress={onPress} style={styles.cellContainer}>
+            <View ref={ref} style={containerStyle}>
                 {displayViewRenderer ? (
                     <ViewRenderer value={value} type={type} {...restField} />
                 ) : (

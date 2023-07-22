@@ -7,23 +7,6 @@ import { useFieldType, useHooks, useTableManagerStoreRef } from '../../contexts'
 import { withVirtualization } from '../../hocs';
 import { useContextMenu } from '../../hooks';
 
-// import { ADD_FIELD_COL_ID, SELECTION_COL_ID } from './utils';
-// import RowSelectionItem from './RowSelectionItem';
-
-// const withCorrectRenderer = <T,>(Component: ComponentType<T>) => {
-//     return (props: T) => {
-//         switch (props.column) {
-//             case SELECTION_COL_ID:
-//                 return <RowSelectionItem {...props} />;
-//
-//             case ADD_FIELD_COL_ID:
-//                 return null;
-//             default:
-//                 return <Component {...props} />;
-//         }
-//     };
-// };
-
 export type ColumnHeaderCellProps = RenderHeaderCellProps &
     ViewProps & {
         iconProps?: Partial<IconProps>;
@@ -31,7 +14,7 @@ export type ColumnHeaderCellProps = RenderHeaderCellProps &
         renderTitle?: (info: { title: string; type: string; id: string }) => string | ReactNode;
     };
 
-const ColumnHeaderRenderer = ({
+const ColumnHeaderCell = ({
     column,
     columnIndex,
     iconProps,
@@ -108,4 +91,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(withVirtualization(ColumnHeaderRenderer));
+export default memo(withVirtualization(ColumnHeaderCell));

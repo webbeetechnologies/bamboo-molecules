@@ -1,13 +1,13 @@
 import { createContext, memo, ReactNode, useContext } from 'react';
 import type { FieldTypes } from '../types';
 
-const fieldTypesContext = createContext<FieldTypes>({});
+const FieldTypesContext = createContext<FieldTypes>({});
 
-export const useFieldTypes = () => useContext(fieldTypesContext);
+export const useFieldTypes = () => useContext(FieldTypesContext);
 
 export const FieldTypesProvider = memo(
     ({ value, children }: { value: FieldTypes; children: ReactNode }) => {
-        return <fieldTypesContext.Provider value={value}>{children}</fieldTypesContext.Provider>;
+        return <FieldTypesContext.Provider value={value}>{children}</FieldTypesContext.Provider>;
     },
 );
 

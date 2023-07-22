@@ -37,6 +37,7 @@ const InlineInput = ({
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        maxWidth: '100%',
     },
     innerContainer: {
         flex: 1,
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
     input: {
         height: '100%',
         paddingHorizontal: 0,
+        maxWidth: '100%',
     },
 });
 
