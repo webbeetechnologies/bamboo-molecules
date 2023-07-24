@@ -50,9 +50,9 @@ const ColumnHeaderCell = ({
     const handleContextMenu = useCallback(() => {
         setTableManagerStore(() => ({
             focusedCellRef: elementRef,
-            focusedCell: { columnId: column, type: 'column' },
+            focusedCell: { columnId: column, columnIndex, type: 'column' },
         }));
-    }, [column, setTableManagerStore]);
+    }, [column, columnIndex, setTableManagerStore]);
 
     useContextMenu({ ref: elementRef, callback: handleContextMenu });
 

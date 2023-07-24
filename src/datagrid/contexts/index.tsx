@@ -2,7 +2,8 @@ export { FieldTypesProvider, useFieldType } from './FieldTypesContext';
 export {
     useTableManagerStoreRef,
     TableManagerProvider,
-    useFocusedCell,
+    useIsCellFocused,
+    useTableManagerValueSelector,
     useShouldContextMenuDisplayed,
 } from './TableManagerContext';
 

@@ -5,7 +5,7 @@ import type {
     RenderHeaderCellProps,
 } from '../components';
 import { useMolecules } from '../hooks';
-import { ComponentType, ReactNode, useCallback, useMemo, useRef } from 'react';
+import { ComponentType, memo, ReactNode, useCallback, useMemo, useRef } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { StyleSheet } from 'react-native';
 
@@ -16,6 +16,7 @@ import {
     HooksContextType,
     HooksProvider,
     useShouldContextMenuDisplayed,
+    useTableManagerValueSelector,
 } from './contexts';
 import { typedMemo } from './hocs';
 import { ContextMenu, ColumnHeaderCell, CellRenderer } from './components';
@@ -54,7 +55,7 @@ export type ContextMenuProps = Partial<MenuProps> & {
 const emptyObj = {};
 
 const DataGrid = ({
-    verticalScrollProps,
+    verticalScrollProps: _verticalScrollProps,
     rowSize: rowHeight = 'sm',
     rowIds,
     columnIds,
@@ -104,6 +105,14 @@ const DataGrid = ({
         [_horizontalScrollProps],
     );
 
+    const verticalScrollProps = useMemo(
+        () => ({
+            ..._verticalScrollProps,
+            CellRendererComponent: RowRendererComponent,
+        }),
+        [_verticalScrollProps],
+    );
+
     const onContextMenuOpen = useCallback(
         (e: any) => {
             e.preventDefault();
@@ -144,6 +153,22 @@ const DataGrid = ({
         </>
     );
 };
+
+// TODO - inject this to Provider
+const RowRendererComponent = memo(({ style, index, ...rest }: ViewProps & { index: number }) => {
+    const { View } = useMolecules();
+
+    const isRowFocused = useTableManagerValueSelector(
+        store => store.focusedCell?.rowIndex === index - 1,
+    )!;
+
+    const rowRendererStyle = useMemo(
+        () => [style, isRowFocused && { zIndex: 100 }],
+        [isRowFocused, style],
+    );
+
+    return <View style={rowRendererStyle} {...rest} />;
+});
 
 const withContextProviders = (Component: ComponentType<Props>) => {
     return ({

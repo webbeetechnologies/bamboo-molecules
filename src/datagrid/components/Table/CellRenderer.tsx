@@ -5,13 +5,13 @@ import { CallbackActionState, withActionState } from '../../../hocs';
 import { useMolecules } from '../../../hooks';
 import type { RenderCellProps } from '../../../components';
 
-import { useFieldType, useTableManagerStoreRef, useFocusedCell, useHooks } from '../../contexts';
+import { useFieldType, useTableManagerStoreRef, useIsCellFocused, useHooks } from '../../contexts';
 import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
 
 export type Props = RenderCellProps & CallbackActionState & ViewProps & {};
 
-const CellRenderer = ({ hovered, column, row, columnIndex }: Props, ref: any) => {
+const CellRenderer = ({ hovered, column, row, columnIndex, rowIndex }: Props, ref: any) => {
     const { View, StateLayer } = useMolecules();
 
     const cellRef = useRef<any>(null);
@@ -19,9 +19,8 @@ const CellRenderer = ({ hovered, column, row, columnIndex }: Props, ref: any) =>
     const { useField, useCellValue } = useHooks();
     const { type, ...restField } = useField(column);
     const { readonly, displayEditorOnHover } = useFieldType(type);
-    const [isFocused, setFocusedCell] = useFocusedCell(row, column);
+    const [isFocused, setFocusedCell] = useIsCellFocused(row, column);
     const { set: setTableManagerStore } = useTableManagerStoreRef();
-    // const [{ width = 140 }] = useFieldConfigs(column);
 
     const isTappedRef = useRef(0);
 
@@ -30,8 +29,8 @@ const CellRenderer = ({ hovered, column, row, columnIndex }: Props, ref: any) =>
     const [value, setValue] = useCellValue(row, column);
 
     const onFocus = useCallback(() => {
-        setFocusedCell({ columnId: column, rowId: row, type: 'cell' });
-    }, [column, row, setFocusedCell]);
+        setFocusedCell({ columnId: column, rowId: row, columnIndex, rowIndex, type: 'cell' });
+    }, [column, columnIndex, row, rowIndex, setFocusedCell]);
 
     const onPress = useCallback(() => {
         const delta = new Date().getTime() - isTappedRef.current;
@@ -92,7 +91,6 @@ const CellRenderer = ({ hovered, column, row, columnIndex }: Props, ref: any) =>
                 ) : (
                     <EditRenderer value={value} type={type} onChange={setValue} {...restField} />
                 )}
-
                 <StateLayer style={stateLayerStyle} />
             </View>
         </Pressable>
