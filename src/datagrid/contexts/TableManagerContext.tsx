@@ -3,7 +3,13 @@ import { memo, MutableRefObject, ReactNode, useCallback, useMemo } from 'react';
 import { createFastContext } from '../../fast-context';
 
 export type TableManagerContextType = {
-    focusedCell: { rowId?: string; columnId: string; type: 'column' | 'cell' } | null;
+    focusedCell: {
+        rowId?: string;
+        rowIndex?: number;
+        columnId: string;
+        columnIndex: number;
+        type: 'column' | 'cell';
+    } | null;
     focusedCellRef: MutableRefObject<any> | null;
     withContextMenu: boolean;
 };
@@ -14,10 +20,10 @@ const defaultContextValue = {
     withContextMenu: false,
 };
 
-const {
+export const {
     Provider: TableManagerContextProvider,
     useContext: useTableManagerSelector,
-    useContextValue,
+    useContextValue: useTableManagerValueSelector,
     useStoreRef,
 } = createFastContext<TableManagerContextType>();
 
@@ -41,7 +47,7 @@ export const TableManagerProvider = memo(
 
 export const useTableManagerStoreRef = useStoreRef;
 
-export const useFocusedCell = (
+export const useIsCellFocused = (
     recordId: string,
     fieldId: string,
 ): [boolean, (cell: TableManagerContextType['focusedCell']) => void] => {
@@ -62,5 +68,5 @@ export const useFocusedCell = (
 };
 
 export const useShouldContextMenuDisplayed = () => {
-    return useContextValue(store => store.withContextMenu);
+    return useTableManagerValueSelector(store => store.withContextMenu);
 };
