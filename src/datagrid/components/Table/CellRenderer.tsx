@@ -1,17 +1,37 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Pressable } from 'react-native';
+import { StyleSheet, Pressable, PressableProps, ViewStyle } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { CallbackActionState, withActionState } from '../../../hocs';
 import { useMolecules } from '../../../hooks';
-import type { RenderCellProps } from '../../../components';
+import type { RenderCellProps, StateLayerProps } from '../../../components';
 
 import { useFieldType, useTableManagerStoreRef, useIsCellFocused, useHooks } from '../../contexts';
 import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
 
-export type Props = RenderCellProps & CallbackActionState & ViewProps & {};
+export type Props = RenderCellProps &
+    CallbackActionState &
+    Omit<PressableProps, 'ref'> & {
+        innerContainerProps?: Partial<ViewProps>;
+        stateLayerProps?: Partial<StateLayerProps>;
+    };
 
-const CellRenderer = ({ hovered, column, row, columnIndex, rowIndex }: Props, ref: any) => {
+const emptyObj = {};
+
+const CellRenderer = (
+    {
+        hovered,
+        column,
+        row,
+        columnIndex,
+        rowIndex,
+        innerContainerProps = emptyObj,
+        stateLayerProps = emptyObj,
+        style,
+        ...rest
+    }: Props,
+    ref: any,
+) => {
     const { View, StateLayer } = useMolecules();
 
     const cellRef = useRef<any>(null);
@@ -54,18 +74,31 @@ const CellRenderer = ({ hovered, column, row, columnIndex, rowIndex }: Props, re
         return !displayEditorOnHover ? !isEditing : !hovered && !isFocused;
     }, [displayEditorOnHover, hovered, isEditing, isFocused, readonly]);
 
-    const { containerStyle, stateLayerStyle } = useMemo(
+    const { containerStyle, innerContainerStyle, stateLayerStyle } = useMemo(
         () => ({
-            containerStyle: [
+            containerStyle: [styles.cellContainer, style] as ViewStyle,
+            innerContainerStyle: [
                 styles.cell,
                 !isEditing ? styles.centered : styles.editContainer,
                 columnIndex === 0 && {
                     borderLeftWidth: 1,
                 },
+                innerContainerProps.style,
+            ] as ViewStyle,
+            stateLayerStyle: [
+                StyleSheet.absoluteFillObject,
+                isFocused && styles.focused,
+                stateLayerProps.style,
             ],
-            stateLayerStyle: [StyleSheet.absoluteFillObject, isFocused && styles.focused],
         }),
-        [isEditing, columnIndex, isFocused],
+        [
+            style,
+            isEditing,
+            columnIndex,
+            innerContainerProps.style,
+            isFocused,
+            stateLayerProps.style,
+        ],
     );
 
     useEffect(() => {
@@ -84,14 +117,14 @@ const CellRenderer = ({ hovered, column, row, columnIndex, rowIndex }: Props, re
     useContextMenu({ ref: cellRef, callback: handleContextMenu });
 
     return (
-        <Pressable ref={cellRef} onPress={onPress} style={styles.cellContainer}>
-            <View ref={ref} style={containerStyle}>
+        <Pressable ref={cellRef} onPress={onPress} style={containerStyle} {...rest}>
+            <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
                 {displayViewRenderer ? (
                     <ViewRenderer value={value} type={type} {...restField} />
                 ) : (
                     <EditRenderer value={value} type={type} onChange={setValue} {...restField} />
                 )}
-                <StateLayer style={stateLayerStyle} />
+                <StateLayer {...stateLayerProps} style={stateLayerStyle} />
             </View>
         </Pressable>
     );
