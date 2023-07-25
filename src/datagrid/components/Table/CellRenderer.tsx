@@ -8,6 +8,7 @@ import type { RenderCellProps, StateLayerProps } from '../../../components';
 import { useFieldType, useTableManagerStoreRef, useIsCellFocused, useHooks } from '../../contexts';
 import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
+import { useDataTableCell } from '../../../components';
 
 export type Props = RenderCellProps &
     CallbackActionState &
@@ -19,22 +20,14 @@ export type Props = RenderCellProps &
 const emptyObj = {};
 
 const CellRenderer = (
-    {
-        hovered,
-        column,
-        row,
-        columnIndex,
-        rowIndex,
-        innerContainerProps = emptyObj,
-        stateLayerProps = emptyObj,
-        style,
-        ...rest
-    }: Props,
+    { hovered, innerContainerProps = emptyObj, stateLayerProps = emptyObj, style, ...rest }: Props,
     ref: any,
 ) => {
     const { View, StateLayer } = useMolecules();
 
     const cellRef = useRef<any>(null);
+
+    const { column, row, rowIndex, columnIndex } = useDataTableCell();
 
     const { useField, useCellValue } = useHooks();
     const { type, ...restField } = useField(column);
