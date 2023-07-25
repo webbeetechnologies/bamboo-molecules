@@ -30,7 +30,7 @@ type DataTableContextType = Pick<
         'headerCellProps' | 'cellProps' | 'headerRowProps' | 'rowProps' | 'selectedRows' | 'rowSize'
     > & {
         tableWidth: number;
-        containerWidth: number;
+        containerWidth?: number;
         /*
          * columnIds as keys
          * */
