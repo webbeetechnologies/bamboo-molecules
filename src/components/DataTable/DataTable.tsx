@@ -10,7 +10,7 @@ import type {
     ViewToken,
 } from 'react-native';
 
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { useComponentStyles } from '../../hooks';
 import { createFastContext } from '../../fast-context';
 import {
     useDataTable,
@@ -22,6 +22,7 @@ import { defaultProps } from './defaults';
 import { renderRow } from './DataTableRow';
 import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
 import { DataTableHeaderRow } from './DataTableHeader';
+import { Dimensions } from 'react-native';
 
 type DataTableComponentProps = DataTableBase & ScrollViewProps;
 type DataTablePresentationProps = DataTableComponentProps &
@@ -43,10 +44,12 @@ const defaultOffset = 500;
 
 export const useIsCellWithinBounds = (left: number, rowId: string, columnId: string) => {
     const cellWidth = useDataTableColumnWidth(columnId);
-    const windowWidth = useDataTable(store => store.windowWidth);
+    // this is a quick fix // TODO - revisit this later
+    const containerWidth =
+        useDataTable(store => store.containerWidth) || Dimensions.get('window').width;
 
     const checkLeft = (x: number, offset: number) => left + cellWidth >= x - offset;
-    const checkRight = (x: number, offset: number) => left <= x + offset + windowWidth;
+    const checkRight = (x: number, offset: number) => left <= x + offset + containerWidth;
     const isViewableItem = (viewItemIds: string[]) => viewItemIds.includes(rowId);
 
     return useContextValue(
@@ -55,15 +58,6 @@ export const useIsCellWithinBounds = (left: number, rowId: string, columnId: str
             checkRight(x, isViewableItem(viewItemIds) ? defaultOffset : 0),
     );
 };
-
-export const useRowWithinBounds = (top: number) => {
-    const checkTop = useCallback((y: number, offset: number) => top + 40 >= y - offset, [top]);
-    const checkBottom = useCallback((y: number, offset: number) => top <= y + offset + 500, [top]);
-
-    return useContextValue(({ y }) => checkTop(y, 500) && checkBottom(y, 500));
-};
-
-const emptyObj = {};
 
 const DataTablePresentationComponent = memo(
     forwardRef((props: DataTablePresentationProps, ref: ForwardedRef<ScrollView>) => {
@@ -77,12 +71,9 @@ const DataTablePresentationComponent = memo(
             // tableHeight,
             FlatListComponent,
             ScrollViewComponent,
-            containerProps,
+            onLayout: onLayoutProp,
             ...restScrollViewProps
         } = props;
-
-        const { onLayout: onLayoutContainerProp, ...restContainerProps } =
-            containerProps || (emptyObj as ViewProps);
 
         const {
             style: vStyleProp,
@@ -91,8 +82,6 @@ const DataTablePresentationComponent = memo(
             keyExtractor: keyExtractorProp = defaultProps.keyExtractor,
             ...vProps
         } = { ...defaultProps, ...verticalScrollProps };
-
-        const { View } = useMolecules();
 
         const hStyle = useComponentStyles('DataTable', [hStyleProp]);
         const vStyle = useMemo(() => [{ width: tableWidth }, vStyleProp], [vStyleProp, tableWidth]);
@@ -145,39 +134,38 @@ const DataTablePresentationComponent = memo(
 
         const onLayout = useCallback(
             (e: LayoutChangeEvent) => {
-                onLayoutContainerProp?.(e);
+                onLayoutProp?.(e);
 
                 setDataTableStore(() => ({
-                    windowWidth: e.nativeEvent.layout.width,
+                    containerWidth: e.nativeEvent.layout.width,
                 }));
             },
-            [onLayoutContainerProp, setDataTableStore],
+            [onLayoutProp, setDataTableStore],
         );
 
         return (
-            <View {...restContainerProps} onLayout={onLayout}>
-                <ScrollViewComponent
-                    {...restScrollViewProps}
-                    {...horizontalScrollProps}
-                    onScroll={onScroll}
-                    scrollEventThrottle={16}
-                    horizontal={true}
-                    ref={ref}
-                    style={hStyle}>
-                    <FlatListComponent
-                        {...vProps}
-                        data={normalizedData}
-                        windowSize={windowSize}
-                        style={vStyle}
-                        maxToRenderPerBatch={maxToRenderPerBatch}
-                        keyExtractor={keyExtractorProp}
-                        renderItem={renderItem}
-                        stickyHeaderIndices={stickyHeaderIndices}
-                        onScroll={onFlatListScroll}
-                        onViewableItemsChanged={onViewableItemsChanged}
-                    />
-                </ScrollViewComponent>
-            </View>
+            <ScrollViewComponent
+                {...restScrollViewProps}
+                {...horizontalScrollProps}
+                onLayout={onLayout}
+                onScroll={onScroll}
+                scrollEventThrottle={16}
+                horizontal={true}
+                ref={ref}
+                style={hStyle}>
+                <FlatListComponent
+                    {...vProps}
+                    data={normalizedData}
+                    windowSize={windowSize}
+                    style={vStyle}
+                    maxToRenderPerBatch={maxToRenderPerBatch}
+                    keyExtractor={keyExtractorProp}
+                    renderItem={renderItem}
+                    stickyHeaderIndices={stickyHeaderIndices}
+                    onScroll={onFlatListScroll}
+                    onViewableItemsChanged={onViewableItemsChanged}
+                />
+            </ScrollViewComponent>
         );
     }),
 );
