@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import { StyleSheet, useWindowDimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
 
 import { DataGrid } from '../../../src/datagrid';
@@ -16,11 +16,10 @@ import {
 
 export const Example = () => {
     const { View } = useMolecules();
-    const dimensions = useWindowDimensions();
 
     const { state: isOpen, handleOpen, handleClose } = useToggle();
 
-    const containerStyle = useMemo(() => ({ width: dimensions.width }), [dimensions.width]);
+    const containerStyle = useMemo(() => ({ width: '100%' }), []);
 
     const { rowIds, columnIds } = useMemo(
         () => ({
