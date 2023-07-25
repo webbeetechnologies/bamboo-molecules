@@ -30,7 +30,7 @@ const ColumnHeaderCell = ({
     const { set: setTableManagerStore } = useTableManagerStoreRef();
 
     const { useField } = useHooks();
-    const { type, displayTitle, id } = useField(column);
+    const { type, title, id } = useField(column);
     const { icon } = useFieldType(type);
 
     const { containerStyle, titleStyle, iconStyle } = useMemo(
@@ -60,9 +60,7 @@ const ColumnHeaderCell = ({
         <View style={containerStyle} ref={elementRef} {...rest}>
             <Icon style={iconStyle} name={icon.name} type={icon.type} size={16} {...iconProps} />
             <Text style={titleStyle} numberOfLines={1} {...titleProps}>
-                {renderTitle
-                    ? renderTitle?.({ title: displayTitle, type: type, id })
-                    : displayTitle}
+                {renderTitle ? renderTitle?.({ title, type, id }) : title}
             </Text>
 
             {children}

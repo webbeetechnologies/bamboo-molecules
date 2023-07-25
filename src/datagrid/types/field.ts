@@ -1,6 +1,6 @@
 export type Field = {
     id: string;
     type: string;
-    displayTitle: string;
+    title: string;
     [key: string]: any;
 };

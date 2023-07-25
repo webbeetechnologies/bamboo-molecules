@@ -13,7 +13,7 @@ export type FieldType<T = unknown, C extends {} = {}> = {
     ValueRenderer: FieldTypeRenderer<T, C>;
     EditorRenderer: FieldTypeRenderer<T, C>;
     readonly?: boolean;
-    displayEditorOnHover?: boolean;
+    showEditor?: (arg: { hovered: boolean; focused: boolean; doubleTapped: boolean }) => boolean;
     // fieldEditorRenderer: ReactElement;
     // fieldEditorValidator: ReactElement;
     validator?: (value: any) => any;

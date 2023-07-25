@@ -16,42 +16,42 @@ export const fields: Field[] = [
     {
         id: '_name',
         type: 'singleLineText',
-        displayTitle: 'Name',
+        title: 'Name',
     },
     {
         id: '_name2',
         type: 'singleLineText',
-        displayTitle: 'Name 2',
+        title: 'Name 2',
     },
     {
         id: '_male',
         type: 'checkbox',
-        displayTitle: 'Male?',
+        title: 'Male?',
     },
     {
         id: '_age',
         type: 'number',
-        displayTitle: 'Age',
+        title: 'Age',
     },
     {
         id: '_rating',
         type: 'rating',
-        displayTitle: 'Rating',
+        title: 'Rating',
     },
     {
         id: '_name6',
         type: 'singleLineText',
-        displayTitle: 'Name 2',
+        title: 'Name 2',
     },
     {
         id: '_name7',
         type: 'singleLineText',
-        displayTitle: 'Name 2',
+        title: 'Name 2',
     },
     {
         id: '_name8',
         type: 'singleLineText',
-        displayTitle: 'Name 2',
+        title: 'Name 2',
     },
 ];
 
@@ -94,7 +94,7 @@ export const records = [
 export const virtualizationMockFields = generateFlatListData(100, i => ({
     id: `_name-${i + 1}`,
     type: 'singleLineText',
-    displayTitle: `Name ${i + 1}`,
+    title: `Name ${i + 1}`,
 }));
 
 export const virtaulizationMockRecords = generateFlatListData(1000, i => {

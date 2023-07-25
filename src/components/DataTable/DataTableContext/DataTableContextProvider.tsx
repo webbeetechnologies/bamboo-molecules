@@ -79,7 +79,6 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 rowSize,
                 cellXOffsets: calculateXOffset(columns, columnWidths, defaultColumnWidth),
                 columnWidths,
-                windowWidth: 0,
             }),
             [
                 records,

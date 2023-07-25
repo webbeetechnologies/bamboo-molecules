@@ -8,6 +8,7 @@ import type { RenderCellProps, StateLayerProps } from '../../../components';
 import { useFieldType, useTableManagerStoreRef, useIsCellFocused, useHooks } from '../../contexts';
 import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
+import { useDataTableCell } from '../../../components';
 
 export type Props = RenderCellProps &
     CallbackActionState &
@@ -20,11 +21,7 @@ const emptyObj = {};
 
 const CellRenderer = (
     {
-        hovered,
-        column,
-        row,
-        columnIndex,
-        rowIndex,
+        hovered = false,
         innerContainerProps = emptyObj,
         stateLayerProps = emptyObj,
         style,
@@ -36,9 +33,11 @@ const CellRenderer = (
 
     const cellRef = useRef<any>(null);
 
+    const { column, row, rowIndex, columnIndex } = useDataTableCell();
+
     const { useField, useCellValue } = useHooks();
     const { type, ...restField } = useField(column);
-    const { readonly, displayEditorOnHover } = useFieldType(type);
+    const { readonly, displayEditorOnHover, showEditor } = useFieldType(type);
     const [isFocused, setFocusedCell] = useIsCellFocused(row, column);
     const { set: setTableManagerStore } = useTableManagerStoreRef();
 
@@ -71,8 +70,10 @@ const CellRenderer = (
     const displayViewRenderer = useMemo(() => {
         if (readonly) return true;
 
-        return !displayEditorOnHover ? !isEditing : !hovered && !isFocused;
-    }, [displayEditorOnHover, hovered, isEditing, isFocused, readonly]);
+        return showEditor
+            ? !showEditor({ hovered, focused: isFocused, doubleTapped: isEditing })
+            : !isEditing;
+    }, [hovered, isEditing, isFocused, readonly, showEditor]);
 
     const { containerStyle, innerContainerStyle, stateLayerStyle } = useMemo(
         () => ({

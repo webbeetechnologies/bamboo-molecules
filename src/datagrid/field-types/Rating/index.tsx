@@ -11,5 +11,5 @@ export const RatingFieldType: FieldType<Value> = {
     },
     EditorRenderer,
     ValueRenderer,
-    displayEditorOnHover: true,
+    showEditor: ({ hovered, focused }) => hovered || focused,
 };
