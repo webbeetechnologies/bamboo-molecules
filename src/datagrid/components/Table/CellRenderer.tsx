@@ -20,7 +20,13 @@ export type Props = RenderCellProps &
 const emptyObj = {};
 
 const CellRenderer = (
-    { hovered, innerContainerProps = emptyObj, stateLayerProps = emptyObj, style, ...rest }: Props,
+    {
+        hovered = false,
+        innerContainerProps = emptyObj,
+        stateLayerProps = emptyObj,
+        style,
+        ...rest
+    }: Props,
     ref: any,
 ) => {
     const { View, StateLayer } = useMolecules();
@@ -31,7 +37,7 @@ const CellRenderer = (
 
     const { useField, useCellValue } = useHooks();
     const { type, ...restField } = useField(column);
-    const { readonly, displayEditorOnHover } = useFieldType(type);
+    const { readonly, displayEditorOnHover, showEditor } = useFieldType(type);
     const [isFocused, setFocusedCell] = useIsCellFocused(row, column);
     const { set: setTableManagerStore } = useTableManagerStoreRef();
 
@@ -64,8 +70,10 @@ const CellRenderer = (
     const displayViewRenderer = useMemo(() => {
         if (readonly) return true;
 
-        return !displayEditorOnHover ? !isEditing : !hovered && !isFocused;
-    }, [displayEditorOnHover, hovered, isEditing, isFocused, readonly]);
+        return showEditor
+            ? !showEditor({ hovered, focused: isFocused, doubleTapped: isEditing })
+            : !isEditing;
+    }, [hovered, isEditing, isFocused, readonly, showEditor]);
 
     const { containerStyle, innerContainerStyle, stateLayerStyle } = useMemo(
         () => ({
