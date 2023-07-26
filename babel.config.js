@@ -1,7 +1,16 @@
 const path = require('path');
 module.exports = api => {
     api.cache(true);
-    const presets = [['babel-preset-expo', { jsxRuntime: 'automatic' }]];
+    const presets = [
+        [
+            '@babel/preset-env',
+            {
+                targets: { node: '18' },
+            },
+        ],
+        ['@babel/preset-react', { runtime: 'automatic' }],
+        '@babel/preset-typescript',
+    ];
     // to resolve the bamboo-shoots packages directory
     const plugins = [
         [
