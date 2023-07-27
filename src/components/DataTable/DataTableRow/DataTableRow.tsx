@@ -7,10 +7,10 @@ import { useComponentStyles, useMolecules } from '../../../hooks';
 import { CallbackActionState, withActionState } from '../../../hocs';
 // import { useRowWithinBounds } from '../DataTable';
 
-type DataTableComponentProps = { record: TDataTableRow; index: number };
-const DataTableComponentPresentation = memo(
+type DataTableRowProps = { record: TDataTableRow; index: number } & CallbackActionState;
+const DataTableRowPresentation = memo(
     (
-        props: DataTableComponentProps &
+        props: DataTableRowProps &
             CallbackActionState &
             Pick<DataTableProps, 'rowSize' | 'rowProps' | 'columns'> & { isSelected: boolean },
     ) => {
@@ -50,7 +50,7 @@ const DataTableComponentPresentation = memo(
     },
 );
 
-const DataTableComponent = memo((props: DataTableComponentProps) => {
+const DataTableRowWithoutActionState = memo((props: DataTableRowProps) => {
     const { columns, rowSize, rowProps, selectedRows } = useDataTable(store => ({
         columns: store.columns || [],
         rowSize: store.rowSize,
@@ -64,7 +64,7 @@ const DataTableComponent = memo((props: DataTableComponentProps) => {
     // if (!isRowWithinBounds) return null;
 
     return (
-        <DataTableComponentPresentation
+        <DataTableRowPresentation
             isSelected={!!selectedRows && Boolean(selectedRows[props.record])}
             {...props}
             columns={columns}
@@ -83,8 +83,7 @@ const DataTableComponent = memo((props: DataTableComponentProps) => {
     );
 });
 
-// @ts-ignore // TODO - fix ts issue @elvisduru
-export const DataTableRow = memo(withActionState(DataTableComponent));
+export const DataTableRow = memo(withActionState(DataTableRowWithoutActionState));
 
 export const renderRow: ListRenderItem<TDataTableRow> = ({ item, index }) => (
     // @ts-ignore // TODO - fix ts issue @elvisduru

@@ -83,20 +83,11 @@ const DataTablePresentationComponent = memo(
 
         const hStyle = useComponentStyles('DataTable', [hStyleProp]);
         const vStyle = useMemo(() => [{ width: tableWidth }, vStyleProp], [vStyleProp, tableWidth]);
-        const normalizedData = useMemo(() => [{ id: '__header__' }, ...records], [records]);
 
         const containerWidth = useDataTable(store => store.containerWidth);
 
         const { store, set: setStore } = useStoreRef();
         const { set: setDataTableStore } = useDataTableStoreRef();
-
-        const renderItem: typeof renderRow = useCallback(props => {
-            return props.index === 0 ? (
-                <DataTableHeaderRow key={props.item} />
-            ) : (
-                renderRow({ ...props, index: props.index - 1 })
-            );
-        }, []);
 
         const stickyHeaderIndices = useMemo(
             () =>
@@ -156,12 +147,13 @@ const DataTablePresentationComponent = memo(
                 {!!containerWidth && (
                     <FlatListComponent
                         {...vProps}
-                        data={normalizedData}
+                        data={records}
                         windowSize={windowSize}
                         style={vStyle}
+                        ListHeaderComponent={DataTableHeaderRow}
                         maxToRenderPerBatch={maxToRenderPerBatch}
                         keyExtractor={keyExtractorProp}
-                        renderItem={renderItem}
+                        renderItem={renderRow}
                         stickyHeaderIndices={stickyHeaderIndices}
                         onScroll={onFlatListScroll}
                         onViewableItemsChanged={onViewableItemsChanged}

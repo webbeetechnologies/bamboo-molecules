@@ -68,9 +68,6 @@ export const CellComponent = memo((props: CellComponentProps) => {
 
     return (
         <DataTableCellContext.Provider value={cellContext}>
-            {/**
-             * TODO: Adopt custom column width
-             */}
             <DataTable.Cell width={width}>{cell}</DataTable.Cell>
         </DataTableCellContext.Provider>
     );
