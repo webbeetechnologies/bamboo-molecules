@@ -12,18 +12,18 @@ import {
     FieldsProvider,
     useCellValue,
     RecordsProvider,
+    groups,
 } from './mocks';
+
+const containerStyle = { width: '100%' };
 
 export const Example = () => {
     const { View } = useMolecules();
 
     const { state: isOpen, handleOpen, handleClose } = useToggle();
 
-    const containerStyle = useMemo(() => ({ width: '100%' }), []);
-
-    const { rowIds, columnIds } = useMemo(
+    const { columnIds } = useMemo(
         () => ({
-            rowIds: records.map(record => `${record.id}`),
             columnIds: fields.map(field => field.id),
         }),
         [],
@@ -49,7 +49,7 @@ export const Example = () => {
             <RecordsProvider records={records}>
                 <View style={containerStyle}>
                     <DataGrid
-                        rowIds={rowIds}
+                        records={records}
                         columnIds={columnIds}
                         contextMenuProps={contextMenuProps}
                         useField={useField}
@@ -79,14 +79,13 @@ const ContextMenuItems = memo(({ onCloseMenu }: { onCloseMenu: () => void }) => 
     );
 });
 
-export const ExampleHorizontalVirtualization = () => {
+export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) => {
     const { View } = useMolecules();
 
-    const containerStyle = useMemo(() => ({ width: 500, height: 500 }), []);
+    const virtualizedContainerStyle = useMemo(() => ({ ...containerStyle, height: 500 }), []);
 
-    const { rowIds, columnIds } = useMemo(
+    const { columnIds } = useMemo(
         () => ({
-            rowIds: virtaulizationMockRecords.map(record => `${record.id}`),
             columnIds: virtualizationMockFields.map(field => field.id),
         }),
         [],
@@ -95,9 +94,10 @@ export const ExampleHorizontalVirtualization = () => {
     return (
         <FieldsProvider fields={virtualizationMockFields}>
             <RecordsProvider records={virtaulizationMockRecords}>
-                <View style={containerStyle}>
+                <View style={virtualizedContainerStyle}>
                     <DataGrid
-                        rowIds={rowIds}
+                        groups={props.groups}
+                        records={virtaulizationMockRecords}
                         columnIds={columnIds}
                         useField={useField}
                         useCellValue={useCellValue}
@@ -107,6 +107,10 @@ export const ExampleHorizontalVirtualization = () => {
         </FieldsProvider>
     );
 };
+
+export const ExampleHorizontalVirtualizationWithGroups = () => (
+    <ExampleHorizontalVirtualization groups={groups} />
+);
 
 const styles = StyleSheet.create({
     menuItem: {

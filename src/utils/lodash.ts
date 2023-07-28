@@ -6,6 +6,7 @@ export { default as omitBy } from 'lodash.omitby';
 export { default as isNil } from 'lodash.isnil';
 export { default as noop } from 'lodash.noop';
 export { default as keyBy } from 'lodash.keyby';
+export { default as groupBy } from 'lodash.groupby';
 
 const defaultResolver = (arg: any) => JSON.stringify(arg);
 export const createMemoizedFunction = ({

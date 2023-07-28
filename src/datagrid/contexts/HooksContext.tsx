@@ -1,9 +1,13 @@
 import { createContext, memo, ReactNode, useContext } from 'react';
 import type { Field } from '../types';
+import type { TDataTableColumn, TDataTableRow } from '../../../src/components/DataTable/types';
 
 export type HooksContextType = {
-    useField: (columnId: string) => Field;
-    useCellValue: <T>(rowId: string, columnId: string) => [T, (newValue: T) => void];
+    useField: (columnId: TDataTableColumn) => Field;
+    useCellValue: <T>(
+        rowId: TDataTableRow,
+        columnId: TDataTableColumn,
+    ) => [T, (newValue: T) => void];
 };
 
 const HooksContext = createContext<HooksContextType | null>(null);

@@ -3,6 +3,7 @@ import type { Field } from '../../../../src/datagrid/types';
 import { keyBy } from '../../../../src/utils';
 
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
+import type { TDataTableRow } from 'src/components/DataTable/types';
 
 export type FieldConfigs = Record<
     string,
@@ -52,9 +53,9 @@ const fieldSelector = (id: string, fields: Field[]) => {
     return fieldsMapById[id] as Field;
 };
 
-export const useField = (id: string) => {
+export const useField = (id: TDataTableRow) => {
     const [field] = useFieldsSelector(store => {
-        return fieldSelector(id, store.fields);
+        return fieldSelector(id as string, store.fields);
     });
 
     return field;
