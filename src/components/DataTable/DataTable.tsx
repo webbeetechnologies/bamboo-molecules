@@ -1,6 +1,6 @@
 import { forwardRef, memo, useCallback, useMemo, ForwardedRef } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
-import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
+import type { DataTableBase, DataTableProps, TDataTableColumn, TDataTableRow } from './types';
 import type {
     LayoutChangeEvent,
     NativeScrollEvent,
@@ -38,17 +38,21 @@ const {
     useContextValue,
 } = createFastContext<typeof defaultValue>();
 
-const defaultValue = { x: 0, y: 0, viewItemIds: [] as string[], scrollXVelocity: 0 };
-const defaultOffset = 500;
+const defaultValue = { x: 0, y: 0, viewItemIds: [] as TDataTableColumn[], scrollXVelocity: 0 };
+const defaultOffset = Infinity;
 
-export const useIsCellWithinBounds = (left: number, rowId: string, columnId: string) => {
+export const useIsCellWithinBounds = (
+    left: number,
+    rowId: TDataTableRow,
+    columnId: TDataTableColumn,
+) => {
     const cellWidth = useDataTableColumnWidth(columnId);
     // this is a quick fix // TODO - revisit this later
     const containerWidth = useDataTable(store => store.containerWidth ?? 0);
 
     const checkLeft = (x: number, offset: number) => left + cellWidth >= x - offset;
     const checkRight = (x: number, offset: number) => left <= x + offset + containerWidth;
-    const isViewableItem = (viewItemIds: string[]) => viewItemIds.includes(rowId);
+    const isViewableItem = (viewItemIds: TDataTableColumn[]) => viewItemIds.includes(rowId);
 
     return useContextValue(
         ({ x, viewItemIds }) =>
@@ -204,6 +208,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 selectedRows,
                 rowSize,
                 columnWidths,
+                useRowRenderer,
                 ...rest
             } = props;
 
@@ -222,6 +227,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 selectedRows,
                 rowSize,
                 columnWidths,
+                useRowRenderer,
             };
 
             return (

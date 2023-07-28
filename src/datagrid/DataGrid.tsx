@@ -17,14 +17,20 @@ import {
     HooksProvider,
     useShouldContextMenuDisplayed,
     useTableManagerValueSelector,
+    createUseRowRenderer,
 } from './contexts';
 import { typedMemo } from './hocs';
 import { ContextMenu, ColumnHeaderCell, CellRenderer } from './components';
 import { useContextMenu } from './hooks';
 import type { FieldTypes } from './types';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
-import { RecordWithId, prepareGroupedData } from './utils';
+import { RecordWithId, RowType, prepareGroupedData } from './utils';
 import type { TDataTableColumn, TDataTableRow } from '../components/DataTable/types';
+
+const useRowRenderer = createUseRowRenderer({
+    [RowType.FOOTER]: () => null,
+    [RowType.HEADER]: () => null,
+});
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -155,6 +161,7 @@ const DataGrid = ({
                 headerRowProps={rowProps}
                 verticalScrollProps={verticalScrollProps}
                 horizontalScrollProps={horizontalScrollProps}
+                useRowRenderer={useRowRenderer}
             />
 
             {shouldContextMenuDisplayed && (
