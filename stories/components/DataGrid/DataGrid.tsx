@@ -1,8 +1,8 @@
 import { memo, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
-import { useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
+import { useMolecules, useToggle, ProvideTheme } from '@bambooapp/bamboo-molecules';
 
-import { DataGrid } from '../../../src/datagrid';
+import { DataGrid, dataGridStyles } from '../../../src/datagrid';
 import {
     fields,
     records,
@@ -14,6 +14,7 @@ import {
     RecordsProvider,
     groups,
 } from './mocks';
+import { useTheme } from '@bambooapp/bamboo-atoms';
 
 const containerStyle = { width: '100%' };
 
@@ -109,7 +110,9 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
 };
 
 export const ExampleHorizontalVirtualizationWithGroups = () => (
-    <ExampleHorizontalVirtualization groups={groups} />
+    <ProvideTheme theme={{ ...useTheme(), ...dataGridStyles }}>
+        <ExampleHorizontalVirtualization groups={groups} />
+    </ProvideTheme>
 );
 
 const styles = StyleSheet.create({

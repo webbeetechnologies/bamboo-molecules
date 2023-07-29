@@ -39,7 +39,7 @@ const {
 } = createFastContext<typeof defaultValue>();
 
 const defaultValue = { x: 0, y: 0, viewItemIds: [] as TDataTableColumn[], scrollXVelocity: 0 };
-const defaultOffset = Infinity;
+const defaultOffset = 500;
 
 export const useIsCellWithinBounds = (
     left: number,

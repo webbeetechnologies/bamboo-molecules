@@ -128,6 +128,10 @@ export const useRecordById = (id: TDataTableRow) => {
     return useTableManagerValueSelector(({ records }) => getRecordsMap(records)[id]);
 };
 
+export const useGroupMeta = (id: TDataTableRow) => {
+    return useRecordById(id) as GroupHeader | GroupFooter;
+};
+
 export const useRecordType = (id: TDataTableRow) => {
     return useTableManagerValueSelector(({ records }) => {
         const arg = getRecordsMap(records)[id];

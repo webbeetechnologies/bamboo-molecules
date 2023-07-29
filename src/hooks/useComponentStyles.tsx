@@ -1,6 +1,7 @@
 import { StyleProp, StyleSheet } from 'react-native';
 import { useTheme } from './useTheme';
 import { useNormalizeStyles } from './useNormalizeStyles';
+import { useEffect } from 'react';
 
 const defaultStyleObject = {};
 
@@ -23,6 +24,12 @@ const useComponentStyles = (
     const theme = useTheme<ITheme>();
 
     const componentTheme = theme[componentName];
+
+    const hasTheme = !!componentTheme;
+    useEffect(() => {
+        if (hasTheme) return;
+        console.warn(`"${componentName}" theme not found`);
+    }, [componentName, hasTheme]);
 
     return useNormalizeStyles(
         theme.resolveComponentStyles({

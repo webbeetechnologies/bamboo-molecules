@@ -8,8 +8,9 @@ export {
     useRecordsMap,
     useRecordById,
     useRecordType,
+    useGroupMeta,
 } from './TableManagerContext';
 
 export { createUseRowRenderer } from './createUseRowRenderer';
 
-export { HooksProvider, useHooks, HooksContextType } from './HooksContext';
+export { HooksProvider, useField, useCellValue, HooksContextType } from './HooksContext';

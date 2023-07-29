@@ -12,12 +12,22 @@ export type HooksContextType = {
 
 const HooksContext = createContext<HooksContextType | null>(null);
 
-export const useHooks = () => {
+const useHooks = () => {
     const contextValue = useContext(HooksContext);
 
     if (contextValue === null) throw new Error('useHooks should be used inside the HooksProvider');
 
     return contextValue;
+};
+
+export const useField: HooksContextType['useField'] = id => {
+    const { useField: useFieldProp } = useHooks();
+    return useFieldProp(id);
+};
+
+export const useCellValue: HooksContextType['useCellValue'] = (rowId, columnId) => {
+    const { useCellValue: useCellValueProp } = useHooks();
+    return useCellValueProp(rowId, columnId);
 };
 
 export const HooksProvider = memo(
