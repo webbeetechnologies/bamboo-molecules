@@ -1,10 +1,15 @@
 import { createContext, memo, ReactNode, useContext } from 'react';
 import type { Field } from '../types';
-import type { TDataTableColumn, TDataTableRow } from '../../../src/components/DataTable/types';
+import type {
+    TDataTableColumn,
+    TDataTableRow,
+    UseRowRenderer,
+} from '../../../src/components/DataTable/types';
 import type { RecordWithId } from '../utils';
 
 export type HooksContextType = {
     useField: (columnId: TDataTableColumn) => Field;
+    useRowRenderer: UseRowRenderer;
     useCellValue: (
         rowId: TDataTableRow,
         columnId: TDataTableColumn,
@@ -32,6 +37,11 @@ export const useField: HooksContextType['useField'] = id => {
 export const useCellValue: HooksContextType['useCellValue'] = (rowId, columnId) => {
     const { useCellValue: useCellValueProp } = useHooks();
     return useCellValueProp(rowId, columnId);
+};
+
+export const useRowRenderer: UseRowRenderer = (rowRendererProps, DefaultRowComponent) => {
+    const { useRowRenderer: useRowRendererProp } = useHooks();
+    return useRowRendererProp?.(rowRendererProps, DefaultRowComponent);
 };
 
 export const HooksProvider = memo(
