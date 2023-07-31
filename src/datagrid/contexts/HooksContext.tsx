@@ -1,13 +1,17 @@
 import { createContext, memo, ReactNode, useContext } from 'react';
 import type { Field } from '../types';
 import type { TDataTableColumn, TDataTableRow } from '../../../src/components/DataTable/types';
+import type { RecordWithId } from '../utils';
 
 export type HooksContextType = {
     useField: (columnId: TDataTableColumn) => Field;
-    useCellValue: <T>(
+    useCellValue: (
         rowId: TDataTableRow,
         columnId: TDataTableColumn,
-    ) => [T, (newValue: T) => void];
+    ) => readonly [
+        RecordWithId,
+        (newValue: Partial<RecordWithId> & Pick<RecordWithId, 'id'>) => void,
+    ];
 };
 
 const HooksContext = createContext<HooksContextType | null>(null);
