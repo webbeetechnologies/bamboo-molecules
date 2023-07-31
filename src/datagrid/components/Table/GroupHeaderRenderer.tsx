@@ -3,7 +3,7 @@ import { memo } from 'react';
 import type { DataTableRowProps, TDataTableRow } from 'src/components/DataTable/types';
 import { useField, useGroupMeta } from '../../contexts';
 import { ViewRenderer } from '../FieldRenderers';
-import { useMolecules } from '../../../../src/hooks';
+import { useMolecules } from '@bambooapp/bamboo-molecules';
 import type { Field } from '../../types';
 import { StyleSheet } from 'react-native';
 import { withSpacers } from './Spacer';
