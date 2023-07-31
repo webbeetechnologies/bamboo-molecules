@@ -22,6 +22,7 @@ type GroupMeta = {
     filters: GroupFilter[];
     id: string;
     count: number;
+    groupId: string;
 };
 
 export type GroupHeader = GroupMeta & {
@@ -33,6 +34,7 @@ export type GroupedRecord = {
     filters: GroupFilter[];
     data: RecordWithId;
     level: number;
+    groupId: string;
 };
 
 export type GroupFooter = GroupMeta & {
@@ -62,7 +64,7 @@ const getPrimitiveValue = (value: any): PrimitiveTypes => {
     return keyStore.get(value);
 };
 
-const getIdFromFilters = (filters: GroupFilter[], { prefix = '', suffix = '' }) => {
+const getIdFromFilters = (filters: GroupFilter[], { prefix = '', suffix = '' } = {}) => {
     return [
         prefix ?? ([] as string[]),
         ...filters.map(x => `${x.field}_${getPrimitiveValue(x.value)}`),
@@ -86,6 +88,7 @@ const makeNested = <T extends RecordWithId>(
             id: record.id,
             level,
             index: index++,
+            groupId: getIdFromFilters(filters),
         })) as GroupedRecord[];
 
     const groupedData = groupBy(records, record => getPrimitiveValue(record[currentField]));
@@ -102,17 +105,21 @@ const makeNested = <T extends RecordWithId>(
         title: any,
         groupFilters: GroupFilter[],
         suffix?: string,
-    ): GroupedData[] => [
-        {
-            ...arg,
-            fieldId: currentField as string,
-            title,
-            level,
-            count: records.length,
-            filters: groupFilters,
-            id: getIdFromFilters(groupFilters, { suffix }),
-        },
-    ];
+    ): GroupedData[] => {
+        const groupId = getIdFromFilters(groupFilters);
+        return [
+            {
+                ...arg,
+                fieldId: currentField as string,
+                title,
+                level,
+                count: records.length,
+                filters: groupFilters,
+                groupId,
+                id: getIdFromFilters([], { prefix: groupId, suffix }),
+            },
+        ];
+    };
 
     const makeFooter = makeGroupMeta.bind(null, { isGroupFooter: true });
     const makeHeader = makeGroupMeta.bind(null, { isGroupHeader: true });
