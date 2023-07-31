@@ -62,6 +62,14 @@ const getPrimitiveValue = (value: any): PrimitiveTypes => {
     return keyStore.get(value);
 };
 
+const getIdFromFilters = (filters: GroupFilter[], { prefix = '', suffix = '' }) => {
+    return [
+        prefix ?? ([] as string[]),
+        ...filters.map(x => `${x.field}_${getPrimitiveValue(x.value)}`),
+        suffix ?? ([] as string[]),
+    ].join('::');
+};
+
 const makeNested = <T extends RecordWithId>(
     records: T[],
     groups: TypedRecordSort<T>[],
@@ -70,7 +78,6 @@ const makeNested = <T extends RecordWithId>(
     filters: GroupFilter[] = [],
 ): GroupedData[] => {
     const [currentField, ...pending] = groups ?? [];
-    const baseKey: string[] = filters.map(x => x.field);
 
     if (!currentField)
         return records.map(record => ({
@@ -87,19 +94,14 @@ const makeNested = <T extends RecordWithId>(
         new Set(records.map(record => getPrimitiveValue(record[currentField]))),
     );
 
-    const groupKey = baseKey
-        .concat(currentField as string)
-        .filter(Boolean)
-        .join('_');
-
     const makeGroupMeta = <
         GroupType extends Pick<GroupHeader, 'isGroupHeader'> | Pick<GroupFooter, 'isGroupFooter'>,
     >(
         arg: GroupType,
 
-        id: string,
         title: any,
         groupFilters: GroupFilter[],
+        suffix?: string,
     ): GroupedData[] => [
         {
             ...arg,
@@ -108,7 +110,7 @@ const makeNested = <T extends RecordWithId>(
             level,
             count: records.length,
             filters: groupFilters,
-            id,
+            id: getIdFromFilters(groupFilters, { suffix }),
         },
     ];
 
@@ -129,9 +131,9 @@ const makeNested = <T extends RecordWithId>(
         ];
 
         return ([] as GroupedData[])
-            .concat(makeHeader(`${groupKey}_${key}_header`, currentValue, groupFilters))
+            .concat(makeHeader(currentValue, groupFilters, `header`))
             .concat(makeGroupedData(String(key), groupFilters))
-            .concat(makeFooter(`${groupKey}_${key}_footer`, currentValue, groupFilters));
+            .concat(makeFooter(currentValue, groupFilters, `footer`));
     };
 
     return texts.map(createGroupItem).flat();
