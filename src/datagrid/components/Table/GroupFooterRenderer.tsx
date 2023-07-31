@@ -1,9 +1,9 @@
 import { memo } from 'react';
-// import type { RenderCellProps } from '../../../components';
-import type { DataTableRowProps, TDataTableRow } from 'src/components/DataTable/types';
+import type { DataTableRowProps, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 import { useField, useGroupMeta } from '../../contexts';
 import type { Field } from '../../types';
 import { withSpacers } from './Spacer';
+import { useMolecules } from '@bambooapp/bamboo-molecules';
 
 export type Props = {
     rowId: TDataTableRow;
@@ -30,6 +30,10 @@ export const GroupFooterRenderer = memo((_: GroupFooterRendererProps) => {
 export const GroupFooterRow = withSpacers((props: DataTableRowProps) => {
     const { fieldId, title, count } = useGroupMeta(props.rowId);
     const field = useField(fieldId);
+    const { GroupFooterRenderer: GroupFooterRendererInjected = GroupFooterRenderer } =
+        useMolecules<{
+            GroupFooterRenderer: typeof GroupFooterRenderer;
+        }>();
 
-    return <GroupFooterRenderer {...field} value={title} recordCount={count} />;
+    return <GroupFooterRendererInjected {...field} value={title} recordCount={count} />;
 });

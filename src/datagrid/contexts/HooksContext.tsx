@@ -9,7 +9,7 @@ import type { RecordWithId } from '../utils';
 
 export type HooksContextType = {
     useField: (columnId: TDataTableColumn) => Field;
-    useRowRenderer: UseRowRenderer;
+    useRowRenderer?: UseRowRenderer;
     useCellValue: (
         rowId: TDataTableRow,
         columnId: TDataTableColumn,

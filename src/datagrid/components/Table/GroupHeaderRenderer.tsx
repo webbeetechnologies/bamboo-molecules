@@ -42,8 +42,12 @@ export const GroupHeaderRenderer = memo(
 export const GroupHeaderRow = withSpacers((props: DataTableRowProps) => {
     const { fieldId, title, count } = useGroupMeta(props.rowId);
     const field = useField(fieldId);
+    const { GroupHeaderRenderer: GroupHeaderRendererInjected = GroupHeaderRenderer } =
+        useMolecules<{
+            GroupHeaderRenderer: typeof GroupHeaderRenderer;
+        }>();
 
-    return <GroupHeaderRenderer {...field} value={title} recordCount={count} />;
+    return <GroupHeaderRendererInjected {...field} value={title} recordCount={count} />;
 });
 
 const styles = StyleSheet.create({
