@@ -5,7 +5,13 @@ import { CallbackActionState, withActionState } from '../../../hocs';
 import { useMolecules } from '../../../hooks';
 import type { RenderCellProps, StateLayerProps } from '../../../components';
 
-import { useFieldType, useTableManagerStoreRef, useIsCellFocused, useHooks } from '../../contexts';
+import {
+    useFieldType,
+    useTableManagerStoreRef,
+    useIsCellFocused,
+    useField,
+    useCellValue,
+} from '../../contexts';
 import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
 import { useDataTableCell } from '../../../components';
@@ -19,7 +25,7 @@ export type Props = RenderCellProps &
 
 const emptyObj = {};
 
-const CellRenderer = (
+const DataCell = (
     {
         hovered = false,
         innerContainerProps = emptyObj,
@@ -35,7 +41,6 @@ const CellRenderer = (
 
     const { column, row, rowIndex, columnIndex } = useDataTableCell();
 
-    const { useField, useCellValue } = useHooks();
     const { type, ...restField } = useField(column);
     const { readonly, displayEditorOnHover, showEditor } = useFieldType(type);
     const [isFocused, setFocusedCell] = useIsCellFocused(row, column);
@@ -161,4 +166,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(withActionState(forwardRef(CellRenderer)));
+export default memo(withActionState(forwardRef(DataCell)));

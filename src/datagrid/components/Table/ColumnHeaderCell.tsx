@@ -4,7 +4,7 @@ import type { TextProps, ViewProps } from '@bambooapp/bamboo-atoms';
 import type { IconProps, RenderHeaderCellProps } from '../../../components';
 import { useMolecules } from '../../../hooks';
 
-import { useFieldType, useHooks, useTableManagerStoreRef } from '../../contexts';
+import { useFieldType, useField, useTableManagerStoreRef } from '../../contexts';
 import { withVirtualization } from '../../hocs';
 import { useContextMenu } from '../../hooks';
 
@@ -29,7 +29,6 @@ const ColumnHeaderCell = ({
     const elementRef = useRef<any>(null);
     const { set: setTableManagerStore } = useTableManagerStoreRef();
 
-    const { useField } = useHooks();
     const { type, title, id } = useField(column);
     const { icon } = useFieldType(type);
 

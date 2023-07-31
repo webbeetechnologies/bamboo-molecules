@@ -3,6 +3,7 @@ import type { Row } from '../../../../src/datagrid/types';
 import { keyBy } from '../../../../src/utils';
 
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
+import type { TDataTableColumn, TDataTableRow } from 'src/components/DataTable/types';
 
 export type RecordsContextType = {
     records: Record<string, Row>;
@@ -69,9 +70,9 @@ const cellValueSelector = (id: string, fieldId: string, records: Record<string, 
     return records[id][fieldId] as any;
 };
 
-export const useCellValue = (id: string, fieldId: string) => {
+export const useCellValue = (id: TDataTableRow, fieldId: TDataTableColumn) => {
     const [value, setStore] = useRecordsSelector(store => {
-        return cellValueSelector(id, fieldId, store.records);
+        return cellValueSelector(id as string, fieldId as string, store.records);
     });
 
     const setCellValue = useCallback(

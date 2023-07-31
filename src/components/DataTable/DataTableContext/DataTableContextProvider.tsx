@@ -39,12 +39,16 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         selectedRows,
         rowSize,
         columnWidths,
+        useRowRenderer: useRowRendererProp,
     }) => {
         const { FlatList } = useMolecules();
 
-        const FlatListComponent = useRef(
-            FlatListComponentProp ?? (FlatList as Required<DataTableProps>['FlatListComponent']),
-        ).current;
+        const { FlatListComponent, useRowRenderer } = useRef({
+            useRowRenderer: useRowRendererProp,
+            FlatListComponent:
+                FlatListComponentProp ??
+                (FlatList as Required<DataTableProps>['FlatListComponent']),
+        }).current;
 
         // TODO: Adopt ScrollView from Molecules.
         const ScrollViewComponent = useRef(ScrollViewComponentProp ?? ScrollView).current;
@@ -58,7 +62,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
 
         const tableWidth = useMemo(() => {
             return columns.reduce(
-                (acc, column) => acc + (columnWidths?.[column] ?? defaultColumnWidth),
+                (acc: number, column) => acc + (columnWidths?.[column] ?? defaultColumnWidth),
                 0,
             );
         }, [columnWidths, columns, defaultColumnWidth]);
@@ -79,6 +83,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 rowSize,
                 cellXOffsets: calculateXOffset(columns, columnWidths, defaultColumnWidth),
                 columnWidths,
+                useRowRenderer,
             }),
             [
                 records,
@@ -92,6 +97,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 selectedRows,
                 rowSize,
                 columnWidths,
+                useRowRenderer,
             ],
         );
 

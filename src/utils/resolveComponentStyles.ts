@@ -18,9 +18,9 @@ export const resolveComponentStyles = resolveComponentStylesMemo(
             states: componentStates,
             sizes: componentSizes,
             ...styles
-        } = componentTheme;
+        } = componentTheme ?? {};
 
-        const variantStyles = variant ? variants[variant] || {} : {};
+        const variantStyles = variant ? variants?.[variant] || {} : {};
         const { states: variantStates, sizes: variantSizes, ...nonStateStyles } = variantStyles; // filtering the unused state styles
 
         return deepmerge(
