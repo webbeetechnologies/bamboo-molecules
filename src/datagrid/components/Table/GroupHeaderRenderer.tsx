@@ -1,6 +1,6 @@
 import { memo } from 'react';
 // import type { RenderCellProps } from '../../../components';
-import type { DataTableRowProps, TDataTableRow } from 'src/components/DataTable/types';
+import type { DataTableRowProps } from 'src/components/DataTable/types';
 import { useField, useGroupMeta } from '../../contexts';
 import { ViewRenderer } from '../FieldRenderers';
 import { useMolecules } from '@bambooapp/bamboo-molecules';
@@ -8,13 +8,12 @@ import type { Field } from '../../types';
 import { StyleSheet } from 'react-native';
 import { withSpacers } from './Spacer';
 
-export type Props = {
-    rowId: TDataTableRow;
-};
-
 export type GroupHeaderRendererProps = Field & {
     value: any;
     recordCount: number;
+    level: number;
+    isHighestLevel: boolean;
+    isLowestLevel: boolean;
 };
 /**
  *
@@ -40,14 +39,24 @@ export const GroupHeaderRenderer = memo(
  * Can be replaced with useRowRenderer prop on datagrid.
  */
 export const GroupHeaderRow = withSpacers((props: DataTableRowProps) => {
-    const { fieldId, title, count } = useGroupMeta(props.rowId);
+    const { fieldId, title, count, level, isHighestLevel, isLowestLevel } = useGroupMeta(
+        props.rowId,
+    );
     const field = useField(fieldId);
     const { GroupHeaderRenderer: GroupHeaderRendererInjected = GroupHeaderRenderer } =
         useMolecules<{
             GroupHeaderRenderer: typeof GroupHeaderRenderer;
         }>();
 
-    return <GroupHeaderRendererInjected {...field} value={title} recordCount={count} />;
+    const metaProps = {
+        value: title,
+        recordCount: count,
+        level,
+        isHighestLevel,
+        isLowestLevel,
+    };
+
+    return <GroupHeaderRendererInjected {...field} {...metaProps} />;
 });
 
 const styles = StyleSheet.create({

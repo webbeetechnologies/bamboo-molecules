@@ -44,7 +44,7 @@ const DataTableRowPresentation = Object.assign(
         );
 
         return (
-            <DataTableRowContext.Provider value={rowContext} key={rowId}>
+            <DataTableRowContext.Provider value={rowContext}>
                 <View {...rowProps} style={rowStyle}>
                     {result}
                 </View>

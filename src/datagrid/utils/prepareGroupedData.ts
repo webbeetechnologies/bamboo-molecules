@@ -23,6 +23,8 @@ type GroupMeta = {
     id: string;
     count: number;
     groupId: string;
+    isHighestLevel: boolean;
+    isLowestLevel: boolean;
 };
 
 export type GroupHeader = GroupMeta & {
@@ -116,6 +118,8 @@ const makeNested = <T extends RecordWithId>(
                 count: records.length,
                 filters: groupFilters,
                 groupId,
+                isHighestLevel: level === 1,
+                isLowestLevel: !!pending.length,
                 id: getIdFromFilters([], { prefix: groupId, suffix }),
             },
         ];
