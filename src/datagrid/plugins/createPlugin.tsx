@@ -1,5 +1,6 @@
 import { useMemo, useRef } from 'react';
-import { usePluginsManagerStoreRef, PluginManagerEvents } from './plugins-manager';
+import { usePluginsManagerStoreRef } from './plugins-manager';
+import type { PluginManagerEvents } from './types';
 
 type PluginMangerEventsKeys = keyof PluginManagerEvents;
 
