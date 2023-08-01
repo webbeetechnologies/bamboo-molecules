@@ -6,6 +6,8 @@ export {
     RenderCellProps,
     DataCellProps,
     DataHeaderCellProps,
+    TDataTableColumn,
+    TDataTableRow,
 } from './types';
 import { DataTable as DataTableComponent } from './DataTable';
 import { DataHeaderCell } from './DataTableHeader';
