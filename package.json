@@ -44,6 +44,7 @@
     "bundle": "rm -rf lib && yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
     "do-release": "npm publish ./dist/bambooapp-bamboo-molecules-$npm_package_version.tgz --access=public",
     "release": "yarn bundle && yarn do-release",
+    "release:dev": "npm version prepatch --preid=dev && yarn bundle && yarn do-release --tag=dev",
     "storybook": "MOLECULES_ENV=storybook start-storybook -p 6006",
     "test-storybook": "test-storybook",
     "coverage": "cp coverage/storybook/coverage-storybook.json coverage/coverage-storybook.json && npx nyc report --reporter=html -t coverage --report-dir coverage/lcov-report",
@@ -54,7 +55,7 @@
     "perf": "npx reassure"
   },
   "dependencies": {
-    "@bambooapp/bamboo-atoms": "^0.0.22",
+    "@bambooapp/bamboo-atoms": "^0.0.26",
     "@gorhom/portal": "^1.0.14",
     "@react-native-aria/overlays": "^0.3.2",
     "@sharcoux/slider": "^6.1.2",

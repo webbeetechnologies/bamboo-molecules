@@ -1,8 +1,8 @@
 import { memo, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
-import { useMolecules, useToggle, ProvideTheme } from '@bambooapp/bamboo-molecules';
+import { useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
 
-import { DataGrid, dataGridStyles } from '../../../src/datagrid';
+import '../../../src/datagrid';
 import {
     fields,
     records,
@@ -14,12 +14,11 @@ import {
     RecordsProvider,
     groups,
 } from './mocks';
-import { useTheme } from '@bambooapp/bamboo-atoms';
 
 const containerStyle = { width: '100%' };
 
 export const Example = () => {
-    const { View } = useMolecules();
+    const { View, DataGrid } = useMolecules();
 
     const { state: isOpen, handleOpen, handleClose } = useToggle();
 
@@ -81,7 +80,7 @@ const ContextMenuItems = memo(({ onCloseMenu }: { onCloseMenu: () => void }) => 
 });
 
 export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) => {
-    const { View } = useMolecules();
+    const { View, DataGrid } = useMolecules();
 
     const virtualizedContainerStyle = useMemo(() => ({ ...containerStyle, height: 500 }), []);
 
@@ -110,9 +109,7 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
 };
 
 export const ExampleHorizontalVirtualizationWithGroups = () => (
-    <ProvideTheme theme={{ ...useTheme(), ...dataGridStyles }}>
-        <ExampleHorizontalVirtualization groups={groups} />
-    </ProvideTheme>
+    <ExampleHorizontalVirtualization groups={groups} />
 );
 
 const styles = StyleSheet.create({
