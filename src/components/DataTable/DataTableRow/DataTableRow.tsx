@@ -1,8 +1,9 @@
 import { Fragment, memo, useMemo } from 'react';
+import type { ListRenderItem } from 'react-native';
+
 import type { DataTableProps, TDataTableRow } from '../types';
 import { DataTableRowContext, useDataTable } from '../DataTableContext/DataTableContext';
 import { renderCellComponent } from '../DataTableCell';
-import type { ListRenderItem } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../../hooks';
 import { CallbackActionState, withActionState } from '../../../hocs';
 // import { useRowWithinBounds } from '../DataTable';
@@ -30,7 +31,10 @@ const DataTableComponentPresentation = memo(
             },
         );
 
-        const rowContext = useMemo(() => ({ row: record, rowIndex: index }), [record, index]);
+        const rowContext = useMemo(
+            () => ({ row: record, rowIndex: index, hovered }),
+            [record, index, hovered],
+        );
 
         const result = useMemo(
             () =>
@@ -87,6 +91,13 @@ const DataTableComponent = memo((props: DataTableComponentProps) => {
 export const DataTableRow = memo(withActionState(DataTableComponent));
 
 export const renderRow: ListRenderItem<TDataTableRow> = ({ item, index }) => (
-    // @ts-ignore // TODO - fix ts issue @elvisduru
-    <DataTableRow record={item} index={index} key={item} />
+    <DataTableRow
+        // @ts-ignore // TODO - fix ts issue @elvisduru
+        record={item}
+        index={index}
+        key={item}
+        actionStateContainerProps={actionStateContainerProps}
+    />
 );
+
+const actionStateContainerProps = { style: { height: '100%' } };

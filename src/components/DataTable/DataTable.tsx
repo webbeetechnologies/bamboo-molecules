@@ -1,5 +1,4 @@
 import { forwardRef, memo, useCallback, useMemo, ForwardedRef } from 'react';
-import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
 import type {
     LayoutChangeEvent,
@@ -19,7 +18,7 @@ import {
     useDataTableStoreRef,
 } from './DataTableContext/DataTableContext';
 import { defaultProps } from './defaults';
-import { renderRow } from './DataTableRow';
+import { renderRow as renderRowDefault } from './DataTableRow';
 import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
 import { DataTableHeaderRow } from './DataTableHeader';
 
@@ -28,10 +27,7 @@ type DataTablePresentationProps = DataTableComponentProps &
     Pick<DataTableProps, 'records'> & { tableWidth: number } & Pick<
         Required<DataTableProps>,
         'FlatListComponent' | 'ScrollViewComponent'
-    > & {
-        containerProps?: ViewProps;
-    };
-
+    >;
 const {
     useStoreRef,
     Provider: HorizontalScrollIndexProvider,
@@ -70,6 +66,8 @@ const DataTablePresentationComponent = memo(
             FlatListComponent,
             ScrollViewComponent,
             onLayout: onLayoutProp,
+            renderRow: renderRowProp,
+            HeaderRowComponent: HeaderRowComponentProp,
             ...restScrollViewProps
         } = props;
 
@@ -90,13 +88,19 @@ const DataTablePresentationComponent = memo(
         const { store, set: setStore } = useStoreRef();
         const { set: setDataTableStore } = useDataTableStoreRef();
 
-        const renderItem: typeof renderRow = useCallback(props => {
-            return props.index === 0 ? (
-                <DataTableHeaderRow key={props.item} />
-            ) : (
-                renderRow({ ...props, index: props.index - 1 })
-            );
-        }, []);
+        const renderRow = renderRowProp || renderRowDefault;
+        const HeaderRowComponent = HeaderRowComponentProp || DataTableHeaderRow;
+
+        const renderItem: typeof renderRowDefault = useCallback(
+            props => {
+                return props.index === 0 ? (
+                    <HeaderRowComponent key={props.item} />
+                ) : (
+                    renderRow({ ...props, index: props.index - 1 })
+                );
+            },
+            [HeaderRowComponent, renderRow],
+        );
 
         const stickyHeaderIndices = useMemo(
             () =>
