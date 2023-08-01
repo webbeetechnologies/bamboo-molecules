@@ -2120,13 +2120,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bambooapp/bamboo-atoms@npm:^0.0.22":
-  version: 0.0.22
-  resolution: "@bambooapp/bamboo-atoms@npm:0.0.22"
+"@bambooapp/bamboo-atoms@npm:^0.0.26":
+  version: 0.0.26
+  resolution: "@bambooapp/bamboo-atoms@npm:0.0.26"
   dependencies:
+    eventemitter2: ^6.4.9
+    lodash.debounce: ^4.0.8
     lodash.isnil: ^4.0.0
     ts-deepmerge: ^3.0.0
-  checksum: dc57df72bb8b8850ff38b5e28a1ec32a54f896a08fa78c0d936923fd344973575b6f6f1032e746bab41bf541e9c60e8f2dbb7b1bda65d379aafbd0eadf89763a
+  checksum: 8592a1cc4eb9e28bd5ba96fbc31ccd3034a590547862eae5904a338281c0219692cd7aa908bbcab2eb4250daed3f0b49ddea254515632287feda8298f21570f2
   languageName: node
   linkType: hard
 
@@ -2134,7 +2136,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@bambooapp/bamboo-molecules@workspace:."
   dependencies:
-    "@bambooapp/bamboo-atoms": ^0.0.22
+    "@bambooapp/bamboo-atoms": ^0.0.26
     "@gorhom/portal": ^1.0.14
     "@react-native-aria/overlays": ^0.3.2
     "@react-native-community/eslint-config": ^3.1.0
@@ -12581,6 +12583,13 @@ __metadata:
   version: 5.0.1
   resolution: "event-target-shim@npm:5.0.1"
   checksum: 1ffe3bb22a6d51bdeb6bf6f7cf97d2ff4a74b017ad12284cc9e6a279e727dc30a5de6bb613e5596ff4dc3e517841339ad09a7eec44266eccb1aa201a30448166
+  languageName: node
+  linkType: hard
+
+"eventemitter2@npm:^6.4.9":
+  version: 6.4.9
+  resolution: "eventemitter2@npm:6.4.9"
+  checksum: be59577c1e1c35509c7ba0e2624335c35bbcfd9485b8a977384c6cc6759341ea1a98d3cb9dbaa5cea4fff9b687e504504e3f9c2cc1674cf3bd8a43a7c74ea3eb
   languageName: node
   linkType: hard
 
