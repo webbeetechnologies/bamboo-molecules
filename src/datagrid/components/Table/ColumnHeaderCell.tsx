@@ -1,8 +1,8 @@
 import { memo, ReactNode, useCallback, useMemo, useRef } from 'react';
 import { StyleSheet, TextStyle } from 'react-native';
 import type { TextProps, ViewProps } from '@bambooapp/bamboo-atoms';
-import type { IconProps, RenderHeaderCellProps } from '../../../components';
-import { useMolecules } from '../../../hooks';
+import { IconProps, RenderHeaderCellProps, useMolecules } from '@bambooapp/bamboo-molecules';
+import { ColumnResizeHandle } from '../ColumnResizeHandle';
 
 import { useFieldType, useHooks, useTableManagerStoreRef } from '../../contexts';
 import { withVirtualization } from '../../hocs';
@@ -64,6 +64,8 @@ const ColumnHeaderCell = ({
             </Text>
 
             {children}
+
+            <ColumnResizeHandle column={column} columnIndex={columnIndex} />
         </View>
     );
 };
@@ -88,6 +90,7 @@ const styles = StyleSheet.create({
         fontWeight: 'typescale.labelMedium.fontWeight' as unknown as TextStyle['fontWeight'],
         lineHeight: 'typescale.labelMedium.lineHeight' as unknown as number,
     },
+    resizePlaceholder: {},
 });
 
 export default memo(withVirtualization(ColumnHeaderCell));

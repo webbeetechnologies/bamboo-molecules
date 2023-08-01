@@ -19,10 +19,12 @@ import {
     useTableManagerValueSelector,
 } from './contexts';
 import { typedMemo } from './hocs';
-import { ContextMenu, ColumnHeaderCell, CellRenderer } from './components';
-import { useContextMenu } from './hooks';
+import { ContextMenu, ColumnHeaderCell, CellRenderer, TableHeaderRow } from './components';
+import { useContextMenu, useHandleKeydownEvents } from './hooks';
 import type { FieldTypes } from './types';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
+import PluginsManager from './plugins/plugins-manager';
+import type { Plugin } from './types/plugins';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -40,6 +42,7 @@ export type Props = Omit<
         contextMenuProps?: ContextMenuProps;
         renderHeader?: DataTableProps['renderHeader'];
         renderCell?: DataTableProps['renderCell'];
+        plugins?: Plugin[];
     };
 
 export type ContextMenuProps = Partial<MenuProps> & {
@@ -128,6 +131,8 @@ const DataGrid = ({
 
     useContextMenu({ ref, callback: onContextMenuOpen });
 
+    useHandleKeydownEvents({ ref });
+
     return (
         <>
             <DataTable
@@ -145,6 +150,7 @@ const DataGrid = ({
                 headerRowProps={rowProps}
                 verticalScrollProps={verticalScrollProps}
                 horizontalScrollProps={horizontalScrollProps}
+                HeaderRowComponent={TableHeaderRow}
             />
 
             {shouldContextMenuDisplayed && (
@@ -176,6 +182,7 @@ const withContextProviders = (Component: ComponentType<Props>) => {
         useField,
         useCellValue,
         contextMenuProps,
+        plugins,
         ...rest
     }: Props) => {
         const hooksContextValue = useMemo(
@@ -190,8 +197,10 @@ const withContextProviders = (Component: ComponentType<Props>) => {
             <FieldTypesProvider value={fieldTypes}>
                 <HooksProvider value={hooksContextValue}>
                     <TableManagerProvider withContextMenu={!!contextMenuProps}>
-                        {/* @ts-ignore - we don't want to pass down unnecessary props */}
-                        <Component {...rest} contextMenuProps={contextMenuProps} />
+                        <PluginsManager plugins={plugins}>
+                            {/* @ts-ignore - we don't want to pass down unnecessary props */}
+                            <Component {...rest} contextMenuProps={contextMenuProps} />
+                        </PluginsManager>
                     </TableManagerProvider>
                 </HooksProvider>
             </FieldTypesProvider>

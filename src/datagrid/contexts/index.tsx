@@ -8,3 +8,5 @@ export {
 } from './TableManagerContext';
 
 export { HooksProvider, useHooks, HooksContextType } from './HooksContext';
+
+export * from './ColumnConfigsContext';

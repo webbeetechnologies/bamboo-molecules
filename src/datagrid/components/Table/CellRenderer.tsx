@@ -1,14 +1,19 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Pressable, PressableProps, ViewStyle } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
-import { CallbackActionState, withActionState } from '../../../hocs';
-import { useMolecules } from '../../../hooks';
-import type { RenderCellProps, StateLayerProps } from '../../../components';
+import {
+    RenderCellProps,
+    StateLayerProps,
+    useMolecules,
+    CallbackActionState,
+    withActionState,
+    useDataTableCell,
+} from '@bambooapp/bamboo-molecules';
 
 import { useFieldType, useTableManagerStoreRef, useIsCellFocused, useHooks } from '../../contexts';
 import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
-import { useDataTableCell } from '../../../components';
+import { DragAndExtendHandle } from '../DragAndExtendHandle';
 
 export type Props = RenderCellProps &
     CallbackActionState &
@@ -19,7 +24,7 @@ export type Props = RenderCellProps &
 
 const emptyObj = {};
 
-const CellRenderer = (
+const _CellRenderer = (
     {
         hovered = false,
         innerContainerProps = emptyObj,
@@ -32,6 +37,8 @@ const CellRenderer = (
     const { View, StateLayer } = useMolecules();
 
     const cellRef = useRef<any>(null);
+    // const { hovered: rowHovered } = useDataTableRow();
+    // const [selection] = useSelection();
 
     const { column, row, rowIndex, columnIndex } = useDataTableCell();
 
@@ -48,13 +55,19 @@ const CellRenderer = (
     const [value, setValue] = useCellValue(row, column);
 
     const onFocus = useCallback(() => {
-        setFocusedCell({ columnId: column, rowId: row, columnIndex, rowIndex, type: 'cell' });
+        setFocusedCell({
+            columnId: column,
+            rowId: row,
+            columnIndex,
+            rowIndex,
+            type: 'cell',
+        });
     }, [column, columnIndex, row, rowIndex, setFocusedCell]);
 
     const onPress = useCallback(() => {
         const delta = new Date().getTime() - isTappedRef.current;
 
-        if (delta < 200) {
+        if (delta < 500) {
             if (readonly || displayEditorOnHover) return;
 
             setIsEditing(prev => !prev);
@@ -90,6 +103,12 @@ const CellRenderer = (
                 StyleSheet.absoluteFillObject,
                 isFocused && styles.focused,
                 stateLayerProps.style,
+                // rowHovered &&
+                //     selection.currentCell &&
+                //     !isFocused &&
+                //     (selection.currentCell?.row === row ||
+                //         selection.currentCell?.column === column) &&
+                //     styles.selected,
             ],
         }),
         [
@@ -126,14 +145,22 @@ const CellRenderer = (
                     <EditRenderer value={value} type={type} onChange={setValue} {...restField} />
                 )}
                 <StateLayer {...stateLayerProps} style={stateLayerStyle} />
+
+                {isFocused && <DragAndExtendHandle style={styles.dragHandle} />}
             </View>
         </Pressable>
     );
 };
 
+const CellRenderer = withActionState(forwardRef(_CellRenderer));
+
+const CellRendererWithStyledHeight = forwardRef((props: Props, ref: any) => (
+    <CellRenderer {...props} ref={ref} actionStateContainerProps={{ style: { height: '100%' } }} />
+));
+
 const styles = StyleSheet.create({
     cellContainer: {
-        height: 40,
+        height: '100%',
     },
     cell: {
         flex: 1,
@@ -159,6 +186,14 @@ const styles = StyleSheet.create({
     centered: {
         justifyContent: 'center',
     },
+    dragHandle: {
+        position: 'absolute',
+        bottom: -3.5,
+        right: -3.5,
+    },
+    selected: {
+        backgroundColor: 'red',
+    },
 });
 
-export default memo(withActionState(forwardRef(CellRenderer)));
+export default memo(CellRendererWithStyledHeight);

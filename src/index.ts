@@ -144,6 +144,7 @@ export {
     AvatarProps,
     MenuProps,
     MenuItemProps,
+    StateLayerProps,
 } from './components';
 
 // to avoid circular dependencies
