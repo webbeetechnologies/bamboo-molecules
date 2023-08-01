@@ -12,6 +12,10 @@ module.exports = api => {
                       extensions: ['.ios.js', '.android.js', '.js', '.jsx', '.ts', '.tsx', '.json'],
                       alias: {
                           '@bambooapp/bamboo-molecules': path.resolve(__dirname, './src/'),
+                          '@bambooapp/bamboo-molecules/components': path.resolve(
+                              __dirname,
+                              './src/components',
+                          ),
                           '@bambooapp/bamboo-molecules/fast-context': path.resolve(
                               __dirname,
                               './src/fast-context',
