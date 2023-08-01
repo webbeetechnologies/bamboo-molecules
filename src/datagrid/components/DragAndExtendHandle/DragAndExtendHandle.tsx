@@ -1,15 +1,24 @@
-import { memo, useMemo } from 'react';
+import { ComponentType, memo, useMemo } from 'react';
 import { StyleSheet, Animated } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useDataTableCell } from '@bambooapp/bamboo-molecules';
+import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 
-import { usePluginsDataSelector } from '../../plugins';
+import {
+    cellSelectionPluginKey,
+    usePluginsDataSelector,
+    usePluginsDataValueSelectorValue,
+} from '../../plugins';
 import { dragAndExtendKey } from '../../plugins/drag-and-extend';
 
-export type Props = ViewProps & {};
+export type Props = ViewProps & {
+    isFocused: boolean;
+    columnId: TDataTableColumn;
+    rowId: TDataTableRow;
+};
 
-const DragAndExtendHandle = ({ style, ...rest }: Props) => {
+const DragAndExtendHandle = ({ style, ...rest }: ViewProps) => {
     const cell = useDataTableCell();
     const [_, setStore] = usePluginsDataSelector(store => store[dragAndExtendKey]);
 
@@ -54,6 +63,22 @@ const DragAndExtendHandle = ({ style, ...rest }: Props) => {
     );
 };
 
+const withVisibilityCheck = (Component: ComponentType<ViewProps>) => {
+    return ({ isFocused, columnId, rowId, ...rest }: Props) => {
+        const isVisible = usePluginsDataValueSelectorValue(store => {
+            const selection = store[cellSelectionPluginKey];
+
+            if (!selection || !selection.end) return isFocused;
+
+            return selection.end.columnId === columnId && selection.end.rowId === rowId;
+        });
+
+        if (!isVisible) return <></>;
+
+        return <Component {...rest} />;
+    };
+};
+
 const styles = StyleSheet.create({
     handle: {
         width: 10,
@@ -64,4 +89,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(DragAndExtendHandle);
+export default memo(withVisibilityCheck(DragAndExtendHandle));

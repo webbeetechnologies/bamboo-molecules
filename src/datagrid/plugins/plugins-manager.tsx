@@ -1,14 +1,16 @@
 import { ComponentType, memo, ReactNode, useEffect, useMemo } from 'react';
-
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
+
 import type { Plugin } from '../types/plugins';
 import { PluginManagerEvents, PluginEvents } from './types';
+import type { Methods } from './createPlugin';
 
 export type PluginsManagerContextType = {
     plugins: Plugin[];
     pluginsMap: Record<string, Plugin>;
 
     events: PluginManagerEvents;
+    methods: Record<string, Methods>;
 
     [key: string]: any;
 };
@@ -73,13 +75,23 @@ const _PluginsManager = ({ plugins = defaultPlugins, children }: Props) => {
         [pluginRefs],
     );
 
+    const methods = useMemo(() => {
+        return pluginRefs.reduce((acc, pluginRef) => {
+            if (!pluginRef.current) return acc;
+            acc[pluginRef.current.key] = pluginRef.current.methods || {};
+
+            return acc;
+        }, {} as Record<string, Methods>);
+    }, [pluginRefs]);
+
     const contextValue = useMemo(() => {
         return {
             plugins: pluginRefs,
             pluginsMap,
             events,
+            methods,
         };
-    }, [pluginRefs, pluginsMap, events]);
+    }, [pluginRefs, pluginsMap, events, methods]);
 
     useEffect(() => {
         pluginRefs.map(pluginRef => {

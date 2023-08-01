@@ -1,9 +1,9 @@
+import type { Cell } from './cell-selection';
+
 export type Selection = {
-    rowId: string;
-    columnId: string;
-    rowIndex: number;
-    columnIndex: number;
-}[];
+    start: Cell;
+    end: Cell;
+};
 
 export enum PluginEvents {
     BEFORE_COPY_CELL = 'beforeCopyCell',

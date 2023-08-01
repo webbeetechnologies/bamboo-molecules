@@ -4,10 +4,13 @@ import type { PluginManagerEvents } from './types';
 
 type PluginMangerEventsKeys = keyof PluginManagerEvents;
 
+export type Methods = Record<string, any>;
+
 export type PluginHandle<E extends PluginMangerEventsKeys> = {
     key: string;
     init?: (...args: any) => any;
     events: Record<E, ((...args: any) => any) | null>;
+    methods?: Methods;
     destroy?: (...args: any) => any;
 };
 
@@ -17,11 +20,13 @@ export const createPlugin = <K extends PluginMangerEventsKeys>({
     key,
     useInit = useVoid,
     eventKeys,
+    methods,
     useDestroy = useVoid,
 }: {
     key: string;
     useInit?: () => (...args: any) => any;
     eventKeys: K[];
+    methods?: Methods;
     useDestroy?: () => (...args: any) => any;
 }) => {
     const usePlugin = <E extends Record<K, ((...args: any) => any) | null>>(args: Partial<E>) => {
@@ -30,7 +35,7 @@ export const createPlugin = <K extends PluginMangerEventsKeys>({
         const events = useMemo(
             () =>
                 eventKeys.reduce((acc, event) => {
-                    // @ts-ignore
+                    // @ts-ignore // TODO - fix type issue
                     acc[event] = args?.[event as K] || null;
 
                     return acc;
@@ -44,6 +49,7 @@ export const createPlugin = <K extends PluginMangerEventsKeys>({
             key,
             init,
             events,
+            methods,
             destroy,
         });
 
@@ -60,5 +66,15 @@ export const createPlugin = <K extends PluginMangerEventsKeys>({
         }, {} as Record<K, (...args: any) => any>);
     };
 
-    return [usePlugin, usePluginEvents] as [typeof usePlugin, typeof usePluginEvents];
+    const usePluginMethods = () => {
+        const { store } = usePluginsManagerStoreRef();
+
+        return store.current.methods[key];
+    };
+
+    return [usePlugin, usePluginEvents, usePluginMethods] as [
+        typeof usePlugin,
+        typeof usePluginEvents,
+        typeof usePluginMethods,
+    ];
 };

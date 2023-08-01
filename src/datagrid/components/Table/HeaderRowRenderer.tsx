@@ -1,6 +1,7 @@
 import { Fragment, memo, useMemo } from 'react';
 import { useComponentStyles, useMolecules } from '@bambooapp/bamboo-molecules';
 import { useDataTable, renderDataTableHeaderCell } from '@bambooapp/bamboo-molecules/components';
+import { StyleSheet } from 'react-native';
 
 export const TableHeaderRow = memo(() => {
     const { View } = useMolecules();
@@ -11,10 +12,9 @@ export const TableHeaderRow = memo(() => {
     }));
 
     const headerStyle = useComponentStyles('DataTable_HeaderRow', [
+        styles.headerRow,
         headerRowProps?.style,
-        {
-            flexDirection: 'row',
-        },
+        { flexDirection: 'row' },
     ]);
 
     const cells = useMemo(
@@ -30,4 +30,11 @@ export const TableHeaderRow = memo(() => {
             {cells}
         </View>
     );
+});
+
+const styles = StyleSheet.create({
+    headerRow: {
+        borderBottomWidth: 1,
+        borderBottomColor: 'colors.outlineVariant',
+    },
 });

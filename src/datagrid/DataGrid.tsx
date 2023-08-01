@@ -25,6 +25,7 @@ import type { FieldTypes } from './types';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
 import PluginsManager from './plugins/plugins-manager';
 import type { Plugin } from './types/plugins';
+import { useSelectionMethods, useSelectionPlugin } from './plugins';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -76,6 +77,7 @@ const DataGrid = ({
         contextMenuProps || (emptyObj as ContextMenuProps);
 
     const shouldContextMenuDisplayed = useShouldContextMenuDisplayed();
+    const { useResetSelectionOnClickOutside } = useSelectionMethods();
 
     const ref = useRef(null);
 
@@ -133,6 +135,8 @@ const DataGrid = ({
 
     useHandleKeydownEvents({ ref });
 
+    useResetSelectionOnClickOutside();
+
     return (
         <>
             <DataTable
@@ -182,7 +186,7 @@ const withContextProviders = (Component: ComponentType<Props>) => {
         useField,
         useCellValue,
         contextMenuProps,
-        plugins,
+        plugins: _plugins,
         ...rest
     }: Props) => {
         const hooksContextValue = useMemo(
@@ -191,6 +195,13 @@ const withContextProviders = (Component: ComponentType<Props>) => {
                 useCellValue,
             }),
             [useField, useCellValue],
+        );
+
+        const selectionPlugin = useSelectionPlugin({});
+
+        const plugins = useMemo(
+            () => [...(_plugins || []), selectionPlugin],
+            [_plugins, selectionPlugin],
         );
 
         return (
@@ -213,8 +224,6 @@ const defaultHorizontalScrollProps = { contentContainerStyle: { flexGrow: 1 } };
 const styles = StyleSheet.create({
     cell: {
         padding: 0,
-        borderBottomWidth: 1,
-        borderBottomColor: 'colors.outlineVariant',
     },
     row: {
         padding: 0,
