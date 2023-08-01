@@ -1,6 +1,6 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
+import { Toast, useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
 
 import { DataGrid } from '../../../src/datagrid';
 import {
@@ -13,13 +13,15 @@ import {
     useCellValue,
     RecordsProvider,
 } from './mocks';
+import { useColumnResizePlugin, useCopyPastePlugin } from '../../../src/datagrid/plugins';
 
 export const Example = () => {
-    const { View } = useMolecules();
+    const { View, ToastContainer } = useMolecules();
 
     const { state: isOpen, handleOpen, handleClose } = useToggle();
 
     const containerStyle = useMemo(() => ({ width: '100%' }), []);
+    const [columnWidth, setColumnWidth] = useState({});
 
     const { rowIds, columnIds } = useMemo(
         () => ({
@@ -44,11 +46,46 @@ export const Example = () => {
         [handleClose, handleOpen, isOpen],
     );
 
+    const columnResizePlugin = useColumnResizePlugin({
+        onColumnResize: ({ columnId, width }) => {
+            setColumnWidth(prev => ({
+                ...prev,
+                [columnId]: width,
+            }));
+        },
+    });
+
+    const copyPastePlugin = useCopyPastePlugin({
+        onCopyCell: args => {
+            Toast.show({
+                text1: 'Cell copied',
+                position: 'bottom',
+            });
+            // eslint-disable-next-line no-console
+            console.log({ copyArgs: args });
+        },
+        onPasteCell: args => {
+            Toast.show({
+                text1: 'Pasted cell',
+                position: 'bottom',
+            });
+            // eslint-disable-next-line no-console
+            console.log({ pasteArgs: args });
+        },
+    });
+
+    const plugins = useMemo(
+        () => [columnResizePlugin, copyPastePlugin],
+        [columnResizePlugin, copyPastePlugin],
+    );
+
     return (
         <FieldsProvider fields={fields}>
             <RecordsProvider records={records}>
                 <View style={containerStyle}>
                     <DataGrid
+                        plugins={plugins}
+                        columnWidths={columnWidth}
                         rowIds={rowIds}
                         columnIds={columnIds}
                         contextMenuProps={contextMenuProps}
@@ -56,6 +93,7 @@ export const Example = () => {
                         useCellValue={useCellValue}
                     />
                 </View>
+                <ToastContainer />
             </RecordsProvider>
         </FieldsProvider>
     );
