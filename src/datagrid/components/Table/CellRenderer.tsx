@@ -144,12 +144,7 @@ const _DataCell = (
                 )}
 
                 <CellBorder isFocused={isFocused} columnIndex={columnIndex} rowIndex={rowIndex} />
-                <DragAndExtendHandle
-                    style={styles.dragHandle}
-                    isFocused={isFocused}
-                    columnId={column}
-                    rowId={row}
-                />
+                <DragAndExtendHandle style={styles.dragHandle} isFocused={isFocused} />
                 <CellSelectionIndicator hovered={hovered} />
             </View>
         </Pressable>
