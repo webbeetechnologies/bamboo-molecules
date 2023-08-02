@@ -35,11 +35,11 @@ const useOnSelectCell = () => {
 
             const selection = { start: tableManagerStore.current.focusedCell, end: cell };
 
-            const continueSelection = beforeCellSelection(selection);
+            const continueSelection = beforeCellSelection({ selection });
 
             if (continueSelection === false) return;
 
-            onCellSelection(selection);
+            onCellSelection({ selection });
             setStore(prev => ({
                 [cellSelectionPluginKey]: {
                     ...prev[cellSelectionPluginKey],

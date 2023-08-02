@@ -173,7 +173,7 @@ const useOnDragSelection = ({
             };
         }
 
-        const continueDragAndSelection = beforeDragAndExtend(selection);
+        const continueDragAndSelection = beforeDragAndExtend({ selection });
 
         if (continueDragAndSelection === false) return;
 
@@ -184,7 +184,7 @@ const useOnDragSelection = ({
             },
         }));
 
-        onDragAndExtend(selection);
+        onDragAndExtend({ selection });
     }, [
         rowHovered,
         hovered,
