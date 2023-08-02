@@ -6,6 +6,7 @@ import { usePluginsDataStoreRef } from './plugins-manager';
 import { createPlugin } from './createPlugin';
 import { PluginEvents, Selection } from './types';
 import { useCopyPasteEvents } from './ copy-paste';
+import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
 
 export const dragAndExtendKey = 'drag-and-extend';
 
@@ -119,6 +120,7 @@ const useOnDragSelection = ({
         cell: { columnIndex: number; rowIndex: number },
     ) => boolean;
 }) => {
+    const { store: datatableStore } = useDataTableStoreRef();
     const { store: tableManagerStore } = useTableManagerStoreRef();
     const { store: pluginsDataStore, set: setPluginsDataStore } = usePluginsDataStoreRef();
     const { beforeDragAndExtend, onDragAndExtend } = useDragAndExtendEvents();
@@ -152,15 +154,22 @@ const useOnDragSelection = ({
         // This means it's horizontal selection
         if (rowHovered && checkIfWithinRow(cellsSelection, { rowIndex })) {
             const startColumnIndexOffset = columnIndex > cellsSelection.end.columnIndex ? 1 : -1;
+            const startColumnIndex = cellsSelection.end.columnIndex + startColumnIndexOffset;
+            const startRowIndex = cellsSelection.start.rowIndex;
+            const endRowIndex = cellsSelection.end.rowIndex;
 
             selection = {
                 start: {
-                    columnIndex: cellsSelection.end.columnIndex + startColumnIndexOffset,
-                    rowIndex: cellsSelection.start.rowIndex,
+                    columnIndex: startColumnIndex,
+                    rowIndex: startRowIndex,
+                    rowId: datatableStore.current.records[startRowIndex],
+                    columnId: datatableStore.current.columns[startColumnIndex],
                 },
                 end: {
-                    rowIndex: cellsSelection.end.rowIndex,
+                    rowIndex: endRowIndex,
+                    rowId: datatableStore.current.records[endRowIndex],
                     columnIndex,
+                    columnId: datatableStore.current.columns[columnIndex],
                 },
             };
         }
@@ -168,14 +177,23 @@ const useOnDragSelection = ({
         // This means it's vertical selection
         if (rowHovered && !checkIfWithinRow(cellsSelection, { rowIndex })) {
             const startRowIndexOffset = rowIndex > cellsSelection.end.rowIndex ? 1 : -1;
+            const startColumnIndex = cellsSelection.start.columnIndex;
+            const startRowIndex = cellsSelection.end.rowIndex + startRowIndexOffset;
+
+            const endColumnIndex = cellsSelection.end.columnIndex;
+
             selection = {
                 start: {
-                    columnIndex: cellsSelection.start.columnIndex,
-                    rowIndex: cellsSelection.end.rowIndex + startRowIndexOffset,
+                    columnIndex: startColumnIndex,
+                    columnId: datatableStore.current.columns[startColumnIndex],
+                    rowIndex: startRowIndex,
+                    rowId: datatableStore.current.records[startRowIndex],
                 },
                 end: {
-                    columnIndex: cellsSelection.end.columnIndex,
+                    columnIndex: endColumnIndex,
+                    columnId: datatableStore.current.columns[endColumnIndex],
                     rowIndex,
+                    rowId: datatableStore.current.records[rowIndex],
                 },
             };
         }
@@ -203,6 +221,7 @@ const useOnDragSelection = ({
         checkSelection,
         beforeDragAndExtend,
         onDragAndExtend,
+        datatableStore,
     ]);
 };
 
