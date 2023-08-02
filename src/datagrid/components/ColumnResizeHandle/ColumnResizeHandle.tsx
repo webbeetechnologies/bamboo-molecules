@@ -8,6 +8,8 @@ import { memo, useMemo, useRef } from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import type { TDataTableColumn } from '@bambooapp/bamboo-molecules/components';
+
 import {
     columnResizePluginKey,
     useColumnResizeEvents,
@@ -16,7 +18,7 @@ import {
 
 export type Props = ViewProps &
     CallbackActionState & {
-        column: string;
+        column: TDataTableColumn;
         columnIndex: number;
     };
 
