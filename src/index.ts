@@ -132,6 +132,10 @@ export {
     ScrollViewRef,
     DataTable,
     DataTableProps,
+    TDataTableColumn,
+    TDataTableRow,
+    DataTableRowProps,
+    UseRowRenderer,
     RenderHeaderCellProps,
     RenderCellProps,
     useDataTableCell,
@@ -174,6 +178,7 @@ export {
     ProvideMoleculesProps,
     ProvidePortalProps,
     extractStyles,
+    registerMolecule,
 } from './core';
 
 export { withRipple, withActionState, CallbackActionState } from './hocs';

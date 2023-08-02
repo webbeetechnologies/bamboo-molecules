@@ -138,7 +138,7 @@ const DataCell = (
 
 const styles = StyleSheet.create({
     cellContainer: {
-        height: 40,
+        height: '100%',
     },
     cell: {
         flex: 1,

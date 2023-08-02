@@ -17,26 +17,15 @@ import {
     HooksProvider,
     useShouldContextMenuDisplayed,
     useTableManagerValueSelector,
-    createUseRowRenderer,
 } from './contexts';
 import { typedMemo } from './hocs';
-import {
-    ContextMenu,
-    ColumnHeaderCell,
-    CellRenderer,
-    GroupFooterRow,
-    GroupHeaderRow,
-} from './components';
+import { ContextMenu, ColumnHeaderCell, CellRenderer } from './components';
 import { useContextMenu } from './hooks';
 import type { FieldTypes } from './types';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
-import { RecordWithId, RowType, prepareGroupedData } from './utils';
-import type { TDataTableColumn, TDataTableRow } from '../components/DataTable/types';
-
-const useRowRenderer = createUseRowRenderer({
-    [RowType.FOOTER]: GroupFooterRow,
-    [RowType.HEADER]: GroupHeaderRow,
-});
+import { RecordWithId, prepareGroupedData } from './utils';
+import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules';
+import { useRowRenderer } from './components/Table/useRowRenderer';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -202,12 +191,17 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         records,
         groups,
         useRowRenderer: useRowRendererProp,
+        useGroupRowState: useGroupRowStateProp,
+        useShowGroupFooter: useShowGroupFooterProp,
+
         ...rest
     }: Props) => {
         const hooksContextValue = useRef({
             useField,
             useCellValue,
             useRowRenderer: useRowRendererProp,
+            useGroupRowState: useGroupRowStateProp,
+            useShowGroupFooter: useShowGroupFooterProp,
         }).current;
 
         const { groupedRecords, rowIds } = useMemo(
@@ -234,8 +228,8 @@ const defaultHorizontalScrollProps = { contentContainerStyle: { flexGrow: 1 } };
 const styles = StyleSheet.create({
     cell: {
         padding: 0,
-        borderBottomWidth: 1,
-        borderBottomColor: 'colors.outlineVariant',
+        // borderTopWidth: 1,
+        // borderColor: 'colors.outlineVariant',
     },
     row: {
         padding: 0,

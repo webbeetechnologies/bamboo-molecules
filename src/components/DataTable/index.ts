@@ -13,6 +13,7 @@ export {
     DataTableRowProps,
     TDataTableColumn,
     TDataTableRow,
+    UseRowRenderer,
 } from './types';
 
 export { dataTableCellStyles } from './DataTableCell';

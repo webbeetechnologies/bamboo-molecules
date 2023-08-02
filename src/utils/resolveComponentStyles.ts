@@ -42,7 +42,8 @@ export const flattenStateStyles = (
     let flattenedStyles = {};
 
     if (states && statesStyles) {
-        const firstActiveState = Object.keys(states).find(key => states[key]) || '';
+        const firstActiveState =
+            Object.keys(states).find(key => states[key] && key in statesStyles) || '';
 
         flattenedStyles = { ...flattenedStyles, ...(statesStyles[firstActiveState] || {}) };
     }

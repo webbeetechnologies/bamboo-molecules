@@ -15,7 +15,7 @@ export enum RowType {
     DATA = 'data',
 }
 
-type GroupMeta = {
+type GroupMetaRecord = {
     fieldId: TDataTableColumn;
     title: any;
     level: number;
@@ -23,15 +23,22 @@ type GroupMeta = {
     id: string;
     count: number;
     groupId: string;
-    isHighestLevel: boolean;
-    isLowestLevel: boolean;
+    isFirstLevel: boolean;
+    isLastLevel: boolean;
+    isFirst: boolean;
+    isLast: boolean;
+    isOnly: boolean;
 };
 
-export type GroupHeader = GroupMeta & {
+export type GroupHeader = GroupMetaRecord & {
     isGroupHeader: true;
 };
 
-export type GroupedRecord = {
+export type GroupFooter = GroupMetaRecord & {
+    isGroupFooter: true;
+};
+
+export type GroupRecord = {
     id: TDataTableRow;
     filters: GroupFilter[];
     data: RecordWithId;
@@ -39,11 +46,7 @@ export type GroupedRecord = {
     groupId: string;
 };
 
-export type GroupFooter = GroupMeta & {
-    isGroupFooter: true;
-};
-
-export type GroupedData = GroupedRecord | GroupHeader | GroupFooter;
+export type GroupedData = GroupRecord | GroupHeader | GroupFooter;
 
 type GroupFilter = { field: string; value: any };
 
@@ -68,10 +71,12 @@ const getPrimitiveValue = (value: any): PrimitiveTypes => {
 
 const getIdFromFilters = (filters: GroupFilter[], { prefix = '', suffix = '' } = {}) => {
     return [
-        prefix ?? ([] as string[]),
+        prefix || ([] as string[]),
         ...filters.map(x => `${x.field}_${getPrimitiveValue(x.value)}`),
-        suffix ?? ([] as string[]),
-    ].join('::');
+        suffix || ([] as string[]),
+    ]
+        .flat()
+        .join('::');
 };
 
 const makeNested = <T extends RecordWithId>(
@@ -88,10 +93,10 @@ const makeNested = <T extends RecordWithId>(
             data: record,
             filters,
             id: record.id,
-            level,
+            level: level - 1,
             index: index++,
             groupId: getIdFromFilters(filters),
-        })) as GroupedRecord[];
+        })) as GroupRecord[];
 
     const groupedData = groupBy(records, record => getPrimitiveValue(record[currentField]));
 
@@ -105,10 +110,14 @@ const makeNested = <T extends RecordWithId>(
         arg: GroupType,
 
         title: any,
-        groupFilters: GroupFilter[],
+        restGroupMeta: {
+            filters: GroupFilter[];
+            isFirst: boolean;
+            isLast: boolean;
+        },
         suffix?: string,
     ): GroupedData[] => {
-        const groupId = getIdFromFilters(groupFilters);
+        const groupId = getIdFromFilters(restGroupMeta.filters);
         return [
             {
                 ...arg,
@@ -116,11 +125,12 @@ const makeNested = <T extends RecordWithId>(
                 title,
                 level,
                 count: records.length,
-                filters: groupFilters,
                 groupId,
-                isHighestLevel: level === 1,
-                isLowestLevel: !!pending.length,
+                isFirstLevel: level === 1,
+                isLastLevel: pending.length === 0,
                 id: getIdFromFilters([], { prefix: groupId, suffix }),
+                isOnly: restGroupMeta.isFirst && restGroupMeta.isLast,
+                ...restGroupMeta,
             },
         ];
     };
@@ -131,20 +141,24 @@ const makeNested = <T extends RecordWithId>(
     const makeGroupedData = (key: string, groupFilters: GroupFilter[]) =>
         makeNested(groupedData[key], pending, index, level + 1, groupFilters);
 
-    const createGroupItem = (key: PrimitiveTypes) => {
+    const createGroupItem = (key: PrimitiveTypes, i: number, self: PrimitiveTypes[]) => {
         const currentValue = keyStoreReversed.get(key);
-        const groupFilters = [
-            ...filters,
-            {
-                field: currentField as string,
-                value: currentValue,
-            },
-        ];
+        const groupMeta = {
+            isFirst: i === 0,
+            isLast: self.length - 1 === i,
+            filters: [
+                ...filters,
+                {
+                    field: currentField as string,
+                    value: currentValue,
+                },
+            ],
+        };
 
         return ([] as GroupedData[])
-            .concat(makeHeader(currentValue, groupFilters, `header`))
-            .concat(makeGroupedData(String(key), groupFilters))
-            .concat(makeFooter(currentValue, groupFilters, `footer`));
+            .concat(makeHeader(currentValue, groupMeta, `header`))
+            .concat(makeGroupedData(String(key), groupMeta.filters))
+            .concat(makeFooter(currentValue, groupMeta, `footer`));
     };
 
     return texts.map(createGroupItem).flat();

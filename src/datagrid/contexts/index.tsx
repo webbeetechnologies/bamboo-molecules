@@ -13,4 +13,11 @@ export {
 
 export { createUseRowRenderer } from './createUseRowRenderer';
 
-export { HooksProvider, useField, useCellValue, HooksContextType } from './HooksContext';
+export {
+    HooksProvider,
+    useField,
+    useCellValue,
+    HooksContextType,
+    useShowGroupFooter,
+    useGroupRowState,
+} from './HooksContext';
