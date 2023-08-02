@@ -9,6 +9,8 @@ import { useCopyPasteEvents } from './ copy-paste';
 
 export const dragAndExtendKey = 'drag-and-extend';
 
+const emptyObj = {};
+
 const checkIfWithinRow = (selection: Selection, cell: { rowIndex: number }) => {
     const { rowIndex } = cell;
 
@@ -46,8 +48,8 @@ const useOnDragEnd = () => {
         beforePasteCell,
         onPasteCell,
         afterPasteCell,
-    } = useCopyPasteEvents() || {};
-    const { afterDragAndExtend } = useDragAndExtendEvents() || {};
+    } = useCopyPasteEvents() || emptyObj;
+    const { afterDragAndExtend } = useDragAndExtendEvents() || emptyObj;
 
     return useCallback(() => {
         const copySelection = store.current[cellSelectionPluginKey] || {
@@ -97,6 +99,7 @@ const useOnDragEnd = () => {
         onPasteCell,
         setStore,
         store,
+        tableManagerStore,
     ]);
 };
 
