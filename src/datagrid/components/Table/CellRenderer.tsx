@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 4,
         borderRightWidth: 1,
-        borderColor: 'rgb(202, 196, 208)',
+        borderColor: 'colors.onSurfaceVariant',
     },
     editContainer: {
         position: 'absolute',

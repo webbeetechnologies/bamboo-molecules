@@ -1,11 +1,11 @@
 export const DataGrid_SpacerRow = {
     flexDirection: 'row' as const,
-    borderColor: 'rgb(202, 196, 208)',
+    borderColor: 'colors.onSurfaceVariant',
 };
 
 export const DataGrid_Spacer = {
     width: 'spacings.3',
-    borderColor: 'rgb(202, 196, 208)',
+    borderColor: 'colors.onSurfaceVariant',
     variants: {
         left: {
             borderLeftWidth: 1,
@@ -18,7 +18,7 @@ export const DataGrid_Spacer = {
 
 export const DataGrid_RowItem = {
     flex: 1,
-    borderColor: 'rgb(202, 196, 208)',
+    borderColor: 'colors.onSurfaceVariant',
     borderTopWidth: 1,
     borderRightWidth: 1,
     borderLeftWidth: 1,
