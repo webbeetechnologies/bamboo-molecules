@@ -1,16 +1,20 @@
-import { ComponentType, memo, useMemo } from 'react';
-import { StyleSheet, Animated } from 'react-native';
+import { ComponentType, memo, useMemo, useRef } from 'react';
+import { StyleSheet, ViewStyle } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
-import { useDataTableCell } from '@bambooapp/bamboo-molecules';
+import { useMolecules } from '@bambooapp/bamboo-molecules';
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 
 import {
     cellSelectionPluginKey,
-    usePluginsDataSelector,
+    copyPastePluginKey,
+    useCopyPasteEvents,
+    usePluginsDataStoreRef,
     usePluginsDataValueSelectorValue,
+    withPluginExistenceCheck,
+    dragAndExtendKey,
+    useDragAndExtendEvents,
 } from '../../plugins';
-import { dragAndExtendKey } from '../../plugins/drag-and-extend';
 
 export type Props = ViewProps & {
     isFocused: boolean;
@@ -19,46 +23,90 @@ export type Props = ViewProps & {
 };
 
 const DragAndExtendHandle = ({ style, ...rest }: ViewProps) => {
-    const cell = useDataTableCell();
-    const [_, setStore] = usePluginsDataSelector(store => store[dragAndExtendKey]);
+    const { View } = useMolecules();
+
+    const ref = useRef(null);
+    const { store, set: setStore } = usePluginsDataStoreRef();
+    const {
+        beforeCopyCell,
+        onCopyCell,
+        afterCopyCell,
+        beforePasteCell,
+        onPasteCell,
+        afterPasteCell,
+    } = useCopyPasteEvents() || {};
+    const { afterDragAndExtend } = useDragAndExtendEvents() || {};
 
     const onPanHandle = useMemo(
         () =>
             Gesture.Pan()
                 .onBegin(() =>
                     setStore(prev => ({
-                        selection: {
-                            ...prev.selection,
-                            currentCell: cell,
+                        [dragAndExtendKey]: {
+                            ...prev[dragAndExtendKey],
+                            start: {},
                         },
                     })),
                 )
-                .onEnd(() =>
+                .onEnd(() => {
+                    const copySelection = store.current[copyPastePluginKey];
+                    const pasteSelection = store.current[dragAndExtendKey];
+
+                    const continueCopy = beforeCopyCell({ selection: copySelection });
+
+                    if (continueCopy !== false) {
+                        onCopyCell({ selection: copySelection });
+
+                        afterCopyCell();
+                    }
+
+                    const continuePaste = beforePasteCell({ selection: copySelection });
+
+                    if (continuePaste !== false) {
+                        onPasteCell({ selection: pasteSelection });
+
+                        afterPasteCell();
+                    }
+
                     setStore(prev => ({
-                        selection: {
-                            ...prev.selection,
-                            currentCell: null,
+                        [dragAndExtendKey]: {
+                            ...prev[dragAndExtendKey],
+                            start: undefined,
+                            end: undefined,
                         },
-                    })),
-                ),
-        [cell, setStore],
+                    }));
+
+                    afterDragAndExtend();
+                }),
+        [
+            afterCopyCell,
+            afterDragAndExtend,
+            afterPasteCell,
+            beforeCopyCell,
+            beforePasteCell,
+            onCopyCell,
+            onPasteCell,
+            setStore,
+            store,
+        ],
     );
 
     const handleStyle = useMemo(
-        () => [
-            styles.handle,
-            {
-                cursor: 'crosshair',
-            },
-            style,
-        ],
+        () =>
+            [
+                styles.handle,
+                {
+                    cursor: 'crosshair',
+                },
+                style,
+            ] as ViewStyle,
         [style],
     );
 
     return (
         <GestureDetector gesture={onPanHandle}>
-            {/* @ts-ignore*/}
-            <Animated.View style={handleStyle} {...rest} />
+            {/* nativeID is required for cell-selection reset listener */}
+            <View style={handleStyle} ref={ref} nativeID="drag-handle" {...rest} />
         </GestureDetector>
     );
 };
@@ -83,10 +131,13 @@ const styles = StyleSheet.create({
     handle: {
         width: 10,
         height: 10,
-        backgroundColor: '#fff',
-        borderColor: '#5C6AE7',
+        backgroundColor: 'colors.neutral1',
+        borderColor: 'colors.primary',
         borderWidth: 1,
+        zIndex: 1,
     },
 });
 
-export default memo(withVisibilityCheck(DragAndExtendHandle));
+export default memo(
+    withPluginExistenceCheck(withVisibilityCheck(DragAndExtendHandle), dragAndExtendKey),
+);

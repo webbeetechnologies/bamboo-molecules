@@ -1,41 +1,84 @@
-import { memo } from 'react';
-import { StateLayerProps, useMolecules } from '@bambooapp/bamboo-molecules';
+import { memo, useMemo } from 'react';
+import {
+    StateLayerProps,
+    useDataTableCell,
+    useDataTableRow,
+    useMolecules,
+} from '@bambooapp/bamboo-molecules';
 import { StyleSheet } from 'react-native';
-import { cellSelectionPluginKey, usePluginsDataValueSelectorValue } from '../../plugins';
+import {
+    cellSelectionPluginKey,
+    Selection,
+    usePluginsDataValueSelectorValue,
+    dragAndExtendKey,
+    useDragAndExtendMethods,
+} from '../../plugins';
 
 export type Props = StateLayerProps & {
-    columnIndex: number;
-    rowIndex: number;
+    hovered: boolean;
 };
 
-const CellSelectionIndicator = ({ columnIndex, rowIndex, ...rest }: Props) => {
+const checkSelection = (selection: Selection, cell: { columnIndex: number; rowIndex: number }) => {
+    const { rowIndex, columnIndex } = cell;
+
+    if (!selection || !selection.start || !selection.end) return false;
+
+    const { start, end } = selection;
+    const { startRowIndex, endRowIndex } =
+        start.rowIndex <= end.rowIndex
+            ? { startRowIndex: start.rowIndex, endRowIndex: end.rowIndex }
+            : { startRowIndex: end.rowIndex, endRowIndex: start.rowIndex };
+    const { startColumnIndex, endColumnIndex } =
+        start.columnIndex <= end.columnIndex
+            ? { startColumnIndex: start.columnIndex, endColumnIndex: end.columnIndex }
+            : { startColumnIndex: end.columnIndex, endColumnIndex: start.columnIndex };
+
+    return (
+        rowIndex >= startRowIndex &&
+        rowIndex <= endRowIndex &&
+        columnIndex >= startColumnIndex &&
+        columnIndex <= endColumnIndex
+    );
+};
+
+const useVoid = () => {};
+
+const CellSelectionIndicator = ({ hovered, style, ...rest }: Props) => {
     const { StateLayer } = useMolecules();
-    const selected = usePluginsDataValueSelectorValue(store => {
-        const selection = store[cellSelectionPluginKey];
 
-        if (!selection || !selection.start || !selection.end) return false;
+    const { columnIndex, rowIndex } = useDataTableCell();
 
-        const { start, end } = selection;
-        const { startRowIndex, endRowIndex } =
-            start.rowIndex <= end.rowIndex
-                ? { startRowIndex: start.rowIndex, endRowIndex: end.rowIndex }
-                : { startRowIndex: end.rowIndex, endRowIndex: start.rowIndex };
-        const { startColumnIndex, endColumnIndex } =
-            start.columnIndex <= end.columnIndex
-                ? { startColumnIndex: start.columnIndex, endColumnIndex: end.columnIndex }
-                : { startColumnIndex: end.columnIndex, endColumnIndex: start.columnIndex };
+    const { hovered: rowHovered } = useDataTableRow();
 
-        return (
-            rowIndex >= startRowIndex &&
-            rowIndex <= endRowIndex &&
-            columnIndex >= startColumnIndex &&
-            columnIndex <= endColumnIndex
-        );
-    });
+    const { useOnDragSelection = useVoid } = useDragAndExtendMethods() || {};
 
-    if (!selected) return <></>;
+    const selected = usePluginsDataValueSelectorValue(store =>
+        checkSelection(store[cellSelectionPluginKey], {
+            columnIndex,
+            rowIndex,
+        }),
+    );
+    const dragAndExtendSelected = usePluginsDataValueSelectorValue(store =>
+        checkSelection(store[dragAndExtendKey], {
+            columnIndex,
+            rowIndex,
+        }),
+    );
 
-    return <StateLayer style={styles.selectionLayer} {...rest} />;
+    useOnDragSelection({ checkSelection, hovered, rowHovered, columnIndex, rowIndex });
+
+    const layerStyle = useMemo(
+        () => [
+            styles.selectionLayer,
+            dragAndExtendSelected && { backgroundColor: 'colors.stateLayer.hover.onSurface' },
+            style,
+        ],
+        [dragAndExtendSelected, style],
+    );
+
+    if (!selected && !dragAndExtendSelected) return <></>;
+
+    return <StateLayer style={layerStyle} {...rest} />;
 };
 
 const styles = StyleSheet.create({

@@ -137,15 +137,15 @@ const _CellRenderer = (
                 ) : (
                     <EditRenderer value={value} type={type} onChange={setValue} {...restField} />
                 )}
-                <CellBorder isFocused={isFocused} columnIndex={columnIndex} rowIndex={rowIndex} />
 
+                <CellBorder isFocused={isFocused} columnIndex={columnIndex} rowIndex={rowIndex} />
                 <DragAndExtendHandle
                     style={styles.dragHandle}
                     isFocused={isFocused}
                     columnId={column}
                     rowId={row}
                 />
-                <CellSelectionIndicator columnIndex={columnIndex} rowIndex={rowIndex} />
+                <CellSelectionIndicator hovered={hovered} />
             </View>
         </Pressable>
     );
@@ -190,9 +190,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: -3.5,
         right: -3.5,
-    },
-    selected: {
-        backgroundColor: 'red',
     },
 });
 
