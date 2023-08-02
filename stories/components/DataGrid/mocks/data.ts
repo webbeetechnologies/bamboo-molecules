@@ -89,6 +89,28 @@ export const records = [
         _name7: 'Thadar',
         _name8: 'Thadar',
     },
+    {
+        id: 4,
+        _name: 'Thet Aung',
+        _name2: 'Thadar',
+        _male: true,
+        _age: 26,
+        _rating: 4,
+        _name6: 'Thadar',
+        _name7: 'Thadar',
+        _name8: 'Thadar',
+    },
+    {
+        id: 5,
+        _name: 'Thet Aung',
+        _name2: 'Thadar',
+        _male: true,
+        _age: 26,
+        _rating: 4,
+        _name6: 'Thadar',
+        _name7: 'Thadar',
+        _name8: 'Thadar',
+    },
 ];
 
 export const virtualizationMockFields = generateFlatListData(100, i => ({

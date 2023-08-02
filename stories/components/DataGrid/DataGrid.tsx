@@ -14,6 +14,7 @@ import {
     RecordsProvider,
 } from './mocks';
 import { useColumnResizePlugin, useCopyPastePlugin } from '../../../src/datagrid/plugins';
+import { useDragAndExtendPlugin } from '../../../src/datagrid/plugins/drag-and-extend';
 
 export const Example = () => {
     const { View, ToastContainer } = useMolecules();
@@ -74,9 +75,16 @@ export const Example = () => {
         },
     });
 
+    const dragAndExtendPlugin = useDragAndExtendPlugin({
+        onDragAndExtend: args => {
+            // eslint-disable-next-line no-console
+            console.log({ dragAndExtend: args });
+        },
+    });
+
     const plugins = useMemo(
-        () => [columnResizePlugin, copyPastePlugin],
-        [columnResizePlugin, copyPastePlugin],
+        () => [columnResizePlugin, copyPastePlugin, dragAndExtendPlugin],
+        [columnResizePlugin, copyPastePlugin, dragAndExtendPlugin],
     );
 
     return (
