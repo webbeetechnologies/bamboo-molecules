@@ -6,7 +6,5 @@ type CreateUseRowRenderer = (
     renderers: Partial<Record<RowType, React.ComponentType<DataTableRowProps>>>,
 ) => UseRowRenderer;
 
-export const createUseRowRenderer: CreateUseRowRenderer = renderers => (props, DefaultRenderer) => {
-    console.log({ props });
-    return renderers[useRecordType(props.rowId)] ?? DefaultRenderer;
-};
+export const createUseRowRenderer: CreateUseRowRenderer = renderers => (props, DefaultRenderer) =>
+    renderers[useRecordType(props.rowId)] ?? DefaultRenderer;
