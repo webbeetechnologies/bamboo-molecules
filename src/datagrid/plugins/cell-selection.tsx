@@ -1,10 +1,11 @@
-import { createPlugin } from './createPlugin';
-import { PluginEvents } from './types';
-import { usePluginsDataStoreRef } from './plugins-manager';
 import { useCallback, useEffect } from 'react';
 import { useTableManagerStoreRef } from '@bambooapp/bamboo-molecules/datagrid';
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 import { Platform } from 'react-native';
+
+import { createPlugin } from './createPlugin';
+import { PluginEvents } from './types';
+import { usePluginsDataStoreRef } from './plugins-manager';
 
 export type Cell = {
     columnId: TDataTableColumn;
@@ -90,6 +91,33 @@ const useResetSelectionOnClickOutside = () => {
     }, [onMouseDown]);
 };
 
+const useOnDragAndSelectStart = () => {
+    const { set: setStore } = usePluginsDataStoreRef();
+
+    return useCallback(
+        (cell: Cell) => {
+            setStore(prev => ({
+                [cellSelectionPluginKey]: {
+                    ...prev[cellSelectionPluginKey],
+                    start: cell,
+                },
+            }));
+        },
+        [setStore],
+    );
+};
+
+const useProcessDragCellSelection = ({ cell, hovered }: { cell: Cell; hovered: boolean }) => {
+    const { store: pluginsDataStore } = usePluginsDataStoreRef();
+    const onSelectCell = useOnSelectCell();
+
+    useEffect(() => {
+        if (!pluginsDataStore.current[cellSelectionPluginKey]?.start || !hovered) return;
+
+        onSelectCell(cell);
+    });
+};
+
 export const [useSelectionPlugin, useSelectionEvents, useSelectionMethods] = createPlugin({
     key: cellSelectionPluginKey,
     eventKeys: [
@@ -97,5 +125,10 @@ export const [useSelectionPlugin, useSelectionEvents, useSelectionMethods] = cre
         PluginEvents.ON_CELL_SELECTION,
         PluginEvents.AFTER_CELL_SELECTION,
     ],
-    methods: { useOnSelectCell, useResetSelectionOnClickOutside },
+    methods: {
+        useOnSelectCell,
+        useResetSelectionOnClickOutside,
+        useOnDragAndSelectStart,
+        useProcessDragCellSelection,
+    },
 });

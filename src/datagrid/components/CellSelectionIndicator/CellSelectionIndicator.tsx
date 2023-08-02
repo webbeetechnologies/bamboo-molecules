@@ -12,6 +12,7 @@ import {
     usePluginsDataValueSelectorValue,
     dragAndExtendKey,
     useDragAndExtendMethods,
+    useSelectionMethods,
 } from '../../plugins';
 
 export type Props = StateLayerProps & {
@@ -46,11 +47,12 @@ const useVoid = () => {};
 const CellSelectionIndicator = ({ hovered, style, ...rest }: Props) => {
     const { StateLayer } = useMolecules();
 
-    const { columnIndex, rowIndex } = useDataTableCell();
+    const { columnIndex, rowIndex, column, row } = useDataTableCell();
 
     const { hovered: rowHovered } = useDataTableRow();
 
     const { useOnDragSelection = useVoid } = useDragAndExtendMethods() || {};
+    const { useProcessDragCellSelection = useVoid } = useSelectionMethods() || {};
 
     const selected = usePluginsDataValueSelectorValue(store =>
         checkSelection(store[cellSelectionPluginKey], {
@@ -64,6 +66,11 @@ const CellSelectionIndicator = ({ hovered, style, ...rest }: Props) => {
             rowIndex,
         }),
     );
+
+    useProcessDragCellSelection({
+        hovered,
+        cell: { columnIndex, rowIndex, rowId: row, columnId: column },
+    });
 
     useOnDragSelection({ checkSelection, hovered, rowHovered, columnIndex, rowIndex });
 

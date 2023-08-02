@@ -28,6 +28,7 @@ import { DragAndExtendHandle } from '../DragAndExtendHandle';
 import { useSelectionMethods } from '../../plugins';
 import { CellSelectionIndicator } from '../CellSelectionIndicator';
 import { CellBorder } from '../CellBorder';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 export type Props = RenderCellProps &
     CallbackActionState &
@@ -54,8 +55,9 @@ const _DataCell = (
     const [isFocused, setFocusedCell] = useIsCellFocused(row, column);
     const { set: setTableManagerStore } = useTableManagerStoreRef();
 
-    const { useOnSelectCell } = useSelectionMethods();
+    const { useOnSelectCell, useOnDragAndSelectStart } = useSelectionMethods();
     const onSelectCell = useOnSelectCell();
+    const onDragAndSelectStart = useOnDragAndSelectStart();
 
     const isTappedRef = useRef(0);
 
@@ -119,6 +121,19 @@ const _DataCell = (
         [style, isEditing, innerContainerProps.style],
     );
 
+    const onDrag = useMemo(
+        () =>
+            Gesture.Pan().onBegin(() =>
+                onDragAndSelectStart({
+                    rowIndex,
+                    columnIndex,
+                    columnId: column,
+                    rowId: row,
+                }),
+            ),
+        [column, columnIndex, onDragAndSelectStart, row, rowIndex],
+    );
+
     useEffect(() => {
         if (isFocused || !isEditing) return;
 
@@ -135,19 +150,30 @@ const _DataCell = (
     useContextMenu({ ref: cellRef, callback: handleContextMenu });
 
     return (
-        <Pressable ref={cellRef} onPress={onPress} style={containerStyle} {...rest}>
-            <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
-                {displayViewRenderer ? (
-                    <ViewRenderer value={value} type={type} {...restField} />
-                ) : (
-                    <EditRenderer value={value} type={type} onChange={setValue} {...restField} />
-                )}
+        <GestureDetector gesture={onDrag}>
+            <Pressable ref={cellRef} onPress={onPress} style={containerStyle} {...rest}>
+                <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
+                    {displayViewRenderer ? (
+                        <ViewRenderer value={value} type={type} {...restField} />
+                    ) : (
+                        <EditRenderer
+                            value={value}
+                            type={type}
+                            onChange={setValue}
+                            {...restField}
+                        />
+                    )}
 
-                <CellBorder isFocused={isFocused} columnIndex={columnIndex} rowIndex={rowIndex} />
-                <DragAndExtendHandle style={styles.dragHandle} isFocused={isFocused} />
-                <CellSelectionIndicator hovered={hovered} />
-            </View>
-        </Pressable>
+                    <CellBorder
+                        isFocused={isFocused}
+                        columnIndex={columnIndex}
+                        rowIndex={rowIndex}
+                    />
+                    <DragAndExtendHandle style={styles.dragHandle} isFocused={isFocused} />
+                    <CellSelectionIndicator hovered={hovered} />
+                </View>
+            </Pressable>
+        </GestureDetector>
     );
 };
 
