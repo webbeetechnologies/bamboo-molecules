@@ -5,7 +5,7 @@ import { cellSelectionPluginKey } from './cell-selection';
 import { usePluginsDataStoreRef } from './plugins-manager';
 import { createPlugin } from './createPlugin';
 import { PluginEvents, Selection } from './types';
-import { copyPastePluginKey, useCopyPasteEvents } from './ copy-paste';
+import { useCopyPasteEvents } from './ copy-paste';
 
 export const dragAndExtendKey = 'drag-and-extend';
 
@@ -37,6 +37,7 @@ const useOnDragStart = () => {
 };
 
 const useOnDragEnd = () => {
+    const { store: tableManagerStore } = useTableManagerStoreRef();
     const { store, set: setStore } = usePluginsDataStoreRef();
     const {
         beforeCopyCell,
@@ -49,7 +50,10 @@ const useOnDragEnd = () => {
     const { afterDragAndExtend } = useDragAndExtendEvents() || {};
 
     return useCallback(() => {
-        const copySelection = store.current[copyPastePluginKey];
+        const copySelection = store.current[cellSelectionPluginKey] || {
+            start: tableManagerStore.current.focusedCell,
+            end: tableManagerStore.current.focusedCell,
+        };
         const pasteSelection = store.current[dragAndExtendKey];
 
         const continueCopy = beforeCopyCell({ selection: copySelection });
