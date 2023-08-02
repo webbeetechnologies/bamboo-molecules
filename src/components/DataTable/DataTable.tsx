@@ -18,7 +18,7 @@ import {
     useDataTableStoreRef,
 } from './DataTableContext/DataTableContext';
 import { defaultProps } from './defaults';
-import { renderRow as renderRowDefault } from './DataTableRow';
+import { renderRow } from './DataTableRow';
 import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
 import { DataTableHeaderRow } from './DataTableHeader';
 
@@ -70,7 +70,6 @@ const DataTablePresentationComponent = memo(
             FlatListComponent,
             ScrollViewComponent,
             onLayout: onLayoutProp,
-            renderRow: renderRowProp,
             HeaderRowComponent: HeaderRowComponentProp,
             ...restScrollViewProps
         } = props;
@@ -91,7 +90,6 @@ const DataTablePresentationComponent = memo(
         const { store, set: setStore } = useStoreRef();
         const { set: setDataTableStore } = useDataTableStoreRef();
 
-        const renderRow = renderRowProp || renderRowDefault;
         const HeaderRowComponent = HeaderRowComponentProp || DataTableHeaderRow;
 
         const stickyHeaderIndices = useMemo(
@@ -226,7 +224,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 cellProps,
                 rowProps,
                 selectedRows,
-                rowSize,
+                rowSize: rowSize || 'sm',
                 columnWidths,
                 useRowRenderer,
             };

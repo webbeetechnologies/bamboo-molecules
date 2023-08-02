@@ -1,5 +1,5 @@
 import type { ComponentPropsWithRef, ComponentType, ReactNode } from 'react';
-import type { FlatListProps, ScrollViewProps, ViewProps, ListRenderItem } from 'react-native';
+import type { FlatListProps, ScrollViewProps, ViewProps } from 'react-native';
 import type { ScrollView } from 'react-native';
 
 type RowProps = Omit<ViewProps, 'children'> & { size?: string };
@@ -35,7 +35,6 @@ export type ScrollProps = {
 
 export type DataTableBase = ScrollProps & {
     stickyRowIndices?: number[];
-    renderRow?: ListRenderItem<TDataTableRow>;
     HeaderRowComponent?: ComponentType<any>;
 };
 
