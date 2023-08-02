@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { useTableManagerStoreRef } from '../contexts';
 import { cellSelectionPluginKey } from './cell-selection';
 import { usePluginsDataStoreRef } from './plugins-manager';
 import { createPlugin } from './createPlugin';
 import { PluginEvents, Selection } from './types';
+import { copyPastePluginKey, useCopyPasteEvents } from './ copy-paste';
 
 export const dragAndExtendKey = 'drag-and-extend';
 
@@ -20,6 +21,79 @@ const checkIfWithinRow = (selection: Selection, cell: { rowIndex: number }) => {
             : { startRowIndex: end.rowIndex, endRowIndex: start.rowIndex };
 
     return rowIndex >= startRowIndex && rowIndex <= endRowIndex;
+};
+
+const useOnDragStart = () => {
+    const { set: setStore } = usePluginsDataStoreRef();
+
+    return useCallback(() => {
+        setStore(prev => ({
+            [dragAndExtendKey]: {
+                ...prev[dragAndExtendKey],
+                start: {},
+            },
+        }));
+    }, [setStore]);
+};
+
+const useOnDragEnd = () => {
+    const { store, set: setStore } = usePluginsDataStoreRef();
+    const {
+        beforeCopyCell,
+        onCopyCell,
+        afterCopyCell,
+        beforePasteCell,
+        onPasteCell,
+        afterPasteCell,
+    } = useCopyPasteEvents() || {};
+    const { afterDragAndExtend } = useDragAndExtendEvents() || {};
+
+    return useCallback(() => {
+        const copySelection = store.current[copyPastePluginKey];
+        const pasteSelection = store.current[dragAndExtendKey];
+
+        const continueCopy = beforeCopyCell({ selection: copySelection });
+
+        if (continueCopy !== false) {
+            onCopyCell({ selection: copySelection });
+
+            afterCopyCell();
+        }
+
+        const continuePaste = beforePasteCell({ selection: copySelection });
+
+        if (continuePaste !== false) {
+            onPasteCell({ selection: pasteSelection });
+
+            afterPasteCell();
+        }
+
+        setStore(prev => ({
+            [dragAndExtendKey]: {
+                ...prev[dragAndExtendKey],
+                start: undefined,
+                end: undefined,
+            },
+            // clearing cell selection as well
+            [cellSelectionPluginKey]: {
+                ...prev[cellSelectionPluginKey],
+                start: undefined,
+                end: undefined,
+            },
+        }));
+
+        afterDragAndExtend();
+    }, [
+        afterCopyCell,
+        afterDragAndExtend,
+        afterPasteCell,
+        beforeCopyCell,
+        beforePasteCell,
+        onCopyCell,
+        onPasteCell,
+        setStore,
+        store,
+    ]);
 };
 
 const useOnDragSelection = ({
@@ -133,5 +207,5 @@ export const [useDragAndExtendPlugin, useDragAndExtendEvents, useDragAndExtendMe
             PluginEvents.ON_DRAG_AND_EXTEND,
             PluginEvents.AFTER_DRAG_AND_EXTEND,
         ],
-        methods: { useOnDragSelection },
+        methods: { useOnDragSelection, useOnDragStart, useOnDragEnd },
     });

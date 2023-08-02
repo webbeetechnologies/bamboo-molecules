@@ -2,11 +2,11 @@ import { memo, ReactNode, useCallback, useMemo, useRef } from 'react';
 import { StyleSheet, TextStyle } from 'react-native';
 import type { TextProps, ViewProps } from '@bambooapp/bamboo-atoms';
 import { IconProps, RenderHeaderCellProps, useMolecules } from '@bambooapp/bamboo-molecules';
-import { ColumnResizeHandle } from '../ColumnResizeHandle';
 
 import { useFieldType, useField, useTableManagerStoreRef } from '../../contexts';
 import { withVirtualization } from '../../hocs';
 import { useContextMenu } from '../../hooks';
+import { ColumnResizeHandle } from '../ColumnResizeHandle';
 
 export type ColumnHeaderCellProps = RenderHeaderCellProps &
     ViewProps & {

@@ -1,94 +1,58 @@
-import { ComponentType, memo, useMemo, useRef } from 'react';
+import { memo, useMemo, useRef } from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
-import { useMolecules } from '@bambooapp/bamboo-molecules';
-import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
+import { useDataTableCell, useMolecules } from '@bambooapp/bamboo-molecules';
 
 import {
     cellSelectionPluginKey,
-    copyPastePluginKey,
-    useCopyPasteEvents,
-    usePluginsDataStoreRef,
     usePluginsDataValueSelectorValue,
     withPluginExistenceCheck,
     dragAndExtendKey,
-    useDragAndExtendEvents,
+    useDragAndExtendMethods,
 } from '../../plugins';
 
 export type Props = ViewProps & {
     isFocused: boolean;
-    columnId: TDataTableColumn;
-    rowId: TDataTableRow;
 };
 
-const DragAndExtendHandle = ({ style, ...rest }: ViewProps) => {
+const DragAndExtendHandle = ({ style, isFocused, ...rest }: Props) => {
     const { View } = useMolecules();
 
+    const { column: columnId, columnIndex, rowIndex, row: rowId } = useDataTableCell();
+
+    const isVisible = usePluginsDataValueSelectorValue(store => {
+        const selection = store[cellSelectionPluginKey];
+        const dragSelection = store[dragAndExtendKey];
+
+        if (dragSelection?.end) {
+            return (
+                dragSelection.end.columnIndex === columnIndex &&
+                dragSelection.end.rowIndex === rowIndex
+            );
+        }
+
+        if (!selection || !selection.end) return isFocused;
+
+        return selection.end.columnId === columnId && selection.end.rowId === rowId;
+    });
+
     const ref = useRef(null);
-    const { store, set: setStore } = usePluginsDataStoreRef();
-    const {
-        beforeCopyCell,
-        onCopyCell,
-        afterCopyCell,
-        beforePasteCell,
-        onPasteCell,
-        afterPasteCell,
-    } = useCopyPasteEvents() || {};
-    const { afterDragAndExtend } = useDragAndExtendEvents() || {};
+
+    const { useOnDragStart, useOnDragEnd } = useDragAndExtendMethods();
+    const onDragEnd = useOnDragEnd();
+    const onDragStart = useOnDragStart();
 
     const onPanHandle = useMemo(
         () =>
             Gesture.Pan()
-                .onBegin(() =>
-                    setStore(prev => ({
-                        [dragAndExtendKey]: {
-                            ...prev[dragAndExtendKey],
-                            start: {},
-                        },
-                    })),
-                )
+                .onBegin(() => {
+                    onDragStart();
+                })
                 .onEnd(() => {
-                    const copySelection = store.current[copyPastePluginKey];
-                    const pasteSelection = store.current[dragAndExtendKey];
-
-                    const continueCopy = beforeCopyCell({ selection: copySelection });
-
-                    if (continueCopy !== false) {
-                        onCopyCell({ selection: copySelection });
-
-                        afterCopyCell();
-                    }
-
-                    const continuePaste = beforePasteCell({ selection: copySelection });
-
-                    if (continuePaste !== false) {
-                        onPasteCell({ selection: pasteSelection });
-
-                        afterPasteCell();
-                    }
-
-                    setStore(prev => ({
-                        [dragAndExtendKey]: {
-                            ...prev[dragAndExtendKey],
-                            start: undefined,
-                            end: undefined,
-                        },
-                    }));
-
-                    afterDragAndExtend();
+                    onDragEnd();
                 }),
-        [
-            afterCopyCell,
-            afterDragAndExtend,
-            afterPasteCell,
-            beforeCopyCell,
-            beforePasteCell,
-            onCopyCell,
-            onPasteCell,
-            setStore,
-            store,
-        ],
+        [onDragEnd, onDragStart],
     );
 
     const handleStyle = useMemo(
@@ -98,9 +62,10 @@ const DragAndExtendHandle = ({ style, ...rest }: ViewProps) => {
                 {
                     cursor: 'crosshair',
                 },
+                !isVisible && { display: 'none' },
                 style,
             ] as ViewStyle,
-        [style],
+        [isVisible, style],
     );
 
     return (
@@ -109,22 +74,6 @@ const DragAndExtendHandle = ({ style, ...rest }: ViewProps) => {
             <View style={handleStyle} ref={ref} nativeID="drag-handle" {...rest} />
         </GestureDetector>
     );
-};
-
-const withVisibilityCheck = (Component: ComponentType<ViewProps>) => {
-    return ({ isFocused, columnId, rowId, ...rest }: Props) => {
-        const isVisible = usePluginsDataValueSelectorValue(store => {
-            const selection = store[cellSelectionPluginKey];
-
-            if (!selection || !selection.end) return isFocused;
-
-            return selection.end.columnId === columnId && selection.end.rowId === rowId;
-        });
-
-        if (!isVisible) return <></>;
-
-        return <Component {...rest} />;
-    };
 };
 
 const styles = StyleSheet.create({
@@ -138,6 +87,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(
-    withPluginExistenceCheck(withVisibilityCheck(DragAndExtendHandle), dragAndExtendKey),
-);
+export default memo(withPluginExistenceCheck(DragAndExtendHandle, dragAndExtendKey));
