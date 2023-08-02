@@ -2120,13 +2120,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bambooapp/bamboo-atoms@npm:^0.0.22":
-  version: 0.0.22
-  resolution: "@bambooapp/bamboo-atoms@npm:0.0.22"
+"@bambooapp/bamboo-atoms@npm:^0.0.26":
+  version: 0.0.26
+  resolution: "@bambooapp/bamboo-atoms@npm:0.0.26"
   dependencies:
+    eventemitter2: ^6.4.9
+    lodash.debounce: ^4.0.8
     lodash.isnil: ^4.0.0
     ts-deepmerge: ^3.0.0
-  checksum: dc57df72bb8b8850ff38b5e28a1ec32a54f896a08fa78c0d936923fd344973575b6f6f1032e746bab41bf541e9c60e8f2dbb7b1bda65d379aafbd0eadf89763a
+  checksum: 8592a1cc4eb9e28bd5ba96fbc31ccd3034a590547862eae5904a338281c0219692cd7aa908bbcab2eb4250daed3f0b49ddea254515632287feda8298f21570f2
   languageName: node
   linkType: hard
 
@@ -2134,7 +2136,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@bambooapp/bamboo-molecules@workspace:."
   dependencies:
-    "@bambooapp/bamboo-atoms": ^0.0.22
+    "@bambooapp/bamboo-atoms": ^0.0.26
     "@gorhom/portal": ^1.0.14
     "@react-native-aria/overlays": ^0.3.2
     "@react-native-community/eslint-config": ^3.1.0
@@ -2153,6 +2155,7 @@ __metadata:
     "@types/color": ^3.0.3
     "@types/jest": ^29.1.2
     "@types/lodash.get": ^4.4.7
+    "@types/lodash.groupby": ^4.6.7
     "@types/lodash.isnil": ^4.0.7
     "@types/lodash.keyby": ^4.6.7
     "@types/lodash.memoize": ^4.1.7
@@ -2175,6 +2178,7 @@ __metadata:
     jest-environment-node: 27
     jest-transform-stub: ^2.0.0
     lodash.get: ^4.4.2
+    lodash.groupby: ^4.6.0
     lodash.isnil: ^4.0.0
     lodash.keyby: ^4.6.0
     lodash.memoize: ^4.1.2
@@ -6846,6 +6850,15 @@ __metadata:
   dependencies:
     "@types/lodash": "*"
   checksum: 0dbf1960606e4707c34e8ffbe97ffaad0e47fc5df7a6e24ea6e4fe5838d2468aa13360f38815c77b06e3c9932631ae15662b4139036a69ee16aeb54827a21405
+  languageName: node
+  linkType: hard
+
+"@types/lodash.groupby@npm:^4.6.7":
+  version: 4.6.7
+  resolution: "@types/lodash.groupby@npm:4.6.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 2dd7f5c43ca4e2202c73a1217ea550fd54746909c19ef38ababe1a3c851c40b1ba66c027397551f9a6f7acf7217507496e316e6de38f3208f4a1f4548b81933b
   languageName: node
   linkType: hard
 
@@ -12573,6 +12586,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eventemitter2@npm:^6.4.9":
+  version: 6.4.9
+  resolution: "eventemitter2@npm:6.4.9"
+  checksum: be59577c1e1c35509c7ba0e2624335c35bbcfd9485b8a977384c6cc6759341ea1a98d3cb9dbaa5cea4fff9b687e504504e3f9c2cc1674cf3bd8a43a7c74ea3eb
+  languageName: node
+  linkType: hard
+
 "eventemitter3@npm:^4.0.0":
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
@@ -18047,6 +18067,13 @@ __metadata:
   version: 4.4.2
   resolution: "lodash.get@npm:4.4.2"
   checksum: e403047ddb03181c9d0e92df9556570e2b67e0f0a930fcbbbd779370972368f5568e914f913e93f3b08f6d492abc71e14d4e9b7a18916c31fa04bd2306efe545
+  languageName: node
+  linkType: hard
+
+"lodash.groupby@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "lodash.groupby@npm:4.6.0"
+  checksum: e2d4d13d12790a1cacab3f5f120b7c072a792224e83b2f403218866d18efde76024b2579996dfebb230a61ce06469332e16639103669a35a605287e19ced6b9b
   languageName: node
   linkType: hard
 

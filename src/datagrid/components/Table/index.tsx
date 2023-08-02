@@ -3,3 +3,5 @@ export { default as CellRenderer, Props as CellRendererProps } from './CellRende
 export { default as ColumnHeaderCell, ColumnHeaderCellProps } from './ColumnHeaderCell';
 export { renderRow, TableRow, Props as TableRowProps } from './RowRenderer';
 export { TableHeaderRow } from './HeaderRowRenderer';
+export { GroupHeaderRow, GroupHeaderRenderer } from './GroupHeaderRenderer';
+export { GroupFooterRow, GroupFooterRenderer } from './GroupFooterRenderer';

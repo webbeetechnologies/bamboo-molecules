@@ -8,6 +8,7 @@ import { useMolecules } from '../hooks';
 import { ComponentType, memo, ReactNode, useCallback, useMemo, useRef } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { StyleSheet } from 'react-native';
+import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 
 import {
     FieldTypesProvider,
@@ -17,43 +18,65 @@ import {
     HooksProvider,
     useShouldContextMenuDisplayed,
     useTableManagerValueSelector,
+    createUseRowRenderer,
 } from './contexts';
 import { typedMemo } from './hocs';
-import { ContextMenu, ColumnHeaderCell, CellRenderer, TableHeaderRow } from './components';
-import { useContextMenu, useHandleKeydownEvents } from './hooks';
-import type { FieldTypes } from './types';
-import { FieldTypes as DefaultFieldTypes } from './field-types';
 import PluginsManager from './plugins/plugins-manager';
 import type { Plugin } from './types/plugins';
 import { useSelectionMethods, useSelectionPlugin } from './plugins';
+import {
+    ContextMenu,
+    ColumnHeaderCell,
+    CellRenderer,
+    GroupFooterRow,
+    TableHeaderRow,
+    GroupHeaderRow,
+} from './components';
+import { useContextMenu, useHandleKeydownEvents } from './hooks';
+import type { FieldTypes } from './types';
+import { FieldTypes as DefaultFieldTypes } from './field-types';
+import { RecordWithId, RowType, prepareGroupedData } from './utils';
+
+const useRowRenderer = createUseRowRenderer({
+    [RowType.FOOTER]: GroupFooterRow,
+    [RowType.HEADER]: GroupHeaderRow,
+});
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
 
-export type Props = Omit<
+type DataGripdPropsBase = Omit<
     DataTableProps,
-    'title' | 'records' | 'renderHeader' | 'renderCell' | 'columns'
+    'title' | 'renderHeader' | 'renderCell' | 'columns' | 'records'
 > &
-    Omit<ViewProps, 'ref'> &
-    HooksContextType & {
+    Omit<ViewProps, 'ref'> & {
         onEndReached?: () => void;
-        columnIds: string[];
-        rowIds: string[];
-        fieldTypes?: FieldTypes;
+        columnIds: TDataTableColumn[];
         contextMenuProps?: ContextMenuProps;
         renderHeader?: DataTableProps['renderHeader'];
         renderCell?: DataTableProps['renderCell'];
         plugins?: Plugin[];
+        groups?: TDataTableColumn[];
+    };
+
+export type Props = DataGripdPropsBase &
+    HooksContextType & {
+        fieldTypes?: FieldTypes;
+        records: RecordWithId[];
     };
 
 export type ContextMenuProps = Partial<MenuProps> & {
     isOpen: boolean;
     handleContextMenuOpen: (payload: {
         type: 'column' | 'cell';
-        selection: { columnId?: string; rowId?: string };
+        selection: { columnId?: TDataTableColumn; rowId?: TDataTableRow };
     }) => void;
     onClose: () => void;
     children?: ReactNode;
+};
+
+type DataGridPresentationProps = DataGripdPropsBase & {
+    records: TDataTableRow[];
 };
 
 const emptyObj = {};
@@ -61,14 +84,14 @@ const emptyObj = {};
 const DataGrid = ({
     verticalScrollProps: _verticalScrollProps,
     rowSize: rowHeight = 'sm',
-    rowIds,
+    records,
     columnIds,
     contextMenuProps,
     rowProps: _rowProps,
     cellProps: _cellProps,
     horizontalScrollProps: _horizontalScrollProps,
     ...rest
-}: Props) => {
+}: DataGridPresentationProps) => {
     const { DataTable } = useMolecules();
 
     const { store } = useTableManagerStoreRef();
@@ -146,7 +169,7 @@ const DataGrid = ({
                 renderCell={renderCell}
                 {...rest}
                 columns={columnIds}
-                records={rowIds}
+                records={records}
                 rowSize={rowHeight}
                 cellProps={cellProps}
                 rowProps={rowProps}
@@ -155,6 +178,7 @@ const DataGrid = ({
                 verticalScrollProps={verticalScrollProps}
                 horizontalScrollProps={horizontalScrollProps}
                 HeaderRowComponent={TableHeaderRow}
+                useRowRenderer={useRowRenderer}
             />
 
             {shouldContextMenuDisplayed && (
@@ -180,13 +204,15 @@ const RowRendererComponent = memo(({ style, index, ...rest }: ViewProps & { inde
     return <View style={rowRendererStyle} {...rest} />;
 });
 
-const withContextProviders = (Component: ComponentType<Props>) => {
+const withContextProviders = (Component: ComponentType<DataGridPresentationProps>) => {
     return ({
         fieldTypes = DefaultFieldTypes as FieldTypes,
         useField,
         useCellValue,
         contextMenuProps,
         plugins: _plugins,
+        records,
+        groups,
         ...rest
     }: Props) => {
         const hooksContextValue = useMemo(
@@ -204,13 +230,24 @@ const withContextProviders = (Component: ComponentType<Props>) => {
             [_plugins, selectionPlugin],
         );
 
+        const { groupedRecords, rowIds } = useMemo(
+            () => prepareGroupedData(records, groups),
+            [records, groups],
+        );
+
         return (
             <FieldTypesProvider value={fieldTypes}>
                 <HooksProvider value={hooksContextValue}>
-                    <TableManagerProvider withContextMenu={!!contextMenuProps}>
+                    <TableManagerProvider
+                        records={groupedRecords}
+                        withContextMenu={!!contextMenuProps}>
                         <PluginsManager plugins={plugins}>
                             {/* @ts-ignore - we don't want to pass down unnecessary props */}
-                            <Component {...rest} contextMenuProps={contextMenuProps} />
+                            <Component
+                                {...rest}
+                                records={rowIds}
+                                contextMenuProps={contextMenuProps}
+                            />
                         </PluginsManager>
                     </TableManagerProvider>
                 </HooksProvider>

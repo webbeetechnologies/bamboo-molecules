@@ -5,8 +5,13 @@ export {
     useIsCellFocused,
     useTableManagerValueSelector,
     useShouldContextMenuDisplayed,
+    useRecordsMap,
+    useRecordById,
+    useRecordType,
+    useGroupMeta,
 } from './TableManagerContext';
 
-export { HooksProvider, useHooks, HooksContextType } from './HooksContext';
-
 export * from './ColumnConfigsContext';
+export { createUseRowRenderer } from './createUseRowRenderer';
+
+export { HooksProvider, useField, useCellValue, HooksContextType } from './HooksContext';

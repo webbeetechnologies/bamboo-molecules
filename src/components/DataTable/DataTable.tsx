@@ -1,5 +1,5 @@
 import { forwardRef, memo, useCallback, useMemo, ForwardedRef } from 'react';
-import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
+import type { DataTableBase, DataTableProps, TDataTableColumn, TDataTableRow } from './types';
 import type {
     LayoutChangeEvent,
     NativeScrollEvent,
@@ -34,17 +34,21 @@ const {
     useContextValue,
 } = createFastContext<typeof defaultValue>();
 
-const defaultValue = { x: 0, y: 0, viewItemIds: [] as string[], scrollXVelocity: 0 };
+const defaultValue = { x: 0, y: 0, viewItemIds: [] as TDataTableColumn[], scrollXVelocity: 0 };
 const defaultOffset = 500;
 
-export const useIsCellWithinBounds = (left: number, rowId: string, columnId: string) => {
+export const useIsCellWithinBounds = (
+    left: number,
+    rowId: TDataTableRow,
+    columnId: TDataTableColumn,
+) => {
     const cellWidth = useDataTableColumnWidth(columnId);
     // this is a quick fix // TODO - revisit this later
     const containerWidth = useDataTable(store => store.containerWidth ?? 0);
 
     const checkLeft = (x: number, offset: number) => left + cellWidth >= x - offset;
     const checkRight = (x: number, offset: number) => left <= x + offset + containerWidth;
-    const isViewableItem = (viewItemIds: string[]) => viewItemIds.includes(rowId);
+    const isViewableItem = (viewItemIds: TDataTableColumn[]) => viewItemIds.includes(rowId);
 
     return useContextValue(
         ({ x, viewItemIds }) =>
@@ -81,7 +85,6 @@ const DataTablePresentationComponent = memo(
 
         const hStyle = useComponentStyles('DataTable', [hStyleProp]);
         const vStyle = useMemo(() => [{ width: tableWidth }, vStyleProp], [vStyleProp, tableWidth]);
-        const normalizedData = useMemo(() => [{ id: '__header__' }, ...records], [records]);
 
         const containerWidth = useDataTable(store => store.containerWidth);
 
@@ -90,17 +93,6 @@ const DataTablePresentationComponent = memo(
 
         const renderRow = renderRowProp || renderRowDefault;
         const HeaderRowComponent = HeaderRowComponentProp || DataTableHeaderRow;
-
-        const renderItem: typeof renderRowDefault = useCallback(
-            props => {
-                return props.index === 0 ? (
-                    <HeaderRowComponent key={props.item} />
-                ) : (
-                    renderRow({ ...props, index: props.index - 1 })
-                );
-            },
-            [HeaderRowComponent, renderRow],
-        );
 
         const stickyHeaderIndices = useMemo(
             () =>
@@ -160,12 +152,13 @@ const DataTablePresentationComponent = memo(
                 {!!containerWidth && (
                     <FlatListComponent
                         {...vProps}
-                        data={normalizedData}
+                        data={records}
                         windowSize={windowSize}
                         style={vStyle}
+                        ListHeaderComponent={HeaderRowComponent}
                         maxToRenderPerBatch={maxToRenderPerBatch}
                         keyExtractor={keyExtractorProp}
-                        renderItem={renderItem}
+                        renderItem={renderRow}
                         stickyHeaderIndices={stickyHeaderIndices}
                         onScroll={onFlatListScroll}
                         onViewableItemsChanged={onViewableItemsChanged}
@@ -216,6 +209,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 selectedRows,
                 rowSize,
                 columnWidths,
+                useRowRenderer,
                 ...rest
             } = props;
 
@@ -234,6 +228,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 selectedRows,
                 rowSize,
                 columnWidths,
+                useRowRenderer,
             };
 
             return (

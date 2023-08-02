@@ -12,8 +12,8 @@ export type CallbackActionState = {
 
 // P is for type-assertion of the wrapped component props
 // only works for Web
-const withActionState = <P extends CallbackActionState>(Component: ComponentType<P>) =>
-    forwardRef((props: P, ref: any) => {
+const withActionState = <P extends CallbackActionState>(Component: ComponentType<P>) => {
+    const ComponentWithActionState = forwardRef((props: P, ref: any) => {
         const {
             actionStateContainerProps,
             hovered: hoveredProp,
@@ -44,5 +44,11 @@ const withActionState = <P extends CallbackActionState>(Component: ComponentType
             </View>
         );
     });
+
+    if (Component.displayName)
+        ComponentWithActionState.displayName = Component.displayName + 'WithActionState';
+
+    return ComponentWithActionState;
+};
 
 export default withActionState;

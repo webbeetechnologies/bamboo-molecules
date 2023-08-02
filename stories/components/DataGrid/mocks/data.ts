@@ -119,13 +119,28 @@ export const virtualizationMockFields = generateFlatListData(100, i => ({
     title: `Name ${i + 1}`,
 }));
 
+const possibleValues = {
+    [virtualizationMockFields[0].id]: ['A', 'B', 'C', 'null'],
+    [virtualizationMockFields[1].id]: ['1', '2', '3', '4', 'null'],
+    [virtualizationMockFields[2].id]: ['true', 'false', 'null'],
+};
+
+const getAPossibleValueOrDefault = (fieldId: number, rowIndex: number) => {
+    const arr = possibleValues[fieldId];
+    if (!arr) return `John-${`record-${rowIndex + 1}`}-${fieldId}`;
+
+    return arr.at(rowIndex % arr.length);
+};
+
+export const groups = Object.keys(possibleValues);
+
 export const virtaulizationMockRecords = generateFlatListData(1000, i => {
     const fieldIds = virtualizationMockFields.map(field => field.id);
 
     return {
         id: `record-${i + 1}`,
         ...fieldIds.reduce((acc, fieldId) => {
-            acc[fieldId] = `John-${`record-${i + 1}`}-${fieldId}`;
+            acc[fieldId] = getAPossibleValueOrDefault(fieldId, i);
             return acc;
         }, {} as Record<string, any>),
     };

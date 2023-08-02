@@ -15,7 +15,13 @@ import {
     useDataTableCell,
 } from '@bambooapp/bamboo-molecules';
 
-import { useFieldType, useTableManagerStoreRef, useIsCellFocused, useHooks } from '../../contexts';
+import {
+    useFieldType,
+    useTableManagerStoreRef,
+    useIsCellFocused,
+    useField,
+    useCellValue,
+} from '../../contexts';
 import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
 import { DragAndExtendHandle } from '../DragAndExtendHandle';
@@ -31,7 +37,7 @@ export type Props = RenderCellProps &
 
 const emptyObj = {};
 
-const _CellRenderer = (
+const _DataCell = (
     { hovered = false, innerContainerProps = emptyObj, style, ...rest }: Props,
     ref: any,
 ) => {
@@ -43,7 +49,6 @@ const _CellRenderer = (
 
     const { column, row, rowIndex, columnIndex } = useDataTableCell();
 
-    const { useField, useCellValue } = useHooks();
     const { type, ...restField } = useField(column);
     const { readonly, displayEditorOnHover, showEditor } = useFieldType(type);
     const [isFocused, setFocusedCell] = useIsCellFocused(row, column);
@@ -151,10 +156,10 @@ const _CellRenderer = (
     );
 };
 
-const CellRenderer = withActionState(forwardRef(_CellRenderer));
+const DataCell = withActionState(forwardRef(_DataCell));
 
 const CellRendererWithStyledHeight = forwardRef((props: Props, ref: any) => (
-    <CellRenderer {...props} ref={ref} actionStateContainerProps={actionContainerProps} />
+    <DataCell {...props} ref={ref} actionStateContainerProps={actionContainerProps} />
 ));
 
 const actionContainerProps = { style: { height: '100%' } };

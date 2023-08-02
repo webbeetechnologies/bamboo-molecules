@@ -70,6 +70,18 @@ import type {
 
 import type { MaterialToastProps, ToastContainerProps } from '../../components/Toast';
 
+declare global {
+    namespace BambooMolecules {
+        interface Components {}
+    }
+}
+
+declare global {
+    namespace BambooAtoms {
+        interface Components extends BambooMolecules.Components {}
+    }
+}
+
 export type ProvideComponentsProps = {
     components?: Partial<IComponentsProviderContext>;
     children: ReactNode;
@@ -146,4 +158,6 @@ export interface DefaultComponents {
     Tabs: typeof Tabs;
 }
 
-export type IComponentsProviderContext = IAtomsComponentsProviderContext & DefaultComponents & {};
+export type IComponentsProviderContext = IAtomsComponentsProviderContext &
+    DefaultComponents &
+    BambooMolecules.Components & {};

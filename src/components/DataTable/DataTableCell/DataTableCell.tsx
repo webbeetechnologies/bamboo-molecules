@@ -1,5 +1,5 @@
 import { FC, memo, useMemo } from 'react';
-import { useComponentStyles, useMolecules } from '../../../hooks';
+import { useComponentStyles, useMolecules, usePrevious } from '../../../hooks';
 import {
     DataTableCellContext,
     useDataTable,
@@ -39,7 +39,9 @@ export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
 
     const isWithinBounds = useIsCellWithinBounds(cellXOffsets[columnIndex], row, column);
 
-    if (!isWithinBounds) return <></>;
+    const isVisible = usePrevious(isWithinBounds).current || isWithinBounds;
+
+    if (!isVisible) return <></>;
 
     return (
         <>
@@ -68,9 +70,6 @@ export const CellComponent = memo((props: CellComponentProps) => {
 
     return (
         <DataTableCellContext.Provider value={cellContext}>
-            {/**
-             * TODO: Adopt custom column width
-             */}
             <DataTable.Cell width={width}>{cell}</DataTable.Cell>
         </DataTableCellContext.Provider>
     );

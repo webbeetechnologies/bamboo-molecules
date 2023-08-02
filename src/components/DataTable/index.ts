@@ -1,4 +1,8 @@
 import { DataCell } from './DataTableCell';
+import { DataTable as DataTableComponent } from './DataTable';
+import { DataHeaderCell } from './DataTableHeader';
+
+export * from './DataTableContext';
 
 export {
     DataTableProps,
@@ -9,9 +13,6 @@ export {
     TDataTableColumn,
     TDataTableRow,
 } from './types';
-import { DataTable as DataTableComponent } from './DataTable';
-import { DataHeaderCell } from './DataTableHeader';
-export * from './DataTableContext';
 
 export {
     dataTableCellStyles,

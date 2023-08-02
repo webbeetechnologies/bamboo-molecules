@@ -1,28 +1,31 @@
 import { Fragment, memo, useMemo } from 'react';
 import type { ListRenderItem } from 'react-native';
 
-import type { DataTableProps, TDataTableRow } from '../types';
-import { DataTableRowContext, useDataTable } from '../DataTableContext/DataTableContext';
+import type { DataTableRowProps, TDataTableRow } from '../types';
+import { DataTableRowContext, useDataTable } from '../DataTableContext';
 import { renderCellComponent } from '../DataTableCell';
 import { useComponentStyles, useMolecules } from '../../../hooks';
 import { CallbackActionState, withActionState } from '../../../hocs';
 // import { useRowWithinBounds } from '../DataTable';
 
-type DataTableComponentProps = { record: TDataTableRow; index: number };
-const DataTableComponentPresentation = memo(
-    (
-        props: DataTableComponentProps &
-            CallbackActionState &
-            Pick<DataTableProps, 'rowSize' | 'rowProps' | 'columns'> & { isSelected: boolean },
-    ) => {
-        const { record, index, isSelected, hovered = false, rowSize } = props;
+/**
+ *
+ * The default DataTable Row component optimized for rendering all sorts of data.
+ *
+ */
+const DataTableRowPresentation = Object.assign(
+    (props: DataTableRowProps & CallbackActionState) => {
+        const { rowId, index, hovered = false, columns, rowProps, isSelected = false } = props;
+        const { rowSize } = useDataTable(store => ({
+            rowSize: store.rowSize,
+        }));
         const { View } = useMolecules();
 
         const rowStyle = useComponentStyles(
             'DataTable_Row',
-            [props.rowProps?.style, { flexDirection: 'row' }],
+            [rowProps?.style, { flexDirection: 'row' }],
             {
-                size: props.rowProps?.size ?? rowSize,
+                size: rowProps?.size ?? rowSize,
                 states: {
                     selected_hovered: isSelected && hovered,
                     selected: isSelected,
@@ -32,68 +35,73 @@ const DataTableComponentPresentation = memo(
         );
 
         const rowContext = useMemo(
-            () => ({ row: record, rowIndex: index, hovered }),
-            [record, index, hovered],
+            () => ({ row: rowId, rowIndex: index, hovered }),
+            [rowId, index, hovered],
         );
 
         const result = useMemo(
             () =>
-                props.columns.map((item, i) => (
+                columns.map((item, i) => (
                     <Fragment key={item}>{renderCellComponent({ item, index: i })}</Fragment>
                 )),
-            [props.columns],
+            [columns],
         );
 
         return (
-            <DataTableRowContext.Provider value={rowContext} key={record}>
-                <View {...props.rowProps} style={rowStyle}>
+            <DataTableRowContext.Provider value={rowContext} key={rowId}>
+                <View {...rowProps} style={rowStyle}>
                     {result}
                 </View>
             </DataTableRowContext.Provider>
         );
     },
+    {
+        displayName: 'DataTableRowPresentation',
+    },
 );
 
-const DataTableComponent = memo((props: DataTableComponentProps) => {
-    const { columns, rowSize, rowProps, selectedRows } = useDataTable(store => ({
-        columns: store.columns || [],
-        rowSize: store.rowSize,
-        rowProps: store.rowProps,
-        selectedRows: store.selectedRows,
-    }));
-    //
-    // const { cellYOffsets } = useDataTable();
-    // const isRowWithinBounds = useRowWithinBounds(cellYOffsets[props.index]);
-    //
-    // if (!isRowWithinBounds) return null;
+// Add Action State to the row
+const DataTableRowPresentationWithActionState = memo(withActionState(DataTableRowPresentation));
 
-    return (
-        <DataTableComponentPresentation
-            isSelected={!!selectedRows && Boolean(selectedRows[props.record])}
-            {...props}
-            columns={columns}
-            rowProps={rowProps}
-            // rowProps={{
-            //     ...rowProps,
-            //     style: {
-            //         position: 'absolute',
-            //         top: cellYOffsets[props.index],
-            //         height: 40,
-            //         width: '100%',
-            //     },
-            // }}
-            rowSize={rowSize}
-        />
-    );
-});
+/**
+ *
+ * Allow component consumer to render a separate row
+ * UseCase: Data grid can have header rows, footer rows and data rows.
+ */
+const DataTableRow = memo(
+    (props: Pick<DataTableRowProps, 'rowId' | 'index'> & CallbackActionState) => {
+        const { columns, rowProps, isSelected } = useDataTable(store => ({
+            columns: store.columns || [],
 
-// @ts-ignore // TODO - fix ts issue @elvisduru
-export const DataTableRow = memo(withActionState(DataTableComponent));
+            rowProps: store.rowProps,
+            isSelected: Boolean(store.selectedRows?.[props.rowId]),
+        }));
 
+        const useRowRenderer = useDataTable(state => state.useRowRenderer);
+        const RowComponent =
+            useRowRenderer?.(props, DataTableRowPresentationWithActionState) ??
+            DataTableRowPresentationWithActionState;
+
+        return (
+            <RowComponent
+                {...props}
+                columns={columns}
+                rowProps={rowProps}
+                isSelected={isSelected}
+            />
+        );
+    },
+);
+DataTableRow.displayName = 'DataTableRow';
+
+/**
+ *
+ * Used internally by data table for FlatList renderItem
+ *
+ */
 export const renderRow: ListRenderItem<TDataTableRow> = ({ item, index }) => (
     <DataTableRow
-        // @ts-ignore // TODO - fix ts issue @elvisduru
-        record={item}
+        rowId={item}
         index={index}
         key={item}
         actionStateContainerProps={actionStateContainerProps}
