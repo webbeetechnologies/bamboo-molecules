@@ -14,6 +14,7 @@ import {
     withActionState,
     useDataTableCell,
 } from '@bambooapp/bamboo-molecules';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 import {
     useFieldType,
@@ -28,7 +29,6 @@ import { DragAndExtendHandle } from '../DragAndExtendHandle';
 import { useSelectionMethods } from '../../plugins';
 import { CellSelectionIndicator } from '../CellSelectionIndicator';
 import { CellBorder } from '../CellBorder';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 export type Props = RenderCellProps &
     CallbackActionState &
@@ -45,8 +45,6 @@ const _DataCell = (
     const { View } = useMolecules();
 
     const cellRef = useRef<any>(null);
-    // const { hovered: rowHovered } = useDataTableRow();
-    // const [selection] = useSelection();
 
     const { column, row, rowIndex, columnIndex } = useDataTableCell();
 
@@ -55,9 +53,10 @@ const _DataCell = (
     const [isFocused, setFocusedCell] = useIsCellFocused(row, column);
     const { set: setTableManagerStore } = useTableManagerStoreRef();
 
-    const { useOnSelectCell, useOnDragAndSelectStart } = useSelectionMethods();
+    const { useOnSelectCell } = useSelectionMethods();
     const onSelectCell = useOnSelectCell();
-    const onDragAndSelectStart = useOnDragAndSelectStart();
+    // const onDragAndSelectStart = useOnDragAndSelectStart();
+    // const onDragAndSelectEnd = useOnDragAndSelectEnd();
 
     const isTappedRef = useRef(0);
 
@@ -121,18 +120,20 @@ const _DataCell = (
         [style, isEditing, innerContainerProps.style],
     );
 
-    const onDrag = useMemo(
-        () =>
-            Gesture.Pan().onBegin(() =>
-                onDragAndSelectStart({
-                    rowIndex,
-                    columnIndex,
-                    columnId: column,
-                    rowId: row,
-                }),
-            ),
-        [column, columnIndex, onDragAndSelectStart, row, rowIndex],
-    );
+    const onDrag = useMemo(() => {
+        return Gesture.Pan()
+            .onBegin(() => {
+                // onDragAndSelectStart({
+                //     rowIndex,
+                //     columnIndex,
+                //     columnId: column,
+                //     rowId: row,
+                // });
+            })
+            .onEnd(() => {
+                // onDragAndSelectEnd();
+            });
+    }, []);
 
     useEffect(() => {
         if (isFocused || !isEditing) return;

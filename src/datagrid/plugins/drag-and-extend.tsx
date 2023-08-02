@@ -78,6 +78,7 @@ const useOnDragEnd = () => {
         setStore(prev => ({
             [dragAndExtendKey]: {
                 ...prev[dragAndExtendKey],
+                isSelecting: false,
                 start: undefined,
                 end: undefined,
             },

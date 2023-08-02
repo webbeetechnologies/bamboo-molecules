@@ -100,6 +100,7 @@ const useOnDragAndSelectStart = () => {
                 [cellSelectionPluginKey]: {
                     ...prev[cellSelectionPluginKey],
                     start: cell,
+                    isSelecting: true,
                 },
             }));
         },
@@ -107,12 +108,25 @@ const useOnDragAndSelectStart = () => {
     );
 };
 
+const useOnDragAndSelectEnd = () => {
+    const { set: setStore } = usePluginsDataStoreRef();
+
+    return useCallback(() => {
+        setStore(prev => ({
+            [cellSelectionPluginKey]: {
+                ...prev[cellSelectionPluginKey],
+                isSelecting: false,
+            },
+        }));
+    }, [setStore]);
+};
+
 const useProcessDragCellSelection = ({ cell, hovered }: { cell: Cell; hovered: boolean }) => {
     const { store: pluginsDataStore } = usePluginsDataStoreRef();
     const onSelectCell = useOnSelectCell();
 
     useEffect(() => {
-        if (!pluginsDataStore.current[cellSelectionPluginKey]?.start || !hovered) return;
+        if (!pluginsDataStore.current[cellSelectionPluginKey]?.isSelecting || !hovered) return;
 
         onSelectCell(cell);
     });
@@ -129,6 +143,7 @@ export const [useSelectionPlugin, useSelectionEvents, useSelectionMethods] = cre
         useOnSelectCell,
         useResetSelectionOnClickOutside,
         useOnDragAndSelectStart,
+        useOnDragAndSelectEnd,
         useProcessDragCellSelection,
     },
 });
