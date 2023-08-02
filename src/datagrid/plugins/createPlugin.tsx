@@ -6,6 +6,7 @@ type PluginMangerEventsKeys = keyof PluginManagerEvents;
 
 export type Methods = Record<string, any>;
 
+// TODO - improve types
 export type PluginHandle<E extends PluginMangerEventsKeys> = {
     key: string;
     init?: (...args: any) => any;
@@ -23,6 +24,7 @@ export const createPlugin = <K extends PluginMangerEventsKeys>({
     methods,
     useDestroy = useVoid,
 }: {
+    // TODO - improve types
     key: string;
     useInit?: () => (...args: any) => any;
     eventKeys: K[];
