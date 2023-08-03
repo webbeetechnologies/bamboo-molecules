@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'colors.neutral1',
         borderColor: 'colors.primary',
         borderWidth: 1,
-        zIndex: 1,
     },
 });
 

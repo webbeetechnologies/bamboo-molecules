@@ -205,9 +205,15 @@ const useIsDragHandleVisible = ({
             );
         }
 
-        if (!selection || !selection.end) return isFocused;
+        if (!selection || !(selection.end || selection.start)) return isFocused;
 
-        return selection.end.columnIndex === columnIndex && selection.end.rowIndex === rowIndex;
+        const { start, end } = selection;
+
+        const endRowIndex = start?.rowIndex <= end?.rowIndex ? end?.rowIndex : start?.rowIndex;
+        const endColumnIndex =
+            start?.columnIndex <= end?.columnIndex ? end?.columnIndex : start?.columnIndex;
+
+        return endColumnIndex === columnIndex && endRowIndex === rowIndex;
     });
 };
 
