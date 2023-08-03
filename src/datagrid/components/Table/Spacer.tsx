@@ -6,14 +6,12 @@ import type { GroupFooter, GroupHeader, GroupedData } from 'src/datagrid/utils';
 
 type SpacerProp = { variant: 'left' | 'right' };
 
-const Spacer = (props: SpacerProp & { edge: boolean }) => {
+const Spacer = (props: SpacerProp) => {
     const { View } = useMolecules();
 
     const spacer = useComponentStyles('DataGrid_Spacer', null, {
         variant: props.variant,
     });
-
-    // if (props.edge) return null;
 
     return <View style={spacer} />;
 };
@@ -22,11 +20,7 @@ export const SpacerList = memo((props: SpacerProp & { level: number }) => {
     const spaces = useMemo(
         () =>
             Array.from({ length: props.level }, (_, i) => (
-                <Spacer
-                    key={i + ''}
-                    variant={props.variant}
-                    edge={props.variant === 'left' ? i === 0 : i + 1 === props.level}
-                />
+                <Spacer key={i + ''} variant={props.variant} />
             )),
         [props.variant, props.level],
     );
