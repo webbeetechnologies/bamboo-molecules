@@ -53,7 +53,7 @@ export const TableManagerProvider = memo(
                 withContextMenu,
                 records,
             }),
-            [withContextMenu, records],
+            [tableRef, withContextMenu, records],
         );
 
         return (
