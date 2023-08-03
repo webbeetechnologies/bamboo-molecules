@@ -19,3 +19,8 @@ export const createMemoizedFunction = ({
     const memo = Object.assign(memoize, { Cache });
     return Object.assign(<T extends (...args: any[]) => any>(func: T) => memo(func, resolver));
 };
+
+export const weakMemoized = createMemoizedFunction({
+    resolver: x => x,
+    Cache: WeakMap,
+});

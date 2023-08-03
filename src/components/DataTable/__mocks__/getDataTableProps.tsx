@@ -23,6 +23,7 @@ export const getDataTableMockProps = (
     columns: number,
     FlatListComponent?: ComponentType<FlatListProps<any>>,
 ) => ({
+    rowSize: 'sm',
     columns: generateFlatListData(columns, index => `column-${index}`),
     records: generateFlatListData(rows, index => `row-${index}`),
     selectedRows: {

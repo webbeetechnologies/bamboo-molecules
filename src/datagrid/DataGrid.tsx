@@ -17,31 +17,20 @@ import {
     HooksProvider,
     useShouldContextMenuDisplayed,
     useTableManagerValueSelector,
-    createUseRowRenderer,
 } from './contexts';
 import { typedMemo } from './hocs';
-import {
-    ContextMenu,
-    ColumnHeaderCell,
-    CellRenderer,
-    GroupFooterRow,
-    GroupHeaderRow,
-} from './components';
+import { ContextMenu, ColumnHeaderCell, CellRenderer } from './components';
 import { useContextMenu } from './hooks';
 import type { FieldTypes } from './types';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
-import { RecordWithId, RowType, prepareGroupedData } from './utils';
-import type { TDataTableColumn, TDataTableRow } from '../components/DataTable/types';
-
-const useRowRenderer = createUseRowRenderer({
-    [RowType.FOOTER]: GroupFooterRow,
-    [RowType.HEADER]: GroupHeaderRow,
-});
+import { RecordWithId, prepareGroupedData } from './utils';
+import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules';
+import { useRowRenderer } from './components/Table/useRowRenderer';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
 
-type DataGripdPropsBase = Omit<
+type DataGridPropsBase = Omit<
     DataTableProps,
     'title' | 'renderHeader' | 'renderCell' | 'columns' | 'records'
 > &
@@ -54,7 +43,7 @@ type DataGripdPropsBase = Omit<
         groups?: TDataTableColumn[];
     };
 
-export type Props = DataGripdPropsBase &
+export type Props = DataGridPropsBase &
     HooksContextType & {
         fieldTypes?: FieldTypes;
         records: RecordWithId[];
@@ -70,7 +59,7 @@ export type ContextMenuProps = Partial<MenuProps> & {
     children?: ReactNode;
 };
 
-type DataGridPresentationProps = DataGripdPropsBase & {
+type DataGridPresentationProps = DataGridPropsBase & {
     records: TDataTableRow[];
 };
 
@@ -201,15 +190,19 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         contextMenuProps,
         records,
         groups,
+        useRowRenderer: useRowRendererProp,
+        useGroupRowState: useGroupRowStateProp,
+        useShowGroupFooter: useShowGroupFooterProp,
+
         ...rest
     }: Props) => {
-        const hooksContextValue = useMemo(
-            () => ({
-                useField,
-                useCellValue,
-            }),
-            [useField, useCellValue],
-        );
+        const hooksContextValue = useRef({
+            useField,
+            useCellValue,
+            useRowRenderer: useRowRendererProp,
+            useGroupRowState: useGroupRowStateProp,
+            useShowGroupFooter: useShowGroupFooterProp,
+        }).current;
 
         const { groupedRecords, rowIds } = useMemo(
             () => prepareGroupedData(records, groups),
@@ -235,8 +228,8 @@ const defaultHorizontalScrollProps = { contentContainerStyle: { flexGrow: 1 } };
 const styles = StyleSheet.create({
     cell: {
         padding: 0,
-        borderBottomWidth: 1,
-        borderBottomColor: 'colors.outlineVariant',
+        // borderTopWidth: 1,
+        // borderColor: 'colors.outlineVariant',
     },
     row: {
         padding: 0,

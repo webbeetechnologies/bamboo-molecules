@@ -2,8 +2,9 @@ import { memo, MutableRefObject, PropsWithChildren, useCallback, useMemo } from 
 
 import { createFastContext } from '../../fast-context';
 import { RowType, GroupedData, GroupHeader, GroupFooter } from '../utils';
-import { createMemoizedFunction, keyBy } from '../utils';
+import { weakMemoized, keyBy } from '../utils';
 import type { TDataTableColumn, TDataTableRow } from '../../components/DataTable/types';
+import type { GroupMeta } from '../types';
 
 export type TableManagerContextProviderProps = {
     withContextMenu: boolean;
@@ -111,13 +112,8 @@ export const useRecordIds = () => {
     return useTableManagerValueSelector(({ records }) => records.map(({ id }) => id), compare);
 };
 
-const memoized = createMemoizedFunction({
-    resolver: x => x,
-    Cache: WeakMap,
-});
-
 type GroupedDataMap = Record<TDataTableColumn, GroupedData>;
-const getRecordsMap = memoized((records: GroupedData[]) => keyBy(records, 'id')) as (
+const getRecordsMap = weakMemoized((records: GroupedData[]) => keyBy(records, 'id')) as (
     records: GroupedData[],
 ) => GroupedDataMap;
 export const useRecordsMap = () => {
@@ -128,8 +124,39 @@ export const useRecordById = (id: TDataTableRow) => {
     return useTableManagerValueSelector(({ records }) => getRecordsMap(records)[id]);
 };
 
-export const useGroupMeta = (id: TDataTableRow) => {
-    return useRecordById(id) as GroupHeader | GroupFooter;
+export const useHasGroupedData = (id: TDataTableRow) => {
+    return !!useRecordById(id).groupId;
+};
+
+export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
+    const {
+        fieldId,
+        title,
+        count,
+        isFirst,
+        isLast,
+        isFirstLevel,
+        isLastLevel,
+        isOnly,
+        title: value,
+        level,
+    } = useRecordById(id) as GroupHeader | GroupFooter;
+
+    return useMemo(
+        () => ({
+            fieldId,
+            title,
+            level,
+            recordCount: count,
+            isFirst,
+            isLast,
+            isFirstLevel,
+            isLastLevel,
+            isOnly,
+            value,
+        }),
+        [fieldId, title, level, count, isFirst, isLast, isFirstLevel, isLastLevel, isOnly, value],
+    );
 };
 
 export const useRecordType = (id: TDataTableRow) => {

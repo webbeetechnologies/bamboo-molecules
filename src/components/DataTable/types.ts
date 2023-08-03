@@ -48,7 +48,7 @@ export type DataTableRowProps = {
 export type UseRowRenderer<T extends DataTableRowProps = DataTableRowProps> = (
     props: Pick<DataTableRowProps, 'rowId' | 'index'>,
     DefaultComponent: ComponentType<DataTableRowProps>,
-) => ComponentType<T>;
+) => ComponentType<T> | undefined;
 
 export interface DataTableProps<RecordType = any>
     extends Omit<ScrollViewProps, 'children'>,

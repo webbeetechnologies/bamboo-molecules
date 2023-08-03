@@ -1,12 +1,8 @@
-import { ComponentType, forwardRef, PropsWithoutRef, useRef } from 'react';
+import { ComponentType, forwardRef, PropsWithoutRef } from 'react';
 import type { ViewProps } from 'react-native';
-import { useFocus, useHover, useActive } from 'react-native-web-hooks';
-import { useMolecules } from '../hooks';
+import { UseActionStateProps, useMolecules, useActionState } from '../hooks';
 
-export type CallbackActionState = {
-    pressed?: boolean;
-    hovered?: boolean;
-    focused?: boolean;
+export type CallbackActionState = UseActionStateProps & {
     actionStateContainerProps?: PropsWithoutRef<ViewProps>;
 };
 
@@ -25,10 +21,11 @@ const withActionState = <P extends CallbackActionState>(Component: ComponentType
         };
         const { View } = useMolecules();
 
-        const actionsRef = useRef(null);
-        const hovered = useHover(actionsRef) || hoveredProp;
-        const pressed = useActive(actionsRef) || pressedProp;
-        const focused = useFocus(actionsRef) || focusedProp;
+        const { actionsRef, hovered, pressed, focused } = useActionState({
+            hovered: hoveredProp,
+            focused: focusedProp,
+            pressed: pressedProp,
+        });
 
         return (
             <View ref={actionsRef} {...actionStateContainerProps}>

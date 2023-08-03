@@ -1,10 +1,10 @@
 import { memo, ReactNode, useCallback, useMemo } from 'react';
-import type { Row } from '../../../../src/datagrid/types';
 import { keyBy } from '../../../../src/utils';
 
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 import type { TDataTableColumn, TDataTableRow } from 'src/components/DataTable/types';
 
+type Row = { id: TDataTableRow } & Record<string, any>;
 export type RecordsContextType = {
     records: Record<string, Row>;
 };

@@ -10,6 +10,10 @@ export {
     RenderCellProps,
     DataCellProps,
     DataHeaderCellProps,
+    DataTableRowProps,
+    TDataTableColumn,
+    TDataTableRow,
+    UseRowRenderer,
 } from './types';
 
 export { dataTableCellStyles } from './DataTableCell';

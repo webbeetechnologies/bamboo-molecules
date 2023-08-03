@@ -1,25 +1,27 @@
 import { memo } from 'react';
-// import type { RenderCellProps } from '../../../components';
-import type { DataTableRowProps, TDataTableRow } from 'src/components/DataTable/types';
-import { useField, useGroupMeta } from '../../contexts';
-import type { Field } from '../../types';
-import { withSpacers } from './Spacer';
+import { useField, useGroupMeta, useShowGroupFooter } from '../../contexts';
 
-export type Props = {
-    rowId: TDataTableRow;
-};
+import { useMolecules } from '@bambooapp/bamboo-molecules';
+import type { DataGridRowRendererProps, GroupMetaRowProps } from '../../types';
 
-export type GroupFooterRendererProps = Field & {
-    value: any;
-    recordCount: number;
-};
 /**
  *
  * Can be replaced by the component consumer.
  *
  */
-export const GroupFooterRenderer = memo((_: GroupFooterRendererProps) => {
-    return null;
+export const GroupFooterRenderer = memo(({ meta, rowProps }: GroupMetaRowProps) => {
+    const { View, Text } = useMolecules();
+    const shouldShowFooter = useShowGroupFooter(meta);
+
+    if (!shouldShowFooter) {
+        return <View {...rowProps} />;
+    }
+
+    return (
+        <View {...rowProps}>
+            <Text>Hello World</Text>
+        </View>
+    );
 });
 
 /**
@@ -27,9 +29,19 @@ export const GroupFooterRenderer = memo((_: GroupFooterRendererProps) => {
  * Renders the group header row.
  * Can be replaced with useRowRenderer prop on datagrid.
  */
-export const GroupFooterRow = withSpacers((props: DataTableRowProps) => {
-    const { fieldId, title, count } = useGroupMeta(props.rowId);
-    const field = useField(fieldId);
+export const GroupFooterRow = memo((props: DataGridRowRendererProps) => {
+    const meta = useGroupMeta(props.rowId);
+    const field = useField(meta.fieldId);
+    const { GroupFooterRenderer: RowRenderer } = useMolecules();
 
-    return <GroupFooterRenderer {...field} value={title} recordCount={count} />;
+    const rendererProps = {
+        ...field,
+        meta,
+        rowProps: props.rowProps,
+        rowId: props.rowId,
+    };
+
+    return <RowRenderer {...rendererProps} />;
 });
+
+GroupFooterRow.displayName = 'GroupFooterRow';
