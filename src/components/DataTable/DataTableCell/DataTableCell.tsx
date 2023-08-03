@@ -25,9 +25,10 @@ export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
     const { View } = useMolecules();
 
     const { columnIndex, column, row } = useDataTableCell();
-    const { cellProps, cellXOffsets } = useDataTable(store => ({
+    const { cellProps, cellXOffsets, CellWrapperComponent } = useDataTable(store => ({
         cellProps: store.cellProps,
         cellXOffsets: store.cellXOffsets,
+        CellWrapperComponent: store.CellWrapperComponent || View,
     }));
 
     const cellStyles = useComponentStyles('DataTable_Cell', [
@@ -45,9 +46,9 @@ export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
 
     return (
         <>
-            <View {...cellProps} {...props} style={cellStyles}>
+            <CellWrapperComponent {...cellProps} {...props} style={cellStyles}>
                 {props.children}
-            </View>
+            </CellWrapperComponent>
         </>
     );
 });

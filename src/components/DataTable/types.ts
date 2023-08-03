@@ -141,4 +141,9 @@ export interface DataTableProps<RecordType = any>
      * DataTableRowProps
      */
     useRowRenderer?: UseRowRenderer;
+    /**
+     *
+     * CellWrapperComponent
+     */
+    CellWrapperComponent?: ComponentType<DataCellProps>;
 }

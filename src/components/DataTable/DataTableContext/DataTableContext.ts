@@ -34,6 +34,7 @@ type DataTableContextType = Pick<
         | 'selectedRows'
         | 'rowSize'
         | 'useRowRenderer'
+        | 'CellWrapperComponent'
     > & {
         tableWidth: number;
         containerWidth?: number;
