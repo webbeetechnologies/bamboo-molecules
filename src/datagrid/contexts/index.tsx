@@ -9,6 +9,7 @@ export {
     useRecordById,
     useRecordType,
     useGroupMeta,
+    useHasGroupedData,
 } from './TableManagerContext';
 
 export { createUseRowRenderer } from './createUseRowRenderer';

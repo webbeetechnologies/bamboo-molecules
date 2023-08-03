@@ -1,5 +1,5 @@
 import { RowType, weakMemoized } from '../../utils';
-import { createUseRowRenderer } from '../../contexts';
+import { createUseRowRenderer, useHasGroupedData } from '../../contexts';
 import { GroupFooterRow } from './GroupFooterRenderer';
 import { GroupHeaderRow } from './GroupHeaderRenderer';
 import type { ComponentType } from 'react';
@@ -17,5 +17,9 @@ const getRowWithSpacers = weakMemoized((Row: ComponentType<DataGridRowRendererPr
 );
 
 export const useRowRenderer: UseRowRenderer<DataGridRowRendererProps> = (props, Component) => {
-    return getRowWithSpacers(useRowRendererLocal(props, Component));
+    const RowRenderer = useRowRendererLocal(props, Component);
+
+    if (!useHasGroupedData(props.rowId)) return RowRenderer;
+
+    return getRowWithSpacers(RowRenderer);
 };
