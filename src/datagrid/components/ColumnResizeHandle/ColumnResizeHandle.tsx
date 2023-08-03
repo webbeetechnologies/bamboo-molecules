@@ -11,7 +11,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import type { TDataTableColumn } from '@bambooapp/bamboo-molecules/components';
 
 import {
-    columnResizePluginKey,
+    COLUMN_RESIZE_PLUGIN_KEY,
     useColumnResizeEvents,
     withPluginExistenceCheck,
 } from '../../plugins';
@@ -113,4 +113,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(withPluginExistenceCheck(ColumnResizeHandle, columnResizePluginKey));
+export default memo(withPluginExistenceCheck(ColumnResizeHandle, COLUMN_RESIZE_PLUGIN_KEY));

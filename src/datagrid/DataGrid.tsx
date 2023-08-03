@@ -5,7 +5,7 @@ import type {
     RenderHeaderCellProps,
 } from '../components';
 import { useMolecules } from '../hooks';
-import { ComponentType, memo, ReactNode, useCallback, useMemo, useRef } from 'react';
+import { ComponentType, memo, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { StyleSheet } from 'react-native';
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
@@ -23,7 +23,7 @@ import {
 import { typedMemo } from './hocs';
 import PluginsManager from './plugins/plugins-manager';
 import type { Plugin } from './types/plugins';
-import { useSelectionMethods, useSelectionPlugin } from './plugins';
+import { useCellSelectionMethods, useCellSelectionPlugin } from './plugins';
 import {
     ContextMenu,
     ColumnHeaderCell,
@@ -69,7 +69,12 @@ export type ContextMenuProps = Partial<MenuProps> & {
     isOpen: boolean;
     handleContextMenuOpen: (payload: {
         type: 'column' | 'cell';
-        selection: { columnId?: TDataTableColumn; rowId?: TDataTableRow };
+        selection: {
+            columnId?: TDataTableColumn;
+            rowId?: TDataTableRow;
+            columnIndex?: number;
+            rowIndex?: number;
+        };
     }) => void;
     onClose: () => void;
     children?: ReactNode;
@@ -100,9 +105,13 @@ const DataGrid = ({
         contextMenuProps || (emptyObj as ContextMenuProps);
 
     const shouldContextMenuDisplayed = useShouldContextMenuDisplayed();
-    const { useResetSelectionOnClickOutside } = useSelectionMethods();
+    const { useResetSelectionOnClickOutside } = useCellSelectionMethods();
 
     const ref = useRef(null);
+    const dataRef = useRef<{ records: TDataTableRow[]; columns: TDataTableColumn[] }>({
+        records: [],
+        columns: [],
+    });
 
     const cellProps = useMemo(
         () => ({
@@ -147,12 +156,30 @@ const DataGrid = ({
 
             if (!shouldContextMenuDisplayed || !store.current.focusedCell) return;
 
-            const { type, ...focusedCell } = store.current.focusedCell;
+            const { type, rowIndex, columnIndex } = store.current.focusedCell;
+            const rowId = rowIndex !== undefined ? dataRef.current.records[rowIndex] : undefined;
+            const columnId =
+                columnIndex !== undefined ? dataRef.current.records[columnIndex] : undefined;
 
-            handleContextMenuOpen({ type: type, selection: focusedCell });
+            handleContextMenuOpen({
+                type: type,
+                selection: {
+                    rowIndex,
+                    rowId,
+                    columnId,
+                    columnIndex,
+                },
+            });
         },
         [handleContextMenuOpen, shouldContextMenuDisplayed, store],
     );
+
+    useEffect(() => {
+        dataRef.current = {
+            records,
+            columns: columnIds,
+        };
+    }, [columnIds, records]);
 
     useContextMenu({ ref, callback: onContextMenuOpen });
 
@@ -223,7 +250,7 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
             [useField, useCellValue],
         );
 
-        const selectionPlugin = useSelectionPlugin({});
+        const selectionPlugin = useCellSelectionPlugin({});
 
         const plugins = useMemo(
             () => [...(_plugins || []), selectionPlugin],

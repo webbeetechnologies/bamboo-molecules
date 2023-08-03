@@ -1,14 +1,14 @@
 import { useCallback, useEffect } from 'react';
-
-import { useTableManagerStoreRef } from '../contexts';
-import { cellSelectionPluginKey } from './cell-selection';
-import { usePluginsDataStoreRef } from './plugins-manager';
-import { createPlugin } from './createPlugin';
-import { PluginEvents, Selection } from './types';
-import { useCopyPasteEvents } from './ copy-paste';
 import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
 
-export const dragAndExtendKey = 'drag-and-extend';
+import { useTableManagerStoreRef } from '../contexts';
+import { CELL_SELECTION_PLUGIN_KEY, CellIndexes } from './cell-selection';
+import { usePluginsDataStoreRef, usePluginsDataValueSelectorValue } from './plugins-manager';
+import { createPlugin } from './createPlugin';
+import { PluginEvents, Selection } from './types';
+import { checkSelection, useNormalizeCellHandler } from './utils';
+
+export const DRAG_AND_EXTEND_PLUGIN_KEY = 'drag-and-extend';
 
 const emptyObj = {};
 
@@ -31,8 +31,8 @@ const useOnDragStart = () => {
 
     return useCallback(() => {
         setStore(prev => ({
-            [dragAndExtendKey]: {
-                ...prev[dragAndExtendKey],
+            [DRAG_AND_EXTEND_PLUGIN_KEY]: {
+                ...prev[DRAG_AND_EXTEND_PLUGIN_KEY],
                 start: {},
             },
         }));
@@ -42,71 +42,33 @@ const useOnDragStart = () => {
 const useOnDragEnd = () => {
     const { store: tableManagerStore } = useTableManagerStoreRef();
     const { store, set: setStore } = usePluginsDataStoreRef();
-    const {
-        beforeCopyCell,
-        onCopyCell,
-        afterCopyCell,
-        beforePasteCell,
-        onPasteCell,
-        afterPasteCell,
-    } = useCopyPasteEvents() || emptyObj;
-    const { afterDragAndExtend } = useDragAndExtendEvents() || emptyObj;
+    const { onDragAndExtend, afterDragAndExtend } = useDragAndExtendEvents() || emptyObj;
 
     return useCallback(() => {
-        const copySelection = store.current[cellSelectionPluginKey] || {
+        const copySelection = store.current[CELL_SELECTION_PLUGIN_KEY] || {
             start: tableManagerStore.current.focusedCell,
             end: tableManagerStore.current.focusedCell,
         };
-        const pasteSelection = store.current[dragAndExtendKey];
+        const pasteSelection = store.current[DRAG_AND_EXTEND_PLUGIN_KEY];
 
-        const continueCopy = beforeCopyCell({ selection: copySelection });
-
-        if (continueCopy !== false) {
-            onCopyCell({ selection: copySelection });
-
-            afterCopyCell();
-        }
-
-        const continuePaste = beforePasteCell({ selection: copySelection });
-
-        if (continuePaste !== false) {
-            onPasteCell({ selection: pasteSelection });
-
-            afterPasteCell();
-        }
+        onDragAndExtend({ selection: copySelection, target: pasteSelection });
 
         setStore(prev => ({
-            [dragAndExtendKey]: {
-                ...prev[dragAndExtendKey],
-                isSelecting: false,
-                start: undefined,
-                end: undefined,
-            },
+            [DRAG_AND_EXTEND_PLUGIN_KEY]: undefined,
             // clearing cell selection as well
-            [cellSelectionPluginKey]: {
-                ...prev[cellSelectionPluginKey],
-                start: undefined,
-                end: undefined,
+            [CELL_SELECTION_PLUGIN_KEY]: {
+                ...prev[CELL_SELECTION_PLUGIN_KEY],
+                start:
+                    prev[CELL_SELECTION_PLUGIN_KEY]?.start || tableManagerStore.current.focusedCell,
+                end: prev[DRAG_AND_EXTEND_PLUGIN_KEY]?.end,
             },
         }));
 
         afterDragAndExtend();
-    }, [
-        afterCopyCell,
-        afterDragAndExtend,
-        afterPasteCell,
-        beforeCopyCell,
-        beforePasteCell,
-        onCopyCell,
-        onPasteCell,
-        setStore,
-        store,
-        tableManagerStore,
-    ]);
+    }, [afterDragAndExtend, onDragAndExtend, setStore, store, tableManagerStore]);
 };
 
 const useOnDragSelection = ({
-    checkSelection,
     columnIndex,
     rowIndex,
     hovered,
@@ -116,23 +78,25 @@ const useOnDragSelection = ({
     rowIndex: number;
     hovered: boolean;
     rowHovered: boolean;
-    checkSelection: (
-        selection: Selection,
-        cell: { columnIndex: number; rowIndex: number },
-    ) => boolean;
 }) => {
     const { store: datatableStore } = useDataTableStoreRef();
     const { store: tableManagerStore } = useTableManagerStoreRef();
     const { store: pluginsDataStore, set: setPluginsDataStore } = usePluginsDataStoreRef();
     const { beforeDragAndExtend, onDragAndExtend } = useDragAndExtendEvents();
 
+    const normalizeCell = useNormalizeCellHandler();
+
     useEffect(() => {
         // we need hovered because only hovered cell would trigger the event instead of the entire row
-        if (!pluginsDataStore.current[dragAndExtendKey]?.start || !rowHovered || !hovered) return;
+        if (!pluginsDataStore.current[DRAG_AND_EXTEND_PLUGIN_KEY]?.start || !rowHovered || !hovered)
+            return;
 
+        const hasSelection =
+            pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.start &&
+            pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.end;
         // if there is no selection, we use focusedCell
-        const cellsSelection = pluginsDataStore.current[cellSelectionPluginKey]?.start
-            ? pluginsDataStore.current[cellSelectionPluginKey]
+        const cellsSelection = hasSelection
+            ? pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]
             : {
                   start: tableManagerStore.current.focusedCell,
                   end: tableManagerStore.current.focusedCell,
@@ -140,8 +104,8 @@ const useOnDragSelection = ({
 
         if (checkSelection(cellsSelection, { columnIndex, rowIndex })) {
             setPluginsDataStore(prev => ({
-                [dragAndExtendKey]: {
-                    ...prev[dragAndExtendKey],
+                [DRAG_AND_EXTEND_PLUGIN_KEY]: {
+                    ...prev[DRAG_AND_EXTEND_PLUGIN_KEY],
                     start: {},
                     end: undefined,
                 },
@@ -160,18 +124,14 @@ const useOnDragSelection = ({
             const endRowIndex = cellsSelection.end.rowIndex;
 
             selection = {
-                start: {
+                start: normalizeCell({
                     columnIndex: startColumnIndex,
                     rowIndex: startRowIndex,
-                    rowId: datatableStore.current.records[startRowIndex],
-                    columnId: datatableStore.current.columns[startColumnIndex],
-                },
-                end: {
-                    rowIndex: endRowIndex,
-                    rowId: datatableStore.current.records[endRowIndex],
+                }),
+                end: normalizeCell({
                     columnIndex,
-                    columnId: datatableStore.current.columns[columnIndex],
-                },
+                    rowIndex: endRowIndex,
+                }),
             };
         }
 
@@ -184,18 +144,14 @@ const useOnDragSelection = ({
             const endColumnIndex = cellsSelection.end.columnIndex;
 
             selection = {
-                start: {
+                start: normalizeCell({
                     columnIndex: startColumnIndex,
-                    columnId: datatableStore.current.columns[startColumnIndex],
                     rowIndex: startRowIndex,
-                    rowId: datatableStore.current.records[startRowIndex],
-                },
-                end: {
+                }),
+                end: normalizeCell({
                     columnIndex: endColumnIndex,
-                    columnId: datatableStore.current.columns[endColumnIndex],
                     rowIndex,
-                    rowId: datatableStore.current.records[rowIndex],
-                },
+                }),
             };
         }
 
@@ -204,14 +160,13 @@ const useOnDragSelection = ({
         if (continueDragAndSelection === false) return;
 
         setPluginsDataStore(prev => ({
-            [dragAndExtendKey]: {
-                ...prev[dragAndExtendKey],
+            [DRAG_AND_EXTEND_PLUGIN_KEY]: {
+                ...prev[DRAG_AND_EXTEND_PLUGIN_KEY],
                 ...selection,
             },
         }));
-
-        onDragAndExtend({ selection });
     }, [
+        normalizeCell,
         rowHovered,
         hovered,
         rowIndex,
@@ -219,20 +174,56 @@ const useOnDragSelection = ({
         columnIndex,
         pluginsDataStore,
         tableManagerStore,
-        checkSelection,
         beforeDragAndExtend,
         onDragAndExtend,
         datatableStore,
     ]);
 };
 
+const useHasDragAndExtendSelection = ({ columnIndex, rowIndex }: CellIndexes) => {
+    return usePluginsDataValueSelectorValue(store =>
+        checkSelection(store[DRAG_AND_EXTEND_PLUGIN_KEY], {
+            columnIndex,
+            rowIndex,
+        }),
+    );
+};
+
+const useIsDragHandleVisible = ({
+    columnIndex,
+    rowIndex,
+    isFocused,
+}: CellIndexes & { isFocused: boolean }) => {
+    return usePluginsDataValueSelectorValue(store => {
+        const selection = store[CELL_SELECTION_PLUGIN_KEY];
+        const dragSelection = store[DRAG_AND_EXTEND_PLUGIN_KEY];
+
+        if (dragSelection?.end) {
+            return (
+                dragSelection.end.columnIndex === columnIndex &&
+                dragSelection.end.rowIndex === rowIndex
+            );
+        }
+
+        if (!selection || !selection.end) return isFocused;
+
+        return selection.end.columnIndex === columnIndex && selection.end.rowIndex === rowIndex;
+    });
+};
+
 export const [useDragAndExtendPlugin, useDragAndExtendEvents, useDragAndExtendMethods] =
     createPlugin({
-        key: dragAndExtendKey,
+        key: DRAG_AND_EXTEND_PLUGIN_KEY,
         eventKeys: [
             PluginEvents.BEFORE_DRAG_AND_EXTEND,
             PluginEvents.ON_DRAG_AND_EXTEND,
             PluginEvents.AFTER_DRAG_AND_EXTEND,
         ],
-        methods: { useOnDragSelection, useOnDragStart, useOnDragEnd },
+        methods: {
+            useOnDragSelection,
+            useOnDragStart,
+            useOnDragEnd,
+            useHasDragAndExtendSelection,
+            useIsDragHandleVisible,
+        },
     });

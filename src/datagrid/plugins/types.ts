@@ -1,8 +1,8 @@
-import type { Cell } from './cell-selection';
+import type { CellIndexes } from './cell-selection';
 
 export type Selection = {
-    start: Cell;
-    end: Cell;
+    start: CellIndexes;
+    end: CellIndexes;
 };
 
 export enum PluginEvents {
@@ -52,6 +52,6 @@ export type PluginManagerEvents = {
     [PluginEvents.AFTER_CELL_SELECTION]: () => void;
 
     [PluginEvents.BEFORE_DRAG_AND_EXTEND]: (args: { selection: Selection }) => void | boolean;
-    [PluginEvents.ON_DRAG_AND_EXTEND]: (args: { selection: Selection }) => void;
+    [PluginEvents.ON_DRAG_AND_EXTEND]: (args: { selection: Selection; target: Selection }) => void;
     [PluginEvents.AFTER_DRAG_AND_EXTEND]: () => void;
 };

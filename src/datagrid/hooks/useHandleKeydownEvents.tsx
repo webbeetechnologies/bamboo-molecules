@@ -2,7 +2,7 @@ import { useCallback, useEffect, RefObject } from 'react';
 import { Platform } from 'react-native';
 import { useTableManagerStoreRef } from '../contexts';
 
-import { cellSelectionPluginKey, useCopyPasteEvents, usePluginsDataStoreRef } from '../plugins';
+import { CELL_SELECTION_PLUGIN_KEY, useCopyPasteEvents, usePluginsDataStoreRef } from '../plugins';
 import { isMac } from '../utils';
 
 export type Props = {
@@ -35,7 +35,7 @@ const useHandleKeydownEvents = ({ ref }: Props) => {
 
             if (!store.current.focusedCell || store.current.focusedCell.type === 'column') return;
 
-            const selection = pluginDataStore.current[cellSelectionPluginKey] || {
+            const selection = pluginDataStore.current[CELL_SELECTION_PLUGIN_KEY] || {
                 start: store.current.focusedCell,
                 end: store.current.focusedCell,
             };

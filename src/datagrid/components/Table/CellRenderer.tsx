@@ -26,7 +26,7 @@ import {
 import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
 import { DragAndExtendHandle } from '../DragAndExtendHandle';
-import { useSelectionMethods } from '../../plugins';
+import { useCellSelectionMethods } from '../../plugins';
 import { CellSelectionIndicator } from '../CellSelectionIndicator';
 import { CellBorder } from '../CellBorder';
 
@@ -46,17 +46,18 @@ const _DataCell = (
 
     const cellRef = useRef<any>(null);
 
-    const { column, row, rowIndex, columnIndex } = useDataTableCell();
+    const { row, column, rowIndex, columnIndex } = useDataTableCell();
 
     const { type, ...restField } = useField(column);
     const { readonly, displayEditorOnHover, showEditor } = useFieldType(type);
-    const [isFocused, setFocusedCell] = useIsCellFocused(row, column);
+    const [isFocused, setFocusedCell] = useIsCellFocused(rowIndex, columnIndex);
     const { set: setTableManagerStore } = useTableManagerStoreRef();
 
-    const { useOnSelectCell } = useSelectionMethods();
+    const { useOnSelectCell, useOnDragAndSelectStart, useOnDragAndSelectEnd } =
+        useCellSelectionMethods();
     const onSelectCell = useOnSelectCell();
-    // const onDragAndSelectStart = useOnDragAndSelectStart();
-    // const onDragAndSelectEnd = useOnDragAndSelectEnd();
+    const onDragAndSelectStart = useOnDragAndSelectStart();
+    const onDragAndSelectEnd = useOnDragAndSelectEnd();
 
     const isTappedRef = useRef(0);
 
@@ -66,7 +67,7 @@ const _DataCell = (
 
     const onFocus = useCallback(
         (e: GestureResponderEvent) => {
-            const cell = { columnId: column, rowId: row, columnIndex, rowIndex };
+            const cell = { columnIndex, rowIndex };
 
             if ((e as unknown as MouseEvent).shiftKey) {
                 onSelectCell(cell);
@@ -78,7 +79,7 @@ const _DataCell = (
                 type: 'cell',
             });
         },
-        [column, columnIndex, onSelectCell, row, rowIndex, setFocusedCell],
+        [columnIndex, onSelectCell, rowIndex, setFocusedCell],
     );
 
     const onPress = useCallback(
@@ -123,17 +124,15 @@ const _DataCell = (
     const onDrag = useMemo(() => {
         return Gesture.Pan()
             .onBegin(() => {
-                // onDragAndSelectStart({
-                //     rowIndex,
-                //     columnIndex,
-                //     columnId: column,
-                //     rowId: row,
-                // });
+                onDragAndSelectStart({
+                    rowIndex,
+                    columnIndex,
+                });
             })
             .onEnd(() => {
-                // onDragAndSelectEnd();
+                onDragAndSelectEnd();
             });
-    }, []);
+    }, [onDragAndSelectStart, onDragAndSelectEnd, rowIndex, columnIndex]);
 
     useEffect(() => {
         if (isFocused || !isEditing) return;
@@ -151,8 +150,8 @@ const _DataCell = (
     useContextMenu({ ref: cellRef, callback: handleContextMenu });
 
     return (
-        <GestureDetector gesture={onDrag}>
-            <Pressable ref={cellRef} onPress={onPress} style={containerStyle} {...rest}>
+        <Pressable ref={cellRef} onPress={onPress} style={containerStyle} {...rest}>
+            <GestureDetector gesture={onDrag}>
                 <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
                     {displayViewRenderer ? (
                         <ViewRenderer value={value} type={type} {...restField} />
@@ -170,11 +169,12 @@ const _DataCell = (
                         columnIndex={columnIndex}
                         rowIndex={rowIndex}
                     />
-                    <DragAndExtendHandle style={styles.dragHandle} isFocused={isFocused} />
                     <CellSelectionIndicator hovered={hovered} />
                 </View>
-            </Pressable>
-        </GestureDetector>
+            </GestureDetector>
+
+            <DragAndExtendHandle style={styles.dragHandle} isFocused={isFocused} />
+        </Pressable>
     );
 };
 

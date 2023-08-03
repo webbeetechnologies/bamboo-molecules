@@ -1,34 +1,36 @@
 import { useCallback, useEffect } from 'react';
-import { useTableManagerStoreRef } from '@bambooapp/bamboo-molecules/datagrid';
-import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
+import {
+    usePluginsDataValueSelectorValue,
+    useTableManagerStoreRef,
+} from '@bambooapp/bamboo-molecules/datagrid';
 import { Platform } from 'react-native';
 
 import { createPlugin } from './createPlugin';
 import { PluginEvents } from './types';
 import { usePluginsDataStoreRef } from './plugins-manager';
+import { checkSelection, useNormalizeCellHandler } from './utils';
 
-export type Cell = {
-    columnId: TDataTableColumn;
-    rowId: TDataTableRow;
+export type CellIndexes = {
     rowIndex: number;
     columnIndex: number;
 };
 
-export const cellSelectionPluginKey = 'cell-selection';
+export const CELL_SELECTION_PLUGIN_KEY = 'cell-selection';
 
 const useOnSelectCell = () => {
     const { store: tableManagerStore, set: setTableManagerStore } = useTableManagerStoreRef();
     const { set: setStore } = usePluginsDataStoreRef();
-    const { beforeCellSelection, afterCellSelection, onCellSelection } = useSelectionEvents();
+    const { beforeCellSelection, afterCellSelection, onCellSelection } = useCellSelectionEvents();
+    const normalizeCell = useNormalizeCellHandler();
 
     return useCallback(
-        (cell: Cell) => {
+        (cell: CellIndexes) => {
             if (
                 !tableManagerStore.current.focusedCell ||
                 tableManagerStore.current.focusedCell?.type === 'column'
             ) {
                 setTableManagerStore(() => ({
-                    focusedCell: { ...cell, type: 'cell' },
+                    focusedCell: { ...normalizeCell(cell), type: 'cell' },
                 }));
 
                 return;
@@ -42,8 +44,8 @@ const useOnSelectCell = () => {
 
             onCellSelection({ selection });
             setStore(prev => ({
-                [cellSelectionPluginKey]: {
-                    ...prev[cellSelectionPluginKey],
+                [CELL_SELECTION_PLUGIN_KEY]: {
+                    ...prev[CELL_SELECTION_PLUGIN_KEY],
                     ...selection,
                 },
             }));
@@ -51,6 +53,7 @@ const useOnSelectCell = () => {
             afterCellSelection();
         },
         [
+            normalizeCell,
             afterCellSelection,
             beforeCellSelection,
             onCellSelection,
@@ -71,7 +74,7 @@ const useResetSelectionOnClickOutside = () => {
             if (allowedTargetIds.includes((e.target as HTMLDivElement)?.id)) return;
 
             setStore(() => ({
-                [cellSelectionPluginKey]: {
+                [CELL_SELECTION_PLUGIN_KEY]: {
                     start: undefined,
                     end: undefined,
                 },
@@ -93,18 +96,19 @@ const useResetSelectionOnClickOutside = () => {
 
 const useOnDragAndSelectStart = () => {
     const { set: setStore } = usePluginsDataStoreRef();
+    const normalizeCell = useNormalizeCellHandler();
 
     return useCallback(
-        (cell: Cell) => {
+        (cellIndexes: { columnIndex: number; rowIndex: number }) => {
             setStore(prev => ({
-                [cellSelectionPluginKey]: {
-                    ...prev[cellSelectionPluginKey],
-                    start: cell,
+                [CELL_SELECTION_PLUGIN_KEY]: {
+                    ...prev[CELL_SELECTION_PLUGIN_KEY],
+                    start: normalizeCell(cellIndexes),
                     isSelecting: true,
                 },
             }));
         },
-        [setStore],
+        [normalizeCell, setStore],
     );
 };
 
@@ -113,37 +117,54 @@ const useOnDragAndSelectEnd = () => {
 
     return useCallback(() => {
         setStore(prev => ({
-            [cellSelectionPluginKey]: {
-                ...prev[cellSelectionPluginKey],
+            [CELL_SELECTION_PLUGIN_KEY]: {
+                ...prev[CELL_SELECTION_PLUGIN_KEY],
                 isSelecting: false,
             },
         }));
     }, [setStore]);
 };
 
-const useProcessDragCellSelection = ({ cell, hovered }: { cell: Cell; hovered: boolean }) => {
+const useProcessDragCellSelection = ({
+    cell,
+    hovered,
+}: {
+    cell: CellIndexes;
+    hovered: boolean;
+}) => {
     const { store: pluginsDataStore } = usePluginsDataStoreRef();
     const onSelectCell = useOnSelectCell();
 
     useEffect(() => {
-        if (!pluginsDataStore.current[cellSelectionPluginKey]?.isSelecting || !hovered) return;
+        if (!pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.isSelecting || !hovered) return;
 
         onSelectCell(cell);
     });
 };
 
-export const [useSelectionPlugin, useSelectionEvents, useSelectionMethods] = createPlugin({
-    key: cellSelectionPluginKey,
-    eventKeys: [
-        PluginEvents.BEFORE_CELL_SELECTION,
-        PluginEvents.ON_CELL_SELECTION,
-        PluginEvents.AFTER_CELL_SELECTION,
-    ],
-    methods: {
-        useOnSelectCell,
-        useResetSelectionOnClickOutside,
-        useOnDragAndSelectStart,
-        useOnDragAndSelectEnd,
-        useProcessDragCellSelection,
-    },
-});
+const useHasCellSelection = ({ columnIndex, rowIndex }: CellIndexes) => {
+    return usePluginsDataValueSelectorValue(store =>
+        checkSelection(store[CELL_SELECTION_PLUGIN_KEY], {
+            columnIndex,
+            rowIndex,
+        }),
+    );
+};
+
+export const [useCellSelectionPlugin, useCellSelectionEvents, useCellSelectionMethods] =
+    createPlugin({
+        key: CELL_SELECTION_PLUGIN_KEY,
+        eventKeys: [
+            PluginEvents.BEFORE_CELL_SELECTION,
+            PluginEvents.ON_CELL_SELECTION,
+            PluginEvents.AFTER_CELL_SELECTION,
+        ],
+        methods: {
+            useOnSelectCell,
+            useResetSelectionOnClickOutside,
+            useOnDragAndSelectStart,
+            useOnDragAndSelectEnd,
+            useProcessDragCellSelection,
+            useHasCellSelection,
+        },
+    });

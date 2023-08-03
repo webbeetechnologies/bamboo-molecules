@@ -1,10 +1,10 @@
 import { createPlugin } from './createPlugin';
 import { PluginEvents } from './types';
 
-export const copyPastePluginKey = 'copy-paste';
+export const COPY_PASTE_PLUGIN_KEY = 'copy-paste';
 
 export const [useCopyPastePlugin, useCopyPasteEvents] = createPlugin({
-    key: copyPastePluginKey,
+    key: COPY_PASTE_PLUGIN_KEY,
     eventKeys: [
         PluginEvents.BEFORE_COPY_CELL,
         PluginEvents.ON_COPY_CELL,

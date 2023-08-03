@@ -18,9 +18,7 @@ export type TableManagerContextProviderProps = {
 
 export type TableManagerContextType = TableManagerContextProviderProps & {
     focusedCell: {
-        rowId?: TDataTableRow;
         rowIndex?: number;
-        columnId: TDataTableColumn;
         columnIndex: number;
         type: 'column' | 'cell';
     } | null;
@@ -66,11 +64,14 @@ export const TableManagerProvider = memo(
 export const useTableManagerStoreRef = useStoreRef;
 
 export const useIsCellFocused = (
-    recordId: TDataTableRow,
-    fieldId: TDataTableColumn,
+    rowIndex: number,
+    columnIndex: number,
 ): [boolean, (cell: TableManagerContextType['focusedCell']) => void] => {
     const [isFocused, setStore] = useTableManagerSelector(store => {
-        return store.focusedCell?.rowId === recordId && store.focusedCell?.columnId === fieldId;
+        return (
+            store.focusedCell?.rowIndex === rowIndex &&
+            store.focusedCell?.columnIndex === columnIndex
+        );
     });
 
     const setFocusedCell = useCallback(

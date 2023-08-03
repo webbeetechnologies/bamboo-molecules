@@ -19,7 +19,7 @@ export const {
     Provider: PluginsManagerContextProvider,
     useContext: usePluginsManagerSelector,
     useContextValue: usePluginsManagerValueSelector,
-    useStoreRef,
+    useStoreRef: usePluginsManagerStoreRef,
 } = createFastContext<PluginsManagerContextType>();
 
 export const {
@@ -113,7 +113,5 @@ const _PluginsManager = ({ plugins = defaultPlugins, children }: Props) => {
 };
 
 export const PluginsManager = memo(withPluginsData(_PluginsManager));
-
-export const usePluginsManagerStoreRef = useStoreRef;
 
 export default PluginsManager;

@@ -6,73 +6,36 @@ import {
     useMolecules,
 } from '@bambooapp/bamboo-molecules';
 import { StyleSheet } from 'react-native';
-import {
-    cellSelectionPluginKey,
-    Selection,
-    usePluginsDataValueSelectorValue,
-    dragAndExtendKey,
-    useDragAndExtendMethods,
-    useSelectionMethods,
-} from '../../plugins';
+import { useDragAndExtendMethods, useCellSelectionMethods } from '../../plugins';
 
 export type Props = StateLayerProps & {
     hovered: boolean;
 };
 
-const checkSelection = (selection: Selection, cell: { columnIndex: number; rowIndex: number }) => {
-    const { rowIndex, columnIndex } = cell;
-
-    if (!selection || !selection.start || !selection.end) return false;
-
-    const { start, end } = selection;
-    const { startRowIndex, endRowIndex } =
-        start.rowIndex <= end.rowIndex
-            ? { startRowIndex: start.rowIndex, endRowIndex: end.rowIndex }
-            : { startRowIndex: end.rowIndex, endRowIndex: start.rowIndex };
-    const { startColumnIndex, endColumnIndex } =
-        start.columnIndex <= end.columnIndex
-            ? { startColumnIndex: start.columnIndex, endColumnIndex: end.columnIndex }
-            : { startColumnIndex: end.columnIndex, endColumnIndex: start.columnIndex };
-
-    return (
-        rowIndex >= startRowIndex &&
-        rowIndex <= endRowIndex &&
-        columnIndex >= startColumnIndex &&
-        columnIndex <= endColumnIndex
-    );
-};
-
 const useVoid = () => {};
+const useBoolean = () => false;
 
 const CellSelectionIndicator = ({ hovered, style, ...rest }: Props) => {
     const { StateLayer } = useMolecules();
 
-    const { columnIndex, rowIndex, column, row } = useDataTableCell();
+    const { columnIndex, rowIndex } = useDataTableCell();
 
     const { hovered: rowHovered } = useDataTableRow();
 
-    const { useOnDragSelection = useVoid } = useDragAndExtendMethods() || {};
-    const { useProcessDragCellSelection = useVoid } = useSelectionMethods() || {};
+    const { useOnDragSelection = useVoid, useHasDragAndExtendSelection = useBoolean } =
+        useDragAndExtendMethods() || {};
+    const { useProcessDragCellSelection = useVoid, useHasCellSelection = useBoolean } =
+        useCellSelectionMethods() || {};
 
-    const selected = usePluginsDataValueSelectorValue(store =>
-        checkSelection(store[cellSelectionPluginKey], {
-            columnIndex,
-            rowIndex,
-        }),
-    );
-    const dragAndExtendSelected = usePluginsDataValueSelectorValue(store =>
-        checkSelection(store[dragAndExtendKey], {
-            columnIndex,
-            rowIndex,
-        }),
-    );
+    const selected = useHasCellSelection({ columnIndex, rowIndex });
+    const dragAndExtendSelected = useHasDragAndExtendSelection({ columnIndex, rowIndex });
 
     useProcessDragCellSelection({
         hovered,
-        cell: { columnIndex, rowIndex, rowId: row, columnId: column },
+        cell: { columnIndex, rowIndex },
     });
 
-    useOnDragSelection({ checkSelection, hovered, rowHovered, columnIndex, rowIndex });
+    useOnDragSelection({ hovered, rowHovered, columnIndex, rowIndex });
 
     const layerStyle = useMemo(
         () => [

@@ -1,10 +1,10 @@
 import { createPlugin } from './createPlugin';
 import { PluginEvents } from './types';
 
-export const columnResizePluginKey = 'column-resize';
+export const COLUMN_RESIZE_PLUGIN_KEY = 'column-resize';
 
 export const [useColumnResizePlugin, useColumnResizeEvents] = createPlugin({
-    key: columnResizePluginKey,
+    key: COLUMN_RESIZE_PLUGIN_KEY,
     eventKeys: [
         PluginEvents.BEFORE_COLUMN_RESIZE,
         PluginEvents.ON_COLUMN_RESIZE,

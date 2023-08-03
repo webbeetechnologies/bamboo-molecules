@@ -5,10 +5,8 @@ import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useDataTableCell, useMolecules } from '@bambooapp/bamboo-molecules';
 
 import {
-    cellSelectionPluginKey,
-    usePluginsDataValueSelectorValue,
     withPluginExistenceCheck,
-    dragAndExtendKey,
+    DRAG_AND_EXTEND_PLUGIN_KEY,
     useDragAndExtendMethods,
 } from '../../plugins';
 
@@ -19,23 +17,10 @@ export type Props = ViewProps & {
 const DragAndExtendHandle = ({ style, isFocused, ...rest }: Props) => {
     const { View } = useMolecules();
 
-    const { column: columnId, columnIndex, rowIndex, row: rowId } = useDataTableCell();
+    const { columnIndex, rowIndex } = useDataTableCell();
+    const { useIsDragHandleVisible } = useDragAndExtendMethods();
 
-    const isVisible = usePluginsDataValueSelectorValue(store => {
-        const selection = store[cellSelectionPluginKey];
-        const dragSelection = store[dragAndExtendKey];
-
-        if (dragSelection?.end) {
-            return (
-                dragSelection.end.columnIndex === columnIndex &&
-                dragSelection.end.rowIndex === rowIndex
-            );
-        }
-
-        if (!selection || !selection.end) return isFocused;
-
-        return selection.end.columnId === columnId && selection.end.rowId === rowId;
-    });
+    const isVisible = useIsDragHandleVisible({ columnIndex, rowIndex, isFocused });
 
     const ref = useRef(null);
 
@@ -87,4 +72,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(withPluginExistenceCheck(DragAndExtendHandle, dragAndExtendKey));
+export default memo(withPluginExistenceCheck(DragAndExtendHandle, DRAG_AND_EXTEND_PLUGIN_KEY));
