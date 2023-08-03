@@ -8,7 +8,7 @@ import { Platform } from 'react-native';
 import { createPlugin } from './createPlugin';
 import { PluginEvents } from './types';
 import { usePluginsDataStoreRef } from './plugins-manager';
-import { checkSelection, useNormalizeCellHandler } from './utils';
+import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
 
 export type CellIndexes = {
     rowIndex: number;
@@ -22,6 +22,7 @@ const useOnSelectCell = () => {
     const { set: setStore } = usePluginsDataStoreRef();
     const { beforeCellSelection, afterCellSelection, onCellSelection } = useCellSelectionEvents();
     const normalizeCell = useNormalizeCellHandler();
+    const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(
         (cell: CellIndexes) => {
@@ -36,7 +37,10 @@ const useOnSelectCell = () => {
                 return;
             }
 
-            const selection = { start: tableManagerStore.current.focusedCell, end: cell };
+            const selection = {
+                start: tableManagerStore.current.focusedCell as CellIndexes,
+                end: cell as CellIndexes,
+            };
 
             const continueSelection = beforeCellSelection({ selection });
 
@@ -46,13 +50,14 @@ const useOnSelectCell = () => {
             setStore(prev => ({
                 [CELL_SELECTION_PLUGIN_KEY]: {
                     ...prev[CELL_SELECTION_PLUGIN_KEY],
-                    ...selection,
+                    ...normalizeSelection(selection),
                 },
             }));
 
             afterCellSelection();
         },
         [
+            normalizeSelection,
             normalizeCell,
             afterCellSelection,
             beforeCellSelection,
@@ -113,16 +118,34 @@ const useOnDragAndSelectStart = () => {
 };
 
 const useOnDragAndSelectEnd = () => {
-    const { set: setStore } = usePluginsDataStoreRef();
+    const { store, set: setStore } = usePluginsDataStoreRef();
+    const { beforeCellSelection, onCellSelection, afterCellSelection } = useCellSelectionEvents();
+
+    const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(() => {
+        const selection = normalizeSelection(store.current[CELL_SELECTION_PLUGIN_KEY]);
+
+        if (beforeCellSelection({ selection }) === false) return;
+
+        onCellSelection({ selection });
+
         setStore(prev => ({
             [CELL_SELECTION_PLUGIN_KEY]: {
                 ...prev[CELL_SELECTION_PLUGIN_KEY],
                 isSelecting: false,
             },
         }));
-    }, [setStore]);
+
+        afterCellSelection();
+    }, [
+        afterCellSelection,
+        beforeCellSelection,
+        onCellSelection,
+        setStore,
+        store,
+        normalizeSelection,
+    ]);
 };
 
 const useProcessDragCellSelection = ({

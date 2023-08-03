@@ -6,7 +6,7 @@ import { CELL_SELECTION_PLUGIN_KEY, CellIndexes } from './cell-selection';
 import { usePluginsDataStoreRef, usePluginsDataValueSelectorValue } from './plugins-manager';
 import { createPlugin } from './createPlugin';
 import { PluginEvents, Selection } from './types';
-import { checkSelection, useNormalizeCellHandler } from './utils';
+import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
 
 export const DRAG_AND_EXTEND_PLUGIN_KEY = 'drag-and-extend';
 
@@ -43,6 +43,7 @@ const useOnDragEnd = () => {
     const { store: tableManagerStore } = useTableManagerStoreRef();
     const { store, set: setStore } = usePluginsDataStoreRef();
     const { onDragAndExtend, afterDragAndExtend } = useDragAndExtendEvents() || emptyObj;
+    const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(() => {
         const copySelection = store.current[CELL_SELECTION_PLUGIN_KEY] || {
@@ -51,7 +52,10 @@ const useOnDragEnd = () => {
         };
         const pasteSelection = store.current[DRAG_AND_EXTEND_PLUGIN_KEY];
 
-        onDragAndExtend({ selection: copySelection, target: pasteSelection });
+        onDragAndExtend({
+            selection: normalizeSelection(copySelection),
+            target: normalizeSelection(pasteSelection),
+        });
 
         setStore(prev => ({
             [DRAG_AND_EXTEND_PLUGIN_KEY]: undefined,
@@ -65,7 +69,14 @@ const useOnDragEnd = () => {
         }));
 
         afterDragAndExtend();
-    }, [afterDragAndExtend, onDragAndExtend, setStore, store, tableManagerStore]);
+    }, [
+        afterDragAndExtend,
+        normalizeSelection,
+        onDragAndExtend,
+        setStore,
+        store,
+        tableManagerStore,
+    ]);
 };
 
 const useOnDragSelection = ({
@@ -85,6 +96,7 @@ const useOnDragSelection = ({
     const { beforeDragAndExtend, onDragAndExtend } = useDragAndExtendEvents();
 
     const normalizeCell = useNormalizeCellHandler();
+    const normalizeSelection = useNormalizeSelectionHandler();
 
     useEffect(() => {
         // we need hovered because only hovered cell would trigger the event instead of the entire row
@@ -155,6 +167,8 @@ const useOnDragSelection = ({
             };
         }
 
+        selection = normalizeSelection(selection as Selection);
+
         const continueDragAndSelection = beforeDragAndExtend({ selection });
 
         if (continueDragAndSelection === false) return;
@@ -177,6 +191,7 @@ const useOnDragSelection = ({
         beforeDragAndExtend,
         onDragAndExtend,
         datatableStore,
+        normalizeSelection,
     ]);
 };
 

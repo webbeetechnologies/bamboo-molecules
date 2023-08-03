@@ -1,4 +1,4 @@
-import { memo, MutableRefObject, PropsWithChildren, useCallback, useMemo } from 'react';
+import { memo, MutableRefObject, PropsWithChildren, RefObject, useCallback, useMemo } from 'react';
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
@@ -14,6 +14,7 @@ import {
 export type TableManagerContextProviderProps = {
     withContextMenu: boolean;
     records: GroupedData[];
+    tableRef: RefObject<any>;
 };
 
 export type TableManagerContextType = TableManagerContextProviderProps & {
@@ -40,6 +41,7 @@ export const {
 
 export const TableManagerProvider = memo(
     ({
+        tableRef,
         withContextMenu,
         children,
         records,
@@ -47,6 +49,7 @@ export const TableManagerProvider = memo(
         const contextValue = useMemo(
             () => ({
                 ...defaultContextValue,
+                tableRef,
                 withContextMenu,
                 records,
             }),

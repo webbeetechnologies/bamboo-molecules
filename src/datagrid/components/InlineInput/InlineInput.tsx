@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
+import { StyleSheet } from 'react-native';
 import type { TextInputProps } from '../../../components';
 import { useMolecules } from '../../../hooks';
-import { StyleSheet } from 'react-native';
 
 const InlineInput = ({
     containerStyle: containerStyleProp,

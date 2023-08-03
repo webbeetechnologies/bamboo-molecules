@@ -4,6 +4,7 @@ import { useTableManagerStoreRef } from '../contexts';
 
 import { CELL_SELECTION_PLUGIN_KEY, useCopyPasteEvents, usePluginsDataStoreRef } from '../plugins';
 import { isMac } from '../utils';
+import { useNormalizeSelectionHandler } from '../plugins/utils';
 
 export type Props = {
     ref: RefObject<HTMLDivElement>;
@@ -25,6 +26,7 @@ const useHandleKeydownEvents = ({ ref }: Props) => {
     const { store: pluginDataStore } = usePluginsDataStoreRef();
 
     const { beforeCopyCell, onCopyCell, beforePasteCell, onPasteCell } = useCopyPasteEvents();
+    const normalizeSelection = useNormalizeSelectionHandler();
 
     const onKeydown = useCallback(
         (e: KeyboardEvent) => {
@@ -35,10 +37,12 @@ const useHandleKeydownEvents = ({ ref }: Props) => {
 
             if (!store.current.focusedCell || store.current.focusedCell.type === 'column') return;
 
-            const selection = pluginDataStore.current[CELL_SELECTION_PLUGIN_KEY] || {
-                start: store.current.focusedCell,
-                end: store.current.focusedCell,
-            };
+            const selection = normalizeSelection(
+                pluginDataStore.current[CELL_SELECTION_PLUGIN_KEY] || {
+                    start: store.current.focusedCell,
+                    end: store.current.focusedCell,
+                },
+            );
 
             const continueCopy = beforeCopyCell({
                 selection,
@@ -57,7 +61,15 @@ const useHandleKeydownEvents = ({ ref }: Props) => {
                 });
             }
         },
-        [beforeCopyCell, beforePasteCell, onCopyCell, onPasteCell, store, pluginDataStore],
+        [
+            store,
+            normalizeSelection,
+            pluginDataStore,
+            beforeCopyCell,
+            beforePasteCell,
+            onCopyCell,
+            onPasteCell,
+        ],
     );
 
     useEffect(() => {

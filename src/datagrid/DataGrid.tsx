@@ -32,7 +32,7 @@ import {
     CellWrapperComponent,
     RowWrapperComponent,
 } from './components';
-import { useContextMenu, useHandleKeydownEvents } from './hooks';
+import { useContextMenu } from './hooks';
 import type { FieldTypes } from './types';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
 import { RecordWithId, RowType, prepareGroupedData } from './utils';
@@ -107,7 +107,6 @@ const DataGrid = ({
     const shouldContextMenuDisplayed = useShouldContextMenuDisplayed();
     const { useResetSelectionOnClickOutside } = useCellSelectionMethods();
 
-    const ref = useRef(null);
     const dataRef = useRef<{ records: TDataTableRow[]; columns: TDataTableColumn[] }>({
         records: [],
         columns: [],
@@ -181,16 +180,15 @@ const DataGrid = ({
         };
     }, [columnIds, records]);
 
-    useContextMenu({ ref, callback: onContextMenuOpen });
-
-    useHandleKeydownEvents({ ref });
+    // TODO - move this to plugins
+    useContextMenu({ ref: store.current.tableRef, callback: onContextMenuOpen });
 
     useResetSelectionOnClickOutside();
 
     return (
         <>
             <DataTable
-                ref={ref}
+                ref={store.current.tableRef}
                 testID="datagrid"
                 renderHeader={renderHeader}
                 renderCell={renderCell}
@@ -227,6 +225,8 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         groups,
         ...rest
     }: Props) => {
+        const ref = useRef(null);
+
         const hooksContextValue = useMemo(
             () => ({
                 useField,
@@ -251,6 +251,7 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
             <FieldTypesProvider value={fieldTypes}>
                 <HooksProvider value={hooksContextValue}>
                     <TableManagerProvider
+                        tableRef={ref}
                         records={groupedRecords}
                         withContextMenu={!!contextMenuProps}>
                         <PluginsManager plugins={plugins}>

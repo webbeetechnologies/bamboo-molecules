@@ -111,12 +111,12 @@ const _DataCell = (
 
     const { containerStyle, innerContainerStyle } = useMemo(
         () => ({
-            containerStyle: [styles.cellContainer, style] as ViewStyle,
-            innerContainerStyle: [
-                styles.cell,
+            containerStyle: [
+                styles.cellContainer,
                 !isEditing ? styles.centered : styles.editContainer,
-                innerContainerProps.style,
+                style,
             ] as ViewStyle,
+            innerContainerStyle: [styles.cell, innerContainerProps.style] as ViewStyle,
         }),
         [style, isEditing, innerContainerProps.style],
     );
@@ -151,8 +151,8 @@ const _DataCell = (
 
     return (
         <Pressable ref={cellRef} onPress={onPress} style={containerStyle} {...rest}>
-            <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
-                <GestureDetector gesture={onDrag}>
+            <GestureDetector gesture={onDrag}>
+                <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
                     {displayViewRenderer ? (
                         <ViewRenderer value={value} type={type} {...restField} />
                     ) : (
@@ -163,16 +163,14 @@ const _DataCell = (
                             {...restField}
                         />
                     )}
-                </GestureDetector>
+                </View>
+            </GestureDetector>
 
-                <CellBorder isFocused={isFocused} columnIndex={columnIndex} rowIndex={rowIndex} />
+            <CellBorder isFocused={isFocused} columnIndex={columnIndex} rowIndex={rowIndex} />
 
-                <CellSelectionIndicator hovered={hovered} />
+            <CellSelectionIndicator hovered={hovered} />
 
-                {!isEditing && (
-                    <DragAndExtendHandle style={styles.dragHandle} isFocused={isFocused} />
-                )}
-            </View>
+            {!isEditing && <DragAndExtendHandle style={styles.dragHandle} isFocused={isFocused} />}
         </Pressable>
     );
 };
@@ -187,11 +185,16 @@ const actionContainerProps = { style: { height: '100%' } };
 
 const styles = StyleSheet.create({
     cellContainer: {
-        height: '100%',
+        flex: 1,
+        padding: 4,
     },
     cell: {
         flex: 1,
-        padding: 4,
+        justifyContent: 'center',
+    },
+    rendererContainer: {
+        width: '100%',
+        height: '100%',
     },
     editContainer: {
         position: 'absolute',

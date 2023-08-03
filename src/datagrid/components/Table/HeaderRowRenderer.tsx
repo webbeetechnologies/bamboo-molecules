@@ -2,9 +2,12 @@ import { Fragment, memo, useMemo } from 'react';
 import { useComponentStyles, useMolecules } from '@bambooapp/bamboo-molecules';
 import { useDataTable, renderDataTableHeaderCell } from '@bambooapp/bamboo-molecules/components';
 import { StyleSheet } from 'react-native';
+import { useHandleKeydownEvents } from '../../hooks';
+import { useTableManagerStoreRef } from '../../contexts';
 
 export const TableHeaderRow = memo(() => {
     const { View } = useMolecules();
+    const { store } = useTableManagerStoreRef();
 
     const { columns, headerRowProps } = useDataTable(store => ({
         columns: store.columns || [],
@@ -24,6 +27,9 @@ export const TableHeaderRow = memo(() => {
             )),
         [columns],
     );
+
+    // TODO - move this to plugins
+    useHandleKeydownEvents({ ref: store.current.tableRef });
 
     return (
         <View {...headerRowProps} style={headerStyle}>
