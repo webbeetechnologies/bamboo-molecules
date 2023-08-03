@@ -1,5 +1,6 @@
 import type { Selection } from '../types';
 
+// TODO - add testcases
 const checkSelection = (selection: Selection, cell: { columnIndex: number; rowIndex: number }) => {
     const { rowIndex, columnIndex } = cell;
 

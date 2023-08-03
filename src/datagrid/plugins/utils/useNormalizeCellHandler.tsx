@@ -1,6 +1,7 @@
 import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
 import { useCallback } from 'react';
 
+// TODO - add testcases
 const useNormalizeCellHandler = () => {
     const { store: datatableStore } = useDataTableStoreRef();
 
