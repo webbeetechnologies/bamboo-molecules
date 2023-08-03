@@ -45,7 +45,7 @@ const useRowRenderer = createUseRowRenderer({
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
 
-type DataGripdPropsBase = Omit<
+type DataGridPropsBase = Omit<
     DataTableProps,
     'title' | 'renderHeader' | 'renderCell' | 'columns' | 'records'
 > &
@@ -59,7 +59,7 @@ type DataGripdPropsBase = Omit<
         groups?: TDataTableColumn[];
     };
 
-export type Props = DataGripdPropsBase &
+export type Props = DataGridPropsBase &
     HooksContextType & {
         fieldTypes?: FieldTypes;
         records: RecordWithId[];
@@ -80,7 +80,7 @@ export type ContextMenuProps = Partial<MenuProps> & {
     children?: ReactNode;
 };
 
-type DataGridPresentationProps = DataGripdPropsBase & {
+type DataGridPresentationProps = DataGridPropsBase & {
     records: TDataTableRow[];
 };
 
@@ -223,17 +223,21 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         plugins: _plugins,
         records,
         groups,
+        useRowRenderer: useRowRendererProp,
+        useGroupRowState: useGroupRowStateProp,
+        useShowGroupFooter: useShowGroupFooterProp,
+
         ...rest
     }: Props) => {
         const ref = useRef(null);
 
-        const hooksContextValue = useMemo(
-            () => ({
-                useField,
-                useCellValue,
-            }),
-            [useField, useCellValue],
-        );
+        const hooksContextValue = useRef({
+            useField,
+            useCellValue,
+            useRowRenderer: useRowRendererProp,
+            useGroupRowState: useGroupRowStateProp,
+            useShowGroupFooter: useShowGroupFooterProp,
+        }).current;
 
         const selectionPlugin = useCellSelectionPlugin({});
 

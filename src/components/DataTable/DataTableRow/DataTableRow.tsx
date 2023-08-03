@@ -4,8 +4,9 @@ import type { ListRenderItem } from 'react-native';
 import type { DataTableRowProps, TDataTableRow } from '../types';
 import { DataTableRowContext, useDataTable } from '../DataTableContext';
 import { renderCellComponent } from '../DataTableCell';
-import { useComponentStyles, useMolecules } from '../../../hooks';
-import { CallbackActionState, withActionState } from '../../../hocs';
+import type { CallbackActionState } from '../../../hocs';
+import { useActionState, useComponentStyles, useMolecules } from '../../../hooks';
+
 // import { useRowWithinBounds } from '../DataTable';
 
 /**
@@ -13,55 +14,53 @@ import { CallbackActionState, withActionState } from '../../../hocs';
  * The default DataTable Row component optimized for rendering all sorts of data.
  *
  */
-const DataTableRowPresentation = Object.assign(
-    (props: DataTableRowProps & CallbackActionState) => {
-        const { rowId, index, hovered = false, columns, rowProps, isSelected = false } = props;
-        const { rowSize } = useDataTable(store => ({
-            rowSize: store.rowSize,
-        }));
-        const { View } = useMolecules();
+const DataTableRowPresentation = (props: DataTableRowProps) => {
+    const { hovered = false, actionsRef } = useActionState();
 
-        const rowStyle = useComponentStyles(
-            'DataTable_Row',
-            [rowProps?.style, { flexDirection: 'row' }],
-            {
-                size: rowProps?.size ?? rowSize,
-                states: {
-                    selected_hovered: isSelected && hovered,
-                    selected: isSelected,
-                    hovered,
-                },
+    const { rowId, index, columns, rowProps, isSelected = false } = props;
+    const { rowSize } = useDataTable(store => ({
+        rowSize: store.rowSize,
+    }));
+    const { View } = useMolecules();
+
+    const rowStyle = useComponentStyles(
+        'DataTable_Row',
+        [rowProps?.style, { flexDirection: 'row' }],
+        {
+            size: rowProps?.size ?? rowSize,
+            states: {
+                selected_hovered: isSelected && hovered,
+                selected: isSelected,
+                hovered,
             },
-        );
+        },
+    );
 
-        const rowContext = useMemo(
-            () => ({ row: rowId, rowIndex: index, hovered }),
-            [rowId, index, hovered],
-        );
+    const rowContext = useMemo(
+        () => ({ row: rowId, rowIndex: index, hovered }),
+        [rowId, index, hovered],
+    );
 
-        const result = useMemo(
-            () =>
-                columns.map((item, i) => (
-                    <Fragment key={item}>{renderCellComponent({ item, index: i })}</Fragment>
-                )),
-            [columns],
-        );
+    const result = useMemo(
+        () =>
+            columns.map((item, i) => (
+                <Fragment key={i}>{renderCellComponent({ item, index: i })}</Fragment>
+            )),
+        [columns],
+    );
 
-        return (
-            <DataTableRowContext.Provider value={rowContext} key={rowId}>
-                <View {...rowProps} style={rowStyle}>
-                    {result}
-                </View>
-            </DataTableRowContext.Provider>
-        );
-    },
-    {
-        displayName: 'DataTableRowPresentation',
-    },
-);
+    return (
+        <DataTableRowContext.Provider value={rowContext}>
+            <View ref={actionsRef} {...rowProps} style={rowStyle}>
+                {result}
+            </View>
+        </DataTableRowContext.Provider>
+    );
+};
 
 // Add Action State to the row
-const DataTableRowPresentationWithActionState = memo(withActionState(DataTableRowPresentation));
+const DataTableRowPresentationWithActionState = memo(DataTableRowPresentation);
+DataTableRowPresentation.displayName = 'DataTableRowPresentation';
 
 /**
  *
@@ -100,12 +99,5 @@ DataTableRow.displayName = 'DataTableRow';
  *
  */
 export const renderRow: ListRenderItem<TDataTableRow> = ({ item, index }) => (
-    <DataTableRow
-        rowId={item}
-        index={index}
-        key={item}
-        actionStateContainerProps={actionStateContainerProps}
-    />
+    <DataTableRow rowId={item} index={index} />
 );
-
-const actionStateContainerProps = { style: { height: '100%' } };

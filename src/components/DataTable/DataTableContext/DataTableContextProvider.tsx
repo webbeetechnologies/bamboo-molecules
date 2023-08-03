@@ -67,14 +67,12 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 0,
             );
         }, [columnWidths, columns, defaultColumnWidth]);
-        // const tableHeight = Math.min(records.length * 40);
 
         const dataContext = useMemo(
             () => ({
                 records,
                 columns,
                 tableWidth,
-                // tableHeight,
                 defaultColumnWidth,
                 headerCellProps,
                 cellProps,
