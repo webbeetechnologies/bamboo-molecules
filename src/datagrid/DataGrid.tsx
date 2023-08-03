@@ -5,7 +5,7 @@ import type {
     RenderHeaderCellProps,
 } from '../components';
 import { useMolecules } from '../hooks';
-import { ComponentType, memo, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
+import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { StyleSheet } from 'react-native';
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
@@ -17,7 +17,6 @@ import {
     HooksContextType,
     HooksProvider,
     useShouldContextMenuDisplayed,
-    useTableManagerValueSelector,
     createUseRowRenderer,
 } from './contexts';
 import { typedMemo } from './hocs';
@@ -30,6 +29,8 @@ import {
     GroupFooterRow,
     TableHeaderRow,
     GroupHeaderRow,
+    CellWrapperComponent,
+    RowWrapperComponent,
 } from './components';
 import { useContextMenu, useHandleKeydownEvents } from './hooks';
 import type { FieldTypes } from './types';
@@ -144,7 +145,7 @@ const DataGrid = ({
     const verticalScrollProps = useMemo(
         () => ({
             ..._verticalScrollProps,
-            CellRendererComponent: RowRendererComponent,
+            CellRendererComponent: RowWrapperComponent,
         }),
         [_verticalScrollProps],
     );
@@ -205,6 +206,7 @@ const DataGrid = ({
                 horizontalScrollProps={horizontalScrollProps}
                 HeaderRowComponent={TableHeaderRow}
                 useRowRenderer={useRowRenderer}
+                CellWrapperComponent={CellWrapperComponent}
             />
 
             {shouldContextMenuDisplayed && (
@@ -213,22 +215,6 @@ const DataGrid = ({
         </>
     );
 };
-
-// TODO - inject this to Provider
-const RowRendererComponent = memo(({ style, index, ...rest }: ViewProps & { index: number }) => {
-    const { View } = useMolecules();
-
-    const isRowFocused = useTableManagerValueSelector(
-        store => store.focusedCell?.rowIndex === index - 1,
-    )!;
-
-    const rowRendererStyle = useMemo(
-        () => [style, isRowFocused && { zIndex: 100 }],
-        [isRowFocused, style],
-    );
-
-    return <View style={rowRendererStyle} {...rest} />;
-});
 
 const withContextProviders = (Component: ComponentType<DataGridPresentationProps>) => {
     return ({

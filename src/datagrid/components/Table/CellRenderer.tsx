@@ -151,8 +151,8 @@ const _DataCell = (
 
     return (
         <Pressable ref={cellRef} onPress={onPress} style={containerStyle} {...rest}>
-            <GestureDetector gesture={onDrag}>
-                <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
+            <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
+                <GestureDetector gesture={onDrag}>
                     {displayViewRenderer ? (
                         <ViewRenderer value={value} type={type} {...restField} />
                     ) : (
@@ -163,17 +163,16 @@ const _DataCell = (
                             {...restField}
                         />
                     )}
+                </GestureDetector>
 
-                    <CellBorder
-                        isFocused={isFocused}
-                        columnIndex={columnIndex}
-                        rowIndex={rowIndex}
-                    />
-                    <CellSelectionIndicator hovered={hovered} />
-                </View>
-            </GestureDetector>
+                <CellBorder isFocused={isFocused} columnIndex={columnIndex} rowIndex={rowIndex} />
 
-            <DragAndExtendHandle style={styles.dragHandle} isFocused={isFocused} />
+                <CellSelectionIndicator hovered={hovered} />
+
+                {!isEditing && (
+                    <DragAndExtendHandle style={styles.dragHandle} isFocused={isFocused} />
+                )}
+            </View>
         </Pressable>
     );
 };
