@@ -22,8 +22,7 @@ import {
 } from './contexts';
 import { typedMemo } from './hocs';
 import PluginsManager from './plugins/plugins-manager';
-import type { Plugin } from './types/plugins';
-import { useCellSelectionMethods, useCellSelectionPlugin } from './plugins';
+import { useCellSelectionMethods, useCellSelectionPlugin, Plugin } from './plugins';
 import {
     ContextMenu,
     ColumnHeaderCell,

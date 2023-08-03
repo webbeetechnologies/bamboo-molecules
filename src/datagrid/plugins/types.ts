@@ -1,4 +1,6 @@
 import type { CellIndexes } from './cell-selection';
+import type { RefObject } from 'react';
+import type { PluginHandle } from './createPlugin';
 
 export type Selection = {
     start: CellIndexes;
@@ -55,3 +57,5 @@ export type PluginManagerEvents = {
     [PluginEvents.ON_DRAG_AND_EXTEND]: (args: { selection: Selection; target: Selection }) => void;
     [PluginEvents.AFTER_DRAG_AND_EXTEND]: () => void;
 };
+
+export type Plugin = RefObject<PluginHandle<any>>;

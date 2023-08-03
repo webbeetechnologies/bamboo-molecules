@@ -1,8 +1,7 @@
 import { ComponentType, memo, ReactNode, useEffect, useMemo } from 'react';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
-import type { Plugin } from '../types/plugins';
-import { PluginManagerEvents, PluginEvents } from './types';
+import { PluginManagerEvents, PluginEvents, Plugin } from './types';
 import type { Methods } from './createPlugin';
 
 export type PluginsManagerContextType = {
