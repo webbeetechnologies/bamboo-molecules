@@ -20,32 +20,34 @@ export const DataGrid_RowItem = {
     flex: 1,
     borderColor: 'colors.onSurfaceVariant',
     borderTopWidth: 1,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+};
+
+export const DataGrid_GroupHeaderItem = {
+    ...DataGrid_RowItem,
+    marginTop: 'spacings.3',
     borderRightWidth: 1,
     borderLeftWidth: 1,
-    variants: {
-        row: {
-            borderLeftWidth: 0,
-            borderRightWidth: 0,
-        },
-        header: {
-            marginTop: 'spacings.3',
 
-            states: {
-                isFirst: {
-                    marginTop: 0,
-                },
-            },
+    states: {
+        isFirst: {
+            marginTop: 0,
         },
-        footer: {
-            borderBottomWidth: 1,
-            borderTopWidth: 0,
-            height: 'spacings.3',
-            states: {
-                showFooter: {
-                    borderTopWidth: 1,
-                    height: undefined,
-                },
-            },
+    },
+};
+
+export const DataGrid_GroupFooterItem = {
+    ...DataGrid_GroupHeaderItem,
+    marginTop: 0,
+    borderBottomWidth: 1,
+    borderTopWidth: 0,
+    height: 'spacings.3',
+
+    states: {
+        showFooter: {
+            borderTopWidth: 1,
+            height: undefined,
         },
     },
 };

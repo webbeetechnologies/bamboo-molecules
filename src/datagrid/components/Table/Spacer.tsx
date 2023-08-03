@@ -35,9 +35,9 @@ export const SpacerList = memo((props: SpacerProp & { level: number }) => {
 });
 
 const getVariant = (groupRow: GroupedData) => {
-    if ((groupRow as GroupHeader).isGroupHeader) return 'header';
-    if ((groupRow as GroupFooter).isGroupFooter) return 'footer';
-    return 'row';
+    if ((groupRow as GroupHeader).isGroupHeader) return 'DataGrid_GroupHeaderItem';
+    if ((groupRow as GroupFooter).isGroupFooter) return 'DataGrid_GroupFooterItem';
+    return 'DataGrid_RowItem';
 };
 
 export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
@@ -53,10 +53,10 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
             variant,
         });
 
-        const style = useComponentStyles('DataGrid_RowItem', props.rowProps?.style, {
+        const style = useComponentStyles(variant, props.rowProps?.style, {
             variant,
             states: {
-                showFooter: useShowGroupFooter(meta) && variant === 'footer',
+                showFooter: useShowGroupFooter(meta) && (groupRow as GroupFooter).isGroupFooter,
                 ...useGroupRowState(meta),
             },
         });
