@@ -6,14 +6,12 @@ import type { GroupFooter, GroupHeader, GroupedData } from 'src/datagrid/utils';
 
 type SpacerProp = { variant: 'left' | 'right' };
 
-const Spacer = (props: SpacerProp & { edge: boolean }) => {
+const Spacer = (props: SpacerProp) => {
     const { View } = useMolecules();
 
     const spacer = useComponentStyles('DataGrid_Spacer', null, {
         variant: props.variant,
     });
-
-    // if (props.edge) return null;
 
     return <View style={spacer} />;
 };
@@ -22,11 +20,7 @@ export const SpacerList = memo((props: SpacerProp & { level: number }) => {
     const spaces = useMemo(
         () =>
             Array.from({ length: props.level }, (_, i) => (
-                <Spacer
-                    key={i + ''}
-                    variant={props.variant}
-                    edge={props.variant === 'left' ? i === 0 : i + 1 === props.level}
-                />
+                <Spacer key={i + ''} variant={props.variant} />
             )),
         [props.variant, props.level],
     );
@@ -35,9 +29,9 @@ export const SpacerList = memo((props: SpacerProp & { level: number }) => {
 });
 
 const getVariant = (groupRow: GroupedData) => {
-    if ((groupRow as GroupHeader).isGroupHeader) return 'header';
-    if ((groupRow as GroupFooter).isGroupFooter) return 'footer';
-    return 'row';
+    if ((groupRow as GroupHeader).isGroupHeader) return 'DataGrid_GroupHeaderItem';
+    if ((groupRow as GroupFooter).isGroupFooter) return 'DataGrid_GroupFooterItem';
+    return 'DataGrid_RowItem';
 };
 
 export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
@@ -53,10 +47,10 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
             variant,
         });
 
-        const style = useComponentStyles('DataGrid_RowItem', props.rowProps?.style, {
+        const style = useComponentStyles(variant, props.rowProps?.style, {
             variant,
             states: {
-                showFooter: useShowGroupFooter(meta) && variant === 'footer',
+                showFooter: useShowGroupFooter(meta) && (groupRow as GroupFooter).isGroupFooter,
                 ...useGroupRowState(meta),
             },
         });
