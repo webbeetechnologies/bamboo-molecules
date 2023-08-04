@@ -1,5 +1,21 @@
-import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
+// TODO - fix alias issue with Jest
+import { TDataTableColumn, TDataTableRow, useDataTableStoreRef } from '../../../components';
 import { useCallback } from 'react';
+import type { CellIndexes } from '../cell-selection';
+
+export const normalizeCellHandler = ({
+    columnIndex,
+    rowIndex,
+    columns,
+    records,
+}: CellIndexes & { records: TDataTableRow[]; columns: TDataTableColumn[] }) => {
+    return {
+        columnIndex,
+        rowIndex,
+        rowId: records[rowIndex],
+        columnId: columns[columnIndex],
+    };
+};
 
 // TODO - add testcases
 const useNormalizeCellHandler = () => {
@@ -7,12 +23,12 @@ const useNormalizeCellHandler = () => {
 
     return useCallback(
         ({ columnIndex, rowIndex }: { columnIndex: number; rowIndex: number }) => {
-            return {
+            return normalizeCellHandler({
                 columnIndex,
                 rowIndex,
-                rowId: datatableStore.current.records[rowIndex],
-                columnId: datatableStore.current.columns[columnIndex],
-            };
+                records: datatableStore.current.records,
+                columns: datatableStore.current.columns,
+            });
         },
         [datatableStore],
     );

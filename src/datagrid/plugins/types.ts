@@ -1,10 +1,22 @@
-import type { CellIndexes } from './cell-selection';
 import type { RefObject } from 'react';
-import type { PluginHandle } from './createPlugin';
+import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules';
 
-export type Selection = {
+import type { PluginHandle } from './createPlugin';
+import type { CellIndexes } from './cell-selection';
+
+export type Cell = CellIndexes & {
+    rowId: TDataTableRow;
+    columnId: TDataTableColumn;
+};
+
+export type SelectionIndexes = {
     start: CellIndexes;
     end: CellIndexes;
+};
+
+export type Selection = {
+    start: Cell;
+    end: Cell;
 };
 
 export enum PluginEvents {
