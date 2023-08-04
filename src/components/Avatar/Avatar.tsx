@@ -141,10 +141,8 @@ const AvatarInner = memo(
         );
 
         useEffect(() => {
-            if (!isImageFailed) return;
-
             setIsImageFailed(false);
-        }, [source, isImageFailed]);
+        }, [source]);
 
         if (source && !isImageFailed) {
             return (
