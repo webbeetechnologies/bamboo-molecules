@@ -8,6 +8,12 @@ import { GroupHeaderRow } from './GroupHeaderRenderer';
 import type { DataGridRowRendererProps } from '../../types';
 import { withSpacers } from './Spacer';
 
+/**
+ *
+ * If the factory function uses the default row renderer which is a part of DataTable Component.
+ * To add a separate DataRow renderer, inject it using a custom useRowRenderer passed to the DataGrid component.
+ *
+ */
 const useRowRendererLocal = createUseRowRenderer({
     [RowType.FOOTER]: GroupFooterRow,
     [RowType.HEADER]: GroupHeaderRow,

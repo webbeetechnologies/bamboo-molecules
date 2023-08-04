@@ -19,7 +19,7 @@ export const GroupFooterRenderer = memo(({ meta, rowProps }: GroupMetaRowProps) 
 
     return (
         <View {...rowProps}>
-            <Text>Hello World</Text>
+            <Text>A footer doesn't exist. Inject a custom footer to make this work!!</Text>
         </View>
     );
 });

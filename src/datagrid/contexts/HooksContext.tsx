@@ -50,7 +50,7 @@ export const useRowRenderer: UseRowRenderer = (rowRendererProps, DefaultRowCompo
 };
 
 export const useShowGroupFooter: UseShowGroupFooter = meta => {
-    const defaultFunction: UseShowGroupFooter = ({ isLastLevel }) => isLastLevel;
+    const defaultFunction: UseShowGroupFooter = () => false;
     const { useShowGroupFooter: useShowGroupFooterProp = defaultFunction } = useHooks();
     return useShowGroupFooterProp(meta);
 };
