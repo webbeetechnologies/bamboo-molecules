@@ -1,6 +1,6 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
+import { Toast, useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
 
 import '../../../src/datagrid';
 import {
@@ -14,13 +14,17 @@ import {
     RecordsProvider,
     groups,
 } from './mocks';
+import { useColumnResizePlugin, useCopyPastePlugin } from '../../../src/datagrid/plugins';
+import { useDragAndExtendPlugin } from '../../../src/datagrid/plugins/drag-and-extend';
 
 const containerStyle = { width: '100%' };
 
 export const Example = () => {
-    const { View, DataGrid } = useMolecules();
+    const { View, DataGrid, ToastContainer } = useMolecules();
 
     const { state: isOpen, handleOpen, handleClose } = useToggle();
+
+    const [columnWidth, setColumnWidth] = useState({});
 
     const { columnIds } = useMemo(
         () => ({
@@ -44,11 +48,53 @@ export const Example = () => {
         [handleClose, handleOpen, isOpen],
     );
 
+    const columnResizePlugin = useColumnResizePlugin({
+        onColumnResize: ({ columnId, width }) => {
+            setColumnWidth(prev => ({
+                ...prev,
+                [columnId]: width,
+            }));
+        },
+    });
+
+    const copyPastePlugin = useCopyPastePlugin({
+        onCopyCell: args => {
+            Toast.show({
+                text1: 'Cell copied',
+                position: 'bottom',
+            });
+            // eslint-disable-next-line no-console
+            console.log({ copyArgs: args });
+        },
+        onPasteCell: args => {
+            Toast.show({
+                text1: 'Pasted cell',
+                position: 'bottom',
+            });
+            // eslint-disable-next-line no-console
+            console.log({ pasteArgs: args });
+        },
+    });
+
+    const dragAndExtendPlugin = useDragAndExtendPlugin({
+        onDragAndExtend: args => {
+            // eslint-disable-next-line no-console
+            console.log({ dragAndExtend: args });
+        },
+    });
+
+    const plugins = useMemo(
+        () => [columnResizePlugin, copyPastePlugin, dragAndExtendPlugin],
+        [columnResizePlugin, copyPastePlugin, dragAndExtendPlugin],
+    );
+
     return (
         <FieldsProvider fields={fields}>
             <RecordsProvider records={records}>
                 <View style={containerStyle}>
                     <DataGrid
+                        plugins={plugins}
+                        columnWidths={columnWidth}
                         records={records}
                         columnIds={columnIds}
                         contextMenuProps={contextMenuProps}
@@ -56,6 +102,7 @@ export const Example = () => {
                         useCellValue={useCellValue}
                     />
                 </View>
+                <ToastContainer />
             </RecordsProvider>
         </FieldsProvider>
     );

@@ -1,21 +1,20 @@
-import { memo, MutableRefObject, PropsWithChildren, useCallback, useMemo } from 'react';
+import { memo, MutableRefObject, PropsWithChildren, RefObject, useCallback, useMemo } from 'react';
+import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
+import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
-import { createFastContext } from '../../fast-context';
 import { RowType, GroupedData, GroupHeader, GroupFooter } from '../utils';
 import { weakMemoized, keyBy } from '../utils';
-import type { TDataTableColumn, TDataTableRow } from '../../components/DataTable/types';
 import type { GroupMeta } from '../types';
 
 export type TableManagerContextProviderProps = {
     withContextMenu: boolean;
     records: GroupedData[];
+    tableRef: RefObject<any>;
 };
 
 export type TableManagerContextType = TableManagerContextProviderProps & {
     focusedCell: {
-        rowId?: TDataTableRow;
         rowIndex?: number;
-        columnId: TDataTableColumn;
         columnIndex: number;
         type: 'column' | 'cell';
     } | null;
@@ -37,6 +36,7 @@ export const {
 
 export const TableManagerProvider = memo(
     ({
+        tableRef,
         withContextMenu,
         children,
         records,
@@ -44,10 +44,11 @@ export const TableManagerProvider = memo(
         const contextValue = useMemo(
             () => ({
                 ...defaultContextValue,
+                tableRef,
                 withContextMenu,
                 records,
             }),
-            [withContextMenu, records],
+            [tableRef, withContextMenu, records],
         );
 
         return (
@@ -61,11 +62,14 @@ export const TableManagerProvider = memo(
 export const useTableManagerStoreRef = useStoreRef;
 
 export const useIsCellFocused = (
-    recordId: TDataTableRow,
-    fieldId: TDataTableColumn,
+    rowIndex: number,
+    columnIndex: number,
 ): [boolean, (cell: TableManagerContextType['focusedCell']) => void] => {
     const [isFocused, setStore] = useTableManagerSelector(store => {
-        return store.focusedCell?.rowId === recordId && store.focusedCell?.columnId === fieldId;
+        return (
+            store.focusedCell?.rowIndex === rowIndex &&
+            store.focusedCell?.columnIndex === columnIndex
+        );
     });
 
     const setFocusedCell = useCallback(

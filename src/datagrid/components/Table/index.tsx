@@ -1,14 +1,19 @@
+import type { ComponentType } from 'react';
 import { registerMolecule } from '@bambooapp/bamboo-molecules';
+
 import { GroupHeaderRenderer } from './GroupHeaderRenderer';
 import { GroupFooterRenderer } from './GroupFooterRenderer';
 import type { GroupMetaRowProps } from '../../types';
-import type { ComponentType } from 'react';
 
 export { default as ContextMenu, Props as ContextMenuProps } from './ContextMenu';
 export { default as CellRenderer, Props as CellRendererProps } from './CellRenderer';
 export { default as ColumnHeaderCell, ColumnHeaderCellProps } from './ColumnHeaderCell';
+export { renderRow, TableRow, Props as TableRowProps } from './RowRenderer';
+export { TableHeaderRow } from './HeaderRowRenderer';
 export { GroupHeaderRow, GroupHeaderRenderer } from './GroupHeaderRenderer';
 export { GroupFooterRow, GroupFooterRenderer } from './GroupFooterRenderer';
+export { default as CellWrapperComponent } from './CellWrapper';
+export { default as RowWrapperComponent } from './RowWrapper';
 
 registerMolecule('GroupHeaderRenderer', {
     Component: GroupHeaderRenderer,

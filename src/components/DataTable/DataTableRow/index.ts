@@ -13,6 +13,15 @@ export const dataTableRowStyles: ComponentStylePropWithResolvers<
         sm: {
             height: 40,
         },
+        md: {
+            height: 80,
+        },
+        lg: {
+            height: 120,
+        },
+        xl: {
+            height: 160,
+        },
     },
     states: {
         hovered: {

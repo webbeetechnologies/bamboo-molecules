@@ -1,8 +1,8 @@
 import { memo } from 'react';
+import { useMolecules } from '@bambooapp/bamboo-molecules';
 // import type { RenderCellProps } from '../../../components';
 import { useField, useGroupMeta } from '../../contexts';
 import { ViewRenderer } from '../FieldRenderers';
-import { useMolecules } from '@bambooapp/bamboo-molecules';
 
 import type { DataGridRowRendererProps, GroupMetaRowProps } from '../../types';
 

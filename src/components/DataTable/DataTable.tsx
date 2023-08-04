@@ -1,5 +1,4 @@
 import { forwardRef, memo, useCallback, useMemo, ForwardedRef } from 'react';
-import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import type { DataTableBase, DataTableProps, TDataTableColumn, TDataTableRow } from './types';
 import type {
     LayoutChangeEvent,
@@ -28,10 +27,7 @@ type DataTablePresentationProps = DataTableComponentProps &
     Pick<DataTableProps, 'records'> & { tableWidth: number } & Pick<
         Required<DataTableProps>,
         'FlatListComponent' | 'ScrollViewComponent'
-    > & {
-        containerProps?: ViewProps;
-    };
-
+    >;
 const {
     useStoreRef,
     Provider: HorizontalScrollIndexProvider,
@@ -74,6 +70,7 @@ const DataTablePresentationComponent = memo(
             FlatListComponent,
             ScrollViewComponent,
             onLayout: onLayoutProp,
+            HeaderRowComponent: HeaderRowComponentProp,
             ...restScrollViewProps
         } = props;
 
@@ -92,6 +89,8 @@ const DataTablePresentationComponent = memo(
 
         const { store, set: setStore } = useStoreRef();
         const { set: setDataTableStore } = useDataTableStoreRef();
+
+        const HeaderRowComponent = HeaderRowComponentProp || DataTableHeaderRow;
 
         const stickyHeaderIndices = useMemo(
             () =>
@@ -154,7 +153,7 @@ const DataTablePresentationComponent = memo(
                         data={records}
                         windowSize={windowSize}
                         style={vStyle}
-                        ListHeaderComponent={DataTableHeaderRow}
+                        ListHeaderComponent={HeaderRowComponent}
                         maxToRenderPerBatch={maxToRenderPerBatch}
                         keyExtractor={keyExtractorProp}
                         renderItem={renderRow}
@@ -209,6 +208,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 rowSize,
                 columnWidths,
                 useRowRenderer,
+                CellWrapperComponent,
                 ...rest
             } = props;
 
@@ -225,9 +225,10 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 cellProps,
                 rowProps,
                 selectedRows,
-                rowSize,
+                rowSize: rowSize || 'sm',
                 columnWidths,
                 useRowRenderer,
+                CellWrapperComponent,
             };
 
             return (

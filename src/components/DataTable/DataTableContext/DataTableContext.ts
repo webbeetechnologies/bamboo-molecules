@@ -34,6 +34,7 @@ type DataTableContextType = Pick<
         | 'selectedRows'
         | 'rowSize'
         | 'useRowRenderer'
+        | 'CellWrapperComponent'
     > & {
         tableWidth: number;
         containerWidth?: number;
@@ -74,7 +75,7 @@ export const useDataTableComponent = <
  * also adds event handlers
  */
 // TODO: Add event handlers here
-type DataTableRowContextType = { row: TDataTableRow; rowIndex: number };
+type DataTableRowContextType = { row: TDataTableRow; rowIndex: number; hovered: boolean };
 export const DataTableRowContext = createContext<DataTableRowContextType | null>(null);
 export const useDataTableRow = () =>
     useInvariant(
@@ -87,7 +88,7 @@ export const useDataTableRow = () =>
  * also adds event handlers
  */
 // TODO: Add event handlers here
-type DataTableCellContextType = DataTableRowContextType & {
+type DataTableCellContextType = Omit<DataTableRowContextType, 'hovered'> & {
     column: TDataTableColumn;
     columnIndex: number;
 };

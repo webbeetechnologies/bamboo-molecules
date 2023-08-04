@@ -35,6 +35,7 @@ export type ScrollProps = {
 
 export type DataTableBase = ScrollProps & {
     stickyRowIndices?: number[];
+    HeaderRowComponent?: ComponentType<any>;
 };
 
 export type DataTableRowProps = {
@@ -140,4 +141,9 @@ export interface DataTableProps<RecordType = any>
      * DataTableRowProps
      */
     useRowRenderer?: UseRowRenderer;
+    /**
+     *
+     * CellWrapperComponent
+     */
+    CellWrapperComponent?: ComponentType<DataCellProps>;
 }

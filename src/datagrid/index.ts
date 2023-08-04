@@ -10,6 +10,27 @@ export * from './components';
 export { FieldTypes } from './field-types';
 export * from './contexts';
 
+export {
+    useCopyPastePlugin,
+    useCellSelectionPlugin,
+    useColumnResizePlugin,
+    useDragAndExtendPlugin,
+    DRAG_AND_EXTEND_PLUGIN_KEY,
+    COLUMN_RESIZE_PLUGIN_KEY,
+    CELL_SELECTION_PLUGIN_KEY,
+    COPY_PASTE_PLUGIN_KEY,
+    PluginEvents,
+    Selection,
+    PluginHandle,
+    usePluginsDataStoreRef,
+    usePluginsManagerSelector,
+    usePluginsManagerStoreRef,
+    createPlugin,
+    usePluginsDataSelector,
+    usePluginsDataValueSelectorValue,
+    usePluginsManagerValueSelector,
+} from './plugins';
+
 registerMolecule('DataGrid', {
     Component: DataGrid,
     defaultStyles: dataGridStyles,

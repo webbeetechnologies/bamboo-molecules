@@ -40,6 +40,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         rowSize,
         columnWidths,
         useRowRenderer: useRowRendererProp,
+        CellWrapperComponent,
     }) => {
         const { FlatList } = useMolecules();
 
@@ -82,8 +83,10 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 cellXOffsets: calculateXOffset(columns, columnWidths, defaultColumnWidth),
                 columnWidths,
                 useRowRenderer,
+                CellWrapperComponent,
             }),
             [
+                CellWrapperComponent,
                 records,
                 columns,
                 tableWidth,

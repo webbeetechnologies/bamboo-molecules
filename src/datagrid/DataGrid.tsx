@@ -5,9 +5,10 @@ import type {
     RenderHeaderCellProps,
 } from '../components';
 import { useMolecules } from '../hooks';
-import { ComponentType, memo, ReactNode, useCallback, useMemo, useRef } from 'react';
+import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { StyleSheet } from 'react-native';
+import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 
 import {
     FieldTypesProvider,
@@ -15,17 +16,26 @@ import {
     useTableManagerStoreRef,
     HooksContextType,
     HooksProvider,
+    useRowRenderer,
     useShouldContextMenuDisplayed,
-    useTableManagerValueSelector,
 } from './contexts';
 import { typedMemo } from './hocs';
-import { ContextMenu, ColumnHeaderCell, CellRenderer } from './components';
+import PluginsManager from './plugins/plugins-manager';
+import { useCellSelectionMethods, useCellSelectionPlugin, Plugin } from './plugins';
+import {
+    ContextMenu,
+    ColumnHeaderCell,
+    CellRenderer,
+    TableHeaderRow,
+    CellWrapperComponent,
+    RowWrapperComponent,
+} from './components';
 import { useContextMenu } from './hooks';
 import type { FieldTypes } from './types';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
 import { RecordWithId, prepareGroupedData } from './utils';
-import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules';
-import { useRowRenderer } from './components/Table/useRowRenderer';
+
+import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -40,6 +50,7 @@ type DataGridPropsBase = Omit<
         contextMenuProps?: ContextMenuProps;
         renderHeader?: DataTableProps['renderHeader'];
         renderCell?: DataTableProps['renderCell'];
+        plugins?: Plugin[];
         groups?: TDataTableColumn[];
     };
 
@@ -53,7 +64,12 @@ export type ContextMenuProps = Partial<MenuProps> & {
     isOpen: boolean;
     handleContextMenuOpen: (payload: {
         type: 'column' | 'cell';
-        selection: { columnId?: TDataTableColumn; rowId?: TDataTableRow };
+        selection: {
+            columnId?: TDataTableColumn;
+            rowId?: TDataTableRow;
+            columnIndex?: number;
+            rowIndex?: number;
+        };
     }) => void;
     onClose: () => void;
     children?: ReactNode;
@@ -84,8 +100,12 @@ const DataGrid = ({
         contextMenuProps || (emptyObj as ContextMenuProps);
 
     const shouldContextMenuDisplayed = useShouldContextMenuDisplayed();
+    const { useResetSelectionOnClickOutside } = useCellSelectionMethods();
 
-    const ref = useRef(null);
+    const dataRef = useRef<{ records: TDataTableRow[]; columns: TDataTableColumn[] }>({
+        records: [],
+        columns: [],
+    });
 
     const cellProps = useMemo(
         () => ({
@@ -119,7 +139,7 @@ const DataGrid = ({
     const verticalScrollProps = useMemo(
         () => ({
             ..._verticalScrollProps,
-            CellRendererComponent: RowRendererComponent,
+            CellRendererComponent: RowWrapperComponent,
         }),
         [_verticalScrollProps],
     );
@@ -130,19 +150,40 @@ const DataGrid = ({
 
             if (!shouldContextMenuDisplayed || !store.current.focusedCell) return;
 
-            const { type, ...focusedCell } = store.current.focusedCell;
+            const { type, rowIndex, columnIndex } = store.current.focusedCell;
+            const rowId = rowIndex !== undefined ? dataRef.current.records[rowIndex] : undefined;
+            const columnId =
+                columnIndex !== undefined ? dataRef.current.records[columnIndex] : undefined;
 
-            handleContextMenuOpen({ type: type, selection: focusedCell });
+            handleContextMenuOpen({
+                type: type,
+                selection: {
+                    rowIndex,
+                    rowId,
+                    columnId,
+                    columnIndex,
+                },
+            });
         },
         [handleContextMenuOpen, shouldContextMenuDisplayed, store],
     );
 
-    useContextMenu({ ref, callback: onContextMenuOpen });
+    useEffect(() => {
+        dataRef.current = {
+            records,
+            columns: columnIds,
+        };
+    }, [columnIds, records]);
+
+    // TODO - move this to plugins
+    useContextMenu({ ref: store.current.tableRef, callback: onContextMenuOpen });
+
+    useResetSelectionOnClickOutside();
 
     return (
         <>
             <DataTable
-                ref={ref}
+                ref={store.current.tableRef}
                 testID="datagrid"
                 renderHeader={renderHeader}
                 renderCell={renderCell}
@@ -156,7 +197,9 @@ const DataGrid = ({
                 headerRowProps={rowProps}
                 verticalScrollProps={verticalScrollProps}
                 horizontalScrollProps={horizontalScrollProps}
+                HeaderRowComponent={TableHeaderRow}
                 useRowRenderer={useRowRenderer}
+                CellWrapperComponent={CellWrapperComponent}
             />
 
             {shouldContextMenuDisplayed && (
@@ -166,36 +209,23 @@ const DataGrid = ({
     );
 };
 
-// TODO - inject this to Provider
-const RowRendererComponent = memo(({ style, index, ...rest }: ViewProps & { index: number }) => {
-    const { View } = useMolecules();
-
-    const isRowFocused = useTableManagerValueSelector(
-        store => store.focusedCell?.rowIndex === index - 1,
-    )!;
-
-    const rowRendererStyle = useMemo(
-        () => [style, isRowFocused && { zIndex: 100 }],
-        [isRowFocused, style],
-    );
-
-    return <View style={rowRendererStyle} {...rest} />;
-});
-
 const withContextProviders = (Component: ComponentType<DataGridPresentationProps>) => {
     return ({
         fieldTypes = DefaultFieldTypes as FieldTypes,
         useField,
         useCellValue,
         contextMenuProps,
+        plugins: _plugins,
         records,
         groups,
-        useRowRenderer: useRowRendererProp,
+        useRowRenderer: useRowRendererProp = useRowRendererDefault,
         useGroupRowState: useGroupRowStateProp,
         useShowGroupFooter: useShowGroupFooterProp,
 
         ...rest
     }: Props) => {
+        const ref = useRef(null);
+
         const hooksContextValue = useRef({
             useField,
             useCellValue,
@@ -203,6 +233,13 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
             useGroupRowState: useGroupRowStateProp,
             useShowGroupFooter: useShowGroupFooterProp,
         }).current;
+
+        const selectionPlugin = useCellSelectionPlugin({});
+
+        const plugins = useMemo(
+            () => [...(_plugins || []), selectionPlugin],
+            [_plugins, selectionPlugin],
+        );
 
         const { groupedRecords, rowIds } = useMemo(
             () => prepareGroupedData(records, groups),
@@ -213,9 +250,17 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
             <FieldTypesProvider value={fieldTypes}>
                 <HooksProvider value={hooksContextValue}>
                     <TableManagerProvider
+                        tableRef={ref}
                         records={groupedRecords}
                         withContextMenu={!!contextMenuProps}>
-                        <Component {...rest} records={rowIds} contextMenuProps={contextMenuProps} />
+                        <PluginsManager plugins={plugins}>
+                            {/* @ts-ignore - we don't want to pass down unnecessary props */}
+                            <Component
+                                {...rest}
+                                records={rowIds}
+                                contextMenuProps={contextMenuProps}
+                            />
+                        </PluginsManager>
                     </TableManagerProvider>
                 </HooksProvider>
             </FieldTypesProvider>
@@ -228,8 +273,6 @@ const defaultHorizontalScrollProps = { contentContainerStyle: { flexGrow: 1 } };
 const styles = StyleSheet.create({
     cell: {
         padding: 0,
-        // borderTopWidth: 1,
-        // borderColor: 'colors.outlineVariant',
     },
     row: {
         padding: 0,

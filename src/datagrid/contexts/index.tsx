@@ -12,7 +12,7 @@ export {
     useHasGroupedData,
 } from './TableManagerContext';
 
-export { createUseRowRenderer } from './createUseRowRenderer';
+export * from './ColumnConfigsContext';
 
 export {
     HooksProvider,
@@ -21,4 +21,5 @@ export {
     HooksContextType,
     useShowGroupFooter,
     useGroupRowState,
+    useRowRenderer,
 } from './HooksContext';

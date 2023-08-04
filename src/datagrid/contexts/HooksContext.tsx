@@ -1,4 +1,6 @@
 import { createContext, memo, ReactNode, useContext } from 'react';
+import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
+
 import type {
     DataGridRowRendererProps,
     Field,
@@ -6,7 +8,6 @@ import type {
     UseRowRenderer,
     UseShowGroupFooter,
 } from '../types';
-import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules';
 import type { RecordWithId } from '../utils';
 
 export type HooksContextType = {

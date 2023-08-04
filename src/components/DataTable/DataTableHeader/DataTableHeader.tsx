@@ -47,15 +47,15 @@ export const DataTableHeaderRow = memo(() => {
     return <DataTableHeaderRowPresentation columns={columns} headerRowProps={headerRowProps} />;
 });
 
-const HeaderCellComponent: FC<RenderHeaderCellProps> = memo(props => {
+export const HeaderCellComponent: FC<RenderHeaderCellProps> = memo(props => {
     const { DataTable } = useMolecules();
     const { renderHeader } = useDataTableComponent();
     const width = useDataTableColumnWidth(props.column);
-    // TODO: Adopt custom column width
+
     return <DataTable.HeaderCell width={width}>{renderHeader(props)}</DataTable.HeaderCell>;
 });
 
-const renderHeaderCell = ({ item, index }: { item: TDataTableColumn; index: number }) => (
+export const renderHeaderCell = ({ item, index }: { item: TDataTableColumn; index: number }) => (
     <HeaderCellComponent column={item} columnIndex={index} />
 );
 

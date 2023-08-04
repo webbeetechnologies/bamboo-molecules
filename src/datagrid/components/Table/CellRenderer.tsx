@@ -1,9 +1,20 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Pressable, PressableProps, ViewStyle } from 'react-native';
+import {
+    StyleSheet,
+    Pressable,
+    PressableProps,
+    ViewStyle,
+    GestureResponderEvent,
+} from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
-import { CallbackActionState, withActionState } from '../../../hocs';
-import { useMolecules } from '../../../hooks';
-import type { RenderCellProps, StateLayerProps } from '../../../components';
+import {
+    RenderCellProps,
+    useMolecules,
+    CallbackActionState,
+    withActionState,
+    useDataTableCell,
+} from '@bambooapp/bamboo-molecules';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 import {
     useFieldType,
@@ -14,37 +25,39 @@ import {
 } from '../../contexts';
 import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
-import { useDataTableCell } from '../../../components';
+import { DragAndExtendHandle } from '../DragAndExtendHandle';
+import { useCellSelectionMethods } from '../../plugins';
+import { CellSelectionIndicator } from '../CellSelectionIndicator';
+import { CellBorder } from '../CellBorder';
 
 export type Props = RenderCellProps &
     CallbackActionState &
     Omit<PressableProps, 'ref'> & {
         innerContainerProps?: Partial<ViewProps>;
-        stateLayerProps?: Partial<StateLayerProps>;
     };
 
 const emptyObj = {};
 
-const DataCell = (
-    {
-        hovered = false,
-        innerContainerProps = emptyObj,
-        stateLayerProps = emptyObj,
-        style,
-        ...rest
-    }: Props,
+const _DataCell = (
+    { hovered = false, innerContainerProps = emptyObj, style, ...rest }: Props,
     ref: any,
 ) => {
-    const { View, StateLayer } = useMolecules();
+    const { View } = useMolecules();
 
     const cellRef = useRef<any>(null);
 
-    const { column, row, rowIndex, columnIndex } = useDataTableCell();
+    const { row, column, rowIndex, columnIndex } = useDataTableCell();
 
     const { type, ...restField } = useField(column);
     const { readonly, displayEditorOnHover, showEditor } = useFieldType(type);
-    const [isFocused, setFocusedCell] = useIsCellFocused(row, column);
+    const [isFocused, setFocusedCell] = useIsCellFocused(rowIndex, columnIndex);
     const { set: setTableManagerStore } = useTableManagerStoreRef();
+
+    const { useOnSelectCell, useOnDragAndSelectStart, useOnDragAndSelectEnd } =
+        useCellSelectionMethods();
+    const onSelectCell = useOnSelectCell();
+    const onDragAndSelectStart = useOnDragAndSelectStart();
+    const onDragAndSelectEnd = useOnDragAndSelectEnd();
 
     const isTappedRef = useRef(0);
 
@@ -52,25 +65,41 @@ const DataCell = (
 
     const [value, setValue] = useCellValue(row, column);
 
-    const onFocus = useCallback(() => {
-        setFocusedCell({ columnId: column, rowId: row, columnIndex, rowIndex, type: 'cell' });
-    }, [column, columnIndex, row, rowIndex, setFocusedCell]);
+    const onFocus = useCallback(
+        (e: GestureResponderEvent) => {
+            const cell = { columnIndex, rowIndex };
 
-    const onPress = useCallback(() => {
-        const delta = new Date().getTime() - isTappedRef.current;
+            if ((e as unknown as MouseEvent).shiftKey) {
+                onSelectCell(cell);
+                return;
+            }
 
-        if (delta < 200) {
-            if (readonly || displayEditorOnHover) return;
+            setFocusedCell({
+                ...cell,
+                type: 'cell',
+            });
+        },
+        [columnIndex, onSelectCell, rowIndex, setFocusedCell],
+    );
 
-            setIsEditing(prev => !prev);
+    const onPress = useCallback(
+        (e: GestureResponderEvent) => {
+            const delta = new Date().getTime() - isTappedRef.current;
 
-            return;
-        }
+            if (delta < 500) {
+                if (readonly || displayEditorOnHover) return;
 
-        isTappedRef.current = new Date().getTime();
+                setIsEditing(prev => !prev);
 
-        onFocus();
-    }, [displayEditorOnHover, onFocus, readonly]);
+                return;
+            }
+
+            isTappedRef.current = new Date().getTime();
+
+            onFocus(e);
+        },
+        [displayEditorOnHover, onFocus, readonly],
+    );
 
     const displayViewRenderer = useMemo(() => {
         if (readonly) return true;
@@ -80,32 +109,30 @@ const DataCell = (
             : !isEditing;
     }, [hovered, isEditing, isFocused, readonly, showEditor]);
 
-    const { containerStyle, innerContainerStyle, stateLayerStyle } = useMemo(
+    const { containerStyle, innerContainerStyle } = useMemo(
         () => ({
-            containerStyle: [styles.cellContainer, style] as ViewStyle,
-            innerContainerStyle: [
-                styles.cell,
+            containerStyle: [
+                styles.cellContainer,
                 !isEditing ? styles.centered : styles.editContainer,
-                columnIndex === 0 && {
-                    borderLeftWidth: 1,
-                },
-                innerContainerProps.style,
+                style,
             ] as ViewStyle,
-            stateLayerStyle: [
-                StyleSheet.absoluteFillObject,
-                isFocused && styles.focused,
-                stateLayerProps.style,
-            ],
+            innerContainerStyle: [styles.cell, innerContainerProps.style] as ViewStyle,
         }),
-        [
-            style,
-            isEditing,
-            columnIndex,
-            innerContainerProps.style,
-            isFocused,
-            stateLayerProps.style,
-        ],
+        [style, isEditing, innerContainerProps.style],
     );
+
+    const onDrag = useMemo(() => {
+        return Gesture.Pan()
+            .onBegin(() => {
+                onDragAndSelectStart({
+                    rowIndex,
+                    columnIndex,
+                });
+            })
+            .onEnd(() => {
+                onDragAndSelectEnd();
+            });
+    }, [onDragAndSelectStart, onDragAndSelectEnd, rowIndex, columnIndex]);
 
     useEffect(() => {
         if (isFocused || !isEditing) return;
@@ -114,7 +141,7 @@ const DataCell = (
     }, [isEditing, isFocused]);
 
     const handleContextMenu = useCallback(() => {
-        onFocus();
+        onFocus({} as GestureResponderEvent);
         setTableManagerStore(() => ({
             focusedCellRef: cellRef,
         }));
@@ -124,27 +151,46 @@ const DataCell = (
 
     return (
         <Pressable ref={cellRef} onPress={onPress} style={containerStyle} {...rest}>
-            <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
-                {displayViewRenderer ? (
-                    <ViewRenderer value={value} type={type} {...restField} />
-                ) : (
-                    <EditRenderer value={value} type={type} onChange={setValue} {...restField} />
-                )}
-                <StateLayer {...stateLayerProps} style={stateLayerStyle} />
-            </View>
+            <GestureDetector gesture={onDrag}>
+                <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
+                    {displayViewRenderer ? (
+                        <ViewRenderer value={value} type={type} {...restField} />
+                    ) : (
+                        <EditRenderer
+                            value={value}
+                            type={type}
+                            onChange={setValue}
+                            {...restField}
+                        />
+                    )}
+                </View>
+            </GestureDetector>
+
+            <CellBorder isFocused={isFocused} columnIndex={columnIndex} rowIndex={rowIndex} />
+
+            <CellSelectionIndicator hovered={hovered} />
+
+            {!isEditing && <DragAndExtendHandle style={styles.dragHandle} isFocused={isFocused} />}
         </Pressable>
     );
 };
 
+const DataCell = withActionState(forwardRef(_DataCell));
+
+const CellRendererWithStyledHeight = forwardRef((props: Props, ref: any) => (
+    <DataCell {...props} ref={ref} actionStateContainerProps={actionContainerProps} />
+));
+
+const actionContainerProps = { style: { height: '100%' } };
+
 const styles = StyleSheet.create({
     cellContainer: {
-        height: '100%',
+        flex: 1,
+        padding: 4,
     },
     cell: {
         flex: 1,
-        padding: 4,
-        borderRightWidth: 1,
-        borderColor: 'colors.onSurfaceVariant',
+        justifyContent: 'center',
     },
     editContainer: {
         position: 'absolute',
@@ -157,6 +203,7 @@ const styles = StyleSheet.create({
         borderLeftWidth: 2,
         borderRightWidth: 2,
         borderWidth: 2,
+        borderRadius: 2,
         borderColor: 'blue',
         backgroundColor: 'colors.surface',
         height: '100%',
@@ -164,6 +211,11 @@ const styles = StyleSheet.create({
     centered: {
         justifyContent: 'center',
     },
+    dragHandle: {
+        position: 'absolute',
+        bottom: -3.5,
+        right: -3.5,
+    },
 });
 
-export default memo(withActionState(forwardRef(DataCell)));
+export default memo(CellRendererWithStyledHeight);
