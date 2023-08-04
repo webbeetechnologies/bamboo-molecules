@@ -13,7 +13,6 @@ export {
 } from './TableManagerContext';
 
 export * from './ColumnConfigsContext';
-export { createUseRowRenderer } from './createUseRowRenderer';
 
 export {
     HooksProvider,
@@ -22,4 +21,5 @@ export {
     HooksContextType,
     useShowGroupFooter,
     useGroupRowState,
+    useRowRenderer,
 } from './HooksContext';

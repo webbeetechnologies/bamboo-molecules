@@ -16,8 +16,8 @@ import {
     useTableManagerStoreRef,
     HooksContextType,
     HooksProvider,
+    useRowRenderer,
     useShouldContextMenuDisplayed,
-    createUseRowRenderer,
 } from './contexts';
 import { typedMemo } from './hocs';
 import PluginsManager from './plugins/plugins-manager';
@@ -26,21 +26,16 @@ import {
     ContextMenu,
     ColumnHeaderCell,
     CellRenderer,
-    GroupFooterRow,
     TableHeaderRow,
-    GroupHeaderRow,
     CellWrapperComponent,
     RowWrapperComponent,
 } from './components';
 import { useContextMenu } from './hooks';
 import type { FieldTypes } from './types';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
-import { RecordWithId, RowType, prepareGroupedData } from './utils';
+import { RecordWithId, prepareGroupedData } from './utils';
 
-const useRowRenderer = createUseRowRenderer({
-    [RowType.FOOTER]: GroupFooterRow,
-    [RowType.HEADER]: GroupHeaderRow,
-});
+import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -223,7 +218,7 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         plugins: _plugins,
         records,
         groups,
-        useRowRenderer: useRowRendererProp,
+        useRowRenderer: useRowRendererProp = useRowRendererDefault,
         useGroupRowState: useGroupRowStateProp,
         useShowGroupFooter: useShowGroupFooterProp,
 
