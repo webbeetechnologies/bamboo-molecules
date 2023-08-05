@@ -52,6 +52,8 @@ export const HeaderCellComponent: FC<RenderHeaderCellProps> = memo(props => {
     const { renderHeader } = useDataTableComponent();
     const width = useDataTableColumnWidth(props.column);
 
+    if (!width) return null;
+
     return <DataTable.HeaderCell width={width}>{renderHeader(props)}</DataTable.HeaderCell>;
 });
 

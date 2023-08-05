@@ -24,14 +24,14 @@ export const Example = () => {
 
     const { state: isOpen, handleOpen, handleClose } = useToggle();
 
-    const [columnWidth, setColumnWidth] = useState({});
-
     const { columnIds } = useMemo(
         () => ({
             columnIds: fields.map(field => field.id),
         }),
         [],
     );
+
+    const [columnWidth, setColumnWidth] = useState({ [columnIds[0]]: 0, [columnIds[1]]: 100 });
 
     const contextMenuProps = useMemo(
         () => ({
@@ -52,7 +52,7 @@ export const Example = () => {
         onColumnResize: ({ columnId, width }) => {
             setColumnWidth(prev => ({
                 ...prev,
-                [columnId]: width,
+                [columnId]: width < 40 ? 40 : width,
             }));
         },
     });
