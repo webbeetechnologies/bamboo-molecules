@@ -31,7 +31,7 @@ export const Example = () => {
         [],
     );
 
-    const [columnWidth, setColumnWidth] = useState({ [columnIds[0]]: 0, [columnIds[1]]: 100 });
+    const [columnWidth, setColumnWidth] = useState({});
 
     const contextMenuProps = useMemo(
         () => ({
