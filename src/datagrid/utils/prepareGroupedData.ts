@@ -52,6 +52,12 @@ type GroupFilter = { field: string; value: any };
 
 const keyStore = new WeakMap();
 const keyStoreReversed = new Map();
+const cachedFilters = new Map<string, GroupFilter[]>([]);
+
+const getCachedFilters = (key: string, filters: GroupFilter[]) => {
+    if (!cachedFilters.has(key)) cachedFilters.set(key, filters);
+    return cachedFilters.get(key)!;
+};
 
 const addToKeyStoreReversed = (key: PrimitiveTypes, value: any = key) => {
     keyStoreReversed.set(key, value);
@@ -88,15 +94,17 @@ const makeNested = <T extends RecordWithId>(
 ): GroupedData[] => {
     const [currentField, ...pending] = groups ?? [];
 
-    if (!currentField)
+    if (!currentField) {
+        const groupId = getIdFromFilters(filters);
         return records.map(record => ({
             data: record,
-            filters,
+            filters: getCachedFilters(groupId, filters),
             id: record.id,
             level: level - 1,
             index: index++,
-            groupId: getIdFromFilters(filters),
+            groupId,
         })) as GroupRecord[];
+    }
 
     const groupedData = groupBy(records, record => getPrimitiveValue(record[currentField]));
 
@@ -131,6 +139,7 @@ const makeNested = <T extends RecordWithId>(
                 id: getIdFromFilters([], { prefix: groupId, suffix }),
                 isOnly: restGroupMeta.isFirst && restGroupMeta.isLast,
                 ...restGroupMeta,
+                filters: getCachedFilters(groupId, restGroupMeta.filters),
             },
         ];
     };
