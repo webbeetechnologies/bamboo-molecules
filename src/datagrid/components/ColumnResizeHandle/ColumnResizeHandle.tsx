@@ -1,18 +1,15 @@
-import {
-    CallbackActionState,
-    useDataTable,
-    useMolecules,
-    withActionState,
-} from '@bambooapp/bamboo-molecules';
+import { CallbackActionState, useMolecules, withActionState } from '@bambooapp/bamboo-molecules';
 import { memo, useMemo, useRef } from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import type { TDataTableColumn } from '@bambooapp/bamboo-molecules/components';
+import { useDataTableColumnWidth, TDataTableColumn } from '@bambooapp/bamboo-molecules/components';
 
 import {
     COLUMN_RESIZE_PLUGIN_KEY,
     useColumnResizeEvents,
+    useColumnResizeMethods,
+    usePluginsDataStoreRef,
     withPluginExistenceCheck,
 } from '../../plugins';
 
@@ -26,50 +23,91 @@ const ColumnResizeHandleComponent = withActionState(
     ({ hovered, style, column, columnIndex, ...rest }: Props) => {
         const { View } = useMolecules();
 
-        const columnWidth = useDataTable(store => store.columnWidths?.[column] || 150);
-        const initialColumnWidth = useRef(0);
+        const { store, set: setStore } = usePluginsDataStoreRef();
+        const { useIsColumnResizing } = useColumnResizeMethods();
+
+        const isResizing = useIsColumnResizing(column);
+        const columnWidth = useDataTableColumnWidth(column);
+        const columnWidthRef = useRef<{ initial: number | null; new: number | null }>({
+            initial: null,
+            new: null,
+        });
         const { beforeColumnResize, onColumnResize, afterColumnResize } = useColumnResizeEvents();
 
         const onPanHandle = useMemo(
             () =>
                 Gesture.Pan()
                     .onBegin(() => {
-                        initialColumnWidth.current = columnWidth;
-
-                        // TODO - add cancellation
-                        beforeColumnResize({
+                        const shouldContinue = beforeColumnResize({
                             columnId: column,
                             columnIndex,
                         });
+
+                        if (shouldContinue === false) return;
+
+                        columnWidthRef.current.initial = columnWidth;
+
+                        setStore(prev => ({
+                            [COLUMN_RESIZE_PLUGIN_KEY]: {
+                                ...prev[COLUMN_RESIZE_PLUGIN_KEY],
+                                resizingColumn: column,
+                            },
+                        }));
                     })
                     .onUpdate(({ translationX }) => {
+                        if (store.current[COLUMN_RESIZE_PLUGIN_KEY]?.resizingColumn !== column)
+                            return;
+
+                        columnWidthRef.current.new = Math.max(
+                            (columnWidthRef.current.initial ?? 0) + translationX,
+                            1,
+                        );
                         onColumnResize({
                             columnId: column,
                             columnIndex,
-                            width: Math.max(initialColumnWidth.current + translationX, 1),
+                            width: Math.max(columnWidthRef.current.new),
                         });
                     })
                     .onEnd(() => {
                         afterColumnResize({
                             columnId: column,
                             columnIndex,
+                            width: columnWidthRef.current.new,
                         });
+                    })
+                    .onFinalize(() => {
+                        //cleanup
+                        columnWidthRef.current.initial = null;
+                        columnWidthRef.current.new = null;
+
+                        setStore(prev => ({
+                            [COLUMN_RESIZE_PLUGIN_KEY]: {
+                                ...prev[COLUMN_RESIZE_PLUGIN_KEY],
+                                resizingColumn: null,
+                            },
+                        }));
                     }),
             [
-                afterColumnResize,
                 beforeColumnResize,
                 column,
                 columnIndex,
                 columnWidth,
+                setStore,
+                store,
                 onColumnResize,
+                afterColumnResize,
             ],
         );
 
         const { handleStyle } = useMemo(
             () => ({
-                handleStyle: [styles.handle, !hovered && { display: 'none' }, style] as ViewStyle,
+                handleStyle: [
+                    styles.handle,
+                    !(hovered || isResizing) && { display: 'none' },
+                    style,
+                ] as ViewStyle,
             }),
-            [hovered, style],
+            [isResizing, hovered, style],
         );
 
         return (
