@@ -6,9 +6,7 @@ import type { Value } from './types';
 export const RatingFieldType: FieldType<Value> = {
     type: 'rating',
     title: 'Rating',
-    icon: {
-        name: 'star-outline',
-    },
+    icon: 'pound',
     EditorRenderer,
     ValueRenderer,
     showEditor: ({ hovered, focused }) => hovered || focused,

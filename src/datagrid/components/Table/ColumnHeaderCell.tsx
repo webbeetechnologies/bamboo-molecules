@@ -22,6 +22,7 @@ const ColumnHeaderCell = ({
     titleProps,
     children,
     renderTitle,
+    style,
     ...rest
 }: ColumnHeaderCellProps) => {
     const { View, Icon, Text } = useMolecules();
@@ -30,7 +31,7 @@ const ColumnHeaderCell = ({
     const { set: setTableManagerStore } = useTableManagerStoreRef();
 
     const { type, title, id } = useField(column);
-    const { icon } = useFieldType(type);
+    const { icon, iconType } = useFieldType(type);
 
     const { containerStyle, titleStyle, iconStyle } = useMemo(
         () => ({
@@ -39,11 +40,12 @@ const ColumnHeaderCell = ({
                 columnIndex === 0 && {
                     borderLeftWidth: 1,
                 },
+                style,
             ],
             titleStyle: [styles.text, titleProps?.style],
             iconStyle: [styles.icon, iconProps?.style],
         }),
-        [columnIndex, iconProps?.style, titleProps?.style],
+        [columnIndex, iconProps?.style, titleProps?.style, style],
     );
 
     const handleContextMenu = useCallback(() => {
@@ -57,7 +59,7 @@ const ColumnHeaderCell = ({
 
     return (
         <View style={containerStyle} ref={elementRef} {...rest}>
-            <Icon style={iconStyle} name={icon.name} type={icon.type} size={16} {...iconProps} />
+            <Icon style={iconStyle} name={icon} type={iconType} size={16} {...iconProps} />
             <Text style={titleStyle} numberOfLines={1} {...titleProps}>
                 {renderTitle ? renderTitle?.({ title, type, id }) : title}
             </Text>
@@ -74,7 +76,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 4,
-        height: 32,
+        minHeight: 32,
         borderTopWidth: 1,
         borderRightWidth: 1,
         borderColor: 'colors.outlineVariant',
