@@ -6,9 +6,7 @@ import type { Value } from './types';
 export const SingleLineTextFieldType: FieldType<Value> = {
     type: 'singleLineText',
     title: 'Single line text',
-    icon: {
-        name: 'format-letter-case',
-    },
+    icon: 'format-letter-case',
     EditorRenderer,
     ValueRenderer,
 };

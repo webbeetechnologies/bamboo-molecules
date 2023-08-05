@@ -6,9 +6,7 @@ import type { Value } from './types';
 export const CheckboxFieldType: FieldType<Value> = {
     type: 'checkbox',
     title: 'Checkbox',
-    icon: {
-        name: 'checkbox-outline',
-    },
+    icon: 'checkbox-outline',
     EditorRenderer,
     ValueRenderer,
     showEditor: ({ hovered, focused }) => hovered || focused,
