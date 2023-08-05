@@ -37,17 +37,23 @@ const ColumnResizeHandleComponent = withActionState(
                         initialColumnWidth.current = columnWidth;
 
                         // TODO - add cancellation
-                        beforeColumnResize();
+                        beforeColumnResize({
+                            columnId: column,
+                            columnIndex,
+                        });
                     })
                     .onUpdate(({ translationX }) => {
                         onColumnResize({
                             columnId: column,
                             columnIndex,
-                            width: initialColumnWidth.current + translationX,
+                            width: Math.max(initialColumnWidth.current + translationX, 1),
                         });
                     })
                     .onEnd(() => {
-                        afterColumnResize();
+                        afterColumnResize({
+                            columnId: column,
+                            columnIndex,
+                        });
                     }),
             [
                 afterColumnResize,

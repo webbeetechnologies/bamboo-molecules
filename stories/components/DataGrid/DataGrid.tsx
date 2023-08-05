@@ -52,7 +52,7 @@ export const Example = () => {
         onColumnResize: ({ columnId, width }) => {
             setColumnWidth(prev => ({
                 ...prev,
-                [columnId]: width < 40 ? 40 : width,
+                [columnId]: width,
             }));
         },
     });
