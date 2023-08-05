@@ -24,6 +24,16 @@ describe('checkSelection', () => {
 
         expect(isInSelection).toBe(true);
     });
+    it('should return true if the cell is within the selection even if start and end are reversed', () => {
+        const cell: CellIndexes = {
+            columnIndex: 2,
+            rowIndex: 3,
+        };
+
+        const isInSelection = checkSelection({ start: selection.end, end: selection.start }, cell);
+
+        expect(isInSelection).toBe(true);
+    });
 
     it('should return false if the cell is not within the selection', () => {
         const cell: CellIndexes = {

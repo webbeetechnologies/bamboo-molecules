@@ -5,7 +5,7 @@ const records = ['record-1', 'record-2', 'record-3', 'record-4', 'record-5'];
 const columns = ['column-1', 'column-2', 'column-3', 'column-4', 'column-5'];
 
 describe('normalizeCellHandler', () => {
-    it('should return correct ids for give column and row indexes', function () {
+    it('should return correct ids for given column and row indexes', function () {
         const selectionIndexes: CellIndexes = {
             columnIndex: 2,
             rowIndex: 1,
