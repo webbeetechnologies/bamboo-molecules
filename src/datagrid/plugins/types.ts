@@ -30,13 +30,17 @@ export enum PluginEvents {
 }
 
 export type PluginManagerEvents = {
-    [PluginEvents.BEFORE_COLUMN_RESIZE]: () => void;
+    [PluginEvents.BEFORE_COLUMN_RESIZE]: (args: { columnId: string; columnIndex: number }) => void;
     [PluginEvents.ON_COLUMN_RESIZE]: (args: {
         columnId: string;
         columnIndex: number;
         width: number;
     }) => void;
-    [PluginEvents.AFTER_COLUMN_RESIZE]: () => void;
+    [PluginEvents.AFTER_COLUMN_RESIZE]: (args: {
+        columnId: string;
+        columnIndex: number;
+        width: number;
+    }) => void;
 
     [PluginEvents.BEFORE_COPY_CELL]: (args: { selection: Selection }) => void | boolean;
     [PluginEvents.ON_COPY_CELL]: (args: { selection: Selection }) => void;

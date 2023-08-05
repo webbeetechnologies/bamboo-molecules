@@ -4,7 +4,11 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import { useMolecules } from '../../../hooks';
 import type { DataTableProps, TDataTableColumn } from '../types';
-import { DataTableComponentContext, DataTableProvider } from './DataTableContext';
+import {
+    DataTableComponentContext,
+    DataTableProvider,
+    deriveColumnWidth,
+} from './DataTableContext';
 
 const calculateXOffset = (
     columns: TDataTableColumn[],
@@ -12,10 +16,14 @@ const calculateXOffset = (
     defaultColumnWidth: number,
 ) =>
     columns.reduce(
-        (leftArray, _column, i) => {
+        (leftArray, _column, i, self) => {
             if (i === 0) return leftArray;
 
-            const previousColumnWidth = columnWidths?.[columns[i - 1]] || defaultColumnWidth;
+            const previousColumnWidth = deriveColumnWidth({
+                columnWidths,
+                column: self[i - 1],
+                defaultColumnWidth,
+            });
 
             return [...leftArray, leftArray.at(-1)! + previousColumnWidth];
         },

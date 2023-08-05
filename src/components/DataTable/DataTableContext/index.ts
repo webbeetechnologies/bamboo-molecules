@@ -7,4 +7,5 @@ export {
     useDataTableColumnWidth,
     useDataTableComponent,
     useDataTableStoreRef,
+    deriveColumnWidth,
 } from './DataTableContext';

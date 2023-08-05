@@ -99,8 +99,20 @@ export const useDataTableCell = () =>
         'Trying to read DataTableCell context outside the provider',
     );
 
-export const useDataTableColumnWidth = (_column: TDataTableColumn): number => {
+export const deriveColumnWidth = ({
+    column,
+    columnWidths,
+    defaultColumnWidth,
+}: {
+    column: TDataTableColumn;
+    columnWidths?: Record<TDataTableColumn, number>;
+    defaultColumnWidth: number;
+}) => {
+    return columnWidths?.[column] ?? defaultColumnWidth;
+};
+
+export const useDataTableColumnWidth = (column: TDataTableColumn): number => {
     return useDataTable(({ columnWidths, defaultColumnWidth }) =>
-        columnWidths && columnWidths?.[_column] ? columnWidths[_column] : defaultColumnWidth,
+        deriveColumnWidth({ columnWidths, column, defaultColumnWidth }),
     );
 };
