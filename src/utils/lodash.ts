@@ -5,6 +5,8 @@ export { default as omit } from 'lodash.omit';
 export { default as omitBy } from 'lodash.omitby';
 export { default as isNil } from 'lodash.isnil';
 export { default as noop } from 'lodash.noop';
+export { default as keyBy } from 'lodash.keyby';
+export { default as groupBy } from 'lodash.groupby';
 
 const defaultResolver = (arg: any) => JSON.stringify(arg);
 export const createMemoizedFunction = ({
@@ -17,3 +19,8 @@ export const createMemoizedFunction = ({
     const memo = Object.assign(memoize, { Cache });
     return Object.assign(<T extends (...args: any[]) => any>(func: T) => memo(func, resolver));
 };
+
+export const weakMemoized = createMemoizedFunction({
+    resolver: x => x,
+    Cache: WeakMap,
+});

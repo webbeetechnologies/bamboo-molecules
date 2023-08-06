@@ -22,6 +22,7 @@ const DataTableHeaderRowPresentation = memo(
                 flexDirection: 'row',
             },
         ]);
+
         const result = useMemo(
             () =>
                 columns.map((item, i) => (
@@ -39,25 +40,32 @@ const DataTableHeaderRowPresentation = memo(
 );
 
 export const DataTableHeaderRow = memo(() => {
-    const { columns = [], headerRowProps } = useDataTable();
+    const { columns, headerRowProps } = useDataTable(store => ({
+        columns: store.columns || [],
+        headerRowProps: store.headerRowProps,
+    }));
     return <DataTableHeaderRowPresentation columns={columns} headerRowProps={headerRowProps} />;
 });
 
-const HeaderCellComponent: FC<RenderHeaderCellProps> = memo(props => {
+export const HeaderCellComponent: FC<RenderHeaderCellProps> = memo(props => {
     const { DataTable } = useMolecules();
     const { renderHeader } = useDataTableComponent();
     const width = useDataTableColumnWidth(props.column);
-    // TODO: Adopt custom column width
+
+    if (!width) return null;
+
     return <DataTable.HeaderCell width={width}>{renderHeader(props)}</DataTable.HeaderCell>;
 });
 
-const renderHeaderCell = ({ item, index }: { item: TDataTableColumn; index: number }) => (
+export const renderHeaderCell = ({ item, index }: { item: TDataTableColumn; index: number }) => (
     <HeaderCellComponent column={item} columnIndex={index} />
 );
 
 export const DataHeaderCell = memo(({ width, style, ...props }: DataHeaderCellProps) => {
     const { View } = useMolecules();
-    const { headerCellProps } = useDataTable() || {};
+    const { headerCellProps } = useDataTable(store => ({
+        headerCellProps: store.headerCellProps,
+    }));
     const headerCellStyles = useComponentStyles('DataTable_HeaderCell', [
         { width },
         headerCellProps?.style,

@@ -23,3 +23,5 @@ export {
     ProvidePortalProps,
     ProvideMoleculesProps,
 } from './ProvideMolecules';
+
+export { registerMolecule } from './registerMolecule';

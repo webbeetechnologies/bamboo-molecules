@@ -3,6 +3,9 @@
     "baseUrl": ".",
     "paths": {
       "@bambooapp/bamboo-molecules": ["./src/index.ts"],
+      "@bambooapp/bamboo-molecules/components": ["./src/components/index.tsx"],
+      "@bambooapp/bamboo-molecules/datagrid": ["./src/datagrid/index.ts"],
+      "@bambooapp/bamboo-molecules/components": ["./src/components"],
       "@bambooapp/bamboo-molecules/fast-context": ["./src/fast-context/index.tsx"]},
     "declaration": true,
     "allowUnreachableCode": false,

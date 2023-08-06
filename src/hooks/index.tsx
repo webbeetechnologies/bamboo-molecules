@@ -12,6 +12,8 @@ export { usePortal } from '@gorhom/portal';
 
 export * from './useTheme';
 
+export * from './useActionState';
+
 export { default as useMolecules } from './useMolecules';
 export { default as usePlatformType } from './usePlatformType';
 export { default as useComponentStyles } from './useComponentStyles';

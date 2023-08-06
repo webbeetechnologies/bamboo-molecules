@@ -18,9 +18,9 @@ export const resolveComponentStyles = resolveComponentStylesMemo(
             states: componentStates,
             sizes: componentSizes,
             ...styles
-        } = componentTheme;
+        } = componentTheme ?? {};
 
-        const variantStyles = variant ? variants[variant] || {} : {};
+        const variantStyles = variant ? variants?.[variant] || {} : {};
         const { states: variantStates, sizes: variantSizes, ...nonStateStyles } = variantStyles; // filtering the unused state styles
 
         return deepmerge(
@@ -42,7 +42,8 @@ export const flattenStateStyles = (
     let flattenedStyles = {};
 
     if (states && statesStyles) {
-        const firstActiveState = Object.keys(states).find(key => states[key]) || '';
+        const firstActiveState =
+            Object.keys(states).find(key => states[key] && key in statesStyles) || '';
 
         flattenedStyles = { ...flattenedStyles, ...(statesStyles[firstActiveState] || {}) };
     }

@@ -1,9 +1,34 @@
 import type { FC, PropsWithChildren } from 'react';
 import { memo, useMemo, useRef } from 'react';
-import { DataTableComponentContext, DataTableContext } from './DataTableContext';
-import type { DataTableProps } from '../types';
-import { useMolecules } from '../../../hooks';
 import { ScrollView } from 'react-native-gesture-handler';
+
+import { useMolecules } from '../../../hooks';
+import type { DataTableProps, TDataTableColumn } from '../types';
+import {
+    DataTableComponentContext,
+    DataTableProvider,
+    deriveColumnWidth,
+} from './DataTableContext';
+
+const calculateXOffset = (
+    columns: TDataTableColumn[],
+    columnWidths: Record<TDataTableColumn, number> | undefined,
+    defaultColumnWidth: number,
+) =>
+    columns.reduce(
+        (leftArray, _column, i, self) => {
+            if (i === 0) return leftArray;
+
+            const previousColumnWidth = deriveColumnWidth({
+                columnWidths,
+                column: self[i - 1],
+                defaultColumnWidth,
+            });
+
+            return [...leftArray, leftArray.at(-1)! + previousColumnWidth];
+        },
+        [0],
+    );
 
 export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = memo(
     ({
@@ -21,12 +46,18 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         rowProps,
         selectedRows,
         rowSize,
+        columnWidths,
+        useRowRenderer: useRowRendererProp,
+        CellWrapperComponent,
     }) => {
         const { FlatList } = useMolecules();
 
-        const FlatListComponent = useRef(
-            FlatListComponentProp ?? (FlatList as Required<DataTableProps>['FlatListComponent']),
-        ).current;
+        const { FlatListComponent, useRowRenderer } = useRef({
+            useRowRenderer: useRowRendererProp,
+            FlatListComponent:
+                FlatListComponentProp ??
+                (FlatList as Required<DataTableProps>['FlatListComponent']),
+        }).current;
 
         // TODO: Adopt ScrollView from Molecules.
         const ScrollViewComponent = useRef(ScrollViewComponentProp ?? ScrollView).current;
@@ -38,7 +69,13 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
             [FlatListComponent, ScrollViewComponent, renderCell, renderHeader],
         );
 
-        const tableWidth = Math.min(columns.length * defaultColumnWidth);
+        const tableWidth = useMemo(() => {
+            return columns.reduce(
+                (acc: number, column) => acc + (columnWidths?.[column] ?? defaultColumnWidth),
+                0,
+            );
+        }, [columnWidths, columns, defaultColumnWidth]);
+
         const dataContext = useMemo(
             () => ({
                 records,
@@ -51,8 +88,13 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 rowProps,
                 selectedRows,
                 rowSize,
+                cellXOffsets: calculateXOffset(columns, columnWidths, defaultColumnWidth),
+                columnWidths,
+                useRowRenderer,
+                CellWrapperComponent,
             }),
             [
+                CellWrapperComponent,
                 records,
                 columns,
                 tableWidth,
@@ -63,14 +105,14 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 rowProps,
                 selectedRows,
                 rowSize,
+                columnWidths,
+                useRowRenderer,
             ],
         );
 
         return (
             <DataTableComponentContext.Provider value={components}>
-                <DataTableContext.Provider value={dataContext}>
-                    {children}
-                </DataTableContext.Provider>
+                <DataTableProvider value={dataContext}>{children}</DataTableProvider>
             </DataTableComponentContext.Provider>
         );
     },

@@ -1,4 +1,8 @@
 import { DataCell } from './DataTableCell';
+import { DataTable as DataTableComponent } from './DataTable';
+import { DataHeaderCell } from './DataTableHeader';
+
+export * from './DataTableContext';
 
 export {
     DataTableProps,
@@ -6,15 +10,23 @@ export {
     RenderCellProps,
     DataCellProps,
     DataHeaderCellProps,
+    DataTableRowProps,
+    TDataTableColumn,
+    TDataTableRow,
+    UseRowRenderer,
 } from './types';
-import { DataTable as DataTableComponent } from './DataTable';
-import { DataHeaderCell } from './DataTableHeader';
-export * from './DataTableContext';
 
-export { dataTableCellStyles } from './DataTableCell';
-export { dataTableRowStyles } from './DataTableRow';
+export {
+    dataTableCellStyles,
+    renderCellComponent as renderDataTableCellComponent,
+} from './DataTableCell';
+export { dataTableRowStyles, renderRow as renderDataTableRow } from './DataTableRow';
 export { dataTableStyles } from './utils';
-export { dataTableHeaderCellStyles, dataTableHeaderStyles } from './DataTableHeader';
+export {
+    dataTableHeaderCellStyles,
+    dataTableHeaderStyles,
+    renderHeaderCell as renderDataTableHeaderCell,
+} from './DataTableHeader';
 
 export const DataTable = Object.assign(DataTableComponent, {
     Cell: DataCell,

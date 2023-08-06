@@ -2,9 +2,11 @@ import type { ComponentPropsWithRef, ComponentType, ReactNode } from 'react';
 import type { FlatListProps, ScrollViewProps, ViewProps } from 'react-native';
 import type { ScrollView } from 'react-native';
 
-export type TDataTableColumn = string;
+type RowProps = Omit<ViewProps, 'children'> & { size?: string };
 
-export type TDataTableRow = string;
+export type TDataTableColumn = string | number;
+
+export type TDataTableRow = string | number;
 
 export interface DataTableComponentProps<T = any> {
     FlatListComponent?: ComponentType<FlatListProps<T>>;
@@ -12,7 +14,9 @@ export interface DataTableComponentProps<T = any> {
 }
 
 export type DataHeaderCellProps = ViewProps & { width: number };
-export type DataCellProps = ViewProps & { width: number };
+export type DataCellProps = ViewProps & {
+    width: number;
+};
 
 export type RenderHeaderCellProps = {
     columnIndex: number;
@@ -31,7 +35,21 @@ export type ScrollProps = {
 
 export type DataTableBase = ScrollProps & {
     stickyRowIndices?: number[];
+    HeaderRowComponent?: ComponentType<any>;
 };
+
+export type DataTableRowProps = {
+    rowId: TDataTableRow;
+    index: number;
+    columns: TDataTableColumn[];
+    rowProps?: RowProps;
+    isSelected?: boolean;
+};
+
+export type UseRowRenderer<T extends DataTableRowProps = DataTableRowProps> = (
+    props: Pick<DataTableRowProps, 'rowId' | 'index'>,
+    DefaultComponent: ComponentType<DataTableRowProps>,
+) => ComponentType<T> | undefined;
 
 export interface DataTableProps<RecordType = any>
     extends Omit<ScrollViewProps, 'children'>,
@@ -96,14 +114,14 @@ export interface DataTableProps<RecordType = any>
      * Props for the data row.
      * Caution: Use memoized props for best performance
      */
-    rowProps?: Omit<ViewProps, 'children'> & { size?: string };
+    rowProps?: RowProps;
 
     /**
      *
      * if present, enables row selection in the table.
      *
      */
-    selectedRows?: Record<string, boolean> | false;
+    selectedRows?: Record<string, boolean>;
 
     /**
      *
@@ -111,4 +129,21 @@ export interface DataTableProps<RecordType = any>
      *
      */
     rowSize?: string;
+    /**
+     *
+     * if present, defines the width of a cell on the basis of the column name.
+     * the default width will be use otherwise
+     *
+     */
+    columnWidths?: Record<TDataTableColumn, number>;
+    /**
+     *
+     * DataTableRowProps
+     */
+    useRowRenderer?: UseRowRenderer;
+    /**
+     *
+     * CellWrapperComponent
+     */
+    CellWrapperComponent?: ComponentType<DataCellProps>;
 }

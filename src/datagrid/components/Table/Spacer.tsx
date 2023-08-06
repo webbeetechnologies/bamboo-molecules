@@ -1,0 +1,72 @@
+import { ComponentType, memo, useMemo } from 'react';
+import { useComponentStyles, useMolecules } from '@bambooapp/bamboo-molecules';
+import type { DataTableRowProps } from '@bambooapp/bamboo-molecules';
+import { useGroupMeta, useRecordById, useGroupRowState, useShowGroupFooter } from '../../contexts';
+import type { GroupFooter, GroupHeader, GroupedData } from 'src/datagrid/utils';
+
+type SpacerProp = { variant: 'left' | 'right' };
+
+const Spacer = (props: SpacerProp) => {
+    const { View } = useMolecules();
+
+    const spacer = useComponentStyles('DataGrid_Spacer', null, {
+        variant: props.variant,
+    });
+
+    return <View style={spacer} />;
+};
+
+export const SpacerList = memo((props: SpacerProp & { level: number }) => {
+    const spaces = useMemo(
+        () =>
+            Array.from({ length: props.level }, (_, i) => (
+                <Spacer key={i + ''} variant={props.variant} />
+            )),
+        [props.variant, props.level],
+    );
+
+    return <>{spaces}</>;
+});
+
+const getVariant = (groupRow: GroupedData) => {
+    if ((groupRow as GroupHeader).isGroupHeader) return 'DataGrid_GroupHeaderItem';
+    if ((groupRow as GroupFooter).isGroupFooter) return 'DataGrid_GroupFooterItem';
+    return 'DataGrid_RowItem';
+};
+
+export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
+    const SpacedComponent = memo((props: DataTableRowProps) => {
+        const { View } = useMolecules();
+        const groupRow = useRecordById(props.rowId);
+        const { level } = groupRow;
+        const meta = useGroupMeta(props.rowId);
+
+        const variant = getVariant(groupRow);
+
+        const groupSpacerWrapStyles = useComponentStyles('DataGrid_SpacerRow', null, {
+            variant,
+        });
+
+        const style = useComponentStyles(variant, props.rowProps?.style, {
+            variant,
+            states: {
+                showFooter: useShowGroupFooter(meta) && (groupRow as GroupFooter).isGroupFooter,
+                ...useGroupRowState(meta),
+            },
+        });
+
+        const rowProps = useMemo(() => ({ ...props.rowProps, style }), [style, props.rowProps]);
+
+        return (
+            <View style={groupSpacerWrapStyles}>
+                <SpacerList level={level} variant="left" />
+                <Component {...props} rowProps={rowProps} />
+                <SpacerList level={level} variant="right" />
+            </View>
+        );
+    });
+
+    SpacedComponent.displayName = (Component.displayName || '') + 'WithSpacers';
+
+    return SpacedComponent;
+};

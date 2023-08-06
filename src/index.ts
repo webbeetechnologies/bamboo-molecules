@@ -14,6 +14,7 @@ export {
     ItalicProps,
     ViewProps,
     IconProps,
+    IconType,
     PopoverProps,
     IconButtonProps,
     ActivityIndicatorProps,
@@ -131,6 +132,10 @@ export {
     ScrollViewRef,
     DataTable,
     DataTableProps,
+    TDataTableColumn,
+    TDataTableRow,
+    DataTableRowProps,
+    UseRowRenderer,
     RenderHeaderCellProps,
     RenderCellProps,
     useDataTableCell,
@@ -141,6 +146,9 @@ export {
     RangeSlider,
     RangeSliderProps,
     AvatarProps,
+    MenuProps,
+    MenuItemProps,
+    StateLayerProps,
 } from './components';
 
 // to avoid circular dependencies
@@ -171,9 +179,10 @@ export {
     ProvideMoleculesProps,
     ProvidePortalProps,
     extractStyles,
+    registerMolecule,
 } from './core';
 
-export { withRipple, withActionState, CallbackActionState } from './hocs';
+export { withRipple, withActionState, CallbackActionState, typedMemo } from './hocs';
 
 export {
     useMolecules,
@@ -209,6 +218,7 @@ export {
     useHandleNumberFormat,
     UseHandleNumberFormatProps,
     NumberMaskConfig,
+    useActionState,
 } from './hooks';
 
 export {

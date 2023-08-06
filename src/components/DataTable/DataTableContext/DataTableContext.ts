@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react';
+import { createFastContext } from '../../../fast-context';
 import type { DataTableProps, TDataTableColumn, TDataTableRow } from '../types';
 
 /**
@@ -26,18 +27,31 @@ type DataTableContextType = Pick<
 > &
     Pick<
         DataTableProps,
-        'headerCellProps' | 'cellProps' | 'headerRowProps' | 'rowProps' | 'selectedRows' | 'rowSize'
+        | 'headerCellProps'
+        | 'cellProps'
+        | 'headerRowProps'
+        | 'rowProps'
+        | 'selectedRows'
+        | 'rowSize'
+        | 'useRowRenderer'
+        | 'CellWrapperComponent'
     > & {
         tableWidth: number;
+        containerWidth?: number;
+        /*
+         * columnIds as keys
+         * */
+        columnWidths?: Record<TDataTableColumn, number>;
+        // tableHeight: number;
+        cellXOffsets: number[];
     };
 
-export const DataTableContext = createContext<DataTableContextType | null>(null);
-export const useDataTable = () =>
-    useInvariant(
-        useContext(DataTableContext),
-        'Trying to read DataTable context outside the provider',
-    );
-
+export const {
+    useContext: useDataTableStore,
+    useContextValue: useDataTable,
+    Provider: DataTableProvider,
+    useStoreRef: useDataTableStoreRef,
+} = createFastContext<DataTableContextType>(true);
 /**
  *
  * Context for all the Components: ScrollView, FlatList, renderHeader and renderCell.
@@ -61,7 +75,7 @@ export const useDataTableComponent = <
  * also adds event handlers
  */
 // TODO: Add event handlers here
-type DataTableRowContextType = { row: TDataTableRow; rowIndex: number };
+type DataTableRowContextType = { row: TDataTableRow; rowIndex: number; hovered: boolean };
 export const DataTableRowContext = createContext<DataTableRowContextType | null>(null);
 export const useDataTableRow = () =>
     useInvariant(
@@ -74,7 +88,7 @@ export const useDataTableRow = () =>
  * also adds event handlers
  */
 // TODO: Add event handlers here
-type DataTableCellContextType = DataTableRowContextType & {
+type DataTableCellContextType = Omit<DataTableRowContextType, 'hovered'> & {
     column: TDataTableColumn;
     columnIndex: number;
 };
@@ -85,7 +99,20 @@ export const useDataTableCell = () =>
         'Trying to read DataTableCell context outside the provider',
     );
 
-export const useDataTableColumnWidth = (_column: TDataTableColumn): number => {
-    // TODO: Add logic to get specific column width OR default width.
-    return useDataTable().defaultColumnWidth;
+export const deriveColumnWidth = ({
+    column,
+    columnWidths,
+    defaultColumnWidth,
+}: {
+    column: TDataTableColumn;
+    columnWidths?: Record<TDataTableColumn, number>;
+    defaultColumnWidth: number;
+}) => {
+    return columnWidths?.[column] ?? defaultColumnWidth;
+};
+
+export const useDataTableColumnWidth = (column: TDataTableColumn): number => {
+    return useDataTable(({ columnWidths, defaultColumnWidth }) =>
+        deriveColumnWidth({ columnWidths, column, defaultColumnWidth }),
+    );
 };

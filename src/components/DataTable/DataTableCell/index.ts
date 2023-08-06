@@ -5,4 +5,5 @@ export { renderCellComponent, DataCell } from './DataTableCell';
 
 export const dataTableCellStyles: ComponentStylePropWithResolvers<ViewStyle, ''> = {
     padding: 'spacings.1',
+    height: '100%',
 };
