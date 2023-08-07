@@ -133,7 +133,7 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
 
     const { columnIds } = useMemo(
         () => ({
-            columnIds: virtualizationMockFields.slice(0, 5).map(field => field.id),
+            columnIds: virtualizationMockFields.map(field => field.id),
         }),
         [],
     );
