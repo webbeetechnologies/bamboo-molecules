@@ -190,4 +190,12 @@ export const MD3LightTheme: MD3Theme = {
         _96: -384,
         _px: -1,
     },
+    elevations: {
+        level0: 0,
+        level1: 1,
+        level2: 2,
+        level3: 3,
+        level4: 4,
+        level5: 5,
+    },
 };
