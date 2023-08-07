@@ -141,6 +141,7 @@ export {
     useDataTableCell,
     useDataTable,
     useDataTableRow,
+    useDataTableHeaderCell,
     Slider,
     SliderProps,
     RangeSlider,

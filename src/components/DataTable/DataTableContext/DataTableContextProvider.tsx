@@ -6,6 +6,8 @@ import { useMolecules } from '../../../hooks';
 import type { DataTableProps, TDataTableColumn } from '../types';
 import {
     DataTableComponentContext,
+    DataTableHeaderCellContext,
+    DataTableHeaderCellContextType,
     DataTableProvider,
     deriveColumnWidth,
 } from './DataTableContext';
@@ -89,6 +91,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 rowProps,
                 selectedRows,
                 rowSize,
+                horizontalOffset,
                 cellXOffsets: calculateXOffset(columns, columnWidths, defaultColumnWidth),
                 columnWidths,
                 useRowRenderer,
@@ -107,6 +110,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 selectedRows,
                 rowSize,
                 columnWidths,
+                horizontalOffset,
                 useRowRenderer,
             ],
         );
@@ -118,3 +122,19 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         );
     },
 );
+
+export const DataTableHeaderCellContextProvider = (
+    props: PropsWithChildren<DataTableHeaderCellContextType>,
+) => {
+    const { column, columnIndex, isFirst, isLast } = props;
+    const contextValue = useMemo(
+        () => ({ column, columnIndex, isFirst, isLast }),
+        [column, columnIndex, isFirst, isLast],
+    );
+
+    return (
+        <DataTableHeaderCellContext.Provider value={contextValue}>
+            {props.children}
+        </DataTableHeaderCellContext.Provider>
+    );
+};
