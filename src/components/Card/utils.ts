@@ -6,6 +6,7 @@ type CustomProps = {
     animationDuration?: string;
     container?: ViewStyle;
     innerContainer?: ViewStyle;
+    elevationLevel?: string;
 };
 
 export const cardStyles: ComponentStylePropWithVariants<ViewStyle, States, CustomProps> = {
@@ -20,6 +21,8 @@ export const cardStyles: ComponentStylePropWithVariants<ViewStyle, States, Custo
 
     variants: {
         elevated: {
+            elevationLevel: 'elevations.level1',
+
             container: {
                 backgroundColor: 'colors.surface',
             },
@@ -31,9 +34,14 @@ export const cardStyles: ComponentStylePropWithVariants<ViewStyle, States, Custo
                         opacity: 0.38,
                     },
                 },
+                hovered: {
+                    elevationLevel: 'elevations.level2',
+                },
             },
         },
         filled: {
+            elevationLevel: 'elevations.level0',
+
             container: {
                 backgroundColor: 'colors.surfaceVariant',
             },
@@ -45,9 +53,14 @@ export const cardStyles: ComponentStylePropWithVariants<ViewStyle, States, Custo
                         opacity: 0.38,
                     },
                 },
+                hovered: {
+                    elevationLevel: 'elevations.level1',
+                },
             },
         },
         outlined: {
+            elevationLevel: 'elevations.level0',
+
             container: {},
             borderWidth: 1,
             borderColor: 'colors.outline',
@@ -55,6 +68,9 @@ export const cardStyles: ComponentStylePropWithVariants<ViewStyle, States, Custo
             states: {
                 disabled: {
                     opacity: 0.12,
+                },
+                hovered: {
+                    elevationLevel: 'elevations.level1',
                 },
             },
         },
