@@ -219,6 +219,7 @@ export {
     UseHandleNumberFormatProps,
     NumberMaskConfig,
     useActionState,
+    useToken,
 } from './hooks';
 
 export {

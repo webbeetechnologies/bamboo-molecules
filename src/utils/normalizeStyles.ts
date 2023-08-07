@@ -2,6 +2,11 @@ import type { StyleProp } from 'react-native';
 import type { MD3Theme } from '../core/theme/types';
 import { createMemoizedFunction, get } from './lodash';
 
+export const maybeIsToken = (value: any) => {
+    if (typeof value !== 'string') return false;
+    return value.includes('.');
+};
+
 const normalizeStylesMemo = createMemoizedFunction({
     /**
      *
@@ -36,9 +41,7 @@ const normalizeStyles = normalizeStylesMemo(
 
         const newStyles = Object.assign({}, styles);
         const normalizableProperties = Object.keys(newStyles).filter(
-            key =>
-                (typeof newStyles[key] === 'string' && newStyles[key].includes('.')) ||
-                typeof newStyles[key] === 'object',
+            key => maybeIsToken(newStyles[key]) || typeof newStyles[key] === 'object',
         );
 
         normalizableProperties.forEach(key => {
