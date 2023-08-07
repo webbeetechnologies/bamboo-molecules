@@ -209,6 +209,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 columnWidths,
                 useRowRenderer,
                 CellWrapperComponent,
+                horizontalOffset,
                 ...rest
             } = props;
 
@@ -229,6 +230,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 columnWidths,
                 useRowRenderer,
                 CellWrapperComponent,
+                horizontalOffset,
             };
 
             return (

@@ -64,6 +64,14 @@ export interface DataTableProps<RecordType = any>
 
     /**
      *
+     * horizontalOffsetWidth: The value is multipled by two so that the offset is applied to the left and right of the table.
+     * @default 0
+     *
+     */
+    horizontalOffset?: number;
+
+    /**
+     *
      * Defines the headers of the table.
      * The component doesn't care about additional properties except the id; all the columns passed will be rendered.
      * If the component consumer wants to implement hiding columns, a filtered list of columns must be passed to the DataTable.
