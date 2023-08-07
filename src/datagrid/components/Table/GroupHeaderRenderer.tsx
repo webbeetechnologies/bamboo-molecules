@@ -12,7 +12,7 @@ import type { DataGridRowRendererProps, GroupMetaRowProps } from '../../types';
  *
  */
 export const GroupHeaderRenderer = memo(
-    ({ meta, rowId: _r, rowProps, ...field }: GroupMetaRowProps) => {
+    ({ meta, rowId: _r, rowProps, columns: _c, ...field }: GroupMetaRowProps) => {
         const { View, Text } = useMolecules();
 
         return (
