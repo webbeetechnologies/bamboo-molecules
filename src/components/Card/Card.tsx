@@ -49,28 +49,30 @@ const Card = (
         },
     );
 
-    const initialElevation = useMemo(
-        () => (elevationProp === undefined ? (variant === 'elevated' ? 1 : 0) : elevationProp),
-        [elevationProp, variant],
-    );
-
-    const { current: elevation } = useRef<Animated.Value>(new Animated.Value(initialElevation));
-
     const styles = useMemo(() => {
-        const { container, innerContainer, animationDuration, ...restStyles } = componentStyles;
+        const { container, innerContainer, animationDuration, elevationLevel, ...restStyles } =
+            componentStyles;
 
         return {
             container: [container, restStyles],
             innerContainer: innerContainer,
             animationDuration,
+            elevationLevel,
         };
     }, [componentStyles]);
 
+    const initialElevation = useMemo(
+        () => (elevationProp === undefined ? styles.elevationLevel : elevationProp),
+        [elevationProp, styles.elevationLevel],
+    );
+
+    const { current: elevation } = useRef<Animated.Value>(new Animated.Value(initialElevation));
+
     useEffect(() => {
-        if (disabled || !rest?.onPress) return;
+        if (disabled || disableOnHoverElevation || !rest?.onPress) return;
 
         Animated.timing(elevation, {
-            toValue: hovered && !disableOnHoverElevation ? initialElevation + 1 : initialElevation,
+            toValue: hovered ? (elevationProp || 0) + styles.elevationLevel : initialElevation,
             duration: styles.animationDuration,
             useNativeDriver: false,
         }).start();
@@ -83,6 +85,8 @@ const Card = (
         styles.animationDuration,
         disabled,
         rest?.onPress,
+        elevationProp,
+        styles.elevationLevel,
     ]);
 
     return (

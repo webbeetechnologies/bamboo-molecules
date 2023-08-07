@@ -167,13 +167,6 @@ const Button = (
         [variant],
     );
 
-    const initialElevation = useMemo(
-        () => (elevationProp === undefined ? (isVariant('elevated') ? 1 : 0) : elevationProp),
-        [elevationProp, isVariant],
-    );
-
-    const { current: elevation } = useRef<Animated.Value>(new Animated.Value(initialElevation));
-
     const {
         customLabelColor,
         customLabelSize,
@@ -189,6 +182,7 @@ const Button = (
         iconContainerStyle,
         accessibilityState,
         stateLayerStyle,
+        elevationLevel,
     } = useMemo(() => {
         const {
             backgroundColor: _backgroundColor,
@@ -208,6 +202,7 @@ const Button = (
             labelText,
             labelTextAddons,
             stateLayer,
+            elevationLevel: _elevationLevel,
             ..._buttonStyles
         } = componentStyles;
 
@@ -243,6 +238,7 @@ const Button = (
             ],
             accessibilityState: { disabled },
             stateLayerStyle: [stateLayer, stateLayerProps?.style],
+            elevationLevel: _elevationLevel,
         };
     }, [
         componentStyles,
@@ -256,15 +252,32 @@ const Button = (
         stateLayerProps?.style,
     ]);
 
+    const initialElevation = useMemo(
+        () => (elevationProp === undefined ? elevationLevel : elevationProp),
+        [elevationLevel, elevationProp],
+    );
+
+    const { current: elevation } = useRef<Animated.Value>(new Animated.Value(initialElevation));
+
     useEffect(() => {
-        if (disabled || !onPress || isVariant('outlined') || isVariant('text')) return;
+        if (disabled || !onPress) return;
 
         Animated.timing(elevation, {
-            toValue: hovered ? initialElevation + 1 : initialElevation,
+            toValue: hovered ? (elevationProp || 0) + elevationLevel : initialElevation,
             duration: 200 * animationScale,
             useNativeDriver: false,
         }).start();
-    }, [elevation, hovered, initialElevation, disabled, onPress, animationScale, isVariant]);
+    }, [
+        elevation,
+        hovered,
+        initialElevation,
+        disabled,
+        onPress,
+        animationScale,
+        isVariant,
+        elevationLevel,
+        elevationProp,
+    ]);
 
     return (
         <Surface {...rest} style={surfaceStyle} elevation={disabled ? 0 : elevation}>
