@@ -4,6 +4,7 @@ import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecule
 import type {
     DataGridRowRendererProps,
     Field,
+    GroupMeta,
     UseGroupRowState,
     UseRowRenderer,
     UseShowGroupFooter,
@@ -49,9 +50,10 @@ export const useRowRenderer: UseRowRenderer = (rowRendererProps, DefaultRowCompo
     return useRowRendererProp?.(rowRendererProps, DefaultRowComponent);
 };
 
-export const useShowGroupFooter: UseShowGroupFooter = meta => {
+export const useShowGroupFooter: UseShowGroupFooter = (meta: GroupMeta) => {
     const defaultFunction: UseShowGroupFooter = () => false;
     const { useShowGroupFooter: useShowGroupFooterProp = defaultFunction } = useHooks();
+
     return useShowGroupFooterProp(meta);
 };
 
@@ -59,8 +61,8 @@ const useGroupRowStateDefault: UseGroupRowState = meta => ({
     isOnly: meta.isOnly,
     isFirst: meta.isFirst,
     isLast: meta.isLast,
-    isFirstLevel: meta.isLastLevel,
-    isLastLevel: meta.isFirstLevel,
+    isFirstLevel: meta.isFirstLevel,
+    isLastLevel: meta.isLastLevel,
 });
 
 export const useGroupRowState: UseGroupRowState = meta => {

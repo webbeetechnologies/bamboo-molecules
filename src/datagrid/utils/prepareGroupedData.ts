@@ -1,5 +1,6 @@
-import type { TDataTableColumn, TDataTableRow } from 'src/components/DataTable/types';
+import type { TDataTableRow } from '@bambooapp/bamboo-molecules';
 import { groupBy } from './lodash';
+import type { GroupConstantValues, GroupMeta } from '../types/row';
 
 export interface RecordWithId extends Record<string, any> {
     id: number | string;
@@ -15,19 +16,11 @@ export enum RowType {
     DATA = 'data',
 }
 
-type GroupMetaRecord = {
-    fieldId: TDataTableColumn;
+type GroupMetaRecord = GroupMeta & {
     title: any;
-    level: number;
-    filters: GroupFilter[];
+    groupConstants: GroupConstantValues[];
     id: string;
-    count: number;
     groupId: string;
-    isFirstLevel: boolean;
-    isLastLevel: boolean;
-    isFirst: boolean;
-    isLast: boolean;
-    isOnly: boolean;
 };
 
 export type GroupHeader = GroupMetaRecord & {
@@ -40,7 +33,7 @@ export type GroupFooter = GroupMetaRecord & {
 
 export type GroupRecord = {
     id: TDataTableRow;
-    filters: GroupFilter[];
+    groupConstants: GroupConstantValues[];
     data: RecordWithId;
     level: number;
     groupId: string;
@@ -48,13 +41,11 @@ export type GroupRecord = {
 
 export type GroupedData = GroupRecord | GroupHeader | GroupFooter;
 
-type GroupFilter = { field: string; value: any };
-
 const keyStore = new WeakMap();
 const keyStoreReversed = new Map();
-const cachedFilters = new Map<string, GroupFilter[]>([]);
+const cachedFilters = new Map<string, GroupConstantValues[]>([]);
 
-const getCachedFilters = (key: string, filters: GroupFilter[]) => {
+const getCachedConstants = (key: string, filters: GroupConstantValues[]) => {
     if (!cachedFilters.has(key)) cachedFilters.set(key, filters);
     return cachedFilters.get(key)!;
 };
@@ -75,7 +66,7 @@ const getPrimitiveValue = (value: any): PrimitiveTypes => {
     return keyStore.get(value);
 };
 
-const getIdFromFilters = (filters: GroupFilter[], { prefix = '', suffix = '' } = {}) => {
+const getIdFromConstants = (filters: GroupConstantValues[], { prefix = '', suffix = '' } = {}) => {
     return [
         prefix || ([] as string[]),
         ...filters.map(x => `${x.field}_${getPrimitiveValue(x.value)}`),
@@ -90,15 +81,15 @@ const makeNested = <T extends RecordWithId>(
     groups: TypedRecordSort<T>[],
     index = 0,
     level = 1,
-    filters: GroupFilter[] = [],
+    filters: GroupConstantValues[] = [],
 ): GroupedData[] => {
     const [currentField, ...pending] = groups ?? [];
 
     if (!currentField) {
-        const groupId = getIdFromFilters(filters);
+        const groupId = getIdFromConstants(filters);
         return records.map(record => ({
             data: record,
-            filters: getCachedFilters(groupId, filters),
+            groupConstants: getCachedConstants(groupId, filters),
             id: record.id,
             level: level - 1,
             index: index++,
@@ -119,27 +110,27 @@ const makeNested = <T extends RecordWithId>(
 
         title: any,
         restGroupMeta: {
-            filters: GroupFilter[];
+            groupConstants: GroupConstantValues[];
             isFirst: boolean;
             isLast: boolean;
         },
         suffix?: string,
     ): GroupedData[] => {
-        const groupId = getIdFromFilters(restGroupMeta.filters);
+        const groupId = getIdFromConstants(restGroupMeta.groupConstants);
         return [
             {
                 ...arg,
                 fieldId: currentField as string,
                 title,
                 level,
-                count: records.length,
+                recordCount: records.length,
                 groupId,
                 isFirstLevel: level === 1,
                 isLastLevel: pending.length === 0,
-                id: getIdFromFilters([], { prefix: groupId, suffix }),
+                id: getIdFromConstants([], { prefix: groupId, suffix }),
                 isOnly: restGroupMeta.isFirst && restGroupMeta.isLast,
                 ...restGroupMeta,
-                filters: getCachedFilters(groupId, restGroupMeta.filters),
+                groupConstants: getCachedConstants(groupId, restGroupMeta.groupConstants),
             },
         ];
     };
@@ -147,15 +138,17 @@ const makeNested = <T extends RecordWithId>(
     const makeFooter = makeGroupMeta.bind(null, { isGroupFooter: true });
     const makeHeader = makeGroupMeta.bind(null, { isGroupHeader: true });
 
-    const makeGroupedData = (key: string, groupFilters: GroupFilter[]) =>
-        makeNested(groupedData[key], pending, index, level + 1, groupFilters);
+    const makeGroupedData = (
+        key: string,
+        { groupConstants }: { groupConstants: GroupConstantValues[] },
+    ) => makeNested(groupedData[key], pending, index, level + 1, groupConstants);
 
     const createGroupItem = (key: PrimitiveTypes, i: number, self: PrimitiveTypes[]) => {
         const currentValue = keyStoreReversed.get(key);
         const groupMeta = {
             isFirst: i === 0,
             isLast: self.length - 1 === i,
-            filters: [
+            groupConstants: [
                 ...filters,
                 {
                     field: currentField as string,
@@ -166,7 +159,7 @@ const makeNested = <T extends RecordWithId>(
 
         return ([] as GroupedData[])
             .concat(makeHeader(currentValue, groupMeta, `header`))
-            .concat(makeGroupedData(String(key), groupMeta.filters))
+            .concat(makeGroupedData(String(key), groupMeta))
             .concat(makeFooter(currentValue, groupMeta, `footer`));
     };
 
@@ -180,6 +173,11 @@ const prepareFlattenedDataWithGroups = <T extends RecordWithId = RecordWithId>(
     keyStoreReversed.clear();
     return makeNested(modelRecords, groupRecordsBy).flat();
 };
+
+export const isGroupFooter = (x: GroupedData): x is GroupFooter => (x as GroupFooter).isGroupFooter;
+export const isGroupHeader = (x: GroupedData): x is GroupHeader => (x as GroupHeader).isGroupHeader;
+export const isDataRow = (x: GroupedData): x is GroupHeader =>
+    !isGroupHeader(x) && !isGroupFooter(x);
 
 export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
     modelRecords: T[],

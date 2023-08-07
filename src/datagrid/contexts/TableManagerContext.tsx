@@ -10,6 +10,7 @@ export type TableManagerContextProviderProps = {
     withContextMenu: boolean;
     records: GroupedData[];
     tableRef: RefObject<any>;
+    spacerWidth: number;
 };
 
 export type TableManagerContextType = TableManagerContextProviderProps & {
@@ -25,6 +26,7 @@ const defaultContextValue = {
     focusedCell: null,
     focusedCellRef: null,
     withContextMenu: false,
+    spacerWidth: 0,
 };
 
 export const {
@@ -39,6 +41,7 @@ export const TableManagerProvider = memo(
         tableRef,
         withContextMenu,
         children,
+        spacerWidth,
         records,
     }: PropsWithChildren<TableManagerContextProviderProps>) => {
         const contextValue = useMemo(
@@ -47,8 +50,9 @@ export const TableManagerProvider = memo(
                 tableRef,
                 withContextMenu,
                 records,
+                spacerWidth,
             }),
-            [tableRef, withContextMenu, records],
+            [tableRef, withContextMenu, records, spacerWidth],
         );
 
         return (
@@ -136,7 +140,7 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
     const {
         fieldId,
         title,
-        count,
+        recordCount,
         isFirst,
         isLast,
         isFirstLevel,
@@ -151,7 +155,7 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
             fieldId,
             title,
             level,
-            recordCount: count,
+            recordCount,
             isFirst,
             isLast,
             isFirstLevel,
@@ -159,7 +163,18 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
             isOnly,
             value,
         }),
-        [fieldId, title, level, count, isFirst, isLast, isFirstLevel, isLastLevel, isOnly, value],
+        [
+            fieldId,
+            title,
+            level,
+            recordCount,
+            isFirst,
+            isLast,
+            isFirstLevel,
+            isLastLevel,
+            isOnly,
+            value,
+        ],
     );
 };
 

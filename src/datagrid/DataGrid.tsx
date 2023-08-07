@@ -11,7 +11,7 @@ import type {
     RenderHeaderCellProps,
 } from '@bambooapp/bamboo-molecules/components';
 
-import { useMolecules } from '../hooks';
+import { useMolecules, useToken } from '../hooks';
 import {
     FieldTypesProvider,
     TableManagerProvider,
@@ -55,10 +55,11 @@ type DataGridPropsBase = Omit<
         groups?: TDataTableColumn[];
     };
 
-export type Props = DataGridPropsBase &
+export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
     HooksContextType & {
         fieldTypes?: FieldTypes;
         records: RecordWithId[];
+        spacerWidth?: string | number;
     };
 
 export type ContextMenuProps = Partial<MenuProps> & {
@@ -222,10 +223,12 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         useRowRenderer: useRowRendererProp = useRowRendererDefault,
         useGroupRowState: useGroupRowStateProp,
         useShowGroupFooter: useShowGroupFooterProp,
-
+        spacerWidth: spacerWidthProp = 'spacings.3',
         ...rest
     }: Props) => {
         const ref = useRef(null);
+
+        const spacerWidth = useToken(spacerWidthProp as string) ?? spacerWidthProp;
 
         const hooksContextValue = useRef({
             useField,
@@ -247,11 +250,14 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
             [records, groups],
         );
 
+        const offsetWidth = (groups?.length ?? 0) * spacerWidth;
+
         return (
             <FieldTypesProvider value={fieldTypes}>
                 <HooksProvider value={hooksContextValue}>
                     <TableManagerProvider
                         tableRef={ref}
+                        spacerWidth={spacerWidth}
                         records={groupedRecords}
                         withContextMenu={!!contextMenuProps}>
                         <PluginsManager plugins={plugins}>
@@ -259,6 +265,7 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
                             <Component
                                 {...rest}
                                 records={rowIds}
+                                horizontalOffset={offsetWidth}
                                 contextMenuProps={contextMenuProps}
                             />
                         </PluginsManager>

@@ -1,6 +1,8 @@
 import type { DataTableRowProps, TDataTableColumn } from '@bambooapp/bamboo-molecules';
 import type { Field } from './field';
 
+export type GroupConstantValues = { field: string; value: any };
+
 export type GroupMetaStates = {
     isFirstLevel: boolean;
     isLastLevel: boolean;
@@ -10,10 +12,10 @@ export type GroupMetaStates = {
 };
 
 export type GroupMeta = GroupMetaStates & {
-    value: any;
     fieldId: TDataTableColumn;
     recordCount: number;
     level: number;
+    groupConstants: GroupConstantValues[];
 };
 
 export type DataGridRowRendererProps = DataTableRowProps;

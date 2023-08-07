@@ -49,6 +49,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         columnWidths,
         useRowRenderer: useRowRendererProp,
         CellWrapperComponent,
+        horizontalOffset = 0,
     }) => {
         const { FlatList } = useMolecules();
 
@@ -72,9 +73,9 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         const tableWidth = useMemo(() => {
             return columns.reduce(
                 (acc: number, column) => acc + (columnWidths?.[column] ?? defaultColumnWidth),
-                0,
+                horizontalOffset * 2,
             );
-        }, [columnWidths, columns, defaultColumnWidth]);
+        }, [horizontalOffset, columnWidths, columns, defaultColumnWidth]);
 
         const dataContext = useMemo(
             () => ({

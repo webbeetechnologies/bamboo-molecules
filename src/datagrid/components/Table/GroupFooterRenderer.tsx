@@ -1,8 +1,18 @@
 import { memo } from 'react';
 import { useField, useGroupMeta, useShowGroupFooter } from '../../contexts';
 
-import { useMolecules } from '@bambooapp/bamboo-molecules';
+import { ViewProps, useMolecules } from '@bambooapp/bamboo-molecules';
 import type { DataGridRowRendererProps, GroupMetaRowProps } from '../../types';
+import { useComponentStyles } from '@bambooapp/bamboo-atoms';
+
+const EmptyFooter = memo(({ isLastLevel, ...props }: ViewProps & { isLastLevel: boolean }) => {
+    const { View } = useMolecules();
+    const emptyFooterStyles = useComponentStyles('DataGrid_EmptyFooterRow');
+
+    const style = isLastLevel ? emptyFooterStyles : props.style;
+
+    return <View {...props} style={style} />;
+});
 
 /**
  *
@@ -14,7 +24,7 @@ export const GroupFooterRenderer = memo(({ meta, rowProps }: GroupMetaRowProps) 
     const shouldShowFooter = useShowGroupFooter(meta);
 
     if (!shouldShowFooter) {
-        return <View {...rowProps} />;
+        return <EmptyFooter {...rowProps} isLastLevel={meta.isLastLevel} />;
     }
 
     return (
