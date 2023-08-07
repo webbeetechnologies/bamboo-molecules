@@ -36,8 +36,12 @@ export const DataGrid_GroupHeaderItem = {
         isFirst: {
             marginTop: 0,
         },
-        isLastLevel: {
+        isDataRowHeader: {
             borderBottomWidth: 1,
+        },
+        isDataRowHeaderFirst: {
+            borderBottomWidth: 1,
+            marginTop: 0,
         },
     },
 };

@@ -65,8 +65,11 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
         const { level } = groupRow;
 
         const groupMeta = useGroupMeta(props.rowId);
+        const isDataRowHeader = isGroupHeader(groupRow) && groupRow.isLastLevel;
         const style = useComponentStyles(rowTypes[variant], props.rowProps?.style, {
             states: {
+                isDataRowHeaderFirst: isDataRowHeader && groupRow.isFirst,
+                isDataRowHeader: isDataRowHeader,
                 isFirstGroup: props.index === 0,
                 ...useGroupRowState(groupMeta),
             },

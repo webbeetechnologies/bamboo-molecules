@@ -148,6 +148,7 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
         isOnly,
         title: value,
         level,
+        groupConstants,
     } = useRecordById(id) as GroupHeader | GroupFooter;
 
     return useMemo(
@@ -162,6 +163,7 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
             isLastLevel,
             isOnly,
             value,
+            groupConstants,
         }),
         [
             fieldId,
@@ -174,6 +176,7 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
             isLastLevel,
             isOnly,
             value,
+            groupConstants,
         ],
     );
 };
