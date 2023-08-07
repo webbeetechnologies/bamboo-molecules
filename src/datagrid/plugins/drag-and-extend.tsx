@@ -5,14 +5,14 @@ import { useTableManagerStoreRef } from '../contexts';
 import { CELL_SELECTION_PLUGIN_KEY, CellIndexes } from './cell-selection';
 import { usePluginsDataStoreRef, usePluginsDataValueSelectorValue } from './plugins-manager';
 import { createPlugin } from './createPlugin';
-import { PluginEvents, Selection } from './types';
+import { PluginEvents, SelectionIndexes } from './types';
 import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
 
 export const DRAG_AND_EXTEND_PLUGIN_KEY = 'drag-and-extend';
 
 const emptyObj = {};
 
-const checkIfWithinRow = (selection: Selection, cell: { rowIndex: number }) => {
+const checkIfWithinRow = (selection: SelectionIndexes, cell: { rowIndex: number }) => {
     const { rowIndex } = cell;
 
     if (!selection || !selection.start || !selection.end) return false;
@@ -167,7 +167,7 @@ const useOnDragSelection = ({
             };
         }
 
-        selection = normalizeSelection(selection as Selection);
+        selection = normalizeSelection(selection as SelectionIndexes);
 
         const continueDragAndSelection = beforeDragAndExtend({ selection });
 
