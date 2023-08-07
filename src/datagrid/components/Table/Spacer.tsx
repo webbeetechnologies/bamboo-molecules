@@ -7,7 +7,7 @@ import {
     useTableManagerValueSelector,
     useGroupMeta,
 } from '../../contexts';
-import { isGroupFooter, GroupedData, isGroupHeader } from '../../utils';
+import { isGroupFooter, GroupedData, isGroupHeader, GroupHeader } from '../../utils';
 
 type SpacerProp = { variant: 'left' | 'right'; isLastLevel?: boolean };
 
@@ -68,7 +68,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
         const isDataRowHeader = isGroupHeader(groupRow) && groupRow.isLastLevel;
         const style = useComponentStyles(rowTypes[variant], props.rowProps?.style, {
             states: {
-                isDataRowHeaderFirst: isDataRowHeader && groupRow.isFirst,
+                isDataRowHeaderFirst: isDataRowHeader && (groupRow as GroupHeader).isFirst,
                 isDataRowHeader: isDataRowHeader,
                 isFirstGroup: props.index === 0,
                 ...useGroupRowState(groupMeta),
