@@ -94,6 +94,8 @@ export type MD3Colors = {
     backdrop: string;
     elevation: MD3ElevationColors;
     lines: string;
+    palette: Record<string, string>;
+    opacity: Record<string, number>;
 };
 
 export type MD3Shapes = {

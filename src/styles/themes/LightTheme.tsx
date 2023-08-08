@@ -76,6 +76,8 @@ export const generateLightThemeColors = (
                 onSurface_Level4: color(palette.neutral10).alpha(opacity.level4).hexa(),
             },
         },
+        palette,
+        opacity,
     };
 };
 
