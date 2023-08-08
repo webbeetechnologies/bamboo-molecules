@@ -1,6 +1,6 @@
 {
   "name": "@bambooapp/bamboo-molecules",
-  "version": "0.2.10-dev.0",
+  "version": "0.2.10",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/webbeetechnologies/bamboo-molecules.git"
