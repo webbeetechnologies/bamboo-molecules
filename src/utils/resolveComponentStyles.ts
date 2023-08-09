@@ -1,5 +1,5 @@
 import deepmerge from 'ts-deepmerge';
-import type { MD3Typescale, ResolveComponentStylesArgs } from '../core/theme/types';
+import type { ResolveComponentStylesArgs } from '../core/theme/types';
 import type { ComponentSize } from '../types';
 import { createMemoizedFunction } from './lodash';
 
@@ -39,18 +39,13 @@ export const flattenStateStyles = (
     states: { [key: string]: boolean } | undefined,
     statesStyles: Record<string, any>,
 ) => {
-    let flattenedStyles = {} as Partial<Record<string, any> & { typescale: MD3Typescale }>;
+    let flattenedStyles = {};
 
     if (states && statesStyles) {
         const firstActiveState =
             Object.keys(states).find(key => states[key] && key in statesStyles) || '';
 
         flattenedStyles = { ...flattenedStyles, ...(statesStyles[firstActiveState] || {}) };
-    }
-
-    if ('typescale' in flattenedStyles) {
-        const { typescale = {}, ...rest } = flattenedStyles;
-        flattenedStyles = { ...rest, ...typescale };
     }
 
     return flattenedStyles;
