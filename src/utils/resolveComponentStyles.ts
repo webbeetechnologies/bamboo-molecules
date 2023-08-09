@@ -39,7 +39,7 @@ export const flattenStateStyles = (
     states: { [key: string]: boolean } | undefined,
     statesStyles: Record<string, any>,
 ) => {
-    let flattenedStyles = {};
+    let flattenedStyles = {} as Partial<Record<string, any> & { typescale: MD3Typescale }>;
 
     if (states && statesStyles) {
         const firstActiveState =
@@ -50,7 +50,7 @@ export const flattenStateStyles = (
 
     if ('typescale' in flattenedStyles) {
         const { typescale = {}, ...rest } = flattenedStyles;
-        flattenedStyles = { ...rest, ...(typescale as MD3Typescale) };
+        flattenedStyles = { ...rest, ...typescale };
     }
 
     return flattenedStyles;
