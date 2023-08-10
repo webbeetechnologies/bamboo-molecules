@@ -68,6 +68,7 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     maxHeight,
     style,
     onQueryChange,
+    onCancel,
     ...optionListProps
 }: Props<TItem>) => {
     const { OptionList, ActionSheet, Dialog, DropdownListPopover } = useMolecules();
@@ -93,11 +94,11 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
 
     const onClose = useCallback(() => {
         if (isOpen) {
+            onCancel?.();
             setIsOpen(false);
-
             onQueryChange?.('');
         }
-    }, [isOpen, onQueryChange, setIsOpen]);
+    }, [isOpen, onQueryChange, setIsOpen, onCancel]);
 
     const onOpen = useCallback(() => {
         if (!isOpen) setIsOpen(true);
