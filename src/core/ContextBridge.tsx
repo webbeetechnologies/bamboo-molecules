@@ -25,7 +25,8 @@ export const createContextBridge = (contexts: ContextType<any>[]) => {
                     </Context.Provider>
                 );
             }, <>{children}</>);
-        }, [children]);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [...contextValuesRef.current, children]);
 
         return <>{render(content)}</>;
     });
