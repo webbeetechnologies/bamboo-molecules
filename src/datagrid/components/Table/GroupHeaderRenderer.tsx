@@ -18,7 +18,7 @@ export const GroupHeaderRenderer = memo(
         return (
             <View {...rowProps}>
                 <Text>{field.title}</Text>
-                <ViewRenderer value={meta.value} {...field} />
+                <ViewRenderer value={meta.groupConstants.at(-1)?.value} {...field} />
             </View>
         );
     },

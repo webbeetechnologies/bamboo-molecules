@@ -1,37 +1,46 @@
 export const DataGrid_SpacerRow = {
     flexDirection: 'row' as const,
-    borderColor: 'colors.onSurfaceVariant',
+    borderColor: 'colors.outlineVariant',
 };
 
 export const DataGrid_Spacer = {
-    width: 'spacings.3',
-    borderColor: 'colors.onSurfaceVariant',
+    borderColor: 'colors.outlineVariant',
     variants: {
         left: {
             borderLeftWidth: 1,
         },
         right: {
-            borderLeftWidth: 1,
+            borderRightWidth: 1,
         },
     },
 };
 
-export const DataGrid_RowItem = {
+const DataGrid_RowBase = {
     flex: 1,
-    borderColor: 'colors.onSurfaceVariant',
-    borderTopWidth: 1,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
+    borderColor: 'colors.outlineVariant',
+};
+
+export const DataGrid_RowItem = {
+    ...DataGrid_RowBase,
 };
 
 export const DataGrid_GroupHeaderItem = {
-    ...DataGrid_RowItem,
+    ...DataGrid_RowBase,
     marginTop: 'spacings.3',
+    borderTopWidth: 1,
     borderRightWidth: 1,
     borderLeftWidth: 1,
 
     states: {
+        isFirstGroup: {},
         isFirst: {
+            marginTop: 0,
+        },
+        isDataRowHeader: {
+            borderBottomWidth: 1,
+        },
+        isDataRowHeaderFirst: {
+            borderBottomWidth: 1,
             marginTop: 0,
         },
     },
@@ -42,12 +51,8 @@ export const DataGrid_GroupFooterItem = {
     marginTop: 0,
     borderBottomWidth: 1,
     borderTopWidth: 0,
-    height: 'spacings.3',
+};
 
-    states: {
-        showFooter: {
-            borderTopWidth: 1,
-            height: undefined,
-        },
-    },
+export const DataGrid_EmptyFooterRow = {
+    ...DataGrid_RowBase,
 };

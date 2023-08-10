@@ -1,5 +1,5 @@
 import type { StyleProp } from 'react-native';
-import type { MD3Theme } from '../core/theme/types';
+import type { MD3Theme, MD3Typescale } from '../core/theme/types';
 import { createMemoizedFunction, get } from './lodash';
 
 export const maybeIsToken = (value: any) => {
@@ -20,6 +20,15 @@ const normalizeStylesMemo = createMemoizedFunction({
         cacheKey: string,
     ) => `${cacheKey}_${themeName}_${JSON.stringify(styles)}`,
 });
+
+const flattenTypescale = (style: Partial<Record<string, any> & { typescale: MD3Typescale }>) => {
+    if ('typescale' in style) {
+        const { typescale = {}, ...rest } = style;
+        style = { ...rest, ...typescale };
+    }
+
+    return style;
+};
 
 // normalize tokens inside the styles object and the subsequent objects inside it
 const normalizeStyles = normalizeStylesMemo(
@@ -53,7 +62,7 @@ const normalizeStyles = normalizeStylesMemo(
             }
         });
 
-        return newStyles;
+        return flattenTypescale(newStyles);
     },
 );
 

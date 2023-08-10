@@ -17,12 +17,10 @@ export { default as RowWrapperComponent } from './RowWrapper';
 
 registerMolecule('GroupHeaderRenderer', {
     Component: GroupHeaderRenderer,
-    defaultStyles: {},
 });
 
 registerMolecule('GroupFooterRenderer', {
     Component: GroupFooterRenderer,
-    defaultStyles: {},
 });
 
 declare global {

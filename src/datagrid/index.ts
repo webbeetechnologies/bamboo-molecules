@@ -38,7 +38,6 @@ registerMolecule('DataGrid', {
 
 registerMolecule('DataGrid_ViewRenderer', {
     Component: ViewRenderer,
-    defaultStyles: {},
 });
 
 declare global {
