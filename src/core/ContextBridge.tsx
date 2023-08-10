@@ -1,23 +1,32 @@
-import type { ComponentType, Context, ReactNode } from 'react';
-import { memo } from 'react';
+import type { Context as ContextType, ReactNode } from 'react';
+import { memo, useContext, useMemo, useRef } from 'react';
 
 export type Props = {
     children: ReactNode;
-    context: Context<any>;
-    Wrapper: ComponentType<any>;
+    render: (children: ReactNode) => ReactNode;
 };
 
-// TODO - support nested context tree
-const ContextBridge = ({ children, context: Context, Wrapper }: Props) => {
-    return (
-        <Context.Consumer>
-            {value => (
-                <Wrapper>
-                    <Context.Provider value={value}>{children}</Context.Provider>
-                </Wrapper>
-            )}
-        </Context.Consumer>
-    );
-};
+export const createContextBridge = (contexts: ContextType<any>[]) => {
+    const reversedContexts = contexts.reverse();
 
-export default memo(ContextBridge);
+    return memo(({ children, render }: Props) => {
+        const contextValuesRef = useRef<any[]>([]);
+
+        for (const i in reversedContexts) {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            contextValuesRef.current[i] = useContext(contexts[i]);
+        }
+
+        const content = useMemo(() => {
+            return reversedContexts.reduce((acc, Context, currentIndex) => {
+                return (
+                    <Context.Provider value={contextValuesRef.current[currentIndex]}>
+                        {acc}
+                    </Context.Provider>
+                );
+            }, <>{children}</>);
+        }, [children]);
+
+        return <>{render(content)}</>;
+    });
+};
