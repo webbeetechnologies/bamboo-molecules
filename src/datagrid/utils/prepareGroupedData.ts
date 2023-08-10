@@ -76,44 +76,48 @@ const getIdFromConstants = (filters: GroupConstantValues[], { prefix = '', suffi
         .join('::');
 };
 
-const makeNested = <T extends RecordWithId>(
-    records: T[],
-    groups: TypedRecordSort<T>[],
-    index = 0,
-    level = 1,
-    filters: GroupConstantValues[] = [],
-): GroupedData[] => {
-    const [currentField, ...pending] = groups ?? [];
+type Meta = {
+    groupConstants: GroupConstantValues[];
+    isFirst: boolean;
+    isLast: boolean;
+};
 
-    if (!currentField) {
-        const groupId = getIdFromConstants(filters);
-        return records.map(record => ({
-            data: record,
-            groupConstants: getCachedConstants(groupId, filters),
-            id: record.id,
-            level: level - 1,
-            index: index++,
-            groupId,
-        })) as GroupRecord[];
-    }
-
-    const groupedData = groupBy(records, record => getPrimitiveValue(record[currentField]));
-
-    const texts = Array.from(
-        new Set(records.map(record => getPrimitiveValue(record[currentField]))),
-    );
-
-    const makeGroupMeta = <
-        GroupType extends Pick<GroupHeader, 'isGroupHeader'> | Pick<GroupFooter, 'isGroupFooter'>,
-    >(
-        arg: GroupType,
-
-        title: any,
-        restGroupMeta: {
-            groupConstants: GroupConstantValues[];
-            isFirst: boolean;
-            isLast: boolean;
+const makeNested = <T extends RecordWithId>(args: {
+    records: T[];
+    groups: TypedRecordSort<T>[];
+    getIndex: () => number;
+    level?: number;
+    groupedDataMeta?: Meta;
+}): GroupedData[] => {
+    const {
+        records,
+        groups,
+        getIndex,
+        level = 1,
+        groupedDataMeta = {
+            isFirst: true,
+            isLast: true,
+            groupConstants: [],
         },
+    } = args;
+
+    type GroupBase = 'level';
+    type GroupPartials =
+        | Pick<GroupHeader, 'isGroupHeader' | GroupBase>
+        | Pick<GroupFooter, 'isGroupFooter' | GroupBase>;
+
+    /**
+     *
+     * Make group header and footer.
+     *
+     * Note:
+     * Creating a new function on every pass because it depends on the data.
+     * Also, the function will be garbage collected.
+     *
+     */
+    const makeGroupMeta = <GroupType extends GroupPartials>(
+        arg: GroupType,
+        restGroupMeta: Meta,
         suffix?: string,
     ): GroupedData[] => {
         const groupId = getIdFromConstants(restGroupMeta.groupConstants);
@@ -121,7 +125,7 @@ const makeNested = <T extends RecordWithId>(
             {
                 ...arg,
                 fieldId: currentField as string,
-                title,
+                title: restGroupMeta.groupConstants.at(-1)?.value,
                 level,
                 recordCount: records.length,
                 groupId,
@@ -135,13 +139,43 @@ const makeNested = <T extends RecordWithId>(
         ];
     };
 
-    const makeFooter = makeGroupMeta.bind(null, { isGroupFooter: true });
-    const makeHeader = makeGroupMeta.bind(null, { isGroupHeader: true });
+    /**
+     * Simplified makeGroupMeta.
+     */
+    const makeFooter = makeGroupMeta.bind(null, { isGroupFooter: true, level: level - 1 });
+    const makeHeader = makeGroupMeta.bind(null, { isGroupHeader: true, level });
 
-    const makeGroupedData = (
-        key: string,
-        { groupConstants }: { groupConstants: GroupConstantValues[] },
-    ) => makeNested(groupedData[key], pending, index, level + 1, groupConstants);
+    const [currentField, ...pending] = groups ?? [];
+
+    if (!currentField) {
+        const groupId = getIdFromConstants(groupedDataMeta.groupConstants);
+
+        const data: GroupedData[] = records.map(record => ({
+            data: record,
+            groupConstants: getCachedConstants(groupId, groupedDataMeta.groupConstants),
+            id: record.id,
+            level: level - 1,
+            index: getIndex(),
+            groupId,
+        }));
+
+        return data.concat(makeFooter(groupedDataMeta, `footer`));
+    }
+
+    const groupedData = groupBy(records, record => getPrimitiveValue(record[currentField]));
+
+    const texts = Array.from(
+        new Set(records.map(record => getPrimitiveValue(record[currentField]))),
+    );
+
+    const makeGroupedData = (key: string, groupMeta: Meta) =>
+        makeNested({
+            records: groupedData[key],
+            groups: pending,
+            getIndex,
+            level: level + 1,
+            groupedDataMeta: groupMeta,
+        });
 
     const createGroupItem = (key: PrimitiveTypes, i: number, self: PrimitiveTypes[]) => {
         const currentValue = keyStoreReversed.get(key);
@@ -149,7 +183,7 @@ const makeNested = <T extends RecordWithId>(
             isFirst: i === 0,
             isLast: self.length - 1 === i,
             groupConstants: [
-                ...filters,
+                ...groupedDataMeta.groupConstants,
                 {
                     field: currentField as string,
                     value: currentValue,
@@ -158,9 +192,8 @@ const makeNested = <T extends RecordWithId>(
         };
 
         return ([] as GroupedData[])
-            .concat(makeHeader(currentValue, groupMeta, `header`))
-            .concat(makeGroupedData(String(key), groupMeta))
-            .concat(makeFooter(currentValue, groupMeta, `footer`));
+            .concat(makeHeader(groupMeta, `header`))
+            .concat(makeGroupedData(String(key), groupMeta));
     };
 
     return texts.map(createGroupItem).flat();
@@ -170,8 +203,13 @@ const prepareFlattenedDataWithGroups = <T extends RecordWithId = RecordWithId>(
     modelRecords: T[],
     groupRecordsBy: TypedRecordSort<T>[] = [],
 ) => {
+    let index = 0;
     keyStoreReversed.clear();
-    return makeNested(modelRecords, groupRecordsBy).flat();
+    return makeNested({
+        records: modelRecords,
+        groups: groupRecordsBy,
+        getIndex: () => index++,
+    }).flat();
 };
 
 export const isGroupFooter = (x: GroupedData): x is GroupFooter => (x as GroupFooter).isGroupFooter;

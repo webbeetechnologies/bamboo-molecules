@@ -6,6 +6,7 @@ import {
     useGroupRowState,
     useTableManagerValueSelector,
     useGroupMeta,
+    useHasGroupedData,
 } from '../../contexts';
 import { isGroupFooter, GroupedData, isGroupHeader, GroupHeader } from '../../utils';
 
@@ -56,6 +57,8 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
         const groupRow = useRecordById(props.rowId) as GroupedData;
         const variant = useGroupVariant(groupRow);
 
+        const isGroupsEnabled = useHasGroupedData(props.rowId);
+
         const groupSpacerWrapStyles = useComponentStyles('DataGrid_SpacerRow', null, {
             variant,
         });
@@ -75,7 +78,14 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
             },
         });
 
-        const rowProps = useMemo(() => ({ ...props.rowProps, style }), [style, props.rowProps]);
+        const rowProps = useMemo(
+            () => ({ ...props.rowProps, style: [props.rowProps, style] }),
+            [style, props.rowProps],
+        );
+
+        if (!isGroupsEnabled) {
+            return <Component {...props} rowProps={rowProps} />;
+        }
 
         return (
             <View style={groupSpacerWrapStyles}>

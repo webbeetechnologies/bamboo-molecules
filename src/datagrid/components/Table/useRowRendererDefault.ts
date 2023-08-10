@@ -2,7 +2,7 @@ import type { ComponentType } from 'react';
 import type { UseRowRenderer } from '@bambooapp/bamboo-molecules';
 
 import { RowType, weakMemoized } from '../../utils';
-import { useHasGroupedData, useRecordType } from '../../contexts';
+import { useRecordType } from '../../contexts';
 import { GroupFooterRow } from './GroupFooterRenderer';
 import { GroupHeaderRow } from './GroupHeaderRenderer';
 import type { DataGridRowRendererProps } from '../../types';
@@ -23,17 +23,10 @@ const getRowWithSpacers = weakMemoized((Row: ComponentType<DataGridRowRendererPr
     withSpacers(Row),
 );
 
-const useRowRendererLocal: UseRowRenderer<DataGridRowRendererProps> = (props, DefaultRenderer) => {
-    const rowType = useRecordType(props.rowId);
-    return renderers[rowType] ?? DefaultRenderer;
-};
 export const useRowRendererDefault: UseRowRenderer<DataGridRowRendererProps> = (
     props,
-    Component,
+    DefaultRenderer,
 ) => {
-    const RowRenderer = useRowRendererLocal(props, Component);
-
-    if (!useHasGroupedData(props.rowId)) return RowRenderer;
-
-    return getRowWithSpacers(RowRenderer);
+    const rowType = useRecordType(props.rowId);
+    return getRowWithSpacers(renderers[rowType] ?? DefaultRenderer);
 };
