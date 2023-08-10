@@ -68,6 +68,7 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     maxHeight,
     style,
     onQueryChange,
+    onCancel,
     ...optionListProps
 }: Props<TItem>) => {
     const { OptionList, ActionSheet, Dialog, DropdownListPopover } = useMolecules();
@@ -94,10 +95,10 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     const onClose = useCallback(() => {
         if (isOpen) {
             setIsOpen(false);
-
+            onCancel?.();
             onQueryChange?.('');
         }
-    }, [isOpen, onQueryChange, setIsOpen]);
+    }, [isOpen, onQueryChange, setIsOpen, onCancel]);
 
     const onOpen = useCallback(() => {
         if (!isOpen) setIsOpen(true);
@@ -109,10 +110,11 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
 
             if (hideOnSelect) {
                 setIsOpen(false);
+                onCancel?.();
                 onQueryChange?.('');
             }
         },
-        [onSelectionChangeProp, hideOnSelect, setIsOpen, onQueryChange],
+        [onSelectionChangeProp, hideOnSelect, setIsOpen, onQueryChange, onCancel],
     );
 
     const [WrapperComponent, props] = useMemo(() => {
