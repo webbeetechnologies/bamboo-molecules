@@ -7,7 +7,7 @@ export type Props = {
 };
 
 export const createContextBridge = (contexts: ContextType<any>[]) => {
-    const reversedContexts = contexts.reverse();
+    const reversedContexts = [...contexts].reverse();
 
     return memo(({ children, render }: Props) => {
         const contextValuesRef = useRef<any[]>([]);
