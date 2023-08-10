@@ -180,7 +180,7 @@ export {
     ProvidePortalProps,
     extractStyles,
     registerMolecule,
-    ContextBridge,
+    createContextBridge,
 } from './core';
 
 export { withRipple, withActionState, CallbackActionState, typedMemo } from './hocs';

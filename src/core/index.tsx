@@ -26,4 +26,4 @@ export {
 
 export { registerMolecule } from './registerMolecule';
 
-export { default as ContextBridge } from './ContextBridge';
+export { createContextBridge } from './ContextBridge';
