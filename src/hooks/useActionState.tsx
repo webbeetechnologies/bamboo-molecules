@@ -8,7 +8,7 @@ export type UseActionStateProps = {
 };
 
 export const useActionState = (
-    props = {} as Omit<UseActionStateProps, 'actionStateContainerProps'>,
+    props: Omit<UseActionStateProps, 'actionStateContainerProps'> = {},
 ) => {
     const actionsRef = useRef(null);
     const hovered = useHover(actionsRef) || props.hovered;
