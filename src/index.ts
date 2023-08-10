@@ -181,6 +181,7 @@ export {
     ProvidePortalProps,
     extractStyles,
     registerMolecule,
+    createContextBridge,
 } from './core';
 
 export { withRipple, withActionState, CallbackActionState, typedMemo } from './hocs';
