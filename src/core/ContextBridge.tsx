@@ -1,15 +1,14 @@
-import type { Context as ContextType, ReactNode } from 'react';
-import { memo, useContext, useMemo, useRef } from 'react';
+import type { ComponentType, Context as ContextType, ReactNode } from 'react';
+import { useContext, useMemo, useRef } from 'react';
+import { typedMemo } from '../hocs';
 
-export type Props = {
-    children: ReactNode;
-    render: (children: ReactNode) => ReactNode;
-};
-
-export const createContextBridge = (contexts: ContextType<any>[]) => {
+export const createContextBridge = <T extends { children: ReactNode }>(
+    contexts: ContextType<any>[],
+    Wrapper: ComponentType<T>,
+) => {
     const reversedContexts = [...contexts].reverse();
 
-    return memo(({ children, render }: Props) => {
+    return typedMemo(({ children, ...rest }: T) => {
         const contextValuesRef = useRef<any[]>([]);
 
         for (const i in reversedContexts) {
@@ -28,6 +27,6 @@ export const createContextBridge = (contexts: ContextType<any>[]) => {
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [...contextValuesRef.current, children]);
 
-        return <>{render(content)}</>;
+        return <Wrapper {...(rest as T)}>{content}</Wrapper>;
     });
 };
