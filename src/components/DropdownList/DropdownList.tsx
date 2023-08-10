@@ -94,8 +94,8 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
 
     const onClose = useCallback(() => {
         if (isOpen) {
-            setIsOpen(false);
             onCancel?.();
+            setIsOpen(false);
             onQueryChange?.('');
         }
     }, [isOpen, onQueryChange, setIsOpen, onCancel]);
@@ -110,11 +110,10 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
 
             if (hideOnSelect) {
                 setIsOpen(false);
-                onCancel?.();
                 onQueryChange?.('');
             }
         },
-        [onSelectionChangeProp, hideOnSelect, setIsOpen, onQueryChange, onCancel],
+        [onSelectionChangeProp, hideOnSelect, setIsOpen, onQueryChange],
     );
 
     const [WrapperComponent, props] = useMemo(() => {
