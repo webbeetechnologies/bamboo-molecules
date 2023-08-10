@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useField, useGroupMeta, useShowGroupFooter } from '../../contexts';
+import { useGroupMeta, useShowGroupFooter } from '../../contexts';
 
 import { ViewProps, useMolecules } from '@bambooapp/bamboo-molecules';
 import type { DataGridRowRendererProps, GroupMetaRowProps } from '../../types';
@@ -41,14 +41,13 @@ export const GroupFooterRenderer = memo(({ meta, rowProps }: GroupMetaRowProps) 
  */
 export const GroupFooterRow = memo((props: DataGridRowRendererProps) => {
     const meta = useGroupMeta(props.rowId);
-    const field = useField(meta.fieldId);
     const { GroupFooterRenderer: RowRenderer } = useMolecules();
 
     const rendererProps = {
-        ...field,
         meta,
         rowProps: props.rowProps,
         rowId: props.rowId,
+        index: props.index,
     };
 
     return <RowRenderer {...rendererProps} />;

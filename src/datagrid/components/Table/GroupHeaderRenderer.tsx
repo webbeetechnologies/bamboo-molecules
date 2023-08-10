@@ -11,18 +11,17 @@ import type { DataGridRowRendererProps, GroupMetaRowProps } from '../../types';
  * Can be replaced by the component consumer.
  *
  */
-export const GroupHeaderRenderer = memo(
-    ({ meta, rowId: _r, rowProps, columns: _c, ...field }: GroupMetaRowProps) => {
-        const { View, Text } = useMolecules();
+export const GroupHeaderRenderer = memo(({ meta, rowId: _r, rowProps }: GroupMetaRowProps) => {
+    const { View, Text } = useMolecules();
+    const field = useField(meta.fieldId!);
 
-        return (
-            <View {...rowProps}>
-                <Text>{field.title}</Text>
-                <ViewRenderer value={meta.groupConstants.at(-1)?.value} {...field} />
-            </View>
-        );
-    },
-);
+    return (
+        <View {...rowProps}>
+            <Text>{field.title}</Text>
+            <ViewRenderer value={meta.groupConstants.at(-1)?.value} {...field} />
+        </View>
+    );
+});
 
 /**
  *
@@ -31,14 +30,13 @@ export const GroupHeaderRenderer = memo(
  */
 export const GroupHeaderRow = memo((props: DataGridRowRendererProps) => {
     const meta = useGroupMeta(props.rowId);
-    const field = useField(meta.fieldId);
     const { GroupHeaderRenderer: RowRenderer } = useMolecules();
 
     const rendererProps = {
-        ...field,
         meta,
         rowProps: props.rowProps,
         rowId: props.rowId,
+        index: props.index,
     };
 
     return <RowRenderer {...rendererProps} />;

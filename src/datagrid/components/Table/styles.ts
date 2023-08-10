@@ -16,7 +16,7 @@ export const DataGrid_Spacer = {
 };
 
 const DataGrid_RowBase = {
-    flex: 1,
+    flexGrow: 1,
     borderColor: 'colors.outlineVariant',
 };
 
