@@ -1,15 +1,27 @@
+import type { TDataTableColumn } from '@bambooapp/bamboo-molecules';
+
 import { createPlugin } from './createPlugin';
 import { PluginEvents } from './types';
+import { usePluginsDataValueSelectorValue } from './plugins-manager';
 
 export const COLUMN_RESIZE_PLUGIN_KEY = 'column-resize';
 
-export const [useColumnResizePlugin, useColumnResizeEvents] = createPlugin({
+const useIsColumnResizing = (column: TDataTableColumn) => {
+    return usePluginsDataValueSelectorValue(store => {
+        return store[COLUMN_RESIZE_PLUGIN_KEY]?.resizingColumn === column;
+    });
+};
+
+export const [useColumnResizePlugin, useColumnResizeEvents, useColumnResizeMethods] = createPlugin({
     key: COLUMN_RESIZE_PLUGIN_KEY,
     eventKeys: [
         PluginEvents.BEFORE_COLUMN_RESIZE,
         PluginEvents.ON_COLUMN_RESIZE,
         PluginEvents.AFTER_COLUMN_RESIZE,
     ],
+    methods: {
+        useIsColumnResizing,
+    },
 });
 
 // export const useColumnResize = (

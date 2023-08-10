@@ -1,5 +1,6 @@
+import { typedMemo } from '@bambooapp/bamboo-molecules';
+
 import { ErrorBoundary } from '../ErrorBoundary';
-import { typedMemo } from '../../hocs';
 import { useFieldType } from '../../contexts';
 import type { FieldTypeRenderer, RendererType } from '../../types';
 

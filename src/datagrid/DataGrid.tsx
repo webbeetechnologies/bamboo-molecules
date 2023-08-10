@@ -1,15 +1,17 @@
+import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
+import { StyleSheet } from 'react-native';
+import { typedMemo } from '@bambooapp/bamboo-molecules';
 import type {
+    TDataTableColumn,
+    TDataTableRow,
     DataTableProps,
     MenuProps,
     RenderCellProps,
     RenderHeaderCellProps,
-} from '../components';
-import { useMolecules } from '../hooks';
-import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
-import type { ViewProps } from '@bambooapp/bamboo-atoms';
-import { StyleSheet } from 'react-native';
-import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
+} from '@bambooapp/bamboo-molecules/components';
 
+import { useMolecules, useToken } from '../hooks';
 import {
     FieldTypesProvider,
     TableManagerProvider,
@@ -19,7 +21,6 @@ import {
     useRowRenderer,
     useShouldContextMenuDisplayed,
 } from './contexts';
-import { typedMemo } from './hocs';
 import PluginsManager from './plugins/plugins-manager';
 import { useCellSelectionMethods, useCellSelectionPlugin, Plugin } from './plugins';
 import {
@@ -54,10 +55,11 @@ type DataGridPropsBase = Omit<
         groups?: TDataTableColumn[];
     };
 
-export type Props = DataGridPropsBase &
+export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
     HooksContextType & {
         fieldTypes?: FieldTypes;
         records: RecordWithId[];
+        spacerWidth?: string | number;
     };
 
 export type ContextMenuProps = Partial<MenuProps> & {
@@ -221,10 +223,12 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         useRowRenderer: useRowRendererProp = useRowRendererDefault,
         useGroupRowState: useGroupRowStateProp,
         useShowGroupFooter: useShowGroupFooterProp,
-
+        spacerWidth: spacerWidthProp = 'spacings.3',
         ...rest
     }: Props) => {
         const ref = useRef(null);
+
+        const spacerWidth = useToken(spacerWidthProp as string) ?? spacerWidthProp;
 
         const hooksContextValue = useRef({
             useField,
@@ -246,11 +250,14 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
             [records, groups],
         );
 
+        const offsetWidth = (groups?.length ?? 0) * spacerWidth;
+
         return (
             <FieldTypesProvider value={fieldTypes}>
                 <HooksProvider value={hooksContextValue}>
                     <TableManagerProvider
                         tableRef={ref}
+                        spacerWidth={spacerWidth}
                         records={groupedRecords}
                         withContextMenu={!!contextMenuProps}>
                         <PluginsManager plugins={plugins}>
@@ -258,6 +265,7 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
                             <Component
                                 {...rest}
                                 records={rowIds}
+                                horizontalOffset={offsetWidth}
                                 contextMenuProps={contextMenuProps}
                             />
                         </PluginsManager>

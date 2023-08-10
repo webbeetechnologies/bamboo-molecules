@@ -30,8 +30,6 @@ const useHandleKeydownEvents = ({ ref }: Props) => {
 
     const onKeydown = useCallback(
         (e: KeyboardEvent) => {
-            e.preventDefault();
-
             const isMacOs = isMac();
             const osKeyMap = createOSKeyMap(e)[String(isMacOs) as 'true' | 'false'];
 

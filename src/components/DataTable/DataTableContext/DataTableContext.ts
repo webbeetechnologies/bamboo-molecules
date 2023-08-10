@@ -35,6 +35,7 @@ type DataTableContextType = Pick<
         | 'rowSize'
         | 'useRowRenderer'
         | 'CellWrapperComponent'
+        | 'horizontalOffset'
     > & {
         tableWidth: number;
         containerWidth?: number;
@@ -88,7 +89,7 @@ export const useDataTableRow = () =>
  * also adds event handlers
  */
 // TODO: Add event handlers here
-type DataTableCellContextType = Omit<DataTableRowContextType, 'hovered'> & {
+export type DataTableCellContextType = Omit<DataTableRowContextType, 'hovered'> & {
     column: TDataTableColumn;
     columnIndex: number;
 };
@@ -99,8 +100,40 @@ export const useDataTableCell = () =>
         'Trying to read DataTableCell context outside the provider',
     );
 
-export const useDataTableColumnWidth = (_column: TDataTableColumn): number => {
+/**
+ * Context to store row selections and actions
+ * also adds event handlers
+ */
+
+export type DataTableHeaderCellContextType = {
+    column: TDataTableColumn;
+    columnIndex: number;
+    isFirst: boolean;
+    isLast: boolean;
+};
+export const DataTableHeaderCellContext = createContext<DataTableHeaderCellContextType | null>(
+    null,
+);
+export const useDataTableHeaderCell = () =>
+    useInvariant(
+        useContext(DataTableHeaderCellContext),
+        'Trying to read DataTableCell context outside the provider',
+    );
+
+export const deriveColumnWidth = ({
+    column,
+    columnWidths,
+    defaultColumnWidth,
+}: {
+    column: TDataTableColumn;
+    columnWidths?: Record<TDataTableColumn, number>;
+    defaultColumnWidth: number;
+}) => {
+    return columnWidths?.[column] ?? defaultColumnWidth;
+};
+
+export const useDataTableColumnWidth = (column: TDataTableColumn): number => {
     return useDataTable(({ columnWidths, defaultColumnWidth }) =>
-        columnWidths && columnWidths?.[_column] ? columnWidths[_column] : defaultColumnWidth,
+        deriveColumnWidth({ columnWidths, column, defaultColumnWidth }),
     );
 };

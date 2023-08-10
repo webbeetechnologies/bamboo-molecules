@@ -76,6 +76,8 @@ export const generateLightThemeColors = (
                 onSurface_Level4: color(palette.neutral10).alpha(opacity.level4).hexa(),
             },
         },
+        palette,
+        opacity,
     };
 };
 
@@ -189,5 +191,13 @@ export const MD3LightTheme: MD3Theme = {
         _80: -320,
         _96: -384,
         _px: -1,
+    },
+    elevations: {
+        level0: 0,
+        level1: 1,
+        level2: 2,
+        level3: 3,
+        level4: 4,
+        level5: 5,
     },
 };

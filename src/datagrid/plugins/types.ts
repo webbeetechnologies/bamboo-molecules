@@ -1,10 +1,22 @@
-import type { CellIndexes } from './cell-selection';
 import type { RefObject } from 'react';
-import type { PluginHandle } from './createPlugin';
+import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules';
 
-export type Selection = {
+import type { PluginHandle } from './createPlugin';
+import type { CellIndexes } from './cell-selection';
+
+export type Cell = CellIndexes & {
+    rowId: TDataTableRow;
+    columnId: TDataTableColumn;
+};
+
+export type SelectionIndexes = {
     start: CellIndexes;
     end: CellIndexes;
+};
+
+export type Selection = {
+    start: Cell;
+    end: Cell;
 };
 
 export enum PluginEvents {
@@ -30,13 +42,17 @@ export enum PluginEvents {
 }
 
 export type PluginManagerEvents = {
-    [PluginEvents.BEFORE_COLUMN_RESIZE]: () => void;
+    [PluginEvents.BEFORE_COLUMN_RESIZE]: (args: { columnId: string; columnIndex: number }) => void;
     [PluginEvents.ON_COLUMN_RESIZE]: (args: {
         columnId: string;
         columnIndex: number;
         width: number;
     }) => void;
-    [PluginEvents.AFTER_COLUMN_RESIZE]: () => void;
+    [PluginEvents.AFTER_COLUMN_RESIZE]: (args: {
+        columnId: string;
+        columnIndex: number;
+        width: number;
+    }) => void;
 
     [PluginEvents.BEFORE_COPY_CELL]: (args: { selection: Selection }) => void | boolean;
     [PluginEvents.ON_COPY_CELL]: (args: { selection: Selection }) => void;

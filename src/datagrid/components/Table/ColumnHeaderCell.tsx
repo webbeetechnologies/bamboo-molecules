@@ -3,6 +3,8 @@ import { StyleSheet, TextStyle } from 'react-native';
 import type { TextProps, ViewProps } from '@bambooapp/bamboo-atoms';
 import { IconProps, RenderHeaderCellProps, useMolecules } from '@bambooapp/bamboo-molecules';
 
+import { useDataTableHeaderCell } from '@bambooapp/bamboo-molecules/components';
+
 import { useFieldType, useField, useTableManagerStoreRef } from '../../contexts';
 import { withVirtualization } from '../../hocs';
 import { useContextMenu } from '../../hooks';
@@ -22,6 +24,7 @@ const ColumnHeaderCell = ({
     titleProps,
     children,
     renderTitle,
+    style,
     ...rest
 }: ColumnHeaderCellProps) => {
     const { View, Icon, Text } = useMolecules();
@@ -29,21 +32,24 @@ const ColumnHeaderCell = ({
     const elementRef = useRef<any>(null);
     const { set: setTableManagerStore } = useTableManagerStoreRef();
 
+    const { isFirst, isLast } = useDataTableHeaderCell();
+
     const { type, title, id } = useField(column);
-    const { icon } = useFieldType(type);
+    const { icon, iconType } = useFieldType(type);
 
     const { containerStyle, titleStyle, iconStyle } = useMemo(
         () => ({
             containerStyle: [
                 styles.container,
-                columnIndex === 0 && {
-                    borderLeftWidth: 1,
-                },
+
+                style,
+                isFirst && { borderLeftWidth: 0 },
+                isLast && { borderRightWidth: 0 },
             ],
             titleStyle: [styles.text, titleProps?.style],
             iconStyle: [styles.icon, iconProps?.style],
         }),
-        [columnIndex, iconProps?.style, titleProps?.style],
+        [style, isFirst, isLast, titleProps?.style, iconProps?.style],
     );
 
     const handleContextMenu = useCallback(() => {
@@ -57,7 +63,7 @@ const ColumnHeaderCell = ({
 
     return (
         <View style={containerStyle} ref={elementRef} {...rest}>
-            <Icon style={iconStyle} name={icon.name} type={icon.type} size={16} {...iconProps} />
+            <Icon style={iconStyle} name={icon} type={iconType} size={16} {...iconProps} />
             <Text style={titleStyle} numberOfLines={1} {...titleProps}>
                 {renderTitle ? renderTitle?.({ title, type, id }) : title}
             </Text>
@@ -74,8 +80,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 4,
-        height: 32,
-        borderTopWidth: 1,
+        minHeight: 32,
         borderRightWidth: 1,
         borderColor: 'colors.outlineVariant',
     },

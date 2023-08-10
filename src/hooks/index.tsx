@@ -14,6 +14,8 @@ export * from './useTheme';
 
 export * from './useActionState';
 
+export * from './useToken';
+
 export { default as useMolecules } from './useMolecules';
 export { default as usePlatformType } from './usePlatformType';
 export { default as useComponentStyles } from './useComponentStyles';

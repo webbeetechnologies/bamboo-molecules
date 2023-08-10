@@ -1,6 +1,7 @@
 import { useMemo, useRef } from 'react';
 import { usePluginsManagerStoreRef } from './plugins-manager';
 import type { PluginManagerEvents } from './types';
+import { noop } from '../../utils';
 
 type PluginMangerEventsKeys = keyof PluginManagerEvents;
 
@@ -62,7 +63,7 @@ export const createPlugin = <K extends PluginMangerEventsKeys>({
         const { store } = usePluginsManagerStoreRef();
 
         return eventKeys.reduce((acc, eventKey) => {
-            acc[eventKey] = store.current.events[eventKey];
+            acc[eventKey] = store.current.pluginsMap[key]?.current?.events[eventKey] || noop;
 
             return acc;
         }, {} as Record<K, (...args: any) => any>);

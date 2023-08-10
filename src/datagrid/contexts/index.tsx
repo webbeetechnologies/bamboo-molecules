@@ -12,8 +12,6 @@ export {
     useHasGroupedData,
 } from './TableManagerContext';
 
-export * from './ColumnConfigsContext';
-
 export {
     HooksProvider,
     useField,

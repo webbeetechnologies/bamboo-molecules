@@ -1,16 +1,13 @@
-import { FC, Fragment, memo, useMemo } from 'react';
+import { FC, memo, useMemo } from 'react';
 import type {
     RenderHeaderCellProps,
     TDataTableColumn,
     DataHeaderCellProps,
     DataTableProps,
 } from '../types';
-import {
-    useDataTable,
-    useDataTableColumnWidth,
-    useDataTableComponent,
-} from '../DataTableContext/DataTableContext';
+import { useDataTable, useDataTableColumnWidth, useDataTableComponent } from '../DataTableContext';
 import { useComponentStyles, useMolecules } from '../../../hooks';
+import { DataTableHeaderCellContextProvider } from '../DataTableContext';
 
 const DataTableHeaderRowPresentation = memo(
     ({ columns, headerRowProps }: Pick<DataTableProps, 'headerRowProps' | 'columns'>) => {
@@ -26,7 +23,14 @@ const DataTableHeaderRowPresentation = memo(
         const result = useMemo(
             () =>
                 columns.map((item, i) => (
-                    <Fragment key={item}>{renderHeaderCell({ item, index: i })}</Fragment>
+                    <DataTableHeaderCellContextProvider
+                        column={item}
+                        columnIndex={i}
+                        isFirst={i === 0}
+                        isLast={self.length - 1 === i}
+                        key={i}>
+                        {renderHeaderCell({ item, index: i })}
+                    </DataTableHeaderCellContextProvider>
                 )),
             [columns],
         );
@@ -51,6 +55,8 @@ export const HeaderCellComponent: FC<RenderHeaderCellProps> = memo(props => {
     const { DataTable } = useMolecules();
     const { renderHeader } = useDataTableComponent();
     const width = useDataTableColumnWidth(props.column);
+
+    if (!width) return null;
 
     return <DataTable.HeaderCell width={width}>{renderHeader(props)}</DataTable.HeaderCell>;
 });

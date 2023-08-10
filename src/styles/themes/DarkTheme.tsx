@@ -76,6 +76,8 @@ export const generateDarkThemeColors = (
                 onSurface_Level4: color(palette.neutral90).alpha(opacity.level4).hexa(),
             },
         },
+        palette,
+        opacity,
     };
 };
 

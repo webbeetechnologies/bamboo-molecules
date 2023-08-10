@@ -82,6 +82,8 @@ const Cell: FC<{ column: TDataTableColumn; columnIndex: number }> = memo(props =
 
     const width = useDataTableColumnWidth(props.column);
 
+    if (!width) return null;
+
     const cellProps = {
         ...props,
         row,

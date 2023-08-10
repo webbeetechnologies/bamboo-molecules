@@ -6,9 +6,7 @@ import type { Value } from './types';
 export const NumberFieldType: FieldType<Value> = {
     type: 'number',
     title: 'Number',
-    icon: {
-        name: 'pound',
-    },
+    icon: 'pound',
     EditorRenderer,
     ValueRenderer,
 };

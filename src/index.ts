@@ -141,6 +141,7 @@ export {
     useDataTableCell,
     useDataTable,
     useDataTableRow,
+    useDataTableHeaderCell,
     Slider,
     SliderProps,
     RangeSlider,
@@ -182,7 +183,7 @@ export {
     registerMolecule,
 } from './core';
 
-export { withRipple, withActionState, CallbackActionState } from './hocs';
+export { withRipple, withActionState, CallbackActionState, typedMemo } from './hocs';
 
 export {
     useMolecules,
@@ -218,6 +219,8 @@ export {
     useHandleNumberFormat,
     UseHandleNumberFormatProps,
     NumberMaskConfig,
+    useActionState,
+    useToken,
 } from './hooks';
 
 export {

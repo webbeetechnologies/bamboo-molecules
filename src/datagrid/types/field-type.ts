@@ -6,10 +6,8 @@ export type RendererType = 'ValueRenderer' | 'EditorRenderer';
 export type FieldType<T = unknown, C extends {} = {}> = {
     type: string;
     title: string;
-    icon: {
-        name: string;
-        type?: IconType;
-    };
+    icon: string;
+    iconType?: IconType;
     ValueRenderer: FieldTypeRenderer<T, C>;
     EditorRenderer: FieldTypeRenderer<T, C>;
     readonly?: boolean;

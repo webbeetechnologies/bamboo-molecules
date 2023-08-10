@@ -24,14 +24,14 @@ export const Example = () => {
 
     const { state: isOpen, handleOpen, handleClose } = useToggle();
 
-    const [columnWidth, setColumnWidth] = useState({});
-
     const { columnIds } = useMemo(
         () => ({
             columnIds: fields.map(field => field.id),
         }),
         [],
     );
+
+    const [columnWidth, setColumnWidth] = useState({});
 
     const contextMenuProps = useMemo(
         () => ({

@@ -12,13 +12,13 @@ import type { DataGridRowRendererProps, GroupMetaRowProps } from '../../types';
  *
  */
 export const GroupHeaderRenderer = memo(
-    ({ meta, rowId: _r, rowProps, ...field }: GroupMetaRowProps) => {
+    ({ meta, rowId: _r, rowProps, columns: _c, ...field }: GroupMetaRowProps) => {
         const { View, Text } = useMolecules();
 
         return (
             <View {...rowProps}>
                 <Text>{field.title}</Text>
-                <ViewRenderer value={meta.value} {...field} />
+                <ViewRenderer value={meta.groupConstants.at(-1)?.value} {...field} />
             </View>
         );
     },

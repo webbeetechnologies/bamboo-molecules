@@ -23,5 +23,6 @@ const CellWrapperComponent = ({ style, ...rest }: DataCellProps) => {
 
     return <View style={cellRendererStyle} {...rest} />;
 };
+CellWrapperComponent.displayName = 'DataGridCellWrapperComponent';
 
 export default memo(CellWrapperComponent);

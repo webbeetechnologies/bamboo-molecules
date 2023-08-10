@@ -28,6 +28,7 @@ export type MD3Theme = {
     fontSizes: Record<string, string | number>;
     fontWeights: Record<string, string | number>;
     lineHeights: Record<string, string | number>;
+    elevations: Record<string, number>;
 };
 
 export type ResolveComponentStylesArgs = {
@@ -93,6 +94,8 @@ export type MD3Colors = {
     backdrop: string;
     elevation: MD3ElevationColors;
     lines: string;
+    palette: Record<string, string>;
+    opacity: Record<string, number>;
 };
 
 export type MD3Shapes = {

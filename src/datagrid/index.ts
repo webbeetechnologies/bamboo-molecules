@@ -20,7 +20,7 @@ export {
     CELL_SELECTION_PLUGIN_KEY,
     COPY_PASTE_PLUGIN_KEY,
     PluginEvents,
-    Selection,
+    SelectionIndexes,
     PluginHandle,
     usePluginsDataStoreRef,
     usePluginsManagerSelector,
@@ -38,7 +38,6 @@ registerMolecule('DataGrid', {
 
 registerMolecule('DataGrid_ViewRenderer', {
     Component: ViewRenderer,
-    defaultStyles: {},
 });
 
 declare global {
