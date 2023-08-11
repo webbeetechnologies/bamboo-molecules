@@ -10,9 +10,8 @@ import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import {
     RenderCellProps,
     useMolecules,
-    CallbackActionState,
-    withActionState,
     useDataTableCell,
+    useActionState,
 } from '@bambooapp/bamboo-molecules';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
@@ -28,23 +27,20 @@ import { ViewRenderer, EditRenderer } from '../FieldRenderers';
 import { DragAndExtendHandle } from '../DragAndExtendHandle';
 import { useCellSelectionMethods } from '../../plugins';
 import { CellSelectionIndicator } from '../CellSelectionIndicator';
-import { CellBorder } from '../CellBorder';
+import '../CellBorder';
 
 export type Props = RenderCellProps &
-    CallbackActionState &
     Omit<PressableProps, 'ref'> & {
         innerContainerProps?: Partial<ViewProps>;
     };
 
 const emptyObj = {};
 
-const _DataCell = (
-    { hovered = false, innerContainerProps = emptyObj, style, ...rest }: Props,
-    ref: any,
-) => {
-    const { View } = useMolecules();
-
+const _DataCell = ({ innerContainerProps = emptyObj, style, ...rest }: Props, ref: any) => {
+    const { View, CellBorder } = useMolecules();
     const cellRef = useRef<any>(null);
+
+    const { hovered = false } = useActionState({ ref: cellRef });
 
     const { row, column, rowIndex, columnIndex } = useDataTableCell();
 
@@ -113,6 +109,7 @@ const _DataCell = (
         () => ({
             containerStyle: [
                 styles.cellContainer,
+                actionContainerProps.style,
                 !isEditing ? styles.centered : styles.editContainer,
                 style,
             ] as ViewStyle,
@@ -175,11 +172,7 @@ const _DataCell = (
     );
 };
 
-const DataCell = withActionState(forwardRef(_DataCell));
-
-const CellRendererWithStyledHeight = forwardRef((props: Props, ref: any) => (
-    <DataCell {...props} ref={ref} actionStateContainerProps={actionContainerProps} />
-));
+const DataCell = forwardRef(_DataCell);
 
 const actionContainerProps = { style: { height: '100%' } };
 
@@ -218,4 +211,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(CellRendererWithStyledHeight);
+export default memo(DataCell);

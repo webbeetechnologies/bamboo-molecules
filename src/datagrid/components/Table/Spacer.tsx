@@ -8,7 +8,7 @@ import {
     useGroupMeta,
     useHasGroupedData,
 } from '../../contexts';
-import { isGroupFooter, GroupedData, isGroupHeader, GroupHeader } from '../../utils';
+import { GroupedData, isGroupHeader, GroupHeader } from '../../utils';
 
 type SpacerProp = { variant: 'left' | 'right'; isLastLevel?: boolean };
 
@@ -40,22 +40,16 @@ export const SpacerList = memo((props: SpacerProp & { level: number }) => {
     return <>{spaces}</>;
 });
 
-const useGroupVariant = (groupRow: GroupedData) => {
-    if (isGroupHeader(groupRow)) return 'header';
-    if (isGroupFooter(groupRow)) return 'footer';
-    return 'cell';
-};
-
 const rowTypes = {
     header: 'DataGrid_GroupHeaderItem',
     footer: 'DataGrid_GroupFooterItem',
-    cell: 'DataGrid_RowItem',
+    data: 'DataGrid_RowItem',
 };
 
 export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
     const SpacedComponent = memo((props: DataTableRowProps) => {
         const groupRow = useRecordById(props.rowId) as GroupedData;
-        const variant = useGroupVariant(groupRow);
+        const variant = groupRow.rowType;
 
         const isGroupsEnabled = useHasGroupedData(props.rowId);
 
