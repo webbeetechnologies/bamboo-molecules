@@ -11,7 +11,7 @@ type CustomStyleProp = {
 
 export const newSwitchStyles: ComponentStylePropWithVariants<
     ViewStyle,
-    'selected_disabled' | 'active' | 'disabled' | 'offIcon',
+    'selected_disabled' | 'active' | 'disabled' | 'offIcon' | 'hovered' | 'focused' | 'pressed',
     CustomStyleProp
 > = {
     container: {
