@@ -2,7 +2,7 @@ import { memo, MutableRefObject, PropsWithChildren, RefObject, useCallback, useM
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
-import { RowType, GroupedData, GroupHeader, GroupFooter } from '../utils';
+import type { GroupedData, GroupHeader, GroupFooter } from '../utils';
 import { weakMemoized, keyBy } from '../utils';
 import type { GroupMeta } from '../types';
 
@@ -149,6 +149,7 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
         title: value,
         level,
         groupConstants,
+        rowType,
     } = useRecordById(id) as GroupHeader | GroupFooter;
 
     return useMemo(
@@ -164,6 +165,7 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
             isOnly,
             value,
             groupConstants,
+            rowType,
         }),
         [
             fieldId,
@@ -177,15 +179,11 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
             isOnly,
             value,
             groupConstants,
+            rowType,
         ],
     );
 };
 
 export const useRecordType = (id: TDataTableRow) => {
-    return useTableManagerValueSelector(({ records }) => {
-        const arg = getRecordsMap(records)[id];
-        if ((arg as GroupHeader).isGroupHeader) return RowType.HEADER;
-        if ((arg as GroupFooter).isGroupFooter) return RowType.FOOTER;
-        return RowType.DATA;
-    });
+    return useTableManagerValueSelector(({ records }) => getRecordsMap(records)[id].rowType);
 };

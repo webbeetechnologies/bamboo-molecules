@@ -5,6 +5,6 @@ type GroupStates = GroupMetaStates & {
 };
 
 export type UseShowGroupFooter = (meta: GroupMeta) => boolean;
-export type UseGroupRowState = (meta: GroupMetaStates) => Partial<GroupStates>;
+export type UseGroupRowState = (meta: GroupMeta) => Partial<Omit<GroupStates, 'rowType'>>;
 
 export { UseRowRenderer } from '@bambooapp/bamboo-molecules';

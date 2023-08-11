@@ -8,7 +8,14 @@ export type GroupMetaStates = {
     isFirst: boolean;
     isLast: boolean;
     isOnly: boolean;
+    rowType: `${RowType}`;
 };
+
+export enum RowType {
+    HEADER = 'header',
+    FOOTER = 'footer',
+    DATA = 'data',
+}
 
 export type GroupMeta = GroupMetaStates & {
     fieldId?: TDataTableColumn;

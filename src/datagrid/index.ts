@@ -10,6 +10,8 @@ export * from './components';
 export { FieldTypes } from './field-types';
 export * from './contexts';
 
+export { GroupRecord, GroupFooter, GroupHeader, prepareGroupedData } from './utils';
+
 export {
     useCopyPastePlugin,
     useCellSelectionPlugin,

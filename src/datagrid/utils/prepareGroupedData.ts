@@ -1,6 +1,6 @@
 import type { TDataTableRow } from '@bambooapp/bamboo-molecules';
 import { groupBy } from './lodash';
-import type { GroupConstantValues, GroupMeta } from '../types/row';
+import { RowType, GroupConstantValues, GroupMeta } from '../types/row';
 
 export interface RecordWithId extends Record<string, any> {
     id: number | string;
@@ -10,12 +10,6 @@ type TypedRecordSort<O = RecordWithId> = keyof O;
 
 type PrimitiveTypes = string | boolean | number | null | undefined;
 
-export enum RowType {
-    HEADER = 'header',
-    FOOTER = 'footer',
-    DATA = 'data',
-}
-
 type GroupMetaRecord = GroupMeta & {
     title: any;
     groupConstants: GroupConstantValues[];
@@ -24,11 +18,11 @@ type GroupMetaRecord = GroupMeta & {
 };
 
 export type GroupHeader = GroupMetaRecord & {
-    isGroupHeader: true;
+    rowType: 'header';
 };
 
 export type GroupFooter = GroupMetaRecord & {
-    isGroupFooter: true;
+    rowType: 'footer';
 };
 
 export type GroupRecord = {
@@ -37,6 +31,8 @@ export type GroupRecord = {
     data: RecordWithId;
     level: number;
     groupId: string;
+    index: number;
+    rowType: 'data';
 };
 
 export type GroupedData = GroupRecord | GroupHeader | GroupFooter;
@@ -101,10 +97,7 @@ const makeNested = <T extends RecordWithId>(args: {
         },
     } = args;
 
-    type GroupBase = 'level';
-    type GroupPartials =
-        | Pick<GroupHeader, 'isGroupHeader' | GroupBase>
-        | Pick<GroupFooter, 'isGroupFooter' | GroupBase>;
+    type GroupPartials = Pick<GroupedData, 'level'> & { rowType: Exclude<RowType, RowType.DATA> };
 
     /**
      *
@@ -123,7 +116,7 @@ const makeNested = <T extends RecordWithId>(args: {
         const groupId = getIdFromConstants(restGroupMeta.groupConstants);
         return [
             {
-                ...arg,
+                ...(arg as GroupType),
                 fieldId: currentField as string,
                 title: restGroupMeta.groupConstants.at(-1)?.value,
                 recordCount: records.length,
@@ -141,8 +134,8 @@ const makeNested = <T extends RecordWithId>(args: {
     /**
      * Simplified makeGroupMeta.
      */
-    const makeFooter = makeGroupMeta.bind(null, { isGroupFooter: true, level: level - 1 });
-    const makeHeader = makeGroupMeta.bind(null, { isGroupHeader: true, level });
+    const makeFooter = makeGroupMeta.bind(null, { rowType: RowType.FOOTER, level: level - 1 });
+    const makeHeader = makeGroupMeta.bind(null, { rowType: RowType.HEADER, level });
 
     const [currentField, ...pending] = groups ?? [];
 
@@ -156,6 +149,7 @@ const makeNested = <T extends RecordWithId>(args: {
             level: level - 1,
             index: getIndex(),
             groupId,
+            rowType: RowType.DATA,
         }));
 
         return data.concat(makeFooter(groupedDataMeta, `footer`));
@@ -211,10 +205,9 @@ const prepareFlattenedDataWithGroups = <T extends RecordWithId = RecordWithId>(
     }).flat();
 };
 
-export const isGroupFooter = (x: GroupedData): x is GroupFooter => (x as GroupFooter).isGroupFooter;
-export const isGroupHeader = (x: GroupedData): x is GroupHeader => (x as GroupHeader).isGroupHeader;
-export const isDataRow = (x: GroupedData): x is GroupHeader =>
-    !isGroupHeader(x) && !isGroupFooter(x);
+export const isGroupFooter = (x: GroupedData): x is GroupFooter => x.rowType === RowType.FOOTER;
+export const isGroupHeader = (x: GroupedData): x is GroupHeader => x.rowType === RowType.HEADER;
+export const isDataRow = (x: GroupedData): x is GroupHeader => x.rowType === RowType.DATA;
 
 export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
     modelRecords: T[],

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { MutableRefObject, useRef } from 'react';
 import { useActive, useFocus, useHover } from 'react-native-web-hooks';
 
 export type UseActionStateProps = {
@@ -8,9 +8,10 @@ export type UseActionStateProps = {
 };
 
 export const useActionState = (
-    props: Omit<UseActionStateProps, 'actionStateContainerProps'> = {},
+    props: UseActionStateProps & { ref?: MutableRefObject<any> } = {},
 ) => {
-    const actionsRef = useRef(null);
+    const ref = useRef(null);
+    const actionsRef = props.ref ?? ref;
     const hovered = useHover(actionsRef) || props.hovered;
     const pressed = useActive(actionsRef) || props.pressed;
     const focused = useFocus(actionsRef) || props.focused;

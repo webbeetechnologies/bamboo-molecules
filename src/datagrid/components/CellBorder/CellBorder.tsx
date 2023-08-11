@@ -1,6 +1,10 @@
-import { StateLayerProps, useMolecules } from '@bambooapp/bamboo-molecules';
-import { memo, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import {
+    StateLayerProps,
+    registerMolecule,
+    useComponentStyles,
+    useMolecules,
+} from '@bambooapp/bamboo-molecules';
+import { memo } from 'react';
 
 export type Props = StateLayerProps & {
     isFocused: boolean;
@@ -11,34 +15,47 @@ export type Props = StateLayerProps & {
 const CellBorder = ({ style, isFocused, columnIndex, ...rest }: Props) => {
     const { StateLayer } = useMolecules();
 
-    const borderStyle = useMemo(
-        () => [
-            styles.border,
-            columnIndex === 0 && { borderLeftWidth: 1 },
-            isFocused && styles.focused,
-            style,
-        ],
-        [columnIndex, isFocused, style],
-    );
+    const borderStyle = useComponentStyles('DataGrid_CellBorder', [style], {
+        variant: columnIndex === 0 ? 'first' : '',
+        states: {
+            focused: isFocused,
+        },
+    });
 
     return <StateLayer style={borderStyle} {...rest} />;
 };
 
-const styles = StyleSheet.create({
-    border: {
-        borderRightWidth: 1,
-        borderBottomWidth: 1,
-        borderColor: 'colors.outlineVariant',
-    },
-    focused: {
-        borderLeftWidth: 2,
-        borderRightWidth: 2,
-        borderBottomWidth: 2,
-        borderTopWidth: 2,
-        borderRadius: 2,
-        borderColor: 'blue',
-        backgroundColor: 'colors.surface',
+registerMolecule('CellBorder', {
+    Component: memo(CellBorder),
+    defaultStyles: {
+        DataGrid_CellBorder: {
+            borderRightWidth: 1,
+            borderBottomWidth: 1,
+            borderColor: 'colors.outlineVariant',
+            variants: {
+                first: { borderLeftWidth: 1 },
+            },
+            states: {
+                focused: {
+                    borderLeftWidth: 2,
+                    borderRightWidth: 2,
+                    borderBottomWidth: 2,
+                    borderTopWidth: 2,
+                    borderRadius: 2,
+                    borderColor: 'blue',
+                    backgroundColor: 'colors.surface',
+                },
+            },
+        },
     },
 });
 
 export default memo(CellBorder);
+
+declare global {
+    namespace BambooMolecules {
+        interface Components {
+            CellBorder: typeof CellBorder;
+        }
+    }
+}
