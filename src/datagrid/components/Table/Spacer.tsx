@@ -76,7 +76,9 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
             [
                 props.rowProps?.style,
                 isGroupsEnabled && level === 0 ? { minHeight: spacerWidth } : null,
-                !groupMeta.isRealGroup ? { borderLeftWidth: 0, borderRightWidth: 0 } : null,
+                groupMeta.isRealGroup === false
+                    ? { borderLeftWidth: 0, borderRightWidth: 0 }
+                    : null,
             ],
             {
                 states: {
@@ -88,7 +90,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
         );
 
         const rowProps = useMemo(
-            () => ({ ...props.rowProps, style: [props.rowProps, style] }),
+            () => ({ ...props.rowProps, style: [props.rowProps?.style, style] }),
             [style, props.rowProps],
         );
 
