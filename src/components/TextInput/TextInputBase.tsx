@@ -46,8 +46,8 @@ const TextInputBase = ({
 
     const { View, StateLayer } = useMolecules();
     const { backgroundColor: parentBackground } = useContext(BackgroundContext);
-    const { inputStyle: _inputStyle } = useNormalizeStyles(
-        useMemo(() => ({ inputStyle }), [inputStyle]),
+    const _inputStyle = useNormalizeStyles(
+        useMemo(() => inputStyle, [inputStyle]),
         'textinput_base',
     );
 
