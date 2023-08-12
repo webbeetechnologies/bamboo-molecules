@@ -140,11 +140,11 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
 
     return (
         <FieldsProvider fields={virtualizationMockFields}>
-            <RecordsProvider records={virtaulizationMockRecords}>
+            <RecordsProvider records={virtaulizationMockRecords.slice(0, 20)}>
                 <View style={virtualizedContainerStyle}>
                     <DataGrid
-                        groups={props.groups}
-                        records={virtaulizationMockRecords}
+                        groups={props.groups?.slice(0, 2)}
+                        records={virtaulizationMockRecords.slice(0, 20)}
                         columnIds={columnIds}
                         useField={useField}
                         useCellValue={useCellValue}

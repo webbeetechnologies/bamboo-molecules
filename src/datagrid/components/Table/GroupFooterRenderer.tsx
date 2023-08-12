@@ -24,7 +24,7 @@ export const GroupFooterRenderer = memo(({ meta, rowProps }: GroupMetaRowProps) 
     const shouldShowFooter = useShowGroupFooter(meta);
 
     if (!shouldShowFooter) {
-        return <EmptyFooter {...rowProps} isLastLevel={meta.isLastLevel} />;
+        return <EmptyFooter {...rowProps} isLastLevel={!meta.isAbsolute && meta.isLastLevel} />;
     }
 
     return (
