@@ -8,7 +8,7 @@ import {
     StyleSheet,
 } from 'react-native';
 
-import { useMolecules } from '../../hooks';
+import { useMolecules, useNormalizeStyles } from '../../hooks';
 import { normalizeBorderRadiuses, normalizeSpacings, BackgroundContext } from '../../utils';
 import InputLabel from './InputLabel';
 import type { InputBaseProps, RenderProps } from './types';
@@ -46,6 +46,10 @@ const TextInputBase = ({
 
     const { View, StateLayer } = useMolecules();
     const { backgroundColor: parentBackground } = useContext(BackgroundContext);
+    const { inputStyle: _inputStyle } = useNormalizeStyles(
+        useMemo(() => ({ inputStyle }), [inputStyle]),
+        'textinput_base',
+    );
 
     const labelWidth = parentState.labelLayout.width;
     const labelHeight = parentState.labelLayout.height;
@@ -169,7 +173,7 @@ const TextInputBase = ({
                     textAlign: textAlign ? textAlign : I18nManager.isRTL ? 'right' : 'left',
                 },
                 Platform.OS === 'web' && { outline: 'none' },
-                inputStyle,
+                _inputStyle,
             ],
             inputContainerStyle: [
                 defaultStyles.labelContainer,
@@ -208,10 +212,10 @@ const TextInputBase = ({
             stateLayerStyle: [stateLayer, stateLayerProps?.style],
         };
     }, [
+        _inputStyle,
         componentStyles,
         hasActiveOutline,
         inputContainerStyle,
-        inputStyle,
         labelHalfWidth,
         labelHeight,
         labelWidth,
