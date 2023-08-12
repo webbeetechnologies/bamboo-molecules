@@ -88,7 +88,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
         );
 
         const rowProps = useMemo(
-            () => ({ ...props.rowProps, style: [props.rowProps, style] }),
+            () => ({ ...props.rowProps, style: [props.rowProps?.style, style] }),
             [style, props.rowProps],
         );
 
