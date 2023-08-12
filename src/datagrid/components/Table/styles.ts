@@ -1,6 +1,13 @@
 export const DataGrid_SpacerRow = {
     flexDirection: 'row' as const,
     borderColor: 'colors.outlineVariant',
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    states: {
+        isFirstGroup: {
+            paddingTop: 'spacings.3',
+        },
+    },
 };
 
 export const DataGrid_Spacer = {
@@ -32,7 +39,6 @@ export const DataGrid_GroupHeaderItem = {
     borderLeftWidth: 1,
 
     states: {
-        isFirstGroup: {},
         isFirst: {
             marginTop: 0,
         },

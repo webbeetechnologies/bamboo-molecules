@@ -2,7 +2,7 @@ import { memo, MutableRefObject, PropsWithChildren, RefObject, useCallback, useM
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
-import type { GroupedData, GroupHeader, GroupFooter } from '../utils';
+import type { GroupedData, GroupFooter } from '../utils';
 import { weakMemoized, keyBy } from '../utils';
 import type { GroupMeta } from '../types';
 
@@ -124,64 +124,41 @@ type GroupedDataMap = Record<TDataTableColumn, GroupedData>;
 const getRecordsMap = weakMemoized((records: GroupedData[]) => keyBy(records, 'id')) as (
     records: GroupedData[],
 ) => GroupedDataMap;
+
+const getRecordById = (records: GroupedData[], id: TDataTableRow) => getRecordsMap(records)[id];
+
 export const useRecordsMap = () => {
     return useTableManagerValueSelector(({ records }) => getRecordsMap(records));
 };
 
 export const useRecordById = (id: TDataTableRow) => {
-    return useTableManagerValueSelector(({ records }) => getRecordsMap(records)[id]);
+    return useTableManagerValueSelector(({ records }) => getRecordById(records, id));
 };
 
-export const useHasGroupedData = (id: TDataTableRow) => {
-    return !!useRecordById(id).groupId;
+export const useHasGroupedData = () => {
+    return useTableManagerValueSelector(({ records }) => !!records.at(0)?.groupId);
 };
 
 export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
-    const {
-        fieldId,
-        title,
-        recordCount,
-        isFirst,
-        isLast,
-        isFirstLevel,
-        isLastLevel,
-        isOnly,
-        title: value,
-        level,
-        groupConstants,
-        rowType,
-    } = useRecordById(id) as GroupHeader | GroupFooter;
+    return useTableManagerValueSelector(({ records }) => {
+        const record = getRecordById(records, id) as GroupFooter;
 
-    return useMemo(
-        () => ({
-            fieldId,
-            title,
-            level,
-            recordCount,
-            isFirst,
-            isLast,
-            isFirstLevel,
-            isLastLevel,
-            isOnly,
-            value,
-            groupConstants,
-            rowType,
-        }),
-        [
-            fieldId,
-            title,
-            level,
-            recordCount,
-            isFirst,
-            isLast,
-            isFirstLevel,
-            isLastLevel,
-            isOnly,
-            value,
-            groupConstants,
-            rowType,
-        ],
-    );
+        return {
+            fieldId: record.fieldId,
+            value: record.title,
+            recordCount: record.recordCount,
+            isFirst: record.isFirst,
+            isLast: record.isLast,
+            isFirstLevel: record.isFirstLevel,
+            isLastLevel: record.isLastLevel,
+            isOnly: record.isOnly,
+            title: record.title,
+            level: record.level,
+            groupConstants: record.groupConstants,
+            rowType: record.rowType,
+            isAbsolute: record.isAbsolute,
+        };
+    });
 };
 
 export const useRecordType = (id: TDataTableRow) => {
