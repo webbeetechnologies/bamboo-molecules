@@ -97,6 +97,8 @@ export const deepCompare = (x: any, y: any, depth = Infinity) => {
     if (typeof x !== typeof y) return false;
     if (!x || !y) return false;
 
+    if (typeof x === 'function') return false;
+
     if (typeof x === 'object') {
         if (depth === 0) return false;
         const keys = Array.from(new Set(Object.keys({ ...x, ...y })));
