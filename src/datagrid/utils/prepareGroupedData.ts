@@ -15,7 +15,7 @@ type GroupMetaRecord = GroupMeta & {
     groupConstants: GroupConstantValues[];
     id: string;
     groupId: string;
-    isAbsolute?: boolean;
+    isRealGroup?: boolean;
 };
 
 export type GroupHeader = GroupMetaRecord & {
@@ -77,7 +77,7 @@ type Meta = {
     groupConstants: GroupConstantValues[];
     isFirst: boolean;
     isLast: boolean;
-    isAbsolute?: boolean;
+    isRealGroup?: boolean;
     recordCount: number;
 };
 
@@ -128,6 +128,7 @@ const makeNested = <T extends RecordWithId>(args: {
                 id: getIdFromConstants([], { prefix: groupId, suffix: arg.rowType }),
                 isOnly: restGroupMeta.isFirst && restGroupMeta.isLast,
                 ...restGroupMeta,
+                isRealGroup: restGroupMeta.isRealGroup ?? true,
                 groupConstants: getCachedConstants(groupId, restGroupMeta.groupConstants),
             },
         ];
@@ -198,7 +199,7 @@ const makeNested = <T extends RecordWithId>(args: {
         groupedDataMeta.groupConstants.length
             ? []
             : makeFooter({
-                  isAbsolute: true,
+                  isRealGroup: false,
                   isFirst: false,
                   isLast: false,
                   groupConstants: [],
