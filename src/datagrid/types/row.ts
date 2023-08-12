@@ -8,7 +8,7 @@ export type GroupMetaStates = {
     isFirst: boolean;
     isLast: boolean;
     isOnly: boolean;
-    isAbsolute?: boolean;
+    isRealGroup: boolean;
     rowType: `${RowType}`;
 };
 
