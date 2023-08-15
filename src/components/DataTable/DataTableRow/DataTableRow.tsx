@@ -5,7 +5,7 @@ import type { DataTableRowProps, TDataTableRow } from '../types';
 import { DataTableRowContext, useDataTable } from '../DataTableContext';
 import { renderCellComponent } from '../DataTableCell';
 import { useActionState, useComponentStyles, useMolecules } from '../../../hooks';
-import { shallowCompare } from 'src/utils';
+import { shallowCompare } from '../../../utils';
 
 // import { useRowWithinBounds } from '../DataTable';
 
