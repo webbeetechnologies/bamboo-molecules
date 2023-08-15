@@ -145,12 +145,13 @@ const makeNested = <T extends RecordWithId>(args: {
     if (!currentField) {
         const groupId = getIdFromConstants(groupedDataMeta.groupConstants);
 
-        const data: GroupedData[] = records.map(record => ({
+        const data: GroupedData[] = records.map((record, i) => ({
             data: record,
             groupConstants: getCachedConstants(groupId, groupedDataMeta.groupConstants),
             id: record.id,
             level: groupedDataMeta.groupConstants.length,
             index: getIndex(),
+            indexInGroup: i,
             groupId,
             rowType: RowType.DATA,
         }));
