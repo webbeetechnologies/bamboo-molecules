@@ -6,10 +6,10 @@ import {
     useContext,
     useRef,
     Context,
-    useEffect,
 } from 'react';
 import typedMemo from '../hocs/typedMemo';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
+import { usePrevious } from '..';
 
 type StoreDataType = Record<string, any>;
 
@@ -29,15 +29,18 @@ const useStoreData = <IStore extends StoreDataType>(
     const store = useRef<IStore>(value as IStore);
     const watchRef = useRef(watch);
 
-    const get = useCallback(() => store.current, []);
+    const get = useCallback(() => store.current, [store]);
 
     const subscribers = useRef(new Set<() => void>());
 
-    const set = useCallback((callback: (prev: IStore) => Partial<IStore>) => {
-        store.current = { ...store.current, ...callback(store.current) };
+    const set = useCallback(
+        (callback: (prev: IStore) => Partial<IStore>) => {
+            store.current = { ...store.current, ...callback(store.current) };
 
-        subscribers.current.forEach(subscriber => subscriber());
-    }, []);
+            subscribers.current.forEach(subscriber => subscriber());
+        },
+        [store],
+    );
 
     const subscribe = useCallback((callback: () => void) => {
         subscribers.current.add(callback);
@@ -45,11 +48,15 @@ const useStoreData = <IStore extends StoreDataType>(
         return () => subscribers.current.delete(callback);
     }, []);
 
-    useEffect(() => {
-        if (!watchRef.current || !value) return;
-
-        set(() => value);
-    }, [value, set]);
+    /**
+     * Cases:
+     * 1. when the value updates, we want the data to be updated immediately
+     * 2. the data stored in store.current may not be current with regards to the parent and the parent must have dropped the references related to the data.
+     * 3. because store.current is a ref, on watch and change, if we update store.current, no side-effect introduced.
+     */
+    if (usePrevious(value).current === value && watchRef.current) {
+        store.current = { ...store.current, ...value };
+    }
 
     return {
         get,
