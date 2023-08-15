@@ -79,10 +79,7 @@ const useResetSelectionOnClickOutside = () => {
             if (allowedTargetIds.includes((e.target as HTMLDivElement)?.id)) return;
 
             setStore(() => ({
-                [CELL_SELECTION_PLUGIN_KEY]: {
-                    start: undefined,
-                    end: undefined,
-                },
+                [CELL_SELECTION_PLUGIN_KEY]: undefined,
             }));
         },
         [setStore],
