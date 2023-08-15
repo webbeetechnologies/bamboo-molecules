@@ -15,6 +15,7 @@ export {
 export { normalizeBorderRadiuses } from './normalizeBorderRadiuses';
 
 export * from './lodash';
+export * from './compare';
 
 export * from './date-fns';
 
