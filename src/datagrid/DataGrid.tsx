@@ -1,7 +1,7 @@
-import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
+import { ComponentType, ReactNode, useCallback, useMemo, useRef } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { StyleSheet } from 'react-native';
-import { typedMemo } from '@bambooapp/bamboo-molecules';
+import { typedMemo, useLatest } from '@bambooapp/bamboo-molecules';
 import type {
     TDataTableColumn,
     TDataTableRow,
@@ -104,9 +104,9 @@ const DataGrid = ({
     const shouldContextMenuDisplayed = useShouldContextMenuDisplayed();
     const { useResetSelectionOnClickOutside } = useCellSelectionMethods();
 
-    const dataRef = useRef<{ records: TDataTableRow[]; columns: TDataTableColumn[] }>({
-        records: [],
-        columns: [],
+    const dataRef = useLatest<{ records: TDataTableRow[]; columns: TDataTableColumn[] }>({
+        records,
+        columns: columnIds,
     });
 
     const cellProps = useMemo(
@@ -167,15 +167,8 @@ const DataGrid = ({
                 },
             });
         },
-        [handleContextMenuOpen, shouldContextMenuDisplayed, store],
+        [dataRef, handleContextMenuOpen, shouldContextMenuDisplayed, store],
     );
-
-    useEffect(() => {
-        dataRef.current = {
-            records,
-            columns: columnIds,
-        };
-    }, [columnIds, records]);
 
     // TODO - move this to plugins
     useContextMenu({ ref: store.current.tableRef, callback: onContextMenuOpen });

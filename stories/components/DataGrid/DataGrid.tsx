@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react';
+import { FC, memo, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Toast, useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
 
@@ -12,14 +12,13 @@ import {
     FieldsProvider,
     useCellValue,
     RecordsProvider,
-    groups,
 } from './mocks';
 import { useColumnResizePlugin, useCopyPastePlugin } from '../../../src/datagrid/plugins';
 import { useDragAndExtendPlugin } from '../../../src/datagrid/plugins/drag-and-extend';
 
 const containerStyle = { width: '100%' };
 
-export const Example = () => {
+export const Example: FC<{ groups?: string[] }> = () => {
     const { View, DataGrid, ToastContainer } = useMolecules();
 
     const { state: isOpen, handleOpen, handleClose } = useToggle();
@@ -140,11 +139,11 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
 
     return (
         <FieldsProvider fields={virtualizationMockFields}>
-            <RecordsProvider records={virtaulizationMockRecords.slice(0, 20)}>
+            <RecordsProvider records={virtaulizationMockRecords}>
                 <View style={virtualizedContainerStyle}>
                     <DataGrid
-                        groups={props.groups?.slice(0, 2)}
-                        records={virtaulizationMockRecords.slice(0, 20)}
+                        groups={props.groups}
+                        records={virtaulizationMockRecords}
                         columnIds={columnIds}
                         useField={useField}
                         useCellValue={useCellValue}
@@ -154,10 +153,6 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
         </FieldsProvider>
     );
 };
-
-export const ExampleHorizontalVirtualizationWithGroups = () => (
-    <ExampleHorizontalVirtualization groups={groups} />
-);
 
 const styles = StyleSheet.create({
     menuItem: {

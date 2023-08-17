@@ -6,6 +6,7 @@ import {
     useContext,
     useRef,
     Context,
+    useEffect,
 } from 'react';
 import typedMemo from '../hocs/typedMemo';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
@@ -36,7 +37,6 @@ const useStoreData = <IStore extends StoreDataType>(
     const set = useCallback(
         (callback: (prev: IStore) => Partial<IStore>) => {
             store.current = { ...store.current, ...callback(store.current) };
-
             subscribers.current.forEach(subscriber => subscriber());
         },
         [store],
@@ -47,6 +47,12 @@ const useStoreData = <IStore extends StoreDataType>(
 
         return () => subscribers.current.delete(callback);
     }, []);
+
+    /** The effect is required to trigger the updates on the consumers */
+    useEffect(() => {
+        if (!watchRef.current) return;
+        set(prev => ({ ...prev, ...value }));
+    }, [set, value]);
 
     /**
      * Cases:
