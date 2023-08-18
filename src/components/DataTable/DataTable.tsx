@@ -7,20 +7,22 @@ import type {
     ScrollView,
     ScrollViewProps,
     ViewToken,
+    ViewabilityConfigCallbackPairs,
 } from 'react-native';
 
-import { useComponentStyles } from '../../hooks';
 import { createFastContext } from '../../fast-context';
+import { useComponentStyles } from '../../hooks';
 import {
     useDataTable,
     useDataTableColumnWidth,
     useDataTableComponent,
     useDataTableStoreRef,
 } from './DataTableContext/DataTableContext';
-import { defaultProps } from './defaults';
-import { renderRow } from './DataTableRow';
 import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
 import { DataTableHeaderRow } from './DataTableHeader';
+import { renderRow } from './DataTableRow';
+import { DEFAULT_VIEWABILITY_CONFIG } from './constants';
+import { defaultProps } from './defaults';
 
 type DataTableComponentProps = DataTableBase & ScrollViewProps;
 type DataTablePresentationProps = DataTableComponentProps &
@@ -79,6 +81,7 @@ const DataTablePresentationComponent = memo(
             windowSize = defaultProps.windowSize,
             maxToRenderPerBatch = defaultProps.maxToRenderPerBatch,
             keyExtractor: keyExtractorProp = defaultProps.keyExtractor,
+            viewabilityConfigCallbackPairs: viewabilityConfigCallbackPairsProp = [],
             ...vProps
         } = { ...defaultProps, ...verticalScrollProps };
 
@@ -126,6 +129,17 @@ const DataTablePresentationComponent = memo(
             [setStore],
         );
 
+        const viewabilityConfigCallbackPairs = useMemo<ViewabilityConfigCallbackPairs>(
+            () => [
+                {
+                    viewabilityConfig: DEFAULT_VIEWABILITY_CONFIG,
+                    onViewableItemsChanged,
+                },
+                ...viewabilityConfigCallbackPairsProp,
+            ],
+            [onViewableItemsChanged, viewabilityConfigCallbackPairsProp],
+        );
+
         const onLayout = useCallback(
             (e: LayoutChangeEvent) => {
                 onLayoutProp?.(e);
@@ -159,7 +173,7 @@ const DataTablePresentationComponent = memo(
                         renderItem={renderRow}
                         stickyHeaderIndices={stickyHeaderIndices}
                         onScroll={onFlatListScroll}
-                        onViewableItemsChanged={onViewableItemsChanged}
+                        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs}
                     />
                 )}
             </ScrollViewComponent>
