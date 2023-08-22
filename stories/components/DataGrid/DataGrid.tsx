@@ -13,7 +13,11 @@ import {
     useCellValue,
     RecordsProvider,
 } from './mocks';
-import { useColumnResizePlugin, useCopyPastePlugin } from '../../../src/datagrid/plugins';
+import {
+    useColumnResizePlugin,
+    useCopyPastePlugin,
+    useExpandCollapseGroupsPlugin,
+} from '../../../src/datagrid/plugins';
 import { useDragAndExtendPlugin } from '../../../src/datagrid/plugins/drag-and-extend';
 
 const containerStyle = { width: '100%' };
@@ -81,10 +85,20 @@ export const Example: FC<{ groups?: string[] }> = () => {
             console.log({ dragAndExtend: args });
         },
     });
+    const expandCollapsePlugin = useExpandCollapseGroupsPlugin({
+        onGroupExpand: args => {
+            // eslint-disable-next-line no-console
+            console.log({ expandCollapse: args });
+        },
+        onGroupCollapse: args => {
+            // eslint-disable-next-line no-console
+            console.log({ expandCollapse: args });
+        },
+    });
 
     const plugins = useMemo(
-        () => [columnResizePlugin, copyPastePlugin, dragAndExtendPlugin],
-        [columnResizePlugin, copyPastePlugin, dragAndExtendPlugin],
+        () => [columnResizePlugin, copyPastePlugin, dragAndExtendPlugin, expandCollapsePlugin],
+        [columnResizePlugin, copyPastePlugin, dragAndExtendPlugin, expandCollapsePlugin],
     );
 
     return (
@@ -137,11 +151,25 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
         [],
     );
 
+    const expandCollapsePlugin = useExpandCollapseGroupsPlugin({
+        onGroupExpand: args => {
+            // eslint-disable-next-line no-console
+            console.log({ expandCollapse: args });
+        },
+        onGroupCollapse: args => {
+            // eslint-disable-next-line no-console
+            console.log({ expandCollapse: args });
+        },
+    });
+
+    const plugins = useMemo(() => [expandCollapsePlugin], [expandCollapsePlugin]);
+
     return (
         <FieldsProvider fields={virtualizationMockFields}>
             <RecordsProvider records={virtaulizationMockRecords}>
                 <View style={virtualizedContainerStyle}>
                     <DataGrid
+                        plugins={plugins}
                         groups={props.groups}
                         records={virtaulizationMockRecords}
                         columnIds={columnIds}
