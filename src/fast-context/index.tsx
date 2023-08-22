@@ -54,7 +54,6 @@ const useStoreData = <IStore extends StoreDataType>(
         set(prev => ({ ...prev, ...value }));
     }, [set, value]);
 
-    // console.log({ value, previous: { ...usePrevious(value).current } });
     /**
      * Cases:
      * 1. when the value updates, we want the data to be updated immediately
