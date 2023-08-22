@@ -22,7 +22,12 @@ import {
     useShouldContextMenuDisplayed,
 } from './contexts';
 import PluginsManager from './plugins/plugins-manager';
-import { useCellSelectionMethods, useCellSelectionPlugin, Plugin } from './plugins';
+import {
+    useCellSelectionMethods,
+    useCellSelectionPlugin,
+    Plugin,
+    useExpandCollapseGroupsMethods,
+} from './plugins';
 import {
     ContextMenu,
     ColumnHeaderCell,
@@ -209,20 +214,12 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         fieldTypes = DefaultFieldTypes as FieldTypes,
         useField,
         useCellValue,
-        contextMenuProps,
         plugins: _plugins,
-        records,
-        groups,
         useRowRenderer: useRowRendererProp = useRowRendererDefault,
         useGroupRowState: useGroupRowStateProp,
         useShowGroupFooter: useShowGroupFooterProp,
-        spacerWidth: spacerWidthProp = 'spacings.3',
         ...rest
     }: Props) => {
-        const ref = useRef(null);
-
-        const spacerWidth = useToken(spacerWidthProp as string) ?? spacerWidthProp;
-
         const hooksContextValue = useRef({
             useField,
             useCellValue,
@@ -238,35 +235,59 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
             [_plugins, selectionPlugin],
         );
 
-        const { groupedRecords, rowIds } = useMemo(
-            () => prepareGroupedData(records, groups),
-            [records, groups],
-        );
-
-        const offsetWidth = (groups?.length ?? 0) * spacerWidth;
-
         return (
             <FieldTypesProvider value={fieldTypes}>
                 <HooksProvider value={hooksContextValue}>
-                    <TableManagerProvider
-                        tableRef={ref}
-                        spacerWidth={spacerWidth}
-                        records={groupedRecords}
-                        withContextMenu={!!contextMenuProps}>
-                        <PluginsManager plugins={plugins}>
-                            {/* @ts-ignore - we don't want to pass down unnecessary props */}
-                            <Component
-                                {...rest}
-                                records={rowIds}
-                                horizontalOffset={offsetWidth}
-                                contextMenuProps={contextMenuProps}
-                            />
-                        </PluginsManager>
-                    </TableManagerProvider>
+                    <PluginsManager plugins={plugins}>
+                        <TableManagerProviderWrapper Component={Component} {...rest} />
+                    </PluginsManager>
                 </HooksProvider>
             </FieldTypesProvider>
         );
     };
+};
+
+const defaultExpandCollapseMethods = { useCollapsedGroupIds: () => [] };
+
+const TableManagerProviderWrapper = ({
+    records,
+    groups,
+    contextMenuProps,
+    spacerWidth: spacerWidthProp = 'spacings.3',
+    Component,
+    ...rest
+}: Omit<Props, 'useField' | 'useCellValue'> & {
+    Component: ComponentType<DataGridPresentationProps>;
+}) => {
+    const ref = useRef(null);
+    // in case expanse collapse plugins in not defined
+    const { useCollapsedGroupIds } =
+        useExpandCollapseGroupsMethods() || defaultExpandCollapseMethods;
+    const collapsedGroupIds = useCollapsedGroupIds();
+
+    const { groupedRecords, rowIds } = useMemo(
+        () => prepareGroupedData(records, groups, collapsedGroupIds),
+        [records, groups, collapsedGroupIds],
+    );
+    const spacerWidth = useToken(spacerWidthProp as string) ?? spacerWidthProp;
+
+    const offsetWidth = (groups?.length ?? 0) * spacerWidth;
+
+    return (
+        <TableManagerProvider
+            tableRef={ref}
+            spacerWidth={spacerWidth}
+            records={groupedRecords}
+            withContextMenu={!!contextMenuProps}>
+            {/* @ts-ignore - we don't want to pass down unnecessary props */}
+            <Component
+                {...rest}
+                records={rowIds}
+                horizontalOffset={offsetWidth}
+                contextMenuProps={contextMenuProps}
+            />
+        </TableManagerProvider>
+    );
 };
 
 const defaultHorizontalScrollProps = { contentContainerStyle: { flexGrow: 1 } };
