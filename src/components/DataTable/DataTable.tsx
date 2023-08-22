@@ -1,28 +1,29 @@
-import { forwardRef, memo, useCallback, useMemo, ForwardedRef } from 'react';
-import type { DataTableBase, DataTableProps, TDataTableColumn, TDataTableRow } from './types';
+import { ForwardedRef, forwardRef, memo, useCallback, useMemo } from 'react';
 import type {
     LayoutChangeEvent,
     NativeScrollEvent,
     NativeSyntheticEvent,
     ScrollView,
     ScrollViewProps,
-    ViewToken,
-    ViewabilityConfigCallbackPairs,
 } from 'react-native';
+import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
 
-import { createFastContext } from '../../fast-context';
 import { useComponentStyles } from '../../hooks';
 import {
     useDataTable,
-    useDataTableColumnWidth,
     useDataTableComponent,
     useDataTableStoreRef,
 } from './DataTableContext/DataTableContext';
 import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
 import { DataTableHeaderRow } from './DataTableHeader';
 import { renderRow } from './DataTableRow';
-import { DEFAULT_VIEWABILITY_CONFIG } from './constants';
 import { defaultProps } from './defaults';
+import {
+    HorizontalScrollIndexProvider,
+    defaultValue,
+    useStoreRef,
+    useViewabilityConfigCallbackPairs,
+} from './hooks';
 
 type DataTableComponentProps = DataTableBase & ScrollViewProps;
 type DataTablePresentationProps = DataTableComponentProps &
@@ -30,34 +31,6 @@ type DataTablePresentationProps = DataTableComponentProps &
         Required<DataTableProps>,
         'FlatListComponent' | 'ScrollViewComponent'
     >;
-const {
-    useStoreRef,
-    Provider: HorizontalScrollIndexProvider,
-    useContextValue,
-} = createFastContext<typeof defaultValue>();
-
-const defaultValue = { x: 0, y: 0, viewItemIds: [] as TDataTableColumn[], scrollXVelocity: 0 };
-const defaultOffset = 500;
-
-export const useIsCellWithinBounds = (
-    left: number,
-    rowId: TDataTableRow,
-    columnId: TDataTableColumn,
-) => {
-    const cellWidth = useDataTableColumnWidth(columnId);
-    // this is a quick fix // TODO - revisit this later
-    const containerWidth = useDataTable(store => store.containerWidth ?? 0);
-
-    const checkLeft = (x: number, offset: number) => left + cellWidth >= x - offset;
-    const checkRight = (x: number, offset: number) => left <= x + offset + containerWidth;
-    const isViewableItem = (viewItemIds: TDataTableColumn[]) => viewItemIds.includes(rowId);
-
-    return useContextValue(
-        ({ x, viewItemIds }) =>
-            checkLeft(x, isViewableItem(viewItemIds) ? defaultOffset : 0) &&
-            checkRight(x, isViewableItem(viewItemIds) ? defaultOffset : 0),
-    );
-};
 
 const DataTablePresentationComponent = memo(
     forwardRef((props: DataTablePresentationProps, ref: ForwardedRef<ScrollView>) => {
@@ -120,24 +93,8 @@ const DataTablePresentationComponent = memo(
             [setStore],
         );
 
-        const onViewableItemsChanged = useCallback(
-            ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-                setStore(() => ({
-                    viewItemIds: viewableItems.map(item => item.item),
-                }));
-            },
-            [setStore],
-        );
-
-        const viewabilityConfigCallbackPairs = useMemo<ViewabilityConfigCallbackPairs>(
-            () => [
-                {
-                    viewabilityConfig: DEFAULT_VIEWABILITY_CONFIG,
-                    onViewableItemsChanged,
-                },
-                ...viewabilityConfigCallbackPairsProp,
-            ],
-            [onViewableItemsChanged, viewabilityConfigCallbackPairsProp],
+        const viewabilityConfigCallbackPairs = useViewabilityConfigCallbackPairs(
+            viewabilityConfigCallbackPairsProp,
         );
 
         const onLayout = useCallback(
@@ -173,7 +130,7 @@ const DataTablePresentationComponent = memo(
                         renderItem={renderRow}
                         stickyHeaderIndices={stickyHeaderIndices}
                         onScroll={onFlatListScroll}
-                        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs}
+                        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
                     />
                 )}
             </ScrollViewComponent>
