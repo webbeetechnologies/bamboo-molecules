@@ -60,7 +60,7 @@ const useStoreData = <IStore extends StoreDataType>(
      * 2. the data stored in store.current may not be current with regards to the parent and the parent must have dropped the references related to the data.
      * 3. because store.current is a ref, on watch and change, if we update store.current, no side-effect introduced.
      */
-    if (usePrevious(value).current === value && watchRef.current) {
+    if (usePrevious(value).current !== value && watchRef.current) {
         store.current = { ...store.current, ...value };
     }
 

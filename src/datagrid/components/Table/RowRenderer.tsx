@@ -1,30 +1,26 @@
 import { Fragment, memo, useMemo } from 'react';
-import type { ListRenderItem } from 'react-native';
-import {
-    useComponentStyles,
-    useMolecules,
-    CallbackActionState,
-    withActionState,
-} from '@bambooapp/bamboo-molecules';
+import { useActionState, useComponentStyles, useMolecules } from '@bambooapp/bamboo-molecules';
 import {
     renderDataTableCellComponent,
     DataTableRowContext,
     useDataTable,
 } from '@bambooapp/bamboo-molecules/components';
+import type { DataGridRowRendererProps } from '../../types';
 
-export type Props = CallbackActionState & { record: string; index: number };
+export type Props = DataGridRowRendererProps;
 
-const TableRowComponent = ({ record, index, hovered = false }: Props) => {
+const TableRowComponent = ({ rowId, index }: Props) => {
     const { columns, rowSize, rowProps, selectedRows } = useDataTable(store => ({
         columns: store.columns || [],
         rowSize: store.rowSize,
         rowProps: store.rowProps,
         selectedRows: store.selectedRows,
     }));
+    const { actionsRef, hovered } = useActionState();
 
     const { View } = useMolecules();
 
-    const isSelected = !!selectedRows && Boolean(selectedRows[record]);
+    const isSelected = !!selectedRows && Boolean(selectedRows[rowId]);
 
     const rowStyle = useComponentStyles(
         'DataTable_Row',
@@ -40,8 +36,8 @@ const TableRowComponent = ({ record, index, hovered = false }: Props) => {
     );
 
     const rowContext = useMemo(
-        () => ({ row: record, rowIndex: index, hovered }),
-        [record, index, hovered],
+        () => ({ row: rowId, rowIndex: index, hovered }),
+        [rowId, index, hovered],
     );
 
     const cells = useMemo(
@@ -53,23 +49,12 @@ const TableRowComponent = ({ record, index, hovered = false }: Props) => {
     );
 
     return (
-        <DataTableRowContext.Provider value={rowContext} key={record}>
-            <View {...rowProps} style={rowStyle}>
+        <DataTableRowContext.Provider value={rowContext} key={rowId}>
+            <View {...rowProps} style={rowStyle} ref={actionsRef}>
                 {cells}
             </View>
         </DataTableRowContext.Provider>
     );
 };
 
-export const TableRow = memo(withActionState(TableRowComponent));
-
-export const renderRow: ListRenderItem<string> = ({ item, index }) => (
-    <TableRow
-        record={item}
-        index={index}
-        key={item}
-        actionStateContainerProps={actionStateContainerProps}
-    />
-);
-
-const actionStateContainerProps = { style: { height: '100%' } };
+export const TableRow = memo(TableRowComponent);

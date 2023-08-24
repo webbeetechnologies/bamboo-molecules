@@ -124,6 +124,7 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
         const record = getRecordById(records, id) as GroupFooter;
 
         return {
+            groupId: record.groupId,
             fieldId: record.fieldId,
             value: record.title,
             recordCount: record.recordCount,

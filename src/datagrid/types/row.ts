@@ -19,6 +19,7 @@ export enum RowType {
 }
 
 export type GroupMeta = GroupMetaStates & {
+    groupId: string;
     fieldId?: TDataTableColumn;
     recordCount: number;
     level: number;

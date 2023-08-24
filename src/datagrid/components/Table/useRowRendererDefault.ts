@@ -7,6 +7,7 @@ import { GroupFooterRow } from './GroupFooterRenderer';
 import { GroupHeaderRow } from './GroupHeaderRenderer';
 import { DataGridRowRendererProps, RowType } from '../../types';
 import { withSpacers } from './Spacer';
+import { TableRow } from './RowRenderer';
 
 /**
  *
@@ -17,6 +18,7 @@ import { withSpacers } from './Spacer';
 const renderers: Partial<Record<RowType, ComponentType<DataGridRowRendererProps>>> = {
     [RowType.FOOTER]: GroupFooterRow,
     [RowType.HEADER]: GroupHeaderRow,
+    [RowType.DATA]: TableRow,
 };
 
 const getRowWithSpacers = weakMemoized((Row: ComponentType<DataGridRowRendererProps>) =>
