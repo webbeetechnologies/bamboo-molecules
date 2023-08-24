@@ -22,7 +22,7 @@ export {
     CELL_SELECTION_PLUGIN_KEY,
     COPY_PASTE_PLUGIN_KEY,
     PluginEvents,
-    SelectionIndices as SelectionIndexes,
+    SelectionIndices,
     PluginHandle,
     usePluginsDataStoreRef,
     usePluginsManagerSelector,
