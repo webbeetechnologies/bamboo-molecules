@@ -25,16 +25,16 @@ export type Props = ModalProps & {
 
 const Dialog = ({ children, onClose, iconProps, style = {}, ...rest }: Props) => {
     const { Modal } = useMolecules();
-    const componentStyles = useComponentStyles('Dialog', { container: style });
+    const componentStyles = useComponentStyles('Dialog', style);
 
     const { containerStyle, childStyle } = useMemo(() => {
-        const { spacing, container } = componentStyles;
+        const { spacing, ...restStyle } = componentStyles;
 
         return {
             childStyle: {
                 marginTop: spacing,
             },
-            containerStyle: container,
+            containerStyle: restStyle,
         };
     }, [componentStyles]);
 

@@ -31,6 +31,7 @@ export const modalStyles: ComponentStylePropWithVariants<
         flex: 1,
     },
     modalContent: {
+        minWidth: 280,
         backgroundColor: 'colors.surface',
         overflow: 'hidden',
     },
