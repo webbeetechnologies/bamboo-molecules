@@ -39,13 +39,13 @@ export const modalStyles: ComponentStylePropWithVariants<
     sizes: {
         md: {
             modalContent: {
-                maxWidth: 400,
+                maxWidth: 560,
                 borderRadius: 10,
             },
         },
         lg: {
             modalContent: {
-                maxWidth: 600,
+                maxWidth: 700,
                 borderRadius: 10,
             },
         },
