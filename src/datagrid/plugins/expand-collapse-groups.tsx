@@ -42,6 +42,7 @@ const useOnToggleGroupExpandAndCollapse = () => {
 
                 if (isGroupCollapsed) {
                     const shouldContinue = beforeGroupExpand({
+                        groupId,
                         collapsedGroupIds: expandCollapseData.collapsedGroups,
                     });
 
@@ -54,6 +55,7 @@ const useOnToggleGroupExpandAndCollapse = () => {
                     afterGroupExpand();
                 } else {
                     const shouldContinue = beforeGroupCollapse({
+                        groupId,
                         collapsedGroupIds: expandCollapseData.collapsedGroups,
                     });
 

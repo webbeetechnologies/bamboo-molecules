@@ -80,10 +80,16 @@ export type PluginManagerEvents = {
     [PluginEvents.ON_DRAG_AND_EXTEND]: (args: { selection: Selection; target: Selection }) => void;
     [PluginEvents.AFTER_DRAG_AND_EXTEND]: () => void;
 
-    [PluginEvents.BEFORE_GROUP_COLLAPSE]: (args: { collapsedGroupIds: string[] }) => void | boolean;
+    [PluginEvents.BEFORE_GROUP_COLLAPSE]: (args: {
+        groupId: string;
+        collapsedGroupIds: string[];
+    }) => void | boolean;
     [PluginEvents.ON_GROUP_COLLAPSE]: (args: { collapsedGroupIds: string[] }) => void;
     [PluginEvents.AFTER_GROUP_COLLAPSE]: () => void;
-    [PluginEvents.BEFORE_GROUP_EXPAND]: (args: { collapsedGroupIds: string[] }) => void | boolean;
+    [PluginEvents.BEFORE_GROUP_EXPAND]: (args: {
+        groupId: string;
+        collapsedGroupIds: string[];
+    }) => void | boolean;
     [PluginEvents.ON_GROUP_EXPAND]: (args: { collapsedGroupIds: string[] }) => void;
     [PluginEvents.AFTER_GROUP_EXPAND]: () => void;
 };
