@@ -10,14 +10,9 @@ type CustomProps = {
 
 export const dialogStyles: ComponentStylePropWithVariants<TextStyle, States, CustomProps> = {
     spacing: 'spacings.6',
-
-    container: {
-        justifyContent: 'flex-start',
-        borderRadius: 'shapes.corner.extraLarge' as unknown as number,
-        backgroundColor: 'colors.surface',
-        minWidth: 280,
-        maxWidth: 560,
-    },
+    justifyContent: 'flex-start',
+    borderRadius: 'shapes.corner.extraLarge' as unknown as number,
+    backgroundColor: 'colors.surface',
 };
 
 export const dialogTitleStyles: ComponentStylePropWithVariants<TextStyle, ''> = {

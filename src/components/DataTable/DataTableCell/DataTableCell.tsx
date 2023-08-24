@@ -9,7 +9,7 @@ import {
     useDataTableRow,
 } from '../DataTableContext/DataTableContext';
 import type { DataTableProps, TDataTableColumn, TDataTableRow, DataCellProps } from '../types';
-import { useIsCellWithinBounds } from '../DataTable';
+import { useIsCellWithinBounds } from '../hooks';
 
 type CellComponentProps = {
     column: TDataTableColumn;
