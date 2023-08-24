@@ -31,6 +31,7 @@ export const modalStyles: ComponentStylePropWithVariants<
         flex: 1,
     },
     modalContent: {
+        minWidth: 280,
         backgroundColor: 'colors.surface',
         overflow: 'hidden',
     },
@@ -38,13 +39,13 @@ export const modalStyles: ComponentStylePropWithVariants<
     sizes: {
         md: {
             modalContent: {
-                maxWidth: 400,
+                maxWidth: 560,
                 borderRadius: 10,
             },
         },
         lg: {
             modalContent: {
-                maxWidth: 600,
+                maxWidth: 700,
                 borderRadius: 10,
             },
         },
