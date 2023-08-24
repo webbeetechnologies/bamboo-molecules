@@ -2,17 +2,17 @@ import { useCallback, useEffect } from 'react';
 import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
 
 import { useTableManagerStoreRef } from '../contexts';
-import { CELL_SELECTION_PLUGIN_KEY, CellIndexes } from './cell-selection';
+import { CELL_SELECTION_PLUGIN_KEY } from './cell-selection';
 import { usePluginsDataStoreRef, usePluginsDataValueSelectorValue } from './plugins-manager';
 import { createPlugin } from './createPlugin';
-import { PluginEvents, SelectionIndexes } from './types';
+import { CellIndices, PluginEvents, SelectionIndices } from './types';
 import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
 
 export const DRAG_AND_EXTEND_PLUGIN_KEY = 'drag-and-extend';
 
 const emptyObj = {};
 
-const checkIfWithinRow = (selection: SelectionIndexes, cell: { rowIndex: number }) => {
+const checkIfWithinRow = (selection: SelectionIndices, cell: { rowIndex: number }) => {
     const { rowIndex } = cell;
 
     if (!selection || !selection.start || !selection.end) return false;
@@ -167,7 +167,7 @@ const useOnDragSelection = ({
             };
         }
 
-        selection = normalizeSelection(selection as SelectionIndexes);
+        selection = normalizeSelection(selection as SelectionIndices);
 
         const continueDragAndSelection = beforeDragAndExtend({ selection });
 
@@ -195,7 +195,7 @@ const useOnDragSelection = ({
     ]);
 };
 
-const useHasDragAndExtendSelection = ({ columnIndex, rowIndex }: CellIndexes) => {
+const useHasDragAndExtendSelection = ({ columnIndex, rowIndex }: CellIndices) => {
     return usePluginsDataValueSelectorValue(store =>
         checkSelection(store[DRAG_AND_EXTEND_PLUGIN_KEY], {
             columnIndex,
@@ -208,7 +208,7 @@ const useIsDragHandleVisible = ({
     columnIndex,
     rowIndex,
     isFocused,
-}: CellIndexes & { isFocused: boolean }) => {
+}: CellIndices & { isFocused: boolean }) => {
     return usePluginsDataValueSelectorValue(store => {
         const selection = store[CELL_SELECTION_PLUGIN_KEY];
         const dragSelection = store[DRAG_AND_EXTEND_PLUGIN_KEY];

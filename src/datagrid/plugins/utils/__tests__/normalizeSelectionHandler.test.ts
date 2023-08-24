@@ -1,16 +1,16 @@
+import type { CellIndices } from '../../types';
 import { normalizeSelectionHandler } from '../useNormalizeSelection';
-import type { CellIndexes } from '../../cell-selection';
 
-const records = ['record-1', 'record-2', 'record-3', 'record-4', 'record-5'];
-const columns = ['column-1', 'column-2', 'column-3', 'column-4', 'column-5'];
+const recordIds = ['record-1', 'record-2', 'record-3', 'record-4', 'record-5'];
+const columnIds = ['column-1', 'column-2', 'column-3', 'column-4', 'column-5'];
 
 describe('normalizeSelectionHandler', () => {
     it('should return correct columnIds and recordIs for given selection indexes', function () {
-        const startIndexes: CellIndexes = {
+        const startIndexes: CellIndices = {
             columnIndex: 2,
             rowIndex: 1,
         };
-        const endIndexes: CellIndexes = {
+        const endIndexes: CellIndices = {
             columnIndex: 4,
             rowIndex: 4,
         };
@@ -24,8 +24,8 @@ describe('normalizeSelectionHandler', () => {
         const returnedSelection = normalizeSelectionHandler({
             start: startIndexes,
             end: endIndexes,
-            records,
-            columns,
+            recordIds,
+            columnIds,
         });
 
         expect(returnedSelection.recordIds).toEqual(
@@ -39,11 +39,11 @@ describe('normalizeSelectionHandler', () => {
     });
 
     it('should still return correct range even though some of the indexes are not there in the records and columns', function () {
-        const startIndexes: CellIndexes = {
+        const startIndexes: CellIndices = {
             columnIndex: 4,
             rowIndex: 2,
         };
-        const endIndexes: CellIndexes = {
+        const endIndexes: CellIndices = {
             columnIndex: 6,
             rowIndex: 6,
         };
@@ -57,8 +57,8 @@ describe('normalizeSelectionHandler', () => {
         const returnedSelection = normalizeSelectionHandler({
             start: startIndexes,
             end: endIndexes,
-            records,
-            columns,
+            recordIds,
+            columnIds,
         });
 
         expect(returnedSelection.recordIds).toEqual(

@@ -1,19 +1,14 @@
-import { useCallback, useEffect } from 'react';
 import {
     usePluginsDataValueSelectorValue,
     useTableManagerStoreRef,
 } from '@bambooapp/bamboo-molecules/datagrid';
+import { useCallback, useEffect } from 'react';
 import { Platform } from 'react-native';
 
 import { createPlugin } from './createPlugin';
-import { PluginEvents } from './types';
 import { usePluginsDataStoreRef } from './plugins-manager';
+import { CellIndices, PluginEvents } from './types';
 import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
-
-export type CellIndexes = {
-    rowIndex: number;
-    columnIndex: number;
-};
 
 export const CELL_SELECTION_PLUGIN_KEY = 'cell-selection';
 
@@ -25,7 +20,7 @@ const useOnSelectCell = () => {
     const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(
-        (cell: CellIndexes) => {
+        (cell: CellIndices) => {
             if (
                 !tableManagerStore.current.focusedCell ||
                 tableManagerStore.current.focusedCell?.type === 'column'
@@ -38,8 +33,8 @@ const useOnSelectCell = () => {
             }
 
             const selection = {
-                start: tableManagerStore.current.focusedCell as CellIndexes,
-                end: cell as CellIndexes,
+                start: tableManagerStore.current.focusedCell as CellIndices,
+                end: cell as CellIndices,
             };
 
             const continueSelection = beforeCellSelection({ selection });
@@ -149,7 +144,7 @@ const useProcessDragCellSelection = ({
     cell,
     hovered,
 }: {
-    cell: CellIndexes;
+    cell: CellIndices;
     hovered: boolean;
 }) => {
     const { store: pluginsDataStore } = usePluginsDataStoreRef();
@@ -162,7 +157,7 @@ const useProcessDragCellSelection = ({
     });
 };
 
-const useHasCellSelection = ({ columnIndex, rowIndex }: CellIndexes) => {
+const useHasCellSelection = ({ columnIndex, rowIndex }: CellIndices) => {
     return usePluginsDataValueSelectorValue(store =>
         checkSelection(store[CELL_SELECTION_PLUGIN_KEY], {
             columnIndex,

@@ -1,14 +1,14 @@
 // TODO - fix alias issue with Jest
 import { TDataTableColumn, TDataTableRow, useDataTableStoreRef } from '../../../components';
 import { useCallback } from 'react';
-import type { CellIndexes } from '../cell-selection';
+import type { CellIndices } from '../types';
 
 export const normalizeCellHandler = ({
     columnIndex,
     rowIndex,
     columns,
     records,
-}: CellIndexes & { records: TDataTableRow[]; columns: TDataTableColumn[] }) => {
+}: CellIndices & { records: TDataTableRow[]; columns: TDataTableColumn[] }) => {
     return {
         columnIndex,
         rowIndex,

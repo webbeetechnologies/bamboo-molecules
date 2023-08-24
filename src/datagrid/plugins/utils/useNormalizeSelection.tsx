@@ -1,29 +1,19 @@
 // TODO - fix alias issue with Jest
-import { TDataTableColumn, TDataTableRow, useDataTableStoreRef } from '../../../components';
 import { useCallback } from 'react';
-import type { CellIndexes } from '../cell-selection';
+import { useDataTableStoreRef } from '../../../components';
+import type { SelectionIndices, TableSelection } from '../types';
 
 const getItemsInRange = (array: any[], startIndex: number, endIndex: number) => {
     const [start, end] = [startIndex, endIndex].sort((x, y) => x - y);
     return array.slice(start, end + 1);
 };
 
-export const normalizeSelectionHandler = ({
-    start,
-    end,
-    records,
-    columns,
-}: {
-    start: CellIndexes;
-    end: CellIndexes;
-    records: TDataTableRow[];
-    columns: TDataTableColumn[];
-}) => {
+export const normalizeSelectionHandler = ({ start, end, recordIds, columnIds }: TableSelection) => {
     return {
         start,
         end,
-        recordIds: getItemsInRange(records, start?.rowIndex, end?.rowIndex),
-        columnIds: getItemsInRange(columns, start?.columnIndex, end?.columnIndex),
+        recordIds: getItemsInRange(recordIds, start?.rowIndex, end?.rowIndex),
+        columnIds: getItemsInRange(columnIds, start?.columnIndex, end?.columnIndex),
     };
 };
 
@@ -32,12 +22,12 @@ const useNormalizeSelectionHandler = () => {
     const { store: datatableStore } = useDataTableStoreRef();
 
     return useCallback(
-        ({ start, end }: { start: CellIndexes; end: CellIndexes }) => {
+        ({ start, end }: SelectionIndices) => {
             return normalizeSelectionHandler({
                 start,
                 end,
-                columns: datatableStore.current.columns,
-                records: datatableStore.current.records,
+                columnIds: datatableStore.current.columns,
+                recordIds: datatableStore.current.records,
             });
         },
         [datatableStore],

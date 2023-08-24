@@ -1,12 +1,12 @@
+import type { CellIndices } from '../../types';
 import { normalizeCellHandler } from '../useNormalizeCellHandler';
-import type { CellIndexes } from '../../cell-selection';
 
 const records = ['record-1', 'record-2', 'record-3', 'record-4', 'record-5'];
 const columns = ['column-1', 'column-2', 'column-3', 'column-4', 'column-5'];
 
 describe('normalizeCellHandler', () => {
     it('should return correct ids for given column and row indexes', function () {
-        const selectionIndexes: CellIndexes = {
+        const selectionIndexes: CellIndices = {
             columnIndex: 2,
             rowIndex: 1,
         };

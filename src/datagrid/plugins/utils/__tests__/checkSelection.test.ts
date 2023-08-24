@@ -1,8 +1,7 @@
 import checkSelection from '../checkSelection';
-import type { SelectionIndexes } from '../../types';
-import type { CellIndexes } from '../../cell-selection';
+import type { CellIndices, SelectionIndices } from '../../types';
 
-const selection: SelectionIndexes = {
+const selection: SelectionIndices = {
     start: {
         columnIndex: 2,
         rowIndex: 1,
@@ -15,7 +14,7 @@ const selection: SelectionIndexes = {
 
 describe('checkSelection', () => {
     it('should return true if the cell is within the selection', () => {
-        const cell: CellIndexes = {
+        const cell: CellIndices = {
             columnIndex: 2,
             rowIndex: 3,
         };
@@ -25,7 +24,7 @@ describe('checkSelection', () => {
         expect(isInSelection).toBe(true);
     });
     it('should return true if the cell is within the selection even if start and end are reversed', () => {
-        const cell: CellIndexes = {
+        const cell: CellIndices = {
             columnIndex: 2,
             rowIndex: 3,
         };
@@ -36,7 +35,7 @@ describe('checkSelection', () => {
     });
 
     it('should return false if the cell is not within the selection', () => {
-        const cell: CellIndexes = {
+        const cell: CellIndices = {
             columnIndex: 5,
             rowIndex: 3,
         };

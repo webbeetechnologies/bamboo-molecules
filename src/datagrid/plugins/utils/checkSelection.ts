@@ -1,8 +1,8 @@
-import type { SelectionIndexes } from '../types';
+import type { SelectionIndices } from '../types';
 
 // TODO - add testcases
 const checkSelection = (
-    selection: SelectionIndexes,
+    selection: SelectionIndices,
     cell: { columnIndex: number; rowIndex: number },
 ) => {
     const { rowIndex, columnIndex } = cell;
