@@ -106,8 +106,6 @@ function Modal(
             ...restStyle
         } = componentStyles;
 
-        console.log({ restStyle, style });
-
         return {
             animationScale: _animationScale,
             backdropStyle: [
