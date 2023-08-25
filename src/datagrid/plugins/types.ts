@@ -2,21 +2,30 @@ import type { RefObject } from 'react';
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules';
 
 import type { PluginHandle } from './createPlugin';
-import type { CellIndexes } from './cell-selection';
 
-export type Cell = CellIndexes & {
+export type CellIndices = {
+    rowIndex: number;
+    columnIndex: number;
+};
+
+export type Cell = CellIndices & {
     rowId: TDataTableRow;
     columnId: TDataTableColumn;
 };
 
-export type SelectionIndexes = {
-    start: CellIndexes;
-    end: CellIndexes;
+export type SelectionIndices = {
+    start: CellIndices;
+    end: CellIndices;
 };
 
 export type Selection = {
     start: Cell;
     end: Cell;
+};
+
+export type TableSelection = SelectionIndices & {
+    recordIds: TDataTableRow[];
+    columnIds: TDataTableColumn[];
 };
 
 export enum PluginEvents {
