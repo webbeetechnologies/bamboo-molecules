@@ -16,6 +16,7 @@ type GroupMetaRecord = GroupMeta & {
     id: string;
     groupId: string;
     isRealGroup?: boolean;
+    isCollapsed: boolean;
 };
 
 export type GroupHeader = GroupMetaRecord & {
@@ -34,6 +35,7 @@ export type GroupRecord = {
     groupId: string;
     index: number;
     rowType: 'data';
+    isCollapsed: boolean;
 };
 
 export type GroupedData = GroupRecord | GroupHeader | GroupFooter;
@@ -63,7 +65,10 @@ const getPrimitiveValue = (value: any): PrimitiveTypes => {
     return keyStore.get(value);
 };
 
-const getIdFromConstants = (filters: GroupConstantValues[], { prefix = '', suffix = '' } = {}) => {
+export const getIdFromConstants = (
+    filters: GroupConstantValues[],
+    { prefix = '', suffix = '' } = {},
+) => {
     return [
         prefix || ([] as string[]),
         ...filters.map(x => `${x.field}_${getPrimitiveValue(x.value)}`),
@@ -79,22 +84,26 @@ type Meta = {
     isLast: boolean;
     isRealGroup?: boolean;
     recordCount: number;
+    isCollapsed: boolean;
 };
 
 const makeNested = <T extends RecordWithId>(args: {
     records: T[];
     groups: TypedRecordSort<T>[];
     getIndex: () => number;
+    collapsedGroupIds: string[];
     groupedDataMeta?: Meta;
 }): GroupedData[] => {
     const {
         records,
         groups,
         getIndex,
+        collapsedGroupIds,
         groupedDataMeta = {
             isFirst: true,
             isLast: true,
             groupConstants: [],
+            isCollapsed: false,
             recordCount: records.length,
         },
     } = args;
@@ -129,6 +138,7 @@ const makeNested = <T extends RecordWithId>(args: {
                 isOnly: restGroupMeta.isFirst && restGroupMeta.isLast,
                 ...restGroupMeta,
                 isRealGroup: restGroupMeta.isRealGroup ?? true,
+                isCollapsed: collapsedGroupIds.includes(groupId) && arg.rowType === 'footer',
                 groupConstants: getCachedConstants(groupId, restGroupMeta.groupConstants),
             },
         ];
@@ -154,6 +164,7 @@ const makeNested = <T extends RecordWithId>(args: {
             indexInGroup: i,
             groupId,
             rowType: RowType.DATA,
+            isCollapsed: groupedDataMeta.isCollapsed,
         }));
 
         return data.concat(makeFooter(groupedDataMeta));
@@ -170,26 +181,31 @@ const makeNested = <T extends RecordWithId>(args: {
             records: groupedData[key],
             groups: pending,
             getIndex,
+            collapsedGroupIds,
             groupedDataMeta: groupMeta,
         });
 
     const createGroupItem = (key: PrimitiveTypes, i: number, self: PrimitiveTypes[]) => {
         const currentValue = keyStoreReversed.get(key);
+
+        const groupConstants = [
+            ...groupedDataMeta.groupConstants,
+            {
+                field: currentField as string,
+                value: currentValue,
+            },
+        ];
+
         const groupMeta = {
             isFirst: i === 0,
             isLast: self.length - 1 === i,
             recordCount: groupedData[String(key)].length,
-            groupConstants: [
-                ...groupedDataMeta.groupConstants,
-                {
-                    field: currentField as string,
-                    value: currentValue,
-                },
-            ],
+            groupConstants,
+            isCollapsed: collapsedGroupIds.includes(getIdFromConstants(groupConstants)),
         };
 
         return ([] as GroupedData[])
-            .concat(makeHeader(groupMeta))
+            .concat(makeHeader({ ...groupMeta, isCollapsed: groupedDataMeta.isCollapsed }))
             .concat(makeGroupedData(String(key), groupMeta))
             .concat(pending.length ? makeFooter(groupMeta) : []);
     };
@@ -205,6 +221,7 @@ const makeNested = <T extends RecordWithId>(args: {
                   isLast: false,
                   groupConstants: [],
                   recordCount: records.length,
+                  isCollapsed: groupedDataMeta.isCollapsed,
               }),
     ].flat();
 };
@@ -212,6 +229,7 @@ const makeNested = <T extends RecordWithId>(args: {
 const prepareFlattenedDataWithGroups = <T extends RecordWithId = RecordWithId>(
     modelRecords: T[],
     groupRecordsBy: TypedRecordSort<T>[] = [],
+    collapsedGroupIds: string[],
 ) => {
     let index = 0;
     keyStoreReversed.clear();
@@ -219,7 +237,10 @@ const prepareFlattenedDataWithGroups = <T extends RecordWithId = RecordWithId>(
         records: modelRecords,
         groups: groupRecordsBy,
         getIndex: () => index++,
-    }).flat();
+        collapsedGroupIds,
+    })
+        .flat()
+        .filter(({ isCollapsed }) => !isCollapsed);
 };
 
 export const isGroupFooter = (x: GroupedData): x is GroupFooter => x.rowType === RowType.FOOTER;
@@ -229,8 +250,13 @@ export const isDataRow = (x: GroupedData): x is GroupHeader => x.rowType === Row
 export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
     modelRecords: T[],
     groupRecordsBy?: TypedRecordSort<T>[],
+    collapsedGroupIds: string[] = [],
 ) => {
-    const groupedData = prepareFlattenedDataWithGroups(modelRecords, groupRecordsBy);
+    const groupedData = prepareFlattenedDataWithGroups(
+        modelRecords,
+        groupRecordsBy,
+        collapsedGroupIds,
+    );
 
     return {
         groupedRecords: groupedData,

@@ -100,7 +100,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
                     borderColor: 'colors.stateLayer.disabled.onSurface',
                 },
                 hovered: {
-                    backgroundColor: 'colors.primaryContainerOnHover',
+                    backgroundColor: 'colors.stateLayer.hover.primary',
                 },
             },
         },

@@ -12,9 +12,9 @@ export const useActionState = (
 ) => {
     const ref = useRef(null);
     const actionsRef = props.ref ?? ref;
-    const hovered = useHover(actionsRef) || props.hovered;
-    const pressed = useActive(actionsRef) || props.pressed;
-    const focused = useFocus(actionsRef) || props.focused;
+    const hovered = useHover(actionsRef) || !!props.hovered;
+    const pressed = useActive(actionsRef) || !!props.pressed;
+    const focused = useFocus(actionsRef) || !!props.focused;
 
     return {
         actionsRef,
