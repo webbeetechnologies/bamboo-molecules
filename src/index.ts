@@ -182,6 +182,7 @@ export {
     extractStyles,
     registerMolecule,
     createContextBridge,
+    registerPortalContext,
 } from './core';
 
 export { withRipple, withActionState, CallbackActionState, typedMemo } from './hocs';
