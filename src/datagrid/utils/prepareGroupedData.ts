@@ -34,6 +34,7 @@ export type GroupRecord = {
     level: number;
     groupId: string;
     index: number;
+    indexInGroup: number;
     rowType: 'data';
     isCollapsed: boolean;
 };

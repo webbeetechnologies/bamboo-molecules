@@ -1,6 +1,7 @@
 import type { ComponentPropsWithRef, ComponentType, ReactNode } from 'react';
 import type { FlatListProps, ScrollViewProps, ViewProps } from 'react-native';
 import type { ScrollView } from 'react-native';
+import type { ViewAbilityConfigPair } from 'src/datagrid/types';
 
 type RowProps = Omit<ViewProps, 'children'> & { size?: string };
 
@@ -9,7 +10,11 @@ export type TDataTableColumn = string | number;
 export type TDataTableRow = string | number;
 
 export interface DataTableComponentProps<T = any> {
-    FlatListComponent?: ComponentType<FlatListProps<T>>;
+    FlatListComponent?: ComponentType<
+        Omit<FlatListProps<T>, 'viewabilityConfigCallbackPairs'> & {
+            viewabilityConfigCallbackPairs: ViewAbilityConfigPair[];
+        }
+    >;
     ScrollViewComponent?: ComponentType<ComponentPropsWithRef<typeof ScrollView>>;
 }
 
@@ -29,7 +34,10 @@ export type RenderCellProps = {
 } & RenderHeaderCellProps;
 
 export type ScrollProps = {
-    verticalScrollProps?: Omit<FlatListProps<any>, 'data' | 'renderItem'>;
+    verticalScrollProps?: Omit<
+        FlatListProps<any>,
+        'data' | 'renderItem' | 'viewabilityConfigCallbackPairs'
+    > & { viewabilityConfigCallbackPairs?: ViewAbilityConfigPair[] };
     horizontalScrollProps?: ScrollViewProps;
 };
 
