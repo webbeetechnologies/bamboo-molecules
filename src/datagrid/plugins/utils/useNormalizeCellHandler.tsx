@@ -1,36 +1,33 @@
 // TODO - fix alias issue with Jest
-import { TDataTableColumn, TDataTableRow, useDataTableStoreRef } from '../../../components';
 import { useCallback } from 'react';
-import type { CellIndices } from '../types';
-
-export const normalizeCellHandler = ({
-    columnIndex,
-    rowIndex,
-    columns,
-    records,
-}: CellIndices & { records: TDataTableRow[]; columns: TDataTableColumn[] }) => {
-    return {
-        columnIndex,
-        rowIndex,
-        rowId: records[rowIndex],
-        columnId: columns[columnIndex],
-    };
-};
+import { GroupRecord, useTableManagerStoreRef } from '../..';
+import { useDataTableStoreRef } from '../../../components';
 
 // TODO - add testcases
 const useNormalizeCellHandler = () => {
-    const { store: datatableStore } = useDataTableStoreRef();
+    const { store: tableManagerStore } = useTableManagerStoreRef();
+    const { store: dataTableStore } = useDataTableStoreRef();
 
     return useCallback(
         ({ columnIndex, rowIndex }: { columnIndex: number; rowIndex: number }) => {
-            return normalizeCellHandler({
+            const getCorrectRowIndex = (index: number) => {
+                if (tableManagerStore.current.records[index].rowType === 'data') return index;
+                throw new Error('Record is not a data row');
+            };
+
+            const correctIndex = getCorrectRowIndex(rowIndex);
+            const { index, id: rowId } = tableManagerStore.current.records[
+                correctIndex
+            ] as GroupRecord;
+
+            return {
                 columnIndex,
-                rowIndex,
-                records: datatableStore.current.records,
-                columns: datatableStore.current.columns,
-            });
+                rowIndex: index,
+                rowId,
+                columns: dataTableStore.current.columns[columnIndex],
+            };
         },
-        [datatableStore],
+        [tableManagerStore, dataTableStore],
     );
 };
 
