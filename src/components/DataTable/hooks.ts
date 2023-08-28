@@ -1,6 +1,7 @@
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 import { useCallback, useRef } from 'react';
-import type { ViewToken, ViewabilityConfigCallbackPairs } from 'react-native';
+import type { ViewToken } from 'react-native';
+import type { ViewAbilityConfigPair } from 'src/datagrid/types';
 import { useDataTable, useDataTableColumnWidth } from './DataTableContext';
 import { DEFAULT_VIEWABILITY_CONFIG } from './constants';
 import type { TDataTableColumn, TDataTableRow } from './types';
@@ -40,7 +41,7 @@ export const useIsCellWithinBounds = (
 };
 
 export const useViewabilityConfigCallbackPairs = (
-    viewabilityConfigCallbackPairs: ViewabilityConfigCallbackPairs,
+    viewabilityConfigCallbackPairs: ViewAbilityConfigPair[],
 ) => {
     const { set: setStore } = useStoreRef();
 
@@ -53,7 +54,7 @@ export const useViewabilityConfigCallbackPairs = (
         [setStore],
     );
 
-    return useRef<ViewabilityConfigCallbackPairs>([
+    return useRef([
         {
             viewabilityConfig: DEFAULT_VIEWABILITY_CONFIG,
             onViewableItemsChanged,
