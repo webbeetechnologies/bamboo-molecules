@@ -10,7 +10,7 @@ import {
 } from 'react';
 import typedMemo from '../hocs/typedMemo';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
-import { usePrevious } from '..';
+import { usePrevious } from '../hooks';
 
 type StoreDataType = Record<string, any>;
 
