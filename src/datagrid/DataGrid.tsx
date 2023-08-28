@@ -38,7 +38,7 @@ import {
     useExpandCollapseGroupsMethods,
 } from './plugins';
 import PluginsManager from './plugins/plugins-manager';
-import type { FieldTypes, ViewAbilityConfigPair } from './types';
+import type { FieldTypes } from './types';
 import { RecordWithId, addDataToCallbackPairs, prepareGroupedData } from './utils';
 
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
@@ -58,9 +58,6 @@ type DataGridPropsBase = Omit<
         renderCell?: DataTableProps['renderCell'];
         plugins?: Plugin[];
         groups?: TDataTableColumn[];
-        verticalScrollProps?: DataTableProps['verticalScrollProps'] & {
-            viewabilityConfigCallbackPairs?: ViewAbilityConfigPair[];
-        };
     };
 
 export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
