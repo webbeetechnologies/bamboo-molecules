@@ -17,8 +17,8 @@ import {
     useColumnResizePlugin,
     useCopyPastePlugin,
     useExpandCollapseGroupsPlugin,
+    useDragAndExtendPlugin,
 } from '../../../src/datagrid/plugins';
-import { useDragAndExtendPlugin } from '../../../src/datagrid/plugins/drag-and-extend';
 
 const containerStyle = { width: '100%' };
 

@@ -1,5 +1,5 @@
-import type { RefObject } from 'react';
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules';
+import type { RefObject } from 'react';
 
 import type { PluginHandle } from './createPlugin';
 

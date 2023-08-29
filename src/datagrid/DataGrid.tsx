@@ -1,45 +1,45 @@
-import { ComponentType, ReactNode, useCallback, useMemo, useRef } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
-import { StyleSheet } from 'react-native';
 import { typedMemo, useLatest } from '@bambooapp/bamboo-molecules';
 import type {
-    TDataTableColumn,
-    TDataTableRow,
     DataTableProps,
     MenuProps,
     RenderCellProps,
     RenderHeaderCellProps,
+    TDataTableColumn,
+    TDataTableRow,
 } from '@bambooapp/bamboo-molecules/components';
+import { ComponentType, ReactNode, useCallback, useMemo, useRef } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { useMolecules, useToken } from '../hooks';
 import {
+    CellRenderer,
+    CellWrapperComponent,
+    ColumnHeaderCell,
+    ContextMenu,
+    RowWrapperComponent,
+    TableHeaderRow,
+} from './components';
+import {
     FieldTypesProvider,
-    TableManagerProvider,
-    useTableManagerStoreRef,
     HooksContextType,
     HooksProvider,
+    TableManagerProvider,
     useRowRenderer,
     useShouldContextMenuDisplayed,
+    useTableManagerStoreRef,
 } from './contexts';
-import PluginsManager from './plugins/plugins-manager';
+import { FieldTypes as DefaultFieldTypes } from './field-types';
+import { useContextMenu } from './hooks';
 import {
+    Plugin,
     useCellSelectionMethods,
     useCellSelectionPlugin,
-    Plugin,
     useExpandCollapseGroupsMethods,
 } from './plugins';
-import {
-    ContextMenu,
-    ColumnHeaderCell,
-    CellRenderer,
-    TableHeaderRow,
-    CellWrapperComponent,
-    RowWrapperComponent,
-} from './components';
-import { useContextMenu } from './hooks';
+import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
-import { FieldTypes as DefaultFieldTypes } from './field-types';
-import { RecordWithId, prepareGroupedData } from './utils';
+import { RecordWithId, addDataToCallbackPairs, prepareGroupedData } from './utils';
 
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
 
@@ -144,11 +144,12 @@ const DataGrid = ({
     );
 
     const verticalScrollProps = useMemo(
-        () => ({
-            ..._verticalScrollProps,
-            CellRendererComponent: RowWrapperComponent,
-        }),
-        [_verticalScrollProps],
+        () =>
+            addDataToCallbackPairs(store, {
+                ..._verticalScrollProps,
+                CellRendererComponent: RowWrapperComponent,
+            }),
+        [store, _verticalScrollProps],
     );
 
     const onContextMenuOpen = useCallback(

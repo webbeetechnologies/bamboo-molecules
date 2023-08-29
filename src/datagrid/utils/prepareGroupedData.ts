@@ -34,6 +34,7 @@ export type GroupRecord = {
     level: number;
     groupId: string;
     index: number;
+    indexInGroup: number;
     rowType: 'data';
     isCollapsed: boolean;
 };
@@ -54,13 +55,25 @@ const addToKeyStoreReversed = (key: PrimitiveTypes, value: any = key) => {
     return key;
 };
 
-const getPrimitiveValue = (value: any): PrimitiveTypes => {
+/**
+ *
+ * Expect object to always have an id property.
+ *
+ */
+const normalizedItemKey = (prefix: string | number, value: RecordWithId | RecordWithId[]) => {
+    return [prefix]
+        .concat(([] as RecordWithId[]).concat(value).map(item => String(item?.id)))
+        .join('__');
+};
+
+const getPrimitiveValue = (field: string, value: any): PrimitiveTypes => {
     if (!value) return addToKeyStoreReversed(value);
     if (typeof value !== 'object') return addToKeyStoreReversed(value);
     if (typeof value === 'function') return '';
 
-    if (!keyStore.has(value))
-        keyStore.set(value, addToKeyStoreReversed(JSON.stringify(value), value));
+    if (!keyStore.has(value)) {
+        keyStore.set(value, addToKeyStoreReversed(normalizedItemKey(field, value), value));
+    }
 
     return keyStore.get(value);
 };
@@ -71,7 +84,7 @@ export const getIdFromConstants = (
 ) => {
     return [
         prefix || ([] as string[]),
-        ...filters.map(x => `${x.field}_${getPrimitiveValue(x.value)}`),
+        ...filters.map(x => `${x.field}_${getPrimitiveValue(x.field, x.value)}`),
         suffix || ([] as string[]),
     ]
         .flat()
@@ -170,10 +183,14 @@ const makeNested = <T extends RecordWithId>(args: {
         return data.concat(makeFooter(groupedDataMeta));
     }
 
-    const groupedData = groupBy(records, record => getPrimitiveValue(record[currentField]));
+    const groupedData = groupBy(records, record =>
+        getPrimitiveValue(currentField as string, record[currentField]),
+    );
 
     const texts = Array.from(
-        new Set(records.map(record => getPrimitiveValue(record[currentField]))),
+        new Set(
+            records.map(record => getPrimitiveValue(currentField as string, record[currentField])),
+        ),
     );
 
     const makeGroupedData = (key: string, groupMeta: Meta) =>
