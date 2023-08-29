@@ -104,7 +104,7 @@ const normalizeSelectionForGrouping = (
     };
 
     const correctStartRowIndex = getCorrectRowIndex(start.rowIndex);
-    const { index: startRowIndexInGroup } = store.current.records[
+    const { index: startRowIndexInGroup, groupConstants } = store.current.records[
         correctStartRowIndex
     ] as GroupRecord;
 
@@ -121,6 +121,7 @@ const normalizeSelectionForGrouping = (
             ...end,
             rowIndex: endRowIndexInGroup,
         },
+        groupConstants,
     };
 };
 
