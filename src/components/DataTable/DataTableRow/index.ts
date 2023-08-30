@@ -7,7 +7,7 @@ export const dataTableRowStyles: ComponentStylePropWithResolvers<
     ViewStyle,
     'selected' | 'hovered' | 'selected_hovered'
 > = {
-    width: '100%',
+    flex: 1,
 
     sizes: {
         sm: {
