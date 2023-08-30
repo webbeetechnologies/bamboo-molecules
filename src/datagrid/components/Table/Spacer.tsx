@@ -76,6 +76,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
             [
                 props.rowProps?.style,
                 isGroupsEnabled && level === 0 ? { minHeight: spacerWidth } : null,
+                isGroupsEnabled && { flex: 1 },
                 groupMeta.isRealGroup === false
                     ? { borderLeftWidth: 0, borderRightWidth: 0 }
                     : null,
