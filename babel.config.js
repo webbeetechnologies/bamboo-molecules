@@ -28,6 +28,17 @@ module.exports = api => {
     api.cache(true);
     const presets = [['babel-preset-expo', { jsxRuntime: 'automatic' }]];
 
+    // const presets = [
+    //     [
+    //         '@babel/preset-env',
+    //         {
+    //             targets: { node: '18' },
+    //         },
+    //     ],
+    //     ['@babel/preset-react', { runtime: 'automatic' }],
+    //     '@babel/preset-typescript',
+    // ];
+
     const plugins = process.env.MOLECULES_ENV === 'storybook' ? storybookPlugins : bundlePlugins;
 
     return {
