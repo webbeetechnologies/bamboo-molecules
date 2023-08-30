@@ -60,10 +60,11 @@ const addToKeyStoreReversed = (key: PrimitiveTypes, value: any = key) => {
  * Expect object to always have an id property.
  *
  */
-const normalizedItemKey = (prefix: string | number, value: RecordWithId | RecordWithId[]) => {
-    return [prefix]
-        .concat(([] as RecordWithId[]).concat(value).map(item => String(item?.id)))
-        .join('__');
+const normalizedItemKey = (prefix: string | number, dirtyValue: RecordWithId | RecordWithId[]) => {
+    const ids = ([] as RecordWithId[]).concat(dirtyValue).map(item => String(item?.id));
+    const value = [prefix].concat(ids.length ? ids : 'empty');
+
+    return value.join('__');
 };
 
 const getPrimitiveValue = (field: string, value: any): PrimitiveTypes => {
@@ -71,11 +72,12 @@ const getPrimitiveValue = (field: string, value: any): PrimitiveTypes => {
     if (typeof value !== 'object') return addToKeyStoreReversed(value);
     if (typeof value === 'function') return '';
 
-    if (!keyStore.has(value)) {
-        keyStore.set(value, addToKeyStoreReversed(normalizedItemKey(field, value), value));
+    const key = normalizedItemKey(field, value);
+    if (!keyStoreReversed.has(key)) {
+        keyStore.set(value, addToKeyStoreReversed(key, value));
     }
 
-    return keyStore.get(value);
+    return key;
 };
 
 export const getIdFromConstants = (
@@ -151,7 +153,6 @@ const makeNested = <T extends RecordWithId>(args: {
                 isOnly: restGroupMeta.isFirst && restGroupMeta.isLast,
                 ...restGroupMeta,
                 isRealGroup: restGroupMeta.isRealGroup ?? true,
-                isCollapsed: collapsedGroupIds.includes(groupId) && arg.rowType === 'footer',
                 groupConstants: getCachedConstants(groupId, restGroupMeta.groupConstants),
             },
         ];
@@ -213,12 +214,15 @@ const makeNested = <T extends RecordWithId>(args: {
             },
         ];
 
+        const isGroupCollapsed = (groupId: string) =>
+            collapsedGroupIds.some(collapsedId => groupId.startsWith(collapsedId));
+
         const groupMeta = {
             isFirst: i === 0,
             isLast: self.length - 1 === i,
             recordCount: groupedData[String(key)].length,
             groupConstants,
-            isCollapsed: collapsedGroupIds.includes(getIdFromConstants(groupConstants)),
+            isCollapsed: isGroupCollapsed(getIdFromConstants(groupConstants)),
         };
 
         return ([] as GroupedData[])
