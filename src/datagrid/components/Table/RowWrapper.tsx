@@ -12,7 +12,7 @@ const RowWrapper = ({ style, index, ...rest }: ViewProps & { index: number }) =>
     )!;
 
     const rowRendererStyle = useMemo(
-        () => [style, isRowFocused && { zIndex: 100 }],
+        () => [style, isRowFocused && { zIndex: 9 }],
         [isRowFocused, style],
     );
 
