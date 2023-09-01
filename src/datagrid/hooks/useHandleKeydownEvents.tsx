@@ -104,22 +104,28 @@ const normalizeSelectionForGrouping = (
     };
 
     const correctStartRowIndex = getCorrectRowIndex(start.rowIndex);
-    const { index: startRowIndexInGroup, groupConstants } = store.current.records[
-        correctStartRowIndex
-    ] as GroupRecord;
+    const {
+        index: startIndex,
+        indexInGroup: startRowIndexInGroup,
+        groupConstants,
+    } = store.current.records[correctStartRowIndex] as GroupRecord;
 
     const correctEndRowIndex = getCorrectRowIndex(end.rowIndex);
-    const { index: endRowIndexInGroup } = store.current.records[correctEndRowIndex] as GroupRecord;
+    const { index: endIndex, indexInGroup: endRowIndexInGroup } = store.current.records[
+        correctEndRowIndex
+    ] as GroupRecord;
 
     return {
         ...rest,
         start: {
             ...start,
-            rowIndex: startRowIndexInGroup,
+            rowIndex: startIndex,
+            rowIndexInGroup: startRowIndexInGroup,
         },
         end: {
             ...end,
-            rowIndex: endRowIndexInGroup,
+            rowIndex: endIndex,
+            rowIndexInGroup: endRowIndexInGroup,
         },
         groupConstants,
     };

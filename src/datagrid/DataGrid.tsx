@@ -232,7 +232,7 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         const selectionPlugin = useCellSelectionPlugin({});
 
         const plugins = useMemo(
-            () => [...(_plugins || []), selectionPlugin],
+            () => [selectionPlugin, ...(_plugins || [])],
             [_plugins, selectionPlugin],
         );
 
