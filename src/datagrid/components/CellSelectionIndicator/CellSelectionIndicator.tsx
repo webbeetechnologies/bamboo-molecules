@@ -18,7 +18,7 @@ const useBoolean = () => false;
 const CellSelectionIndicator = ({ hovered, style, ...rest }: Props) => {
     const { StateLayer } = useMolecules();
 
-    const { columnIndex, rowIndex } = useDataTableCell();
+    const { columnIndex, rowIndex, row, column } = useDataTableCell();
 
     const { hovered: rowHovered } = useDataTableRow();
 
@@ -32,7 +32,7 @@ const CellSelectionIndicator = ({ hovered, style, ...rest }: Props) => {
 
     useProcessDragCellSelection({
         hovered,
-        cell: { columnIndex, rowIndex },
+        cell: { columnIndex, rowIndex, rowId: row, columnId: column },
     });
 
     useOnDragSelection({ hovered, rowHovered, columnIndex, rowIndex });

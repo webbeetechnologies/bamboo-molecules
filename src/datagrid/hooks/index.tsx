@@ -3,3 +3,4 @@ export {
     default as useHandleKeydownEvents,
     Props as UseHandleKeydownEventsProps,
 } from './useHandleKeydownEvents';
+export { default as useHandleClickOutside } from './useHandleClickOutside';

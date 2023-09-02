@@ -1,4 +1,4 @@
-import { memo, MutableRefObject, PropsWithChildren, RefObject, useCallback, useMemo } from 'react';
+import { memo, MutableRefObject, PropsWithChildren, RefObject, useMemo } from 'react';
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
@@ -17,15 +17,19 @@ export type TableManagerContextProviderProps = {
 export type TableManagerContextType = TableManagerContextProviderProps & {
     focusedCell: {
         rowIndex?: number;
+        rowId?: TDataTableRow;
+        columnId: TDataTableColumn;
         columnIndex: number;
         type: 'column' | 'cell';
     } | null;
     focusedCellRef: MutableRefObject<any> | null;
+    isEditing: boolean;
 };
 
 const defaultContextValue = {
     focusedCell: null,
     focusedCellRef: null,
+    isEditing: false,
     withContextMenu: false,
     spacerWidth: 0,
 };
@@ -67,26 +71,20 @@ export const TableManagerProvider = memo(
 export const useTableManagerStoreRef = useStoreRef;
 
 export const useIsCellFocused = (
-    rowIndex: number,
-    columnIndex: number,
-): [boolean, (cell: TableManagerContextType['focusedCell']) => void] => {
-    const [isFocused, setStore] = useTableManagerSelector(store => {
-        return (
-            store.focusedCell?.rowIndex === rowIndex &&
-            store.focusedCell?.columnIndex === columnIndex
-        );
-    });
-
-    const setFocusedCell = useCallback(
-        (cell: TableManagerContextType['focusedCell']) => {
-            setStore(() => ({
-                focusedCell: cell,
-            }));
-        },
-        [setStore],
-    );
-
-    return [isFocused, setFocusedCell];
+    rowId: TDataTableRow,
+    columnId: TDataTableColumn,
+): {
+    isFocused: boolean;
+    isEditing: boolean;
+} => {
+    return useTableManagerValueSelector(store => {
+        const _isFocused =
+            store.focusedCell?.rowId === rowId && store.focusedCell?.columnId === columnId;
+        return {
+            isFocused: _isFocused,
+            isEditing: _isFocused && store.isEditing,
+        };
+    }, shallowCompare);
 };
 
 export const useShouldContextMenuDisplayed = () => {

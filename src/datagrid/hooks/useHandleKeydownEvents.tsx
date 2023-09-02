@@ -41,7 +41,8 @@ const useHandleKeydownEvents = ({ ref }: Props) => {
 
             if (
                 !tableManagerStore.current.focusedCell ||
-                tableManagerStore.current.focusedCell.type === 'column'
+                tableManagerStore.current.focusedCell.type === 'column' ||
+                tableManagerStore.current.isEditing
             )
                 return;
 

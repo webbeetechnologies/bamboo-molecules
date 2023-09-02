@@ -10,10 +10,10 @@ const useBoolean = () => false;
 // TODO - inject this to Provider
 const CellWrapperComponent = ({ style, ...rest }: DataCellProps) => {
     const { View } = useMolecules();
-    const { rowIndex, columnIndex } = useDataTableCell();
+    const { row, column, rowIndex, columnIndex } = useDataTableCell();
     const { useIsDragHandleVisible = useBoolean } = useDragAndExtendMethods() || emptyObj;
 
-    const [isFocused] = useIsCellFocused(rowIndex, columnIndex)!;
+    const { isFocused } = useIsCellFocused(row, column)!;
     const isVisible = useIsDragHandleVisible({ columnIndex, rowIndex, isFocused });
 
     const cellRendererStyle = useMemo(
