@@ -1,4 +1,4 @@
-import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import {
     StyleSheet,
     Pressable,
@@ -46,7 +46,7 @@ const _DataCell = ({ innerContainerProps = emptyObj, style, ...rest }: Props, re
 
     const { type, ...restField } = useField(column);
     const { readonly, displayEditorOnHover, showEditor } = useFieldType(type);
-    const [isFocused, setFocusedCell] = useIsCellFocused(rowIndex, columnIndex);
+    const { isFocused, isEditing } = useIsCellFocused(row, column);
     const { set: setTableManagerStore } = useTableManagerStoreRef();
 
     const { useOnSelectCell, useOnDragAndSelectStart, useOnDragAndSelectEnd } =
@@ -57,35 +57,40 @@ const _DataCell = ({ innerContainerProps = emptyObj, style, ...rest }: Props, re
 
     const isTappedRef = useRef(0);
 
-    const [isEditing, setIsEditing] = useState(false);
-
     const [value, setValue] = useCellValue(row, column);
 
     const onFocus = useCallback(
         (e: GestureResponderEvent) => {
-            const cell = { columnIndex, rowIndex };
+            const cell = { columnIndex, rowIndex, columnId: column, rowId: row };
 
             if ((e as unknown as MouseEvent).shiftKey) {
-                onSelectCell(cell);
+                onSelectCell({ columnIndex, rowIndex });
                 return;
             }
 
-            setFocusedCell({
-                ...cell,
-                type: 'cell',
-            });
+            setTableManagerStore(() => ({
+                focusedCell: {
+                    ...cell,
+                    type: 'cell',
+                },
+                isEditing: false,
+            }));
         },
-        [columnIndex, onSelectCell, rowIndex, setFocusedCell],
+        [column, columnIndex, onSelectCell, row, rowIndex, setTableManagerStore],
     );
 
     const onPress = useCallback(
         (e: GestureResponderEvent) => {
+            if (isEditing) return;
+
             const delta = new Date().getTime() - isTappedRef.current;
 
             if (delta < 500) {
                 if (readonly || displayEditorOnHover) return;
 
-                setIsEditing(prev => !prev);
+                setTableManagerStore(prev => ({
+                    isEditing: !prev.isEditing,
+                }));
 
                 return;
             }
@@ -94,7 +99,7 @@ const _DataCell = ({ innerContainerProps = emptyObj, style, ...rest }: Props, re
 
             onFocus(e);
         },
-        [displayEditorOnHover, onFocus, readonly],
+        [displayEditorOnHover, isEditing, onFocus, readonly, setTableManagerStore],
     );
 
     const displayViewRenderer = useMemo(() => {
@@ -105,7 +110,7 @@ const _DataCell = ({ innerContainerProps = emptyObj, style, ...rest }: Props, re
             : !isEditing;
     }, [hovered, isEditing, isFocused, readonly, showEditor]);
 
-    const { containerStyle, innerContainerStyle } = useMemo(
+    const { containerStyle, innerContainerStyle, dataSet } = useMemo(
         () => ({
             containerStyle: [
                 styles.cellContainer,
@@ -114,6 +119,7 @@ const _DataCell = ({ innerContainerProps = emptyObj, style, ...rest }: Props, re
                 style,
             ] as ViewStyle,
             innerContainerStyle: [styles.cell, innerContainerProps.style] as ViewStyle,
+            dataSet: { elementtype: 'cell' },
         }),
         [style, isEditing, innerContainerProps.style],
     );
@@ -121,6 +127,7 @@ const _DataCell = ({ innerContainerProps = emptyObj, style, ...rest }: Props, re
     const onDrag = useMemo(() => {
         return Gesture.Pan()
             .onBegin(() => {
+                onFocus({} as GestureResponderEvent);
                 onDragAndSelectStart({
                     rowIndex,
                     columnIndex,
@@ -129,13 +136,13 @@ const _DataCell = ({ innerContainerProps = emptyObj, style, ...rest }: Props, re
             .onEnd(() => {
                 onDragAndSelectEnd();
             });
-    }, [onDragAndSelectStart, onDragAndSelectEnd, rowIndex, columnIndex]);
+    }, [onFocus, onDragAndSelectStart, rowIndex, columnIndex, onDragAndSelectEnd]);
 
     useEffect(() => {
         if (isFocused || !isEditing) return;
 
-        setIsEditing(false);
-    }, [isEditing, isFocused]);
+        setTableManagerStore(() => ({ isEditing: false }));
+    }, [isEditing, isFocused, setTableManagerStore]);
 
     const handleContextMenu = useCallback(() => {
         onFocus({} as GestureResponderEvent);
@@ -147,7 +154,13 @@ const _DataCell = ({ innerContainerProps = emptyObj, style, ...rest }: Props, re
     useContextMenu({ ref: cellRef, callback: handleContextMenu });
 
     return (
-        <Pressable ref={cellRef} onPress={onPress} style={containerStyle} {...rest}>
+        <Pressable
+            ref={cellRef}
+            onPress={onPress}
+            style={containerStyle}
+            // @ts-ignore
+            dataSet={dataSet}
+            {...rest}>
             <GestureDetector gesture={onDrag}>
                 <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
                     {displayViewRenderer ? (

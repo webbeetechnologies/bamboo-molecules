@@ -30,13 +30,8 @@ import {
     useTableManagerStoreRef,
 } from './contexts';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
-import { useContextMenu } from './hooks';
-import {
-    Plugin,
-    useCellSelectionMethods,
-    useCellSelectionPlugin,
-    useExpandCollapseGroupsMethods,
-} from './plugins';
+import { useContextMenu, useHandleClickOutside } from './hooks';
+import { Plugin, useCellSelectionPlugin, useExpandCollapseGroupsMethods } from './plugins';
 import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
 import { RecordWithId, addDataToCallbackPairs, prepareGroupedData } from './utils';
@@ -107,7 +102,6 @@ const DataGrid = ({
         contextMenuProps || (emptyObj as ContextMenuProps);
 
     const shouldContextMenuDisplayed = useShouldContextMenuDisplayed();
-    const { useResetSelectionOnClickOutside } = useCellSelectionMethods();
 
     const dataRef = useLatest<{ records: TDataTableRow[]; columns: TDataTableColumn[] }>({
         records,
@@ -179,7 +173,7 @@ const DataGrid = ({
     // TODO - move this to plugins
     useContextMenu({ ref: store.current.tableRef, callback: onContextMenuOpen });
 
-    useResetSelectionOnClickOutside();
+    useHandleClickOutside();
 
     return (
         <>
@@ -232,7 +226,7 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         const selectionPlugin = useCellSelectionPlugin({});
 
         const plugins = useMemo(
-            () => [...(_plugins || []), selectionPlugin],
+            () => [selectionPlugin, ...(_plugins || [])],
             [_plugins, selectionPlugin],
         );
 

@@ -3,7 +3,6 @@ import {
     useTableManagerStoreRef,
 } from '@bambooapp/bamboo-molecules/datagrid';
 import { useCallback, useEffect } from 'react';
-import { Platform } from 'react-native';
 
 import { createPlugin } from './createPlugin';
 import { usePluginsDataStoreRef } from './plugins-manager';
@@ -13,21 +12,21 @@ import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler }
 export const CELL_SELECTION_PLUGIN_KEY = 'cell-selection';
 
 const useOnSelectCell = () => {
-    const { store: tableManagerStore, set: setTableManagerStore } = useTableManagerStoreRef();
+    const { store: tableManagerStore } = useTableManagerStoreRef();
     const { set: setStore } = usePluginsDataStoreRef();
     const { beforeCellSelection, afterCellSelection, onCellSelection } = useCellSelectionEvents();
-    const normalizeCell = useNormalizeCellHandler();
     const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(
         (cell: CellIndices) => {
+            // this wouldn't be possible
             if (
                 !tableManagerStore.current.focusedCell ||
                 tableManagerStore.current.focusedCell?.type === 'column'
             ) {
-                setTableManagerStore(() => ({
-                    focusedCell: { ...normalizeCell(cell), type: 'cell' },
-                }));
+                // setTableManagerStore(() => ({
+                //     focusedCell: { ...normalizeCell(cell), type: 'cell' },
+                // }));
 
                 return;
             }
@@ -53,12 +52,10 @@ const useOnSelectCell = () => {
         },
         [
             normalizeSelection,
-            normalizeCell,
             afterCellSelection,
             beforeCellSelection,
             onCellSelection,
             setStore,
-            setTableManagerStore,
             tableManagerStore,
         ],
     );
@@ -66,10 +63,10 @@ const useOnSelectCell = () => {
 
 const allowedTargetIds = ['drag-handle'];
 
-const useResetSelectionOnClickOutside = () => {
+const useOnResetSelectionOnClickOutside = () => {
     const { set: setStore } = usePluginsDataStoreRef();
 
-    const onMouseDown = useCallback(
+    return useCallback(
         (e: MouseEvent) => {
             if (allowedTargetIds.includes((e.target as HTMLDivElement)?.id)) return;
 
@@ -79,16 +76,6 @@ const useResetSelectionOnClickOutside = () => {
         },
         [setStore],
     );
-
-    useEffect(() => {
-        if (Platform.OS !== 'web') return;
-
-        window.addEventListener('mousedown', onMouseDown);
-
-        return () => {
-            window.removeEventListener('mousedown', onMouseDown);
-        };
-    }, [onMouseDown]);
 };
 
 const useOnDragAndSelectStart = () => {
@@ -96,11 +83,11 @@ const useOnDragAndSelectStart = () => {
     const normalizeCell = useNormalizeCellHandler();
 
     return useCallback(
-        (cellIndexes: { columnIndex: number; rowIndex: number }) => {
+        (cell: { columnIndex: number; rowIndex: number }) => {
             setStore(prev => ({
                 [CELL_SELECTION_PLUGIN_KEY]: {
                     ...prev[CELL_SELECTION_PLUGIN_KEY],
-                    start: normalizeCell(cellIndexes),
+                    start: normalizeCell(cell),
                     isSelecting: true,
                 },
             }));
@@ -176,7 +163,7 @@ export const [useCellSelectionPlugin, useCellSelectionEvents, useCellSelectionMe
         ],
         methods: {
             useOnSelectCell,
-            useResetSelectionOnClickOutside,
+            useOnResetSelectionOnClickOutside,
             useOnDragAndSelectStart,
             useOnDragAndSelectEnd,
             useProcessDragCellSelection,
