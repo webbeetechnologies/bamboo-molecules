@@ -32,6 +32,8 @@ const defaultContextValue = {
     isEditing: false,
     withContextMenu: false,
     spacerWidth: 0,
+    records: [],
+    tableRef: {} as RefObject<any>,
 };
 
 export const {
@@ -39,7 +41,7 @@ export const {
     useContext: useTableManagerSelector,
     useContextValue: useTableManagerValueSelector,
     useStoreRef,
-} = createFastContext<TableManagerContextType>(true);
+} = createFastContext<TableManagerContextType>(defaultContextValue, true);
 
 export const TableManagerProvider = memo(
     ({
@@ -50,13 +52,13 @@ export const TableManagerProvider = memo(
         records,
     }: PropsWithChildren<TableManagerContextProviderProps>) => {
         const contextValue = useMemo(
-            () => ({
-                ...defaultContextValue,
-                tableRef,
-                withContextMenu,
-                records,
-                spacerWidth,
-            }),
+            () =>
+                ({
+                    tableRef,
+                    withContextMenu,
+                    records,
+                    spacerWidth,
+                } as TableManagerContextType),
             [tableRef, withContextMenu, records, spacerWidth],
         );
 

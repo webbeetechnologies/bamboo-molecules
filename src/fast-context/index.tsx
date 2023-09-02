@@ -25,9 +25,10 @@ type UseStoreDataReturnType<T> = {
 
 const useStoreData = <IStore extends StoreDataType>(
     value: IStore,
+    defaultValue: IStore | null,
     watch: boolean = false,
 ): UseStoreDataReturnType<IStore> => {
-    const store = useRef<IStore>(value as IStore);
+    const store = useRef<IStore>((value as IStore) || defaultValue);
     const watchRef = useRef(watch);
 
     const get = useCallback(() => store.current, [store]);
@@ -72,7 +73,10 @@ const useStoreData = <IStore extends StoreDataType>(
     };
 };
 
-export const createFastContext = <T extends StoreDataType = {}>(watch: boolean = false) => {
+export const createFastContext = <T extends StoreDataType = {}>(
+    defaultValue: T | null = null,
+    watch: boolean = false,
+) => {
     const context = createContext<UseStoreDataReturnType<T> | null>(null);
 
     return {
@@ -87,7 +91,11 @@ export const createFastContext = <T extends StoreDataType = {}>(watch: boolean =
          * use key prop to unmount and remount if necessary. alternatively use set from the context to update the value.
          *
          */
-        Provider: createProvider<T>(context as Context<UseStoreDataReturnType<T>>, watch),
+        Provider: createProvider<T>(
+            context as Context<UseStoreDataReturnType<T>>,
+            defaultValue,
+            watch,
+        ),
 
         /**
          *
@@ -117,11 +125,12 @@ export const createFastContext = <T extends StoreDataType = {}>(watch: boolean =
 
 export const createProvider = <T extends Record<string, any> = {}>(
     StoreContext: Context<UseStoreDataReturnType<T>>,
+    defaultValue: T | null,
     watch: boolean,
 ) =>
     typedMemo(({ value, children }: { value: T; children: ReactNode }) => {
         return (
-            <StoreContext.Provider value={useStoreData<T>(value, watch) as any}>
+            <StoreContext.Provider value={useStoreData<T>(value, defaultValue, watch) as any}>
                 {children}
             </StoreContext.Provider>
         );
