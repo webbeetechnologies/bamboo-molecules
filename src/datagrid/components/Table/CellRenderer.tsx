@@ -32,11 +32,15 @@ import '../CellBorder';
 export type Props = RenderCellProps &
     Omit<PressableProps, 'ref'> & {
         innerContainerProps?: Partial<ViewProps>;
+        readonly?: boolean;
     };
 
 const emptyObj = {};
 
-const _DataCell = ({ innerContainerProps = emptyObj, style, ...rest }: Props, ref: any) => {
+const _DataCell = (
+    { innerContainerProps = emptyObj, style, readonly: cellReadonly = false, ...rest }: Props,
+    ref: any,
+) => {
     const { View, CellBorder } = useMolecules();
     const cellRef = useRef<any>(null);
 
@@ -81,7 +85,7 @@ const _DataCell = ({ innerContainerProps = emptyObj, style, ...rest }: Props, re
 
     const onPress = useCallback(
         (e: GestureResponderEvent) => {
-            if (isEditing) return;
+            if (isEditing || cellReadonly) return;
 
             const delta = new Date().getTime() - isTappedRef.current;
 
@@ -99,16 +103,16 @@ const _DataCell = ({ innerContainerProps = emptyObj, style, ...rest }: Props, re
 
             onFocus(e);
         },
-        [displayEditorOnHover, isEditing, onFocus, readonly, setTableManagerStore],
+        [cellReadonly, displayEditorOnHover, isEditing, onFocus, readonly, setTableManagerStore],
     );
 
     const displayViewRenderer = useMemo(() => {
-        if (readonly) return true;
+        if (readonly || cellReadonly) return true;
 
         return showEditor
             ? !showEditor({ hovered, focused: isFocused, doubleTapped: isEditing })
             : !isEditing;
-    }, [hovered, isEditing, isFocused, readonly, showEditor]);
+    }, [cellReadonly, hovered, isEditing, isFocused, readonly, showEditor]);
 
     const { containerStyle, innerContainerStyle, dataSet } = useMemo(
         () => ({
