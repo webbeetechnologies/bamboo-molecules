@@ -9,8 +9,8 @@ import type { DataGridRowRendererProps } from '../../types';
 
 export type Props = DataGridRowRendererProps;
 
-const TableRowComponent = ({ rowId, index }: Props) => {
-    const { columns, rowSize, rowProps, selectedRows } = useDataTable(store => ({
+const TableRowComponent = ({ rowId, index, rowProps }: Props) => {
+    const { columns, rowSize, selectedRows } = useDataTable(store => ({
         columns: store.columns || [],
         rowSize: store.rowSize,
         rowProps: store.rowProps,

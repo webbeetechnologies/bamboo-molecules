@@ -31,10 +31,10 @@ const useOnSelectCell = () => {
                 return;
             }
 
-            const selection = {
+            const selection = normalizeSelection({
                 start: tableManagerStore.current.focusedCell as CellIndices,
                 end: cell as CellIndices,
-            };
+            });
 
             const continueSelection = beforeCellSelection({ selection });
 
@@ -44,7 +44,7 @@ const useOnSelectCell = () => {
             setStore(prev => ({
                 [CELL_SELECTION_PLUGIN_KEY]: {
                     ...prev[CELL_SELECTION_PLUGIN_KEY],
-                    ...normalizeSelection(selection),
+                    ...selection,
                 },
             }));
 

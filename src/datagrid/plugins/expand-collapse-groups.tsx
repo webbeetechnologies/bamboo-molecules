@@ -6,15 +6,21 @@ import { shallowCompare } from '../../utils';
 
 export const EXPAND_COLLAPSE_GROUPS_KEY = 'expand-collapse-groups';
 
+type ExpandCollapseStore = Record<string, string>;
+
+const getCollapsedGroups = (store: any): ExpandCollapseStore => store?.collapsedGroups ?? {};
+
 const useIsGroupCollapsed = (groupId: string) => {
     return usePluginsDataValueSelectorValue(store => {
-        return !!store[EXPAND_COLLAPSE_GROUPS_KEY]?.collapsedGroups?.[groupId];
+        return Object.values(getCollapsedGroups(store[EXPAND_COLLAPSE_GROUPS_KEY])).some(value =>
+            groupId.startsWith(value),
+        );
     });
 };
 
 const useCollapsedGroupIds = () => {
     return usePluginsDataValueSelectorValue(store => {
-        return Object.keys(store[EXPAND_COLLAPSE_GROUPS_KEY]?.collapsedGroups || {});
+        return Object.keys(getCollapsedGroups(store[EXPAND_COLLAPSE_GROUPS_KEY]));
     }, shallowCompare);
 };
 
@@ -35,35 +41,35 @@ const useOnToggleGroupExpandAndCollapse = () => {
                 const expandCollapseData = {
                     ...prev[EXPAND_COLLAPSE_GROUPS_KEY],
                     collapsedGroups: {
-                        ...prev[EXPAND_COLLAPSE_GROUPS_KEY]?.collapsedGroups,
+                        ...getCollapsedGroups(prev[EXPAND_COLLAPSE_GROUPS_KEY]),
                     },
                 };
-                const isGroupCollapsed = !!expandCollapseData.collapsedGroups[groupId];
+                const isGroupCollapsed = !!getCollapsedGroups(expandCollapseData)[groupId];
 
                 if (isGroupCollapsed) {
                     const shouldContinue = beforeGroupExpand({
                         groupId,
-                        collapsedGroupIds: expandCollapseData.collapsedGroups,
+                        collapsedGroupIds: getCollapsedGroups(expandCollapseData),
                     });
 
                     if (shouldContinue === false) return {};
 
-                    onGroupExpand({ collapsedGroupIds: expandCollapseData.collapsedGroups });
+                    onGroupExpand({ collapsedGroupIds: getCollapsedGroups(expandCollapseData) });
 
-                    delete expandCollapseData.collapsedGroups[groupId];
+                    delete getCollapsedGroups(expandCollapseData)[groupId];
 
                     afterGroupExpand();
                 } else {
                     const shouldContinue = beforeGroupCollapse({
                         groupId,
-                        collapsedGroupIds: expandCollapseData.collapsedGroups,
+                        collapsedGroupIds: getCollapsedGroups(expandCollapseData),
                     });
 
                     if (shouldContinue === false) return {};
 
-                    onGroupCollapse({ collapsedGroupIds: expandCollapseData.collapsedGroups });
+                    onGroupCollapse({ collapsedGroupIds: getCollapsedGroups(expandCollapseData) });
 
-                    expandCollapseData.collapsedGroups[groupId] = groupId;
+                    getCollapsedGroups(expandCollapseData)[groupId] = groupId;
 
                     afterGroupCollapse();
                 }

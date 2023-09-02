@@ -66,6 +66,11 @@ export const createPlugin = <K extends PluginMangerEventsKeys>({
             acc[eventKey] = store.current.pluginsMap[key]?.current?.events[eventKey] || noop;
 
             return acc;
+            /**
+             * TODO: @thetaungg this shouldn't be any!
+             * Because we are making this any, we have inconsistent types.
+             * This should be of type: PluginManagerEvents
+             */
         }, {} as Record<K, (...args: any) => any>);
     };
 

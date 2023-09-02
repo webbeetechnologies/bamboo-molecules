@@ -2,10 +2,12 @@ import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecule
 import type { RefObject } from 'react';
 
 import type { PluginHandle } from './createPlugin';
+import type { GroupedData } from '../utils';
 
 export type CellIndices = {
     rowIndex: number;
     columnIndex: number;
+    rowIndexInGroup?: number;
 };
 
 export type Cell = CellIndices & {
@@ -26,6 +28,12 @@ export type Selection = {
 export type TableSelection = SelectionIndices & {
     recordIds: TDataTableRow[];
     columnIds: TDataTableColumn[];
+    records: GroupedData[];
+};
+
+export type TableSelectionBeforeCommit = TableSelection & {
+    startRecord: GroupedData;
+    endRecord: GroupedData;
 };
 
 export enum PluginEvents {

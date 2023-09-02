@@ -16,14 +16,13 @@ const useNormalizeCellHandler = () => {
             };
 
             const correctIndex = getCorrectRowIndex(rowIndex);
-            const { index, id: rowId } = tableManagerStore.current.records[
-                correctIndex
-            ] as GroupRecord;
+            const record = tableManagerStore.current.records[correctIndex] as GroupRecord;
 
             return {
                 columnIndex,
-                rowIndex: index,
-                rowId,
+                rowIndex: record.index,
+                rowId: record.id,
+                record,
                 columns: dataTableStore.current.columns[columnIndex],
             };
         },
