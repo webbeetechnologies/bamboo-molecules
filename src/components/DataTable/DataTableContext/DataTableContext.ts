@@ -92,6 +92,7 @@ export const useDataTableRow = () =>
 export type DataTableCellContextType = Omit<DataTableRowContextType, 'hovered'> & {
     column: TDataTableColumn;
     columnIndex: number;
+    isLast: boolean;
 };
 export const DataTableCellContext = createContext<DataTableCellContextType | null>(null);
 export const useDataTableCell = () =>

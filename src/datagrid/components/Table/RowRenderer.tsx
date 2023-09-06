@@ -4,6 +4,7 @@ import {
     renderDataTableCellComponent,
     DataTableRowContext,
     useDataTable,
+    DataTableCellContext,
 } from '@bambooapp/bamboo-molecules/components';
 import type { DataGridRowRendererProps } from '../../types';
 
@@ -42,10 +43,21 @@ const TableRowComponent = ({ rowId, index, rowProps }: Props) => {
 
     const cells = useMemo(
         () =>
-            columns.map((item, i) => (
-                <Fragment key={item}>{renderDataTableCellComponent({ item, index: i })}</Fragment>
+            columns.map((item, i, self) => (
+                <DataTableCellContext.Provider
+                    value={{
+                        column: item,
+                        columnIndex: i,
+                        row: rowId,
+                        rowIndex: index,
+                        isLast: self.length - 1 === i,
+                    }}>
+                    <Fragment key={item}>
+                        {renderDataTableCellComponent({ item, index: i })}
+                    </Fragment>
+                </DataTableCellContext.Provider>
             )),
-        [columns],
+        [columns, rowId, index],
     );
 
     return (
