@@ -391,7 +391,7 @@ const ChildItem = memo(
             active: name === value,
             onLayoutContent,
             variant,
-            testID,
+            testID: child.props.testID ?? testID,
         });
     },
 );

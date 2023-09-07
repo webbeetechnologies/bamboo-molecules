@@ -1,6 +1,6 @@
 {
   "name": "@bambooapp/bamboo-molecules",
-  "version": "0.2.38",
+  "version": "0.2.42",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/webbeetechnologies/bamboo-molecules.git"
@@ -84,7 +84,9 @@
     "@storybook/addon-interactions": "^6.5.16",
     "@storybook/addon-links": "^6.5.16",
     "@storybook/addon-react-native-web": "^0.0.19",
+    "@storybook/builder-webpack5": "^6.5.16",
     "@storybook/jest": "^0.0.10",
+    "@storybook/manager-webpack5": "^6.5.16",
     "@storybook/react": "^6.5.16",
     "@storybook/test-runner": "^0.9.3",
     "@storybook/testing-library": "^0.0.13",

@@ -19,11 +19,13 @@ export {
     useColumnResizePlugin,
     useDragAndExtendPlugin,
     useExpandCollapseGroupsPlugin,
+    useCellFocusPlugin,
     DRAG_AND_EXTEND_PLUGIN_KEY,
     COLUMN_RESIZE_PLUGIN_KEY,
     CELL_SELECTION_PLUGIN_KEY,
     COPY_PASTE_PLUGIN_KEY,
     EXPAND_COLLAPSE_GROUPS_KEY,
+    CELL_FOCUS_PLUGIN_KEY,
     PluginEvents,
     SelectionIndices,
     PluginHandle,
@@ -32,7 +34,7 @@ export {
     usePluginsManagerStoreRef,
     createPlugin,
     usePluginsDataSelector,
-    usePluginsDataValueSelectorValue,
+    usePluginsDataValueSelector,
     usePluginsManagerValueSelector,
 } from './plugins';
 

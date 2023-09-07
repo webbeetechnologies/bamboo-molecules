@@ -24,7 +24,7 @@ export const {
 export const {
     Provider: PluginsDataContextProvider,
     useContext: usePluginsDataSelector,
-    useContextValue: usePluginsDataValueSelectorValue,
+    useContextValue: usePluginsDataValueSelector,
     useStoreRef: usePluginsDataStoreRef,
 } = createFastContext<Record<string, any>>();
 

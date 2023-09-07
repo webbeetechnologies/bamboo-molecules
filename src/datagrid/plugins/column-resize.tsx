@@ -2,12 +2,12 @@ import type { TDataTableColumn } from '@bambooapp/bamboo-molecules';
 
 import { createPlugin } from './createPlugin';
 import { PluginEvents } from './types';
-import { usePluginsDataValueSelectorValue } from './plugins-manager';
+import { usePluginsDataValueSelector } from './plugins-manager';
 
 export const COLUMN_RESIZE_PLUGIN_KEY = 'column-resize';
 
 const useIsColumnResizing = (column: TDataTableColumn) => {
-    return usePluginsDataValueSelectorValue(store => {
+    return usePluginsDataValueSelector(store => {
         return store[COLUMN_RESIZE_PLUGIN_KEY]?.resizingColumn === column;
     });
 };

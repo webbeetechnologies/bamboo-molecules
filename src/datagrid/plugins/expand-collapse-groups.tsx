@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { createPlugin } from './createPlugin';
 import { PluginEvents } from './types';
-import { usePluginsDataValueSelectorValue, usePluginsDataStoreRef } from './plugins-manager';
+import { usePluginsDataValueSelector, usePluginsDataStoreRef } from './plugins-manager';
 import { shallowCompare } from '../../utils';
 
 export const EXPAND_COLLAPSE_GROUPS_KEY = 'expand-collapse-groups';
@@ -11,7 +11,7 @@ type ExpandCollapseStore = Record<string, string>;
 const getCollapsedGroups = (store: any): ExpandCollapseStore => store?.collapsedGroups ?? {};
 
 const useIsGroupCollapsed = (groupId: string) => {
-    return usePluginsDataValueSelectorValue(store => {
+    return usePluginsDataValueSelector(store => {
         return Object.values(getCollapsedGroups(store[EXPAND_COLLAPSE_GROUPS_KEY])).some(value =>
             groupId.startsWith(value),
         );
@@ -19,7 +19,7 @@ const useIsGroupCollapsed = (groupId: string) => {
 };
 
 const useCollapsedGroupIds = () => {
-    return usePluginsDataValueSelectorValue(store => {
+    return usePluginsDataValueSelector(store => {
         return Object.keys(getCollapsedGroups(store[EXPAND_COLLAPSE_GROUPS_KEY]));
     }, shallowCompare);
 };

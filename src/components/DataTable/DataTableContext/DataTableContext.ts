@@ -52,7 +52,7 @@ export const {
     useContextValue: useDataTable,
     Provider: DataTableProvider,
     useStoreRef: useDataTableStoreRef,
-} = createFastContext<DataTableContextType>(true);
+} = createFastContext<DataTableContextType>(null, true);
 /**
  *
  * Context for all the Components: ScrollView, FlatList, renderHeader and renderCell.

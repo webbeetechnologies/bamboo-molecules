@@ -1,29 +1,25 @@
-import {
-    usePluginsDataValueSelectorValue,
-    useTableManagerStoreRef,
-} from '@bambooapp/bamboo-molecules/datagrid';
+import { usePluginsDataValueSelector } from '@bambooapp/bamboo-molecules/datagrid';
 import { useCallback, useEffect } from 'react';
 
 import { createPlugin } from './createPlugin';
 import { usePluginsDataStoreRef } from './plugins-manager';
 import { CellIndices, PluginEvents } from './types';
 import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
+import { CELL_FOCUS_PLUGIN_KEY } from './cell-focus';
 
 export const CELL_SELECTION_PLUGIN_KEY = 'cell-selection';
 
 const useOnSelectCell = () => {
-    const { store: tableManagerStore } = useTableManagerStoreRef();
-    const { set: setStore } = usePluginsDataStoreRef();
+    const { store: pluginsDataStore, set: setStore } = usePluginsDataStoreRef();
     const { beforeCellSelection, afterCellSelection, onCellSelection } = useCellSelectionEvents();
     const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(
         (cell: CellIndices) => {
+            const focusedCell = pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
+
             // this wouldn't be possible
-            if (
-                !tableManagerStore.current.focusedCell ||
-                tableManagerStore.current.focusedCell?.type === 'column'
-            ) {
+            if (!focusedCell || focusedCell?.type === 'column') {
                 // setTableManagerStore(() => ({
                 //     focusedCell: { ...normalizeCell(cell), type: 'cell' },
                 // }));
@@ -32,7 +28,7 @@ const useOnSelectCell = () => {
             }
 
             const selection = normalizeSelection({
-                start: tableManagerStore.current.focusedCell as CellIndices,
+                start: focusedCell as CellIndices,
                 end: cell as CellIndices,
             });
 
@@ -51,12 +47,12 @@ const useOnSelectCell = () => {
             afterCellSelection();
         },
         [
+            pluginsDataStore,
             normalizeSelection,
-            afterCellSelection,
             beforeCellSelection,
             onCellSelection,
             setStore,
-            tableManagerStore,
+            afterCellSelection,
         ],
     );
 };
@@ -145,7 +141,7 @@ const useProcessDragCellSelection = ({
 };
 
 const useHasCellSelection = ({ columnIndex, rowIndex }: CellIndices) => {
-    return usePluginsDataValueSelectorValue(store =>
+    return usePluginsDataValueSelector(store =>
         checkSelection(store[CELL_SELECTION_PLUGIN_KEY], {
             columnIndex,
             rowIndex,

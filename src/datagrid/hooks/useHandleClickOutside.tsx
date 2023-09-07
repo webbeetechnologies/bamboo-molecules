@@ -1,11 +1,12 @@
 import { useCallback, useEffect } from 'react';
 import { Platform } from 'react-native';
-import { useCellSelectionMethods } from '../plugins';
-import { useTableManagerStoreRef } from '@bambooapp/bamboo-molecules/datagrid';
+import { useCellFocusMethods, useCellSelectionMethods } from '../plugins';
 
 const useHandleClickOutside = () => {
-    const { set: setTableManagerStore } = useTableManagerStoreRef();
+    const { useSetFocusCellPluginStore } = useCellFocusMethods();
     const { useOnResetSelectionOnClickOutside } = useCellSelectionMethods();
+
+    const setFocusCellPluginStore = useSetFocusCellPluginStore();
     const onResetSelection = useOnResetSelectionOnClickOutside();
 
     const onResetFocus = useCallback(
@@ -17,13 +18,13 @@ const useHandleClickOutside = () => {
             )
                 return;
 
-            setTableManagerStore(() => ({
+            setFocusCellPluginStore(() => ({
                 focusedCell: null,
                 focusedCellRef: null,
                 isEditing: false,
             }));
         },
-        [setTableManagerStore],
+        [setFocusCellPluginStore],
     );
 
     const onMouseDown = useCallback(
