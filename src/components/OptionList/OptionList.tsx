@@ -111,6 +111,7 @@ const OptionList = <
         selection: selectionProp,
         onSelectionChange: onSelectionChangeProp,
         renderItem: renderItemProp,
+        testID,
         ...rest
     }: Props<TItem, TSection>,
     ref: any,
@@ -166,14 +167,14 @@ const OptionList = <
                     // TODO - fix ts issues
                     renderItem={renderItemProp}
                     info={info}
-                    testID={info.item.id + ''}
+                    testID={testID ? `${testID}-${info.item.id}` : ''}
                     index={idToIndexMap[info.item.id as keyof typeof idToIndexMap] as number}
                     onPressItem={onPressItem}
                     selectable={selectable}
                 />
             );
         },
-        [idToIndexMap, onPressItem, renderItemProp, selectable],
+        [idToIndexMap, testID, onPressItem, renderItemProp, selectable],
     );
 
     const keyExtractor = useCallback((item: TItem) => `${item.id}`, []);
@@ -184,6 +185,7 @@ const OptionList = <
             <SectionList
                 ref={ref}
                 keyExtractor={keyExtractor}
+                testID={testID}
                 {...rest}
                 sections={records}
                 renderItem={renderItem as SectionListProps['renderItem']}
