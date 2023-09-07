@@ -30,7 +30,7 @@ import {
     useTableManagerStoreRef,
 } from './contexts';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
-import { useContextMenu, useHandleClickOutside } from './hooks';
+import { useContextMenu } from './hooks';
 import {
     CELL_FOCUS_PLUGIN_KEY,
     Plugin,
@@ -185,8 +185,6 @@ const DataGrid = ({
 
     // TODO - move this to plugins
     useContextMenu({ ref: store.current.tableRef, callback: onContextMenuOpen });
-
-    useHandleClickOutside();
 
     return (
         <>
