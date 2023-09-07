@@ -43,6 +43,7 @@ const DataTableRowPresentation = (props: DataTableRowProps) => {
         () =>
             columns.map((item, i, self) => (
                 <DataTableCellContext.Provider
+                    key={item}
                     value={{
                         column: item,
                         columnIndex: i,
@@ -50,7 +51,7 @@ const DataTableRowPresentation = (props: DataTableRowProps) => {
                         rowIndex: index,
                         isLast: self.length - 1 === i,
                     }}>
-                    <Fragment key={i}>{renderCellComponent({ item, index: i })}</Fragment>
+                    {renderCellComponent({ item, index: i })}
                 </DataTableCellContext.Provider>
             )),
         [columns, rowId, index],

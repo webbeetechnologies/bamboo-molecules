@@ -45,6 +45,7 @@ const TableRowComponent = ({ rowId, index, rowProps }: Props) => {
         () =>
             columns.map((item, i, self) => (
                 <DataTableCellContext.Provider
+                    key={item}
                     value={{
                         column: item,
                         columnIndex: i,
@@ -52,9 +53,7 @@ const TableRowComponent = ({ rowId, index, rowProps }: Props) => {
                         rowIndex: index,
                         isLast: self.length - 1 === i,
                     }}>
-                    <Fragment key={item}>
-                        {renderDataTableCellComponent({ item, index: i })}
-                    </Fragment>
+                    {renderDataTableCellComponent({ item, index: i })}
                 </DataTableCellContext.Provider>
             )),
         [columns, rowId, index],
