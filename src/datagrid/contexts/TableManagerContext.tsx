@@ -1,4 +1,4 @@
-import { memo, MutableRefObject, PropsWithChildren, RefObject, useMemo } from 'react';
+import { memo, PropsWithChildren, RefObject, useMemo } from 'react';
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
@@ -14,17 +14,7 @@ export type TableManagerContextProviderProps = {
     spacerWidth: number;
 };
 
-export type TableManagerContextType = TableManagerContextProviderProps & {
-    focusedCell: {
-        rowIndex?: number;
-        rowId?: TDataTableRow;
-        columnId: TDataTableColumn;
-        columnIndex: number;
-        type: 'column' | 'cell';
-    } | null;
-    focusedCellRef: MutableRefObject<any> | null;
-    isEditing: boolean;
-};
+export type TableManagerContextType = TableManagerContextProviderProps & {};
 
 const defaultContextValue = {
     focusedCell: null,
@@ -71,23 +61,6 @@ export const TableManagerProvider = memo(
 );
 
 export const useTableManagerStoreRef = useStoreRef;
-
-export const useIsCellFocused = (
-    rowId: TDataTableRow,
-    columnId: TDataTableColumn,
-): {
-    isFocused: boolean;
-    isEditing: boolean;
-} => {
-    return useTableManagerValueSelector(store => {
-        const _isFocused =
-            store.focusedCell?.rowId === rowId && store.focusedCell?.columnId === columnId;
-        return {
-            isFocused: _isFocused,
-            isEditing: _isFocused && store.isEditing,
-        };
-    }, shallowCompare);
-};
 
 export const useShouldContextMenuDisplayed = () => {
     return useTableManagerValueSelector(store => store.withContextMenu);

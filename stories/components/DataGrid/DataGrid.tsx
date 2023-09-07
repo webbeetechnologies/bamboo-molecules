@@ -18,6 +18,7 @@ import {
     useCopyPastePlugin,
     useExpandCollapseGroupsPlugin,
     useDragAndExtendPlugin,
+    useCellFocusPlugin,
 } from '../../../src/datagrid/plugins';
 
 const containerStyle = { width: '100%' };
@@ -50,6 +51,17 @@ export const Example: FC<{ groups?: string[] }> = () => {
         }),
         [handleClose, handleOpen, isOpen],
     );
+
+    const cellFocusPlugin = useCellFocusPlugin({
+        onFocusCell: args => {
+            // eslint-disable-next-line no-console
+            console.log({ cellFocus: args });
+        },
+        onUnFocusCell: args => {
+            // eslint-disable-next-line no-console
+            console.log({ unFocusCell: args });
+        },
+    });
 
     const columnResizePlugin = useColumnResizePlugin({
         onColumnResize: ({ columnId, width }) => {
@@ -97,8 +109,20 @@ export const Example: FC<{ groups?: string[] }> = () => {
     });
 
     const plugins = useMemo(
-        () => [columnResizePlugin, copyPastePlugin, dragAndExtendPlugin, expandCollapsePlugin],
-        [columnResizePlugin, copyPastePlugin, dragAndExtendPlugin, expandCollapsePlugin],
+        () => [
+            columnResizePlugin,
+            copyPastePlugin,
+            dragAndExtendPlugin,
+            expandCollapsePlugin,
+            cellFocusPlugin,
+        ],
+        [
+            columnResizePlugin,
+            copyPastePlugin,
+            dragAndExtendPlugin,
+            expandCollapsePlugin,
+            cellFocusPlugin,
+        ],
     );
 
     return (

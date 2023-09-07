@@ -32,7 +32,7 @@ export {
     usePluginsManagerStoreRef,
     createPlugin,
     usePluginsDataSelector,
-    usePluginsDataValueSelectorValue,
+    usePluginsDataValueSelector,
     usePluginsManagerValueSelector,
 } from './plugins';
 
