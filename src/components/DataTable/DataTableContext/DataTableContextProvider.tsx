@@ -5,6 +5,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useMolecules } from '../../../hooks';
 import type { DataTableProps, TDataTableColumn } from '../types';
 import {
+    DataTableCellContext,
+    DataTableCellContextType,
     DataTableComponentContext,
     DataTableHeaderCellContext,
     DataTableHeaderCellContextType,
@@ -136,5 +138,21 @@ export const DataTableHeaderCellContextProvider = (
         <DataTableHeaderCellContext.Provider value={contextValue}>
             {props.children}
         </DataTableHeaderCellContext.Provider>
+    );
+};
+
+export const DataTableCellContextProvider = (
+    props: PropsWithChildren<DataTableCellContextType>,
+) => {
+    const { row, rowIndex, column, columnIndex, isLast } = props;
+    const contextValue = useMemo(
+        () => ({ row, rowIndex, column, columnIndex, isLast }),
+        [row, rowIndex, column, columnIndex, isLast],
+    );
+
+    return (
+        <DataTableCellContext.Provider value={contextValue}>
+            {props.children}
+        </DataTableCellContext.Provider>
     );
 };

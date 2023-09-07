@@ -2,6 +2,7 @@ import {
     StateLayerProps,
     registerMolecule,
     useComponentStyles,
+    useDataTableCell,
     useMolecules,
 } from '@bambooapp/bamboo-molecules';
 import { memo } from 'react';
@@ -15,8 +16,10 @@ export type Props = StateLayerProps & {
 const CellBorder = ({ style, isFocused, columnIndex, ...rest }: Props) => {
     const { StateLayer } = useMolecules();
 
+    const { isLast } = useDataTableCell();
+
     const borderStyle = useComponentStyles('DataGrid_CellBorder', [style], {
-        variant: columnIndex === 0 ? 'first' : '',
+        variant: columnIndex === 0 ? 'first' : isLast ? 'last' : '',
         states: {
             focused: isFocused,
         },

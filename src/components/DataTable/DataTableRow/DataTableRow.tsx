@@ -1,11 +1,15 @@
-import { Fragment, memo, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import type { ListRenderItem } from 'react-native';
 
-import type { DataTableRowProps, TDataTableRow } from '../types';
-import { DataTableRowContext, useDataTable } from '../DataTableContext';
-import { renderCellComponent } from '../DataTableCell';
 import { useActionState, useComponentStyles, useMolecules } from '../../../hooks';
 import { shallowCompare } from '../../../utils';
+import { renderCellComponent } from '../DataTableCell';
+import {
+    DataTableCellContextProvider,
+    DataTableRowContext,
+    useDataTable,
+} from '../DataTableContext';
+import type { DataTableRowProps, TDataTableRow } from '../types';
 
 // import { useRowWithinBounds } from '../DataTable';
 
@@ -41,10 +45,18 @@ const DataTableRowPresentation = (props: DataTableRowProps) => {
 
     const result = useMemo(
         () =>
-            columns.map((item, i) => (
-                <Fragment key={i}>{renderCellComponent({ item, index: i })}</Fragment>
+            columns.map((item, i, self) => (
+                <DataTableCellContextProvider
+                    column={item}
+                    columnIndex={i}
+                    row={rowId}
+                    rowIndex={index}
+                    isLast={self.length - 1 === i}
+                    key={i}>
+                    {renderCellComponent({ item, index: i })}
+                </DataTableCellContextProvider>
             )),
-        [columns],
+        [columns, rowId, index],
     );
 
     return (
