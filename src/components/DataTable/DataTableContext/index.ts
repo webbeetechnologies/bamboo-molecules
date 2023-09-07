@@ -14,4 +14,7 @@ export {
     DataTableCellContextType,
 } from './DataTableContext';
 
-export { DataTableHeaderCellContextProvider } from './DataTableContextProvider';
+export {
+    DataTableHeaderCellContextProvider,
+    DataTableCellContextProvider,
+} from './DataTableContextProvider';

@@ -85,12 +85,12 @@ const _DataCell = (
 
     const onPress = useCallback(
         (e: GestureResponderEvent) => {
-            if (isEditing || cellReadonly) return;
+            if (isEditing) return;
 
             const delta = new Date().getTime() - isTappedRef.current;
 
             if (delta < 500) {
-                if (readonly || displayEditorOnHover) return;
+                if (cellReadonly || readonly || displayEditorOnHover) return;
 
                 setTableManagerStore(prev => ({
                     isEditing: !prev.isEditing,

@@ -1,11 +1,11 @@
-import { Fragment, memo, useMemo } from 'react';
 import { useActionState, useComponentStyles, useMolecules } from '@bambooapp/bamboo-molecules';
 import {
-    renderDataTableCellComponent,
+    DataTableCellContextProvider,
     DataTableRowContext,
+    renderDataTableCellComponent,
     useDataTable,
-    DataTableCellContext,
 } from '@bambooapp/bamboo-molecules/components';
+import { memo, useMemo } from 'react';
 import type { DataGridRowRendererProps } from '../../types';
 
 export type Props = DataGridRowRendererProps;
@@ -44,17 +44,15 @@ const TableRowComponent = ({ rowId, index, rowProps }: Props) => {
     const cells = useMemo(
         () =>
             columns.map((item, i, self) => (
-                <DataTableCellContext.Provider
-                    key={item}
-                    value={{
-                        column: item,
-                        columnIndex: i,
-                        row: rowId,
-                        rowIndex: index,
-                        isLast: self.length - 1 === i,
-                    }}>
+                <DataTableCellContextProvider
+                    column={item}
+                    columnIndex={i}
+                    row={rowId}
+                    rowIndex={index}
+                    isLast={self.length - 1 === i}
+                    key={i}>
                     {renderDataTableCellComponent({ item, index: i })}
-                </DataTableCellContext.Provider>
+                </DataTableCellContextProvider>
             )),
         [columns, rowId, index],
     );
