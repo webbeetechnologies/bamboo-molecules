@@ -88,6 +88,7 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
         onSelectionChange: onSelectionChangeProp,
         renderItem: renderItemProp,
         customFlatList: CustomFlatList,
+        testID,
         ...rest
     }: Props<TItem>,
     ref: any,
@@ -144,10 +145,11 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
                     info={info}
                     onPressItem={onPressItem}
                     selectable={selectable}
+                    testID={testID && `${testID}-${info.item.id}`}
                 />
             );
         },
-        [onPressItem, renderItemProp, selectable],
+        [onPressItem, renderItemProp, selectable, testID],
     );
 
     const keyExtractor = useCallback((item: TItem) => `${item.id}`, []);
@@ -158,6 +160,7 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
             <FlatListComponent
                 ref={ref}
                 keyExtractor={keyExtractor}
+                testID={testID}
                 {...rest}
                 data={records}
                 renderItem={renderItem}
@@ -174,6 +177,7 @@ type OptionListItemProps<TItem extends DefaultItemT = DefaultItemT> = Pick<
     info: ListRenderItemInfo<TItem>;
     onPressItem?: (item: TItem) => void;
     selectable?: boolean;
+    testID?: string;
 };
 
 const OptionListItem = typedMemo(
@@ -182,6 +186,7 @@ const OptionListItem = typedMemo(
         renderItem,
         selectable,
         onPressItem,
+        testID,
     }: OptionListItemProps<TItem>) => {
         const { TouchableRipple } = useMolecules();
 
@@ -203,7 +208,9 @@ const OptionListItem = typedMemo(
 
         if (selectable && info.item?.selectable !== false) {
             return (
-                <TouchableRipple onPress={onPress}>{renderItem(renderItemInfo)}</TouchableRipple>
+                <TouchableRipple testID={testID} onPress={onPress}>
+                    {renderItem(renderItemInfo)}
+                </TouchableRipple>
             );
         }
 
