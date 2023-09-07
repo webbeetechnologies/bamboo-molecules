@@ -167,7 +167,7 @@ const OptionList = <
                     // TODO - fix ts issues
                     renderItem={renderItemProp}
                     info={info}
-                    testID={testID ? `${testID}-${info.item.id}` : ''}
+                    testID={testID && `${testID}-${info.item.id}`}
                     index={idToIndexMap[info.item.id as keyof typeof idToIndexMap] as number}
                     onPressItem={onPressItem}
                     selectable={selectable}
