@@ -16,4 +16,7 @@ module.exports = {
         config.devtool = 'source-map';
         return config;
     },
+    core: {
+        builder: 'webpack5',
+    },
 };
