@@ -162,7 +162,17 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
         },
     });
 
-    const plugins = useMemo(() => [expandCollapsePlugin], [expandCollapsePlugin]);
+    const dragAndExtendPlugin = useDragAndExtendPlugin({
+        onDragAndExtend: args => {
+            // eslint-disable-next-line no-console
+            console.log({ dragAndExtend: args });
+        },
+    });
+
+    const plugins = useMemo(
+        () => [expandCollapsePlugin, dragAndExtendPlugin],
+        [dragAndExtendPlugin, expandCollapsePlugin],
+    );
 
     return (
         <FieldsProvider fields={virtualizationMockFields}>
