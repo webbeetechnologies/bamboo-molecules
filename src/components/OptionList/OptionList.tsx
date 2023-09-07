@@ -166,6 +166,7 @@ const OptionList = <
                     // TODO - fix ts issues
                     renderItem={renderItemProp}
                     info={info}
+                    testID={info.item.id + ''}
                     index={idToIndexMap[info.item.id as keyof typeof idToIndexMap] as number}
                     onPressItem={onPressItem}
                     selectable={selectable}
@@ -200,6 +201,7 @@ type OptionListItemProps<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>
     onPressItem?: (item: TItem) => void;
     selectable?: boolean;
     index: number;
+    testID?: string;
 };
 
 const OptionListItem = typedMemo(
@@ -212,6 +214,7 @@ const OptionListItem = typedMemo(
         selectable,
         onPressItem,
         index,
+        testID,
     }: OptionListItemProps<TItem, TSection>) => {
         const { TouchableRipple } = useMolecules();
 
@@ -233,7 +236,9 @@ const OptionListItem = typedMemo(
 
         if (selectable && info.item?.selectable !== false) {
             return (
-                <TouchableRipple onPress={onPress}>{renderItem(renderItemInfo)}</TouchableRipple>
+                <TouchableRipple testID={testID} onPress={onPress}>
+                    {renderItem(renderItemInfo)}
+                </TouchableRipple>
             );
         }
 

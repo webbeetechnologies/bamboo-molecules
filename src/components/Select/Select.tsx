@@ -209,6 +209,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
                 <ListItem
                     variant="menuItem"
                     hoverable
+                    testID={testID && `${testID}-${info.item[labelKey]}`}
                     hovered={info.focused}
                     selected={selected}
                     right={info.item.right}
@@ -217,14 +218,14 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
                 </ListItem>
             );
         },
-        [ListItem, labelKey, renderItemProp, selectionValue],
+        [ListItem, testID, labelKey, renderItemProp, selectionValue],
     );
 
     // passing the methods and merging with triggerRef so that element instance is also available in the ref (useful for using with components like Tooltip)
     useImperativeHandle<unknown, SelectHandles>(
         ref,
         () =>
-            Object.assign(triggerRef.current, {
+            Object.assign(triggerRef.current!, {
                 isOpen,
                 setIsOpen,
             }),
