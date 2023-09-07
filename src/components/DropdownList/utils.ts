@@ -10,5 +10,6 @@ export const dropdownListStyles: ComponentStylePropWithVariants<ViewStyle, '', C
         minWidth: 112,
         backgroundColor: 'colors.surface',
         borderRadius: 'shapes.corner.extraSmall' as unknown as number,
+        paddingVertical: 'spacings.2',
     },
 };
