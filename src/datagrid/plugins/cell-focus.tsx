@@ -5,6 +5,7 @@ import { shallowCompare } from '../../utils';
 import { createPlugin } from './createPlugin';
 import { FocusedCell, PluginEvents } from './types';
 import { usePluginsDataStoreRef, usePluginsDataValueSelector } from './plugins-manager';
+import { useNormalizeCellHandler } from './utils';
 
 export const CELL_FOCUS_PLUGIN_KEY = 'cell-focus';
 
@@ -18,6 +19,7 @@ const useSetFocusCellPluginStore = () => {
         afterFocusCell,
         afterUnFocusCell,
     } = useCellFocusEvents();
+    const normalizeCell = useNormalizeCellHandler();
 
     return useCallback(
         (
@@ -40,7 +42,9 @@ const useSetFocusCellPluginStore = () => {
 
             if (focusedCell === null) {
                 const shouldContinue = beforeUnFocusCell({
-                    cell: pluginsStoreRef.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell,
+                    cell: pluginsStoreRef.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell
+                        ? normalizeCell(pluginsStoreRef.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell)
+                        : null,
                 });
 
                 if (shouldContinue === false) return;
@@ -55,11 +59,15 @@ const useSetFocusCellPluginStore = () => {
             }
 
             if (focusedCell) {
-                const shouldContinue = beforeFocusCell({ cell: focusedCell });
+                const normalizedCell = normalizeCell({
+                    ...focusedCell,
+                    rowIndex: focusedCell.rowIndex || 0,
+                });
+                const shouldContinue = beforeFocusCell({ cell: normalizedCell });
 
                 if (shouldContinue === false) return;
 
-                onFocusCell({ cell: focusedCell });
+                onFocusCell({ cell: normalizedCell });
 
                 setStore();
 
@@ -75,6 +83,7 @@ const useSetFocusCellPluginStore = () => {
             afterUnFocusCell,
             beforeFocusCell,
             beforeUnFocusCell,
+            normalizeCell,
             onFocusCell,
             onUnFocusCell,
             pluginsStoreRef,
