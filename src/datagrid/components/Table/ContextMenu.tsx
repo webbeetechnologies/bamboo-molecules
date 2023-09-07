@@ -1,8 +1,8 @@
-import { useMolecules } from '../../../hooks';
-import type { MenuProps } from '../../../components';
 import { memo, ReactElement, ReactNode } from 'react';
 
-import { useTableManagerStoreRef } from '../../contexts';
+import { useMolecules } from '../../../hooks';
+import type { MenuProps } from '../../../components';
+import { useCellFocusMethods } from '../../plugins';
 
 export type Props = Omit<MenuProps, 'triggerRef' | 'children'> & {
     children?: ReactNode;
@@ -11,10 +11,11 @@ export type Props = Omit<MenuProps, 'triggerRef' | 'children'> & {
 const ContextMenu = ({ isOpen, onClose, children, ...rest }: Props) => {
     const { Menu } = useMolecules();
 
-    const { store } = useTableManagerStoreRef();
+    const { useFocusedCellRef } = useCellFocusMethods();
+    const focusedCellRef = useFocusedCellRef();
 
     return (
-        <Menu isOpen={isOpen} triggerRef={store.current.focusedCellRef} onClose={onClose} {...rest}>
+        <Menu isOpen={isOpen} triggerRef={focusedCellRef} onClose={onClose} {...rest}>
             {children as ReactElement}
         </Menu>
     );

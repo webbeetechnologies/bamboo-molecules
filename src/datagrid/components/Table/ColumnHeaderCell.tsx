@@ -5,10 +5,11 @@ import { IconProps, RenderHeaderCellProps, useMolecules } from '@bambooapp/bambo
 
 import { useDataTableHeaderCell } from '@bambooapp/bamboo-molecules/components';
 
-import { useFieldType, useField, useTableManagerStoreRef } from '../../contexts';
+import { useFieldType, useField } from '../../contexts';
 import { withVirtualization } from '../../hocs';
 import { useContextMenu } from '../../hooks';
 import { ColumnResizeHandle } from '../ColumnResizeHandle';
+import { useCellFocusMethods } from '../../plugins';
 
 export type ColumnHeaderCellProps = RenderHeaderCellProps &
     ViewProps & {
@@ -30,7 +31,8 @@ const ColumnHeaderCell = ({
     const { View, Icon, Text } = useMolecules();
 
     const elementRef = useRef<any>(null);
-    const { set: setTableManagerStore } = useTableManagerStoreRef();
+    const { useSetFocusCellPluginStore } = useCellFocusMethods();
+    const setFocusCellPluginStore = useSetFocusCellPluginStore();
 
     const { isFirst, isLast } = useDataTableHeaderCell();
 
@@ -53,11 +55,11 @@ const ColumnHeaderCell = ({
     );
 
     const handleContextMenu = useCallback(() => {
-        setTableManagerStore(() => ({
+        setFocusCellPluginStore(() => ({
             focusedCellRef: elementRef,
             focusedCell: { columnIndex, columnId: column, type: 'column' },
         }));
-    }, [columnIndex, column, setTableManagerStore]);
+    }, [columnIndex, column, setFocusCellPluginStore]);
 
     useContextMenu({ ref: elementRef, callback: handleContextMenu });
 
