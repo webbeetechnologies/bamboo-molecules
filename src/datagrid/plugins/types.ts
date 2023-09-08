@@ -15,6 +15,14 @@ export type Cell = CellIndices & {
     columnId: TDataTableColumn;
 };
 
+export type FocusedCell = {
+    rowIndex?: number;
+    rowId?: TDataTableRow;
+    columnId: TDataTableColumn;
+    columnIndex: number;
+    type: 'column' | 'cell';
+} | null;
+
 export type SelectionIndices = {
     start: CellIndices;
     end: CellIndices;
@@ -63,6 +71,13 @@ export enum PluginEvents {
     BEFORE_GROUP_EXPAND = 'beforeGroupExpand',
     ON_GROUP_EXPAND = 'onGroupExpand',
     AFTER_GROUP_EXPAND = 'afterGroupExpand',
+
+    BEFORE_FOCUS_CELL = 'beforeFocusCell',
+    ON_FOCUS_CELL = 'onFocusCell',
+    AFTER_FOCUS_CELL = 'afterFocusCell',
+    BEFORE_UNFOCUS_CELL = 'beforeUnFocusCell',
+    ON_UNFOCUS_CELL = 'onUnFocusCell',
+    AFTER_UNFOCUS_CELL = 'afterUnFocusCell',
 }
 
 export type PluginManagerEvents = {
@@ -109,6 +124,18 @@ export type PluginManagerEvents = {
     }) => void | boolean;
     [PluginEvents.ON_GROUP_EXPAND]: (args: { collapsedGroupIds: string[] }) => void;
     [PluginEvents.AFTER_GROUP_EXPAND]: () => void;
+
+    [PluginEvents.BEFORE_FOCUS_CELL]: (args: { cell: FocusedCell }) => void;
+    [PluginEvents.ON_FOCUS_CELL]: (args: { cell: FocusedCell }) => void;
+    [PluginEvents.AFTER_FOCUS_CELL]: () => void;
+
+    [PluginEvents.BEFORE_FOCUS_CELL]: (args: { cell: FocusedCell }) => void;
+    [PluginEvents.ON_FOCUS_CELL]: (args: { cell: FocusedCell }) => void;
+    [PluginEvents.AFTER_FOCUS_CELL]: () => void;
+
+    [PluginEvents.BEFORE_UNFOCUS_CELL]: (args: { cell: FocusedCell }) => void;
+    [PluginEvents.ON_UNFOCUS_CELL]: () => void;
+    [PluginEvents.AFTER_UNFOCUS_CELL]: () => void;
 };
 
 export type Plugin = RefObject<PluginHandle<any>>;

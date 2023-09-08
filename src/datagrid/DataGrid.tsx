@@ -30,8 +30,15 @@ import {
     useTableManagerStoreRef,
 } from './contexts';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
-import { useContextMenu, useHandleClickOutside } from './hooks';
-import { Plugin, useCellSelectionPlugin, useExpandCollapseGroupsMethods } from './plugins';
+import { useContextMenu } from './hooks';
+import {
+    CELL_FOCUS_PLUGIN_KEY,
+    Plugin,
+    useCellFocusPlugin,
+    useCellSelectionPlugin,
+    useExpandCollapseGroupsMethods,
+    usePluginsDataStoreRef,
+} from './plugins';
 import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
 import { RecordWithId, addDataToCallbackPairs, prepareGroupedData } from './utils';
@@ -97,6 +104,7 @@ const DataGrid = ({
     const { DataTable } = useMolecules();
 
     const { store } = useTableManagerStoreRef();
+    const { store: pluginsDataStore } = usePluginsDataStoreRef();
 
     const { handleContextMenuOpen, isOpen, onClose, ...restContextMenuProps } =
         contextMenuProps || (emptyObj as ContextMenuProps);
@@ -150,9 +158,14 @@ const DataGrid = ({
         (e: any) => {
             e.preventDefault();
 
-            if (!shouldContextMenuDisplayed || !store.current.focusedCell) return;
+            if (
+                !shouldContextMenuDisplayed ||
+                !pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell
+            )
+                return;
 
-            const { type, rowIndex, columnIndex } = store.current.focusedCell;
+            const { type, rowIndex, columnIndex } =
+                pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
             const rowId = rowIndex !== undefined ? dataRef.current.records[rowIndex] : undefined;
             const columnId =
                 columnIndex !== undefined ? dataRef.current.records[columnIndex] : undefined;
@@ -167,13 +180,11 @@ const DataGrid = ({
                 },
             });
         },
-        [dataRef, handleContextMenuOpen, shouldContextMenuDisplayed, store],
+        [dataRef, handleContextMenuOpen, pluginsDataStore, shouldContextMenuDisplayed],
     );
 
     // TODO - move this to plugins
     useContextMenu({ ref: store.current.tableRef, callback: onContextMenuOpen });
-
-    useHandleClickOutside();
 
     return (
         <>
@@ -224,10 +235,11 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         }).current;
 
         const selectionPlugin = useCellSelectionPlugin({});
+        const cellFocusPlugin = useCellFocusPlugin({});
 
         const plugins = useMemo(
-            () => [selectionPlugin, ...(_plugins || [])],
-            [_plugins, selectionPlugin],
+            () => [selectionPlugin, cellFocusPlugin, ...(_plugins || [])],
+            [_plugins, cellFocusPlugin, selectionPlugin],
         );
 
         return (

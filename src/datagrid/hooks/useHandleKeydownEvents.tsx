@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import { useTableManagerStoreRef } from '../contexts';
 
 import {
+    CELL_FOCUS_PLUGIN_KEY,
     CELL_SELECTION_PLUGIN_KEY,
     TableSelection,
     useCopyPasteEvents,
@@ -40,16 +41,16 @@ const useHandleKeydownEvents = ({ ref }: Props) => {
             const osKeyMap = createOSKeyMap(e)[String(isMacOs) as 'true' | 'false'];
 
             if (
-                !tableManagerStore.current.focusedCell ||
-                tableManagerStore.current.focusedCell.type === 'column' ||
-                tableManagerStore.current.isEditing
+                !pluginDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell ||
+                pluginDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell.type === 'column' ||
+                pluginDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.isEditing
             )
                 return;
 
             const selection = normalizeSelection(
                 pluginDataStore.current[CELL_SELECTION_PLUGIN_KEY] || {
-                    start: tableManagerStore.current.focusedCell,
-                    end: tableManagerStore.current.focusedCell,
+                    start: pluginDataStore.current[CELL_FOCUS_PLUGIN_KEY].focusedCell,
+                    end: pluginDataStore.current[CELL_FOCUS_PLUGIN_KEY].focusedCell,
                 },
             );
 

@@ -1,15 +1,14 @@
 import { FC, memo, useMemo } from 'react';
 import { useComponentStyles, useMolecules, usePrevious } from '../../../hooks';
 import {
-    DataTableCellContext,
     useDataTable,
     useDataTableCell,
     useDataTableColumnWidth,
     useDataTableComponent,
     useDataTableRow,
 } from '../DataTableContext/DataTableContext';
-import type { DataTableProps, TDataTableColumn, TDataTableRow, DataCellProps } from '../types';
 import { useIsCellWithinBounds } from '../hooks';
+import type { DataCellProps, DataTableProps, TDataTableColumn, TDataTableRow } from '../types';
 
 type CellComponentProps = {
     column: TDataTableColumn;
@@ -69,11 +68,7 @@ export const CellComponent = memo((props: CellComponentProps) => {
 
     const cell = renderCell(cellContext);
 
-    return (
-        <DataTableCellContext.Provider value={cellContext}>
-            <DataTable.Cell width={width}>{cell}</DataTable.Cell>
-        </DataTableCellContext.Provider>
-    );
+    return <DataTable.Cell width={width}>{cell}</DataTable.Cell>;
 });
 
 const Cell: FC<{ column: TDataTableColumn; columnIndex: number }> = memo(props => {

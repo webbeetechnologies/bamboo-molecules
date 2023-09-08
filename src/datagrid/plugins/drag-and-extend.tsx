@@ -3,10 +3,11 @@ import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
 
 import { useTableManagerStoreRef } from '../contexts';
 import { CELL_SELECTION_PLUGIN_KEY } from './cell-selection';
-import { usePluginsDataStoreRef, usePluginsDataValueSelectorValue } from './plugins-manager';
+import { usePluginsDataStoreRef, usePluginsDataValueSelector } from './plugins-manager';
 import { createPlugin } from './createPlugin';
 import { CellIndices, PluginEvents, SelectionIndices } from './types';
 import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
+import { CELL_FOCUS_PLUGIN_KEY } from './cell-focus';
 
 export const DRAG_AND_EXTEND_PLUGIN_KEY = 'drag-and-extend';
 
@@ -40,30 +41,45 @@ const useOnDragStart = () => {
 };
 
 const useOnDragEnd = () => {
-    const { store: tableManagerStore } = useTableManagerStoreRef();
-    const { store, set: setStore } = usePluginsDataStoreRef();
-    const { onDragAndExtend, afterDragAndExtend } = useDragAndExtendEvents() || emptyObj;
+    const { store, set: setPluginsDataStore } = usePluginsDataStoreRef();
+    const { beforeDragAndExtend, onDragAndExtend, afterDragAndExtend } =
+        useDragAndExtendEvents() || emptyObj;
+    const normalizeCell = useNormalizeCellHandler();
     const normalizeSelection = useNormalizeSelectionHandler();
+
+    const focusedCell = store.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
 
     return useCallback(() => {
         const copySelection = store.current[CELL_SELECTION_PLUGIN_KEY] || {
-            start: tableManagerStore.current.focusedCell,
-            end: tableManagerStore.current.focusedCell,
+            start: focusedCell,
+            end: focusedCell,
         };
-        const pasteSelection = store.current[DRAG_AND_EXTEND_PLUGIN_KEY];
+        const { start, end } = store.current[DRAG_AND_EXTEND_PLUGIN_KEY];
 
-        onDragAndExtend({
+        if (!start || !end) return;
+
+        const args = {
             selection: normalizeSelection(copySelection),
-            target: normalizeSelection(pasteSelection),
-        });
+            target: normalizeSelection({ start: normalizeCell(start), end: normalizeCell(end) }),
+        };
 
-        setStore(prev => ({
+        const continueDragAndSelection = beforeDragAndExtend(args);
+
+        if (continueDragAndSelection === false) {
+            setPluginsDataStore(() => ({
+                [DRAG_AND_EXTEND_PLUGIN_KEY]: {},
+            }));
+            return;
+        }
+
+        onDragAndExtend(args);
+
+        setPluginsDataStore(prev => ({
             [DRAG_AND_EXTEND_PLUGIN_KEY]: undefined,
             // clearing cell selection as well
             [CELL_SELECTION_PLUGIN_KEY]: {
                 ...prev[CELL_SELECTION_PLUGIN_KEY],
-                start:
-                    prev[CELL_SELECTION_PLUGIN_KEY]?.start || tableManagerStore.current.focusedCell,
+                start: prev[CELL_SELECTION_PLUGIN_KEY]?.start || focusedCell,
                 end: prev[DRAG_AND_EXTEND_PLUGIN_KEY]?.end,
             },
         }));
@@ -71,11 +87,13 @@ const useOnDragEnd = () => {
         afterDragAndExtend();
     }, [
         afterDragAndExtend,
+        beforeDragAndExtend,
+        focusedCell,
+        normalizeCell,
         normalizeSelection,
         onDragAndExtend,
-        setStore,
+        setPluginsDataStore,
         store,
-        tableManagerStore,
     ]);
 };
 
@@ -103,6 +121,10 @@ const useOnDragSelection = ({
         if (!pluginsDataStore.current[DRAG_AND_EXTEND_PLUGIN_KEY]?.start || !rowHovered || !hovered)
             return;
 
+        if (tableManagerStore.current.records[rowIndex].rowType !== 'data') return;
+
+        const focusedCell = pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
+
         const hasSelection =
             pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.start &&
             pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.end;
@@ -110,8 +132,8 @@ const useOnDragSelection = ({
         const cellsSelection = hasSelection
             ? pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]
             : {
-                  start: tableManagerStore.current.focusedCell,
-                  end: tableManagerStore.current.focusedCell,
+                  start: focusedCell,
+                  end: focusedCell,
               };
 
         if (checkSelection(cellsSelection, { columnIndex, rowIndex })) {
@@ -135,15 +157,25 @@ const useOnDragSelection = ({
             const startRowIndex = cellsSelection.start.rowIndex;
             const endRowIndex = cellsSelection.end.rowIndex;
 
+            if (
+                tableManagerStore.current.records[startRowIndex].rowType !== 'data' ||
+                tableManagerStore.current.records[endRowIndex].rowType !== 'data'
+            ) {
+                setPluginsDataStore(() => ({
+                    [DRAG_AND_EXTEND_PLUGIN_KEY]: {},
+                }));
+                return;
+            }
+
             selection = {
-                start: normalizeCell({
+                start: {
                     columnIndex: startColumnIndex,
                     rowIndex: startRowIndex,
-                }),
-                end: normalizeCell({
+                },
+                end: {
                     columnIndex,
                     rowIndex: endRowIndex,
-                }),
+                },
             };
         }
 
@@ -155,23 +187,26 @@ const useOnDragSelection = ({
 
             const endColumnIndex = cellsSelection.end.columnIndex;
 
+            if (tableManagerStore.current.records[startRowIndex].rowType !== 'data') {
+                setPluginsDataStore(() => ({
+                    [DRAG_AND_EXTEND_PLUGIN_KEY]: {},
+                }));
+                return;
+            }
+
             selection = {
-                start: normalizeCell({
+                start: {
                     columnIndex: startColumnIndex,
                     rowIndex: startRowIndex,
-                }),
-                end: normalizeCell({
+                },
+                end: {
                     columnIndex: endColumnIndex,
                     rowIndex,
-                }),
+                },
             };
         }
 
         selection = normalizeSelection(selection as SelectionIndices);
-
-        const continueDragAndSelection = beforeDragAndExtend({ selection });
-
-        if (continueDragAndSelection === false) return;
 
         setPluginsDataStore(prev => ({
             [DRAG_AND_EXTEND_PLUGIN_KEY]: {
@@ -196,7 +231,7 @@ const useOnDragSelection = ({
 };
 
 const useHasDragAndExtendSelection = ({ columnIndex, rowIndex }: CellIndices) => {
-    return usePluginsDataValueSelectorValue(store =>
+    return usePluginsDataValueSelector(store =>
         checkSelection(store[DRAG_AND_EXTEND_PLUGIN_KEY], {
             columnIndex,
             rowIndex,
@@ -209,7 +244,7 @@ const useIsDragHandleVisible = ({
     rowIndex,
     isFocused,
 }: CellIndices & { isFocused: boolean }) => {
-    return usePluginsDataValueSelectorValue(store => {
+    return usePluginsDataValueSelector(store => {
         const selection = store[CELL_SELECTION_PLUGIN_KEY];
         const dragSelection = store[DRAG_AND_EXTEND_PLUGIN_KEY];
 

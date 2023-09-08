@@ -6,7 +6,7 @@ import {
     DataTableHeaderCellContextProvider,
 } from '@bambooapp/bamboo-molecules/components';
 import { StyleSheet } from 'react-native';
-import { useHandleKeydownEvents } from '../../hooks';
+import { useHandleClickOutside, useHandleKeydownEvents } from '../../hooks';
 import { useTableManagerStoreRef } from '../../contexts';
 
 export const TableHeaderRow = memo(() => {
@@ -43,6 +43,7 @@ export const TableHeaderRow = memo(() => {
 
     // TODO - move this to plugins
     useHandleKeydownEvents({ ref: storeRef.current.tableRef });
+    useHandleClickOutside();
 
     return (
         <View {...headerRowProps} style={headerStyle}>
