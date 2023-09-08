@@ -93,6 +93,18 @@ const useSetFocusCellPluginStore = () => {
     );
 };
 
+const useResetFocusCellState = () => {
+    const setFocusState = useSetFocusCellPluginStore();
+
+    return useCallback(() => {
+        setFocusState(() => ({
+            focusedCell: null,
+            focusedCellRef: null,
+            isEditing: false,
+        }));
+    }, [setFocusState]);
+};
+
 const useIsRowFocused = (rowIndex: TDataTableRow) => {
     return usePluginsDataValueSelector(
         prev => prev[CELL_FOCUS_PLUGIN_KEY]?.focusedCell?.rowIndex === rowIndex,
@@ -147,7 +159,7 @@ const useEnsureCorrectFocusCellState = () => {
         [columnIds, recordIds],
     );
 
-    const setFocusCell = useSetFocusCellPluginStore();
+    const resetFocusState = useResetFocusCellState();
     const isFocusedCellStateCorrect = usePluginsDataValueSelector(state => {
         const { columnId, rowId } = state[CELL_FOCUS_PLUGIN_KEY]?.focusedCell || {};
 
@@ -157,12 +169,8 @@ const useEnsureCorrectFocusCellState = () => {
     useEffect(() => {
         if (isFocusedCellStateCorrect) return;
 
-        setFocusCell(() => ({
-            focusedCell: null,
-            focusedCellRef: null,
-            isEditing: false,
-        }));
-    }, [isFocusedCellStateCorrect, setFocusCell]);
+        resetFocusState();
+    }, [isFocusedCellStateCorrect, resetFocusState]);
 };
 
 export const [useCellFocusPlugin, useCellFocusEvents, useCellFocusMethods] = createPlugin({
@@ -181,5 +189,6 @@ export const [useCellFocusPlugin, useCellFocusEvents, useCellFocusMethods] = cre
         useIsCellFocused,
         useFocusedCellRef,
         useEnsureCorrectFocusCellState,
+        useResetFocusCellState,
     },
 });
