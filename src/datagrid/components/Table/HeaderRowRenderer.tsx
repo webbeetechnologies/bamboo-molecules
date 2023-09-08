@@ -8,6 +8,7 @@ import {
 import { StyleSheet } from 'react-native';
 import { useHandleClickOutside, useHandleKeydownEvents } from '../../hooks';
 import { useTableManagerStoreRef } from '../../contexts';
+import { useCellFocusMethods } from '../../plugins';
 
 export const TableHeaderRow = memo(() => {
     const { View } = useMolecules();
@@ -18,6 +19,7 @@ export const TableHeaderRow = memo(() => {
         headerRowProps: store.headerRowProps,
         horizontalOffset: store.horizontalOffset,
     }));
+    const { useEnsureCorrectFocusCellState } = useCellFocusMethods();
 
     const headerStyle = useComponentStyles('DataTable_HeaderRow', [
         { paddingHorizontal: horizontalOffset },
@@ -44,6 +46,7 @@ export const TableHeaderRow = memo(() => {
     // TODO - move this to plugins
     useHandleKeydownEvents({ ref: storeRef.current.tableRef });
     useHandleClickOutside();
+    useEnsureCorrectFocusCellState();
 
     return (
         <View {...headerRowProps} style={headerStyle}>

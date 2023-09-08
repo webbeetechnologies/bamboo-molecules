@@ -1,7 +1,7 @@
 // TODO - fix alias issue with Jest
 import { useCallback } from 'react';
 import { GroupRecord, useTableManagerStoreRef } from '../..';
-import { useDataTableStoreRef } from '../../../components';
+import { TDataTableColumn, TDataTableRow, useDataTableStoreRef } from '../../../components';
 
 // TODO - add testcases
 const useNormalizeCellHandler = () => {
@@ -9,7 +9,28 @@ const useNormalizeCellHandler = () => {
     const { store: dataTableStore } = useDataTableStoreRef();
 
     return useCallback(
-        ({ columnIndex, rowIndex }: { columnIndex: number; rowIndex: number }) => {
+        ({
+            columnIndex,
+            rowIndex,
+            columnId,
+            rowId,
+        }: {
+            columnIndex: number;
+            rowIndex: number;
+            rowId?: TDataTableRow;
+            columnId?: TDataTableColumn;
+        }) => {
+            // for the case when the record is deleted
+            if (!tableManagerStore.current.records[rowIndex]) return undefined;
+            // for focused cell, we can't just check the indices, we have to check with the ids to see if it exists or not
+            if (
+                columnId &&
+                rowId &&
+                (tableManagerStore.current.records[rowIndex]?.id !== rowId ||
+                    dataTableStore.current.columns[columnIndex] !== columnId)
+            )
+                return undefined;
+
             const getCorrectRowIndex = (index: number) => {
                 if (tableManagerStore.current.records[index].rowType === 'data') return index;
                 throw new Error('Record is not a data row');
@@ -23,7 +44,7 @@ const useNormalizeCellHandler = () => {
                 rowIndex: record.index,
                 rowId: record.id,
                 record,
-                columns: dataTableStore.current.columns[columnIndex],
+                columnId: dataTableStore.current.columns[columnIndex],
             };
         },
         [tableManagerStore, dataTableStore],

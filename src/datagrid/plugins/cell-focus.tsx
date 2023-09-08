@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import type { TDataTableRow, TDataTableColumn } from '@bambooapp/bamboo-molecules';
 
 import { shallowCompare } from '../../utils';
@@ -6,6 +6,7 @@ import { createPlugin } from './createPlugin';
 import { FocusedCell, PluginEvents } from './types';
 import { usePluginsDataStoreRef, usePluginsDataValueSelector } from './plugins-manager';
 import { useNormalizeCellHandler } from './utils';
+import { useDataTableStore } from '../../components/DataTable/DataTableContext/DataTableContext';
 
 export const CELL_FOCUS_PLUGIN_KEY = 'cell-focus';
 
@@ -124,6 +125,46 @@ const useIsCellFocused = (
     }, shallowCompare);
 };
 
+const useEnsureCorrectFocusCellState = () => {
+    const [{ recordIds, columnIds }] = useDataTableStore(state => ({
+        recordIds: state.records,
+        columnIds: state.columns,
+    }));
+
+    const { recordsMap, columnsMap } = useMemo(
+        () => ({
+            recordsMap: recordIds.reduce((acc: Record<TDataTableRow, true>, recordId) => {
+                acc[recordId] = true;
+
+                return acc;
+            }, {}),
+            columnsMap: columnIds.reduce((acc: Record<TDataTableColumn, true>, columnId) => {
+                acc[columnId] = true;
+
+                return acc;
+            }, {}),
+        }),
+        [columnIds, recordIds],
+    );
+
+    const setFocusCell = useSetFocusCellPluginStore();
+    const isFocusedCellStateCorrect = usePluginsDataValueSelector(state => {
+        const { columnId, rowId } = state[CELL_FOCUS_PLUGIN_KEY]?.focusedCell || {};
+
+        return columnsMap[columnId] && recordsMap[rowId];
+    });
+
+    useEffect(() => {
+        if (isFocusedCellStateCorrect) return;
+
+        setFocusCell(() => ({
+            focusedCell: null,
+            focusedCellRef: null,
+            isEditing: false,
+        }));
+    }, [isFocusedCellStateCorrect, setFocusCell]);
+};
+
 export const [useCellFocusPlugin, useCellFocusEvents, useCellFocusMethods] = createPlugin({
     key: CELL_FOCUS_PLUGIN_KEY,
     eventKeys: [
@@ -139,5 +180,6 @@ export const [useCellFocusPlugin, useCellFocusEvents, useCellFocusMethods] = cre
         useIsRowFocused,
         useIsCellFocused,
         useFocusedCellRef,
+        useEnsureCorrectFocusCellState,
     },
 });
