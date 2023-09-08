@@ -36,8 +36,8 @@ Default.play = async ({ canvasElement }) => {
 
     await waitFor(() => canvas);
 
-    const dateInput = await canvas.getByTestId('datetimepicker--datepickerinput-outlined');
-    const timeInput = await canvas.getByTestId('datetimepicker--timepickerinput-outlined');
+    const dateInput = await canvas.getByTestId('datetimepicker--datepickerinput');
+    const timeInput = await canvas.getByTestId('datetimepicker--timepickerinput');
     // const timepickerModal = await canvas.getByTestId('datetimepicker--timepickermodal');
 
     await userEvent.type(dateInput, '13/01/2022');
