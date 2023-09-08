@@ -5,7 +5,7 @@ import { useTableManagerStoreRef } from '../contexts';
 import { CELL_SELECTION_PLUGIN_KEY } from './cell-selection';
 import { usePluginsDataStoreRef, usePluginsDataValueSelector } from './plugins-manager';
 import { createPlugin } from './createPlugin';
-import { CellIndices, PluginEvents, SelectionIndices } from './types';
+import { Cell, CellIndices, PluginEvents, SelectionIndices } from './types';
 import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
 import { CELL_FOCUS_PLUGIN_KEY } from './cell-focus';
 
@@ -60,7 +60,10 @@ const useOnDragEnd = () => {
 
         const args = {
             selection: normalizeSelection(copySelection),
-            target: normalizeSelection({ start: normalizeCell(start), end: normalizeCell(end) }),
+            target: normalizeSelection({
+                start: normalizeCell(start) as Cell,
+                end: normalizeCell(end) as Cell,
+            }),
         };
 
         const continueDragAndSelection = beforeDragAndExtend(args);

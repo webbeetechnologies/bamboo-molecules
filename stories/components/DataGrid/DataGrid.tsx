@@ -1,11 +1,11 @@
-import { FC, memo, useMemo, useState } from 'react';
+import { FC, memo, useEffect, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Toast, useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
 
 import '../../../src/datagrid';
 import {
     fields,
-    records,
+    records as _records,
     virtaulizationMockRecords,
     virtualizationMockFields,
     useField,
@@ -34,6 +34,8 @@ export const Example: FC<{ groups?: string[] }> = () => {
         }),
         [],
     );
+
+    const [records, setRecords] = useState(_records);
 
     const [columnWidth, setColumnWidth] = useState({});
 
@@ -124,6 +126,12 @@ export const Example: FC<{ groups?: string[] }> = () => {
             cellFocusPlugin,
         ],
     );
+
+    useEffect(() => {
+        setTimeout(() => {
+            setRecords(prev => prev.slice(0, prev.length - 1));
+        }, 10000);
+    }, []);
 
     return (
         <FieldsProvider fields={fields}>
