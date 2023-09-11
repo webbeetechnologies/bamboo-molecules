@@ -3,10 +3,10 @@ import { Platform } from 'react-native';
 import { useCellFocusMethods, useCellSelectionMethods } from '../plugins';
 
 const useHandleClickOutside = () => {
-    const { useSetFocusCellPluginStore } = useCellFocusMethods();
+    const { useResetFocusCellState } = useCellFocusMethods();
     const { useOnResetSelectionOnClickOutside } = useCellSelectionMethods();
 
-    const setFocusCellPluginStore = useSetFocusCellPluginStore();
+    const resetFocusCellState = useResetFocusCellState();
     const onResetSelection = useOnResetSelectionOnClickOutside();
 
     const onResetFocus = useCallback(
@@ -18,13 +18,9 @@ const useHandleClickOutside = () => {
             )
                 return;
 
-            setFocusCellPluginStore(() => ({
-                focusedCell: null,
-                focusedCellRef: null,
-                isEditing: false,
-            }));
+            resetFocusCellState();
         },
-        [setFocusCellPluginStore],
+        [resetFocusCellState],
     );
 
     const onMouseDown = useCallback(
