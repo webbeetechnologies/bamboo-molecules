@@ -341,14 +341,12 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                 }).start();
             } else {
                 // restore label
-                {
-                    Animated.timing(labelAnimation, {
-                        toValue: 1,
-                        duration: FOCUS_ANIMATION_DURATION * (styles.animationScale || 1),
-                        // To prevent this - https://github.com/callstack/react-native-paper/issues/941
-                        useNativeDriver: true,
-                    }).start();
-                }
+                Animated.timing(labelAnimation, {
+                    toValue: 1,
+                    duration: FOCUS_ANIMATION_DURATION * (styles.animationScale || 1),
+                    // To prevent this - https://github.com/callstack/react-native-paper/issues/941
+                    useNativeDriver: true,
+                }).start();
             }
         }, [focused, value, labelAnimation, styles]);
 

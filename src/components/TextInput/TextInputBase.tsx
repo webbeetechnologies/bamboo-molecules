@@ -233,12 +233,12 @@ const TextInputBase = ({
                 {variant === 'flat' && (
                     <>
                         <Animated.View
-                            testID="text-input-underline"
+                            testID={testID && `${testID}--text-input-underline`}
                             style={styles.underlineStyle}
                         />
 
                         <StateLayer
-                            testID={testID ? `${testID}-stateLayer` : ''}
+                            testID={testID && `${testID}--stateLayer`}
                             {...stateLayerProps}
                             style={styles.stateLayerStyle}
                         />
@@ -258,7 +258,7 @@ const TextInputBase = ({
                     <View
                         style={styles.leftElement}
                         onLayout={handleLayoutLeftElement}
-                        testID="text-input-left-element">
+                        testID={testID && `${testID}--text-input-left-element`}>
                         {typeof left === 'function'
                             ? left?.({
                                   color: styles.activeColor,
@@ -270,12 +270,12 @@ const TextInputBase = ({
                 )}
             </>
 
-            <View style={styles.inputContainerStyle}>
+            <View style={styles.inputContainerStyle} testID={testID && `${testID}-${variant}`}>
                 {Platform.OS !== 'android' && multiline && !!label && variant === 'flat' && (
                     // Workaround for: https://github.com/callstack/react-native-paper/issues/2799
                     // Patch for a multiline TextInput with fixed height, which allow to avoid covering input label with its value.
                     <View
-                        testID="patch-container"
+                        testID={testID && `${testID}--patch-container`}
                         pointerEvents="none"
                         style={styles.patchContainer}
                     />
@@ -300,7 +300,7 @@ const TextInputBase = ({
                 )}
 
                 {render({
-                    testID: `${testID}-${variant}`,
+                    testID,
                     ...rest,
                     style: styles.textInputStyle,
                     ref: innerRef,
@@ -319,7 +319,9 @@ const TextInputBase = ({
 
             <>
                 {right && (
-                    <View style={styles.rightElement} testID="text-input-right-element">
+                    <View
+                        style={styles.rightElement}
+                        testID={testID && `${testID}--text-input-right-element`}>
                         {typeof right === 'function'
                             ? right?.({
                                   color: styles.activeColor,

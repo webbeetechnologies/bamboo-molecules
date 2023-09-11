@@ -54,7 +54,7 @@ TwelveHourInteractionTest.play = async ({ canvasElement }) => {
 
     await waitFor(() => canvas);
 
-    const timeInput = await canvas.getByTestId('timepickerfield-flat');
+    const timeInput = await canvas.getByTestId('timepickerfield');
 
     await userEvent.clear(timeInput);
     await userEvent.type(timeInput, '1');
@@ -98,7 +98,7 @@ TwentyFourHourInteractionTest.play = async ({ canvasElement }) => {
 
     await waitFor(() => canvas);
 
-    const timeInput = await canvas.getByTestId('timepickerfield-flat');
+    const timeInput = await canvas.getByTestId('timepickerfield');
 
     await userEvent.clear(timeInput);
     await userEvent.type(timeInput, '1');
