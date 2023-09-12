@@ -1,5 +1,7 @@
 import { RefObject, useCallback, useEffect } from 'react';
 import { Platform } from 'react-native';
+import { isMac } from '@bambooapp/bamboo-molecules';
+
 import { useTableManagerStoreRef } from '../contexts';
 
 import {
@@ -10,7 +12,7 @@ import {
     usePluginsDataStoreRef,
 } from '../plugins';
 import { useNormalizeSelectionHandler } from '../plugins/utils';
-import { GroupRecord, isMac } from '../utils';
+import type { GroupRecord } from '../utils';
 import type { TableManagerContextType } from '../contexts/TableManagerContext';
 
 export type Props = {

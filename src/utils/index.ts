@@ -33,3 +33,5 @@ export const clearStylesCache = () => {
 };
 
 export { getYearRange } from './getyearRange';
+
+export * from './getOS';
