@@ -1,32 +1,15 @@
-import { memo, ReactNode, useMemo, useRef } from 'react';
-import { Platform } from 'react-native';
-import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
+import { memo, useMemo, useRef } from 'react';
 
-import { keyBy } from '../utils';
-import EventsManager from './EventsManager';
-import type { Shortcut, Scope, ShortcutWithEvent } from './types';
+import { keyBy } from '../../utils';
+import EventsManager from '../EventsManager';
+import type { Shortcut, ShortcutWithEvent } from '../types';
+import {
+    ShortcutsManagerProps,
+    shortcutEventPrefix,
+    ShortcutsManagerContextProvider,
+} from './utils';
 
-export type ShortcutsManagerContextType = {
-    shortcuts: Record<string, ShortcutWithEvent>;
-    scopes: Record<string, Scope>;
-};
-
-export const {
-    Provider: ShortcutsManagerContextProvider,
-    useContext: useShortcutsManagerContextSelector,
-    useContextValue: useShortcutsManagerContextValueSelector,
-    useStoreRef: useShortcutsManagerStoreRef,
-} = createFastContext<ShortcutsManagerContextType>();
-
-export type Props = {
-    children: ReactNode;
-    shortcuts: Shortcut[];
-    scopes?: Scope[];
-};
-
-export const shortcutEventPrefix = 'shortcut-event-';
-
-const _ShortcutsManager = ({ shortcuts, scopes, children }: Props) => {
+const _ShortcutsManager = ({ shortcuts, scopes, children }: ShortcutsManagerProps) => {
     const shortcutsRef = useRef<Shortcut[]>(shortcuts);
     const scopesRef = useRef(scopes);
 
@@ -35,10 +18,7 @@ const _ShortcutsManager = ({ shortcuts, scopes, children }: Props) => {
             (acc: Record<string, ShortcutWithEvent>, shortcut) => {
                 acc[shortcut.name] = {
                     ...shortcut,
-                    event:
-                        Platform.OS === 'web'
-                            ? new CustomEvent(`${shortcutEventPrefix}${shortcut.name}`)
-                            : undefined,
+                    event: new CustomEvent(`${shortcutEventPrefix}${shortcut.name}`),
                 };
 
                 return acc;

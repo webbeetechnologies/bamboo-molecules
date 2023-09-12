@@ -1,8 +1,9 @@
-import { useShortcutsManagerContextValueSelector, shortcutEventPrefix } from './shortcuts-manager';
-import type { Scope, Shortcut } from './types';
 import { useCallback, useEffect } from 'react';
-import { useLatest } from '@bambooapp/bamboo-molecules';
 import { Platform } from 'react-native';
+import { useLatest } from '@bambooapp/bamboo-molecules';
+
+import { useShortcutsManagerContextValueSelector, shortcutEventPrefix } from '../ShortcutsManager';
+import type { Scope, Shortcut } from '../types';
 
 const useShortcut = (name: string, callback: (shortcut: Shortcut) => void) => {
     const { shortcut, isActive, scope } = useShortcutsManagerContextValueSelector(store => {

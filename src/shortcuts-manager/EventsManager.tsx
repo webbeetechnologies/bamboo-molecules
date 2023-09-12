@@ -1,5 +1,6 @@
-import { useShortcutsManagerStoreRef } from './shortcuts-manager';
 import { memo, useCallback, useEffect } from 'react';
+
+import { useShortcutsManagerStoreRef } from './ShortcutsManager';
 import { getPressedModifierKeys, normalizeKeys } from './utils';
 
 const EventsManager = () => {

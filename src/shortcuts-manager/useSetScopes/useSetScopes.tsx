@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
-import { keyBy } from '../utils';
-import { useShortcutsManagerStoreRef } from './ShortcutsManager';
-import type { Scope } from './types';
+import { keyBy } from '../../utils';
+import { useShortcutsManagerStoreRef } from '../ShortcutsManager';
+import type { Scope } from '../types';
 
 const useSetScopes = () => {
     const { set: setStore } = useShortcutsManagerStoreRef();
