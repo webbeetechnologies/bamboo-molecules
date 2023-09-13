@@ -85,3 +85,8 @@ export const getPressedModifierKeys = (event: KeyboardEvent, mergeMetaKeys = fal
 
     return pressedModifierKeys;
 };
+
+export const shortcutEventPrefix = 'shortcut-event-';
+
+export const calculateShortcutEventName = (shortcutName: string) =>
+    `${shortcutEventPrefix}-${shortcutName}`;

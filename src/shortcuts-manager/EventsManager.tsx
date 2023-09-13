@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect } from 'react';
 
-import { shortcutEventPrefix, useShortcutsManagerStoreRef } from './ShortcutsManager';
-import { getPressedModifierKeys, normalizeKeys } from './utils';
+import { useShortcutsManagerStoreRef } from './ShortcutsManager';
+import { calculateShortcutEventName, getPressedModifierKeys, normalizeKeys } from './utils';
 import type { ShortcutEventDetail } from './types';
 
 const EventsManager = () => {
@@ -22,7 +22,7 @@ const EventsManager = () => {
                 if (!foundMatchedKeys) return;
 
                 const event = new CustomEvent<ShortcutEventDetail>(
-                    `${shortcutEventPrefix}${shortcut.name}`,
+                    calculateShortcutEventName(shortcut.name),
                     {
                         detail: {
                             pressedKeys: [e.key].concat(modifierKeys),

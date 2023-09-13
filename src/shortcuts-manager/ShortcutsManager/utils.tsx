@@ -19,5 +19,3 @@ export type ShortcutsManagerProps = {
     shortcuts: Shortcut[];
     scopes?: Scope[];
 };
-
-export const shortcutEventPrefix = 'shortcut-event-';

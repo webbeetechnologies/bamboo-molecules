@@ -2,8 +2,9 @@ import { useCallback, useEffect } from 'react';
 import { Platform } from 'react-native';
 import { useLatest } from '@bambooapp/bamboo-molecules';
 
-import { useShortcutsManagerContextValueSelector, shortcutEventPrefix } from '../ShortcutsManager';
+import { useShortcutsManagerContextValueSelector } from '../ShortcutsManager';
 import type { Scope, Shortcut, ShortcutEventDetail } from '../types';
+import { calculateShortcutEventName } from '../utils';
 
 const useShortcut = (
     name: string,
@@ -50,7 +51,7 @@ const useShortcut = (
     useEffect(() => {
         if (Platform.OS !== 'web') return;
 
-        const eventName = `${shortcutEventPrefix}${shortcutRef.current.name}`;
+        const eventName = calculateShortcutEventName(shortcutRef.current.name);
 
         document.addEventListener(eventName, onCallback as (e: Event) => void);
 
