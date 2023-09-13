@@ -41,7 +41,7 @@ export type OptionFlatListRenderItemInfo<TItem = DefaultItemT> = ListRenderItemI
 };
 
 export type Props<TItem extends DefaultItemT = DefaultItemT> = UseSearchableProps &
-    Omit<FlatListProps<TItem>, 'sections' | 'renderItem'> & {
+    Omit<FlatListProps<TItem>, 'data' | 'renderItem'> & {
         records: TItem[];
         containerStyle?: ViewStyle;
         searchInputContainerStyle?: ViewStyle;
