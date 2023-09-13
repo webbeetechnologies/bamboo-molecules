@@ -19,8 +19,6 @@ const EventsManager = () => {
                     keyGroup => normalizeKeys(keyGroup) === normalizedKeys,
                 );
 
-                console.log({ foundMatchedKeys, normalizedKeys });
-
                 if (!foundMatchedKeys) return;
 
                 const event = new CustomEvent<ShortcutEventDetail>(
