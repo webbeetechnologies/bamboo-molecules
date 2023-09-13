@@ -1,9 +1,9 @@
-import type { Scope, Shortcut, ShortcutWithEvent } from '../types';
+import type { Scope, Shortcut } from '../types';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 import type { ReactNode } from 'react';
 
 export type ShortcutsManagerContextType = {
-    shortcuts: Record<string, ShortcutWithEvent>;
+    shortcuts: Record<string, Shortcut>;
     scopes: Record<string, Scope>;
 };
 

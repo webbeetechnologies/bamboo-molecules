@@ -3,9 +3,12 @@ import { Platform } from 'react-native';
 import { useLatest } from '@bambooapp/bamboo-molecules';
 
 import { useShortcutsManagerContextValueSelector, shortcutEventPrefix } from '../ShortcutsManager';
-import type { Scope, Shortcut } from '../types';
+import type { Scope, Shortcut, ShortcutEventDetail } from '../types';
 
-const useShortcut = (name: string, callback: (shortcut: Shortcut) => void) => {
+const useShortcut = (
+    name: string,
+    callback: (shortcut: Shortcut, detail: ShortcutEventDetail) => void,
+) => {
     const { shortcut, isActive, scope } = useShortcutsManagerContextValueSelector(store => {
         const _shortcut = store.shortcuts[name];
 
@@ -25,31 +28,34 @@ const useShortcut = (name: string, callback: (shortcut: Shortcut) => void) => {
     const shortcutRef = useLatest(shortcut);
     const callbackRef = useLatest(callback);
 
-    const onCallback = useCallback(() => {
-        if (!activeRef.current) return;
+    const onCallback = useCallback(
+        (e: CustomEvent<ShortcutEventDetail>) => {
+            if (!activeRef.current) return;
 
-        // if there is node, we check if one of the elements instead it is focused
-        if (
-            scopeRef.current?.node &&
-            !(
-                scopeRef.current?.node === document.activeElement ||
-                scopeRef.current?.node.contains(document.activeElement)
+            // if there is node, we check if one of the elements instead it is focused
+            if (
+                scopeRef.current?.node &&
+                !(
+                    scopeRef.current?.node === document.activeElement ||
+                    scopeRef.current?.node.contains(document.activeElement)
+                )
             )
-        )
-            return;
+                return;
 
-        callbackRef.current(shortcutRef.current);
-    }, [activeRef, callbackRef, scopeRef, shortcutRef]);
+            callbackRef.current(shortcutRef.current, e.detail);
+        },
+        [activeRef, callbackRef, scopeRef, shortcutRef],
+    );
 
     useEffect(() => {
         if (Platform.OS !== 'web') return;
 
         const eventName = `${shortcutEventPrefix}${shortcutRef.current.name}`;
 
-        document.addEventListener(eventName, onCallback);
+        document.addEventListener(eventName, onCallback as (e: Event) => void);
 
         return () => {
-            document.removeEventListener(eventName, onCallback);
+            document.removeEventListener(eventName, onCallback as (e: Event) => void);
         };
     }, [onCallback, scopeRef, shortcutRef]);
 };

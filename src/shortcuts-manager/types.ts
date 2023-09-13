@@ -4,11 +4,6 @@ export type Shortcut = {
     scope?: string;
 };
 
-export type ShortcutWithEvent = Shortcut & {
-    // will be undefined for the mobile
-    event: CustomEvent | undefined;
-};
-
 export type Scope = {
     name: string;
     /*
@@ -17,4 +12,11 @@ export type Scope = {
      * TODO - find a solution with ref
      * */
     node?: Element | null;
+};
+
+export type ShortcutEventDetail = {
+    pressedKeys: string[];
+    normalizedKey: string;
+    modifiers: string[];
+    key: string;
 };

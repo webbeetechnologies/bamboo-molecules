@@ -1,7 +1,8 @@
 import { memo, useCallback, useEffect } from 'react';
 
-import { useShortcutsManagerStoreRef } from './ShortcutsManager';
+import { shortcutEventPrefix, useShortcutsManagerStoreRef } from './ShortcutsManager';
 import { getPressedModifierKeys, normalizeKeys } from './utils';
+import type { ShortcutEventDetail } from './types';
 
 const EventsManager = () => {
     const { store } = useShortcutsManagerStoreRef();
@@ -14,11 +15,27 @@ const EventsManager = () => {
             Object.values(store.current.shortcuts).forEach(shortcut => {
                 if (shortcut.scope && !store.current.scopes[shortcut.scope]) return;
 
-                if (shortcut.keys.find(keyGroup => normalizeKeys(keyGroup) === normalizedKeys)) {
-                    if (!shortcut.event) return;
+                const foundMatchedKeys = shortcut.keys.find(
+                    keyGroup => normalizeKeys(keyGroup) === normalizedKeys,
+                );
 
-                    document.dispatchEvent(shortcut.event);
-                }
+                console.log({ foundMatchedKeys, normalizedKeys });
+
+                if (!foundMatchedKeys) return;
+
+                const event = new CustomEvent<ShortcutEventDetail>(
+                    `${shortcutEventPrefix}${shortcut.name}`,
+                    {
+                        detail: {
+                            pressedKeys: [e.key].concat(modifierKeys),
+                            normalizedKey: normalizedKeys,
+                            modifiers: modifierKeys,
+                            key: e.key,
+                        },
+                    },
+                );
+
+                document.dispatchEvent(event);
             });
         },
         [store],
