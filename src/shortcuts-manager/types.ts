@@ -16,5 +16,5 @@ export type Scope = {
      * this is currently the only way for now to get focustrap feature.
      * TODO - find a solution with ref
      * */
-    node?: HTMLElement;
+    node?: Element | null;
 };
