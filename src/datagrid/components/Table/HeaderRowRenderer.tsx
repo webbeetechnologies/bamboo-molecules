@@ -52,7 +52,7 @@ export const TableHeaderRow = memo(() => {
     useHandleClickOutside();
     useEnsureCorrectFocusCellState();
 
-    useShortcut('arrow', (_shortcut, { key, pressedKeys, normalizedKey }) => {
+    useShortcut('arrow', ({ key, pressedKeys, normalizedKey }) => {
         if (normalizedKey.includes('tab')) {
             setFocusCellByDirection(normalizedKey.includes('shift') ? 'left' : 'right');
 
