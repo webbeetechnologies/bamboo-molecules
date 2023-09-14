@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import type { TDataTableRow, TDataTableColumn } from '@bambooapp/bamboo-molecules';
+import {
+    useDataTableHorizontalScrollIndexStoreRef,
+    useDataTableStoreRef,
+    useDataTable,
+} from '@bambooapp/bamboo-molecules/components';
 
-import { shallowCompare } from '../../utils';
+import { isNil, shallowCompare } from '../../utils';
 import { createPlugin } from './createPlugin';
-import { FocusedCell, PluginEvents } from './types';
+import { CellIndices, FocusedCell, PluginEvents } from './types';
 import { usePluginsDataStoreRef, usePluginsDataValueSelector } from './plugins-manager';
 import { useNormalizeCellHandler } from './utils';
-import { useDataTableStore } from '../../components/DataTable/DataTableContext/DataTableContext';
+import { useTableManagerStoreRef } from '../contexts';
 
 export const CELL_FOCUS_PLUGIN_KEY = 'cell-focus';
 
@@ -138,7 +143,7 @@ const useIsCellFocused = (
 };
 
 const useEnsureCorrectFocusCellState = () => {
-    const [{ recordIds, columnIds }] = useDataTableStore(state => ({
+    const { recordIds, columnIds } = useDataTable(state => ({
         recordIds: state.records,
         columnIds: state.columns,
     }));
@@ -173,6 +178,128 @@ const useEnsureCorrectFocusCellState = () => {
     }, [isFocusedCellStateCorrect, resetFocusState]);
 };
 
+const directions = ['up', 'down', 'left', 'right'] as const;
+type Direction = typeof directions[number];
+
+const useSetFocusCellByDirection = () => {
+    const { store: pluginsStoreRef } = usePluginsDataStoreRef();
+    const { store: dataTableStoreRef } = useDataTableStoreRef();
+    const { store: tableManagerStore } = useTableManagerStoreRef();
+    const { store: horizontalScrollIndexStoreRef } = useDataTableHorizontalScrollIndexStoreRef();
+
+    const scrollToCell = useScrollToCell();
+    const setFocusCell = useSetFocusCellPluginStore();
+
+    return useCallback(
+        (direction: Direction) => {
+            if (!directions.includes(direction)) return;
+
+            const currentFocusedCell = pluginsStoreRef.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
+
+            if (!currentFocusedCell) return;
+
+            const { columnIndex, rowIndex } = currentFocusedCell as {
+                columnIndex: number;
+                rowIndex?: number;
+            };
+
+            if (isNil(rowIndex) || isNil(columnIndex)) return;
+
+            const { columns } = dataTableStoreRef.current;
+            const { records } = tableManagerStore.current;
+
+            let newRowIndex = rowIndex;
+            let newColumnIndex = columnIndex;
+
+            if (direction === 'up' || direction === 'down') {
+                if (direction === 'up') {
+                    if (rowIndex === 0) return;
+
+                    newRowIndex = newRowIndex - 1;
+
+                    // keep finding the rowIndex unless the type is data
+                    while (records[newRowIndex]?.rowType !== 'data') {
+                        newRowIndex = newRowIndex - 1;
+
+                        if (newRowIndex <= 0) return;
+                    }
+                } else {
+                    if (rowIndex === records?.length - 1) return;
+
+                    newRowIndex = newRowIndex + 1;
+
+                    // keep finding the rowIndex unless the type is data
+                    while (records[newRowIndex]?.rowType !== 'data') {
+                        newRowIndex = newRowIndex + 1;
+
+                        if (newRowIndex > records?.length - 1) return;
+                    }
+                }
+            }
+            // the only possible values are left or right
+            if (direction === 'left' || direction === 'right') {
+                if (direction === 'left') {
+                    if (columnIndex === 0) return;
+
+                    newColumnIndex = isNil(newColumnIndex) ? 0 : newColumnIndex - 1;
+                } else {
+                    if (newColumnIndex === columns?.length - 1) return;
+
+                    newColumnIndex = isNil(newColumnIndex) ? 0 : newColumnIndex + 1;
+                }
+            }
+
+            setFocusCell(prev => ({
+                ...prev,
+                focusedCell: {
+                    rowId: records[newRowIndex]?.id,
+                    columnId: columns[newColumnIndex],
+                    columnIndex: newColumnIndex,
+                    rowIndex: newRowIndex,
+                    type: 'cell',
+                },
+            }));
+
+            scrollToCell({ columnIndex: newColumnIndex, rowIndex: newRowIndex });
+        },
+        [dataTableStoreRef, pluginsStoreRef, scrollToCell, setFocusCell, tableManagerStore],
+    );
+};
+
+const useScrollToCell = () => {
+    const { store: dataTableStoreRef } = useDataTableStoreRef();
+    const { store: tableManagerStore } = useTableManagerStoreRef();
+    const { store: horizontalScrollIndexStoreRef } = useDataTableHorizontalScrollIndexStoreRef();
+
+    return useCallback(
+        ({ columnIndex, rowIndex }: CellIndices) => {
+            tableManagerStore.current.tableFlatListRef?.current?.scrollToIndex({
+                index: rowIndex,
+                animated: false,
+            });
+
+            const left = dataTableStoreRef.current.cellXOffsets[columnIndex];
+            const cellWidth = dataTableStoreRef.current.columnWidths?.[columnIndex] || 0;
+            const containerWidth = dataTableStoreRef.current.containerWidth || 0;
+
+            const checkLeft = (x: number, offset: number) => left + cellWidth >= x - offset;
+            const checkRight = (x: number, offset: number) => left <= x + offset + containerWidth;
+
+            if (
+                checkLeft(horizontalScrollIndexStoreRef.current.x, 0) &&
+                checkRight(horizontalScrollIndexStoreRef.current.x, 0)
+            )
+                return;
+
+            tableManagerStore.current.tableRef?.current?.scrollTo({
+                x: left,
+                animated: false,
+            });
+        },
+        [dataTableStoreRef, horizontalScrollIndexStoreRef, tableManagerStore],
+    );
+};
+
 export const [useCellFocusPlugin, useCellFocusEvents, useCellFocusMethods] = createPlugin({
     key: CELL_FOCUS_PLUGIN_KEY,
     eventKeys: [
@@ -190,5 +317,6 @@ export const [useCellFocusPlugin, useCellFocusEvents, useCellFocusMethods] = cre
         useFocusedCellRef,
         useEnsureCorrectFocusCellState,
         useResetFocusCellState,
+        useSetFocusCellByDirection,
     },
 });

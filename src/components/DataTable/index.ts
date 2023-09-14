@@ -2,6 +2,8 @@ import { DataCell } from './DataTableCell';
 import { DataTable as DataTableComponent } from './DataTable';
 import { DataHeaderCell } from './DataTableHeader';
 
+export { useStoreRef as useDataTableHorizontalScrollIndexStoreRef } from './hooks';
+
 export * from './DataTableContext';
 
 export {
