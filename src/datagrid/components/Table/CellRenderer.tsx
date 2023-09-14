@@ -12,7 +12,6 @@ import {
     useMolecules,
     useDataTableCell,
     useActionState,
-    useLatest,
 } from '@bambooapp/bamboo-molecules';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
@@ -58,7 +57,6 @@ const _DataCell = (
     const setFocusCellPluginStore = useSetFocusCellPluginStore();
 
     const isTappedRef = useRef(0);
-    const isFocusedRef = useLatest(isFocused);
 
     const [value, setValue] = useCellValue(row, column);
 
@@ -141,20 +139,6 @@ const _DataCell = (
             });
     }, [onFocus, onDragAndSelectStart, rowIndex, columnIndex, onDragAndSelectEnd]);
 
-    const onKeyDown = useCallback(
-        (e: KeyboardEvent) => {
-            e.preventDefault();
-
-            if (e.key.toLowerCase() !== 'enter') return;
-            if (!isFocusedRef.current) return;
-
-            setFocusCellPluginStore((prev: { isEditing?: boolean } | undefined) => ({
-                isEditing: !prev?.isEditing,
-            }));
-        },
-        [isFocusedRef, setFocusCellPluginStore],
-    );
-
     useEffect(() => {
         if (isFocused || !isEditing) return;
 
@@ -176,7 +160,6 @@ const _DataCell = (
             onPress={onPress}
             style={containerStyle}
             // @ts-ignore
-            onKeyDown={onKeyDown}
             dataSet={dataSet}
             {...rest}>
             <GestureDetector gesture={onDrag}>
