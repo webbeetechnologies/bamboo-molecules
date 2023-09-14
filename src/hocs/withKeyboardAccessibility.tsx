@@ -17,10 +17,10 @@ import { Platform } from 'react-native';
 import { createFastContext } from '../fast-context';
 
 export type Store = {
-    currentIndex: number;
+    currentIndex: number | null;
 };
 
-const defaultValue = { currentIndex: 0 };
+const defaultValue = { currentIndex: null };
 
 const {
     useStoreRef,
@@ -145,7 +145,10 @@ const AccessibilityWrapper = memo(
                                 ? 0
                                 : prev.currentIndex + 1,
                     })),
-                Enter: () => onSelectItem(currentIndexRef.current.currentIndex),
+                Enter: () => {
+                    if (currentIndexRef.current.currentIndex === null) return;
+                    onSelectItem(currentIndexRef.current.currentIndex);
+                },
                 Escape: () => onCancel?.(),
             }),
             [currentIndexRef, listLength, onCancel, onSelectItem, setStore],
@@ -165,7 +168,7 @@ const AccessibilityWrapper = memo(
 
         useEffect(() => {
             if (listRef && !!listRef.current) {
-                if (currentIndex < 0 || currentIndex > length - 1) return;
+                if (currentIndex === null || currentIndex < 0 || currentIndex > length - 1) return;
 
                 if (isFlat) {
                     (listRef as RefObject<FlatList>).current?.scrollToIndex?.({
