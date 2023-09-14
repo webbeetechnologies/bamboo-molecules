@@ -28,7 +28,7 @@ const useStoreData = <IStore extends StoreDataType>(
     defaultValue: IStore | null,
     watch: boolean = false,
 ): UseStoreDataReturnType<IStore> => {
-    const store = useRef<IStore>((value as IStore) || defaultValue);
+    const store = useRef<IStore>({ ...defaultValue, ...(value as IStore) });
     const watchRef = useRef(watch);
 
     const get = useCallback(() => store.current, [store]);
