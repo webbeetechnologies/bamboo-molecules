@@ -1,11 +1,13 @@
 import { memo, useMemo } from 'react';
+import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '@bambooapp/bamboo-molecules';
 import {
     useDataTable,
     renderDataTableHeaderCell,
     DataTableHeaderCellContextProvider,
 } from '@bambooapp/bamboo-molecules/components';
-import { StyleSheet } from 'react-native';
+import { useShortcut } from '@bambooapp/bamboo-molecules/shortcuts-manager';
+
 import { useHandleClickOutside, useHandleKeydownEvents } from '../../hooks';
 import { useTableManagerStoreRef } from '../../contexts';
 import { useCellFocusMethods } from '../../plugins';
@@ -13,13 +15,16 @@ import { useCellFocusMethods } from '../../plugins';
 export const TableHeaderRow = memo(() => {
     const { View } = useMolecules();
     const { store: storeRef } = useTableManagerStoreRef();
+    const { useResetFocusCellState } = useCellFocusMethods();
+    const resetFocusCellState = useResetFocusCellState();
 
     const { columns, headerRowProps, horizontalOffset } = useDataTable(store => ({
         columns: store.columns || [],
         headerRowProps: store.headerRowProps,
         horizontalOffset: store.horizontalOffset,
     }));
-    const { useEnsureCorrectFocusCellState } = useCellFocusMethods();
+    const { useEnsureCorrectFocusCellState, useSetFocusCellByDirection } = useCellFocusMethods();
+    const setFocusCellByDirection = useSetFocusCellByDirection();
 
     const headerStyle = useComponentStyles('DataTable_HeaderRow', [
         { paddingHorizontal: horizontalOffset },
@@ -43,10 +48,26 @@ export const TableHeaderRow = memo(() => {
         [columns],
     );
 
-    // TODO - move this to plugins
     useHandleKeydownEvents({ ref: storeRef.current.tableRef });
     useHandleClickOutside();
     useEnsureCorrectFocusCellState();
+
+    useShortcut('arrow', (_shortcut, { key, pressedKeys, normalizedKey }) => {
+        if (normalizedKey.includes('tab')) {
+            setFocusCellByDirection(normalizedKey.includes('shift') ? 'left' : 'right');
+
+            return;
+        }
+
+        setFocusCellByDirection(
+            key.split('Arrow')[1].toLowerCase(),
+            pressedKeys.includes('meta') || pressedKeys.includes('control'),
+        );
+    });
+
+    useShortcut('clear-cell-focus', () => {
+        resetFocusCellState();
+    });
 
     return (
         <View {...headerRowProps} style={headerStyle}>

@@ -1,4 +1,4 @@
-import { memo, PropsWithChildren, RefObject, useMemo } from 'react';
+import { createRef, memo, PropsWithChildren, RefObject, useMemo } from 'react';
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
@@ -14,7 +14,9 @@ export type TableManagerContextProviderProps = {
     spacerWidth: number;
 };
 
-export type TableManagerContextType = TableManagerContextProviderProps & {};
+export type TableManagerContextType = TableManagerContextProviderProps & {
+    tableFlatListRef: RefObject<any>;
+};
 
 const defaultContextValue = {
     focusedCell: null,
@@ -23,7 +25,8 @@ const defaultContextValue = {
     withContextMenu: false,
     spacerWidth: 0,
     records: [],
-    tableRef: {} as RefObject<any>,
+    tableRef: createRef(),
+    tableFlatListRef: createRef(),
 };
 
 export const {
