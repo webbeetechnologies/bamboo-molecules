@@ -13,6 +13,7 @@ const _ShortcutsManager = ({ shortcuts, scopes, children }: ShortcutsManagerProp
         return {
             shortcuts: keyBy(shortcutsRef.current, 'name'),
             scopes: keyBy(scopesRef.current, 'name'),
+            pressedKeys: [],
         };
     }, []);
 

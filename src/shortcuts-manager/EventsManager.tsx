@@ -5,14 +5,18 @@ import { calculateShortcutEventName, getPressedModifierKeys, normalizeKeys } fro
 import type { ShortcutEventDetail } from './types';
 
 const EventsManager = () => {
-    const { store } = useShortcutsManagerStoreRef();
+    const { store, set: setShortcutsManagerStore } = useShortcutsManagerStoreRef();
 
-    const callback = useCallback(
+    const onKeyDown = useCallback(
         (e: KeyboardEvent) => {
             e.preventDefault();
 
             const modifierKeys = getPressedModifierKeys(e);
             const normalizedKeys = normalizeKeys([e.key].concat(modifierKeys));
+
+            setShortcutsManagerStore(prev => ({
+                pressedKeys: [...prev.pressedKeys, e.key],
+            }));
 
             Object.values(store.current.shortcuts).forEach(shortcut => {
                 if (shortcut.scope && !store.current.scopes[shortcut.scope]) return;
@@ -38,16 +42,37 @@ const EventsManager = () => {
                 document.dispatchEvent(event);
             });
         },
-        [store],
+        [setShortcutsManagerStore, store],
     );
 
+    const onKeyUp = useCallback(
+        (e: KeyboardEvent) => {
+            e.preventDefault();
+
+            setShortcutsManagerStore(prev => ({
+                pressedKeys: prev.pressedKeys?.filter(key => key !== e.key),
+            }));
+        },
+        [setShortcutsManagerStore],
+    );
+
+    const onBlur = useCallback(() => {
+        setShortcutsManagerStore(() => ({
+            pressedKeys: [],
+        }));
+    }, [setShortcutsManagerStore]);
+
     useEffect(() => {
-        document.addEventListener('keydown', callback);
+        document.addEventListener('keydown', onKeyDown);
+        document.addEventListener('keyup', onKeyUp);
+        document.addEventListener('blur', onBlur);
 
         return () => {
-            document.removeEventListener('keydown', callback);
+            document.removeEventListener('keydown', onKeyDown);
+            document.removeEventListener('keyup', onKeyUp);
+            document.removeEventListener('blur', onBlur);
         };
-    }, [callback]);
+    }, [onBlur, onKeyDown, onKeyUp]);
     return null;
 };
 

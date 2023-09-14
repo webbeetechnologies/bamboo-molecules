@@ -15,7 +15,7 @@ export const ExampleWithoutProvider = () => {
 
     const setScopes = useSetScopes();
 
-    useShortcut('copy', (shortcut: Shortcut) => {
+    useShortcut('copy', ({ shortcut }) => {
         // eslint-disable-next-line no-console
         console.log({ shortcut });
 
@@ -25,7 +25,7 @@ export const ExampleWithoutProvider = () => {
         });
     });
 
-    useShortcut('paste', (shortcut: Shortcut) => {
+    useShortcut('paste', ({ shortcut }) => {
         // eslint-disable-next-line no-console
         console.log({ shortcut });
 

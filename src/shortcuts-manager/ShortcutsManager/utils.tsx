@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 export type ShortcutsManagerContextType = {
     shortcuts: Record<string, Shortcut>;
     scopes: Record<string, Scope>;
+    pressedKeys: string[];
 };
 
 export const {
