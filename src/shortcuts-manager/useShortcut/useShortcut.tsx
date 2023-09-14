@@ -3,13 +3,11 @@ import { Platform } from 'react-native';
 import { useLatest } from '@bambooapp/bamboo-molecules';
 
 import { useShortcutsManagerContextValueSelector } from '../ShortcutsManager';
-import type { Scope, Shortcut, ShortcutEventDetail } from '../types';
+import type { Scope, ShortcutEventDetail } from '../types';
 import { calculateShortcutEventName } from '../utils';
+import type { ShortcutCallbackArgs } from './types';
 
-const useShortcut = (
-    name: string,
-    callback: (shortcut: Shortcut, detail: ShortcutEventDetail) => void,
-) => {
+const useShortcut = (name: string, callback: (args: ShortcutCallbackArgs) => void) => {
     const { shortcut, isActive, scope } = useShortcutsManagerContextValueSelector(store => {
         const _shortcut = store.shortcuts[name];
 
@@ -43,7 +41,7 @@ const useShortcut = (
             )
                 return;
 
-            callbackRef.current(shortcutRef.current, e.detail);
+            callbackRef.current({ ...e.detail, shortcut: shortcutRef.current });
         },
         [activeRef, callbackRef, scopeRef, shortcutRef],
     );
