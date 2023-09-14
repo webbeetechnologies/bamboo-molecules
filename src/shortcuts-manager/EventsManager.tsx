@@ -9,6 +9,8 @@ const EventsManager = () => {
 
     const callback = useCallback(
         (e: KeyboardEvent) => {
+            e.preventDefault();
+
             const modifierKeys = getPressedModifierKeys(e);
             const normalizedKeys = normalizeKeys([e.key].concat(modifierKeys));
 
