@@ -19,7 +19,19 @@ const EventsManager = () => {
             }));
 
             Object.values(store.current.shortcuts).forEach(shortcut => {
-                if (shortcut.scope && !store.current.scopes[shortcut.scope]) return;
+                if (shortcut.scope) {
+                    const shortcutScope = store.current.scopes[shortcut.scope];
+
+                    if (!shortcutScope) return;
+
+                    if (
+                        !(
+                            shortcutScope?.node === document.activeElement ||
+                            shortcutScope?.node?.contains(document.activeElement)
+                        )
+                    )
+                        return;
+                }
 
                 const foundMatchedKeys = shortcut.keys.find(
                     keyGroup => normalizeKeys(keyGroup) === normalizedKeys,

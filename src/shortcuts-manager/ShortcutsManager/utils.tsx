@@ -17,6 +17,6 @@ export const {
 
 export type ShortcutsManagerProps = {
     children: ReactNode;
-    shortcuts: Shortcut[];
+    shortcuts?: Shortcut[];
     scopes?: Scope[];
 };
