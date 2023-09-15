@@ -6,7 +6,7 @@ import type { Shortcut } from '../types';
 import { ShortcutsManagerProps, ShortcutsManagerContextProvider } from './utils';
 
 const _ShortcutsManager = ({ shortcuts, scopes, children }: ShortcutsManagerProps) => {
-    const shortcutsRef = useRef<Shortcut[]>(shortcuts);
+    const shortcutsRef = useRef<Shortcut[]>(shortcuts || []);
     const scopesRef = useRef(scopes);
 
     const contextValue = useMemo(() => {
