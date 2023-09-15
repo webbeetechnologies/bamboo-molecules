@@ -26,7 +26,8 @@ const DatePickerDocked = (props: DatePickerDockedProps) => {
             contentStyles={styles.popoverContainer}
             triggerRef={triggerRef}
             isOpen={isOpen}
-            onClose={onToggle}>
+            onClose={onToggle}
+            popoverContentProps={props.popoverContentProps}>
             <DatePickerInlineBase
                 {...props}
                 HeaderComponent={DatePickerDockedHeader}

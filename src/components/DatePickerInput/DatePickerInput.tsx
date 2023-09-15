@@ -21,6 +21,7 @@ function DatePickerInput(
         pickerMode = 'modal',
         startYear,
         endYear,
+        dockedPopoverContentProps,
         //locale = 'en',
         ...rest
     }: DatePickerInputProps,
@@ -75,10 +76,12 @@ function DatePickerInput(
                     isOpen={isOpen}
                     onToggle={onToggle}
                     triggerRef={triggerRef}
+                    popoverContentProps={dockedPopoverContentProps}
                 />
             ),
         };
     }, [
+        dockedPopoverContentProps,
         endYear,
         isOpen,
         locale,
