@@ -1,5 +1,5 @@
 import type { MutableRefObject, PropsWithChildren, ReactElement } from 'react';
-import type { TextStyle, ViewStyle } from 'react-native';
+import type { TextStyle, ViewProps, ViewStyle } from 'react-native';
 import type { TPopperContext } from '../Popper/types';
 
 export type PopoverProps = PropsWithChildren<
@@ -23,6 +23,7 @@ export type PopoverProps = PropsWithChildren<
         exitTransition?: ViewStyle & { scale?: number; transition?: { duration: number } };
 
         isKeyboardDismissable?: boolean;
+        popoverContentProps?: ViewProps;
     }
 >;
 

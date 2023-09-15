@@ -1,5 +1,6 @@
 import type { TextInputProps } from '../TextInput';
 import type { ValidRangeType } from '../DatePickerInline';
+import type { ViewProps } from 'react-native';
 
 export interface DatePickerInputProps
     extends Omit<TextInputProps, 'value' | 'onChange' | 'onChangeText'> {
@@ -19,6 +20,7 @@ export interface DatePickerInputProps
     pickerMode?: 'docked' | 'modal';
     startYear?: number;
     endYear?: number;
+    dockedPopoverContentProps?: ViewProps;
 }
 export interface DatePickerInputWithoutModalProps extends Omit<DatePickerInputProps, 'withModal'> {
     inputButtons?: any;
