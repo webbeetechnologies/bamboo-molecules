@@ -9,14 +9,14 @@ const EventsManager = () => {
 
     const onKeyDown = useCallback(
         (e: KeyboardEvent) => {
-            e.preventDefault();
-
             const modifierKeys = getPressedModifierKeys(e);
             const normalizedKeys = normalizeKeys([e.key].concat(modifierKeys));
 
             setShortcutsManagerStore(prev => ({
                 pressedKeys: [...prev.pressedKeys, e.key],
             }));
+
+            let shouldPrevent = false;
 
             Object.values(store.current.shortcuts).forEach(shortcut => {
                 if (shortcut.scope) {
@@ -39,6 +39,8 @@ const EventsManager = () => {
 
                 if (!foundMatchedKeys) return;
 
+                shouldPrevent = !!shortcut.preventDefault;
+
                 const event = new CustomEvent<ShortcutEventDetail>(
                     calculateShortcutEventName(shortcut.name),
                     {
@@ -53,6 +55,10 @@ const EventsManager = () => {
 
                 document.dispatchEvent(event);
             });
+
+            if (shouldPrevent) {
+                e.preventDefault();
+            }
         },
         [setShortcutsManagerStore, store],
     );

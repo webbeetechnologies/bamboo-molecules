@@ -1,5 +1,4 @@
 import { useCallback, useEffect } from 'react';
-import { Platform } from 'react-native';
 import { useLatest } from '@bambooapp/bamboo-molecules';
 
 import { useShortcutsManagerStoreRef } from '../ShortcutsManager';
@@ -7,7 +6,11 @@ import type { ShortcutEventDetail } from '../types';
 import { calculateShortcutEventName } from '../utils';
 import type { ShortcutCallbackArgs } from './types';
 
-const useShortcut = (name: string, callback: (args: ShortcutCallbackArgs) => void) => {
+const useShortcut = (
+    name: string,
+    callback: (args: ShortcutCallbackArgs) => void,
+    disabled: boolean = false,
+) => {
     const { store } = useShortcutsManagerStoreRef();
 
     const nameRef = useLatest(name);
@@ -41,7 +44,7 @@ const useShortcut = (name: string, callback: (args: ShortcutCallbackArgs) => voi
     );
 
     useEffect(() => {
-        if (Platform.OS !== 'web') return;
+        if (disabled) return;
 
         const eventName = calculateShortcutEventName(nameRef.current);
 
@@ -50,7 +53,7 @@ const useShortcut = (name: string, callback: (args: ShortcutCallbackArgs) => voi
         return () => {
             document.removeEventListener(eventName, onCallback as (e: Event) => void);
         };
-    }, [onCallback, nameRef]);
+    }, [onCallback, nameRef, disabled]);
 };
 
 export default useShortcut;
