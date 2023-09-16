@@ -3,7 +3,7 @@ import { isMac } from '@bambooapp/bamboo-molecules';
 
 export const shortcuts: Shortcut[] = [
     {
-        name: 'arrow',
+        name: 'move-cell-focus',
         keys: [
             ['ArrowLeft'],
             ['ArrowRight'],
