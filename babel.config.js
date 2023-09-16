@@ -1,6 +1,6 @@
 const path = require('path');
 
-const defaultPlugins = [
+const storybookPlugins = [
     [
         'module-resolver',
         {
@@ -43,7 +43,7 @@ module.exports = api => {
     //     '@babel/preset-typescript',
     // ];
 
-    const plugins = process.env.MOLECULES_ENV === 'release' ? bundlePlugins : defaultPlugins;
+    const plugins = process.env.MOLECULES_ENV === 'storybook' ? storybookPlugins : bundlePlugins;
 
     return {
         presets,
