@@ -33,10 +33,8 @@ const EventsManager = () => {
                         return;
                 }
 
-                const foundMatchedKeys = shortcut.keys.find(keyGroup =>
-                    typeof keyGroup === 'string'
-                        ? keyGroup
-                        : normalizeKeys(keyGroup) === normalizedKeys,
+                const foundMatchedKeys = shortcut.keys.find(
+                    keyGroup => normalizeKeys(keyGroup) === normalizedKeys,
                 );
 
                 if (!foundMatchedKeys) return;
