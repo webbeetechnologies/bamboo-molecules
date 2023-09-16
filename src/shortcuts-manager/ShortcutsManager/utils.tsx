@@ -6,6 +6,7 @@ export type ShortcutsManagerContextType = {
     shortcuts: Record<string, Shortcut>;
     scopes: Record<string, Scope>;
     pressedKeys: string[];
+    disabled?: boolean;
 };
 
 const defaultValue = {
