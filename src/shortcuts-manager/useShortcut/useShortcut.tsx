@@ -16,13 +16,18 @@ const useShortcut = (name: string, callback: (args: ShortcutCallbackArgs) => voi
     const onCallback = useCallback(
         (e: CustomEvent<ShortcutEventDetail>) => {
             const shortcut = store.current.shortcuts[nameRef.current];
+
+            if (!shortcut) {
+                throw new Error(`Shortcut with name: ${nameRef.current} does not exist`);
+            }
+
             const scope = store.current.scopes[shortcut.scope || ''];
 
             if (shortcut.scope && !scope) return;
 
             // if there is node, we check if one of the elements instead it is focused
             if (
-                scope.node &&
+                scope?.node &&
                 !(
                     scope.node === document.activeElement ||
                     scope.node.contains(document.activeElement)
