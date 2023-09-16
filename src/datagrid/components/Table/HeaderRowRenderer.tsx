@@ -6,25 +6,17 @@ import {
     renderDataTableHeaderCell,
     DataTableHeaderCellContextProvider,
 } from '@bambooapp/bamboo-molecules/components';
-import { useShortcut } from '@bambooapp/bamboo-molecules/shortcuts-manager';
 
-import { useHandleClickOutside, useHandleKeydownEvents } from '../../hooks';
-import { useTableManagerStoreRef } from '../../contexts';
-import { useCellFocusMethods } from '../../plugins';
+import { useDatagridMethods } from '../../hooks';
 
 export const TableHeaderRow = memo(() => {
     const { View } = useMolecules();
-    const { store: storeRef } = useTableManagerStoreRef();
-    const { useResetFocusCellState } = useCellFocusMethods();
-    const resetFocusCellState = useResetFocusCellState();
 
     const { columns, headerRowProps, horizontalOffset } = useDataTable(store => ({
         columns: store.columns || [],
         headerRowProps: store.headerRowProps,
         horizontalOffset: store.horizontalOffset,
     }));
-    const { useEnsureCorrectFocusCellState, useSetFocusCellByDirection } = useCellFocusMethods();
-    const setFocusCellByDirection = useSetFocusCellByDirection();
 
     const headerStyle = useComponentStyles('DataTable_HeaderRow', [
         { paddingHorizontal: horizontalOffset },
@@ -48,26 +40,7 @@ export const TableHeaderRow = memo(() => {
         [columns],
     );
 
-    useHandleKeydownEvents({ ref: storeRef.current.tableRef });
-    useHandleClickOutside();
-    useEnsureCorrectFocusCellState();
-
-    useShortcut('move-cell-focus', ({ key, pressedKeys, normalizedKey }) => {
-        if (normalizedKey.includes('tab')) {
-            setFocusCellByDirection(normalizedKey.includes('shift') ? 'left' : 'right');
-
-            return;
-        }
-
-        setFocusCellByDirection(
-            key.split('Arrow')[1].toLowerCase(),
-            pressedKeys.includes('meta') || pressedKeys.includes('control'),
-        );
-    });
-
-    useShortcut('clear-cell-focus', () => {
-        resetFocusCellState();
-    });
+    useDatagridMethods();
 
     return (
         <View {...headerRowProps} style={headerStyle}>

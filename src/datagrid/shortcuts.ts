@@ -5,11 +5,11 @@ export const shortcuts: Shortcut[] = [
     {
         name: 'move-cell-focus',
         keys: [
-            ['ArrowLeft'],
-            ['ArrowRight'],
-            ['ArrowUp'],
-            ['ArrowDown'],
-            ['Tab'],
+            'ArrowLeft',
+            'ArrowRight',
+            'ArrowUp',
+            'ArrowDown',
+            'Tab',
             ['Shift', 'Tab'],
             isMac() ? ['meta', 'ArrowLeft'] : ['control', 'ArrowLeft'],
             isMac() ? ['meta', 'ArrowRight'] : ['control', 'ArrowRight'],
@@ -21,7 +21,7 @@ export const shortcuts: Shortcut[] = [
     },
     {
         name: 'clear-cell-focus',
-        keys: [['Escape']],
+        keys: ['Escape'],
         scope: 'datagrid',
     },
 ];
