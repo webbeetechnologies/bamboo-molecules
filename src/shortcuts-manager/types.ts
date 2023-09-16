@@ -2,6 +2,7 @@ export type Shortcut = {
     name: string;
     keys: string[][];
     scope?: string;
+    preventDefault?: boolean;
 };
 
 export type Scope = {
