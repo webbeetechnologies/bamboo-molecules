@@ -94,7 +94,7 @@ export const useSetFocusCellByDirection = () => {
                 },
             }));
 
-            scrollToCell({ columnIndex: newColumnIndex, rowIndex: newRowIndex });
+            scrollToCell({ columnIndex: newColumnIndex, rowIndex: newRowIndex, direction });
         },
         [dataTableStoreRef, pluginsStoreRef, scrollToCell, setFocusCell, tableManagerStore],
     );
@@ -106,11 +106,15 @@ const useScrollToCell = () => {
     const { store: horizontalScrollIndexStoreRef } = useDataTableHorizontalScrollIndexStoreRef();
 
     return useCallback(
-        ({ columnIndex, rowIndex }: CellIndices) => {
-            tableManagerStore.current.tableFlatListRef?.current?.scrollToIndex({
-                index: rowIndex,
-                animated: false,
-            });
+        ({ columnIndex, rowIndex, direction }: CellIndices & { direction: Direction }) => {
+            if (direction === 'up' || direction === 'down') {
+                tableManagerStore.current.tableFlatListRef?.current?.scrollToIndex({
+                    index: rowIndex,
+                    animated: false,
+                });
+
+                return;
+            }
 
             const left = dataTableStoreRef.current.cellXOffsets[columnIndex];
             const cellWidth = dataTableStoreRef.current.columnWidths?.[columnIndex] || 0;

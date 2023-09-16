@@ -1,4 +1,4 @@
-import { memo, useContext, useMemo, useRef } from 'react';
+import { memo, useContext, useEffect, useMemo, useRef } from 'react';
 
 import { keyBy } from '../../utils';
 import EventsManager from '../EventsManager';
@@ -25,14 +25,26 @@ const _ShortcutsManager = ({ shortcuts, scopes, children }: ShortcutsManagerProp
 
         return {
             shortcuts: {
-                ...parentContextRef.store.current.shortcuts,
                 ...currentValue.shortcuts,
+                ...parentContextRef.store.current.shortcuts,
             },
             scopes: {
-                ...parentContextRef.store.current.scopes,
                 ...currentValue.scopes,
+                ...parentContextRef.store.current.scopes,
             },
         } as ShortcutsManagerContextType;
+    }, [parentContextRef]);
+
+    // disable the parent event listener, we only need 1 listener
+    useEffect(() => {
+        if (!parentContextRef) return;
+
+        parentContextRef.set(() => ({ disabled: true }));
+
+        // if unmounted re-enable parent event listener
+        return () => {
+            parentContextRef.set(() => ({ disabled: false }));
+        };
     }, [parentContextRef]);
 
     return (

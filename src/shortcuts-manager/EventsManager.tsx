@@ -1,6 +1,9 @@
 import { memo, useCallback, useEffect } from 'react';
 
-import { useShortcutsManagerStoreRef } from './ShortcutsManager';
+import {
+    useShortcutsManagerContextValueSelector,
+    useShortcutsManagerStoreRef,
+} from './ShortcutsManager';
 import { calculateShortcutEventName, getPressedModifierKeys, normalizeKeys } from './utils';
 import type { ShortcutEventDetail } from './types';
 
@@ -91,7 +94,18 @@ const EventsManager = () => {
             document.removeEventListener('blur', onBlur);
         };
     }, [onBlur, onKeyDown, onKeyUp]);
+
     return null;
 };
 
-export default memo(EventsManager);
+const EventManagerContainer = memo(() => {
+    const { isDisabled } = useShortcutsManagerContextValueSelector(state => ({
+        isDisabled: !!state.disabled,
+    }));
+
+    if (isDisabled) return null;
+
+    return <EventsManager />;
+});
+
+export default memo(EventManagerContainer);
