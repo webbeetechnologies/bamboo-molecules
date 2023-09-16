@@ -17,6 +17,7 @@ export const shortcuts: Shortcut[] = [
             isMac() ? ['meta', 'ArrowDown'] : ['control', 'ArrowDown'],
         ],
         scope: 'datagrid',
+        preventDefault: true,
     },
     {
         name: 'clear-cell-focus',

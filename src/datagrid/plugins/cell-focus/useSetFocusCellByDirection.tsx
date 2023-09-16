@@ -45,8 +45,8 @@ export const useSetFocusCellByDirection = () => {
             let newRowIndex = rowIndex;
             let newColumnIndex = columnIndex;
 
-            if (direction === 'up' || direction === 'down') {
-                if (direction === 'up') {
+            switch (direction) {
+                case 'up':
                     if (rowIndex === 0) return;
 
                     newRowIndex = scrollToEdge ? 0 : newRowIndex - 1;
@@ -58,7 +58,8 @@ export const useSetFocusCellByDirection = () => {
                         if (scrollToEdge ? newRowIndex > records?.length - 1 : newRowIndex <= 0)
                             return;
                     }
-                } else {
+                    break;
+                case 'down':
                     if (rowIndex === records?.length - 1) return;
 
                     newRowIndex = scrollToEdge ? records?.length - 1 : newRowIndex + 1;
@@ -70,19 +71,16 @@ export const useSetFocusCellByDirection = () => {
                         if (scrollToEdge ? newRowIndex <= 0 : newRowIndex > records?.length - 1)
                             return;
                     }
-                }
-            }
-            // the only possible values are left or right
-            if (direction === 'left' || direction === 'right') {
-                if (direction === 'left') {
+                    break;
+                case 'left':
                     if (columnIndex === 0) return;
 
                     newColumnIndex = scrollToEdge ? 0 : newColumnIndex - 1;
-                } else {
+                    break;
+                case 'right':
                     if (newColumnIndex === columns?.length - 1) return;
 
                     newColumnIndex = scrollToEdge ? columns?.length - 1 : newColumnIndex + 1;
-                }
             }
 
             setFocusCell(prev => ({
