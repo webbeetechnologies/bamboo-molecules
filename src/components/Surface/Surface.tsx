@@ -1,4 +1,4 @@
-import { ComponentPropsWithRef, ReactNode, memo, useMemo } from 'react';
+import { ComponentPropsWithRef, ReactNode, memo, useMemo, forwardRef } from 'react';
 import { Animated, View, StyleProp, ViewStyle } from 'react-native';
 
 import type { MD3Elevation } from '../../core/theme/types';
@@ -71,7 +71,7 @@ export type Props = ComponentPropsWithRef<typeof View> & {
  */
 
 // for Web
-const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) => {
+const Surface = ({ elevation = 1, style, children, testID, ...props }: Props, ref: any) => {
     const surfaceStyles = useComponentStyles('Surface', style);
 
     const { surfaceStyle, surfaceContextValue } = useMemo(() => {
@@ -85,11 +85,11 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
 
     return (
         <BackgroundContext.Provider value={surfaceContextValue}>
-            <Animated.View {...props} testID={testID} style={surfaceStyle}>
+            <Animated.View ref={ref} {...props} testID={testID} style={surfaceStyle}>
                 {children}
             </Animated.View>
         </BackgroundContext.Provider>
     );
 };
 
-export default memo(Surface);
+export default memo(forwardRef(Surface));
