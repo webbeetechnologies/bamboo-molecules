@@ -120,6 +120,10 @@ export const createFastContext = <T extends StoreDataType = {}>(
             selector: SelectorOutputType<T, SelectorOutput>,
             equalityCheck = Object.is,
         ) => useStoreValue(context as Context<UseStoreDataReturnType<T>>, selector, equalityCheck),
+        /**
+         * context of the store. Useful for ContextBridge
+         */
+        Context: context,
     };
 };
 

@@ -27,6 +27,7 @@
     "src",
     "datagrid",
     "fast-context",
+    "shortcuts-manager",
     "components",
     "!**/__tests__",
     "!**/__fixtures__",
