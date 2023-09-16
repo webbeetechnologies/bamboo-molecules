@@ -8,8 +8,9 @@ import type {
     TDataTableColumn,
     TDataTableRow,
 } from '@bambooapp/bamboo-molecules/components';
-import { ComponentType, ReactNode, useCallback, useMemo, useRef } from 'react';
-import { StyleSheet } from 'react-native';
+import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
+import { Platform, StyleSheet } from 'react-native';
+import { ShortcutsManager, useSetScopes } from '@bambooapp/bamboo-molecules/shortcuts-manager';
 
 import { useMolecules, useToken } from '../hooks';
 import {
@@ -42,8 +43,8 @@ import {
 import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
 import { RecordWithId, addDataToCallbackPairs, prepareGroupedData } from './utils';
-
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
+import { shortcuts } from './shortcuts';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -105,6 +106,8 @@ const DataGrid = ({
 
     const { store } = useTableManagerStoreRef();
     const { store: pluginsDataStore } = usePluginsDataStoreRef();
+
+    const setScopes = useSetScopes();
 
     const { handleContextMenuOpen, isOpen, onClose, ...restContextMenuProps } =
         contextMenuProps || (emptyObj as ContextMenuProps);
@@ -183,6 +186,17 @@ const DataGrid = ({
         [dataRef, handleContextMenuOpen, pluginsDataStore, shouldContextMenuDisplayed],
     );
 
+    useEffect(() => {
+        if (Platform.OS !== 'web') return;
+
+        setScopes([
+            {
+                name: 'datagrid',
+                node: document.querySelector('[data-id="datagrid"]'),
+            },
+        ]);
+    }, [setScopes]);
+
     // TODO - move this to plugins
     useContextMenu({ ref: store.current.tableRef, callback: onContextMenuOpen });
 
@@ -190,6 +204,9 @@ const DataGrid = ({
         <>
             <DataTable
                 ref={store.current.tableRef}
+                flatListRef={store.current.tableFlatListRef}
+                // @ts-ignore
+                dataSet={dataSet}
                 testID="datagrid"
                 renderHeader={renderHeader}
                 renderCell={renderCell}
@@ -245,14 +262,18 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         return (
             <FieldTypesProvider value={fieldTypes}>
                 <HooksProvider value={hooksContextValue}>
-                    <PluginsManager plugins={plugins}>
-                        <TableManagerProviderWrapper Component={Component} {...rest} />
-                    </PluginsManager>
+                    <ShortcutsManager shortcuts={shortcuts}>
+                        <PluginsManager plugins={plugins}>
+                            <TableManagerProviderWrapper Component={Component} {...rest} />
+                        </PluginsManager>
+                    </ShortcutsManager>
                 </HooksProvider>
             </FieldTypesProvider>
         );
     };
 };
+
+const dataSet = { id: 'datagrid' };
 
 const defaultExpandCollapseMethods = { useCollapsedGroupIds: () => [] };
 

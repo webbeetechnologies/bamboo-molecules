@@ -1,6 +1,6 @@
 export type Shortcut = {
     name: string;
-    keys: string[][];
+    keys: (string | string[])[];
     scope?: string;
     preventDefault?: boolean;
 };

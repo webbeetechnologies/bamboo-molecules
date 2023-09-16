@@ -1,25 +1,22 @@
 import { memo, useMemo } from 'react';
+import { StyleSheet } from 'react-native';
 import { useComponentStyles, useMolecules } from '@bambooapp/bamboo-molecules';
 import {
     useDataTable,
     renderDataTableHeaderCell,
     DataTableHeaderCellContextProvider,
 } from '@bambooapp/bamboo-molecules/components';
-import { StyleSheet } from 'react-native';
-import { useHandleClickOutside, useHandleKeydownEvents } from '../../hooks';
-import { useTableManagerStoreRef } from '../../contexts';
-import { useCellFocusMethods } from '../../plugins';
+
+import { useDatagridMethods } from '../../hooks';
 
 export const TableHeaderRow = memo(() => {
     const { View } = useMolecules();
-    const { store: storeRef } = useTableManagerStoreRef();
 
     const { columns, headerRowProps, horizontalOffset } = useDataTable(store => ({
         columns: store.columns || [],
         headerRowProps: store.headerRowProps,
         horizontalOffset: store.horizontalOffset,
     }));
-    const { useEnsureCorrectFocusCellState } = useCellFocusMethods();
 
     const headerStyle = useComponentStyles('DataTable_HeaderRow', [
         { paddingHorizontal: horizontalOffset },
@@ -43,10 +40,7 @@ export const TableHeaderRow = memo(() => {
         [columns],
     );
 
-    // TODO - move this to plugins
-    useHandleKeydownEvents({ ref: storeRef.current.tableRef });
-    useHandleClickOutside();
-    useEnsureCorrectFocusCellState();
+    useDatagridMethods();
 
     return (
         <View {...headerRowProps} style={headerStyle}>

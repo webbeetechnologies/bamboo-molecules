@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, memo, useCallback, useMemo } from 'react';
+import { ForwardedRef, forwardRef, memo, RefObject, useCallback, useMemo } from 'react';
 import type {
     LayoutChangeEvent,
     NativeScrollEvent,
@@ -25,7 +25,10 @@ import {
     useViewabilityConfigCallbackPairs,
 } from './hooks';
 
-type DataTableComponentProps = DataTableBase & ScrollViewProps;
+type DataTableComponentProps = DataTableBase &
+    ScrollViewProps & {
+        flatListRef?: RefObject<any>;
+    };
 type DataTablePresentationProps = DataTableComponentProps &
     Pick<DataTableProps, 'records'> & { tableWidth: number } & Pick<
         Required<DataTableProps>,
@@ -46,6 +49,7 @@ const DataTablePresentationComponent = memo(
             ScrollViewComponent,
             onLayout: onLayoutProp,
             HeaderRowComponent: HeaderRowComponentProp,
+            flatListRef,
             ...restScrollViewProps
         } = props;
 
@@ -120,6 +124,7 @@ const DataTablePresentationComponent = memo(
                 style={hStyle}>
                 {!!containerWidth && (
                     <FlatListComponent
+                        ref={flatListRef}
                         {...vProps}
                         data={records}
                         windowSize={windowSize}

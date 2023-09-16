@@ -1,4 +1,4 @@
-import type { ComponentPropsWithRef, ComponentType, ReactNode } from 'react';
+import type { ComponentPropsWithRef, ComponentType, ReactNode, RefObject } from 'react';
 import type { FlatListProps, ScrollViewProps, ViewProps } from 'react-native';
 import type { ScrollView } from 'react-native';
 import type { ViewAbilityConfigPair } from 'src/datagrid/types';
@@ -13,6 +13,7 @@ export interface DataTableComponentProps<T = any> {
     FlatListComponent?: ComponentType<
         Omit<FlatListProps<T>, 'viewabilityConfigCallbackPairs'> & {
             viewabilityConfigCallbackPairs: ViewAbilityConfigPair[];
+            ref?: RefObject<any>;
         }
     >;
     ScrollViewComponent?: ComponentType<ComponentPropsWithRef<typeof ScrollView>>;
@@ -162,4 +163,5 @@ export interface DataTableProps<RecordType = any>
      * CellWrapperComponent
      */
     CellWrapperComponent?: ComponentType<DataCellProps>;
+    flatListRef?: RefObject<any>;
 }

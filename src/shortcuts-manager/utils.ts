@@ -33,7 +33,9 @@ const mappings = new Map([
  * @param {Array<string>} keys The list of the `KeyboardEvent.key` properties
  * @returns {string}
  */
-export const normalizeKeys = (keys: string[]): string => {
+export const normalizeKeys = (keys: string | string[]): string => {
+    if (typeof keys === 'string') return keys.toLowerCase();
+
     return keys
         .map(key => {
             const lowercaseKey = key.toLowerCase();

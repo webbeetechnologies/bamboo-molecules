@@ -4,3 +4,4 @@ export {
     Props as UseHandleKeydownEventsProps,
 } from './useHandleKeydownEvents';
 export { default as useHandleClickOutside } from './useHandleClickOutside';
+export { default as useDatagridMethods } from './useDatagridMethods';
