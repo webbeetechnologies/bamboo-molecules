@@ -248,6 +248,8 @@ export {
     BackgroundContext,
     formatNumberWithMask,
     normalizeToNumberString,
+    isMac,
+    getOS,
 } from './utils';
 
 export { ComponentStylePropWithVariants, WithElements } from './types';

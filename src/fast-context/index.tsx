@@ -28,7 +28,7 @@ const useStoreData = <IStore extends StoreDataType>(
     defaultValue: IStore | null,
     watch: boolean = false,
 ): UseStoreDataReturnType<IStore> => {
-    const store = useRef<IStore>((value as IStore) || defaultValue);
+    const store = useRef<IStore>({ ...defaultValue, ...(value as IStore) });
     const watchRef = useRef(watch);
 
     const get = useCallback(() => store.current, [store]);
@@ -120,6 +120,10 @@ export const createFastContext = <T extends StoreDataType = {}>(
             selector: SelectorOutputType<T, SelectorOutput>,
             equalityCheck = Object.is,
         ) => useStoreValue(context as Context<UseStoreDataReturnType<T>>, selector, equalityCheck),
+        /**
+         * context of the store. Useful for ContextBridge
+         */
+        Context: context,
     };
 };
 

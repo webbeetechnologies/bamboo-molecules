@@ -16,6 +16,10 @@ const storybookPlugins = [
                     __dirname,
                     './src/fast-context',
                 ),
+                '@bambooapp/bamboo-molecules/shortcuts-manager': path.resolve(
+                    __dirname,
+                    './src/shortcuts-manager',
+                ),
             },
         },
     ],
