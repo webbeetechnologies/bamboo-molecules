@@ -5,7 +5,7 @@ import { createPlugin } from '../createPlugin';
 import { PluginEvents } from '../types';
 import { usePluginsDataStoreRef, usePluginsDataValueSelector } from '../plugins-manager';
 import { useResetFocusCellState, useSetFocusCellPluginStore } from './useSetFocusCellPluginStore';
-import { useSetFocusCellByDirection } from './useSetFocusCellByDIrection';
+import { useSetFocusCellByDirection } from './useSetFocusCellByDirection';
 import { useEnsureCorrectFocusCellState } from './useEnsureFocusCellState';
 
 export const CELL_FOCUS_PLUGIN_KEY = 'cell-focus';
