@@ -97,7 +97,7 @@ function DatePickerInput(
     const rightElement = useMemo(
         () => (
             <>
-                {withModal ? (
+                {withModal || pickerMode === 'docked' ? (
                     <>
                         <IconButton
                             ref={triggerRef}
