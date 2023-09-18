@@ -16,12 +16,14 @@ export const shortcuts: Shortcut[] = [
             isMac() ? ['meta', 'ArrowUp'] : ['control', 'ArrowUp'],
             isMac() ? ['meta', 'ArrowDown'] : ['control', 'ArrowDown'],
         ],
-        scope: 'datagrid',
         preventDefault: true,
     },
     {
         name: 'clear-cell-focus',
         keys: ['Escape'],
-        scope: 'datagrid',
+    },
+    {
+        name: 'edit-cell',
+        keys: ['Enter'],
     },
 ];

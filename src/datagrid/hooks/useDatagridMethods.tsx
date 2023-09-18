@@ -9,6 +9,7 @@ import {
 import { useTableManagerStoreRef } from '../contexts';
 import useHandleClickOutside from './useHandleClickOutside';
 import useHandleKeydownEvents from './useHandleKeydownEvents';
+import useToggleCellEditingState from './useToggleCellEditingState';
 
 const useDatagridMethods = () => {
     const { store: storeRef } = useTableManagerStoreRef();
@@ -29,6 +30,8 @@ const useDatagridMethods = () => {
     useEnsureCorrectFocusCellState();
 
     useResetSelectionOnFocusCellChange();
+
+    useToggleCellEditingState();
 
     useShortcut(
         'move-cell-focus',

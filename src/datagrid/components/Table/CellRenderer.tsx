@@ -12,6 +12,7 @@ import {
     useMolecules,
     useDataTableCell,
     useActionState,
+    useLatest,
 } from '@bambooapp/bamboo-molecules';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
@@ -23,6 +24,7 @@ import { useCellFocusMethods, useCellSelectionMethods } from '../../plugins';
 import { CellSelectionIndicator } from '../CellSelectionIndicator';
 import '../CellBorder';
 import { getPressedModifierKeys } from '../../../shortcuts-manager/utils';
+import { handleEmitNativeEvent } from '../../utils';
 
 export type Props = RenderCellProps &
     Omit<PressableProps, 'ref'> & {
@@ -59,6 +61,7 @@ const _DataCell = (
 
     const isTappedRef = useRef(0);
     const pressedKeyRef = useRef('');
+    const isEditingRef = useLatest(isEditing);
 
     const [value, setValue] = useCellValue(row, column);
 
@@ -84,7 +87,7 @@ const _DataCell = (
 
     const onPress = useCallback(
         (e: GestureResponderEvent) => {
-            if (isEditing) return;
+            if (isEditingRef.current) return;
 
             const delta = new Date().getTime() - isTappedRef.current;
 
@@ -102,7 +105,14 @@ const _DataCell = (
 
             onFocus(e);
         },
-        [cellReadonly, displayEditorOnHover, isEditing, onFocus, readonly, setFocusCellPluginStore],
+        [
+            cellReadonly,
+            displayEditorOnHover,
+            isEditingRef,
+            onFocus,
+            readonly,
+            setFocusCellPluginStore,
+        ],
     );
 
     const displayViewRenderer = useMemo(() => {
@@ -150,21 +160,22 @@ const _DataCell = (
 
     const onKeyDown = useCallback(
         (e: KeyboardEvent) => {
+            if (e.key === 'Enter') {
+                handleEmitNativeEvent('keydown', e);
+            }
+
+            if (!(e.key.length === 1 && !getPressedModifierKeys(e).length)) return;
+
             e.preventDefault();
 
-            if (
-                (e.key === 'Enter' || e.key.length === 1) &&
-                !getPressedModifierKeys(e).length &&
-                displayViewRenderer
-            ) {
-                if (e.key.length === 1) {
-                    pressedKeyRef.current = e.key;
-                }
+            if (isEditingRef.current) return;
 
-                setFocusCellPluginStore(() => ({ isEditing: true }));
-            }
+            pressedKeyRef.current = e.key;
+            setFocusCellPluginStore(() => ({ isEditing: true }));
+
+            return;
         },
-        [displayViewRenderer, setFocusCellPluginStore],
+        [isEditingRef, setFocusCellPluginStore],
     );
 
     useEffect(() => {
