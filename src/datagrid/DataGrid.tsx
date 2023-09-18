@@ -257,6 +257,8 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
             () => [selectionPlugin, cellFocusPlugin, ...(_plugins || [])],
             [_plugins, cellFocusPlugin, selectionPlugin],
         );
+
+        const isMacRef = useRef(isMac());
         const shortcuts = useRef([
             {
                 name: 'move-cell-focus',
@@ -267,10 +269,10 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
                     'ArrowDown',
                     'Tab',
                     ['Shift', 'Tab'],
-                    isMac() ? ['meta', 'ArrowLeft'] : ['control', 'ArrowLeft'],
-                    isMac() ? ['meta', 'ArrowRight'] : ['control', 'ArrowRight'],
-                    isMac() ? ['meta', 'ArrowUp'] : ['control', 'ArrowUp'],
-                    isMac() ? ['meta', 'ArrowDown'] : ['control', 'ArrowDown'],
+                    isMacRef.current ? ['meta', 'ArrowLeft'] : ['control', 'ArrowLeft'],
+                    isMacRef.current ? ['meta', 'ArrowRight'] : ['control', 'ArrowRight'],
+                    isMacRef.current ? ['meta', 'ArrowUp'] : ['control', 'ArrowUp'],
+                    isMacRef.current ? ['meta', 'ArrowDown'] : ['control', 'ArrowDown'],
                 ],
                 preventDefault: true,
             },
