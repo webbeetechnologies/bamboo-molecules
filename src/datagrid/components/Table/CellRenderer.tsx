@@ -57,6 +57,7 @@ const _DataCell = (
     const setFocusCellPluginStore = useSetFocusCellPluginStore();
 
     const isTappedRef = useRef(0);
+    const pressedKeyRef = useRef('');
 
     const [value, setValue] = useCellValue(row, column);
 
@@ -139,18 +140,33 @@ const _DataCell = (
             });
     }, [onFocus, onDragAndSelectStart, rowIndex, columnIndex, onDragAndSelectEnd]);
 
-    useEffect(() => {
-        if (isFocused || !isEditing) return;
-
-        setFocusCellPluginStore(() => ({ isEditing: false }));
-    }, [isEditing, isFocused, setFocusCellPluginStore]);
-
     const handleContextMenu = useCallback(() => {
         onFocus({} as GestureResponderEvent);
         setFocusCellPluginStore(() => ({
             focusedCellRef: cellRef,
         }));
     }, [onFocus, setFocusCellPluginStore]);
+
+    const onKeyDown = useCallback(
+        (e: KeyboardEvent) => {
+            e.preventDefault();
+
+            if ((e.key === 'Enter' || e.key.length === 1) && displayViewRenderer) {
+                if (e.key.length === 1) {
+                    pressedKeyRef.current = e.key;
+                }
+
+                setFocusCellPluginStore(() => ({ isEditing: true }));
+            }
+        },
+        [displayViewRenderer, setFocusCellPluginStore],
+    );
+
+    useEffect(() => {
+        if (isFocused || !isEditing) return;
+
+        setFocusCellPluginStore(() => ({ isEditing: false }));
+    }, [isEditing, isFocused, setFocusCellPluginStore]);
 
     useContextMenu({ ref: cellRef, callback: handleContextMenu });
 
@@ -161,6 +177,7 @@ const _DataCell = (
             style={containerStyle}
             // @ts-ignore
             dataSet={dataSet}
+            onKeyDown={onKeyDown}
             {...rest}>
             <GestureDetector gesture={onDrag}>
                 <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
@@ -171,6 +188,7 @@ const _DataCell = (
                             value={value}
                             type={type}
                             onChange={setValue}
+                            pressedKey={pressedKeyRef.current}
                             {...restField}
                         />
                     )}
@@ -188,7 +206,7 @@ const _DataCell = (
 
 const DataCell = forwardRef(_DataCell);
 
-const actionContainerProps = { style: { height: '100%' } };
+const actionContainerProps = { style: { height: '100%', outline: 'none' } };
 
 const styles = StyleSheet.create({
     cellContainer: {
@@ -205,15 +223,6 @@ const styles = StyleSheet.create({
         left: 0,
         minHeight: '100%',
         width: '100%',
-    },
-    focused: {
-        borderLeftWidth: 2,
-        borderRightWidth: 2,
-        borderWidth: 2,
-        borderRadius: 2,
-        borderColor: 'blue',
-        backgroundColor: 'colors.surface',
-        height: '100%',
     },
     centered: {
         justifyContent: 'center',
