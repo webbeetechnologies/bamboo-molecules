@@ -1,5 +1,5 @@
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
-import { typedMemo, useLatest } from '@bambooapp/bamboo-molecules';
+import { isMac, typedMemo, useLatest } from '@bambooapp/bamboo-molecules';
 import type {
     DataTableProps,
     MenuProps,
@@ -44,7 +44,6 @@ import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
 import { RecordWithId, addDataToCallbackPairs, prepareGroupedData } from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
-import { shortcuts } from './shortcuts';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -258,6 +257,32 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
             () => [selectionPlugin, cellFocusPlugin, ...(_plugins || [])],
             [_plugins, cellFocusPlugin, selectionPlugin],
         );
+        const shortcuts = useRef([
+            {
+                name: 'move-cell-focus',
+                keys: [
+                    'ArrowLeft',
+                    'ArrowRight',
+                    'ArrowUp',
+                    'ArrowDown',
+                    'Tab',
+                    ['Shift', 'Tab'],
+                    isMac() ? ['meta', 'ArrowLeft'] : ['control', 'ArrowLeft'],
+                    isMac() ? ['meta', 'ArrowRight'] : ['control', 'ArrowRight'],
+                    isMac() ? ['meta', 'ArrowUp'] : ['control', 'ArrowUp'],
+                    isMac() ? ['meta', 'ArrowDown'] : ['control', 'ArrowDown'],
+                ],
+                preventDefault: true,
+            },
+            {
+                name: 'clear-cell-focus',
+                keys: ['Escape'],
+            },
+            {
+                name: 'edit-cell',
+                keys: ['Enter'],
+            },
+        ]).current;
 
         return (
             <FieldTypesProvider value={fieldTypes}>
