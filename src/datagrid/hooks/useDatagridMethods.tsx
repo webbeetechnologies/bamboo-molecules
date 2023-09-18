@@ -1,11 +1,14 @@
-import { useHandleClickOutside, useHandleKeydownEvents } from './index';
 import { useShortcut } from '@bambooapp/bamboo-molecules/shortcuts-manager';
+
 import {
     CELL_FOCUS_PLUGIN_KEY,
     useCellFocusMethods,
+    useCellSelectionMethods,
     usePluginsDataValueSelector,
 } from '../plugins';
 import { useTableManagerStoreRef } from '../contexts';
+import useHandleClickOutside from './useHandleClickOutside';
+import useHandleKeydownEvents from './useHandleKeydownEvents';
 
 const useDatagridMethods = () => {
     const { store: storeRef } = useTableManagerStoreRef();
@@ -17,11 +20,15 @@ const useDatagridMethods = () => {
     }));
 
     const { useEnsureCorrectFocusCellState, useSetFocusCellByDirection } = useCellFocusMethods();
+    const { useResetSelectionOnFocusCellChange } = useCellSelectionMethods();
+
     const setFocusCellByDirection = useSetFocusCellByDirection();
 
     useHandleKeydownEvents({ ref: storeRef.current.tableRef });
     useHandleClickOutside();
     useEnsureCorrectFocusCellState();
+
+    useResetSelectionOnFocusCellChange();
 
     useShortcut(
         'move-cell-focus',

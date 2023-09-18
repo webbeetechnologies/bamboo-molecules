@@ -74,6 +74,21 @@ const useOnResetSelectionOnClickOutside = () => {
     );
 };
 
+const useResetSelectionOnFocusCellChange = () => {
+    const { set: setStore, store } = usePluginsDataStoreRef();
+    const { focusCell } = usePluginsDataValueSelector(store => ({
+        focusCell: store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell,
+    }));
+
+    useEffect(() => {
+        if (!store.current[CELL_SELECTION_PLUGIN_KEY]) return;
+
+        setStore(() => ({
+            [CELL_SELECTION_PLUGIN_KEY]: undefined,
+        }));
+    }, [focusCell, setStore, store]);
+};
+
 const useOnDragAndSelectStart = () => {
     const { set: setStore } = usePluginsDataStoreRef();
     const normalizeCell = useNormalizeCellHandler();
@@ -160,6 +175,7 @@ export const [useCellSelectionPlugin, useCellSelectionEvents, useCellSelectionMe
         methods: {
             useOnSelectCell,
             useOnResetSelectionOnClickOutside,
+            useResetSelectionOnFocusCellChange,
             useOnDragAndSelectStart,
             useOnDragAndSelectEnd,
             useProcessDragCellSelection,
