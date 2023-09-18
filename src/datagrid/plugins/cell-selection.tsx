@@ -6,7 +6,6 @@ import { usePluginsDataStoreRef } from './plugins-manager';
 import { CellIndices, PluginEvents } from './types';
 import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
 import { CELL_FOCUS_PLUGIN_KEY } from './cell-focus';
-import { usePrevious } from '@bambooapp/bamboo-molecules';
 
 export const CELL_SELECTION_PLUGIN_KEY = 'cell-selection';
 
@@ -116,7 +115,6 @@ const useOnDragAndSelectEnd = () => {
     const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(() => {
-        console.log({ selection: store.current[CELL_SELECTION_PLUGIN_KEY] });
         const selection = normalizeSelection(store.current[CELL_SELECTION_PLUGIN_KEY]);
 
         if (beforeCellSelection({ selection }) === false) return;
