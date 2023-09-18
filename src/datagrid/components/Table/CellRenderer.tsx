@@ -206,7 +206,7 @@ const _DataCell = (
 
 const DataCell = forwardRef(_DataCell);
 
-const actionContainerProps = { style: { height: '100%' } };
+const actionContainerProps = { style: { height: '100%', outline: 'none' } };
 
 const styles = StyleSheet.create({
     cellContainer: {
@@ -223,15 +223,6 @@ const styles = StyleSheet.create({
         left: 0,
         minHeight: '100%',
         width: '100%',
-    },
-    focused: {
-        borderLeftWidth: 2,
-        borderRightWidth: 2,
-        borderWidth: 2,
-        borderRadius: 2,
-        borderColor: 'blue',
-        backgroundColor: 'colors.surface',
-        height: '100%',
     },
     centered: {
         justifyContent: 'center',
