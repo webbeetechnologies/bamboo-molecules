@@ -76,8 +76,9 @@ const useOnResetSelectionOnClickOutside = () => {
 
 const useResetSelectionOnFocusCellChange = () => {
     const { set: setStore, store } = usePluginsDataStoreRef();
-    const { focusCell } = usePluginsDataValueSelector(store => ({
-        focusCell: store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell,
+    const { columnId, rowId } = usePluginsDataValueSelector(store => ({
+        columnId: store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell?.columnId,
+        rowId: store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell?.rowId,
     }));
 
     useEffect(() => {
@@ -86,7 +87,7 @@ const useResetSelectionOnFocusCellChange = () => {
         setStore(() => ({
             [CELL_SELECTION_PLUGIN_KEY]: undefined,
         }));
-    }, [focusCell, setStore, store]);
+    }, [columnId, rowId, setStore, store]);
 };
 
 const useOnDragAndSelectStart = () => {
