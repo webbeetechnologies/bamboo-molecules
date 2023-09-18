@@ -6,6 +6,7 @@ import { usePluginsDataStoreRef } from './plugins-manager';
 import { CellIndices, PluginEvents } from './types';
 import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
 import { CELL_FOCUS_PLUGIN_KEY } from './cell-focus';
+import { usePrevious } from '@bambooapp/bamboo-molecules';
 
 export const CELL_SELECTION_PLUGIN_KEY = 'cell-selection';
 
@@ -76,8 +77,9 @@ const useOnResetSelectionOnClickOutside = () => {
 
 const useResetSelectionOnFocusCellChange = () => {
     const { set: setStore, store } = usePluginsDataStoreRef();
-    const { focusCell } = usePluginsDataValueSelector(store => ({
-        focusCell: store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell,
+    const { columnId, rowId } = usePluginsDataValueSelector(store => ({
+        columnId: store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell?.columnId,
+        rowId: store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell?.rowId,
     }));
 
     useEffect(() => {
@@ -86,7 +88,7 @@ const useResetSelectionOnFocusCellChange = () => {
         setStore(() => ({
             [CELL_SELECTION_PLUGIN_KEY]: undefined,
         }));
-    }, [focusCell, setStore, store]);
+    }, [columnId, rowId, setStore, store]);
 };
 
 const useOnDragAndSelectStart = () => {
@@ -114,6 +116,7 @@ const useOnDragAndSelectEnd = () => {
     const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(() => {
+        console.log({ selection: store.current[CELL_SELECTION_PLUGIN_KEY] });
         const selection = normalizeSelection(store.current[CELL_SELECTION_PLUGIN_KEY]);
 
         if (beforeCellSelection({ selection }) === false) return;
