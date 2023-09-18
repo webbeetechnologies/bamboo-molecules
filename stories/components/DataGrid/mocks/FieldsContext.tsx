@@ -44,13 +44,15 @@ export const FieldsProvider = memo(
 );
 
 const fieldSelector = (id: string, fields: Field[]) => {
+    if (!id) return {} as Field;
+
     const fieldsMapById = keyBy(fields, 'id');
 
     if (!fieldsMapById[id]) {
         throw new Error(`could not find the field ${id}`);
     }
 
-    return fieldsMapById[id] as Field;
+    return fieldsMapById[id];
 };
 
 export const useField = (id: TDataTableRow) => {
