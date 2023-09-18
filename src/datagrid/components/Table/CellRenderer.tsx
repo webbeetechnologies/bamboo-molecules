@@ -22,6 +22,7 @@ import { DragAndExtendHandle } from '../DragAndExtendHandle';
 import { useCellFocusMethods, useCellSelectionMethods } from '../../plugins';
 import { CellSelectionIndicator } from '../CellSelectionIndicator';
 import '../CellBorder';
+import { getPressedModifierKeys } from '../../../shortcuts-manager/utils';
 
 export type Props = RenderCellProps &
     Omit<PressableProps, 'ref'> & {
@@ -151,7 +152,11 @@ const _DataCell = (
         (e: KeyboardEvent) => {
             e.preventDefault();
 
-            if ((e.key === 'Enter' || e.key.length === 1) && displayViewRenderer) {
+            if (
+                (e.key === 'Enter' || e.key.length === 1) &&
+                !getPressedModifierKeys(e).length &&
+                displayViewRenderer
+            ) {
                 if (e.key.length === 1) {
                     pressedKeyRef.current = e.key;
                 }
