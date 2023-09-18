@@ -24,7 +24,7 @@ import { useCellFocusMethods, useCellSelectionMethods } from '../../plugins';
 import { CellSelectionIndicator } from '../CellSelectionIndicator';
 import '../CellBorder';
 import { getPressedModifierKeys } from '../../../shortcuts-manager/utils';
-import { handleEmitNativeEvent } from '../../utils';
+import { handleEmitKeyboardEvent } from '../../utils';
 
 export type Props = RenderCellProps &
     Omit<PressableProps, 'ref'> & {
@@ -161,7 +161,7 @@ const _DataCell = (
     const onKeyDown = useCallback(
         (e: KeyboardEvent) => {
             if (e.key === 'Enter') {
-                handleEmitNativeEvent('keydown', e);
+                handleEmitKeyboardEvent('keydown', e);
             }
 
             if (!(e.key.length === 1 && !getPressedModifierKeys(e).length)) return;
