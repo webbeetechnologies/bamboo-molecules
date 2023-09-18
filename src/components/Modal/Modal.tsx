@@ -8,6 +8,7 @@ import {
     StyleSheet,
     TouchableWithoutFeedback,
     useWindowDimensions,
+    ViewProps,
     ViewStyle,
 } from 'react-native';
 
@@ -15,7 +16,7 @@ import type { MD3Elevation } from '../../core/theme/types';
 import { addEventListener } from '../../utils';
 import { useComponentStyles, useMolecules } from '../../hooks';
 
-export type Props = {
+export type Props = ViewProps & {
     /**
      * Determines whether clicking outside the modal dismiss it.
      */
@@ -81,6 +82,7 @@ function Modal(
         style,
         animationDuration = DEFAULT_DURATION,
         testID = 'modal',
+        ...rest
     }: Props,
     ref: any,
 ) {
@@ -212,7 +214,8 @@ function Modal(
             style={StyleSheet.absoluteFill}
             onAccessibilityEscape={hideModal}
             testID={testID}
-            ref={ref}>
+            ref={ref}
+            {...rest}>
             <TouchableWithoutFeedback
                 accessibilityLabel={overlayAccessibilityLabel}
                 accessibilityRole="button"
