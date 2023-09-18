@@ -10,6 +10,7 @@ export { default as DataGrid, Props as DataGridProps, ContextMenuProps } from '.
 export * from './components';
 export { FieldTypes } from './field-types';
 export * from './contexts';
+export { handleEmitKeyboardEvent } from './utils';
 
 export { GroupRecord, GroupFooter, GroupHeader, prepareGroupedData } from './utils';
 

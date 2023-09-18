@@ -5,7 +5,7 @@ import type { TextInputProps } from '../../../components';
 import { InlineInput } from '../../components/InlineInput';
 import type { FieldRendererProps } from '../../types';
 import type { Value } from './types';
-import { handleEmitNativeEvent } from '../../utils';
+import { handleEmitKeyboardEvent } from '../../utils';
 
 export type Props = FieldRendererProps<Value> & Omit<TextInputProps, 'value' | 'onChange'> & {};
 
@@ -20,7 +20,7 @@ const SingleLineTextEditorRenderer = ({ value, onChange, ...rest }: Props) => {
         const e = _e as unknown as KeyboardEvent;
 
         if (e.key && (e.key === 'Escape' || e.key === 'Enter')) {
-            handleEmitNativeEvent('keydown', e);
+            handleEmitKeyboardEvent('keydown', e);
         }
     }, []);
 
