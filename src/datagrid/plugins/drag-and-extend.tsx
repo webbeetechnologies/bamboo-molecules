@@ -54,7 +54,7 @@ const useOnDragEnd = () => {
             start: focusedCell,
             end: focusedCell,
         };
-        const { start, end } = store.current[DRAG_AND_EXTEND_PLUGIN_KEY];
+        const { start, end } = store.current[DRAG_AND_EXTEND_PLUGIN_KEY] || emptyObj;
 
         if (!start || !end) return;
 
