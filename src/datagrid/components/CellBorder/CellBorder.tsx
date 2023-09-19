@@ -45,7 +45,7 @@ registerMolecule('CellBorder', {
                     borderBottomWidth: 2,
                     borderTopWidth: 2,
                     borderRadius: 2,
-                    borderColor: 'blue',
+                    borderColor: 'colors.primary',
                     backgroundColor: 'colors.surface',
                 },
             },
