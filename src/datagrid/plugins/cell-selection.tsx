@@ -115,6 +115,8 @@ const useOnDragAndSelectEnd = () => {
     const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(() => {
+        if (!store.current[CELL_SELECTION_PLUGIN_KEY]) return;
+
         const selection = normalizeSelection(store.current[CELL_SELECTION_PLUGIN_KEY]);
 
         if (beforeCellSelection({ selection }) === false) return;
