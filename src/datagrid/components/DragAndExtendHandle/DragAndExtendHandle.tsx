@@ -63,12 +63,12 @@ const DragAndExtendHandle = ({ style, isFocused, ...rest }: Props) => {
 
 const styles = StyleSheet.create({
     handle: {
-        width: 10,
-        height: 10,
+        width: 8,
+        height: 8,
         backgroundColor: 'colors.neutral1',
         borderColor: 'colors.primary',
         borderRadius: 3,
-        borderWidth: 1.5,
+        borderWidth: 1,
     },
 });
 

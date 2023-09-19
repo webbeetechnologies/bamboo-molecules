@@ -245,8 +245,8 @@ const styles = StyleSheet.create({
     },
     dragHandle: {
         position: 'absolute',
-        bottom: -3.5,
-        right: -3.5,
+        bottom: -3,
+        right: -3,
     },
 });
 
