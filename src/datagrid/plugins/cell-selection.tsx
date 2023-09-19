@@ -82,7 +82,11 @@ const useResetSelectionOnFocusCellChange = () => {
     }));
 
     useEffect(() => {
-        if (!store.current[CELL_SELECTION_PLUGIN_KEY]) return;
+        if (
+            !store.current[CELL_SELECTION_PLUGIN_KEY] ||
+            store.current[CELL_SELECTION_PLUGIN_KEY]?.isSelecting
+        )
+            return;
 
         setStore(() => ({
             [CELL_SELECTION_PLUGIN_KEY]: undefined,
