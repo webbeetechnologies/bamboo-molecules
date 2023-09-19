@@ -155,10 +155,10 @@ const useOnDragSelection = ({
 
         // This means it's horizontal selection
         if (rowHovered && checkIfWithinRow(cellsSelection, { rowIndex })) {
-            const startColumnIndexOffset = columnIndex > cellsSelection.end.columnIndex ? 1 : -1;
-            const startColumnIndex = cellsSelection.end.columnIndex + startColumnIndexOffset;
-            const startRowIndex = cellsSelection.start.rowIndex;
-            const endRowIndex = cellsSelection.end.rowIndex;
+            const startColumnIndexOffset = columnIndex > cellsSelection.end?.columnIndex ? 1 : -1;
+            const startColumnIndex = cellsSelection.end?.columnIndex + startColumnIndexOffset;
+            const startRowIndex = cellsSelection.start?.rowIndex;
+            const endRowIndex = cellsSelection.end?.rowIndex;
 
             if (
                 tableManagerStore.current.records[startRowIndex].rowType !== 'data' ||
@@ -184,11 +184,11 @@ const useOnDragSelection = ({
 
         // This means it's vertical selection
         if (rowHovered && !checkIfWithinRow(cellsSelection, { rowIndex })) {
-            const startRowIndexOffset = rowIndex > cellsSelection.end.rowIndex ? 1 : -1;
-            const startColumnIndex = cellsSelection.start.columnIndex;
-            const startRowIndex = cellsSelection.end.rowIndex + startRowIndexOffset;
+            const startRowIndexOffset = rowIndex > cellsSelection.end?.rowIndex ? 1 : -1;
+            const startColumnIndex = cellsSelection.start?.columnIndex;
+            const startRowIndex = cellsSelection.end?.rowIndex + startRowIndexOffset;
 
-            const endColumnIndex = cellsSelection.end.columnIndex;
+            const endColumnIndex = cellsSelection.end?.columnIndex;
 
             if (tableManagerStore.current.records[startRowIndex].rowType !== 'data') {
                 setPluginsDataStore(() => ({
@@ -270,6 +270,27 @@ const useIsDragHandleVisible = ({
     });
 };
 
+const useIsDragHandleVisibleRow = ({ rowIndex }: { rowIndex: number }) => {
+    return usePluginsDataValueSelector(store => {
+        const selection = store[CELL_SELECTION_PLUGIN_KEY];
+        const dragSelection = store[DRAG_AND_EXTEND_PLUGIN_KEY];
+        const focusedCell = store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
+
+        if (dragSelection?.end) {
+            return dragSelection.end.rowIndex === rowIndex;
+        }
+
+        if (!selection || !(selection.end || selection.start))
+            return focusedCell?.rowIndex === rowIndex;
+
+        const { start, end } = selection;
+
+        const endRowIndex = start?.rowIndex <= end?.rowIndex ? end?.rowIndex : start?.rowIndex;
+
+        return endRowIndex === rowIndex;
+    });
+};
+
 export const [useDragAndExtendPlugin, useDragAndExtendEvents, useDragAndExtendMethods] =
     createPlugin({
         key: DRAG_AND_EXTEND_PLUGIN_KEY,
@@ -284,5 +305,6 @@ export const [useDragAndExtendPlugin, useDragAndExtendEvents, useDragAndExtendMe
             useOnDragEnd,
             useHasDragAndExtendSelection,
             useIsDragHandleVisible,
+            useIsDragHandleVisibleRow,
         },
     });
