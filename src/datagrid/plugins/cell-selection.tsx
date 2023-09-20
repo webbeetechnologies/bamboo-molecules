@@ -60,17 +60,18 @@ const useOnSelectCell = () => {
 const allowedTargetIds = ['drag-handle'];
 
 const useOnResetSelectionOnClickOutside = () => {
-    const { set: setStore } = usePluginsDataStoreRef();
+    const { set: setStore, store } = usePluginsDataStoreRef();
 
     return useCallback(
         (e: MouseEvent) => {
+            if (!store.current[CELL_SELECTION_PLUGIN_KEY]) return;
             if (allowedTargetIds.includes((e.target as HTMLDivElement)?.id)) return;
 
             setStore(() => ({
                 [CELL_SELECTION_PLUGIN_KEY]: undefined,
             }));
         },
-        [setStore],
+        [setStore, store],
     );
 };
 

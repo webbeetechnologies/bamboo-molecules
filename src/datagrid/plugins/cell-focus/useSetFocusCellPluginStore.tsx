@@ -93,12 +93,15 @@ export const useSetFocusCellPluginStore = () => {
 
 export const useResetFocusCellState = () => {
     const setFocusState = useSetFocusCellPluginStore();
+    const { store } = usePluginsDataStoreRef();
 
     return useCallback(() => {
+        if (!store.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell) return;
+
         setFocusState(() => ({
             focusedCell: null,
             focusedCellRef: null,
             isEditing: false,
         }));
-    }, [setFocusState]);
+    }, [setFocusState, store]);
 };
