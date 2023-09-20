@@ -42,6 +42,12 @@ const useIsCellFocused = (
     }, shallowCompare);
 };
 
+const usePressedKeyRef = () => {
+    const { store } = usePluginsDataStoreRef();
+
+    return store.current[CELL_FOCUS_PLUGIN_KEY]?.pressedKey;
+};
+
 export const [useCellFocusPlugin, useCellFocusEvents, useCellFocusMethods] = createPlugin({
     key: CELL_FOCUS_PLUGIN_KEY,
     eventKeys: [
@@ -60,5 +66,6 @@ export const [useCellFocusPlugin, useCellFocusEvents, useCellFocusMethods] = cre
         useEnsureCorrectFocusCellState,
         useResetFocusCellState,
         useSetFocusCellByDirection,
+        usePressedKeyRef,
     },
 });

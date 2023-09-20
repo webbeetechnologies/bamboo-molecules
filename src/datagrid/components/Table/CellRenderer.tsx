@@ -50,7 +50,8 @@ const _DataCell = (
 
     const { useOnSelectCell, useOnDragAndSelectStart, useOnDragAndSelectEnd } =
         useCellSelectionMethods();
-    const { useSetFocusCellPluginStore, useIsCellFocused } = useCellFocusMethods();
+    const { useSetFocusCellPluginStore, useIsCellFocused, usePressedKeyRef } =
+        useCellFocusMethods();
 
     const { isFocused, isEditing } = useIsCellFocused(row, column);
     const onSelectCell = useOnSelectCell();
@@ -58,9 +59,9 @@ const _DataCell = (
     const onDragAndSelectEnd = useOnDragAndSelectEnd();
 
     const setFocusCellPluginStore = useSetFocusCellPluginStore();
+    const pressedKey = usePressedKeyRef();
 
     const isTappedRef = useRef(0);
-    const pressedKeyRef = useRef('');
     const isEditingRef = useLatest(isEditing);
 
     const [value, setValue] = useCellValue(row, column);
@@ -170,8 +171,7 @@ const _DataCell = (
 
             if (isEditingRef.current) return;
 
-            pressedKeyRef.current = e.key;
-            setFocusCellPluginStore(() => ({ isEditing: true }));
+            setFocusCellPluginStore(() => ({ isEditing: true, pressedKey: e.key }));
 
             return;
         },
@@ -204,7 +204,7 @@ const _DataCell = (
                             value={value}
                             type={type}
                             onChange={setValue}
-                            pressedKey={pressedKeyRef.current}
+                            pressedKey={pressedKey}
                             {...restField}
                         />
                     )}
