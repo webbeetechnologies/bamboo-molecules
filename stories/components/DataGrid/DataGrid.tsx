@@ -20,6 +20,7 @@ import {
     useDragAndExtendPlugin,
     useCellFocusPlugin,
 } from '../../../src/datagrid/plugins';
+import { prepareGroupedData } from '../../../src/datagrid';
 
 const containerStyle = { width: '100%' };
 
@@ -132,7 +133,7 @@ export const Example: FC<{ groups?: string[] }> = () => {
                     <DataGrid
                         plugins={plugins}
                         columnWidths={columnWidth}
-                        records={records}
+                        records={prepareGroupedData(records, [])}
                         columnIds={columnIds}
                         contextMenuProps={contextMenuProps}
                         useField={useField}

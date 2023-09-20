@@ -37,12 +37,13 @@ import {
     Plugin,
     useCellFocusPlugin,
     useCellSelectionPlugin,
-    useExpandCollapseGroupsMethods,
+    // TODO: Revisit collapse
+    // useExpandCollapseGroupsMethods,
     usePluginsDataStoreRef,
 } from './plugins';
 import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
-import { RecordWithId, addDataToCallbackPairs, prepareGroupedData } from './utils';
+import { GroupedData, addDataToCallbackPairs, getRowIds } from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
@@ -65,7 +66,7 @@ type DataGridPropsBase = Omit<
 export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
     HooksContextType & {
         fieldTypes?: FieldTypes;
-        records: RecordWithId[];
+        records: GroupedData[];
         spacerWidth?: string | number;
     };
 
@@ -302,7 +303,8 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
 
 const dataSet = { id: 'datagrid' };
 
-const defaultExpandCollapseMethods = { useCollapsedGroupIds: () => [] };
+// TODO: Revisit collapse
+// const defaultExpandCollapseMethods = { useCollapsedGroupIds: () => [] };
 
 const TableManagerProviderWrapper = ({
     records,
@@ -315,15 +317,14 @@ const TableManagerProviderWrapper = ({
     Component: ComponentType<DataGridPresentationProps>;
 }) => {
     const ref = useRef(null);
+    // TODO: Revisit collapse
     // in case expanse collapse plugins in not defined
-    const { useCollapsedGroupIds } =
-        useExpandCollapseGroupsMethods() || defaultExpandCollapseMethods;
-    const collapsedGroupIds = useCollapsedGroupIds();
+    // const { useCollapsedGroupIds } =
+    //     useExpandCollapseGroupsMethods() || defaultExpandCollapseMethods;
 
-    const { groupedRecords, rowIds } = useMemo(
-        () => prepareGroupedData(records, groups, collapsedGroupIds),
-        [records, groups, collapsedGroupIds],
-    );
+    // const collapsedGroupIds = useCollapsedGroupIds();
+
+    const rowIds = useMemo(() => getRowIds(records), [records]);
     const spacerWidth = useToken(spacerWidthProp as string) ?? spacerWidthProp;
 
     const offsetWidth = (groups?.length ?? 0) * spacerWidth;
@@ -332,7 +333,7 @@ const TableManagerProviderWrapper = ({
         <TableManagerProvider
             tableRef={ref}
             spacerWidth={spacerWidth}
-            records={groupedRecords}
+            records={records}
             withContextMenu={!!contextMenuProps}>
             {/* @ts-ignore - we don't want to pass down unnecessary props */}
             <Component

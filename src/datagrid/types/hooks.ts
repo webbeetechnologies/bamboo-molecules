@@ -1,4 +1,4 @@
-import type { GroupMeta, GroupMetaStates } from './row';
+import type { GroupMeta, GroupMetaStates } from '../utils';
 
 type GroupStates = GroupMetaStates & {
     isCollapsed: boolean;

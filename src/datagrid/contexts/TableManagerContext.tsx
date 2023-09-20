@@ -3,8 +3,7 @@ import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecule
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
 import type { GroupedData, GroupFooter } from '../utils';
-import { weakMemoized, keyBy } from '../utils';
-import type { GroupMeta } from '../types';
+import { weakMemoized, keyBy, GroupMeta } from '../utils';
 import { shallowCompare } from '../../utils';
 
 export type TableManagerContextProviderProps = {
@@ -103,7 +102,7 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
             groupId: record.groupId,
             fieldId: record.fieldId,
             value: record.title,
-            recordCount: record.recordCount,
+            count: record.count,
             isFirst: record.isFirst,
             isLast: record.isLast,
             isFirstLevel: record.isFirstLevel,
