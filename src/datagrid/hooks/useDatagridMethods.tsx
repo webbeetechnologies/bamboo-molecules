@@ -17,7 +17,7 @@ const useDatagridMethods = () => {
     const resetFocusCellState = useResetFocusCellState();
 
     const { hasFocusedCell } = usePluginsDataValueSelector(store => ({
-        hasFocusedCell: store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell,
+        hasFocusedCell: !!store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell,
     }));
 
     const { useEnsureCorrectFocusCellState, useSetFocusCellByDirection } = useCellFocusMethods();

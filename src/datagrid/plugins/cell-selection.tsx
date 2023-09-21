@@ -60,17 +60,18 @@ const useOnSelectCell = () => {
 const allowedTargetIds = ['drag-handle'];
 
 const useOnResetSelectionOnClickOutside = () => {
-    const { set: setStore } = usePluginsDataStoreRef();
+    const { set: setStore, store } = usePluginsDataStoreRef();
 
     return useCallback(
         (e: MouseEvent) => {
+            if (!store.current[CELL_SELECTION_PLUGIN_KEY]) return;
             if (allowedTargetIds.includes((e.target as HTMLDivElement)?.id)) return;
 
             setStore(() => ({
                 [CELL_SELECTION_PLUGIN_KEY]: undefined,
             }));
         },
-        [setStore],
+        [setStore, store],
     );
 };
 
@@ -82,7 +83,11 @@ const useResetSelectionOnFocusCellChange = () => {
     }));
 
     useEffect(() => {
-        if (!store.current[CELL_SELECTION_PLUGIN_KEY]) return;
+        if (
+            !store.current[CELL_SELECTION_PLUGIN_KEY] ||
+            store.current[CELL_SELECTION_PLUGIN_KEY]?.isSelecting
+        )
+            return;
 
         setStore(() => ({
             [CELL_SELECTION_PLUGIN_KEY]: undefined,
@@ -115,6 +120,8 @@ const useOnDragAndSelectEnd = () => {
     const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(() => {
+        if (!store.current[CELL_SELECTION_PLUGIN_KEY]) return;
+
         const selection = normalizeSelection(store.current[CELL_SELECTION_PLUGIN_KEY]);
 
         if (beforeCellSelection({ selection }) === false) return;

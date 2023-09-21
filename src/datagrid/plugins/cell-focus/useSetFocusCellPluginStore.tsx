@@ -23,8 +23,12 @@ export const useSetFocusCellPluginStore = () => {
     return useCallback(
         (
             selector: (
-                cellFocusStore: { focusedCell: FocusedCell; isEditing?: boolean } | undefined,
-            ) => Partial<{ focusedCell: FocusedCell; isEditing?: boolean } | undefined>,
+                cellFocusStore:
+                    | { focusedCell: FocusedCell; isEditing?: boolean; pressedKey?: string }
+                    | undefined,
+            ) => Partial<
+                { focusedCell: FocusedCell; isEditing?: boolean; pressedKey?: string } | undefined
+            >,
         ) => {
             const focusedCell = selector(
                 pluginsStoreRef.current[CELL_FOCUS_PLUGIN_KEY],
@@ -34,6 +38,7 @@ export const useSetFocusCellPluginStore = () => {
                 setPluginsStore(prev => ({
                     [CELL_FOCUS_PLUGIN_KEY]: {
                         ...prev[CELL_FOCUS_PLUGIN_KEY],
+                        pressedKey: '',
                         ...selector(prev[CELL_FOCUS_PLUGIN_KEY]),
                     },
                 }));
@@ -93,12 +98,16 @@ export const useSetFocusCellPluginStore = () => {
 
 export const useResetFocusCellState = () => {
     const setFocusState = useSetFocusCellPluginStore();
+    const { store } = usePluginsDataStoreRef();
 
     return useCallback(() => {
+        if (!store.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell) return;
+
         setFocusState(() => ({
             focusedCell: null,
             focusedCellRef: null,
             isEditing: false,
+            pressedKey: '',
         }));
-    }, [setFocusState]);
+    }, [setFocusState, store]);
 };
