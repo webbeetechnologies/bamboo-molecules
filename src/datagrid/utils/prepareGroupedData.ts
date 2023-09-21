@@ -18,6 +18,25 @@ export const isDataRow = (x: GroupedData): x is GroupHeader => x.rowType === Row
 
 const defaultConstants: GroupConstantValues[] = [];
 
+const getDefaultFooterRow = memoize(
+    (recordsCount: number): GroupFooter => ({
+        count: recordsCount,
+        groupConstants: defaultConstants,
+        groupId: '',
+        title: '',
+        level: 0,
+        isFirstLevel: true,
+        isLastLevel: true,
+        isFirst: true,
+        isLast: true,
+        isOnly: recordsCount === 0,
+        isRealGroup: true,
+        isCollapsed: false,
+        id: `empty::footer`,
+        rowType: RowType.FOOTER,
+    }),
+);
+
 /**
  *
  * Normalize a value of any type into string.
@@ -227,7 +246,7 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
 export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
     modelRecords: T[],
     groupRecordsBy: GroupMetaRow[] = [],
-) => {
+): GroupedData[] => {
     const groups = extractGroupFields(groupRecordsBy);
     const normalizedModelRecords = modelRecords.map((record, rowIndex) =>
         prepareGroupedRecord(record, groups, rowIndex),
@@ -237,26 +256,7 @@ export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
     );
 
     if (!groupRecordsBy.length)
-        return [
-            ...normalizedModelRecords,
-            {
-                count: modelRecords.length,
-                groupConstants: defaultConstants,
-                groupId: '',
-                title: '',
-                level: 0,
-                index: modelRecords.length,
-                isFirstLevel: true,
-                isLastLevel: true,
-                isFirst: true,
-                isLast: true,
-                isOnly: modelRecords.length === 0,
-                isRealGroup: true,
-                isCollapsed: false,
-                id: `empty::footer`,
-                rowType: RowType.FOOTER,
-            },
-        ];
+        return [...normalizedModelRecords, getDefaultFooterRow(modelRecords.length)];
 
     return groupRecordsBy.reduce((groupedAggregates: GroupedData[], group) => {
         groupedAggregates = [...groupedAggregates, group];
