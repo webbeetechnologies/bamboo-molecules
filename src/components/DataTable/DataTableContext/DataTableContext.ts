@@ -77,12 +77,17 @@ export const useDataTableComponent = <
  */
 // TODO: Add event handlers here
 type DataTableRowContextType = { row: TDataTableRow; rowIndex: number; hovered: boolean };
-export const DataTableRowContext = createContext<DataTableRowContextType | null>(null);
-export const useDataTableRow = () =>
-    useInvariant(
-        useContext(DataTableRowContext),
-        'Trying to read DataTableRow context outside the provider',
-    );
+export const {
+    useContextValue: useDataTableRow,
+    useStoreRef: useDataTableRowRef,
+    Provider: DataTableContextRowProvider,
+} = createFastContext<DataTableRowContextType>({} as DataTableRowContextType, true);
+
+// export const useDataTableRow = () =>
+//     useInvariant(
+//         useContext(DataTableRowContext),
+//         'Trying to read DataTableRow context outside the provider',
+//     );
 
 /**
  * Context to store row selections and actions

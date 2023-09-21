@@ -20,7 +20,7 @@ const CellSelectionIndicator = ({ hovered, style, ...rest }: Props) => {
 
     const { columnIndex, rowIndex, row, column } = useDataTableCell();
 
-    const { hovered: rowHovered } = useDataTableRow();
+    const { hovered: rowHovered } = useDataTableRow(store => ({ hovered: store.hovered }));
 
     const { useOnDragSelection = useVoid, useHasDragAndExtendSelection = useBoolean } =
         useDragAndExtendMethods() || {};

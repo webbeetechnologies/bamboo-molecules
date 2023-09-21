@@ -72,7 +72,10 @@ export const CellComponent = memo((props: CellComponentProps) => {
 });
 
 const Cell: FC<{ column: TDataTableColumn; columnIndex: number }> = memo(props => {
-    const { row, rowIndex } = useDataTableRow();
+    const { row, rowIndex } = useDataTableRow(store => ({
+        row: store.row,
+        rowIndex: store.rowIndex,
+    }));
     const { renderCell } = useDataTableComponent();
 
     const width = useDataTableColumnWidth(props.column);

@@ -5,7 +5,7 @@ export {
     useDataTableRow,
     DataTableCellContext,
     DataTableHeaderCellContext,
-    DataTableRowContext,
+    DataTableContextRowProvider,
     useDataTableColumnWidth,
     useDataTableComponent,
     useDataTableStoreRef,
