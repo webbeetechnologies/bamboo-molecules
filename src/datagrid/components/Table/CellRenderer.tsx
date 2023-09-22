@@ -23,7 +23,7 @@ import { DragAndExtendHandle } from '../DragAndExtendHandle';
 import { useCellFocusMethods, useCellSelectionMethods } from '../../plugins';
 import { CellSelectionIndicator } from '../CellSelectionIndicator';
 import '../CellBorder';
-import { getPressedModifierKeys } from '../../../shortcuts-manager/utils';
+import { getPressedModifierKeys, isSpaceKey } from '../../../shortcuts-manager/utils';
 import { handleEmitKeyboardEvent } from '../../utils';
 
 export type Props = RenderCellProps &
@@ -165,7 +165,7 @@ const _DataCell = (
                 handleEmitKeyboardEvent('keydown', e);
             }
 
-            if (!(e.key.length === 1 && !getPressedModifierKeys(e).length)) return;
+            if (e.key.length !== 1 || getPressedModifierKeys(e).length || isSpaceKey(e.key)) return;
 
             e.preventDefault();
 

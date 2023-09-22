@@ -7,113 +7,112 @@ import {
     useMemo,
     forwardRef,
     PropsWithoutRef,
+    useImperativeHandle,
 } from 'react';
 import { Animated, View, ViewStyle, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import setColor from 'color';
 
-import { withActionState, CallbackActionState } from '../../hocs';
-import { useMolecules, useComponentStyles } from '../../hooks';
+import { useMolecules, useComponentStyles, useActionState } from '../../hooks';
 import type { IconType } from '../Icon';
 import type { SurfaceProps } from '../Surface';
 
 export type ButtonVariant = 'text' | 'outlined' | 'contained' | 'elevated' | 'contained-tonal';
 
-export type Props = Omit<SurfaceProps, 'style'> &
-    CallbackActionState & {
-        /**
-         * Mode of the button. You can change the mode to adjust the styling to give it desired emphasis.
-         * - `text` - flat button without background or outline, used for the lowest priority actions, especially when presenting multiple options.
-         * - `outlined` - button with an outline without background, typically used for important, but not primary action – represents medium emphasis.
-         * - `contained` - button with a background color, used for important action, have the most visual impact and high emphasis.
-         * - `elevated` - button with a background color and elevation, used when absolutely necessary e.g. button requires visual separation from a patterned background. @supported Available in v5.x with theme version 3
-         * - `contained-tonal` - button with a secondary background color, an alternative middle ground between contained and outlined buttons. @supported Available in v5.x with theme version 3
-         */
-        variant?: ButtonVariant;
-        /**
-         * @supported Available in v5.x
-         * Custom button's background color.
-         */
-        buttonColor?: string;
-        /**
-         * @supported Available in v5.x
-         * Custom button's text color.
-         */
-        textColor?: string;
-        /**
-         * Whether to show a loading indicator.
-         */
-        loading?: boolean;
-        /**
-         * Icon to display for the `Button`.
-         */
-        iconType?: IconType;
-        iconName?: string;
-        /**
-         * Whether the button is disabled. A disabled button is greyed out and `onPress` is not called on touch.
-         */
-        disabled?: boolean;
-        /**
-         * Label text of the button.
-         */
-        children: ReactNode;
-        /**
-         * Accessibility label for the button. This is read by the screen reader when the user taps the button.
-         */
-        accessibilityLabel?: string;
-        /**
-         * Accessibility hint for the button. This is read by the screen reader when the user taps the button.
-         */
-        accessibilityHint?: string;
-        /**
-         * Function to execute on press.
-         */
-        onPress?: () => void;
-        /**
-         * @supported Available in v5.x
-         * Function to execute as soon as the touchable element is pressed and invoked even before onPress.
-         */
-        onPressIn?: () => void;
-        /**
-         * @supported Available in v5.x
-         * Function to execute as soon as the touch is released even before onPress.
-         */
-        onPressOut?: () => void;
-        /**
-         * Function to execute on long press.
-         */
-        onLongPress?: () => void;
-        /**
-         * Style of button's inner content.
-         * Use this prop to apply custom height and width and to set the icon on the right with `flexDirection: 'row-reverse'`.
-         */
-        contentStyle?: StyleProp<ViewStyle>;
-        style?: StyleProp<TextStyle>;
-        /**
-         * Style for the button text.
-         */
-        labelStyle?: StyleProp<TextStyle>;
-        /**
-         * Style for the Icon
-         */
-        iconContainerStyle?: StyleProp<ViewStyle>;
-        /*
-         * Size
-         * */
-        size?: 'sm' | 'md' | 'lg';
-        /*
-         * Elevation level
-         * */
-        elevation?: number;
-        /**
-         * testID to be used on tests.
-         */
-        testID?: string;
-        /**
-         * props for the stateLayer
-         */
-        stateLayerProps?: PropsWithoutRef<ViewProps>;
-    };
+export type Props = Omit<SurfaceProps, 'style'> & {
+    /**
+     * Mode of the button. You can change the mode to adjust the styling to give it desired emphasis.
+     * - `text` - flat button without background or outline, used for the lowest priority actions, especially when presenting multiple options.
+     * - `outlined` - button with an outline without background, typically used for important, but not primary action – represents medium emphasis.
+     * - `contained` - button with a background color, used for important action, have the most visual impact and high emphasis.
+     * - `elevated` - button with a background color and elevation, used when absolutely necessary e.g. button requires visual separation from a patterned background. @supported Available in v5.x with theme version 3
+     * - `contained-tonal` - button with a secondary background color, an alternative middle ground between contained and outlined buttons. @supported Available in v5.x with theme version 3
+     */
+    variant?: ButtonVariant;
+    /**
+     * @supported Available in v5.x
+     * Custom button's background color.
+     */
+    buttonColor?: string;
+    /**
+     * @supported Available in v5.x
+     * Custom button's text color.
+     */
+    textColor?: string;
+    /**
+     * Whether to show a loading indicator.
+     */
+    loading?: boolean;
+    /**
+     * Icon to display for the `Button`.
+     */
+    iconType?: IconType;
+    iconName?: string;
+    /**
+     * Whether the button is disabled. A disabled button is greyed out and `onPress` is not called on touch.
+     */
+    disabled?: boolean;
+    /**
+     * Label text of the button.
+     */
+    children: ReactNode;
+    /**
+     * Accessibility label for the button. This is read by the screen reader when the user taps the button.
+     */
+    accessibilityLabel?: string;
+    /**
+     * Accessibility hint for the button. This is read by the screen reader when the user taps the button.
+     */
+    accessibilityHint?: string;
+    /**
+     * Function to execute on press.
+     */
+    onPress?: () => void;
+    /**
+     * @supported Available in v5.x
+     * Function to execute as soon as the touchable element is pressed and invoked even before onPress.
+     */
+    onPressIn?: () => void;
+    /**
+     * @supported Available in v5.x
+     * Function to execute as soon as the touch is released even before onPress.
+     */
+    onPressOut?: () => void;
+    /**
+     * Function to execute on long press.
+     */
+    onLongPress?: () => void;
+    /**
+     * Style of button's inner content.
+     * Use this prop to apply custom height and width and to set the icon on the right with `flexDirection: 'row-reverse'`.
+     */
+    contentStyle?: StyleProp<ViewStyle>;
+    style?: StyleProp<TextStyle>;
+    /**
+     * Style for the button text.
+     */
+    labelStyle?: StyleProp<TextStyle>;
+    /**
+     * Style for the Icon
+     */
+    iconContainerStyle?: StyleProp<ViewStyle>;
+    /*
+     * Size
+     * */
+    size?: 'sm' | 'md' | 'lg';
+    /*
+     * Elevation level
+     * */
+    elevation?: number;
+    /**
+     * testID to be used on tests.
+     */
+    testID?: string;
+    /**
+     * props for the stateLayer
+     */
+    stateLayerProps?: PropsWithoutRef<ViewProps>;
+};
 
 const Button = (
     {
@@ -138,7 +137,6 @@ const Button = (
         iconContainerStyle: iconContainerStyleProp,
         testID,
         accessible,
-        hovered = false,
         stateLayerProps = {},
         elevation: elevationProp,
         ...rest
@@ -146,6 +144,9 @@ const Button = (
     ref: any,
 ) => {
     const { ActivityIndicator, TouchableRipple, Text, Icon, Surface, StateLayer } = useMolecules();
+
+    const triggerRef = useRef(null);
+    const { hovered } = useActionState({ ref: triggerRef });
 
     const componentStyles = useComponentStyles(
         'Button',
@@ -175,7 +176,6 @@ const Button = (
         iconSize,
         rippleColor,
         surfaceStyle,
-        touchableStyle,
         textStyle,
         iconStyle,
         viewStyle,
@@ -220,11 +220,10 @@ const Button = (
             animationScale: _animationScale,
             iconSize: _iconSize,
             rippleColor: setColor(_textColor).alpha(0.12).rgb().string(),
-            touchableStyle: { borderRadius, flexGrow: 1 }, // TODO extract flex properties from style object
             surfaceStyle: [button, { backgroundColor, borderRadius, ..._buttonStyles }],
 
             iconStyle: _iconStyle,
-            viewStyle: [content, contentStyle],
+            viewStyle: [content, { borderRadius, flexGrow: 1 }, contentStyle],
             iconContainerStyle: [_iconStyle, iconContainerStyleProp],
             textStyle: [
                 label,
@@ -279,6 +278,8 @@ const Button = (
         elevationProp,
     ]);
 
+    useImperativeHandle(ref, () => triggerRef.current);
+
     return (
         <Surface {...rest} style={surfaceStyle} elevation={disabled ? 0 : elevation}>
             <TouchableRipple
@@ -295,10 +296,10 @@ const Button = (
                 accessible={accessible}
                 disabled={disabled}
                 rippleColor={rippleColor}
-                style={touchableStyle}
-                ref={ref}
+                style={viewStyle}
+                ref={triggerRef}
                 testID={testID}>
-                <View style={viewStyle}>
+                <>
                     {iconName && loading !== true ? (
                         <View style={iconContainerStyle}>
                             <Icon
@@ -331,10 +332,10 @@ const Button = (
                         {...stateLayerProps}
                         style={stateLayerStyle}
                     />
-                </View>
+                </>
             </TouchableRipple>
         </Surface>
     );
 };
 
-export default memo(withActionState(forwardRef(Button)));
+export default memo(forwardRef(Button));

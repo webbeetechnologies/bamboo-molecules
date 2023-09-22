@@ -1,20 +1,27 @@
-import { useRef, useEffect, useMemo, memo, forwardRef, useCallback, PropsWithoutRef } from 'react';
+import {
+    useRef,
+    useEffect,
+    useMemo,
+    memo,
+    forwardRef,
+    useCallback,
+    PropsWithoutRef,
+    useImperativeHandle,
+} from 'react';
 import { Animated, StyleSheet } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import setColor from 'color';
 
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { useActionState, useComponentStyles, useMolecules } from '../../hooks';
 import type { CheckBoxBaseProps } from './types';
-import { CallbackActionState, withActionState } from '../../hocs';
 
-export type Props = Omit<CheckBoxBaseProps, 'value' | 'defaultValue'> &
-    CallbackActionState & {
-        value: boolean;
-        /**
-         * props for the stateLayer
-         */
-        stateLayerProps?: PropsWithoutRef<ViewProps>;
-    };
+export type Props = Omit<CheckBoxBaseProps, 'value' | 'defaultValue'> & {
+    value: boolean;
+    /**
+     * props for the stateLayer
+     */
+    stateLayerProps?: PropsWithoutRef<ViewProps>;
+};
 
 const CheckboxAndroid = (
     {
@@ -28,7 +35,6 @@ const CheckboxAndroid = (
         color: colorProp,
         uncheckedColor: uncheckedColorProp,
         stateLayerProps = {},
-        hovered = false,
         ...rest
     }: Props,
     ref: any,
@@ -36,6 +42,9 @@ const CheckboxAndroid = (
     const { Icon, TouchableRipple, View, StateLayer } = useMolecules();
     const { current: scaleAnim } = useRef<Animated.Value>(new Animated.Value(1));
     const isFirstRendering = useRef<boolean>(true);
+
+    const triggerRef = useRef(null);
+    const { hovered } = useActionState({ ref: triggerRef });
 
     const componentStyles = useComponentStyles('Checkbox', style, {
         variant: 'android',
@@ -150,6 +159,8 @@ const CheckboxAndroid = (
 
     const accessibilityState = useMemo(() => ({ disabled, checked }), [checked, disabled]);
 
+    useImperativeHandle(ref, () => triggerRef.current);
+
     return (
         <TouchableRipple
             {...rest}
@@ -162,7 +173,7 @@ const CheckboxAndroid = (
             accessibilityLiveRegion="polite"
             style={rippleContainerStyles}
             testID={testID}
-            ref={ref}>
+            ref={triggerRef}>
             <>
                 <Animated.View style={animatedContainerStyles}>
                     <Icon
@@ -193,4 +204,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(withActionState(forwardRef(CheckboxAndroid)));
+export default memo(forwardRef(CheckboxAndroid));
