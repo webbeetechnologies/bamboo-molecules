@@ -70,7 +70,10 @@ const generateKeyFromValue = (key: string, value: unknown) => {
 const generateGroupId = (constants: GroupConstantValues[]) =>
     constants.map(({ field, value }) => generateKeyFromValue(field, value)).join(';');
 
-const getMemoizedConstants = memoize(constants => constants, generateGroupId);
+const getMemoizedConstants = memoize(
+    (constants: GroupConstantValues[]) => constants,
+    generateGroupId,
+);
 
 /**
  *
@@ -99,7 +102,10 @@ const generateValueKey = <T extends RecordWithId = RecordWithId>(
  * returns a memoized constant value from the passed field and value pair.
  *
  */
-const createConstant = memoize((field, value) => ({ field, value }), generateKeyFromValue);
+const createConstant = memoize(
+    (field: string, value: unknown) => ({ field, value }),
+    generateKeyFromValue,
+);
 
 /**
  *
@@ -119,7 +125,7 @@ const getStringifieldRecordMemoized = memoize(
 const generateRecordId = <T extends RecordWithId = RecordWithId>(
     modelRecord: T,
     groups: string[],
-    index?: number,
+    index: number,
 ) =>
     [getStringifieldRecordMemoized(modelRecord), generateValueKey(modelRecord, groups), index].join(
         '__',
@@ -164,7 +170,7 @@ const prepareGroupedRecord = memoize(
         // Index in group will be overwritten later.
         indexInGroup: 0,
     }),
-    (record, groups) => generateRecordId(record, groups),
+    (record, groups, index) => generateRecordId(record, groups, index),
 );
 
 /**
