@@ -1,17 +1,23 @@
-import { forwardRef, memo, PropsWithoutRef, ReactNode, useMemo } from 'react';
+import {
+    forwardRef,
+    memo,
+    PropsWithoutRef,
+    ReactNode,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+} from 'react';
 import type { GestureResponderEvent, TextStyle, ViewStyle } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 
 import type { MD3Elevation } from '../../core/theme/types';
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { useActionState, useComponentStyles, useMolecules } from '../../hooks';
 import type { WithElements } from '../../types';
-import { CallbackActionState, withActionState } from '../../hocs';
 import type { TouchableRippleProps } from '../TouchableRipple';
 import type { IconButtonProps } from '../IconButton';
 import type { ActivityIndicatorProps } from '../ActivityIndicator';
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
-    CallbackActionState &
     WithElements<ReactNode> & {
         /**
          * label of the chip
@@ -113,7 +119,6 @@ const Chip = (
         variant = 'outlined',
         size = 'md',
         disabled,
-        hovered = false,
         elevation: elevationProp = 1,
         left,
         right,
@@ -135,6 +140,10 @@ const Chip = (
     ref: any,
 ) => {
     const { Surface, TouchableRipple, Text, StateLayer } = useMolecules();
+
+    const triggerRef = useRef(null);
+    const { hovered } = useActionState({ ref: triggerRef });
+
     const componentStyles = useComponentStyles(
         'Chip',
         [
@@ -211,6 +220,8 @@ const Chip = (
         [disabled, elevationProp, selected, variant],
     );
 
+    useImperativeHandle(ref, () => triggerRef.current);
+
     return (
         <Surface elevation={elevation} style={containerStyle}>
             <TouchableRipple
@@ -221,7 +232,7 @@ const Chip = (
                 accessibilityLabel={accessibilityLabel}
                 accessibilityRole="button"
                 accessibilityState={accessibilityState}
-                ref={ref}
+                ref={triggerRef}
                 testID={testID}>
                 <>
                     <LeftElement
@@ -325,4 +336,4 @@ const RightElement = memo(
     },
 );
 
-export default memo(withActionState(forwardRef(Chip)));
+export default memo(forwardRef(Chip));

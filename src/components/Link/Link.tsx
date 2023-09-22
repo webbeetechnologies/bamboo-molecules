@@ -1,29 +1,23 @@
-import { forwardRef, memo, useCallback } from 'react';
+import { forwardRef, memo, useCallback, useImperativeHandle, useRef } from 'react';
 import type { TextProps } from '@bambooapp/bamboo-atoms';
-import { useComponentStyles, useMolecules } from '../../hooks';
-import { CallbackActionState, withActionState } from '../../hocs';
-import type { GestureResponderEvent } from 'react-native';
-import { Linking } from 'react-native';
+import { Linking, GestureResponderEvent } from 'react-native';
 
-export type Props = TextProps &
-    CallbackActionState & {
-        href?: string;
-        disabled?: boolean;
-    };
+import { useActionState, useComponentStyles, useMolecules } from '../../hooks';
+
+export type Props = TextProps & {
+    href?: string;
+    disabled?: boolean;
+};
 
 const Link = (
-    {
-        style,
-        children,
-        hovered = false,
-        onPress: onPressProp,
-        href,
-        disabled = false,
-        ...rest
-    }: Props,
+    { style, children, onPress: onPressProp, href, disabled = false, ...rest }: Props,
     ref: any,
 ) => {
     const { Text } = useMolecules();
+
+    const triggerRef = useRef(null);
+    const { hovered } = useActionState({ ref: triggerRef });
+
     const componentStyles = useComponentStyles('Link', style, {
         states: {
             disabled,
@@ -42,9 +36,11 @@ const Link = (
         [disabled, onPressProp, href],
     );
 
+    useImperativeHandle(ref, () => triggerRef.current);
+
     return (
         <Text
-            ref={ref}
+            ref={triggerRef}
             style={componentStyles}
             onPress={onPress}
             accessibilityRole="button"
@@ -54,4 +50,4 @@ const Link = (
     );
 };
 
-export default memo(withActionState(forwardRef(Link)));
+export default memo(forwardRef(Link));

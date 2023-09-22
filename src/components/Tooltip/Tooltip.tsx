@@ -61,18 +61,20 @@ const Tooltip = ({
     return (
         <TooltipContext.Provider value={contextValue}>
             {Tooltip_Trigger[0]}
-            <TooltipPopover
-                placement={placement}
-                showArrow={showArrow}
-                backdropStyles={styles.backdrop}
-                triggerRef={triggerRef}
-                isOpen={isOpen}
-                setIsOpen={setPopoverOpen}
-                contentStyles={style}
-                contentTextStyles={contentTextStyles}
-                onClose={onClose}>
-                {Tooltip_Content[0]}
-            </TooltipPopover>
+            {isOpen && (
+                <TooltipPopover
+                    placement={placement}
+                    showArrow={showArrow}
+                    backdropStyles={styles.backdrop}
+                    triggerRef={triggerRef}
+                    isOpen={isOpen}
+                    setIsOpen={setPopoverOpen}
+                    contentStyles={style}
+                    contentTextStyles={contentTextStyles}
+                    onClose={onClose}>
+                    {Tooltip_Content[0]}
+                </TooltipPopover>
+            )}
         </TooltipContext.Provider>
     );
 };
