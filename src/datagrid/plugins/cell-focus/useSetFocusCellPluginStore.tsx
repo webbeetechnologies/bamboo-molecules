@@ -103,6 +103,12 @@ export const useResetFocusCellState = () => {
     return useCallback(() => {
         if (!store.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell) return;
 
+        if (store.current[CELL_FOCUS_PLUGIN_KEY].isEditing) {
+            setFocusState(() => ({ isEditing: false, pressedKey: '' }));
+
+            return;
+        }
+
         setFocusState(() => ({
             focusedCell: null,
             focusedCellRef: null,

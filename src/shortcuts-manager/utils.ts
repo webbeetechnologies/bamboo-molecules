@@ -88,7 +88,16 @@ export const getPressedModifierKeys = (event: KeyboardEvent, mergeMetaKeys = fal
     return pressedModifierKeys;
 };
 
-export const isSpaceKey = (key: string) => mappings.get(key.toLowerCase()) === 'space';
+export const isKey = (pressedKey: string, key: string) =>
+    mappings.get(pressedKey.toLowerCase()) === key;
+
+export const isSpaceKey = (pressedKey: string) => isKey(pressedKey, 'space');
+
+export const isEnterKey = (pressedKey: string) => isKey(pressedKey, 'enter');
+
+export const isEscapeKey = (pressedKey: string) => isKey(pressedKey, 'escape');
+
+export const isTabKey = (pressedKey: string) => isKey(pressedKey, 'tab');
 
 export const shortcutEventPrefix = 'shortcut-event-';
 

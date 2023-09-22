@@ -3,6 +3,7 @@ export type Shortcut = {
     keys: (string | string[])[];
     scope?: string;
     preventDefault?: boolean;
+    matcher?: (e: KeyboardEvent, key: string | string[], details: ShortcutEventDetail) => boolean;
 };
 
 export type Scope = {

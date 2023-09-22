@@ -6,6 +6,7 @@ import { InlineInput } from '../../components/InlineInput';
 import type { FieldRendererProps } from '../../types';
 import type { Value } from './types';
 import { handleEmitKeyboardEvent } from '../../utils';
+import { isEnterKey, isEscapeKey, isTabKey } from '../../../shortcuts-manager/utils';
 
 export type Props = FieldRendererProps<Value> & Omit<TextInputProps, 'value' | 'onChange'> & {};
 
@@ -19,7 +20,7 @@ const SingleLineTextEditorRenderer = ({ value, onChange, ...rest }: Props) => {
     const onKeyPress = useCallback((_e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
         const e = _e as unknown as KeyboardEvent;
 
-        if (e.key && (e.key === 'Escape' || e.key === 'Enter')) {
+        if (e.key && (isEscapeKey(e.key) || isEnterKey(e.key) || isTabKey(e.key))) {
             handleEmitKeyboardEvent('keydown', e);
         }
     }, []);
