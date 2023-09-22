@@ -1,14 +1,17 @@
-import { memo, useMemo } from 'react';
+import { forwardRef, memo, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import type { TextInputProps } from '../../../components';
 import { useMolecules } from '../../../hooks';
 
-const InlineInput = ({
-    containerStyle: containerStyleProp,
-    style,
-    actionStateContainerProps: _actionStateContainerProps,
-    ...rest
-}: TextInputProps) => {
+const InlineInput = (
+    {
+        containerStyle: containerStyleProp,
+        style,
+        actionStateContainerProps: _actionStateContainerProps,
+        ...rest
+    }: TextInputProps,
+    ref: any,
+) => {
     const { TextInput } = useMolecules();
 
     const { actionStateContainerProps, inputStyle, containerStyle } = useMemo(() => {
@@ -24,6 +27,7 @@ const InlineInput = ({
 
     return (
         <TextInput
+            ref={ref}
             variant="plain"
             size="sm"
             style={inputStyle}
@@ -51,4 +55,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(InlineInput);
+export default memo(forwardRef(InlineInput));

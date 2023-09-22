@@ -45,6 +45,7 @@ import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
 import { GroupedData, addDataToCallbackPairs, getRowIds } from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
+import { isSpaceKey } from '../shortcuts-manager/utils';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -68,6 +69,7 @@ export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
         fieldTypes?: FieldTypes;
         records: GroupedData[];
         spacerWidth?: string | number;
+        focusIgnoredColumns?: TDataTableColumn[];
     };
 
 export type ContextMenuProps = Partial<MenuProps> & {
@@ -285,6 +287,15 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
                 name: 'edit-cell',
                 keys: ['Enter'],
             },
+            {
+                name: 'cell-start-editing',
+                // doesn't matter what the key is
+                keys: ['*'],
+                matcher: (e: KeyboardEvent) => {
+                    return !isSpaceKey(e.key) && e.key.length === 1;
+                },
+                preventDefault: true,
+            },
         ]).current;
 
         return (
@@ -312,6 +323,7 @@ const TableManagerProviderWrapper = ({
     contextMenuProps,
     spacerWidth: spacerWidthProp = 'spacings.3',
     Component,
+    focusIgnoredColumns,
     ...rest
 }: Omit<Props, 'useField' | 'useCellValue'> & {
     Component: ComponentType<DataGridPresentationProps>;
@@ -334,7 +346,8 @@ const TableManagerProviderWrapper = ({
             tableRef={ref}
             spacerWidth={spacerWidth}
             records={records}
-            withContextMenu={!!contextMenuProps}>
+            withContextMenu={!!contextMenuProps}
+            focusIgnoredColumns={focusIgnoredColumns}>
             {/* @ts-ignore - we don't want to pass down unnecessary props */}
             <Component
                 {...rest}

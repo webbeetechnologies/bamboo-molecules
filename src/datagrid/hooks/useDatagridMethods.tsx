@@ -4,6 +4,7 @@ import {
     CELL_FOCUS_PLUGIN_KEY,
     useCellFocusMethods,
     useCellSelectionMethods,
+    usePluginsDataStoreRef,
     usePluginsDataValueSelector,
 } from '../plugins';
 import { useTableManagerStoreRef } from '../contexts';
@@ -16,6 +17,7 @@ const useDatagridMethods = () => {
     const { useResetFocusCellState } = useCellFocusMethods();
     const resetFocusCellState = useResetFocusCellState();
 
+    const { store: pluginsStore } = usePluginsDataStoreRef();
     const { hasFocusedCell } = usePluginsDataValueSelector(store => ({
         hasFocusedCell: !!store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell,
     }));
@@ -41,6 +43,8 @@ const useDatagridMethods = () => {
 
                 return;
             }
+
+            if (pluginsStore.current[CELL_FOCUS_PLUGIN_KEY]?.isEditing) return;
 
             setFocusCellByDirection(
                 key.split('Arrow')[1].toLowerCase(),

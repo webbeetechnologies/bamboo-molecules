@@ -9,5 +9,5 @@ export const SingleLineTextFieldType: FieldType<Value> = {
     icon: 'format-letter-case',
     EditorRenderer,
     ValueRenderer,
-    toggleRenderersWithEnterKey: true,
+    toggleRenderersWithKeyPress: true,
 };

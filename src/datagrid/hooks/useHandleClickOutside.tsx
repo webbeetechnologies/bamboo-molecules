@@ -9,26 +9,18 @@ const useHandleClickOutside = () => {
     const resetFocusCellState = useResetFocusCellState();
     const onResetSelection = useOnResetSelectionOnClickOutside();
 
-    const onResetFocus = useCallback(
+    const onMouseDown = useCallback(
         (e: MouseEvent) => {
-            // dataset comes from the cell-renderer // if this datatype is a parent, we don't want to rest
             if (
                 ((e.target as HTMLDivElement).closest('[data-elementtype]') as HTMLDivElement)
                     ?.dataset?.elementtype
             )
                 return;
 
+            onResetSelection(e);
             resetFocusCellState();
         },
-        [resetFocusCellState],
-    );
-
-    const onMouseDown = useCallback(
-        (e: MouseEvent) => {
-            onResetSelection(e);
-            onResetFocus(e);
-        },
-        [onResetFocus, onResetSelection],
+        [onResetSelection, resetFocusCellState],
     );
 
     useEffect(() => {

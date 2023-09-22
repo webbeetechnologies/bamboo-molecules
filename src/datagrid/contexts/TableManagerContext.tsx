@@ -11,6 +11,7 @@ export type TableManagerContextProviderProps = {
     records: GroupedData[];
     tableRef: RefObject<any>;
     spacerWidth: number;
+    focusIgnoredColumns?: TDataTableColumn[];
 };
 
 export type TableManagerContextType = TableManagerContextProviderProps & {
@@ -26,6 +27,7 @@ const defaultContextValue = {
     records: [],
     tableRef: createRef(),
     tableFlatListRef: createRef(),
+    focusIgnoredColumns: [],
 };
 
 export const {
@@ -42,6 +44,7 @@ export const TableManagerProvider = memo(
         children,
         spacerWidth,
         records,
+        focusIgnoredColumns,
     }: PropsWithChildren<TableManagerContextProviderProps>) => {
         const contextValue = useMemo(
             () =>
@@ -50,8 +53,9 @@ export const TableManagerProvider = memo(
                     withContextMenu,
                     records,
                     spacerWidth,
+                    focusIgnoredColumns,
                 } as TableManagerContextType),
-            [tableRef, withContextMenu, records, spacerWidth],
+            [tableRef, withContextMenu, records, spacerWidth, focusIgnoredColumns],
         );
 
         return (

@@ -7,6 +7,9 @@ import {
 import { calculateShortcutEventName, getPressedModifierKeys, normalizeKeys } from './utils';
 import type { ShortcutEventDetail } from './types';
 
+const defaultMatcher = (_e: KeyboardEvent, key: string | string[], details: ShortcutEventDetail) =>
+    normalizeKeys(key) === details.normalizedKey;
+
 const EventsManager = () => {
     const { store, set: setShortcutsManagerStore } = useShortcutsManagerStoreRef();
 
@@ -36,8 +39,15 @@ const EventsManager = () => {
                         return;
                 }
 
-                const foundMatchedKeys = shortcut.keys.find(
-                    keyGroup => normalizeKeys(keyGroup) === normalizedKeys,
+                const matcher = shortcut.matcher || defaultMatcher;
+
+                const foundMatchedKeys = shortcut.keys.find(keyGroup =>
+                    matcher(e, keyGroup, {
+                        pressedKeys: [e.key].concat(modifierKeys),
+                        normalizedKey: normalizedKeys,
+                        modifiers: modifierKeys,
+                        key: e.key,
+                    }),
                 );
 
                 if (!foundMatchedKeys) return;
