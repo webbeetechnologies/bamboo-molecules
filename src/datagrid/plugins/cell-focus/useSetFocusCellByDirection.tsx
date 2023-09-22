@@ -40,7 +40,7 @@ export const useSetFocusCellByDirection = () => {
             if (isNil(rowIndex) || isNil(columnIndex)) return;
 
             const { columns } = dataTableStoreRef.current;
-            const { records } = tableManagerStore.current;
+            const { records, focusIgnoredColumns = [] } = tableManagerStore.current;
 
             let newRowIndex = rowIndex;
             let newColumnIndex = columnIndex;
@@ -76,11 +76,28 @@ export const useSetFocusCellByDirection = () => {
                     if (columnIndex === 0) return;
 
                     newColumnIndex = scrollToEdge ? 0 : newColumnIndex - 1;
+
+                    // if it's one of the ignored columns with change the index
+                    while (
+                        !columns[newColumnIndex] ||
+                        focusIgnoredColumns.includes(columns[newColumnIndex] as string)
+                    ) {
+                        newColumnIndex = scrollToEdge ? newColumnIndex + 1 : newColumnIndex + 1;
+                    }
+
                     break;
                 case 'right':
                     if (newColumnIndex === columns?.length - 1) return;
 
                     newColumnIndex = scrollToEdge ? columns?.length - 1 : newColumnIndex + 1;
+
+                    // if it's one of the ignored columns with change the index
+                    while (
+                        !columns[newColumnIndex] ||
+                        focusIgnoredColumns.includes(columns[newColumnIndex] as string)
+                    ) {
+                        newColumnIndex = scrollToEdge ? newColumnIndex - 1 : newColumnIndex - 1;
+                    }
             }
 
             setFocusCell(prev => ({
@@ -92,6 +109,8 @@ export const useSetFocusCellByDirection = () => {
                     rowIndex: newRowIndex,
                     type: 'cell',
                 },
+                isEditing: false,
+                pressedKey: '',
             }));
 
             scrollToCell({ columnIndex: newColumnIndex, rowIndex: newRowIndex, direction });

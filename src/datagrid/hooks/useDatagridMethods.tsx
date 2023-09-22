@@ -4,6 +4,7 @@ import {
     CELL_FOCUS_PLUGIN_KEY,
     useCellFocusMethods,
     useCellSelectionMethods,
+    usePluginsDataStoreRef,
     usePluginsDataValueSelector,
 } from '../plugins';
 import { useTableManagerStoreRef } from '../contexts';
@@ -16,6 +17,7 @@ const useDatagridMethods = () => {
     const { useResetFocusCellState } = useCellFocusMethods();
     const resetFocusCellState = useResetFocusCellState();
 
+    const { store: pluginsStore } = usePluginsDataStoreRef();
     const { hasFocusedCell } = usePluginsDataValueSelector(store => ({
         hasFocusedCell: !!store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell,
     }));
@@ -33,22 +35,20 @@ const useDatagridMethods = () => {
 
     useToggleCellEditingState();
 
-    useShortcut(
-        'move-cell-focus',
-        ({ key, pressedKeys, normalizedKey }) => {
-            if (normalizedKey.includes('tab')) {
-                setFocusCellByDirection(normalizedKey.includes('shift') ? 'left' : 'right');
+    useShortcut('move-cell-focus', ({ key, pressedKeys, normalizedKey }) => {
+        if (normalizedKey.includes('tab')) {
+            setFocusCellByDirection(normalizedKey.includes('shift') ? 'left' : 'right');
 
-                return;
-            }
+            return;
+        }
 
-            setFocusCellByDirection(
-                key.split('Arrow')[1].toLowerCase(),
-                pressedKeys.includes('meta') || pressedKeys.includes('control'),
-            );
-        },
-        !hasFocusedCell,
-    );
+        if (pluginsStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell) return;
+
+        setFocusCellByDirection(
+            key.split('Arrow')[1].toLowerCase(),
+            pressedKeys.includes('meta') || pressedKeys.includes('control'),
+        );
+    });
 
     useShortcut(
         'clear-cell-focus',

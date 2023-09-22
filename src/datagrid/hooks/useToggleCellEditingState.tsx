@@ -1,6 +1,7 @@
 import {
     CELL_FOCUS_PLUGIN_KEY,
     useCellFocusMethods,
+    usePluginsDataStoreRef,
     usePluginsDataValueSelector,
 } from '../plugins';
 import { useField, useFieldType } from '../contexts';
@@ -14,19 +15,45 @@ const useToggleCellEditingState = () => {
     const { type } = useField(columnId) || {};
 
     const { toggleRenderersWithEnterKey } = useFieldType(type) || {};
-    const { useSetFocusCellPluginStore } = useCellFocusMethods();
+    const { useSetFocusCellPluginStore, useSetFocusCellByDirection } = useCellFocusMethods();
+
     const setFocusCellPluginStore = useSetFocusCellPluginStore();
+    const setFocusCellByDirection = useSetFocusCellByDirection();
+    const { store: pluginsDataStore } = usePluginsDataStoreRef();
+
+    const { canTriggerCellStartEditing } = usePluginsDataValueSelector(store => ({
+        canTriggerCellStartEditing:
+            !store[CELL_FOCUS_PLUGIN_KEY]?.isEditing && store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell,
+    }));
 
     useShortcut(
         'edit-cell',
         () => {
             if (!toggleRenderersWithEnterKey) return;
 
+            // so that setting isEditing doesn't affect the if statement below
+            const isEditing = pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.isEditing;
+
             setFocusCellPluginStore((prev: { isEditing: boolean }) => ({
                 isEditing: !prev.isEditing,
             }));
+
+            if (isEditing) {
+                setFocusCellByDirection('down');
+            }
         },
         !rowId || !columnId,
+    );
+
+    useShortcut(
+        'cell-start-editing',
+        ({ key }) => {
+            setFocusCellPluginStore(() => ({
+                isEditing: true,
+                pressedKey: key,
+            }));
+        },
+        !canTriggerCellStartEditing,
     );
 };
 
