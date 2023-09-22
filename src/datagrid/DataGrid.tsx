@@ -12,7 +12,6 @@ import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } fro
 import { Platform, StyleSheet } from 'react-native';
 import {
     getPressedModifierKeys,
-    isKey,
     ShortcutsManager,
     useSetScopes,
 } from '@bambooapp/bamboo-molecules/shortcuts-manager';
