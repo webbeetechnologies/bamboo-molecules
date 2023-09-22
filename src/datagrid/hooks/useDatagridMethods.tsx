@@ -58,11 +58,8 @@ const useDatagridMethods = () => {
 
     useShortcut(
         'move-cell-selection',
-        ({ key, pressedKeys }) => {
-            setSelectionByDirection(
-                key.split('Arrow')[1].toLowerCase(),
-                pressedKeys.includes('shift'),
-            );
+        ({ key }) => {
+            setSelectionByDirection(key.split('Arrow')[1].toLowerCase());
         },
         !hasFocusedCell,
     );
