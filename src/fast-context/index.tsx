@@ -11,6 +11,7 @@ import {
 import typedMemo from '../hocs/typedMemo';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
 import { usePrevious } from '../hooks';
+import { shallowCompare } from '../utils';
 
 type StoreDataType = Record<string, any>;
 
@@ -106,7 +107,7 @@ export const createFastContext = <T extends StoreDataType = {}>(
          */
         useContext: <SelectorOutput,>(
             selector: SelectorOutputType<T, SelectorOutput>,
-            equalityCheck = Object.is,
+            equalityCheck = shallowCompare,
         ) => useStore(context as Context<UseStoreDataReturnType<T>>, selector, equalityCheck),
 
         /**
@@ -118,7 +119,7 @@ export const createFastContext = <T extends StoreDataType = {}>(
          */
         useContextValue: <SelectorOutput,>(
             selector: SelectorOutputType<T, SelectorOutput>,
-            equalityCheck = Object.is,
+            equalityCheck = shallowCompare,
         ) => useStoreValue(context as Context<UseStoreDataReturnType<T>>, selector, equalityCheck),
         /**
          * context of the store. Useful for ContextBridge
