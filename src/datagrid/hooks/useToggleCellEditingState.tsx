@@ -14,7 +14,7 @@ const useToggleCellEditingState = () => {
     }));
     const { type } = useField(columnId) || {};
 
-    const { toggleRenderersWithEnterKey } = useFieldType(type) || {};
+    const { toggleRenderersWithKeyPress } = useFieldType(type) || {};
     const { useSetFocusCellPluginStore, useSetFocusCellByDirection } = useCellFocusMethods();
 
     const setFocusCellPluginStore = useSetFocusCellPluginStore();
@@ -29,7 +29,7 @@ const useToggleCellEditingState = () => {
     useShortcut(
         'edit-cell',
         () => {
-            if (!toggleRenderersWithEnterKey) return;
+            if (!toggleRenderersWithKeyPress) return;
 
             // so that setting isEditing doesn't affect the if statement below
             const isEditing = pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.isEditing;
@@ -48,6 +48,8 @@ const useToggleCellEditingState = () => {
     useShortcut(
         'cell-start-editing',
         ({ key }) => {
+            if (!toggleRenderersWithKeyPress) return;
+
             setFocusCellPluginStore(() => ({
                 isEditing: true,
                 pressedKey: key,

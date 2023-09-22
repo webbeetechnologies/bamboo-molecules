@@ -64,6 +64,8 @@ const useOnResetSelectionOnClickOutside = () => {
 
     return useCallback(
         (e: MouseEvent) => {
+            console.log({ e });
+
             if (!store.current[CELL_SELECTION_PLUGIN_KEY]) return;
             if (allowedTargetIds.includes((e.target as HTMLDivElement)?.id)) return;
 

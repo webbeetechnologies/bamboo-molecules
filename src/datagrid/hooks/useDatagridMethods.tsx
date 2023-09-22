@@ -35,20 +35,24 @@ const useDatagridMethods = () => {
 
     useToggleCellEditingState();
 
-    useShortcut('move-cell-focus', ({ key, pressedKeys, normalizedKey }) => {
-        if (normalizedKey.includes('tab')) {
-            setFocusCellByDirection(normalizedKey.includes('shift') ? 'left' : 'right');
+    useShortcut(
+        'move-cell-focus',
+        ({ key, pressedKeys, normalizedKey }) => {
+            if (normalizedKey.includes('tab')) {
+                setFocusCellByDirection(normalizedKey.includes('shift') ? 'left' : 'right');
 
-            return;
-        }
+                return;
+            }
 
-        if (pluginsStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell) return;
+            if (pluginsStore.current[CELL_FOCUS_PLUGIN_KEY]?.isEditing) return;
 
-        setFocusCellByDirection(
-            key.split('Arrow')[1].toLowerCase(),
-            pressedKeys.includes('meta') || pressedKeys.includes('control'),
-        );
-    });
+            setFocusCellByDirection(
+                key.split('Arrow')[1].toLowerCase(),
+                pressedKeys.includes('meta') || pressedKeys.includes('control'),
+            );
+        },
+        !hasFocusedCell,
+    );
 
     useShortcut(
         'clear-cell-focus',
