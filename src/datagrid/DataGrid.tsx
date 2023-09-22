@@ -308,9 +308,11 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
                 matcher: (e: KeyboardEvent) => {
                     const modifiers = getPressedModifierKeys(e);
 
-                    return !isSpaceKey(e.key) && e.key.length === 1 && modifiers.includes('shift')
-                        ? modifiers.length === 1
-                        : !modifiers.length;
+                    return (
+                        !isSpaceKey(e.key) &&
+                        e.key.length === 1 &&
+                        (modifiers.includes('shift') ? modifiers.length === 1 : !modifiers.length)
+                    );
                 },
                 preventDefault: true,
             },
