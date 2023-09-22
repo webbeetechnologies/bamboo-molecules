@@ -1,5 +1,5 @@
 import { FC, memo, useMemo } from 'react';
-import { useComponentStyles, useMolecules, usePrevious } from '../../../hooks';
+import { useComponentStyles, useMolecules } from '../../../hooks';
 import {
     useDataTable,
     useDataTableCell,
@@ -39,9 +39,9 @@ export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
 
     const isWithinBounds = useIsCellWithinBounds(cellXOffsets[columnIndex], row, column);
 
-    const isVisible = usePrevious(isWithinBounds).current || isWithinBounds;
+    // const isVisible = usePrevious(isWithinBounds) || isWithinBounds;
 
-    if (!isVisible) return <></>;
+    if (!isWithinBounds) return <></>;
 
     return (
         <>
