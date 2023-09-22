@@ -255,7 +255,12 @@ export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
     );
 
     if (!groupRecordsBy.length)
-        return [...normalizedModelRecords, getDefaultFooterRow(modelRecords.length)];
+        return [
+            ...normalizedModelRecords.map((record, index) =>
+                prepareRecordWithIndex(record, index, index),
+            ),
+            getDefaultFooterRow(modelRecords.length),
+        ];
 
     let index = 0;
     const finalData = groupRecordsBy.reduce((groupedAggregates: GroupedData[], group) => {
