@@ -12,7 +12,20 @@ export { FieldTypes } from './field-types';
 export * from './contexts';
 export { handleEmitKeyboardEvent } from './utils';
 
-export { GroupRecord, GroupFooter, GroupHeader, prepareGroupedData } from './utils';
+export {
+    GroupRecord,
+    GroupFooter,
+    GroupHeader,
+    prepareGroupedData,
+    AggregateRecord,
+    GroupMetaRow,
+    GroupMeta,
+    prepareAggregateRow,
+    GroupConstantValues,
+    RowType,
+    GroupedData,
+    RecordWithId,
+} from './utils';
 
 export {
     useCopyPastePlugin,

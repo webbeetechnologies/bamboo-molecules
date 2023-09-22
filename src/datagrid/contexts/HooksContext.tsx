@@ -4,12 +4,11 @@ import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecule
 import type {
     DataGridRowRendererProps,
     Field,
-    GroupMeta,
     UseGroupRowState,
     UseRowRenderer,
     UseShowGroupFooter,
 } from '../types';
-import type { RecordWithId } from '../utils';
+import type { RecordWithId, GroupMeta } from '../utils';
 
 export type HooksContextType = {
     useField: (columnId: TDataTableColumn) => Field;

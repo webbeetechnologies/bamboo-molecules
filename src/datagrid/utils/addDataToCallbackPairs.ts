@@ -1,7 +1,7 @@
 import type { FlatListProps } from '@bambooapp/bamboo-molecules';
 import type { RefObject } from 'react';
 import type { ViewAbilityConfigPair, ViewTokenExtended, ViewabilityCallback } from '../types';
-import type { GroupedData } from './prepareGroupedData';
+import type { GroupedData } from './grouping.types';
 
 export const addDataToCallbackPairs = (
     data: RefObject<{ records: GroupedData[] }>,

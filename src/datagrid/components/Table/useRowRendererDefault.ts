@@ -1,11 +1,11 @@
 import type { ComponentType } from 'react';
 import type { UseRowRenderer } from '@bambooapp/bamboo-molecules';
 
-import { weakMemoized } from '../../utils';
+import { RowType, weakMemoized } from '../../utils';
 import { useRecordType } from '../../contexts';
 import { GroupFooterRow } from './GroupFooterRenderer';
 import { GroupHeaderRow } from './GroupHeaderRenderer';
-import { DataGridRowRendererProps, RowType } from '../../types';
+import type { DataGridRowRendererProps } from '../../types';
 import { withSpacers } from './Spacer';
 import { TableRow } from './RowRenderer';
 
