@@ -44,7 +44,7 @@ import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
 import { RecordWithId, addDataToCallbackPairs, prepareGroupedData } from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
-import { cellEditingShortcutKeys } from './utils/shortcuts';
+import { isSpaceKey } from '../shortcuts-manager/utils';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -288,7 +288,11 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
             },
             {
                 name: 'cell-start-editing',
-                keys: cellEditingShortcutKeys,
+                // doesn't matter what the key is
+                keys: ['*'],
+                matcher: (e: KeyboardEvent) => {
+                    return !isSpaceKey(e.key) && e.key.length === 1;
+                },
                 preventDefault: true,
             },
         ]).current;
