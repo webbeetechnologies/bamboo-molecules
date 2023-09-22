@@ -23,6 +23,8 @@ export {
     prepareAggregateRow,
     GroupConstantValues,
     RowType,
+    GroupedData,
+    RecordWithId,
 } from './utils';
 
 export {
