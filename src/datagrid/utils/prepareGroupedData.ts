@@ -125,11 +125,7 @@ const getStringifieldRecordMemoized = memoize(
 const generateRecordId = <T extends RecordWithId = RecordWithId>(
     modelRecord: T,
     groups: string[],
-    index: number,
-) =>
-    [getStringifieldRecordMemoized(modelRecord), generateValueKey(modelRecord, groups), index].join(
-        '__',
-    );
+) => [getStringifieldRecordMemoized(modelRecord), generateValueKey(modelRecord, groups)].join('__');
 
 /**
  *
@@ -154,11 +150,7 @@ const extractGroupFields = memoize(
  * Adds indexInGroup property though they'll be replaced later.
  */
 const prepareGroupedRecord = memoize(
-    <T extends RecordWithId = RecordWithId>(
-        record: T,
-        groups: string[],
-        index: number,
-    ): GroupRecord => ({
+    <T extends RecordWithId = RecordWithId>(record: T, groups: string[]): GroupRecord => ({
         data: record,
         id: record.id,
         level: groups.length,
@@ -166,11 +158,12 @@ const prepareGroupedRecord = memoize(
         groupConstants: getMemoizedConstants(generateConstantsForRecord(record, groups)),
         isCollapsed: false,
         rowType: RowType.DATA as const,
-        index,
         // Index in group will be overwritten later.
+        index: 0,
+        // IndexInGroup in group will be overwritten later.
         indexInGroup: 0,
     }),
-    (record, groups, index) => generateRecordId(record, groups, index),
+    (record, groups) => generateRecordId(record, groups),
 );
 
 /**
@@ -178,11 +171,13 @@ const prepareGroupedRecord = memoize(
  * Add the indexInGroup Prop
  */
 const prepareRecordWithIndex = memoize(
-    <T extends RecordWithId>(record: T, indexInGroup: number) => ({
+    <T extends RecordWithId>(record: T, index: number, indexInGroup: number) => ({
         ...record,
+        index,
         indexInGroup,
     }),
-    (record, indexInGroup) => `${getStringifieldRecordMemoized(record)}-ig:${indexInGroup}`,
+    (record, indexInGroup, index) =>
+        `${getStringifieldRecordMemoized(record)}-i:${index}-ig:${indexInGroup}`,
 );
 
 /**
@@ -254,9 +249,7 @@ export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
     groupRecordsBy: GroupMetaRow[] = [],
 ): GroupedData[] => {
     const groups = extractGroupFields(groupRecordsBy);
-    const normalizedModelRecords = modelRecords.map((record, rowIndex) =>
-        prepareGroupedRecord(record, groups, rowIndex),
-    );
+    const normalizedModelRecords = modelRecords.map(record => prepareGroupedRecord(record, groups));
     const groupedRecords: Record<string, GroupRecord[]> = groupBy(normalizedModelRecords, record =>
         generateValueKey(record.data, groups),
     );
@@ -264,7 +257,8 @@ export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
     if (!groupRecordsBy.length)
         return [...normalizedModelRecords, getDefaultFooterRow(modelRecords.length)];
 
-    return groupRecordsBy.reduce((groupedAggregates: GroupedData[], group) => {
+    let index = 0;
+    const finalData = groupRecordsBy.reduce((groupedAggregates: GroupedData[], group) => {
         groupedAggregates = [...groupedAggregates, group];
         if (!isGroupHeader(group)) return groupedAggregates;
         if (!(group as GroupHeader).isLastLevel) return groupedAggregates;
@@ -281,10 +275,30 @@ export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
                         rowType: RowType.DATA as const,
                         isCollapsed: false,
                     },
+                    index++,
                     indexInGroup,
                 ),
             ),
         ];
     }, []);
+
+    const unRealFooter: GroupFooter = {
+        isRealGroup: false,
+        groupConstants: defaultConstants,
+        level: 0,
+        groupId: '',
+        id: 'last-footer-row',
+        isCollapsed: false,
+        rowType: RowType.FOOTER,
+        isFirstLevel: false,
+        isLastLevel: false,
+        isFirst: false,
+        isLast: false,
+        isOnly: false,
+        count: 0,
+        title: '',
+    };
+
+    return [...finalData, unRealFooter];
 };
 export default prepareGroupedData;
