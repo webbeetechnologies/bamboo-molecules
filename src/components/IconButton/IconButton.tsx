@@ -1,72 +1,70 @@
-import { forwardRef, memo, useMemo } from 'react';
+import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react';
 import type { StyleProp, GestureResponderEvent, TextStyle, ViewStyle } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import color from 'color';
 
-import { useMolecules, useComponentStyles } from '../../hooks';
-import { CallbackActionState, withActionState } from '../../hocs';
+import { useMolecules, useComponentStyles, useActionState } from '../../hooks';
 import CrossFadeIcon from '../Icon/CrossFadeIcon';
 import type { IconType } from '../Icon';
 import type { TouchableRippleProps } from '../TouchableRipple';
 
 type IconButtonVariant = 'default' | 'outlined' | 'contained' | 'contained-tonal';
 
-export type Props = Omit<TouchableRippleProps, 'children' | 'style'> &
-    CallbackActionState & {
-        /**
-         * Icon to display.
-         */
-        name: string;
-        /**
-         * Mode of the icon button. By default there is no specified mode - only pressable icon will be rendered.
-         */
-        variant?: IconButtonVariant;
-        /**
-         * Whether icon button is selected. A selected button receives alternative combination of icon and container colors.
-         */
-        selected?: boolean;
-        /**
-         * Size of the icon.
-         */
-        size?: 'xs' | 'sm' | 'md' | 'lg' | number;
-        /**
-         * Type of the icon. Default is material
-         * Should be a number or a Design Token
-         */
-        type?: IconType;
-        /**
-         * Whether the button is disabled. A disabled button is greyed out and `onPress` is not called on touch.
-         */
-        disabled?: boolean;
-        /**
-         * Whether an icon change is animated.
-         */
-        animated?: boolean;
-        /**
-         * Accessibility label for the button. This is read by the screen reader when the user taps the button.
-         */
-        accessibilityLabel?: string;
-        /**
-         * Function to execute on press.
-         */
-        onPress?: (e: GestureResponderEvent) => void;
-        /**
-         * backgroundColor and color will be extracted from here and act as buttonBackgroundColor and iconColor
-         */
-        style?: StyleProp<TextStyle>;
-        /**
-         * color of the icon
-         */
-        color?: string;
-        /**
-         * Style of the innerContainer
-         */
-        innerContainerStyle?: ViewStyle;
-        /**
-         * Props for the state layer
-         * */
-        stateLayerProps?: ViewProps;
-    };
+export type Props = Omit<TouchableRippleProps, 'children' | 'style'> & {
+    /**
+     * Icon to display.
+     */
+    name: string;
+    /**
+     * Mode of the icon button. By default there is no specified mode - only pressable icon will be rendered.
+     */
+    variant?: IconButtonVariant;
+    /**
+     * Whether icon button is selected. A selected button receives alternative combination of icon and container colors.
+     */
+    selected?: boolean;
+    /**
+     * Size of the icon.
+     */
+    size?: 'xs' | 'sm' | 'md' | 'lg' | number;
+    /**
+     * Type of the icon. Default is material
+     * Should be a number or a Design Token
+     */
+    type?: IconType;
+    /**
+     * Whether the button is disabled. A disabled button is greyed out and `onPress` is not called on touch.
+     */
+    disabled?: boolean;
+    /**
+     * Whether an icon change is animated.
+     */
+    animated?: boolean;
+    /**
+     * Accessibility label for the button. This is read by the screen reader when the user taps the button.
+     */
+    accessibilityLabel?: string;
+    /**
+     * Function to execute on press.
+     */
+    onPress?: (e: GestureResponderEvent) => void;
+    /**
+     * backgroundColor and color will be extracted from here and act as buttonBackgroundColor and iconColor
+     */
+    style?: StyleProp<TextStyle>;
+    /**
+     * color of the icon
+     */
+    color?: string;
+    /**
+     * Style of the innerContainer
+     */
+    innerContainerStyle?: ViewStyle;
+    /**
+     * Props for the state layer
+     * */
+    stateLayerProps?: ViewProps;
+};
 
 const IconButton = (
     {
@@ -81,7 +79,6 @@ const IconButton = (
         animated = false,
         variant = 'default',
         style,
-        hovered = false,
         innerContainerStyle: innerContainerStyleProp = {},
         testID,
         stateLayerProps = {},
@@ -91,6 +88,9 @@ const IconButton = (
 ) => {
     const { TouchableRipple, Surface, Icon, StateLayer } = useMolecules();
     const IconComponent = animated ? CrossFadeIcon : Icon;
+
+    const triggerRef = useRef(null);
+    const { hovered } = useActionState({ ref: triggerRef });
 
     const componentStyles = useComponentStyles(
         'IconButton',
@@ -167,6 +167,8 @@ const IconButton = (
         };
     }, [componentStyles, disabled, size, stateLayerProps?.style]);
 
+    useImperativeHandle(ref, () => triggerRef.current);
+
     return (
         <Surface style={containerStyle} elevation={0}>
             <TouchableRipple
@@ -186,7 +188,7 @@ const IconButton = (
                     // @ts-ignore
                     TouchableRipple?.supported ? rippleSupportedHitSlop : rippleUnsupportedHitSlop
                 }
-                ref={ref}
+                ref={triggerRef}
                 testID={testID}
                 {...rest}>
                 <>
@@ -205,4 +207,4 @@ const IconButton = (
 const rippleSupportedHitSlop = { top: 10, left: 10, bottom: 10, right: 10 };
 const rippleUnsupportedHitSlop = { top: 6, left: 6, bottom: 6, right: 6 };
 
-export default memo(withActionState(forwardRef(IconButton)));
+export default memo(forwardRef(IconButton));

@@ -268,21 +268,23 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
                 />
             </Pressable>
 
-            <DropdownList
-                popoverProps={popoverProps}
-                {...rest}
-                style={dropdownListStyle}
-                renderItem={renderItem}
-                selection={selectionValue}
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
-                triggerRef={triggerRef}
-                onSelectionChange={onSelectItemChange}
-                selectable
-                searchable={searchable}
-                onQueryChange={onQueryChange}
-                testID={dropdownTestID}
-            />
+            {isOpen && (
+                <DropdownList
+                    popoverProps={popoverProps}
+                    {...rest}
+                    style={dropdownListStyle}
+                    renderItem={renderItem}
+                    selection={selectionValue}
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    triggerRef={triggerRef}
+                    onSelectionChange={onSelectItemChange}
+                    selectable
+                    searchable={searchable}
+                    onQueryChange={onQueryChange}
+                    testID={dropdownTestID}
+                />
+            )}
         </>
     );
 };
