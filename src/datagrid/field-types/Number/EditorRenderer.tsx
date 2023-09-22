@@ -7,6 +7,7 @@ import { InlineInput } from '../../components/InlineInput';
 import type { FieldRendererProps } from '../../types';
 import type { Value } from './types';
 import { handleEmitKeyboardEvent } from '../../utils';
+import { isEnterKey, isTabKey, isEscapeKey } from '../../../shortcuts-manager/utils';
 
 export type Props = FieldRendererProps<Value> & Omit<TextInputProps, 'value' | 'onChange'> & {};
 
@@ -20,7 +21,7 @@ const NumberFieldEditorRenderer = ({ value: valueProp = null, onChange, ...rest 
     const onKeyPress = useCallback((_e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
         const e = _e as unknown as KeyboardEvent;
 
-        if (e.key && (e.key === 'Escape' || e.key === 'Enter' || e.key === 'Tab')) {
+        if (e.key && (isEnterKey(e.key) || isTabKey(e.key) || isEscapeKey(e.type))) {
             handleEmitKeyboardEvent('keydown', e);
         }
     }, []);
