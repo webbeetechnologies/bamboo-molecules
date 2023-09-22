@@ -1,4 +1,7 @@
-import { usePluginsDataValueSelector } from '@bambooapp/bamboo-molecules/datagrid';
+import {
+    usePluginsDataValueSelector,
+    useTableManagerStoreRef,
+} from '@bambooapp/bamboo-molecules/datagrid';
 import { useCallback, useEffect } from 'react';
 
 import { createPlugin } from './createPlugin';
@@ -6,6 +9,9 @@ import { usePluginsDataStoreRef } from './plugins-manager';
 import { CellIndices, PluginEvents } from './types';
 import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
 import { CELL_FOCUS_PLUGIN_KEY } from './cell-focus';
+import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
+import { isNil } from '../../utils';
+import { Direction, directions, useScrollToCell } from './cell-focus/useSetFocusCellByDirection';
 
 export const CELL_SELECTION_PLUGIN_KEY = 'cell-selection';
 
@@ -172,6 +178,115 @@ const useHasCellSelection = ({ columnIndex, rowIndex }: CellIndices) => {
     );
 };
 
+// abstract duplicated logic
+export const useSetSelectionByDirection = () => {
+    const { store: pluginsStoreRef, set: setStore } = usePluginsDataStoreRef();
+    const { store: dataTableStoreRef } = useDataTableStoreRef();
+    const { store: tableManagerStore } = useTableManagerStoreRef();
+
+    const scrollToCell = useScrollToCell();
+
+    return useCallback(
+        (direction: Direction, scrollToEdge: boolean = false) => {
+            if (!directions.includes(direction)) return;
+
+            const currentFocusedCell = pluginsStoreRef.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
+            const selection = pluginsStoreRef.current[CELL_SELECTION_PLUGIN_KEY];
+
+            if (!currentFocusedCell) return;
+
+            let start: CellIndices;
+
+            if (!selection || !selection?.start) {
+                start = {
+                    columnIndex: currentFocusedCell.columnIndex,
+                    rowIndex: currentFocusedCell.rowIndex,
+                };
+            } else {
+                start = selection.start;
+            }
+
+            const { columnIndex, rowIndex } = (selection?.end || start) as {
+                columnIndex: number;
+                rowIndex?: number;
+            };
+
+            if (isNil(rowIndex) || isNil(columnIndex)) return;
+
+            const { columns } = dataTableStoreRef.current;
+            const { records, focusIgnoredColumns = [] } = tableManagerStore.current;
+
+            let newRowIndex = rowIndex;
+            let newColumnIndex = columnIndex;
+
+            switch (direction) {
+                case 'up':
+                    if (rowIndex === 0) return;
+
+                    newRowIndex = scrollToEdge ? 0 : newRowIndex - 1;
+
+                    // keep finding the rowIndex unless the type is data
+                    while (records[newRowIndex]?.rowType !== 'data') {
+                        newRowIndex = scrollToEdge ? newRowIndex + 1 : newRowIndex - 1;
+
+                        if (scrollToEdge ? newRowIndex > records?.length - 1 : newRowIndex <= 0)
+                            return;
+                    }
+                    break;
+                case 'down':
+                    if (rowIndex === records?.length - 1) return;
+
+                    newRowIndex = scrollToEdge ? records?.length - 1 : newRowIndex + 1;
+
+                    // keep finding the rowIndex unless the type is data
+                    while (records[newRowIndex]?.rowType !== 'data') {
+                        newRowIndex = scrollToEdge ? newRowIndex - 1 : newRowIndex + 1;
+
+                        if (scrollToEdge ? newRowIndex <= 0 : newRowIndex > records?.length - 1)
+                            return;
+                    }
+                    break;
+                case 'left':
+                    if (columnIndex === 0) return;
+
+                    newColumnIndex = scrollToEdge ? 0 : newColumnIndex - 1;
+
+                    // if it's one of the ignored columns with change the index
+                    while (
+                        !columns[newColumnIndex] ||
+                        focusIgnoredColumns.includes(columns[newColumnIndex] as string)
+                    ) {
+                        newColumnIndex = scrollToEdge ? newColumnIndex + 1 : newColumnIndex + 1;
+                    }
+
+                    break;
+                case 'right':
+                    if (newColumnIndex === columns?.length - 1) return;
+
+                    newColumnIndex = scrollToEdge ? columns?.length - 1 : newColumnIndex + 1;
+
+                    // if it's one of the ignored columns with change the index
+                    while (
+                        !columns[newColumnIndex] ||
+                        focusIgnoredColumns.includes(columns[newColumnIndex] as string)
+                    ) {
+                        newColumnIndex = scrollToEdge ? newColumnIndex - 1 : newColumnIndex - 1;
+                    }
+            }
+
+            setStore(() => ({
+                [CELL_SELECTION_PLUGIN_KEY]: {
+                    start,
+                    end: { columnIndex: newColumnIndex, rowIndex: newRowIndex },
+                },
+            }));
+
+            scrollToCell({ columnIndex: newColumnIndex, rowIndex: newRowIndex, direction });
+        },
+        [dataTableStoreRef, pluginsStoreRef, scrollToCell, setStore, tableManagerStore],
+    );
+};
+
 export const [useCellSelectionPlugin, useCellSelectionEvents, useCellSelectionMethods] =
     createPlugin({
         key: CELL_SELECTION_PLUGIN_KEY,
@@ -188,5 +303,6 @@ export const [useCellSelectionPlugin, useCellSelectionEvents, useCellSelectionMe
             useOnDragAndSelectEnd,
             useProcessDragCellSelection,
             useHasCellSelection,
+            useSetSelectionByDirection,
         },
     });

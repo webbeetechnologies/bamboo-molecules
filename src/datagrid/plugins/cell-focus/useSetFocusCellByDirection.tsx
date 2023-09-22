@@ -13,8 +13,8 @@ import {
 import { isNil } from '../../../utils';
 import { useSetFocusCellPluginStore } from './useSetFocusCellPluginStore';
 
-const directions = ['up', 'down', 'left', 'right'] as const;
-type Direction = typeof directions[number];
+export const directions = ['up', 'down', 'left', 'right'] as const;
+export type Direction = typeof directions[number];
 
 export const useSetFocusCellByDirection = () => {
     const { store: pluginsStoreRef } = usePluginsDataStoreRef();
@@ -119,7 +119,7 @@ export const useSetFocusCellByDirection = () => {
     );
 };
 
-const useScrollToCell = () => {
+export const useScrollToCell = () => {
     const { store: dataTableStoreRef } = useDataTableStoreRef();
     const { store: tableManagerStore } = useTableManagerStoreRef();
     const { store: horizontalScrollIndexStoreRef } = useDataTableHorizontalScrollIndexStoreRef();
