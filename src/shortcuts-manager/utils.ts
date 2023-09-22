@@ -88,6 +88,8 @@ export const getPressedModifierKeys = (event: KeyboardEvent, mergeMetaKeys = fal
     return pressedModifierKeys;
 };
 
+export const isSpaceKey = (key: string) => mappings.get(key.toLowerCase()) === 'space';
+
 export const shortcutEventPrefix = 'shortcut-event-';
 
 export const calculateShortcutEventName = (shortcutName: string) =>
