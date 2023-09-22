@@ -10,7 +10,12 @@ import type {
 } from '@bambooapp/bamboo-molecules/components';
 import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Platform, StyleSheet } from 'react-native';
-import { ShortcutsManager, useSetScopes } from '@bambooapp/bamboo-molecules/shortcuts-manager';
+import {
+    getPressedModifierKeys,
+    isKey,
+    ShortcutsManager,
+    useSetScopes,
+} from '@bambooapp/bamboo-molecules/shortcuts-manager';
 
 import { useMolecules, useToken } from '../hooks';
 import {
@@ -302,7 +307,11 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
                 // doesn't matter what the key is
                 keys: ['*'],
                 matcher: (e: KeyboardEvent) => {
-                    return !isSpaceKey(e.key) && e.key.length === 1;
+                    const modifiers = getPressedModifierKeys(e);
+
+                    return !isSpaceKey(e.key) && e.key.length === 1 && modifiers.includes('shift')
+                        ? modifiers.length === 1
+                        : !modifiers.length;
                 },
                 preventDefault: true,
             },
