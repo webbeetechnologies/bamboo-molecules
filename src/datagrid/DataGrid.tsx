@@ -44,6 +44,7 @@ import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
 import { RecordWithId, addDataToCallbackPairs, prepareGroupedData } from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
+import { cellEditingShortcutKeys } from './utils/shortcuts';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -67,6 +68,7 @@ export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
         fieldTypes?: FieldTypes;
         records: RecordWithId[];
         spacerWidth?: string | number;
+        focusIgnoredColumns?: TDataTableColumn[];
     };
 
 export type ContextMenuProps = Partial<MenuProps> & {
@@ -284,6 +286,11 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
                 name: 'edit-cell',
                 keys: ['Enter'],
             },
+            {
+                name: 'cell-start-editing',
+                keys: cellEditingShortcutKeys,
+                preventDefault: true,
+            },
         ]).current;
 
         return (
@@ -310,6 +317,7 @@ const TableManagerProviderWrapper = ({
     contextMenuProps,
     spacerWidth: spacerWidthProp = 'spacings.3',
     Component,
+    focusIgnoredColumns,
     ...rest
 }: Omit<Props, 'useField' | 'useCellValue'> & {
     Component: ComponentType<DataGridPresentationProps>;
@@ -333,7 +341,8 @@ const TableManagerProviderWrapper = ({
             tableRef={ref}
             spacerWidth={spacerWidth}
             records={groupedRecords}
-            withContextMenu={!!contextMenuProps}>
+            withContextMenu={!!contextMenuProps}
+            focusIgnoredColumns={focusIgnoredColumns}>
             {/* @ts-ignore - we don't want to pass down unnecessary props */}
             <Component
                 {...rest}

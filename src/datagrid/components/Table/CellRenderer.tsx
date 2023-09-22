@@ -23,8 +23,6 @@ import { DragAndExtendHandle } from '../DragAndExtendHandle';
 import { useCellFocusMethods, useCellSelectionMethods } from '../../plugins';
 import { CellSelectionIndicator } from '../CellSelectionIndicator';
 import '../CellBorder';
-import { getPressedModifierKeys, isSpaceKey } from '../../../shortcuts-manager/utils';
-import { handleEmitKeyboardEvent } from '../../utils';
 
 export type Props = RenderCellProps &
     Omit<PressableProps, 'ref'> & {
@@ -159,25 +157,6 @@ const _DataCell = (
         }));
     }, [onFocus, setFocusCellPluginStore]);
 
-    const onKeyDown = useCallback(
-        (e: KeyboardEvent) => {
-            if (e.key === 'Enter') {
-                handleEmitKeyboardEvent('keydown', e);
-            }
-
-            if (e.key.length !== 1 || getPressedModifierKeys(e).length || isSpaceKey(e.key)) return;
-
-            e.preventDefault();
-
-            if (isEditingRef.current) return;
-
-            setFocusCellPluginStore(() => ({ isEditing: true, pressedKey: e.key }));
-
-            return;
-        },
-        [isEditingRef, setFocusCellPluginStore],
-    );
-
     useEffect(() => {
         if (isFocused || !isEditing) return;
 
@@ -193,7 +172,7 @@ const _DataCell = (
             style={containerStyle}
             // @ts-ignore
             dataSet={dataSet}
-            onKeyDown={onKeyDown}
+            // onKeyDown={onKeyDown}
             {...rest}>
             <GestureDetector gesture={onDrag}>
                 <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>

@@ -19,7 +19,7 @@ const SingleLineTextEditorRenderer = ({ value, onChange, ...rest }: Props) => {
     const onKeyPress = useCallback((_e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
         const e = _e as unknown as KeyboardEvent;
 
-        if (e.key && (e.key === 'Escape' || e.key === 'Enter')) {
+        if (e.key && (e.key === 'Escape' || e.key === 'Enter' || e.key === 'Tab')) {
             handleEmitKeyboardEvent('keydown', e);
         }
     }, []);
