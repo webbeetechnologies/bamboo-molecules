@@ -43,8 +43,7 @@ const CheckboxAndroid = (
     const { current: scaleAnim } = useRef<Animated.Value>(new Animated.Value(1));
     const isFirstRendering = useRef<boolean>(true);
 
-    const triggerRef = useRef(null);
-    const { hovered } = useActionState({ ref: triggerRef });
+    const { hovered, actionsRef } = useActionState();
 
     const componentStyles = useComponentStyles('Checkbox', style, {
         variant: 'android',
@@ -159,7 +158,7 @@ const CheckboxAndroid = (
 
     const accessibilityState = useMemo(() => ({ disabled, checked }), [checked, disabled]);
 
-    useImperativeHandle(ref, () => triggerRef.current);
+    useImperativeHandle(ref, () => actionsRef.current);
 
     return (
         <TouchableRipple
@@ -173,7 +172,7 @@ const CheckboxAndroid = (
             accessibilityLiveRegion="polite"
             style={rippleContainerStyles}
             testID={testID}
-            ref={triggerRef}>
+            ref={actionsRef}>
             <>
                 <Animated.View style={animatedContainerStyles}>
                     <Icon

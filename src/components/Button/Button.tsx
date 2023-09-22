@@ -145,8 +145,7 @@ const Button = (
 ) => {
     const { ActivityIndicator, TouchableRipple, Text, Icon, Surface, StateLayer } = useMolecules();
 
-    const triggerRef = useRef(null);
-    const { hovered } = useActionState({ ref: triggerRef });
+    const { hovered, actionsRef } = useActionState();
 
     const componentStyles = useComponentStyles(
         'Button',
@@ -278,7 +277,7 @@ const Button = (
         elevationProp,
     ]);
 
-    useImperativeHandle(ref, () => triggerRef.current);
+    useImperativeHandle(ref, () => actionsRef.current);
 
     return (
         <Surface {...rest} style={surfaceStyle} elevation={disabled ? 0 : elevation}>
@@ -297,7 +296,7 @@ const Button = (
                 disabled={disabled}
                 rippleColor={rippleColor}
                 style={viewStyle}
-                ref={triggerRef}
+                ref={actionsRef}
                 testID={testID}>
                 <>
                     {iconName && loading !== true ? (

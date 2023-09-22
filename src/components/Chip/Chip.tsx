@@ -1,12 +1,4 @@
-import {
-    forwardRef,
-    memo,
-    PropsWithoutRef,
-    ReactNode,
-    useImperativeHandle,
-    useMemo,
-    useRef,
-} from 'react';
+import { forwardRef, memo, PropsWithoutRef, ReactNode, useImperativeHandle, useMemo } from 'react';
 import type { GestureResponderEvent, TextStyle, ViewStyle } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 
@@ -141,8 +133,7 @@ const Chip = (
 ) => {
     const { Surface, TouchableRipple, Text, StateLayer } = useMolecules();
 
-    const triggerRef = useRef(null);
-    const { hovered } = useActionState({ ref: triggerRef });
+    const { hovered, actionsRef } = useActionState();
 
     const componentStyles = useComponentStyles(
         'Chip',
@@ -220,7 +211,7 @@ const Chip = (
         [disabled, elevationProp, selected, variant],
     );
 
-    useImperativeHandle(ref, () => triggerRef.current);
+    useImperativeHandle(ref, () => actionsRef.current);
 
     return (
         <Surface elevation={elevation} style={containerStyle}>
@@ -232,7 +223,7 @@ const Chip = (
                 accessibilityLabel={accessibilityLabel}
                 accessibilityRole="button"
                 accessibilityState={accessibilityState}
-                ref={triggerRef}
+                ref={actionsRef}
                 testID={testID}>
                 <>
                     <LeftElement

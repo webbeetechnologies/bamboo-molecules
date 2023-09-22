@@ -23,9 +23,11 @@ const useDatagridMethods = () => {
     }));
 
     const { useEnsureCorrectFocusCellState, useSetFocusCellByDirection } = useCellFocusMethods();
-    const { useResetSelectionOnFocusCellChange } = useCellSelectionMethods();
+    const { useResetSelectionOnFocusCellChange, useSetSelectionByDirection } =
+        useCellSelectionMethods();
 
     const setFocusCellByDirection = useSetFocusCellByDirection();
+    const setSelectionByDirection = useSetSelectionByDirection();
 
     useHandleKeydownEvents({ ref: storeRef.current.tableRef });
     useHandleClickOutside();
@@ -49,6 +51,17 @@ const useDatagridMethods = () => {
             setFocusCellByDirection(
                 key.split('Arrow')[1].toLowerCase(),
                 pressedKeys.includes('meta') || pressedKeys.includes('control'),
+            );
+        },
+        !hasFocusedCell,
+    );
+
+    useShortcut(
+        'move-cell-selection',
+        ({ key, pressedKeys }) => {
+            setSelectionByDirection(
+                key.split('Arrow')[1].toLowerCase(),
+                pressedKeys.includes('shift'),
             );
         },
         !hasFocusedCell,

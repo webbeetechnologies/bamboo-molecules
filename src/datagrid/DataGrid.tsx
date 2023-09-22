@@ -280,6 +280,16 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
                 preventDefault: true,
             },
             {
+                name: 'move-cell-selection',
+                keys: [
+                    ['Shift', 'ArrowLeft'],
+                    ['Shift', 'ArrowRight'],
+                    ['Shift', 'ArrowUp'],
+                    ['Shift', 'ArrowDown'],
+                ],
+                preventDefault: true,
+            },
+            {
                 name: 'clear-cell-focus',
                 keys: ['Escape'],
             },

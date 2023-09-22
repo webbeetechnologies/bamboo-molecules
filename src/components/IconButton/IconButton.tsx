@@ -1,4 +1,4 @@
-import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react';
+import { forwardRef, memo, useImperativeHandle, useMemo } from 'react';
 import type { StyleProp, GestureResponderEvent, TextStyle, ViewStyle } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import color from 'color';
@@ -89,8 +89,7 @@ const IconButton = (
     const { TouchableRipple, Surface, Icon, StateLayer } = useMolecules();
     const IconComponent = animated ? CrossFadeIcon : Icon;
 
-    const triggerRef = useRef(null);
-    const { hovered } = useActionState({ ref: triggerRef });
+    const { hovered, actionsRef } = useActionState();
 
     const componentStyles = useComponentStyles(
         'IconButton',
@@ -167,7 +166,7 @@ const IconButton = (
         };
     }, [componentStyles, disabled, size, stateLayerProps?.style]);
 
-    useImperativeHandle(ref, () => triggerRef.current);
+    useImperativeHandle(ref, () => actionsRef.current);
 
     return (
         <Surface style={containerStyle} elevation={0}>
@@ -188,7 +187,7 @@ const IconButton = (
                     // @ts-ignore
                     TouchableRipple?.supported ? rippleSupportedHitSlop : rippleUnsupportedHitSlop
                 }
-                ref={triggerRef}
+                ref={actionsRef}
                 testID={testID}
                 {...rest}>
                 <>
