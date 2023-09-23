@@ -100,6 +100,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          */
         stateLayerProps?: PropsWithoutRef<ViewProps>;
         testID?: string;
+        containerProps?: Omit<PropsWithoutRef<ViewProps>, 'style'>;
     };
 
 const Chip = (
@@ -127,6 +128,7 @@ const Chip = (
         selectionBackgroundColor: selectionBackgroundColorProp,
         stateLayerProps = {},
         testID = 'chip',
+        containerProps,
         ...rest
     }: Props,
     ref: any,
@@ -214,7 +216,7 @@ const Chip = (
     useImperativeHandle(ref, () => actionsRef.current);
 
     return (
-        <Surface elevation={elevation} style={containerStyle}>
+        <Surface {...containerProps} elevation={elevation} style={containerStyle}>
             <TouchableRipple
                 borderless
                 {...rest}
