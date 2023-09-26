@@ -80,7 +80,7 @@ export const useRecordIds = () => {
 };
 
 type GroupedDataMap = Record<TDataTableColumn, GroupedData>;
-const getRecordsMap = weakMemoized((records: GroupedData[]) => keyBy(records, 'id')) as (
+const getRecordsMap = weakMemoized((records: GroupedData[]) => keyBy(records, 'uniqueId')) as (
     records: GroupedData[],
 ) => GroupedDataMap;
 
@@ -123,4 +123,11 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
 
 export const useRecordType = (id: TDataTableRow) => {
     return useTableManagerValueSelector(({ records }) => getRecordsMap(records)[id].rowType);
+};
+
+export const useRecord = <T extends unknown>(
+    id: TDataTableRow,
+    selector: (arg: GroupedData) => T,
+) => {
+    return useTableManagerValueSelector(({ records }) => selector(getRecordById(records, id)));
 };

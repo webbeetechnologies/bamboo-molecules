@@ -45,6 +45,7 @@ type GroupBase = {
     id: TDataTableColumn;
     isRealGroup?: boolean;
     isCollapsed: boolean;
+    uniqueId: string;
 };
 
 export type AggregateRecord = AggregateBase & {
