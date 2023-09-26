@@ -175,7 +175,7 @@ const prepareGroupedRecord = memoize(
  * Add the indexInGroup Prop
  */
 const prepareRecordWithIndex = memoize(
-    <T extends RecordWithId>(record: T, index: number, indexInGroup: number) => ({
+    <T extends RecordWithId>(record: T, index: number, indexInGroup?: number) => ({
         ...record,
         uniqueId: `${record.id}-ig:${indexInGroup}`,
         index,
@@ -270,30 +270,36 @@ export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
         ];
 
     let index = 0;
-    const finalData = groupRecordsBy.reduce((groupedAggregates: GroupedData[], group) => {
-        groupedAggregates = [...groupedAggregates, group];
-        if (!isGroupHeader(group)) return groupedAggregates;
-        if (!(group as GroupHeader).isLastLevel) return groupedAggregates;
+    const finalData = groupRecordsBy.reduce(
+        (groupedAggregates: GroupedData[], group, groupIndex) => {
+            groupedAggregates = [
+                ...groupedAggregates,
+                prepareRecordWithIndex(group, groupIndex, undefined),
+            ];
+            if (!isGroupHeader(group)) return groupedAggregates;
+            if (!(group as GroupHeader).isLastLevel) return groupedAggregates;
 
-        return [
-            ...groupedAggregates,
-            ...Array.from({ length: group.count }, (_, indexInGroup) =>
-                prepareRecordWithIndex(
-                    groupedRecords[group.groupId]?.[indexInGroup] ?? {
-                        id: `${group.groupId};unknown:${indexInGroup}`,
-                        uniqueId: `${group.groupId};unknown:${indexInGroup}`,
-                        level: group.level,
-                        groupId: group.groupId,
-                        groupConstants: group.groupConstants,
-                        rowType: RowType.DATA as const,
-                        isCollapsed: false,
-                    },
-                    index++,
-                    indexInGroup,
+            return [
+                ...groupedAggregates,
+                ...Array.from({ length: group.count }, (_, indexInGroup) =>
+                    prepareRecordWithIndex(
+                        groupedRecords[group.groupId]?.[indexInGroup] ?? {
+                            id: `${group.groupId};unknown:${indexInGroup}`,
+                            uniqueId: `${group.groupId};unknown:${indexInGroup}`,
+                            level: group.level,
+                            groupId: group.groupId,
+                            groupConstants: group.groupConstants,
+                            rowType: RowType.DATA as const,
+                            isCollapsed: false,
+                        },
+                        index++,
+                        indexInGroup,
+                    ),
                 ),
-            ),
-        ];
-    }, []);
+            ];
+        },
+        [],
+    );
 
     const unRealFooter: GroupFooter = {
         isRealGroup: false,

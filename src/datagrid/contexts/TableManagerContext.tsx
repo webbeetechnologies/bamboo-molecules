@@ -80,9 +80,13 @@ export const useRecordIds = () => {
 };
 
 type GroupedDataMap = Record<TDataTableColumn, GroupedData>;
-const getRecordsMap = weakMemoized((records: GroupedData[]) => keyBy(records, 'uniqueId')) as (
+const getRecordsMap = weakMemoized((records: GroupedData[]) => keyBy(records, 'id')) as (
     records: GroupedData[],
 ) => GroupedDataMap;
+
+const getRecordByInternalId = weakMemoized((records: GroupedData[]) =>
+    keyBy(records, 'uniqueId'),
+) as (records: GroupedData[]) => GroupedDataMap;
 
 const getRecordById = (records: GroupedData[], id: TDataTableRow) => getRecordsMap(records)[id];
 
@@ -126,8 +130,21 @@ export const useRecordType = (id: TDataTableRow) => {
 };
 
 export const useRecord = <T extends unknown>(
+    /**
+     * Internal Id of the record.
+     */
     id: TDataTableRow,
     selector: (arg: GroupedData) => T,
 ) => {
-    return useTableManagerValueSelector(({ records }) => selector(getRecordById(records, id)));
+    return useTableManagerValueSelector(({ records }) =>
+        selector(getRecordByInternalId(records)[id]),
+    );
+};
+
+export const useRecordByInternalId = (id: TDataTableRow) => {
+    /**
+     * Normalize rowId which is the internal Id into the actual ID of the row.
+     * this is to prevent duplicates.
+     */
+    return useRecord(id, record => record.id);
 };

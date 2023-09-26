@@ -13,17 +13,15 @@ import {
 import { forwardRef, memo, useMemo } from 'react';
 import type { DataGridRowRendererProps } from '../../types';
 import type { ViewStyle } from 'react-native';
-import { useRecord } from '../../contexts/TableManagerContext';
 
 export type Props = DataGridRowRendererProps;
 
 export const TableRow = memo((props: DataTableRowProps) => {
-    const { rowId: id, index, rowProps, isSelected = false } = props;
+    const { rowId, index, rowProps, isSelected = false } = props;
 
     const { hovered = false, actionsRef } = useActionState();
 
     const rowSize = useDataTable(store => store.rowSize);
-    const rowId = useRecord(id, record => record.id);
 
     const rowStyle = useComponentStyles(
         'DataTable_Row',
