@@ -49,8 +49,7 @@ const toStringValue = (value: unknown) => {
     if (!value) return `##${value}`;
     if (typeof value === 'boolean') return `!!${value}`;
     if (!(value instanceof Object)) return `%%${value}`;
-    if (Array.isArray(value)) return value.map(({ id }) => id).join('&');
-    return '@@unknown';
+    return `{{${JSON.stringify(value)}}}`;
 };
 
 /**
