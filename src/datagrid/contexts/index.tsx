@@ -9,6 +9,8 @@ export {
     useRecordType,
     useGroupMeta,
     useHasGroupedData,
+    useRecord,
+    useRecordByInternalId,
 } from './TableManagerContext';
 
 export {

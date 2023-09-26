@@ -7,6 +7,7 @@ import {
     useTableManagerValueSelector,
     useGroupMeta,
     useHasGroupedData,
+    useRecordByInternalId,
 } from '../../contexts';
 import { GroupedData, isGroupHeader, GroupHeader } from '../../utils';
 
@@ -52,7 +53,8 @@ const rowTypes = {
 
 export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
     const SpacedComponent = memo((props: DataTableRowProps) => {
-        const groupRow = useRecordById(props.rowId) as GroupedData;
+        const rowId = useRecordByInternalId(props.rowId);
+        const groupRow = useRecordById(rowId) as GroupedData;
         const { level, rowType: variant } = groupRow;
 
         const isGroupsEnabled = useHasGroupedData();
@@ -68,7 +70,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
 
         const { View } = useMolecules();
 
-        const groupMeta = useGroupMeta(props.rowId);
+        const groupMeta = useGroupMeta(rowId);
         const isDataRowHeader = isGroupHeader(groupRow) && groupRow.isLastLevel;
 
         const style = useComponentStyles(
@@ -96,7 +98,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
         );
 
         if (!isGroupsEnabled) {
-            return <Component {...props} rowProps={rowProps} />;
+            return <Component {...props} rowId={rowId} rowProps={rowProps} />;
         }
 
         return (
@@ -107,7 +109,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
                     variant="left"
                     isLastLevel={groupMeta.isLastLevel}
                 />
-                <Component {...props} rowProps={rowProps} />
+                <Component {...props} rowId={rowId} rowProps={rowProps} />
                 <SpacerList
                     edgeIndex={level - 1}
                     level={level}

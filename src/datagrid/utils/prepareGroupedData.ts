@@ -33,6 +33,7 @@ const getDefaultFooterRow = memoize(
         isRealGroup: true,
         isCollapsed: false,
         id: `empty::footer`,
+        uniqueId: `empty::footer`,
         rowType: RowType.FOOTER,
     }),
 );
@@ -158,6 +159,9 @@ const prepareGroupedRecord = memoize(
         groupConstants: getMemoizedConstants(generateConstantsForRecord(record, groups)),
         isCollapsed: false,
         rowType: RowType.DATA as const,
+
+        // uniqueId will be overwritten later.
+        uniqueId: record.id + '',
         // Index in group will be overwritten later.
         index: 0,
         // IndexInGroup in group will be overwritten later.
@@ -171,8 +175,9 @@ const prepareGroupedRecord = memoize(
  * Add the indexInGroup Prop
  */
 const prepareRecordWithIndex = memoize(
-    <T extends RecordWithId>(record: T, index: number, indexInGroup: number) => ({
+    <T extends RecordWithId>(record: T, index: number, indexInGroup?: number) => ({
         ...record,
+        uniqueId: `${record.id}-ig:${indexInGroup}`,
         index,
         indexInGroup,
     }),
@@ -184,7 +189,7 @@ const prepareRecordWithIndex = memoize(
  * Takes a set of records and returns row ids.
  * It's memoized so that data updates don't trigger a rerender of the Flatlist.
  */
-const _getRowIds = (records: GroupedData[]) => records.map(({ id }) => id);
+const _getRowIds = (records: GroupedData[]) => records.map(({ uniqueId }) => uniqueId);
 export const getRowIds = memoize(_getRowIds, records => _getRowIds(records).join('__'));
 
 /**
@@ -228,12 +233,14 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
         const header: GroupHeader = {
             ...sharedProps,
             id: `${groupId}::header`,
+            uniqueId: `${groupId}::header`,
             rowType: RowType.HEADER,
         };
 
         const footer: GroupFooter = {
             ...sharedProps,
             id: `${groupId}::footer`,
+            uniqueId: `${groupId}::footer`,
             rowType: RowType.FOOTER,
         };
 
@@ -263,29 +270,36 @@ export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
         ];
 
     let index = 0;
-    const finalData = groupRecordsBy.reduce((groupedAggregates: GroupedData[], group) => {
-        groupedAggregates = [...groupedAggregates, group];
-        if (!isGroupHeader(group)) return groupedAggregates;
-        if (!(group as GroupHeader).isLastLevel) return groupedAggregates;
+    const finalData = groupRecordsBy.reduce(
+        (groupedAggregates: GroupedData[], group, groupIndex) => {
+            groupedAggregates = [
+                ...groupedAggregates,
+                prepareRecordWithIndex(group, groupIndex, undefined),
+            ];
+            if (!isGroupHeader(group)) return groupedAggregates;
+            if (!(group as GroupHeader).isLastLevel) return groupedAggregates;
 
-        return [
-            ...groupedAggregates,
-            ...Array.from({ length: group.count }, (_, indexInGroup) =>
-                prepareRecordWithIndex(
-                    groupedRecords[group.groupId]?.[indexInGroup] ?? {
-                        id: `${group.groupId};unknown:${indexInGroup}`,
-                        level: group.level,
-                        groupId: group.groupId,
-                        groupConstants: group.groupConstants,
-                        rowType: RowType.DATA as const,
-                        isCollapsed: false,
-                    },
-                    index++,
-                    indexInGroup,
+            return [
+                ...groupedAggregates,
+                ...Array.from({ length: group.count }, (_, indexInGroup) =>
+                    prepareRecordWithIndex(
+                        groupedRecords[group.groupId]?.[indexInGroup] ?? {
+                            id: `${group.groupId};unknown:${indexInGroup}`,
+                            uniqueId: `${group.groupId};unknown:${indexInGroup}`,
+                            level: group.level,
+                            groupId: group.groupId,
+                            groupConstants: group.groupConstants,
+                            rowType: RowType.DATA as const,
+                            isCollapsed: false,
+                        },
+                        index++,
+                        indexInGroup,
+                    ),
                 ),
-            ),
-        ];
-    }, []);
+            ];
+        },
+        [],
+    );
 
     const unRealFooter: GroupFooter = {
         isRealGroup: false,
@@ -293,6 +307,7 @@ export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
         level: 0,
         groupId: '',
         id: 'last-footer-row',
+        uniqueId: 'last-footer-row',
         isCollapsed: false,
         rowType: RowType.FOOTER,
         isFirstLevel: false,

@@ -9,6 +9,7 @@ import type {
     UseShowGroupFooter,
 } from '../types';
 import type { RecordWithId, GroupMeta } from '../utils';
+import { useRecordByInternalId } from './TableManagerContext';
 
 export type HooksContextType = {
     useField: (columnId: TDataTableColumn) => Field;
@@ -46,7 +47,12 @@ export const useCellValue: HooksContextType['useCellValue'] = (rowId, columnId) 
 
 export const useRowRenderer: UseRowRenderer = (rowRendererProps, DefaultRowComponent) => {
     const { useRowRenderer: useRowRendererProp } = useHooks();
-    return useRowRendererProp?.(rowRendererProps, DefaultRowComponent);
+    /**
+     * Normalize rowId which is the internal Id into the actual ID of the row.
+     * this is to prevent duplicates.
+     */
+    const rowId = useRecordByInternalId(rowRendererProps.rowId);
+    return useRowRendererProp?.({ ...rowRendererProps, rowId }, DefaultRowComponent);
 };
 
 export const useShowGroupFooter: UseShowGroupFooter = (meta: GroupMeta) => {

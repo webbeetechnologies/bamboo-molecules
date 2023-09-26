@@ -43,7 +43,7 @@ export const TableRow = memo((props: DataTableRowProps) => {
 
     return (
         <DataTableContextRowProvider value={rowContext}>
-            <TableRowInner {...props} style={rowStyle} ref={actionsRef} />
+            <TableRowInner {...props} rowId={rowId} style={rowStyle} ref={actionsRef} />
         </DataTableContextRowProvider>
     );
 });
