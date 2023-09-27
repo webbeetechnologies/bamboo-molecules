@@ -1,6 +1,7 @@
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 import { useCallback, useRef } from 'react';
-import type { ViewToken } from 'react-native';
+import { ViewToken, useWindowDimensions } from 'react-native';
+
 import type { ViewAbilityConfigPair } from 'src/datagrid/types';
 import { useDataTable, useDataTableColumnWidth } from './DataTableContext';
 import { DEFAULT_VIEWABILITY_CONFIG } from './constants';
@@ -18,13 +19,13 @@ export const defaultValue = {
     viewItemIds: [] as TDataTableColumn[],
     scrollXVelocity: 0,
 };
-export const defaultOffset = 500;
 
 export const useIsCellWithinBounds = (
     left: number,
     rowId: TDataTableRow,
     columnId: TDataTableColumn,
 ) => {
+    const defaultOffset = useWindowDimensions().width;
     const cellWidth = useDataTableColumnWidth(columnId);
     // this is a quick fix // TODO - revisit this later
     const containerWidth = useDataTable(store => store.containerWidth ?? 0);
