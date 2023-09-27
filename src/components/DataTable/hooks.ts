@@ -1,6 +1,6 @@
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 import { useCallback, useRef } from 'react';
-import { ViewToken, useWindowDimensions } from 'react-native';
+import type { ViewToken } from 'react-native';
 
 import type { ViewAbilityConfigPair } from 'src/datagrid/types';
 import { useDataTable, useDataTableColumnWidth } from './DataTableContext';
@@ -20,25 +20,36 @@ export const defaultValue = {
     scrollXVelocity: 0,
 };
 
+const defaultOffset = 500;
+
 export const useIsCellWithinBounds = (
     left: number,
     rowId: TDataTableRow,
     columnId: TDataTableColumn,
 ) => {
-    const defaultOffset = useWindowDimensions().width;
     const cellWidth = useDataTableColumnWidth(columnId);
     // this is a quick fix // TODO - revisit this later
     const containerWidth = useDataTable(store => store.containerWidth ?? 0);
 
-    const checkLeft = (x: number, offset: number) => left + cellWidth >= x - offset;
-    const checkRight = (x: number, offset: number) => left <= x + offset + containerWidth;
-    const isViewableItem = (viewItemIds: TDataTableColumn[]) => viewItemIds.includes(rowId);
-
-    return useContextValue(
-        ({ x, viewItemIds }) =>
-            checkLeft(x, isViewableItem(viewItemIds) ? defaultOffset : 0) &&
-            checkRight(x, isViewableItem(viewItemIds) ? defaultOffset : 0),
+    const checkLeft = useCallback(
+        (x: number, offset: number) => left + cellWidth >= x - offset,
+        [cellWidth, left],
     );
+    const checkRight = useCallback(
+        (x: number, offset: number) => left <= x + offset + containerWidth,
+        [containerWidth, left],
+    );
+    const isViewableItem = useCallback(
+        (viewItemIds: TDataTableColumn[]) => viewItemIds.includes(rowId),
+        [rowId],
+    );
+
+    return useContextValue(({ x, viewItemIds }) => {
+        return (
+            checkLeft(x, isViewableItem(viewItemIds) ? defaultOffset : 0) &&
+            checkRight(x, isViewableItem(viewItemIds) ? defaultOffset : 0)
+        );
+    });
 };
 
 export const useViewabilityConfigCallbackPairs = (
