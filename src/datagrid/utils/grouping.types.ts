@@ -36,7 +36,7 @@ type AggregateBase = {
     count: number;
     value: any;
     field: TDataTableColumn;
-    rowIds: TDataTableRow;
+    recordIds: TDataTableRow[];
 };
 
 type GroupBase = {
@@ -53,7 +53,7 @@ export type AggregateRecord = AggregateBase & {
     children: AggregateRecord[];
 };
 
-export type NormalizedAggregateRecordBase = Partial<AggregateBase> &
+export type NormalizedAggregateRecordBase = AggregateBase &
     GroupBase &
     GroupMeta & {
         title: any;
@@ -63,12 +63,11 @@ export type GroupHeader = NormalizedAggregateRecordBase & {
     rowType: 'header';
 };
 
-export type GroupFooter = NormalizedAggregateRecordBase & {
+export type GroupFooter = Omit<NormalizedAggregateRecordBase, 'value' | 'recordIds'> & {
     rowType: 'footer';
 };
 
 export type GroupRecord = GroupBase & {
-    data: RecordWithId;
     rowType: 'data';
     index: number;
     indexInGroup: number;
