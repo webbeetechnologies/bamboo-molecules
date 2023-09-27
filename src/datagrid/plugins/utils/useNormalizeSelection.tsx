@@ -12,17 +12,18 @@ const getItemsInRange = (array: any[], startIndex: number, endIndex: number) => 
 export const normalizeSelectionHandler = ({
     start,
     end,
-    recordIds,
     columnIds,
     records,
 }: TableSelection): TableSelectionBeforeCommit => {
+    const _records = getItemsInRange(records, start?.rowIndex, end?.rowIndex);
+
     return {
         start,
         end,
         startRecord: records[start.rowIndex],
         endRecord: records[end?.rowIndex],
-        records: getItemsInRange(records, start?.rowIndex, end?.rowIndex),
-        recordIds: getItemsInRange(recordIds, start?.rowIndex, end?.rowIndex),
+        records: _records,
+        recordIds: _records.map(record => record.id),
         columnIds: getItemsInRange(columnIds, start?.columnIndex, end?.columnIndex),
     };
 };
