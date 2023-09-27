@@ -1,4 +1,4 @@
-import { groupBy, isNil, memoize } from './lodash';
+import { isNil, keyBy, memoize } from './lodash';
 
 import type {
     GroupConstantValues,
@@ -11,6 +11,7 @@ import type {
     RecordWithId,
 } from './grouping.types';
 import { RowType } from './grouping.types';
+import type { TDataTableColumn } from '@bambooapp/bamboo-molecules';
 
 export const isGroupFooter = (x: GroupedData): x is GroupFooter => x.rowType === RowType.FOOTER;
 export const isGroupHeader = (x: GroupedData): x is GroupHeader => x.rowType === RowType.HEADER;
@@ -35,6 +36,7 @@ const getDefaultFooterRow = memoize(
         id: `empty::footer`,
         uniqueId: `empty::footer`,
         rowType: RowType.FOOTER,
+        field: defaultConstants.at(-1)?.field ?? '',
     }),
 );
 
@@ -59,7 +61,7 @@ const toStringValue = (value: unknown) => {
  * Supports all kinds of primitives and Arrays of objects
  *
  */
-const generateKeyFromValue = (key: string, value: unknown) => {
+const generateKeyFromValue = (key: TDataTableColumn, value: unknown) => {
     return `k:${key}:v${toStringValue(value)}`;
 };
 
@@ -82,9 +84,9 @@ const getMemoizedConstants = memoize(
  * generates group constants for the record
  *
  */
-const generateConstantsForRecord = <T extends RecordWithId = RecordWithId>(
-    modelRecord: T,
-    groups: string[],
+const generateConstantsForRecord = (
+    modelRecord: Record<TDataTableColumn, unknown>,
+    groups: TDataTableColumn[],
 ) => groups.map(key => createConstant(key, modelRecord[key]));
 
 /**
@@ -93,9 +95,9 @@ const generateConstantsForRecord = <T extends RecordWithId = RecordWithId>(
  * Returns a string of
  *
  */
-const generateValueKey = <T extends RecordWithId = RecordWithId>(
-    modelRecord: T,
-    groups: string[],
+const generateValueKey = (
+    modelRecord: Record<TDataTableColumn, unknown>,
+    groups: TDataTableColumn[],
 ) => generateGroupId(generateConstantsForRecord(modelRecord, groups));
 
 /**
@@ -104,7 +106,7 @@ const generateValueKey = <T extends RecordWithId = RecordWithId>(
  *
  */
 const createConstant = memoize(
-    (field: string, value: unknown) => ({ field, value }),
+    (field: TDataTableColumn, value: unknown) => ({ field, value }),
     generateKeyFromValue,
 );
 
@@ -125,7 +127,7 @@ const getStringifieldRecordMemoized = memoize(
  */
 const generateRecordId = <T extends RecordWithId = RecordWithId>(
     modelRecord: T,
-    groups: string[],
+    groups: TDataTableColumn[],
 ) => [getStringifieldRecordMemoized(modelRecord), generateValueKey(modelRecord, groups)].join('__');
 
 /**
@@ -150,23 +152,29 @@ const extractGroupFields = memoize(
  * Takes a record of type RecordWithId and prepares the record for grouping.
  * Adds indexInGroup property though they'll be replaced later.
  */
-const prepareGroupedRecord = memoize(
-    <T extends RecordWithId = RecordWithId>(record: T, groups: string[]): GroupRecord => ({
-        data: record,
-        id: record.id,
-        level: groups.length,
-        groupId: generateValueKey(record, groups),
-        groupConstants: getMemoizedConstants(generateConstantsForRecord(record, groups)),
-        isCollapsed: false,
-        rowType: RowType.DATA as const,
+const prepareGroupableRecord = memoize(
+    <T extends RecordWithId = RecordWithId>(record: T, groups: TDataTableColumn[]): GroupRecord => {
+        // const groupConstants = getMemoizedConstants(generateConstantsForRecord(record, groups));
+        return {
+            id: record.id,
+            level: groups.length,
+            isCollapsed: false,
+            rowType: RowType.DATA as const,
 
-        // uniqueId will be overwritten later.
-        uniqueId: record.id + '',
-        // Index in group will be overwritten later.
-        index: 0,
-        // IndexInGroup in group will be overwritten later.
-        indexInGroup: 0,
-    }),
+            // Props will be overwritten later.
+            uniqueId: record.id + '',
+
+            // Earlier, we used the record to determine the group, not possible anymore.
+            // We now expect recordIds that belong to a group. When preparing the grouped record,
+            groupId: '',
+            groupConstants: defaultConstants,
+            // with pagination, there is a possibility that the index is incorrect, thus a new index will be assigned when preparing the record for the group.
+            index: 0,
+
+            // At this point, this information is not available.
+            indexInGroup: 0,
+        };
+    },
     (record, groups) => generateRecordId(record, groups),
 );
 
@@ -174,15 +182,23 @@ const prepareGroupedRecord = memoize(
  *
  * Add the indexInGroup Prop
  */
-const prepareRecordWithIndex = memoize(
-    <T extends RecordWithId>(record: T, index: number, indexInGroup?: number) => ({
+const prepareRecordWithGroup = memoize(
+    <T extends RecordWithId>(
+        record: T,
+        groupId: string,
+        groupConstants: GroupConstantValues[],
+        index: number,
+        indexInGroup?: number,
+    ) => ({
         ...record,
+        groupConstants,
+        groupId,
         uniqueId: `${record.id}-ig:${indexInGroup}`,
         index,
         indexInGroup,
     }),
-    (record, indexInGroup, index) =>
-        `${getStringifieldRecordMemoized(record)}-i:${index}-ig:${indexInGroup}`,
+    (record, groupId, index, indexInGroup) =>
+        `${getStringifieldRecordMemoized(record)}-%%${groupId}%-i:${index}-ig:${indexInGroup}`,
 );
 
 /**
@@ -191,6 +207,8 @@ const prepareRecordWithIndex = memoize(
  */
 const _getRowIds = (records: GroupedData[]) => records.map(({ uniqueId }) => uniqueId);
 export const getRowIds = memoize(_getRowIds, records => _getRowIds(records).join('__'));
+
+const getRecordsById = memoize((records: GroupRecord[]) => keyBy(records, 'id'));
 
 /**
  *
@@ -248,6 +266,17 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
     },
 );
 
+const getEmptyRecord = memoize(
+    (group: GroupMetaRow, indexInGroup: number) => ({
+        id: `${group.groupId};unknown:${indexInGroup}`,
+        uniqueId: `${group.groupId};unknown:${indexInGroup}`,
+        level: group.level,
+        rowType: RowType.DATA as const,
+        isCollapsed: false,
+    }),
+    (group, indexInGroup) => `${group.groupId};unknown:${indexInGroup}`,
+);
+
 /**
  * Accept a list of records and GroupMetaRows and convertes it into a normalized records.
  */
@@ -256,42 +285,44 @@ export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
     groupRecordsBy: GroupMetaRow[] = [],
 ): GroupedData[] => {
     const groups = extractGroupFields(groupRecordsBy);
-    const normalizedModelRecords = modelRecords.map(record => prepareGroupedRecord(record, groups));
-    const groupedRecords: Record<string, GroupRecord[]> = groupBy(normalizedModelRecords, record =>
-        generateValueKey(record.data, groups),
+    const normalizedModelRecords = modelRecords.map(record =>
+        prepareGroupableRecord(record, groups),
     );
 
     if (!groupRecordsBy.length)
         return [
             ...normalizedModelRecords.map((record, index) =>
-                prepareRecordWithIndex(record, index, index),
+                prepareRecordWithGroup(record, '', defaultConstants, index, index),
             ),
             getDefaultFooterRow(modelRecords.length),
         ];
 
     let index = 0;
+    const groupedRecords: Record<string, GroupRecord> = getRecordsById(normalizedModelRecords);
+
     const finalData = groupRecordsBy.reduce(
         (groupedAggregates: GroupedData[], group, groupIndex) => {
             groupedAggregates = [
                 ...groupedAggregates,
-                prepareRecordWithIndex(group, groupIndex, undefined),
+                prepareRecordWithGroup(
+                    group,
+                    group.groupId,
+                    group.groupConstants,
+                    groupIndex,
+                    undefined,
+                ),
             ];
+
             if (!isGroupHeader(group)) return groupedAggregates;
             if (!(group as GroupHeader).isLastLevel) return groupedAggregates;
 
             return [
                 ...groupedAggregates,
-                ...Array.from({ length: group.count }, (_, indexInGroup) =>
-                    prepareRecordWithIndex(
-                        groupedRecords[group.groupId]?.[indexInGroup] ?? {
-                            id: `${group.groupId};unknown:${indexInGroup}`,
-                            uniqueId: `${group.groupId};unknown:${indexInGroup}`,
-                            level: group.level,
-                            groupId: group.groupId,
-                            groupConstants: group.groupConstants,
-                            rowType: RowType.DATA as const,
-                            isCollapsed: false,
-                        },
+                ...group.recordIds.map((recordId, indexInGroup) =>
+                    prepareRecordWithGroup(
+                        groupedRecords[recordId] ?? getEmptyRecord(group, indexInGroup),
+                        group.groupId,
+                        group.groupConstants,
                         index++,
                         indexInGroup,
                     ),
@@ -317,6 +348,7 @@ export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
         isOnly: false,
         count: 0,
         title: '',
+        field: '',
     };
 
     return [...finalData, unRealFooter];
