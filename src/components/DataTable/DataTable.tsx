@@ -67,7 +67,7 @@ const DataTablePresentationComponent = memo(
 
         const containerWidth = useDataTable(store => store.containerWidth);
 
-        const { store, set: setStore } = useStoreRef();
+        const { set: setStore } = useStoreRef();
         const { set: setDataTableStore } = useDataTableStoreRef();
 
         const HeaderRowComponent = HeaderRowComponentProp || DataTableHeaderRow;
@@ -82,20 +82,20 @@ const DataTablePresentationComponent = memo(
 
         const onScroll = useCallback(
             (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-                setStore(() => ({
+                setStore(prev => ({
                     x: e.nativeEvent.contentOffset.x,
-                    scrollXVelocity: e.nativeEvent.contentOffset.x - store.current.x,
+                    scrollXVelocity: e.nativeEvent.contentOffset.x - prev.x,
                 }));
-            },
-            [setStore, store],
-        );
-
-        const onFlatListScroll = useCallback(
-            (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-                setStore(() => ({ y: e.nativeEvent.contentOffset.y }));
             },
             [setStore],
         );
+
+        // const onFlatListScroll = useCallback(
+        //     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        //         setStore(() => ({ y: e.nativeEvent.contentOffset.y }));
+        //     },
+        //     [setStore],
+        // );
 
         const viewabilityConfigCallbackPairs = useViewabilityConfigCallbackPairs(
             viewabilityConfigCallbackPairsProp,
@@ -134,7 +134,6 @@ const DataTablePresentationComponent = memo(
                         keyExtractor={keyExtractorProp}
                         renderItem={renderRow}
                         stickyHeaderIndices={stickyHeaderIndices}
-                        onScroll={onFlatListScroll}
                         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
                     />
                 )}
