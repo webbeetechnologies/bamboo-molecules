@@ -11,6 +11,7 @@ import type {
     RecordWithId,
 } from './grouping.types';
 import { RowType } from './grouping.types';
+import type { TDataTableColumn } from '@bambooapp/bamboo-molecules';
 
 export const isGroupFooter = (x: GroupedData): x is GroupFooter => x.rowType === RowType.FOOTER;
 export const isGroupHeader = (x: GroupedData): x is GroupHeader => x.rowType === RowType.HEADER;
@@ -59,7 +60,7 @@ const toStringValue = (value: unknown) => {
  * Supports all kinds of primitives and Arrays of objects
  *
  */
-const generateKeyFromValue = (key: string, value: unknown) => {
+const generateKeyFromValue = (key: TDataTableColumn, value: unknown) => {
     return `k:${key}:v${toStringValue(value)}`;
 };
 
@@ -82,9 +83,9 @@ const getMemoizedConstants = memoize(
  * generates group constants for the record
  *
  */
-const generateConstantsForRecord = <T extends RecordWithId = RecordWithId>(
-    modelRecord: T,
-    groups: string[],
+const generateConstantsForRecord = (
+    modelRecord: Record<TDataTableColumn, unknown>,
+    groups: TDataTableColumn[],
 ) => groups.map(key => createConstant(key, modelRecord[key]));
 
 /**
@@ -93,9 +94,9 @@ const generateConstantsForRecord = <T extends RecordWithId = RecordWithId>(
  * Returns a string of
  *
  */
-const generateValueKey = <T extends RecordWithId = RecordWithId>(
-    modelRecord: T,
-    groups: string[],
+const generateValueKey = (
+    modelRecord: Record<TDataTableColumn, unknown>,
+    groups: TDataTableColumn[],
 ) => generateGroupId(generateConstantsForRecord(modelRecord, groups));
 
 /**
@@ -104,7 +105,7 @@ const generateValueKey = <T extends RecordWithId = RecordWithId>(
  *
  */
 const createConstant = memoize(
-    (field: string, value: unknown) => ({ field, value }),
+    (field: TDataTableColumn, value: unknown) => ({ field, value }),
     generateKeyFromValue,
 );
 
@@ -125,7 +126,7 @@ const getStringifieldRecordMemoized = memoize(
  */
 const generateRecordId = <T extends RecordWithId = RecordWithId>(
     modelRecord: T,
-    groups: string[],
+    groups: TDataTableColumn[],
 ) => [getStringifieldRecordMemoized(modelRecord), generateValueKey(modelRecord, groups)].join('__');
 
 /**
@@ -151,22 +152,25 @@ const extractGroupFields = memoize(
  * Adds indexInGroup property though they'll be replaced later.
  */
 const prepareGroupedRecord = memoize(
-    <T extends RecordWithId = RecordWithId>(record: T, groups: string[]): GroupRecord => ({
-        data: record,
-        id: record.id,
-        level: groups.length,
-        groupId: generateValueKey(record, groups),
-        groupConstants: getMemoizedConstants(generateConstantsForRecord(record, groups)),
-        isCollapsed: false,
-        rowType: RowType.DATA as const,
+    <T extends RecordWithId = RecordWithId>(record: T, groups: TDataTableColumn[]): GroupRecord => {
+        const groupConstants = getMemoizedConstants(generateConstantsForRecord(record, groups));
+        return {
+            data: record,
+            id: record.id,
+            level: groups.length,
+            groupId: generateGroupId(groupConstants),
+            groupConstants,
+            isCollapsed: false,
+            rowType: RowType.DATA as const,
 
-        // uniqueId will be overwritten later.
-        uniqueId: record.id + '',
-        // Index in group will be overwritten later.
-        index: 0,
-        // IndexInGroup in group will be overwritten later.
-        indexInGroup: 0,
-    }),
+            // uniqueId will be overwritten later.
+            uniqueId: record.id + '',
+            // Index in group will be overwritten later.
+            index: 0,
+            // IndexInGroup in group will be overwritten later.
+            indexInGroup: 0,
+        };
+    },
     (record, groups) => generateRecordId(record, groups),
 );
 
@@ -276,6 +280,7 @@ export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
                 ...groupedAggregates,
                 prepareRecordWithIndex(group, groupIndex, undefined),
             ];
+
             if (!isGroupHeader(group)) return groupedAggregates;
             if (!(group as GroupHeader).isLastLevel) return groupedAggregates;
 

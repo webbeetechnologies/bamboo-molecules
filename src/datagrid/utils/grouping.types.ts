@@ -1,6 +1,6 @@
-import type { TDataTableColumn } from '@bambooapp/bamboo-molecules';
+import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules';
 
-export type GroupConstantValues = { field: string; value: any };
+export type GroupConstantValues = { field: TDataTableColumn; value: any };
 
 export enum RowType {
     HEADER = 'header',
@@ -34,8 +34,9 @@ export type PrimitiveTypes = string | boolean | number | null | undefined;
 
 type AggregateBase = {
     count: number;
-    value: any[];
-    field: string;
+    value: any;
+    field: TDataTableColumn;
+    rowIds: TDataTableRow;
 };
 
 type GroupBase = {
