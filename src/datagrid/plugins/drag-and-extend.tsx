@@ -56,7 +56,14 @@ const useOnDragEnd = () => {
         };
         const { start, end } = store.current[DRAG_AND_EXTEND_PLUGIN_KEY] || emptyObj;
 
-        if (!start || !end) return;
+        if (!start && !end) return;
+
+        if (!start || !end) {
+            setPluginsDataStore(() => ({
+                [DRAG_AND_EXTEND_PLUGIN_KEY]: undefined,
+            }));
+            return;
+        }
 
         const args = {
             selection: normalizeSelection(copySelection),
