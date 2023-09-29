@@ -36,7 +36,7 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         validRange,
         customMonthStyles,
     } = props;
-    const localDate = useDatePickerStoreValue(state => state.localDate);
+    const { localDate } = useDatePickerStoreValue(state => ({ localDate: state.localDate }));
     const { Text, View } = useMolecules();
     const monthStyles = useComponentStyles('DatePicker_Month', customMonthStyles);
 

@@ -25,7 +25,12 @@ function DatePickerDockedHeader({
 }: CalendarHeaderProps) {
     const { View } = useMolecules();
     const [{ localDate, pickerType, startDateYear, endDateYear }, setStore] = useDatePickerStore(
-        state => state,
+        state => ({
+            localDate: state.localDate,
+            pickerType: state.pickerType,
+            startDateYear: state.startDateYear,
+            endDateYear: state.endDateYear,
+        }),
     );
 
     const componentStyles = useComponentStyles('DatePickerDocked_Header', styleProp);
