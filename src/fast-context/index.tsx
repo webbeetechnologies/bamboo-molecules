@@ -10,6 +10,8 @@ import {
 } from 'react';
 import typedMemo from '../hocs/typedMemo';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
+import { usePrevious } from '../hooks';
+import { shallowCompare } from '../utils';
 
 type StoreDataType = Record<string, any>;
 
@@ -24,20 +26,23 @@ type UseStoreDataReturnType<T> = {
 
 const useStoreData = <IStore extends StoreDataType>(
     value: IStore,
+    defaultValue: IStore | null,
     watch: boolean = false,
 ): UseStoreDataReturnType<IStore> => {
-    const store = useRef<IStore>(value as IStore);
+    const store = useRef<IStore>({ ...defaultValue, ...(value as IStore) });
     const watchRef = useRef(watch);
 
-    const get = useCallback(() => store.current, []);
+    const get = useCallback(() => store.current, [store]);
 
     const subscribers = useRef(new Set<() => void>());
 
-    const set = useCallback((callback: (prev: IStore) => Partial<IStore>) => {
-        store.current = { ...store.current, ...callback(store.current) };
-
-        subscribers.current.forEach(subscriber => subscriber());
-    }, []);
+    const set = useCallback(
+        (callback: (prev: IStore) => Partial<IStore>) => {
+            store.current = { ...store.current, ...callback(store.current) };
+            subscribers.current.forEach(subscriber => subscriber());
+        },
+        [store],
+    );
 
     const subscribe = useCallback((callback: () => void) => {
         subscribers.current.add(callback);
@@ -45,11 +50,21 @@ const useStoreData = <IStore extends StoreDataType>(
         return () => subscribers.current.delete(callback);
     }, []);
 
+    /** The effect is required to trigger the updates on the consumers */
     useEffect(() => {
-        if (!watchRef.current || !value) return;
+        if (!watchRef.current) return;
+        set(prev => ({ ...prev, ...value }));
+    }, [set, value]);
 
-        set(() => value);
-    }, [value, set]);
+    /**
+     * Cases:
+     * 1. when the value updates, we want the data to be updated immediately
+     * 2. the data stored in store.current may not be current with regards to the parent and the parent must have dropped the references related to the data.
+     * 3. because store.current is a ref, on watch and change, if we update store.current, no side-effect introduced.
+     */
+    if (usePrevious(value).current !== value && watchRef.current) {
+        store.current = { ...store.current, ...value };
+    }
 
     return {
         get,
@@ -59,7 +74,10 @@ const useStoreData = <IStore extends StoreDataType>(
     };
 };
 
-export const createFastContext = <T extends StoreDataType = {}>(watch: boolean = false) => {
+export const createFastContext = <T extends StoreDataType = {}>(
+    defaultValue: T | null = null,
+    watch: boolean = false,
+) => {
     const context = createContext<UseStoreDataReturnType<T> | null>(null);
 
     return {
@@ -74,7 +92,11 @@ export const createFastContext = <T extends StoreDataType = {}>(watch: boolean =
          * use key prop to unmount and remount if necessary. alternatively use set from the context to update the value.
          *
          */
-        Provider: createProvider<T>(context as Context<UseStoreDataReturnType<T>>, watch),
+        Provider: createProvider<T>(
+            context as Context<UseStoreDataReturnType<T>>,
+            defaultValue,
+            watch,
+        ),
 
         /**
          *
@@ -85,7 +107,7 @@ export const createFastContext = <T extends StoreDataType = {}>(watch: boolean =
          */
         useContext: <SelectorOutput,>(
             selector: SelectorOutputType<T, SelectorOutput>,
-            equalityCheck = Object.is,
+            equalityCheck = shallowCompare,
         ) => useStore(context as Context<UseStoreDataReturnType<T>>, selector, equalityCheck),
 
         /**
@@ -97,18 +119,23 @@ export const createFastContext = <T extends StoreDataType = {}>(watch: boolean =
          */
         useContextValue: <SelectorOutput,>(
             selector: SelectorOutputType<T, SelectorOutput>,
-            equalityCheck = Object.is,
+            equalityCheck = shallowCompare,
         ) => useStoreValue(context as Context<UseStoreDataReturnType<T>>, selector, equalityCheck),
+        /**
+         * context of the store. Useful for ContextBridge
+         */
+        Context: context,
     };
 };
 
 export const createProvider = <T extends Record<string, any> = {}>(
     StoreContext: Context<UseStoreDataReturnType<T>>,
+    defaultValue: T | null,
     watch: boolean,
 ) =>
     typedMemo(({ value, children }: { value: T; children: ReactNode }) => {
         return (
-            <StoreContext.Provider value={useStoreData<T>(value, watch) as any}>
+            <StoreContext.Provider value={useStoreData<T>(value, defaultValue, watch) as any}>
                 {children}
             </StoreContext.Provider>
         );

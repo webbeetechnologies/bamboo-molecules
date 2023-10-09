@@ -1,6 +1,7 @@
-import type { ComponentPropsWithRef, ComponentType, ReactNode } from 'react';
+import type { ComponentPropsWithRef, ComponentType, ReactNode, RefObject } from 'react';
 import type { FlatListProps, ScrollViewProps, ViewProps } from 'react-native';
 import type { ScrollView } from 'react-native';
+import type { ViewAbilityConfigPair } from 'src/datagrid/types';
 
 type RowProps = Omit<ViewProps, 'children'> & { size?: string };
 
@@ -9,7 +10,12 @@ export type TDataTableColumn = string | number;
 export type TDataTableRow = string | number;
 
 export interface DataTableComponentProps<T = any> {
-    FlatListComponent?: ComponentType<FlatListProps<T>>;
+    FlatListComponent?: ComponentType<
+        Omit<FlatListProps<T>, 'viewabilityConfigCallbackPairs'> & {
+            viewabilityConfigCallbackPairs: ViewAbilityConfigPair[];
+            ref?: RefObject<any>;
+        }
+    >;
     ScrollViewComponent?: ComponentType<ComponentPropsWithRef<typeof ScrollView>>;
 }
 
@@ -29,7 +35,10 @@ export type RenderCellProps = {
 } & RenderHeaderCellProps;
 
 export type ScrollProps = {
-    verticalScrollProps?: Omit<FlatListProps<any>, 'data' | 'renderItem'>;
+    verticalScrollProps?: Omit<
+        FlatListProps<any>,
+        'data' | 'renderItem' | 'viewabilityConfigCallbackPairs'
+    > & { viewabilityConfigCallbackPairs?: ViewAbilityConfigPair[] };
     horizontalScrollProps?: ScrollViewProps;
 };
 
@@ -61,6 +70,14 @@ export interface DataTableProps<RecordType = any>
      * @default 150
      */
     defaultColumnWidth?: number;
+
+    /**
+     *
+     * horizontalOffsetWidth: The value is multipled by two so that the offset is applied to the left and right of the table.
+     * @default 0
+     *
+     */
+    horizontalOffset?: number;
 
     /**
      *
@@ -146,4 +163,5 @@ export interface DataTableProps<RecordType = any>
      * CellWrapperComponent
      */
     CellWrapperComponent?: ComponentType<DataCellProps>;
+    flatListRef?: RefObject<any>;
 }

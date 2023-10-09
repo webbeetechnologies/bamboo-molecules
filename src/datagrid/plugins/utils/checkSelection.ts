@@ -1,7 +1,10 @@
-import type { Selection } from '../types';
+import type { SelectionIndices } from '../types';
 
 // TODO - add testcases
-const checkSelection = (selection: Selection, cell: { columnIndex: number; rowIndex: number }) => {
+const checkSelection = (
+    selection: SelectionIndices,
+    cell: { columnIndex: number; rowIndex: number },
+) => {
     const { rowIndex, columnIndex } = cell;
 
     if (!selection || !selection.start || !selection.end) return false;

@@ -2,17 +2,18 @@ import { useCallback, useEffect } from 'react';
 import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
 
 import { useTableManagerStoreRef } from '../contexts';
-import { CELL_SELECTION_PLUGIN_KEY, CellIndexes } from './cell-selection';
-import { usePluginsDataStoreRef, usePluginsDataValueSelectorValue } from './plugins-manager';
+import { CELL_SELECTION_PLUGIN_KEY } from './cell-selection';
+import { usePluginsDataStoreRef, usePluginsDataValueSelector } from './plugins-manager';
 import { createPlugin } from './createPlugin';
-import { PluginEvents, Selection } from './types';
+import { Cell, CellIndices, PluginEvents, SelectionIndices } from './types';
 import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
+import { CELL_FOCUS_PLUGIN_KEY } from './cell-focus';
 
 export const DRAG_AND_EXTEND_PLUGIN_KEY = 'drag-and-extend';
 
 const emptyObj = {};
 
-const checkIfWithinRow = (selection: Selection, cell: { rowIndex: number }) => {
+const checkIfWithinRow = (selection: SelectionIndices, cell: { rowIndex: number }) => {
     const { rowIndex } = cell;
 
     if (!selection || !selection.start || !selection.end) return false;
@@ -40,30 +41,55 @@ const useOnDragStart = () => {
 };
 
 const useOnDragEnd = () => {
-    const { store: tableManagerStore } = useTableManagerStoreRef();
-    const { store, set: setStore } = usePluginsDataStoreRef();
-    const { onDragAndExtend, afterDragAndExtend } = useDragAndExtendEvents() || emptyObj;
+    const { store, set: setPluginsDataStore } = usePluginsDataStoreRef();
+    const { beforeDragAndExtend, onDragAndExtend, afterDragAndExtend } =
+        useDragAndExtendEvents() || emptyObj;
+    const normalizeCell = useNormalizeCellHandler();
     const normalizeSelection = useNormalizeSelectionHandler();
+
+    const focusedCell = store.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
 
     return useCallback(() => {
         const copySelection = store.current[CELL_SELECTION_PLUGIN_KEY] || {
-            start: tableManagerStore.current.focusedCell,
-            end: tableManagerStore.current.focusedCell,
+            start: focusedCell,
+            end: focusedCell,
         };
-        const pasteSelection = store.current[DRAG_AND_EXTEND_PLUGIN_KEY];
+        const { start, end } = store.current[DRAG_AND_EXTEND_PLUGIN_KEY] || emptyObj;
 
-        onDragAndExtend({
+        if (!start && !end) return;
+
+        if (!start || !end) {
+            setPluginsDataStore(() => ({
+                [DRAG_AND_EXTEND_PLUGIN_KEY]: undefined,
+            }));
+            return;
+        }
+
+        const args = {
             selection: normalizeSelection(copySelection),
-            target: normalizeSelection(pasteSelection),
-        });
+            target: normalizeSelection({
+                start: normalizeCell(start) as Cell,
+                end: normalizeCell(end) as Cell,
+            }),
+        };
 
-        setStore(prev => ({
+        const continueDragAndSelection = beforeDragAndExtend(args);
+
+        if (continueDragAndSelection === false) {
+            setPluginsDataStore(() => ({
+                [DRAG_AND_EXTEND_PLUGIN_KEY]: {},
+            }));
+            return;
+        }
+
+        onDragAndExtend(args);
+
+        setPluginsDataStore(prev => ({
             [DRAG_AND_EXTEND_PLUGIN_KEY]: undefined,
             // clearing cell selection as well
             [CELL_SELECTION_PLUGIN_KEY]: {
                 ...prev[CELL_SELECTION_PLUGIN_KEY],
-                start:
-                    prev[CELL_SELECTION_PLUGIN_KEY]?.start || tableManagerStore.current.focusedCell,
+                start: prev[CELL_SELECTION_PLUGIN_KEY]?.start || focusedCell,
                 end: prev[DRAG_AND_EXTEND_PLUGIN_KEY]?.end,
             },
         }));
@@ -71,11 +97,13 @@ const useOnDragEnd = () => {
         afterDragAndExtend();
     }, [
         afterDragAndExtend,
+        beforeDragAndExtend,
+        focusedCell,
+        normalizeCell,
         normalizeSelection,
         onDragAndExtend,
-        setStore,
+        setPluginsDataStore,
         store,
-        tableManagerStore,
     ]);
 };
 
@@ -103,6 +131,10 @@ const useOnDragSelection = ({
         if (!pluginsDataStore.current[DRAG_AND_EXTEND_PLUGIN_KEY]?.start || !rowHovered || !hovered)
             return;
 
+        if (tableManagerStore.current.records[rowIndex].rowType !== 'data') return;
+
+        const focusedCell = pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
+
         const hasSelection =
             pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.start &&
             pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.end;
@@ -110,8 +142,8 @@ const useOnDragSelection = ({
         const cellsSelection = hasSelection
             ? pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]
             : {
-                  start: tableManagerStore.current.focusedCell,
-                  end: tableManagerStore.current.focusedCell,
+                  start: focusedCell,
+                  end: focusedCell,
               };
 
         if (checkSelection(cellsSelection, { columnIndex, rowIndex })) {
@@ -130,48 +162,61 @@ const useOnDragSelection = ({
 
         // This means it's horizontal selection
         if (rowHovered && checkIfWithinRow(cellsSelection, { rowIndex })) {
-            const startColumnIndexOffset = columnIndex > cellsSelection.end.columnIndex ? 1 : -1;
-            const startColumnIndex = cellsSelection.end.columnIndex + startColumnIndexOffset;
-            const startRowIndex = cellsSelection.start.rowIndex;
-            const endRowIndex = cellsSelection.end.rowIndex;
+            const startColumnIndexOffset = columnIndex > cellsSelection.end?.columnIndex ? 1 : -1;
+            const startColumnIndex = cellsSelection.end?.columnIndex + startColumnIndexOffset;
+            const startRowIndex = cellsSelection.start?.rowIndex;
+            const endRowIndex = cellsSelection.end?.rowIndex;
+
+            if (
+                tableManagerStore.current.records[startRowIndex].rowType !== 'data' ||
+                tableManagerStore.current.records[endRowIndex].rowType !== 'data'
+            ) {
+                setPluginsDataStore(() => ({
+                    [DRAG_AND_EXTEND_PLUGIN_KEY]: {},
+                }));
+                return;
+            }
 
             selection = {
-                start: normalizeCell({
+                start: {
                     columnIndex: startColumnIndex,
                     rowIndex: startRowIndex,
-                }),
-                end: normalizeCell({
+                },
+                end: {
                     columnIndex,
                     rowIndex: endRowIndex,
-                }),
+                },
             };
         }
 
         // This means it's vertical selection
         if (rowHovered && !checkIfWithinRow(cellsSelection, { rowIndex })) {
-            const startRowIndexOffset = rowIndex > cellsSelection.end.rowIndex ? 1 : -1;
-            const startColumnIndex = cellsSelection.start.columnIndex;
-            const startRowIndex = cellsSelection.end.rowIndex + startRowIndexOffset;
+            const startRowIndexOffset = rowIndex > cellsSelection.end?.rowIndex ? 1 : -1;
+            const startColumnIndex = cellsSelection.start?.columnIndex;
+            const startRowIndex = cellsSelection.end?.rowIndex + startRowIndexOffset;
 
-            const endColumnIndex = cellsSelection.end.columnIndex;
+            const endColumnIndex = cellsSelection.end?.columnIndex;
+
+            if (tableManagerStore.current.records[startRowIndex].rowType !== 'data') {
+                setPluginsDataStore(() => ({
+                    [DRAG_AND_EXTEND_PLUGIN_KEY]: {},
+                }));
+                return;
+            }
 
             selection = {
-                start: normalizeCell({
+                start: {
                     columnIndex: startColumnIndex,
                     rowIndex: startRowIndex,
-                }),
-                end: normalizeCell({
+                },
+                end: {
                     columnIndex: endColumnIndex,
                     rowIndex,
-                }),
+                },
             };
         }
 
-        selection = normalizeSelection(selection as Selection);
-
-        const continueDragAndSelection = beforeDragAndExtend({ selection });
-
-        if (continueDragAndSelection === false) return;
+        selection = normalizeSelection(selection as SelectionIndices);
 
         setPluginsDataStore(prev => ({
             [DRAG_AND_EXTEND_PLUGIN_KEY]: {
@@ -195,8 +240,8 @@ const useOnDragSelection = ({
     ]);
 };
 
-const useHasDragAndExtendSelection = ({ columnIndex, rowIndex }: CellIndexes) => {
-    return usePluginsDataValueSelectorValue(store =>
+const useHasDragAndExtendSelection = ({ columnIndex, rowIndex }: CellIndices) => {
+    return usePluginsDataValueSelector(store =>
         checkSelection(store[DRAG_AND_EXTEND_PLUGIN_KEY], {
             columnIndex,
             rowIndex,
@@ -208,8 +253,8 @@ const useIsDragHandleVisible = ({
     columnIndex,
     rowIndex,
     isFocused,
-}: CellIndexes & { isFocused: boolean }) => {
-    return usePluginsDataValueSelectorValue(store => {
+}: CellIndices & { isFocused: boolean }) => {
+    return usePluginsDataValueSelector(store => {
         const selection = store[CELL_SELECTION_PLUGIN_KEY];
         const dragSelection = store[DRAG_AND_EXTEND_PLUGIN_KEY];
 
@@ -232,6 +277,27 @@ const useIsDragHandleVisible = ({
     });
 };
 
+const useIsDragHandleVisibleRow = ({ rowIndex }: { rowIndex: number }) => {
+    return usePluginsDataValueSelector(store => {
+        const selection = store[CELL_SELECTION_PLUGIN_KEY];
+        const dragSelection = store[DRAG_AND_EXTEND_PLUGIN_KEY];
+        const focusedCell = store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
+
+        if (dragSelection?.end) {
+            return dragSelection.end.rowIndex === rowIndex;
+        }
+
+        if (!selection || !(selection.end || selection.start))
+            return focusedCell?.rowIndex === rowIndex;
+
+        const { start, end } = selection;
+
+        const endRowIndex = start?.rowIndex <= end?.rowIndex ? end?.rowIndex : start?.rowIndex;
+
+        return endRowIndex === rowIndex;
+    });
+};
+
 export const [useDragAndExtendPlugin, useDragAndExtendEvents, useDragAndExtendMethods] =
     createPlugin({
         key: DRAG_AND_EXTEND_PLUGIN_KEY,
@@ -246,5 +312,6 @@ export const [useDragAndExtendPlugin, useDragAndExtendEvents, useDragAndExtendMe
             useOnDragEnd,
             useHasDragAndExtendSelection,
             useIsDragHandleVisible,
+            useIsDragHandleVisibleRow,
         },
     });

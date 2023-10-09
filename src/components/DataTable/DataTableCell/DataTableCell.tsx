@@ -1,15 +1,14 @@
 import { FC, memo, useMemo } from 'react';
-import { useComponentStyles, useMolecules, usePrevious } from '../../../hooks';
+import { useComponentStyles, useMolecules } from '../../../hooks';
 import {
-    DataTableCellContext,
     useDataTable,
     useDataTableCell,
     useDataTableColumnWidth,
     useDataTableComponent,
     useDataTableRow,
 } from '../DataTableContext/DataTableContext';
-import type { DataTableProps, TDataTableColumn, TDataTableRow, DataCellProps } from '../types';
-import { useIsCellWithinBounds } from '../DataTable';
+import { useIsCellWithinBounds } from '../hooks';
+import type { DataCellProps, DataTableProps, TDataTableColumn, TDataTableRow } from '../types';
 
 type CellComponentProps = {
     column: TDataTableColumn;
@@ -40,9 +39,9 @@ export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
 
     const isWithinBounds = useIsCellWithinBounds(cellXOffsets[columnIndex], row, column);
 
-    const isVisible = usePrevious(isWithinBounds).current || isWithinBounds;
+    // const isVisible = usePrevious(isWithinBounds) || isWithinBounds;
 
-    if (!isVisible) return <></>;
+    if (!isWithinBounds) return <></>;
 
     return (
         <>
@@ -69,15 +68,14 @@ export const CellComponent = memo((props: CellComponentProps) => {
 
     const cell = renderCell(cellContext);
 
-    return (
-        <DataTableCellContext.Provider value={cellContext}>
-            <DataTable.Cell width={width}>{cell}</DataTable.Cell>
-        </DataTableCellContext.Provider>
-    );
+    return <DataTable.Cell width={width}>{cell}</DataTable.Cell>;
 });
 
 const Cell: FC<{ column: TDataTableColumn; columnIndex: number }> = memo(props => {
-    const { row, rowIndex } = useDataTableRow();
+    const { row, rowIndex } = useDataTableRow(store => ({
+        row: store.row,
+        rowIndex: store.rowIndex,
+    }));
     const { renderCell } = useDataTableComponent();
 
     const width = useDataTableColumnWidth(props.column);

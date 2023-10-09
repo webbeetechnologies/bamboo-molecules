@@ -1,6 +1,6 @@
 {
   "name": "@bambooapp/bamboo-molecules",
-  "version": "0.2.6",
+  "version": "0.2.74",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/webbeetechnologies/bamboo-molecules.git"
@@ -27,6 +27,7 @@
     "src",
     "datagrid",
     "fast-context",
+    "shortcuts-manager",
     "components",
     "!**/__tests__",
     "!**/__fixtures__",
@@ -41,10 +42,10 @@
     "run:testcases": "yarn workspace test-cases start",
     "test": "MOLECULES_ENV=storybook jest && yarn test-storybook",
     "test-jest": "jest",
-    "bundle": "rm -rf lib && yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
+    "bundle": "MOLECULES_ENV=release rm -rf lib && yarn prepare && mkdir -p dist && npm pack --pack-destination=dist",
     "do-release": "npm publish ./dist/bambooapp-bamboo-molecules-$npm_package_version.tgz --access=public",
     "release": "yarn bundle && yarn do-release",
-    "release:dev": "npm version prepatch --preid=dev && yarn bundle && yarn do-release --tag=dev",
+    "release:dev": "npm version prerelease --preid=dev && yarn release --tag=dev",
     "storybook": "MOLECULES_ENV=storybook start-storybook -p 6006",
     "test-storybook": "test-storybook",
     "coverage": "cp coverage/storybook/coverage-storybook.json coverage/coverage-storybook.json && npx nyc report --reporter=html -t coverage --report-dir coverage/lcov-report",
@@ -55,7 +56,7 @@
     "perf": "npx reassure"
   },
   "dependencies": {
-    "@bambooapp/bamboo-atoms": "^0.0.26",
+    "@bambooapp/bamboo-atoms": "^0.0.31",
     "@gorhom/portal": "^1.0.14",
     "@react-native-aria/overlays": "^0.3.2",
     "@sharcoux/slider": "^6.1.2",
@@ -84,7 +85,9 @@
     "@storybook/addon-interactions": "^6.5.16",
     "@storybook/addon-links": "^6.5.16",
     "@storybook/addon-react-native-web": "^0.0.19",
+    "@storybook/builder-webpack5": "^6.5.16",
     "@storybook/jest": "^0.0.10",
+    "@storybook/manager-webpack5": "^6.5.16",
     "@storybook/react": "^6.5.16",
     "@storybook/test-runner": "^0.9.3",
     "@storybook/testing-library": "^0.0.13",

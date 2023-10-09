@@ -111,6 +111,7 @@ const OptionList = <
         selection: selectionProp,
         onSelectionChange: onSelectionChangeProp,
         renderItem: renderItemProp,
+        testID,
         ...rest
     }: Props<TItem, TSection>,
     ref: any,
@@ -166,13 +167,14 @@ const OptionList = <
                     // TODO - fix ts issues
                     renderItem={renderItemProp}
                     info={info}
+                    testID={testID && `${testID}-${info.item.id}`}
                     index={idToIndexMap[info.item.id as keyof typeof idToIndexMap] as number}
                     onPressItem={onPressItem}
                     selectable={selectable}
                 />
             );
         },
-        [idToIndexMap, onPressItem, renderItemProp, selectable],
+        [idToIndexMap, testID, onPressItem, renderItemProp, selectable],
     );
 
     const keyExtractor = useCallback((item: TItem) => `${item.id}`, []);
@@ -183,6 +185,7 @@ const OptionList = <
             <SectionList
                 ref={ref}
                 keyExtractor={keyExtractor}
+                testID={testID}
                 {...rest}
                 sections={records}
                 renderItem={renderItem as SectionListProps['renderItem']}
@@ -200,6 +203,7 @@ type OptionListItemProps<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>
     onPressItem?: (item: TItem) => void;
     selectable?: boolean;
     index: number;
+    testID?: string;
 };
 
 const OptionListItem = typedMemo(
@@ -212,6 +216,7 @@ const OptionListItem = typedMemo(
         selectable,
         onPressItem,
         index,
+        testID,
     }: OptionListItemProps<TItem, TSection>) => {
         const { TouchableRipple } = useMolecules();
 
@@ -233,7 +238,9 @@ const OptionListItem = typedMemo(
 
         if (selectable && info.item?.selectable !== false) {
             return (
-                <TouchableRipple onPress={onPress}>{renderItem(renderItemInfo)}</TouchableRipple>
+                <TouchableRipple testID={testID} onPress={onPress}>
+                    {renderItem(renderItemInfo)}
+                </TouchableRipple>
             );
         }
 

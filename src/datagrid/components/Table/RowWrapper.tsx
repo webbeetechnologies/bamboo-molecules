@@ -1,19 +1,24 @@
 import { memo, useMemo } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { useMolecules } from '@bambooapp/bamboo-molecules';
-import { useTableManagerValueSelector } from '../../contexts';
+import { useCellFocusMethods, useDragAndExtendMethods } from '../../plugins';
+
+const useBoolean = () => false;
+const emptyObj = {};
 
 // TODO - inject this to Provider
 const RowWrapper = ({ style, index, ...rest }: ViewProps & { index: number }) => {
     const { View } = useMolecules();
 
-    const isRowFocused = useTableManagerValueSelector(
-        store => store.focusedCell?.rowIndex === index,
-    )!;
+    const { useIsRowFocused } = useCellFocusMethods();
+    const { useIsDragHandleVisibleRow = useBoolean } = useDragAndExtendMethods() || emptyObj;
+
+    const isRowFocused = useIsRowFocused(index);
+    const isDragHandleVisibleOnRow = useIsDragHandleVisibleRow({ rowIndex: index });
 
     const rowRendererStyle = useMemo(
-        () => [style, isRowFocused && { zIndex: 100 }],
-        [isRowFocused, style],
+        () => [style, (isRowFocused || isDragHandleVisibleOnRow) && { zIndex: 9 }],
+        [isDragHandleVisibleOnRow, isRowFocused, style],
     );
 
     return <View style={rowRendererStyle} {...rest} />;

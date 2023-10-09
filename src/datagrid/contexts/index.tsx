@@ -1,8 +1,7 @@
-export { FieldTypesProvider, useFieldType } from './FieldTypesContext';
+export { FieldTypesContext, FieldTypesProvider, useFieldType } from './FieldTypesContext';
 export {
     useTableManagerStoreRef,
     TableManagerProvider,
-    useIsCellFocused,
     useTableManagerValueSelector,
     useShouldContextMenuDisplayed,
     useRecordsMap,
@@ -10,6 +9,8 @@ export {
     useRecordType,
     useGroupMeta,
     useHasGroupedData,
+    useRecord,
+    useRecordByInternalId,
 } from './TableManagerContext';
 
 export {

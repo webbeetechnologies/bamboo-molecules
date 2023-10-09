@@ -141,6 +141,7 @@ export {
     useDataTableCell,
     useDataTable,
     useDataTableRow,
+    useDataTableHeaderCell,
     Slider,
     SliderProps,
     RangeSlider,
@@ -180,6 +181,8 @@ export {
     ProvidePortalProps,
     extractStyles,
     registerMolecule,
+    createContextBridge,
+    registerPortalContext,
 } from './core';
 
 export { withRipple, withActionState, CallbackActionState, typedMemo } from './hocs';
@@ -219,6 +222,7 @@ export {
     UseHandleNumberFormatProps,
     NumberMaskConfig,
     useActionState,
+    useToken,
 } from './hooks';
 
 export {
@@ -244,6 +248,8 @@ export {
     BackgroundContext,
     formatNumberWithMask,
     normalizeToNumberString,
+    isMac,
+    getOS,
 } from './utils';
 
 export { ComponentStylePropWithVariants, WithElements } from './types';

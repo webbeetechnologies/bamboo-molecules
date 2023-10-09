@@ -16,6 +16,10 @@ const storybookPlugins = [
                     __dirname,
                     './src/fast-context',
                 ),
+                '@bambooapp/bamboo-molecules/shortcuts-manager': path.resolve(
+                    __dirname,
+                    './src/shortcuts-manager',
+                ),
             },
         },
     ],
@@ -27,6 +31,17 @@ const bundlePlugins = ['@babel/plugin-proposal-export-namespace-from'];
 module.exports = api => {
     api.cache(true);
     const presets = [['babel-preset-expo', { jsxRuntime: 'automatic' }]];
+
+    // const presets = [
+    //     [
+    //         '@babel/preset-env',
+    //         {
+    //             targets: { node: '18' },
+    //         },
+    //     ],
+    //     ['@babel/preset-react', { runtime: 'automatic' }],
+    //     '@babel/preset-typescript',
+    // ];
 
     const plugins = process.env.MOLECULES_ENV === 'storybook' ? storybookPlugins : bundlePlugins;
 

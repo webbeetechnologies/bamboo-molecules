@@ -1,28 +1,73 @@
 import { memo } from 'react';
-import { useField, useGroupMeta, useShowGroupFooter } from '../../contexts';
+import { useGroupMeta, useShowGroupFooter } from '../../contexts';
 
-import { useMolecules } from '@bambooapp/bamboo-molecules';
+import { ViewProps, useMolecules } from '@bambooapp/bamboo-molecules';
 import type { DataGridRowRendererProps, GroupMetaRowProps } from '../../types';
+import { useComponentStyles } from '@bambooapp/bamboo-atoms';
+
+/**
+ *
+ * Abstracts the logic to render footer.
+ * Component consumer doesn't need to do anything other than add a GroupFooterRenderer
+ *
+ */
+const GroupFooterRendererInternal = memo((props: GroupMetaRowProps) => {
+    const { meta, rowProps } = props;
+    const { GroupFooterRenderer: RowRenderer } = useMolecules();
+
+    const shouldShowFooter = useShowGroupFooter(meta);
+
+    if (!shouldShowFooter) {
+        return (
+            <GroupEmptyFooter
+                {...rowProps}
+                isRealGroup={!!meta.isRealGroup}
+                isLastLevel={meta.isLastLevel}
+            />
+        );
+    }
+
+    return <RowRenderer {...props} />;
+});
+GroupFooterRendererInternal.displayName = 'GroupFooterRendererInternal';
+
+/**
+ *
+ * Renders an empty row.
+ * Fixes all design issues, component consumer doesn't have to worry about styling.
+ *
+ */
+export const GroupEmptyFooter = memo(
+    ({
+        isLastLevel,
+        isRealGroup = true,
+        ...props
+    }: ViewProps & { isLastLevel: boolean; isRealGroup: boolean }) => {
+        const { View } = useMolecules();
+        const emptyFooterStyles = useComponentStyles('DataGrid_EmptyFooterRow');
+
+        const style = isRealGroup && isLastLevel ? emptyFooterStyles : props.style;
+
+        return <View {...props} style={style} />;
+    },
+);
+GroupEmptyFooter.displayName = 'GroupEmptyFooter';
 
 /**
  *
  * Can be replaced by the component consumer.
+ * A placeholder component, just incase the user forgets to add a custom GroupFooterRender. will be replaced
  *
  */
-export const GroupFooterRenderer = memo(({ meta, rowProps }: GroupMetaRowProps) => {
+export const GroupFooterRenderer = memo(({ rowProps }: GroupMetaRowProps) => {
     const { View, Text } = useMolecules();
-    const shouldShowFooter = useShowGroupFooter(meta);
-
-    if (!shouldShowFooter) {
-        return <View {...rowProps} />;
-    }
-
     return (
         <View {...rowProps}>
             <Text>A footer doesn't exist. Inject a custom footer to make this work!!</Text>
         </View>
     );
 });
+GroupEmptyFooter.displayName = 'GroupEmptyFooter';
 
 /**
  *
@@ -31,17 +76,14 @@ export const GroupFooterRenderer = memo(({ meta, rowProps }: GroupMetaRowProps) 
  */
 export const GroupFooterRow = memo((props: DataGridRowRendererProps) => {
     const meta = useGroupMeta(props.rowId);
-    const field = useField(meta.fieldId);
-    const { GroupFooterRenderer: RowRenderer } = useMolecules();
 
     const rendererProps = {
-        ...field,
         meta,
         rowProps: props.rowProps,
         rowId: props.rowId,
+        index: props.index,
     };
 
-    return <RowRenderer {...rendererProps} />;
+    return <GroupFooterRendererInternal {...rendererProps} />;
 });
-
 GroupFooterRow.displayName = 'GroupFooterRow';

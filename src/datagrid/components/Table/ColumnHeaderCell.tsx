@@ -3,10 +3,13 @@ import { StyleSheet, TextStyle } from 'react-native';
 import type { TextProps, ViewProps } from '@bambooapp/bamboo-atoms';
 import { IconProps, RenderHeaderCellProps, useMolecules } from '@bambooapp/bamboo-molecules';
 
-import { useFieldType, useField, useTableManagerStoreRef } from '../../contexts';
+import { useDataTableHeaderCell } from '@bambooapp/bamboo-molecules/components';
+
+import { useFieldType, useField } from '../../contexts';
 import { withVirtualization } from '../../hocs';
 import { useContextMenu } from '../../hooks';
 import { ColumnResizeHandle } from '../ColumnResizeHandle';
+import { useCellFocusMethods } from '../../plugins';
 
 export type ColumnHeaderCellProps = RenderHeaderCellProps &
     ViewProps & {
@@ -28,7 +31,10 @@ const ColumnHeaderCell = ({
     const { View, Icon, Text } = useMolecules();
 
     const elementRef = useRef<any>(null);
-    const { set: setTableManagerStore } = useTableManagerStoreRef();
+    const { useSetFocusCellPluginStore } = useCellFocusMethods();
+    const setFocusCellPluginStore = useSetFocusCellPluginStore();
+
+    const { isFirst, isLast } = useDataTableHeaderCell();
 
     const { type, title, id } = useField(column);
     const { icon, iconType } = useFieldType(type);
@@ -37,23 +43,23 @@ const ColumnHeaderCell = ({
         () => ({
             containerStyle: [
                 styles.container,
-                columnIndex === 0 && {
-                    borderLeftWidth: 1,
-                },
+
                 style,
+                isFirst && { borderLeftWidth: 0 },
+                isLast && { borderRightWidth: 0 },
             ],
             titleStyle: [styles.text, titleProps?.style],
             iconStyle: [styles.icon, iconProps?.style],
         }),
-        [columnIndex, iconProps?.style, titleProps?.style, style],
+        [style, isFirst, isLast, titleProps?.style, iconProps?.style],
     );
 
     const handleContextMenu = useCallback(() => {
-        setTableManagerStore(() => ({
+        setFocusCellPluginStore(() => ({
             focusedCellRef: elementRef,
-            focusedCell: { columnIndex, type: 'column' },
+            focusedCell: { columnIndex, columnId: column, type: 'column' },
         }));
-    }, [columnIndex, setTableManagerStore]);
+    }, [columnIndex, column, setFocusCellPluginStore]);
 
     useContextMenu({ ref: elementRef, callback: handleContextMenu });
 
@@ -77,7 +83,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 4,
         minHeight: 32,
-        borderTopWidth: 1,
         borderRightWidth: 1,
         borderColor: 'colors.outlineVariant',
     },

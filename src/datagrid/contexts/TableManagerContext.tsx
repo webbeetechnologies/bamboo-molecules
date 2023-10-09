@@ -1,30 +1,33 @@
-import { memo, MutableRefObject, PropsWithChildren, RefObject, useCallback, useMemo } from 'react';
+import { createRef, memo, PropsWithChildren, RefObject, useMemo } from 'react';
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
-import { RowType, GroupedData, GroupHeader, GroupFooter } from '../utils';
-import { weakMemoized, keyBy } from '../utils';
-import type { GroupMeta } from '../types';
+import type { GroupedData, GroupFooter } from '../utils';
+import { weakMemoized, keyBy, GroupMeta } from '../utils';
+import { shallowCompare } from '../../utils';
 
 export type TableManagerContextProviderProps = {
     withContextMenu: boolean;
     records: GroupedData[];
     tableRef: RefObject<any>;
+    spacerWidth: number;
+    focusIgnoredColumns?: TDataTableColumn[];
 };
 
 export type TableManagerContextType = TableManagerContextProviderProps & {
-    focusedCell: {
-        rowIndex?: number;
-        columnIndex: number;
-        type: 'column' | 'cell';
-    } | null;
-    focusedCellRef: MutableRefObject<any> | null;
+    tableFlatListRef: RefObject<any>;
 };
 
 const defaultContextValue = {
     focusedCell: null,
     focusedCellRef: null,
+    isEditing: false,
     withContextMenu: false,
+    spacerWidth: 0,
+    records: [],
+    tableRef: createRef(),
+    tableFlatListRef: createRef(),
+    focusIgnoredColumns: [],
 };
 
 export const {
@@ -32,23 +35,27 @@ export const {
     useContext: useTableManagerSelector,
     useContextValue: useTableManagerValueSelector,
     useStoreRef,
-} = createFastContext<TableManagerContextType>(true);
+} = createFastContext<TableManagerContextType>(defaultContextValue, true);
 
 export const TableManagerProvider = memo(
     ({
         tableRef,
         withContextMenu,
         children,
+        spacerWidth,
         records,
+        focusIgnoredColumns,
     }: PropsWithChildren<TableManagerContextProviderProps>) => {
         const contextValue = useMemo(
-            () => ({
-                ...defaultContextValue,
-                tableRef,
-                withContextMenu,
-                records,
-            }),
-            [tableRef, withContextMenu, records],
+            () =>
+                ({
+                    tableRef,
+                    withContextMenu,
+                    records,
+                    spacerWidth,
+                    focusIgnoredColumns,
+                } as TableManagerContextType),
+            [tableRef, withContextMenu, records, spacerWidth, focusIgnoredColumns],
         );
 
         return (
@@ -61,113 +68,83 @@ export const TableManagerProvider = memo(
 
 export const useTableManagerStoreRef = useStoreRef;
 
-export const useIsCellFocused = (
-    rowIndex: number,
-    columnIndex: number,
-): [boolean, (cell: TableManagerContextType['focusedCell']) => void] => {
-    const [isFocused, setStore] = useTableManagerSelector(store => {
-        return (
-            store.focusedCell?.rowIndex === rowIndex &&
-            store.focusedCell?.columnIndex === columnIndex
-        );
-    });
-
-    const setFocusedCell = useCallback(
-        (cell: TableManagerContextType['focusedCell']) => {
-            setStore(() => ({
-                focusedCell: cell,
-            }));
-        },
-        [setStore],
-    );
-
-    return [isFocused, setFocusedCell];
-};
-
 export const useShouldContextMenuDisplayed = () => {
     return useTableManagerValueSelector(store => store.withContextMenu);
 };
 
-export const compare = (x: any, y: any) => {
-    if (Object.is(x, y)) return true;
-    if (typeof x !== typeof y) return false;
-    if (!x || !y) return false;
-
-    return x === y;
-};
-
-export const deepCompare = (x: any, y: any) => {
-    if (compare(x, y)) return true;
-    if (typeof x !== typeof y) return false;
-
-    if (!x || !y) return false;
-
-    if (typeof x === 'object') {
-        const keys = Array.from(new Set(Object.keys({ ...x, ...y })));
-        for (const key of keys) {
-            if (!deepCompare(x[key], y(key))) return false;
-        }
-    }
-
-    return false;
-};
-
 export const useRecordIds = () => {
-    return useTableManagerValueSelector(({ records }) => records.map(({ id }) => id), compare);
+    return useTableManagerValueSelector(
+        ({ records }) => records.map(({ id }) => id),
+        shallowCompare,
+    );
 };
 
 type GroupedDataMap = Record<TDataTableColumn, GroupedData>;
 const getRecordsMap = weakMemoized((records: GroupedData[]) => keyBy(records, 'id')) as (
     records: GroupedData[],
 ) => GroupedDataMap;
+
+const getRecordByInternalId = weakMemoized((records: GroupedData[]) =>
+    keyBy(records, 'uniqueId'),
+) as (records: GroupedData[]) => GroupedDataMap;
+
+const getRecordById = (records: GroupedData[], id: TDataTableRow) => getRecordsMap(records)[id];
+
 export const useRecordsMap = () => {
     return useTableManagerValueSelector(({ records }) => getRecordsMap(records));
 };
 
 export const useRecordById = (id: TDataTableRow) => {
-    return useTableManagerValueSelector(({ records }) => getRecordsMap(records)[id]);
+    return useTableManagerValueSelector(({ records }) => getRecordById(records, id));
 };
 
-export const useHasGroupedData = (id: TDataTableRow) => {
-    return !!useRecordById(id).groupId;
+export const useHasGroupedData = () => {
+    return useTableManagerValueSelector(({ records }) => !!records.at(0)?.groupId);
 };
 
 export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
-    const {
-        fieldId,
-        title,
-        count,
-        isFirst,
-        isLast,
-        isFirstLevel,
-        isLastLevel,
-        isOnly,
-        title: value,
-        level,
-    } = useRecordById(id) as GroupHeader | GroupFooter;
+    return useTableManagerValueSelector(({ records }) => {
+        const record = getRecordById(records, id) as GroupFooter;
 
-    return useMemo(
-        () => ({
-            fieldId,
-            title,
-            level,
-            recordCount: count,
-            isFirst,
-            isLast,
-            isFirstLevel,
-            isLastLevel,
-            isOnly,
-            value,
-        }),
-        [fieldId, title, level, count, isFirst, isLast, isFirstLevel, isLastLevel, isOnly, value],
-    );
+        return {
+            groupId: record.groupId,
+            fieldId: record.fieldId,
+            value: record.title,
+            count: record.count,
+            isFirst: record.isFirst,
+            isLast: record.isLast,
+            isFirstLevel: record.isFirstLevel,
+            isLastLevel: record.isLastLevel,
+            isOnly: record.isOnly,
+            title: record.title,
+            level: record.level,
+            groupConstants: record.groupConstants,
+            rowType: record.rowType,
+            isRealGroup: record.isRealGroup,
+        };
+    }, shallowCompare);
 };
 
 export const useRecordType = (id: TDataTableRow) => {
-    return useTableManagerValueSelector(({ records }) => {
-        const arg = getRecordsMap(records)[id];
-        if ((arg as GroupHeader).isGroupHeader) return RowType.HEADER;
-        if ((arg as GroupFooter).isGroupFooter) return RowType.FOOTER;
-        return RowType.DATA;
-    });
+    return useTableManagerValueSelector(({ records }) => getRecordsMap(records)[id].rowType);
+};
+
+export const useRecord = <T extends unknown>(
+    /**
+     * Internal Id of the record.
+     */
+    id: TDataTableRow,
+    selector: (arg: GroupedData) => T,
+) => {
+    return useTableManagerValueSelector(({ records }) =>
+        selector(getRecordByInternalId(records)[id]),
+    );
+};
+
+export const useRecordByInternalId = (id: TDataTableRow) => {
+    /**
+     * Normalize rowId which is the internal Id into the actual ID of the row.
+     * this is to prevent duplicates.
+     */
+    return useRecord(id, record => record.id);
 };

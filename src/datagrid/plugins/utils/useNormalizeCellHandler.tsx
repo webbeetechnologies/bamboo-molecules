@@ -1,20 +1,53 @@
-import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
+// TODO - fix alias issue with Jest
 import { useCallback } from 'react';
+import { GroupRecord, useTableManagerStoreRef } from '../..';
+import { TDataTableColumn, TDataTableRow, useDataTableStoreRef } from '../../../components';
 
 // TODO - add testcases
 const useNormalizeCellHandler = () => {
-    const { store: datatableStore } = useDataTableStoreRef();
+    const { store: tableManagerStore } = useTableManagerStoreRef();
+    const { store: dataTableStore } = useDataTableStoreRef();
 
     return useCallback(
-        ({ columnIndex, rowIndex }: { columnIndex: number; rowIndex: number }) => {
+        ({
+            columnIndex,
+            rowIndex,
+            columnId,
+            rowId,
+        }: {
+            columnIndex: number;
+            rowIndex: number;
+            rowId?: TDataTableRow;
+            columnId?: TDataTableColumn;
+        }) => {
+            // for the case when the record is deleted
+            if (!tableManagerStore.current.records[rowIndex]) return undefined;
+            // for focused cell, we can't just check the indices, we have to check with the ids to see if it exists or not
+            if (
+                columnId &&
+                rowId &&
+                (tableManagerStore.current.records[rowIndex]?.id !== rowId ||
+                    dataTableStore.current.columns[columnIndex] !== columnId)
+            )
+                return undefined;
+
+            const getCorrectRowIndex = (index: number) => {
+                if (tableManagerStore.current.records[index].rowType === 'data') return index;
+                throw new Error('Record is not a data row');
+            };
+
+            const correctIndex = getCorrectRowIndex(rowIndex);
+            const record = tableManagerStore.current.records[correctIndex] as GroupRecord;
+
             return {
                 columnIndex,
-                rowIndex,
-                rowId: datatableStore.current.records[rowIndex],
-                columnId: datatableStore.current.columns[columnIndex],
+                rowIndex: record.index,
+                rowId: record.id,
+                record,
+                columnId: dataTableStore.current.columns[columnIndex],
             };
         },
-        [datatableStore],
+        [tableManagerStore, dataTableStore],
     );
 };
 

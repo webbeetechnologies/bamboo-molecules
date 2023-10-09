@@ -1,10 +1,19 @@
-import { useCallback, useEffect, RefObject } from 'react';
+import { RefObject, useCallback, useEffect } from 'react';
 import { Platform } from 'react-native';
+import { isMac } from '@bambooapp/bamboo-molecules';
+
 import { useTableManagerStoreRef } from '../contexts';
 
-import { CELL_SELECTION_PLUGIN_KEY, useCopyPasteEvents, usePluginsDataStoreRef } from '../plugins';
-import { isMac } from '../utils';
+import {
+    CELL_FOCUS_PLUGIN_KEY,
+    CELL_SELECTION_PLUGIN_KEY,
+    TableSelection,
+    useCopyPasteEvents,
+    usePluginsDataStoreRef,
+} from '../plugins';
 import { useNormalizeSelectionHandler } from '../plugins/utils';
+import type { GroupRecord } from '../utils';
+import type { TableManagerContextType } from '../contexts/TableManagerContext';
 
 export type Props = {
     ref: RefObject<HTMLDivElement>;
@@ -22,7 +31,7 @@ const createOSKeyMap = (e: KeyboardEvent) => ({
 });
 
 const useHandleKeydownEvents = ({ ref }: Props) => {
-    const { store } = useTableManagerStoreRef();
+    const { store: tableManagerStore } = useTableManagerStoreRef();
     const { store: pluginDataStore } = usePluginsDataStoreRef();
 
     const { beforeCopyCell, onCopyCell, beforePasteCell, onPasteCell } = useCopyPasteEvents();
@@ -33,12 +42,17 @@ const useHandleKeydownEvents = ({ ref }: Props) => {
             const isMacOs = isMac();
             const osKeyMap = createOSKeyMap(e)[String(isMacOs) as 'true' | 'false'];
 
-            if (!store.current.focusedCell || store.current.focusedCell.type === 'column') return;
+            if (
+                !pluginDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell ||
+                pluginDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell.type === 'column' ||
+                pluginDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.isEditing
+            )
+                return;
 
             const selection = normalizeSelection(
                 pluginDataStore.current[CELL_SELECTION_PLUGIN_KEY] || {
-                    start: store.current.focusedCell,
-                    end: store.current.focusedCell,
+                    start: pluginDataStore.current[CELL_FOCUS_PLUGIN_KEY].focusedCell,
+                    end: pluginDataStore.current[CELL_FOCUS_PLUGIN_KEY].focusedCell,
                 },
             );
 
@@ -55,12 +69,12 @@ const useHandleKeydownEvents = ({ ref }: Props) => {
             });
             if (osKeyMap.paste && continuePaste !== false) {
                 onPasteCell({
-                    selection,
+                    selection: normalizeSelectionForGrouping(selection, tableManagerStore),
                 });
             }
         },
         [
-            store,
+            tableManagerStore,
             normalizeSelection,
             pluginDataStore,
             beforeCopyCell,
@@ -81,6 +95,44 @@ const useHandleKeydownEvents = ({ ref }: Props) => {
             triggerRef?.removeEventListener('keydown', onKeydown);
         };
     }, [onKeydown, ref]);
+};
+
+const normalizeSelectionForGrouping = (
+    { start, end, ...rest }: TableSelection,
+    store: React.MutableRefObject<TableManagerContextType>,
+) => {
+    // Normalize selection in case of grouping
+    const getCorrectRowIndex = (index: number) => {
+        if (store.current.records[index].rowType === 'data') return index;
+        throw new Error('Record is not a data row');
+    };
+
+    const correctStartRowIndex = getCorrectRowIndex(start.rowIndex);
+    const {
+        index: startIndex,
+        indexInGroup: startRowIndexInGroup,
+        groupConstants,
+    } = store.current.records[correctStartRowIndex] as GroupRecord;
+
+    const correctEndRowIndex = getCorrectRowIndex(end.rowIndex);
+    const { index: endIndex, indexInGroup: endRowIndexInGroup } = store.current.records[
+        correctEndRowIndex
+    ] as GroupRecord;
+
+    return {
+        ...rest,
+        start: {
+            ...start,
+            rowIndex: startIndex,
+            rowIndexInGroup: startRowIndexInGroup,
+        },
+        end: {
+            ...end,
+            rowIndex: endIndex,
+            rowIndexInGroup: endRowIndexInGroup,
+        },
+        groupConstants,
+    };
 };
 
 export default useHandleKeydownEvents;

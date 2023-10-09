@@ -32,6 +32,7 @@ export const popoverFactory = (componentName: string) =>
                 exitTransition = {},
                 triggerRef,
                 isKeyboardDismissable = true,
+                popoverContentProps,
                 ...props
             }: PopoverProps,
             ref: any,
@@ -92,7 +93,8 @@ export const popoverFactory = (componentName: string) =>
                         animate={popoverStyles.animateTransition}
                         exit={popoverStyles.exitTransition}
                         visible={isOpen}
-                        style={StyleSheet.absoluteFill}>
+                        style={StyleSheet.absoluteFill}
+                        {...popoverContentProps}>
                         <Backdrop onPress={onClose} style={popoverStyles.backdrop} />
 
                         <Popper

@@ -1,7 +1,7 @@
 import { createContext, memo, ReactNode, useContext } from 'react';
-import type { FieldTypes } from '../types';
+import type { FieldType, FieldTypes } from '../types';
 
-const FieldTypesContext = createContext<FieldTypes>({});
+export const FieldTypesContext = createContext<FieldTypes>({});
 
 export const useFieldTypes = () => useContext(FieldTypesContext);
 
@@ -11,8 +11,13 @@ export const FieldTypesProvider = memo(
     },
 );
 
-export const useFieldType = (type: string) => {
+const emptyObj = {} as FieldType;
+
+export const useFieldType = (type: string): FieldType => {
     const fieldTypes = useFieldTypes();
+
+    if (!type) return emptyObj;
+
     const fieldType = fieldTypes[type];
 
     if (!fieldType) throw new Error('Field type not found');

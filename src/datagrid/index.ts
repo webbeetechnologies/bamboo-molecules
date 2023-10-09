@@ -1,33 +1,59 @@
+import type { ComponentType } from 'react';
+import { registerMolecule, registerPortalContext } from '@bambooapp/bamboo-molecules';
 import DataGrid, { Props as DataGridProps } from './DataGrid';
 import { ViewRenderer, ViewRendererProps } from './components';
-import type { ComponentType } from 'react';
 import * as dataGridStyles from './components/styles';
-import { registerMolecule } from '@bambooapp/bamboo-molecules';
+import { FieldTypesContext } from './contexts';
 
 export * from './types';
 export { default as DataGrid, Props as DataGridProps, ContextMenuProps } from './DataGrid';
 export * from './components';
 export { FieldTypes } from './field-types';
 export * from './contexts';
+export { handleEmitKeyboardEvent } from './utils';
+
+export {
+    GroupRecord,
+    GroupFooter,
+    GroupHeader,
+    prepareGroupedData,
+    AggregateRecord,
+    GroupMetaRow,
+    GroupMeta,
+    prepareAggregateRow,
+    GroupConstantValues,
+    RowType,
+    GroupedData,
+    RecordWithId,
+} from './utils';
 
 export {
     useCopyPastePlugin,
     useCellSelectionPlugin,
     useColumnResizePlugin,
     useDragAndExtendPlugin,
+    useExpandCollapseGroupsPlugin,
+    useCellFocusPlugin,
+    useCellFocusMethods,
+    useCellSelectionMethods,
+    useColumnResizeMethods,
+    useDragAndExtendMethods,
+    useExpandCollapseGroupsMethods,
     DRAG_AND_EXTEND_PLUGIN_KEY,
     COLUMN_RESIZE_PLUGIN_KEY,
     CELL_SELECTION_PLUGIN_KEY,
     COPY_PASTE_PLUGIN_KEY,
+    EXPAND_COLLAPSE_GROUPS_KEY,
+    CELL_FOCUS_PLUGIN_KEY,
     PluginEvents,
-    Selection,
+    SelectionIndices,
     PluginHandle,
     usePluginsDataStoreRef,
     usePluginsManagerSelector,
     usePluginsManagerStoreRef,
     createPlugin,
     usePluginsDataSelector,
-    usePluginsDataValueSelectorValue,
+    usePluginsDataValueSelector,
     usePluginsManagerValueSelector,
 } from './plugins';
 
@@ -38,8 +64,9 @@ registerMolecule('DataGrid', {
 
 registerMolecule('DataGrid_ViewRenderer', {
     Component: ViewRenderer,
-    defaultStyles: {},
 });
+
+registerPortalContext(FieldTypesContext);
 
 declare global {
     namespace BambooMolecules {

@@ -1,67 +1,121 @@
 import { ComponentType, memo, useMemo } from 'react';
 import { useComponentStyles, useMolecules } from '@bambooapp/bamboo-molecules';
 import type { DataTableRowProps } from '@bambooapp/bamboo-molecules';
-import { useGroupMeta, useRecordById, useGroupRowState, useShowGroupFooter } from '../../contexts';
-import type { GroupFooter, GroupHeader, GroupedData } from 'src/datagrid/utils';
+import {
+    useRecordById,
+    useGroupRowState,
+    useTableManagerValueSelector,
+    useGroupMeta,
+    useHasGroupedData,
+    useRecordByInternalId,
+} from '../../contexts';
+import { GroupedData, isGroupHeader, GroupHeader } from '../../utils';
 
-type SpacerProp = { variant: 'left' | 'right' };
+type SpacerProp = { variant: 'left' | 'right'; isLastLevel?: boolean };
 
-const Spacer = (props: SpacerProp) => {
+const Spacer = (props: SpacerProp & { edge: boolean }) => {
     const { View } = useMolecules();
 
-    const spacer = useComponentStyles('DataGrid_Spacer', null, {
-        variant: props.variant,
-    });
+    const spacerWidth = useTableManagerValueSelector(store => store.spacerWidth);
+    const variant = props.edge ? `${props.variant}-edge` : props.variant;
+
+    const spacer = useComponentStyles(
+        'DataGrid_Spacer',
+        { width: spacerWidth, minHeight: props.isLastLevel ? undefined : spacerWidth },
+        { variant },
+    );
 
     return <View style={spacer} />;
 };
 
-export const SpacerList = memo((props: SpacerProp & { level: number }) => {
+export const SpacerList = memo((props: SpacerProp & { level: number; edgeIndex: number }) => {
     const spaces = useMemo(
         () =>
             Array.from({ length: props.level }, (_, i) => (
-                <Spacer key={i + ''} variant={props.variant} />
+                <Spacer
+                    key={i + ''}
+                    variant={props.variant}
+                    edge={i === props.edgeIndex}
+                    isLastLevel={props.isLastLevel}
+                />
             )),
-        [props.variant, props.level],
+        [props.variant, props.edgeIndex, props.isLastLevel, props.level],
     );
 
     return <>{spaces}</>;
 });
 
-const getVariant = (groupRow: GroupedData) => {
-    if ((groupRow as GroupHeader).isGroupHeader) return 'DataGrid_GroupHeaderItem';
-    if ((groupRow as GroupFooter).isGroupFooter) return 'DataGrid_GroupFooterItem';
-    return 'DataGrid_RowItem';
+const rowTypes = {
+    header: 'DataGrid_GroupHeaderItem',
+    footer: 'DataGrid_GroupFooterItem',
+    data: 'DataGrid_RowItem',
 };
 
 export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
     const SpacedComponent = memo((props: DataTableRowProps) => {
-        const { View } = useMolecules();
-        const groupRow = useRecordById(props.rowId);
-        const { level } = groupRow;
-        const meta = useGroupMeta(props.rowId);
+        const rowId = useRecordByInternalId(props.rowId);
+        const groupRow = useRecordById(rowId) as GroupedData;
+        const { level, rowType: variant } = groupRow;
 
-        const variant = getVariant(groupRow);
+        const isGroupsEnabled = useHasGroupedData();
+
+        const spacerWidth = useTableManagerValueSelector(store => store.spacerWidth);
 
         const groupSpacerWrapStyles = useComponentStyles('DataGrid_SpacerRow', null, {
             variant,
-        });
-
-        const style = useComponentStyles(variant, props.rowProps?.style, {
-            variant,
             states: {
-                showFooter: useShowGroupFooter(meta) && (groupRow as GroupFooter).isGroupFooter,
-                ...useGroupRowState(meta),
+                isFirstGroup: props.index === 0,
             },
         });
 
-        const rowProps = useMemo(() => ({ ...props.rowProps, style }), [style, props.rowProps]);
+        const { View } = useMolecules();
+
+        const groupMeta = useGroupMeta(rowId);
+        const isDataRowHeader = isGroupHeader(groupRow) && groupRow.isLastLevel;
+
+        const style = useComponentStyles(
+            rowTypes[variant],
+            [
+                props.rowProps?.style,
+                isGroupsEnabled && level === 0 ? { minHeight: spacerWidth } : null,
+                isGroupsEnabled && { flex: 1 },
+                groupMeta.isRealGroup === false
+                    ? { borderLeftWidth: 0, borderRightWidth: 0 }
+                    : null,
+            ],
+            {
+                states: {
+                    isDataRowHeaderFirst: isDataRowHeader && (groupRow as GroupHeader).isFirst,
+                    isDataRowHeader: isDataRowHeader,
+                    ...useGroupRowState(groupMeta),
+                },
+            },
+        );
+
+        const rowProps = useMemo(
+            () => ({ ...props.rowProps, style: [props.rowProps?.style, style] }),
+            [style, props.rowProps],
+        );
+
+        if (!isGroupsEnabled) {
+            return <Component {...props} rowId={rowId} rowProps={rowProps} />;
+        }
 
         return (
             <View style={groupSpacerWrapStyles}>
-                <SpacerList level={level} variant="left" />
-                <Component {...props} rowProps={rowProps} />
-                <SpacerList level={level} variant="right" />
+                <SpacerList
+                    edgeIndex={0}
+                    level={level}
+                    variant="left"
+                    isLastLevel={groupMeta.isLastLevel}
+                />
+                <Component {...props} rowId={rowId} rowProps={rowProps} />
+                <SpacerList
+                    edgeIndex={level - 1}
+                    level={level}
+                    variant="right"
+                    isLastLevel={groupMeta.isLastLevel}
+                />
             </View>
         );
     });

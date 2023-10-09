@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react';
+import { FC, memo, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Toast, useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
 
@@ -12,14 +12,19 @@ import {
     FieldsProvider,
     useCellValue,
     RecordsProvider,
-    groups,
 } from './mocks';
-import { useColumnResizePlugin, useCopyPastePlugin } from '../../../src/datagrid/plugins';
-import { useDragAndExtendPlugin } from '../../../src/datagrid/plugins/drag-and-extend';
+import {
+    useColumnResizePlugin,
+    useCopyPastePlugin,
+    useExpandCollapseGroupsPlugin,
+    useDragAndExtendPlugin,
+    useCellFocusPlugin,
+} from '../../../src/datagrid/plugins';
+import { prepareGroupedData } from '../../../src/datagrid';
 
 const containerStyle = { width: '100%' };
 
-export const Example = () => {
+export const Example: FC<{ groups?: string[] }> = () => {
     const { View, DataGrid, ToastContainer } = useMolecules();
 
     const { state: isOpen, handleOpen, handleClose } = useToggle();
@@ -47,6 +52,17 @@ export const Example = () => {
         }),
         [handleClose, handleOpen, isOpen],
     );
+
+    const cellFocusPlugin = useCellFocusPlugin({
+        onFocusCell: args => {
+            // eslint-disable-next-line no-console
+            console.log({ cellFocus: args });
+        },
+        onUnFocusCell: args => {
+            // eslint-disable-next-line no-console
+            console.log({ unFocusCell: args });
+        },
+    });
 
     const columnResizePlugin = useColumnResizePlugin({
         onColumnResize: ({ columnId, width }) => {
@@ -82,10 +98,32 @@ export const Example = () => {
             console.log({ dragAndExtend: args });
         },
     });
+    const expandCollapsePlugin = useExpandCollapseGroupsPlugin({
+        onGroupExpand: args => {
+            // eslint-disable-next-line no-console
+            console.log({ expandCollapse: args });
+        },
+        onGroupCollapse: args => {
+            // eslint-disable-next-line no-console
+            console.log({ expandCollapse: args });
+        },
+    });
 
     const plugins = useMemo(
-        () => [columnResizePlugin, copyPastePlugin, dragAndExtendPlugin],
-        [columnResizePlugin, copyPastePlugin, dragAndExtendPlugin],
+        () => [
+            columnResizePlugin,
+            copyPastePlugin,
+            dragAndExtendPlugin,
+            expandCollapsePlugin,
+            cellFocusPlugin,
+        ],
+        [
+            columnResizePlugin,
+            copyPastePlugin,
+            dragAndExtendPlugin,
+            expandCollapsePlugin,
+            cellFocusPlugin,
+        ],
     );
 
     return (
@@ -95,7 +133,7 @@ export const Example = () => {
                     <DataGrid
                         plugins={plugins}
                         columnWidths={columnWidth}
-                        records={records}
+                        records={prepareGroupedData(records, [])}
                         columnIds={columnIds}
                         contextMenuProps={contextMenuProps}
                         useField={useField}
@@ -138,11 +176,35 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
         [],
     );
 
+    const expandCollapsePlugin = useExpandCollapseGroupsPlugin({
+        onGroupExpand: args => {
+            // eslint-disable-next-line no-console
+            console.log({ expandCollapse: args });
+        },
+        onGroupCollapse: args => {
+            // eslint-disable-next-line no-console
+            console.log({ expandCollapse: args });
+        },
+    });
+
+    const dragAndExtendPlugin = useDragAndExtendPlugin({
+        onDragAndExtend: args => {
+            // eslint-disable-next-line no-console
+            console.log({ dragAndExtend: args });
+        },
+    });
+
+    const plugins = useMemo(
+        () => [expandCollapsePlugin, dragAndExtendPlugin],
+        [dragAndExtendPlugin, expandCollapsePlugin],
+    );
+
     return (
         <FieldsProvider fields={virtualizationMockFields}>
             <RecordsProvider records={virtaulizationMockRecords}>
                 <View style={virtualizedContainerStyle}>
                     <DataGrid
+                        plugins={plugins}
                         groups={props.groups}
                         records={virtaulizationMockRecords}
                         columnIds={columnIds}
@@ -154,10 +216,6 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
         </FieldsProvider>
     );
 };
-
-export const ExampleHorizontalVirtualizationWithGroups = () => (
-    <ExampleHorizontalVirtualization groups={groups} />
-);
 
 const styles = StyleSheet.create({
     menuItem: {

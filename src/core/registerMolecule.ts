@@ -1,1 +1,1 @@
-export { registerComponent as registerMolecule } from '@bambooapp/bamboo-atoms';
+export { registerAtom as registerMolecule } from '@bambooapp/bamboo-atoms';

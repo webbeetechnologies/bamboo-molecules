@@ -1,46 +1,42 @@
-import { useCallback, useEffect } from 'react';
 import {
-    usePluginsDataValueSelectorValue,
+    usePluginsDataValueSelector,
     useTableManagerStoreRef,
 } from '@bambooapp/bamboo-molecules/datagrid';
-import { Platform } from 'react-native';
+import { useCallback, useEffect } from 'react';
 
 import { createPlugin } from './createPlugin';
-import { PluginEvents } from './types';
 import { usePluginsDataStoreRef } from './plugins-manager';
+import { CellIndices, PluginEvents } from './types';
 import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
-
-export type CellIndexes = {
-    rowIndex: number;
-    columnIndex: number;
-};
+import { CELL_FOCUS_PLUGIN_KEY } from './cell-focus';
+import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
+import { isNil } from '../../utils';
+import { Direction, directions, useScrollToCell } from './cell-focus/useSetFocusCellByDirection';
 
 export const CELL_SELECTION_PLUGIN_KEY = 'cell-selection';
 
 const useOnSelectCell = () => {
-    const { store: tableManagerStore, set: setTableManagerStore } = useTableManagerStoreRef();
-    const { set: setStore } = usePluginsDataStoreRef();
+    const { store: pluginsDataStore, set: setStore } = usePluginsDataStoreRef();
     const { beforeCellSelection, afterCellSelection, onCellSelection } = useCellSelectionEvents();
-    const normalizeCell = useNormalizeCellHandler();
     const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(
-        (cell: CellIndexes) => {
-            if (
-                !tableManagerStore.current.focusedCell ||
-                tableManagerStore.current.focusedCell?.type === 'column'
-            ) {
-                setTableManagerStore(() => ({
-                    focusedCell: { ...normalizeCell(cell), type: 'cell' },
-                }));
+        (cell: CellIndices) => {
+            const focusedCell = pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
+
+            // this wouldn't be possible
+            if (!focusedCell || focusedCell?.type === 'column') {
+                // setTableManagerStore(() => ({
+                //     focusedCell: { ...normalizeCell(cell), type: 'cell' },
+                // }));
 
                 return;
             }
 
-            const selection = {
-                start: tableManagerStore.current.focusedCell as CellIndexes,
-                end: cell as CellIndexes,
-            };
+            const selection = normalizeSelection({
+                start: focusedCell as CellIndices,
+                end: cell as CellIndices,
+            });
 
             const continueSelection = beforeCellSelection({ selection });
 
@@ -50,53 +46,59 @@ const useOnSelectCell = () => {
             setStore(prev => ({
                 [CELL_SELECTION_PLUGIN_KEY]: {
                     ...prev[CELL_SELECTION_PLUGIN_KEY],
-                    ...normalizeSelection(selection),
+                    ...selection,
                 },
             }));
 
             afterCellSelection();
         },
         [
+            pluginsDataStore,
             normalizeSelection,
-            normalizeCell,
-            afterCellSelection,
             beforeCellSelection,
             onCellSelection,
             setStore,
-            setTableManagerStore,
-            tableManagerStore,
+            afterCellSelection,
         ],
     );
 };
 
 const allowedTargetIds = ['drag-handle'];
 
-const useResetSelectionOnClickOutside = () => {
-    const { set: setStore } = usePluginsDataStoreRef();
+const useOnResetSelectionOnClickOutside = () => {
+    const { set: setStore, store } = usePluginsDataStoreRef();
 
-    const onMouseDown = useCallback(
+    return useCallback(
         (e: MouseEvent) => {
+            if (!store.current[CELL_SELECTION_PLUGIN_KEY]) return;
             if (allowedTargetIds.includes((e.target as HTMLDivElement)?.id)) return;
 
             setStore(() => ({
-                [CELL_SELECTION_PLUGIN_KEY]: {
-                    start: undefined,
-                    end: undefined,
-                },
+                [CELL_SELECTION_PLUGIN_KEY]: undefined,
             }));
         },
-        [setStore],
+        [setStore, store],
     );
+};
+
+const useResetSelectionOnFocusCellChange = () => {
+    const { set: setStore, store } = usePluginsDataStoreRef();
+    const { columnId, rowId } = usePluginsDataValueSelector(store => ({
+        columnId: store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell?.columnId,
+        rowId: store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell?.rowId,
+    }));
 
     useEffect(() => {
-        if (Platform.OS !== 'web') return;
+        if (
+            !store.current[CELL_SELECTION_PLUGIN_KEY] ||
+            store.current[CELL_SELECTION_PLUGIN_KEY]?.isSelecting
+        )
+            return;
 
-        window.addEventListener('mousedown', onMouseDown);
-
-        return () => {
-            window.removeEventListener('mousedown', onMouseDown);
-        };
-    }, [onMouseDown]);
+        setStore(() => ({
+            [CELL_SELECTION_PLUGIN_KEY]: undefined,
+        }));
+    }, [columnId, rowId, setStore, store]);
 };
 
 const useOnDragAndSelectStart = () => {
@@ -104,11 +106,11 @@ const useOnDragAndSelectStart = () => {
     const normalizeCell = useNormalizeCellHandler();
 
     return useCallback(
-        (cellIndexes: { columnIndex: number; rowIndex: number }) => {
+        (cell: { columnIndex: number; rowIndex: number }) => {
             setStore(prev => ({
                 [CELL_SELECTION_PLUGIN_KEY]: {
                     ...prev[CELL_SELECTION_PLUGIN_KEY],
-                    start: normalizeCell(cellIndexes),
+                    start: normalizeCell(cell),
                     isSelecting: true,
                 },
             }));
@@ -124,6 +126,8 @@ const useOnDragAndSelectEnd = () => {
     const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(() => {
+        if (!store.current[CELL_SELECTION_PLUGIN_KEY]) return;
+
         const selection = normalizeSelection(store.current[CELL_SELECTION_PLUGIN_KEY]);
 
         if (beforeCellSelection({ selection }) === false) return;
@@ -152,7 +156,7 @@ const useProcessDragCellSelection = ({
     cell,
     hovered,
 }: {
-    cell: CellIndexes;
+    cell: CellIndices;
     hovered: boolean;
 }) => {
     const { store: pluginsDataStore } = usePluginsDataStoreRef();
@@ -165,12 +169,121 @@ const useProcessDragCellSelection = ({
     });
 };
 
-const useHasCellSelection = ({ columnIndex, rowIndex }: CellIndexes) => {
-    return usePluginsDataValueSelectorValue(store =>
+const useHasCellSelection = ({ columnIndex, rowIndex }: CellIndices) => {
+    return usePluginsDataValueSelector(store =>
         checkSelection(store[CELL_SELECTION_PLUGIN_KEY], {
             columnIndex,
             rowIndex,
         }),
+    );
+};
+
+// abstract duplicated logic
+export const useSetSelectionByDirection = () => {
+    const { store: pluginsStoreRef, set: setStore } = usePluginsDataStoreRef();
+    const { store: dataTableStoreRef } = useDataTableStoreRef();
+    const { store: tableManagerStore } = useTableManagerStoreRef();
+
+    const scrollToCell = useScrollToCell();
+
+    return useCallback(
+        (direction: Direction, scrollToEdge: boolean = false) => {
+            if (!directions.includes(direction)) return;
+
+            const currentFocusedCell = pluginsStoreRef.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
+            const selection = pluginsStoreRef.current[CELL_SELECTION_PLUGIN_KEY];
+
+            if (!currentFocusedCell) return;
+
+            let start: CellIndices;
+
+            if (!selection || !selection?.start) {
+                start = {
+                    columnIndex: currentFocusedCell.columnIndex,
+                    rowIndex: currentFocusedCell.rowIndex,
+                };
+            } else {
+                start = selection.start;
+            }
+
+            const { columnIndex, rowIndex } = (selection?.end || start) as {
+                columnIndex: number;
+                rowIndex?: number;
+            };
+
+            if (isNil(rowIndex) || isNil(columnIndex)) return;
+
+            const { columns } = dataTableStoreRef.current;
+            const { records, focusIgnoredColumns = [] } = tableManagerStore.current;
+
+            let newRowIndex = rowIndex;
+            let newColumnIndex = columnIndex;
+
+            switch (direction) {
+                case 'up':
+                    if (rowIndex === 0) return;
+
+                    newRowIndex = scrollToEdge ? 0 : newRowIndex - 1;
+
+                    // keep finding the rowIndex unless the type is data
+                    while (records[newRowIndex]?.rowType !== 'data') {
+                        newRowIndex = scrollToEdge ? newRowIndex + 1 : newRowIndex - 1;
+
+                        if (scrollToEdge ? newRowIndex > records?.length - 1 : newRowIndex <= 0)
+                            return;
+                    }
+                    break;
+                case 'down':
+                    if (rowIndex === records?.length - 1) return;
+
+                    newRowIndex = scrollToEdge ? records?.length - 1 : newRowIndex + 1;
+
+                    // keep finding the rowIndex unless the type is data
+                    while (records[newRowIndex]?.rowType !== 'data') {
+                        newRowIndex = scrollToEdge ? newRowIndex - 1 : newRowIndex + 1;
+
+                        if (scrollToEdge ? newRowIndex <= 0 : newRowIndex > records?.length - 1)
+                            return;
+                    }
+                    break;
+                case 'left':
+                    if (columnIndex === 0) return;
+
+                    newColumnIndex = scrollToEdge ? 0 : newColumnIndex - 1;
+
+                    // if it's one of the ignored columns with change the index
+                    while (
+                        !columns[newColumnIndex] ||
+                        focusIgnoredColumns.includes(columns[newColumnIndex] as string)
+                    ) {
+                        newColumnIndex = scrollToEdge ? newColumnIndex + 1 : newColumnIndex + 1;
+                    }
+
+                    break;
+                case 'right':
+                    if (newColumnIndex === columns?.length - 1) return;
+
+                    newColumnIndex = scrollToEdge ? columns?.length - 1 : newColumnIndex + 1;
+
+                    // if it's one of the ignored columns with change the index
+                    while (
+                        !columns[newColumnIndex] ||
+                        focusIgnoredColumns.includes(columns[newColumnIndex] as string)
+                    ) {
+                        newColumnIndex = scrollToEdge ? newColumnIndex - 1 : newColumnIndex - 1;
+                    }
+            }
+
+            setStore(() => ({
+                [CELL_SELECTION_PLUGIN_KEY]: {
+                    start,
+                    end: { columnIndex: newColumnIndex, rowIndex: newRowIndex },
+                },
+            }));
+
+            scrollToCell({ columnIndex: newColumnIndex, rowIndex: newRowIndex, direction });
+        },
+        [dataTableStoreRef, pluginsStoreRef, scrollToCell, setStore, tableManagerStore],
     );
 };
 
@@ -184,10 +297,12 @@ export const [useCellSelectionPlugin, useCellSelectionEvents, useCellSelectionMe
         ],
         methods: {
             useOnSelectCell,
-            useResetSelectionOnClickOutside,
+            useOnResetSelectionOnClickOutside,
+            useResetSelectionOnFocusCellChange,
             useOnDragAndSelectStart,
             useOnDragAndSelectEnd,
             useProcessDragCellSelection,
             useHasCellSelection,
+            useSetSelectionByDirection,
         },
     });

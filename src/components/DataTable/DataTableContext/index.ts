@@ -1,11 +1,20 @@
 export {
     useDataTableCell,
+    useDataTableHeaderCell,
     useDataTable,
     useDataTableRow,
     DataTableCellContext,
-    DataTableRowContext,
+    DataTableHeaderCellContext,
+    DataTableContextRowProvider,
     useDataTableColumnWidth,
     useDataTableComponent,
     useDataTableStoreRef,
     deriveColumnWidth,
+    DataTableHeaderCellContextType,
+    DataTableCellContextType,
 } from './DataTableContext';
+
+export {
+    DataTableHeaderCellContextProvider,
+    DataTableCellContextProvider,
+} from './DataTableContextProvider';

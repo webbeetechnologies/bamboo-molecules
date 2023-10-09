@@ -1,28 +1,43 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
+import type { ViewStyle } from 'react-native';
 import { useMolecules } from '@bambooapp/bamboo-molecules';
 // import type { RenderCellProps } from '../../../components';
 import { useField, useGroupMeta } from '../../contexts';
 import { ViewRenderer } from '../FieldRenderers';
 
 import type { DataGridRowRendererProps, GroupMetaRowProps } from '../../types';
+import { GroupExpandCollapseToggle } from '../GroupExpandCollapseToggle';
 
 /**
  *
  * Can be replaced by the component consumer.
  *
  */
-export const GroupHeaderRenderer = memo(
-    ({ meta, rowId: _r, rowProps, ...field }: GroupMetaRowProps) => {
-        const { View, Text } = useMolecules();
+export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps }: GroupMetaRowProps) => {
+    const { View, Text } = useMolecules();
+    const field = useField(meta.fieldId!);
 
-        return (
-            <View {...rowProps}>
+    const { rowStyle } = useMemo(
+        () => ({
+            rowStyle: [
+                { flexDirection: 'row', alignItems: 'center', padding: 'spacings.1' },
+                rowProps?.style,
+            ] as ViewStyle,
+        }),
+        [rowProps?.style],
+    );
+
+    return (
+        <View {...rowProps} style={rowStyle}>
+            <GroupExpandCollapseToggle rowId={rowId} />
+
+            <View>
                 <Text>{field.title}</Text>
-                <ViewRenderer value={meta.value} {...field} />
+                <ViewRenderer value={meta.groupConstants.at(-1)?.value} {...field} />
             </View>
-        );
-    },
-);
+        </View>
+    );
+});
 
 /**
  *
@@ -31,14 +46,13 @@ export const GroupHeaderRenderer = memo(
  */
 export const GroupHeaderRow = memo((props: DataGridRowRendererProps) => {
     const meta = useGroupMeta(props.rowId);
-    const field = useField(meta.fieldId);
     const { GroupHeaderRenderer: RowRenderer } = useMolecules();
 
     const rendererProps = {
-        ...field,
         meta,
         rowProps: props.rowProps,
         rowId: props.rowId,
+        index: props.index,
     };
 
     return <RowRenderer {...rendererProps} />;

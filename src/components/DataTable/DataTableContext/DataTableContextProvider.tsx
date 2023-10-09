@@ -5,7 +5,11 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useMolecules } from '../../../hooks';
 import type { DataTableProps, TDataTableColumn } from '../types';
 import {
+    DataTableCellContext,
+    DataTableCellContextType,
     DataTableComponentContext,
+    DataTableHeaderCellContext,
+    DataTableHeaderCellContextType,
     DataTableProvider,
     deriveColumnWidth,
 } from './DataTableContext';
@@ -49,6 +53,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         columnWidths,
         useRowRenderer: useRowRendererProp,
         CellWrapperComponent,
+        horizontalOffset = 0,
     }) => {
         const { FlatList } = useMolecules();
 
@@ -72,9 +77,9 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         const tableWidth = useMemo(() => {
             return columns.reduce(
                 (acc: number, column) => acc + (columnWidths?.[column] ?? defaultColumnWidth),
-                0,
+                horizontalOffset * 2,
             );
-        }, [columnWidths, columns, defaultColumnWidth]);
+        }, [horizontalOffset, columnWidths, columns, defaultColumnWidth]);
 
         const dataContext = useMemo(
             () => ({
@@ -88,6 +93,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 rowProps,
                 selectedRows,
                 rowSize,
+                horizontalOffset,
                 cellXOffsets: calculateXOffset(columns, columnWidths, defaultColumnWidth),
                 columnWidths,
                 useRowRenderer,
@@ -106,6 +112,7 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
                 selectedRows,
                 rowSize,
                 columnWidths,
+                horizontalOffset,
                 useRowRenderer,
             ],
         );
@@ -117,3 +124,35 @@ export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = m
         );
     },
 );
+
+export const DataTableHeaderCellContextProvider = (
+    props: PropsWithChildren<DataTableHeaderCellContextType>,
+) => {
+    const { column, columnIndex, isFirst, isLast } = props;
+    const contextValue = useMemo(
+        () => ({ column, columnIndex, isFirst, isLast }),
+        [column, columnIndex, isFirst, isLast],
+    );
+
+    return (
+        <DataTableHeaderCellContext.Provider value={contextValue}>
+            {props.children}
+        </DataTableHeaderCellContext.Provider>
+    );
+};
+
+export const DataTableCellContextProvider = (
+    props: PropsWithChildren<DataTableCellContextType>,
+) => {
+    const { row, rowIndex, column, columnIndex, isLast } = props;
+    const contextValue = useMemo(
+        () => ({ row, rowIndex, column, columnIndex, isLast }),
+        [row, rowIndex, column, columnIndex, isLast],
+    );
+
+    return (
+        <DataTableCellContext.Provider value={contextValue}>
+            {props.children}
+        </DataTableCellContext.Provider>
+    );
+};

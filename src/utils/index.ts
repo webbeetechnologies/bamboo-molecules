@@ -15,6 +15,7 @@ export {
 export { normalizeBorderRadiuses } from './normalizeBorderRadiuses';
 
 export * from './lodash';
+export * from './compare';
 
 export * from './date-fns';
 
@@ -32,3 +33,5 @@ export const clearStylesCache = () => {
 };
 
 export { getYearRange } from './getyearRange';
+
+export * from './getOS';

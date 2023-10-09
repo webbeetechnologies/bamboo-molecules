@@ -15,6 +15,7 @@ export type FieldType<T = unknown, C extends {} = {}> = {
     // fieldEditorRenderer: ReactElement;
     // fieldEditorValidator: ReactElement;
     validator?: (value: any) => any;
+    toggleRenderersWithKeyPress?: boolean;
     [key: string]: any;
 };
 

@@ -1,61 +1,39 @@
-import { forwardRef, memo, useCallback, useMemo, ForwardedRef } from 'react';
-import type { DataTableBase, DataTableProps, TDataTableColumn, TDataTableRow } from './types';
+import { ForwardedRef, forwardRef, memo, RefObject, useCallback, useMemo } from 'react';
 import type {
     LayoutChangeEvent,
     NativeScrollEvent,
     NativeSyntheticEvent,
     ScrollView,
     ScrollViewProps,
-    ViewToken,
 } from 'react-native';
+import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
 
 import { useComponentStyles } from '../../hooks';
-import { createFastContext } from '../../fast-context';
 import {
     useDataTable,
-    useDataTableColumnWidth,
     useDataTableComponent,
     useDataTableStoreRef,
 } from './DataTableContext/DataTableContext';
-import { defaultProps } from './defaults';
-import { renderRow } from './DataTableRow';
 import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
 import { DataTableHeaderRow } from './DataTableHeader';
+import { renderRow } from './DataTableRow';
+import { defaultProps } from './defaults';
+import {
+    HorizontalScrollIndexProvider,
+    defaultValue,
+    useStoreRef,
+    useViewabilityConfigCallbackPairs,
+} from './hooks';
 
-type DataTableComponentProps = DataTableBase & ScrollViewProps;
+type DataTableComponentProps = DataTableBase &
+    ScrollViewProps & {
+        flatListRef?: RefObject<any>;
+    };
 type DataTablePresentationProps = DataTableComponentProps &
     Pick<DataTableProps, 'records'> & { tableWidth: number } & Pick<
         Required<DataTableProps>,
         'FlatListComponent' | 'ScrollViewComponent'
     >;
-const {
-    useStoreRef,
-    Provider: HorizontalScrollIndexProvider,
-    useContextValue,
-} = createFastContext<typeof defaultValue>();
-
-const defaultValue = { x: 0, y: 0, viewItemIds: [] as TDataTableColumn[], scrollXVelocity: 0 };
-const defaultOffset = 500;
-
-export const useIsCellWithinBounds = (
-    left: number,
-    rowId: TDataTableRow,
-    columnId: TDataTableColumn,
-) => {
-    const cellWidth = useDataTableColumnWidth(columnId);
-    // this is a quick fix // TODO - revisit this later
-    const containerWidth = useDataTable(store => store.containerWidth ?? 0);
-
-    const checkLeft = (x: number, offset: number) => left + cellWidth >= x - offset;
-    const checkRight = (x: number, offset: number) => left <= x + offset + containerWidth;
-    const isViewableItem = (viewItemIds: TDataTableColumn[]) => viewItemIds.includes(rowId);
-
-    return useContextValue(
-        ({ x, viewItemIds }) =>
-            checkLeft(x, isViewableItem(viewItemIds) ? defaultOffset : 0) &&
-            checkRight(x, isViewableItem(viewItemIds) ? defaultOffset : 0),
-    );
-};
 
 const DataTablePresentationComponent = memo(
     forwardRef((props: DataTablePresentationProps, ref: ForwardedRef<ScrollView>) => {
@@ -71,6 +49,7 @@ const DataTablePresentationComponent = memo(
             ScrollViewComponent,
             onLayout: onLayoutProp,
             HeaderRowComponent: HeaderRowComponentProp,
+            flatListRef,
             ...restScrollViewProps
         } = props;
 
@@ -79,6 +58,7 @@ const DataTablePresentationComponent = memo(
             windowSize = defaultProps.windowSize,
             maxToRenderPerBatch = defaultProps.maxToRenderPerBatch,
             keyExtractor: keyExtractorProp = defaultProps.keyExtractor,
+            viewabilityConfigCallbackPairs: viewabilityConfigCallbackPairsProp = [],
             ...vProps
         } = { ...defaultProps, ...verticalScrollProps };
 
@@ -87,7 +67,7 @@ const DataTablePresentationComponent = memo(
 
         const containerWidth = useDataTable(store => store.containerWidth);
 
-        const { store, set: setStore } = useStoreRef();
+        const { set: setStore } = useStoreRef();
         const { set: setDataTableStore } = useDataTableStoreRef();
 
         const HeaderRowComponent = HeaderRowComponentProp || DataTableHeaderRow;
@@ -102,28 +82,23 @@ const DataTablePresentationComponent = memo(
 
         const onScroll = useCallback(
             (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-                setStore(() => ({
+                setStore(prev => ({
                     x: e.nativeEvent.contentOffset.x,
-                    scrollXVelocity: e.nativeEvent.contentOffset.x - store.current.x,
+                    scrollXVelocity: e.nativeEvent.contentOffset.x - prev.x,
                 }));
-            },
-            [setStore, store],
-        );
-
-        const onFlatListScroll = useCallback(
-            (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-                setStore(() => ({ y: e.nativeEvent.contentOffset.y }));
             },
             [setStore],
         );
 
-        const onViewableItemsChanged = useCallback(
-            ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-                setStore(() => ({
-                    viewItemIds: viewableItems.map(item => item.item),
-                }));
-            },
-            [setStore],
+        // const onFlatListScroll = useCallback(
+        //     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        //         setStore(() => ({ y: e.nativeEvent.contentOffset.y }));
+        //     },
+        //     [setStore],
+        // );
+
+        const viewabilityConfigCallbackPairs = useViewabilityConfigCallbackPairs(
+            viewabilityConfigCallbackPairsProp,
         );
 
         const onLayout = useCallback(
@@ -149,6 +124,7 @@ const DataTablePresentationComponent = memo(
                 style={hStyle}>
                 {!!containerWidth && (
                     <FlatListComponent
+                        ref={flatListRef}
                         {...vProps}
                         data={records}
                         windowSize={windowSize}
@@ -158,8 +134,7 @@ const DataTablePresentationComponent = memo(
                         keyExtractor={keyExtractorProp}
                         renderItem={renderRow}
                         stickyHeaderIndices={stickyHeaderIndices}
-                        onScroll={onFlatListScroll}
-                        onViewableItemsChanged={onViewableItemsChanged}
+                        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
                     />
                 )}
             </ScrollViewComponent>
@@ -209,6 +184,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 columnWidths,
                 useRowRenderer,
                 CellWrapperComponent,
+                horizontalOffset,
                 ...rest
             } = props;
 
@@ -229,6 +205,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 columnWidths,
                 useRowRenderer,
                 CellWrapperComponent,
+                horizontalOffset,
             };
 
             return (

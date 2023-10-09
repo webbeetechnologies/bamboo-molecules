@@ -35,6 +35,7 @@ type DataTableContextType = Pick<
         | 'rowSize'
         | 'useRowRenderer'
         | 'CellWrapperComponent'
+        | 'horizontalOffset'
     > & {
         tableWidth: number;
         containerWidth?: number;
@@ -51,7 +52,7 @@ export const {
     useContextValue: useDataTable,
     Provider: DataTableProvider,
     useStoreRef: useDataTableStoreRef,
-} = createFastContext<DataTableContextType>(true);
+} = createFastContext<DataTableContextType>(null, true);
 /**
  *
  * Context for all the Components: ScrollView, FlatList, renderHeader and renderCell.
@@ -76,26 +77,52 @@ export const useDataTableComponent = <
  */
 // TODO: Add event handlers here
 type DataTableRowContextType = { row: TDataTableRow; rowIndex: number; hovered: boolean };
-export const DataTableRowContext = createContext<DataTableRowContextType | null>(null);
-export const useDataTableRow = () =>
-    useInvariant(
-        useContext(DataTableRowContext),
-        'Trying to read DataTableRow context outside the provider',
-    );
+export const {
+    useContextValue: useDataTableRow,
+    useStoreRef: useDataTableRowRef,
+    Provider: DataTableContextRowProvider,
+} = createFastContext<DataTableRowContextType>({} as DataTableRowContextType, true);
+
+// export const useDataTableRow = () =>
+//     useInvariant(
+//         useContext(DataTableRowContext),
+//         'Trying to read DataTableRow context outside the provider',
+//     );
 
 /**
  * Context to store row selections and actions
  * also adds event handlers
  */
 // TODO: Add event handlers here
-type DataTableCellContextType = Omit<DataTableRowContextType, 'hovered'> & {
+export type DataTableCellContextType = Omit<DataTableRowContextType, 'hovered'> & {
     column: TDataTableColumn;
     columnIndex: number;
+    isLast: boolean;
 };
 export const DataTableCellContext = createContext<DataTableCellContextType | null>(null);
 export const useDataTableCell = () =>
     useInvariant(
         useContext(DataTableCellContext),
+        'Trying to read DataTableCell context outside the provider',
+    );
+
+/**
+ * Context to store row selections and actions
+ * also adds event handlers
+ */
+
+export type DataTableHeaderCellContextType = {
+    column: TDataTableColumn;
+    columnIndex: number;
+    isFirst: boolean;
+    isLast: boolean;
+};
+export const DataTableHeaderCellContext = createContext<DataTableHeaderCellContextType | null>(
+    null,
+);
+export const useDataTableHeaderCell = () =>
+    useInvariant(
+        useContext(DataTableHeaderCellContext),
         'Trying to read DataTableCell context outside the provider',
     );
 

@@ -9,4 +9,5 @@ export const NumberFieldType: FieldType<Value> = {
     icon: 'pound',
     EditorRenderer,
     ValueRenderer,
+    toggleRenderersWithKeyPress: true,
 };

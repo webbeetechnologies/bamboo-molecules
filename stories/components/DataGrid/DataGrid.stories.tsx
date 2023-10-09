@@ -1,10 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import {
-    Example,
-    ExampleHorizontalVirtualization,
-    ExampleHorizontalVirtualizationWithGroups,
-} from './DataGrid';
+import { Example, ExampleHorizontalVirtualization } from './DataGrid';
+import { groups } from './mocks';
 
 export default {
     title: 'components/DataGrid',
@@ -44,10 +41,12 @@ HorizontalVirtualization.parameters = {
 };
 
 export const HorizontalVirtualizationWithGroups: ComponentStory<
-    typeof ExampleHorizontalVirtualizationWithGroups
-> = () => <ExampleHorizontalVirtualizationWithGroups />;
+    typeof ExampleHorizontalVirtualization
+> = props => <ExampleHorizontalVirtualization {...props} />;
 
-HorizontalVirtualizationWithGroups.args = {};
+HorizontalVirtualizationWithGroups.args = {
+    groups: groups.slice(2),
+};
 
 HorizontalVirtualizationWithGroups.parameters = {
     docs: {

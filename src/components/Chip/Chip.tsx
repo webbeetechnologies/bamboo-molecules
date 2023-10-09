@@ -1,17 +1,15 @@
-import { forwardRef, memo, PropsWithoutRef, ReactNode, useMemo } from 'react';
+import { forwardRef, memo, PropsWithoutRef, ReactNode, useImperativeHandle, useMemo } from 'react';
 import type { GestureResponderEvent, TextStyle, ViewStyle } from 'react-native';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 
 import type { MD3Elevation } from '../../core/theme/types';
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { useActionState, useComponentStyles, useMolecules } from '../../hooks';
 import type { WithElements } from '../../types';
-import { CallbackActionState, withActionState } from '../../hocs';
 import type { TouchableRippleProps } from '../TouchableRipple';
 import type { IconButtonProps } from '../IconButton';
 import type { ActivityIndicatorProps } from '../ActivityIndicator';
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
-    CallbackActionState &
     WithElements<ReactNode> & {
         /**
          * label of the chip
@@ -102,6 +100,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          */
         stateLayerProps?: PropsWithoutRef<ViewProps>;
         testID?: string;
+        containerProps?: Omit<PropsWithoutRef<ViewProps>, 'style'>;
     };
 
 const Chip = (
@@ -113,7 +112,6 @@ const Chip = (
         variant = 'outlined',
         size = 'md',
         disabled,
-        hovered = false,
         elevation: elevationProp = 1,
         left,
         right,
@@ -130,11 +128,15 @@ const Chip = (
         selectionBackgroundColor: selectionBackgroundColorProp,
         stateLayerProps = {},
         testID = 'chip',
+        containerProps,
         ...rest
     }: Props,
     ref: any,
 ) => {
     const { Surface, TouchableRipple, Text, StateLayer } = useMolecules();
+
+    const { hovered, actionsRef } = useActionState();
+
     const componentStyles = useComponentStyles(
         'Chip',
         [
@@ -211,8 +213,10 @@ const Chip = (
         [disabled, elevationProp, selected, variant],
     );
 
+    useImperativeHandle(ref, () => actionsRef.current);
+
     return (
-        <Surface elevation={elevation} style={containerStyle}>
+        <Surface {...containerProps} elevation={elevation} style={containerStyle}>
             <TouchableRipple
                 borderless
                 {...rest}
@@ -221,7 +225,7 @@ const Chip = (
                 accessibilityLabel={accessibilityLabel}
                 accessibilityRole="button"
                 accessibilityState={accessibilityState}
-                ref={ref}
+                ref={actionsRef}
                 testID={testID}>
                 <>
                     <LeftElement
@@ -325,4 +329,4 @@ const RightElement = memo(
     },
 );
 
-export default memo(withActionState(forwardRef(Chip)));
+export default memo(forwardRef(Chip));

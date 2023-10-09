@@ -11,6 +11,7 @@ type CustomProps = {
     labelText?: TextStyle;
     labelTextAddons?: TextStyle;
     stateLayer?: ViewStyle;
+    elevationLevel?: string;
 };
 
 type CustomSizeProps = {
@@ -91,6 +92,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
             color: 'colors.primary',
             borderColor: 'colors.outline',
             borderWidth: 1,
+            elevationLevel: 'elevations.level0',
 
             states: {
                 disabled: {
@@ -98,13 +100,14 @@ export const defaultStyles: ComponentStylePropWithVariants<
                     borderColor: 'colors.stateLayer.disabled.onSurface',
                 },
                 hovered: {
-                    backgroundColor: 'colors.primaryContainerOnHover',
+                    backgroundColor: 'colors.stateLayer.hover.primary',
                 },
             },
         },
         text: {
             backgroundColor: 'transparent',
             color: 'colors.primary',
+            elevationLevel: 'elevations.level0',
 
             states: {
                 disabled: {
@@ -120,6 +123,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
         contained: {
             backgroundColor: 'colors.primary',
             color: 'colors.onPrimary',
+            elevationLevel: 'elevations.level0',
 
             states: {
                 disabled: {
@@ -130,12 +134,14 @@ export const defaultStyles: ComponentStylePropWithVariants<
                     stateLayer: {
                         backgroundColor: 'colors.stateLayer.hover.onPrimary',
                     },
+                    elevationLevel: 'elevations.level1',
                 },
             },
         },
         elevated: {
             backgroundColor: 'colors.elevation.level1',
             color: 'colors.primary',
+            elevationLevel: 'elevations.level1',
 
             states: {
                 disabled: {
@@ -146,12 +152,14 @@ export const defaultStyles: ComponentStylePropWithVariants<
                     stateLayer: {
                         backgroundColor: 'colors.stateLayer.hover.primary',
                     },
+                    elevationLevel: 'elevations.level2',
                 },
             },
         },
         'contained-tonal': {
             backgroundColor: 'colors.secondaryContainer',
             color: 'colors.onSecondaryContainer',
+            elevationLevel: 'elevations.level0',
 
             states: {
                 disabled: {
@@ -162,6 +170,7 @@ export const defaultStyles: ComponentStylePropWithVariants<
                     stateLayer: {
                         backgroundColor: 'colors.stateLayer.hover.onSecondaryContainer',
                     },
+                    elevationLevel: 'elevations.level1',
                 },
             },
         },

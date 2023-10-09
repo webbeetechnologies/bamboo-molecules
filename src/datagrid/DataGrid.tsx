@@ -1,42 +1,55 @@
-import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
-import { StyleSheet } from 'react-native';
-import { typedMemo } from '@bambooapp/bamboo-molecules';
+import { isMac, typedMemo, useLatest } from '@bambooapp/bamboo-molecules';
 import type {
-    TDataTableColumn,
-    TDataTableRow,
     DataTableProps,
     MenuProps,
     RenderCellProps,
     RenderHeaderCellProps,
+    TDataTableColumn,
+    TDataTableRow,
 } from '@bambooapp/bamboo-molecules/components';
+import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
+import { Platform, StyleSheet } from 'react-native';
+import {
+    getPressedModifierKeys,
+    ShortcutsManager,
+    useSetScopes,
+} from '@bambooapp/bamboo-molecules/shortcuts-manager';
 
-import { useMolecules } from '../hooks';
+import { useMolecules, useToken } from '../hooks';
+import {
+    CellRenderer,
+    CellWrapperComponent,
+    ColumnHeaderCell,
+    ContextMenu,
+    RowWrapperComponent,
+    TableHeaderRow,
+} from './components';
 import {
     FieldTypesProvider,
-    TableManagerProvider,
-    useTableManagerStoreRef,
     HooksContextType,
     HooksProvider,
+    TableManagerProvider,
     useRowRenderer,
     useShouldContextMenuDisplayed,
+    useTableManagerStoreRef,
 } from './contexts';
-import PluginsManager from './plugins/plugins-manager';
-import { useCellSelectionMethods, useCellSelectionPlugin, Plugin } from './plugins';
-import {
-    ContextMenu,
-    ColumnHeaderCell,
-    CellRenderer,
-    TableHeaderRow,
-    CellWrapperComponent,
-    RowWrapperComponent,
-} from './components';
-import { useContextMenu } from './hooks';
-import type { FieldTypes } from './types';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
-import { RecordWithId, prepareGroupedData } from './utils';
-
+import { useContextMenu } from './hooks';
+import {
+    CELL_FOCUS_PLUGIN_KEY,
+    Plugin,
+    useCellFocusPlugin,
+    useCellSelectionPlugin,
+    // TODO: Revisit collapse
+    // useExpandCollapseGroupsMethods,
+    usePluginsDataStoreRef,
+} from './plugins';
+import PluginsManager from './plugins/plugins-manager';
+import type { FieldTypes } from './types';
+import { GroupedData, addDataToCallbackPairs, getRowIds } from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
+import { isSpaceKey } from '../shortcuts-manager/utils';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -55,10 +68,12 @@ type DataGridPropsBase = Omit<
         groups?: TDataTableColumn[];
     };
 
-export type Props = DataGridPropsBase &
+export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
     HooksContextType & {
         fieldTypes?: FieldTypes;
-        records: RecordWithId[];
+        records: GroupedData[];
+        spacerWidth?: string | number;
+        focusIgnoredColumns?: TDataTableColumn[];
     };
 
 export type ContextMenuProps = Partial<MenuProps> & {
@@ -96,16 +111,18 @@ const DataGrid = ({
     const { DataTable } = useMolecules();
 
     const { store } = useTableManagerStoreRef();
+    const { store: pluginsDataStore } = usePluginsDataStoreRef();
+
+    const setScopes = useSetScopes();
 
     const { handleContextMenuOpen, isOpen, onClose, ...restContextMenuProps } =
         contextMenuProps || (emptyObj as ContextMenuProps);
 
     const shouldContextMenuDisplayed = useShouldContextMenuDisplayed();
-    const { useResetSelectionOnClickOutside } = useCellSelectionMethods();
 
-    const dataRef = useRef<{ records: TDataTableRow[]; columns: TDataTableColumn[] }>({
-        records: [],
-        columns: [],
+    const dataRef = useLatest<{ records: TDataTableRow[]; columns: TDataTableColumn[] }>({
+        records,
+        columns: columnIds,
     });
 
     const cellProps = useMemo(
@@ -138,20 +155,26 @@ const DataGrid = ({
     );
 
     const verticalScrollProps = useMemo(
-        () => ({
-            ..._verticalScrollProps,
-            CellRendererComponent: RowWrapperComponent,
-        }),
-        [_verticalScrollProps],
+        () =>
+            addDataToCallbackPairs(store, {
+                ..._verticalScrollProps,
+                CellRendererComponent: RowWrapperComponent,
+            }),
+        [store, _verticalScrollProps],
     );
 
     const onContextMenuOpen = useCallback(
         (e: any) => {
             e.preventDefault();
 
-            if (!shouldContextMenuDisplayed || !store.current.focusedCell) return;
+            if (
+                !shouldContextMenuDisplayed ||
+                !pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell
+            )
+                return;
 
-            const { type, rowIndex, columnIndex } = store.current.focusedCell;
+            const { type, rowIndex, columnIndex } =
+                pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
             const rowId = rowIndex !== undefined ? dataRef.current.records[rowIndex] : undefined;
             const columnId =
                 columnIndex !== undefined ? dataRef.current.records[columnIndex] : undefined;
@@ -166,25 +189,30 @@ const DataGrid = ({
                 },
             });
         },
-        [handleContextMenuOpen, shouldContextMenuDisplayed, store],
+        [dataRef, handleContextMenuOpen, pluginsDataStore, shouldContextMenuDisplayed],
     );
 
     useEffect(() => {
-        dataRef.current = {
-            records,
-            columns: columnIds,
-        };
-    }, [columnIds, records]);
+        if (Platform.OS !== 'web') return;
+
+        setScopes([
+            {
+                name: 'datagrid',
+                node: document.querySelector('[data-id="datagrid"]'),
+            },
+        ]);
+    }, [setScopes]);
 
     // TODO - move this to plugins
     useContextMenu({ ref: store.current.tableRef, callback: onContextMenuOpen });
-
-    useResetSelectionOnClickOutside();
 
     return (
         <>
             <DataTable
                 ref={store.current.tableRef}
+                flatListRef={store.current.tableFlatListRef}
+                // @ts-ignore
+                dataSet={dataSet}
                 testID="datagrid"
                 renderHeader={renderHeader}
                 renderCell={renderCell}
@@ -215,18 +243,12 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         fieldTypes = DefaultFieldTypes as FieldTypes,
         useField,
         useCellValue,
-        contextMenuProps,
         plugins: _plugins,
-        records,
-        groups,
         useRowRenderer: useRowRendererProp = useRowRendererDefault,
         useGroupRowState: useGroupRowStateProp,
         useShowGroupFooter: useShowGroupFooterProp,
-
         ...rest
     }: Props) => {
-        const ref = useRef(null);
-
         const hooksContextValue = useRef({
             useField,
             useCellValue,
@@ -236,37 +258,125 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
         }).current;
 
         const selectionPlugin = useCellSelectionPlugin({});
+        const cellFocusPlugin = useCellFocusPlugin({});
 
         const plugins = useMemo(
-            () => [...(_plugins || []), selectionPlugin],
-            [_plugins, selectionPlugin],
+            () => [selectionPlugin, cellFocusPlugin, ...(_plugins || [])],
+            [_plugins, cellFocusPlugin, selectionPlugin],
         );
 
-        const { groupedRecords, rowIds } = useMemo(
-            () => prepareGroupedData(records, groups),
-            [records, groups],
-        );
+        const isMacRef = useRef(isMac());
+        const shortcuts = useRef([
+            {
+                name: 'move-cell-focus',
+                keys: [
+                    'ArrowLeft',
+                    'ArrowRight',
+                    'ArrowUp',
+                    'ArrowDown',
+                    'Tab',
+                    ['Shift', 'Tab'],
+                    isMacRef.current ? ['meta', 'ArrowLeft'] : ['control', 'ArrowLeft'],
+                    isMacRef.current ? ['meta', 'ArrowRight'] : ['control', 'ArrowRight'],
+                    isMacRef.current ? ['meta', 'ArrowUp'] : ['control', 'ArrowUp'],
+                    isMacRef.current ? ['meta', 'ArrowDown'] : ['control', 'ArrowDown'],
+                ],
+                preventDefault: true,
+            },
+            {
+                name: 'move-cell-selection',
+                keys: [
+                    ['Shift', 'ArrowLeft'],
+                    ['Shift', 'ArrowRight'],
+                    ['Shift', 'ArrowUp'],
+                    ['Shift', 'ArrowDown'],
+                ],
+                preventDefault: true,
+            },
+            {
+                name: 'clear-cell-focus',
+                keys: ['Escape'],
+            },
+            {
+                name: 'edit-cell',
+                keys: ['Enter'],
+            },
+            {
+                name: 'cell-start-editing',
+                // doesn't matter what the key is
+                keys: ['*'],
+                matcher: (e: KeyboardEvent) => {
+                    const modifiers = getPressedModifierKeys(e);
+
+                    return (
+                        !isSpaceKey(e.key) &&
+                        e.key.length === 1 &&
+                        (modifiers.includes('shift') ? modifiers.length === 1 : !modifiers.length)
+                    );
+                },
+                preventDefault: true,
+            },
+        ]).current;
 
         return (
             <FieldTypesProvider value={fieldTypes}>
                 <HooksProvider value={hooksContextValue}>
-                    <TableManagerProvider
-                        tableRef={ref}
-                        records={groupedRecords}
-                        withContextMenu={!!contextMenuProps}>
+                    <ShortcutsManager shortcuts={shortcuts}>
                         <PluginsManager plugins={plugins}>
-                            {/* @ts-ignore - we don't want to pass down unnecessary props */}
-                            <Component
-                                {...rest}
-                                records={rowIds}
-                                contextMenuProps={contextMenuProps}
-                            />
+                            <TableManagerProviderWrapper Component={Component} {...rest} />
                         </PluginsManager>
-                    </TableManagerProvider>
+                    </ShortcutsManager>
                 </HooksProvider>
             </FieldTypesProvider>
         );
     };
+};
+
+const dataSet = { id: 'datagrid' };
+
+// TODO: Revisit collapse
+// const defaultExpandCollapseMethods = { useCollapsedGroupIds: () => [] };
+
+const TableManagerProviderWrapper = ({
+    records,
+    groups,
+    contextMenuProps,
+    spacerWidth: spacerWidthProp = 'spacings.3',
+    Component,
+    focusIgnoredColumns,
+    ...rest
+}: Omit<Props, 'useField' | 'useCellValue'> & {
+    Component: ComponentType<DataGridPresentationProps>;
+}) => {
+    const ref = useRef(null);
+    // TODO: Revisit collapse
+    // in case expanse collapse plugins in not defined
+    // const { useCollapsedGroupIds } =
+    //     useExpandCollapseGroupsMethods() || defaultExpandCollapseMethods;
+
+    // const collapsedGroupIds = useCollapsedGroupIds();
+
+    const rowIds = useMemo(() => getRowIds(records), [records]);
+    const spacerWidth = useToken(spacerWidthProp as string) ?? spacerWidthProp;
+
+    const offsetWidth = (groups?.length ?? 0) * spacerWidth;
+
+    return (
+        <TableManagerProvider
+            tableRef={ref}
+            spacerWidth={spacerWidth}
+            records={records}
+            withContextMenu={!!contextMenuProps}
+            focusIgnoredColumns={focusIgnoredColumns}>
+            {/* @ts-ignore - we don't want to pass down unnecessary props */}
+            <Component
+                {...rest}
+                records={rowIds}
+                horizontalOffset={offsetWidth}
+                contextMenuProps={contextMenuProps}
+            />
+        </TableManagerProvider>
+    );
 };
 
 const defaultHorizontalScrollProps = { contentContainerStyle: { flexGrow: 1 } };

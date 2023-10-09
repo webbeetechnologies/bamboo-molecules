@@ -1,8 +1,7 @@
 import { memo, useMemo } from 'react';
 import { DataCellProps, useDataTableCell } from '@bambooapp/bamboo-molecules/components';
 import { useMolecules } from '@bambooapp/bamboo-molecules';
-import { useIsCellFocused } from '../../contexts';
-import { useDragAndExtendMethods } from '../../plugins';
+import { useCellFocusMethods, useDragAndExtendMethods } from '../../plugins';
 
 const emptyObj = {};
 const useBoolean = () => false;
@@ -10,10 +9,11 @@ const useBoolean = () => false;
 // TODO - inject this to Provider
 const CellWrapperComponent = ({ style, ...rest }: DataCellProps) => {
     const { View } = useMolecules();
-    const { rowIndex, columnIndex } = useDataTableCell();
+    const { row, column, rowIndex, columnIndex } = useDataTableCell();
     const { useIsDragHandleVisible = useBoolean } = useDragAndExtendMethods() || emptyObj;
+    const { useIsCellFocused } = useCellFocusMethods();
 
-    const [isFocused] = useIsCellFocused(rowIndex, columnIndex)!;
+    const { isFocused } = useIsCellFocused(row, column)!;
     const isVisible = useIsDragHandleVisible({ columnIndex, rowIndex, isFocused });
 
     const cellRendererStyle = useMemo(
@@ -23,5 +23,6 @@ const CellWrapperComponent = ({ style, ...rest }: DataCellProps) => {
 
     return <View style={cellRendererStyle} {...rest} />;
 };
+CellWrapperComponent.displayName = 'DataGridCellWrapperComponent';
 
 export default memo(CellWrapperComponent);
