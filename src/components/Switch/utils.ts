@@ -9,7 +9,7 @@ type CustomStyleProp = {
     icon?: TextStyle;
 };
 
-export const newSwitchStyles: ComponentStylePropWithVariants<
+export const switchStyles: ComponentStylePropWithVariants<
     ViewStyle,
     | 'selected'
     | 'selected_disabled'

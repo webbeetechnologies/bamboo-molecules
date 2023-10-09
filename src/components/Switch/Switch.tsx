@@ -22,7 +22,7 @@ const Switch = ({
     const { Icon, TouchableRipple, View } = useMolecules();
     const { actionsRef, focused, hovered, pressed } = useActionState();
 
-    const componentStyles = useComponentStyles('NewSwitch', style, {
+    const componentStyles = useComponentStyles('Switch', style, {
         states: {
             selected: !!value && !hovered && !focused && !pressed,
             selected_disabled: !!value && !!disabled,

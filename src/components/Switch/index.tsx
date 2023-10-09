@@ -1,2 +1,2 @@
 export { default as Switch, ToggleProps as SwitchProps } from './Switch';
-export { newSwitchStyles } from './utils';
+export { switchStyles as defaultSwitchStyles } from './utils';
