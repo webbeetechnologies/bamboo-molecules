@@ -67,7 +67,7 @@ const Switch = ({
                 : !value && unCheckedIcon
                 ? size * 0.04
                 : size * 0.2,
-            size * 1.08,
+            pressed ? size * 0.74 : size * 0.81,
         ],
     });
 
@@ -77,9 +77,9 @@ const Switch = ({
             !value && !pressed && !unCheckedIcon
                 ? size * 0.5
                 : value || unCheckedIcon
-                ? size * 0.8
-                : size,
-            pressed && !value ? size : pressed && value ? size * 0.85 : size * 0.8,
+                ? size * 0.74
+                : size * 0.81,
+            pressed && !value ? size : pressed && value ? size * 0.81 : size * 0.64,
         ],
     });
 
@@ -107,15 +107,17 @@ const Switch = ({
         () => ({
             position: 'absolute',
             left:
-                value || unCheckedIcon
-                    ? size * -0.18
+                value && pressed
+                    ? size * -0.21
+                    : value || unCheckedIcon
+                    ? size * -0.28
                     : !unCheckedIcon && !pressed
-                    ? size * -0.3
-                    : size * -0.1,
+                    ? size * -0.36
+                    : size * -0.16,
             right: 0,
             height: size * 1.2,
             width: size * 1.2,
-            borderRadius: (size * 1.1) / 2,
+            borderRadius: (size * 1.2) / 2,
             backgroundColor: pressed
                 ? 'rgba(0, 0, 0, 0.15)'
                 : focused
@@ -143,9 +145,11 @@ const Switch = ({
                     color && { backgroundColor: color },
                     {
                         height: size,
-                        width: size * 2,
-                        borderRadius: size / 2,
+                        width: size * 1.62,
+                        borderRadius: size / 1.62,
+                        borderWidth: Math.floor(size * 0.095),
                     },
+                    value && { borderWidth: 0 },
                 ],
                 toggleWheelStyle: [
                     toggleWheel,

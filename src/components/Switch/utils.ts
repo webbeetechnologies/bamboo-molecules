@@ -26,7 +26,6 @@ export const switchStyles: ComponentStylePropWithVariants<
 
     toggle: {
         justifyContent: 'center',
-        borderWidth: 2,
         backgroundColor: 'colors.surfaceContainerHighest',
         borderColor: 'colors.outline',
     },
@@ -104,6 +103,21 @@ export const switchStyles: ComponentStylePropWithVariants<
             },
             icon: {
                 color: 'colors.onPrimaryContainer',
+            },
+        },
+        pressed: {
+            toggleWheel: {
+                backgroundColor: 'colors.onSurfaceVariant',
+            },
+        },
+        hovered: {
+            toggleWheel: {
+                backgroundColor: 'colors.onSurfaceVariant',
+            },
+        },
+        focused: {
+            toggleWheel: {
+                backgroundColor: 'colors.onSurfaceVariant',
             },
         },
     },
