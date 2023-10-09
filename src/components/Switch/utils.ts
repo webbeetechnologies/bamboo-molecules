@@ -13,6 +13,7 @@ export const switchStyles: ComponentStylePropWithVariants<
     ViewStyle,
     | 'selected'
     | 'selected_disabled'
+    | 'selected_pressed'
     | 'disabled'
     | 'hovered'
     | 'focused'
@@ -20,11 +21,8 @@ export const switchStyles: ComponentStylePropWithVariants<
     | 'selected_hovered',
     CustomStyleProp
 > = {
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    button: {},
+    container: {},
+    button: { flexDirection: 'row', alignItems: 'center' },
 
     toggle: {
         justifyContent: 'center',
@@ -94,6 +92,18 @@ export const switchStyles: ComponentStylePropWithVariants<
             icon: {
                 color: 'colors.onSurface',
                 opacity: 0.38,
+            },
+        },
+        selected_pressed: {
+            toggle: {
+                borderWidth: 0,
+                backgroundColor: 'colors.primary',
+            },
+            toggleWheel: {
+                backgroundColor: 'colors.primaryContainer',
+            },
+            icon: {
+                color: 'colors.onPrimaryContainer',
             },
         },
     },

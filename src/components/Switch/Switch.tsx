@@ -1,5 +1,5 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
-import { Animated, Easing, SwitchProps } from 'react-native';
+import { Animated, Easing, Pressable, SwitchProps } from 'react-native';
 import { useActionState, useComponentStyles, useMolecules } from '../../hooks';
 
 export type ToggleProps = SwitchProps & {
@@ -19,20 +19,20 @@ const Switch = ({
     unCheckedIcon,
     style,
 }: ToggleProps) => {
-    const { Icon, TouchableRipple, View } = useMolecules();
+    const { Icon, View } = useMolecules();
     const { actionsRef, focused, hovered, pressed } = useActionState();
 
     const componentStyles = useComponentStyles('Switch', style, {
         states: {
-            selected: !!value && !hovered && !focused && !pressed,
+            selected_hovered: !!value && !!hovered,
             selected_disabled: !!value && !!disabled,
+            selected_pressed: !!value && !!pressed,
+            selected_focused: !!value && !!focused,
+            selected: !!value,
             disabled: !!disabled,
             hovered: !!hovered,
-            selected_hovered: !!value && !!hovered,
             focused: !!focused,
-            selected_focused: !!value && !!focused,
-            pressed: !!hovered && !!pressed,
-            selected_pressed: !!value && !!pressed,
+            pressed: !!pressed,
         },
     });
     const toggleMarginAnimation = useRef(new Animated.Value(value ? 0 : 1)).current;
@@ -40,14 +40,14 @@ const Switch = ({
 
     const moveToggle = toggleMarginAnimation.interpolate({
         inputRange: [0, 1],
-        outputRange: [size * 0.05, size * 1.08],
+        outputRange: [!value && pressed ? 0 : size * 0.05, size * 1.08],
     });
 
     const toggleSize = toggleSizeAnimation.interpolate({
         inputRange: [0, 1],
         outputRange: [
-            !value && !pressed && !unCheckedIcon ? size * 0.5 : size * 0.8,
-            pressed ? size * 0.85 : size * 0.8,
+            !value && !pressed && !unCheckedIcon ? size * 0.5 : value ? size * 0.8 : size,
+            pressed && !value ? size * 1 : pressed && value ? size * 0.85 : size * 0.8,
         ],
     });
 
@@ -74,9 +74,9 @@ const Switch = ({
     const thumbOverlay = useMemo(
         () => ({
             position: 'absolute',
-            left: value ? size * -0.08 : size * -0.12,
-            height: size * 1.1,
-            width: size * 1.1,
+            left: value ? size * -0.18 : !value && pressed ? size * -0.1 : size * -0.15,
+            height: size * 1.2,
+            width: size * 1.2,
             borderRadius: (size * 1.1) / 2,
             backgroundColor: pressed
                 ? 'rgba(0, 0, 0, 0.15)'
@@ -88,60 +88,58 @@ const Switch = ({
         [focused, hovered, pressed, size, value],
     );
 
-    const { containerStyle, buttonStyle, toggleStyle, toggleWheelStyle, overlayStyle, iconStyle } =
-        useMemo(() => {
-            const { container, button, toggle, toggleWheel, icon } = componentStyles;
-            return {
-                containerStyle: container,
-                buttonStyle: [button, size && { borderRadius: size / 2 }],
-                toggleStyle: [
-                    toggle,
-                    color && { backgroundColor: color },
-                    {
-                        height: size,
-                        width: size * 2,
-                        borderRadius: size / 2,
+    const { buttonStyle, toggleStyle, toggleWheelStyle, overlayStyle, iconStyle } = useMemo(() => {
+        const { button, toggle, toggleWheel, icon } = componentStyles;
+        return {
+            buttonStyle: [button, size && { borderRadius: size / 2 }],
+            toggleStyle: [
+                toggle,
+                color && { backgroundColor: color },
+                {
+                    height: size,
+                    width: size * 2,
+                    borderRadius: size / 2,
+                },
+            ],
+            toggleWheelStyle: [
+                toggleWheel,
+                {
+                    marginLeft: moveToggle,
+                    width: toggleSize,
+                    height: toggleSize,
+                    borderRadius: (size * 0.8) / 2,
+                },
+                thumbColor && { backgroundColor: thumbColor },
+                !value &&
+                    !unCheckedIcon &&
+                    !pressed && {
+                        borderRadius: (size * 0.5) / 2,
                     },
-                ],
-                toggleWheelStyle: [
-                    toggleWheel,
-                    {
-                        marginLeft: moveToggle,
-                        width: toggleSize,
-                        height: toggleSize,
-                        borderRadius: (size * 0.8) / 2,
-                    },
-                    thumbColor && { backgroundColor: thumbColor },
-                    !value &&
-                        !unCheckedIcon &&
-                        !pressed && {
-                            borderRadius: (size * 0.5) / 2,
-                        },
-                    pressed && {
-                        borderRadius: (size * 0.85) / 2,
-                    },
-                ],
-                overlayStyle: [
-                    toggleWheel,
-                    {
-                        marginLeft: moveToggle,
-                    },
-                    thumbOverlay,
-                ],
-                iconStyle: icon,
-            };
-        }, [
-            componentStyles,
-            size,
-            color,
-            moveToggle,
-            toggleSize,
-            thumbColor,
-            value,
-            unCheckedIcon,
-            pressed,
-            thumbOverlay,
-        ]);
+                pressed && {
+                    borderRadius: (size * (!value ? 1 : 0.85)) / 2,
+                },
+            ],
+            overlayStyle: [
+                toggleWheel,
+                {
+                    marginLeft: moveToggle,
+                },
+                thumbOverlay,
+            ],
+            iconStyle: icon,
+        };
+    }, [
+        componentStyles,
+        size,
+        color,
+        moveToggle,
+        toggleSize,
+        thumbColor,
+        value,
+        unCheckedIcon,
+        pressed,
+        thumbOverlay,
+    ]);
 
     const handleValueChange = useCallback(() => {
         onValueChange && onValueChange(!value);
@@ -166,17 +164,15 @@ const Switch = ({
     );
 
     return (
-        <View ref={actionsRef} style={containerStyle}>
-            <TouchableRipple style={buttonStyle} onPress={handleValueChange} disabled={disabled}>
-                <View style={toggleStyle}>
-                    <Animated.View style={overlayStyle} />
-                    <Animated.View style={toggleWheelStyle}>
-                        {onIconComponent}
-                        {!disabled && offIconComponent}
-                    </Animated.View>
-                </View>
-            </TouchableRipple>
-        </View>
+        <Pressable ref={actionsRef} style={buttonStyle} onPress={handleValueChange}>
+            <View style={toggleStyle}>
+                <Animated.View style={overlayStyle} />
+                <Animated.View style={toggleWheelStyle}>
+                    {onIconComponent}
+                    {!disabled && offIconComponent}
+                </Animated.View>
+            </View>
+        </Pressable>
     );
 };
 
