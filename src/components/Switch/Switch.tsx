@@ -78,7 +78,7 @@ const Switch = ({
                 ? size * 0.5
                 : value || unCheckedIcon
                 ? size * 0.74
-                : size * 0.81,
+                : size * 0.84,
             pressed && !value ? size : pressed && value ? size * 0.81 : size * 0.64,
         ],
     });
@@ -157,7 +157,7 @@ const Switch = ({
                         marginLeft: moveToggle,
                         width: toggleSize,
                         height: toggleSize,
-                        borderRadius: (size * 0.8) / 2,
+                        borderRadius: (size * 0.84) / 2,
                     },
                     thumbColor && { backgroundColor: thumbColor },
                     !value &&
