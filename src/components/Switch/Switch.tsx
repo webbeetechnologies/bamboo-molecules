@@ -6,7 +6,26 @@ export type ToggleProps = SwitchProps & {
     checkedIcon?: string;
     unCheckedIcon?: string;
     size?: number;
+    checkedIconType?: IconType;
+    uncheckedIconType?: IconType;
 };
+
+type IconType =
+    | 'material'
+    | 'material-community'
+    | 'simple-line-icon'
+    | 'zocial'
+    | 'font-awesome'
+    | 'octicon'
+    | 'ionicon'
+    | 'feather'
+    | 'fontisto'
+    | 'foundation'
+    | 'evilicon'
+    | 'entypo'
+    | 'antdesign'
+    | 'font-awesome-5'
+    | undefined;
 
 const Switch = ({
     trackColor,
@@ -18,6 +37,8 @@ const Switch = ({
     checkedIcon,
     unCheckedIcon,
     style,
+    checkedIconType,
+    uncheckedIconType,
 }: ToggleProps) => {
     const { Icon, View } = useMolecules();
     const { actionsRef, focused, hovered, pressed } = useActionState();
@@ -40,13 +61,17 @@ const Switch = ({
 
     const moveToggle = toggleMarginAnimation.interpolate({
         inputRange: [0, 1],
-        outputRange: [!value && pressed ? 0 : size * 0.05, size * 1.08],
+        outputRange: [!value && pressed && !unCheckedIcon ? 0 : size * 0.05, size * 1.08],
     });
 
     const toggleSize = toggleSizeAnimation.interpolate({
         inputRange: [0, 1],
         outputRange: [
-            !value && !pressed && !unCheckedIcon ? size * 0.5 : value ? size * 0.8 : size,
+            !value && !pressed && !unCheckedIcon
+                ? size * 0.5
+                : value || unCheckedIcon
+                ? size * 0.8
+                : size,
             pressed && !value ? size * 1 : pressed && value ? size * 0.85 : size * 0.8,
         ],
     });
@@ -74,7 +99,13 @@ const Switch = ({
     const thumbOverlay = useMemo(
         () => ({
             position: 'absolute',
-            left: value ? size * -0.18 : !value && pressed ? size * -0.1 : size * -0.15,
+            left: value
+                ? size * -0.18
+                : !value && pressed && unCheckedIcon
+                ? size * -0.2
+                : !value && pressed
+                ? size * -0.14
+                : size * -0.2,
             height: size * 1.2,
             width: size * 1.2,
             borderRadius: (size * 1.1) / 2,
@@ -85,7 +116,7 @@ const Switch = ({
                 : 'rgba(0, 0, 0, 0.05)',
             display: hovered || focused || pressed ? 'flex' : 'none',
         }),
-        [focused, hovered, pressed, size, value],
+        [focused, hovered, pressed, size, unCheckedIcon, value],
     );
 
     const { buttonStyle, toggleStyle, toggleWheelStyle, overlayStyle, iconStyle } = useMemo(() => {
@@ -146,21 +177,21 @@ const Switch = ({
     }, [value, onValueChange]);
 
     const renderIcon = useCallback(
-        (icon: string | undefined, condition: boolean) => {
+        (icon: string | undefined, condition: boolean, type?: IconType) => {
             return icon && condition ? (
-                <Icon style={iconStyle} name={icon} size={size * 0.5} />
+                <Icon style={iconStyle} name={icon} size={size * 0.5} type={type} />
             ) : null;
         },
         [Icon, iconStyle, size],
     );
 
     const onIconComponent = useMemo(
-        () => renderIcon(checkedIcon, !!value),
-        [renderIcon, checkedIcon, value],
+        () => renderIcon(checkedIcon, !!value, checkedIconType),
+        [renderIcon, checkedIcon, value, checkedIconType],
     );
     const offIconComponent = useMemo(
-        () => renderIcon(unCheckedIcon, !value),
-        [unCheckedIcon, renderIcon, value],
+        () => renderIcon(unCheckedIcon, !value, uncheckedIconType),
+        [renderIcon, unCheckedIcon, value, uncheckedIconType],
     );
 
     return (
