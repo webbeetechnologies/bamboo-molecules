@@ -29,6 +29,7 @@
     "fast-context",
     "shortcuts-manager",
     "components",
+    "virtualized-list",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
