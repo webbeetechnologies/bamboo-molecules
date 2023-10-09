@@ -48,6 +48,7 @@ export const generateLightThemeColors = (
         neutral1: palette.neutral100,
         onNeutral1: palette.neutral70,
         lines: palette.neutral90, // #E4E1E6
+        surfaceContainerHighest: palette.neutral90,
         elevation: {
             level0: 'transparent',
             // Note: Color values with transparency cause RN to transfer shadows to children nodes

@@ -52,6 +52,7 @@ const ref = {
         neutral50: 'rgba(120, 117, 121, 1)',
         neutral40: 'rgba(96, 93, 98, 1)',
         neutral30: 'rgba(72, 70, 73, 1)',
+        neutral22: 'rgba(54,52,59,1)',
         neutral20: 'rgba(49, 48, 51, 1)',
         neutral10: 'rgba(28, 27, 31, 1)',
         neutral0: 'rgba(0, 0, 0, 1)',

@@ -96,6 +96,7 @@ export type MD3Colors = {
     lines: string;
     palette: Record<string, string>;
     opacity: Record<string, number>;
+    surfaceContainerHighest: string;
 };
 
 export type MD3Shapes = {

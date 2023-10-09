@@ -1,9 +1,9 @@
 import { useToggle } from '../../../src';
-import { CustomSwitch, SwitchProps } from '../../../src/components';
+import { Switch, SwitchProps } from '../../../src/components';
 
 export type Props = SwitchProps & {
-    onIcon?: string;
-    offIcon?: string;
+    checkedIcon?: string;
+    unCheckedIcon?: string;
     size?: number;
 };
 
@@ -11,15 +11,13 @@ export const Example = (props: Props) => {
     const { state: isOn, onToggle } = useToggle();
 
     return (
-        <CustomSwitch
+        <Switch
             onValueChange={onToggle}
             value={isOn}
-            onIcon={props.onIcon}
-            offIcon={props.offIcon}
+            checkedIcon={props.checkedIcon}
+            unCheckedIcon={props.unCheckedIcon}
             disabled={props.disabled}
             {...props}
         />
     );
-
-    // return <Switch value={isOn} onValueChange={onToggle} {...props} />;
 };

@@ -11,76 +11,75 @@ type CustomStyleProp = {
 
 export const newSwitchStyles: ComponentStylePropWithVariants<
     ViewStyle,
-    'selected_disabled' | 'active' | 'disabled' | 'offIcon' | 'hovered' | 'focused' | 'pressed',
+    | 'selected'
+    | 'selected_disabled'
+    | 'disabled'
+    | 'hovered'
+    | 'focused'
+    | 'pressed'
+    | 'selected_hovered',
     CustomStyleProp
 > = {
     container: {
         flexDirection: 'row',
         alignItems: 'center',
     },
-    button: {
-        borderRadius: 16,
-    },
+    button: {},
 
     toggle: {
-        width: 52,
-        height: 32,
-        borderRadius: 16,
         justifyContent: 'center',
         borderWidth: 2,
-        backgroundColor: 'colors.surface',
+        backgroundColor: 'colors.surfaceContainerHighest',
         borderColor: 'colors.outline',
     },
 
     toggleWheel: {
-        width: 16,
-        height: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 8,
+        backgroundColor: 'colors.outline',
         elevation: 1.5,
     },
 
     icon: {
-        color: 'colors.surfaceVariant',
+        color: 'colors.surfaceContainerHighest',
     },
 
     states: {
-        active: {
+        selected: {
             toggle: {
                 borderWidth: 0,
                 backgroundColor: 'colors.primary',
             },
             toggleWheel: {
-                width: 24,
-                height: 24,
-                borderRadius: 12,
+                backgroundColor: 'colors.onPrimary',
             },
             icon: {
                 color: 'colors.onPrimaryContainer',
             },
         },
-        offIcon: {
+        selected_hovered: {
+            toggle: {
+                borderWidth: 0,
+                backgroundColor: 'colors.primary',
+            },
             toggleWheel: {
-                width: 24,
-                height: 24,
-                borderRadius: 12,
+                backgroundColor: 'colors.primaryContainer',
+            },
+            icon: {
+                color: 'colors.onPrimaryContainer',
             },
         },
         disabled: {
             toggle: {
                 opacity: 0.12,
-                backgroundColor: 'colors.surfaceVariant',
+                backgroundColor: 'colors.surfaceContainerHighest',
                 borderColor: 'colors.onSurface',
             },
             toggleWheel: {
-                width: 16,
-                height: 16,
-                borderRadius: 8,
                 opacity: 0.38,
             },
             icon: {
-                color: 'colors.onSurfaceVariant',
+                color: 'colors.surfaceContainerHighest',
                 opacity: 0.38,
             },
         },
@@ -91,9 +90,6 @@ export const newSwitchStyles: ComponentStylePropWithVariants<
             },
             toggleWheel: {
                 opacity: 1,
-                width: 24,
-                height: 24,
-                borderRadius: 12,
             },
             icon: {
                 color: 'colors.onSurface',
