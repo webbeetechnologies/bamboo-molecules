@@ -29,7 +29,7 @@ export {
     HorizontalDividerProps,
 } from './HorizontalDivider';
 export { VerticalDivider, verticalDividerStyles, VerticalDividerProps } from './VerticalDivider';
-export { CustomSwitch, Switch, switchStyles, SwitchProps, newSwitchStyles } from './Switch';
+export { Switch, SwitchProps, newSwitchStyles } from './Switch';
 export { FlatList, FlatListProps, IFlatList, FlatListRef, flatListStyles } from './FlatList';
 
 export {
