@@ -1,5 +1,5 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
-import { Animated, Easing, Pressable, SwitchProps, ViewStyle } from 'react-native';
+import { Animated, Easing, Pressable, SwitchProps, TextStyle, ViewStyle } from 'react-native';
 import { useActionState, useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { IconType } from '../Icon';
 
@@ -9,6 +9,10 @@ export type Props = SwitchProps & {
     size?: number;
     checkedIconType?: IconType;
     uncheckedIconType?: IconType;
+    thumbStyle?: ViewStyle;
+    thumbContainerStyle?: ViewStyle;
+    switchOverlayStyle?: ViewStyle;
+    iconStyle?: TextStyle;
 };
 
 // TODO: Ask alex to create design tokens
@@ -38,6 +42,10 @@ const Switch = ({
     style,
     checkedIconType,
     uncheckedIconType,
+    thumbStyle: _thumbStyle,
+    thumbContainerStyle: _thumbContainerStyle,
+    switchOverlayStyle: _switchOverlayStyle,
+    iconStyle: _iconStyle,
     ...rest
 }: Props) => {
     const { Icon } = useMolecules();
@@ -53,10 +61,14 @@ const Switch = ({
     const componentStyles = useComponentStyles(
         'Switch',
         [
-            style,
             trackColor?.true && { checkedColor: trackColor?.true },
             trackColor?.false && { checkedColor: trackColor?.false },
             thumbColor && { thumbColor },
+            style && { switchContainer: style },
+            _thumbStyle && { thumb: _thumbStyle },
+            _thumbContainerStyle && { thumbContainer: _thumbContainerStyle },
+            _switchOverlayStyle && { overlay: _switchOverlayStyle },
+            _iconStyle && { icon: _iconStyle },
         ],
         {
             states: {
