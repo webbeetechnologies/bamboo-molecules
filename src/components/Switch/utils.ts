@@ -2,15 +2,17 @@ import type { TextStyle, ViewStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
 
 type CustomStyleProp = {
-    container?: ViewStyle;
-    button?: ViewStyle;
-    toggle?: ViewStyle;
-    toggleWheel?: ViewStyle;
+    switchContainer?: ViewStyle;
+    thumbContainer?: ViewStyle;
+    thumb?: ViewStyle;
     icon?: TextStyle;
+    overlay?: ViewStyle;
+    checkedColor?: string;
+    uncheckedColor?: string;
+    thumbColor?: string;
 };
 
-export const switchStyles: ComponentStylePropWithVariants<
-    ViewStyle,
+type States =
     | 'selected'
     | 'selected_disabled'
     | 'selected_pressed'
@@ -18,22 +20,36 @@ export const switchStyles: ComponentStylePropWithVariants<
     | 'hovered'
     | 'focused'
     | 'pressed'
-    | 'selected_hovered',
-    CustomStyleProp
-> = {
-    container: {},
-    button: { flexDirection: 'row', alignItems: 'center' },
+    | 'hovered_pressed'
+    | 'selected_hovered'
+    | 'selected_focused'
+    | 'selected_hovered_pressed'
+    | 'selected_focused_pressed';
 
-    toggle: {
-        justifyContent: 'center',
+export const switchStyles: ComponentStylePropWithVariants<ViewStyle, States, CustomStyleProp> = {
+    uncheckedColor: 'colors.surfaceContainerHighest',
+    checkedColor: 'colors.primary',
+    thumbColor: 'colors.outline',
+
+    switchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
         backgroundColor: 'colors.surfaceContainerHighest',
         borderColor: 'colors.outline',
     },
 
-    toggleWheel: {
+    thumbContainer: { flexDirection: 'row', alignItems: 'center' },
+
+    overlay: {
+        display: 'none',
+        position: 'absolute',
+        right: 0,
+    },
+
+    thumb: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'colors.outline',
         elevation: 1.5,
     },
 
@@ -43,36 +59,50 @@ export const switchStyles: ComponentStylePropWithVariants<
 
     states: {
         selected: {
-            toggle: {
+            thumbColor: 'colors.onPrimary',
+            checkedColor: 'colors.primary',
+            switchContainer: {
                 borderWidth: 0,
-                backgroundColor: 'colors.primary',
-            },
-            toggleWheel: {
-                backgroundColor: 'colors.onPrimary',
             },
             icon: {
                 color: 'colors.onPrimaryContainer',
             },
         },
         selected_hovered: {
-            toggle: {
+            thumbColor: 'colors.primaryContainer',
+            checkedColor: 'colors.primary',
+            switchContainer: {
                 borderWidth: 0,
-                backgroundColor: 'colors.primary',
-            },
-            toggleWheel: {
-                backgroundColor: 'colors.primaryContainer',
             },
             icon: {
                 color: 'colors.onPrimaryContainer',
             },
+            overlay: {
+                backgroundColor: 'colors.stateLayer.hover.primary',
+                display: 'flex',
+            },
+        },
+        selected_focused: {
+            thumbColor: 'colors.primaryContainer',
+            checkedColor: 'colors.primary',
+            switchContainer: {
+                borderWidth: 0,
+            },
+            icon: {
+                color: 'colors.onPrimaryContainer',
+            },
+            overlay: {
+                backgroundColor: 'colors.stateLayer.focussed.primary',
+                display: 'flex',
+            },
         },
         disabled: {
-            toggle: {
+            uncheckedColor: 'colors.surfaceContainerHighest',
+            switchContainer: {
                 opacity: 0.12,
-                backgroundColor: 'colors.surfaceContainerHighest',
                 borderColor: 'colors.onSurface',
             },
-            toggleWheel: {
+            thumb: {
                 opacity: 0.38,
             },
             icon: {
@@ -81,11 +111,11 @@ export const switchStyles: ComponentStylePropWithVariants<
             },
         },
         selected_disabled: {
-            toggle: {
+            checkedColor: 'colors.onSurface',
+            switchContainer: {
                 opacity: 0.12,
-                backgroundColor: 'colors.onSurface',
             },
-            toggleWheel: {
+            thumb: {
                 opacity: 1,
             },
             icon: {
@@ -94,30 +124,73 @@ export const switchStyles: ComponentStylePropWithVariants<
             },
         },
         selected_pressed: {
-            toggle: {
+            thumbColor: 'colors.primaryContainer',
+            checkedColor: 'colors.primary',
+            switchContainer: {
                 borderWidth: 0,
-                backgroundColor: 'colors.primary',
             },
-            toggleWheel: {
-                backgroundColor: 'colors.primaryContainer',
+            overlay: {
+                backgroundColor: 'colors.stateLayer.pressed.primary',
+                display: 'flex',
             },
             icon: {
                 color: 'colors.onPrimaryContainer',
             },
         },
+        selected_hovered_pressed: {
+            thumbColor: 'colors.primaryContainer',
+            checkedColor: 'colors.primary',
+            switchContainer: {
+                borderWidth: 0,
+            },
+            overlay: {
+                backgroundColor: 'colors.stateLayer.pressed.primary',
+                display: 'flex',
+            },
+            icon: {
+                color: 'colors.onPrimaryContainer',
+            },
+        },
+        selected_focused_pressed: {
+            thumbColor: 'colors.primaryContainer',
+            checkedColor: 'colors.primary',
+            switchContainer: {
+                borderWidth: 0,
+            },
+            overlay: {
+                backgroundColor: 'colors.stateLayer.pressed.primary',
+                display: 'flex',
+            },
+            icon: {
+                color: 'colors.onPrimaryContainer',
+            },
+        },
+        hovered_pressed: {
+            thumbColor: 'colors.onSurfaceVariant',
+            overlay: {
+                backgroundColor: 'colors.stateLayer.pressed.onSurface',
+                display: 'flex',
+            },
+        },
         pressed: {
-            toggleWheel: {
-                backgroundColor: 'colors.onSurfaceVariant',
+            thumbColor: 'colors.onSurfaceVariant',
+            overlay: {
+                backgroundColor: 'colors.stateLayer.pressed.onSurface',
+                display: 'flex',
             },
         },
         hovered: {
-            toggleWheel: {
-                backgroundColor: 'colors.onSurfaceVariant',
+            thumbColor: 'colors.onSurfaceVariant',
+            overlay: {
+                backgroundColor: 'colors.stateLayer.hover.onSurface',
+                display: 'flex',
             },
         },
         focused: {
-            toggleWheel: {
-                backgroundColor: 'colors.onSurfaceVariant',
+            thumbColor: 'colors.onSurfaceVariant',
+            overlay: {
+                backgroundColor: 'colors.stateLayer.focussed.onSurface',
+                display: 'flex',
             },
         },
     },

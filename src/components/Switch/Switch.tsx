@@ -1,6 +1,7 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Animated, Easing, Pressable, SwitchProps, ViewStyle } from 'react-native';
-import { useActionState, useComponentStyles, useMolecules } from '../../hooks';
+import { useActionState, useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
+import type { IconType } from '../Icon';
 
 export type ToggleProps = SwitchProps & {
     checkedIcon?: string;
@@ -10,22 +11,8 @@ export type ToggleProps = SwitchProps & {
     uncheckedIconType?: IconType;
 };
 
-type IconType =
-    | 'material'
-    | 'material-community'
-    | 'simple-line-icon'
-    | 'zocial'
-    | 'font-awesome'
-    | 'octicon'
-    | 'ionicon'
-    | 'feather'
-    | 'fontisto'
-    | 'foundation'
-    | 'evilicon'
-    | 'entypo'
-    | 'antdesign'
-    | 'font-awesome-5'
-    | undefined;
+// TODO: Ask alex to create design tokens
+const MOTION_OVERSHOOT = Easing.bezier(0.175, 0.885, 0.32, 1.275);
 
 const Switch = ({
     trackColor,
@@ -33,66 +20,76 @@ const Switch = ({
     thumbColor,
     onValueChange,
     disabled,
-    value,
+    value: valueProp,
     checkedIcon,
     unCheckedIcon,
     style,
     checkedIconType,
     uncheckedIconType,
 }: ToggleProps) => {
-    const { Icon, View } = useMolecules();
+    const { Icon } = useMolecules();
     const { actionsRef, focused, hovered, pressed } = useActionState();
 
-    const componentStyles = useComponentStyles('Switch', style, {
-        states: {
-            selected_hovered: !!value && !!hovered,
-            selected_disabled: !!value && !!disabled,
-            selected_pressed: !!value && !!pressed,
-            selected_focused: !!value && !!focused,
-            selected: !!value,
-            disabled: !!disabled,
-            hovered: !!hovered,
-            focused: !!focused,
-            pressed: !!pressed,
-        },
+    const [value, onChange] = useControlledValue({
+        value: valueProp,
+        onChange: onValueChange as any,
+        defaultValue: false,
+        disabled,
     });
+
+    const componentStyles = useComponentStyles(
+        'Switch',
+        [
+            style,
+            trackColor?.true && { checkedColor: trackColor?.true },
+            trackColor?.false && { checkedColor: trackColor?.false },
+            thumbColor && { thumbColor },
+        ],
+        {
+            states: {
+                selected_hovered_pressed: !!value && !!hovered && !!pressed,
+                selected_focused_pressed: !!value && !!focused && !!pressed,
+                selected_hovered: !!value && !!hovered,
+                selected_disabled: !!value && !!disabled,
+                selected_pressed: !!value && !!pressed,
+                selected_focused: !!value && !!focused,
+                selected: !!value,
+                hovered_pressed: !!hovered && !!pressed,
+                disabled: !!disabled,
+                hovered: !!hovered,
+                focused: !!focused,
+                pressed: !!pressed,
+            },
+        },
+    );
     const toggleMarginAnimation = useRef(new Animated.Value(value ? 0 : 1)).current;
     const toggleSizeAnimation = useRef(new Animated.Value(value ? 0 : 1)).current;
 
-    const moveToggle = toggleMarginAnimation.interpolate({
+    const thumbPosition = toggleMarginAnimation.interpolate({
         inputRange: [0, 1],
         outputRange: [
-            !value && pressed && !unCheckedIcon
-                ? 0
-                : !value && unCheckedIcon
-                ? size * 0.04
-                : size * 0.2,
+            !value && pressed && !unCheckedIcon ? 0 : unCheckedIcon ? size * 0.04 : size * 0.2,
             pressed ? size * 0.74 : size * 0.81,
         ],
     });
 
-    const toggleSize = toggleSizeAnimation.interpolate({
+    const thumbSize = toggleSizeAnimation.interpolate({
         inputRange: [0, 1],
         outputRange: [
             !value && !pressed && !unCheckedIcon
                 ? size * 0.5
                 : value || unCheckedIcon
                 ? size * 0.74
-                : size * 0.84,
+                : size * 0.88,
             pressed && !value ? size : pressed && value ? size * 0.81 : size * 0.64,
         ],
     });
-
-    const color = useMemo(
-        () => (value ? trackColor?.true : trackColor?.false),
-        [trackColor?.false, trackColor?.true, value],
-    );
 
     useEffect(() => {
         Animated.timing(toggleMarginAnimation, {
             toValue: value ? 1 : 0,
             duration: 300,
-            easing: Easing.bezier(0.175, 0.885, 0.32, 1.275),
+            easing: MOTION_OVERSHOOT,
             useNativeDriver: false,
         }).start();
         Animated.timing(toggleSizeAnimation, {
@@ -103,88 +100,91 @@ const Switch = ({
         }).start();
     }, [value, toggleMarginAnimation, toggleSizeAnimation]);
 
-    const thumbOverlay = useMemo(
-        () => ({
-            position: 'absolute',
-            left:
-                value && pressed
-                    ? size * -0.21
-                    : value || unCheckedIcon
-                    ? size * -0.28
-                    : !unCheckedIcon && !pressed
-                    ? size * -0.36
-                    : size * -0.16,
-            right: 0,
+    const thumbOverlay = useMemo(() => {
+        let left = size * -0.16;
+
+        if (value && pressed) {
+            left = size * -0.21;
+        } else if (value || unCheckedIcon) {
+            left = size * -0.28;
+        } else if (!unCheckedIcon && !pressed) {
+            left = size * -0.36;
+        }
+
+        return {
+            left,
             height: size * 1.2,
             width: size * 1.2,
             borderRadius: (size * 1.2) / 2,
-            backgroundColor: pressed
-                ? 'rgba(0, 0, 0, 0.15)'
-                : focused
-                ? 'rgba(0, 0, 0, 0.1)'
-                : 'rgba(0, 0, 0, 0.05)',
-            display: hovered || focused || pressed ? 'flex' : 'none',
-        }),
-        [focused, hovered, pressed, size, unCheckedIcon, value],
-    );
+        };
+    }, [pressed, size, unCheckedIcon, value]);
 
-    const { parentViewStyle, buttonStyle, toggleStyle, toggleWheelStyle, overlayStyle, iconStyle } =
+    const { switchStyle, thumbContainerStyle, thumbStyle, thumbOverlayStyle, iconStyle } =
         useMemo(() => {
-            const { button, toggle, toggleWheel, icon } = componentStyles;
+            const {
+                switchContainer,
+                thumbContainer,
+                thumb,
+                icon,
+                overlay,
+                uncheckedColor: _uncheckedColor,
+                checkedColor: _checkedColor,
+                thumbColor: _thumbColor,
+            } = componentStyles;
+
             return {
-                buttonStyle: [button, size && { borderRadius: size / 2 }],
-                parentViewStyle: {
-                    width: size,
-                    height: size,
-                    borderRadius: size / 2,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                },
-                toggleStyle: [
-                    toggle,
-                    color && { backgroundColor: color },
+                switchStyle: [
+                    switchContainer,
                     {
                         height: size,
                         width: size * 1.62,
                         borderRadius: size / 1.62,
-                        borderWidth: Math.floor(size * 0.095),
+                        borderWidth: Math.floor(size * 0.0625),
+                        backgroundColor: value ? _checkedColor : _uncheckedColor,
                     },
                     value && { borderWidth: 0 },
                 ],
-                toggleWheelStyle: [
-                    toggleWheel,
+                thumbContainerStyle: [
+                    thumbContainer,
                     {
-                        marginLeft: moveToggle,
-                        width: toggleSize,
-                        height: toggleSize,
-                        borderRadius: (size * 0.84) / 2,
+                        height: size,
+                        width: size * 1.62,
+                        borderRadius: size / 1.62,
                     },
-                    thumbColor && { backgroundColor: thumbColor },
+                ],
+                thumbStyle: [
+                    thumb,
+                    {
+                        marginLeft: thumbPosition,
+                        width: thumbSize,
+                        height: thumbSize,
+                        borderRadius: (size * 0.88) / 2,
+                        backgroundColor: _thumbColor,
+                    },
                     !value &&
                         !unCheckedIcon &&
                         !pressed && {
                             borderRadius: (size * 0.5) / 2,
                         },
                     pressed && {
-                        borderRadius: (size * (!value ? 1 : 0.85)) / 2,
+                        borderRadius: (size * (!value ? 1 : 0.88)) / 2,
                     },
                 ],
-                overlayStyle: [
-                    toggleWheel,
+                thumbOverlayStyle: [
+                    thumb,
                     {
-                        marginLeft: moveToggle,
+                        marginLeft: thumbPosition,
                     },
                     thumbOverlay,
+                    overlay,
                 ],
                 iconStyle: icon,
             };
         }, [
             componentStyles,
             size,
-            color,
-            moveToggle,
-            toggleSize,
-            thumbColor,
+            thumbPosition,
+            thumbSize,
             value,
             unCheckedIcon,
             pressed,
@@ -192,38 +192,24 @@ const Switch = ({
         ]);
 
     const handleValueChange = useCallback(() => {
-        onValueChange && onValueChange(!value);
-    }, [value, onValueChange]);
-
-    const renderIcon = useCallback(
-        (icon: string | undefined, condition: boolean, type?: IconType) => {
-            return icon && condition ? (
-                <Icon style={iconStyle} name={icon} size={size * 0.5} type={type} />
-            ) : null;
-        },
-        [Icon, iconStyle, size],
-    );
-
-    const onIconComponent = useMemo(
-        () => renderIcon(checkedIcon, !!value, checkedIconType),
-        [renderIcon, checkedIcon, value, checkedIconType],
-    );
-    const offIconComponent = useMemo(
-        () => renderIcon(unCheckedIcon, !value, uncheckedIconType),
-        [renderIcon, unCheckedIcon, value, uncheckedIconType],
-    );
+        onChange(!value);
+    }, [value, onChange]);
 
     return (
-        <Pressable ref={actionsRef} style={buttonStyle} onPress={handleValueChange}>
-            <View style={toggleStyle}>
-                <Animated.View style={parentViewStyle as ViewStyle}>
-                    <Animated.View style={toggleWheelStyle}>
-                        {onIconComponent}
-                        {!disabled && offIconComponent}
-                    </Animated.View>
+        <Pressable ref={actionsRef} style={switchStyle} onPress={handleValueChange}>
+            <Animated.View style={thumbContainerStyle as ViewStyle}>
+                <Animated.View style={thumbStyle}>
+                    {checkedIcon || unCheckedIcon ? (
+                        <Icon
+                            style={iconStyle}
+                            name={(value ? checkedIcon : unCheckedIcon) as string}
+                            size={size * 0.5}
+                            type={value ? checkedIconType : uncheckedIconType}
+                        />
+                    ) : null}
                 </Animated.View>
-                <Animated.View style={overlayStyle} />
-            </View>
+            </Animated.View>
+            <Animated.View style={thumbOverlayStyle} />
         </Pressable>
     );
 };

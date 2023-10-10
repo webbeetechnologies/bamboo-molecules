@@ -76,6 +76,14 @@ export const generateDarkThemeColors = (
                 onSurface: color(palette.neutral90).alpha(opacity.level2).hexa(),
                 onSurface_Level4: color(palette.neutral90).alpha(opacity.level4).hexa(),
             },
+            pressed: {
+                primary: color(palette.primary40).alpha(opacity.level2).hexa(),
+                onSurface: color(palette.neutral10).alpha(opacity.level2).hexa(),
+            },
+            focussed: {
+                primary: color(palette.primary40).alpha(opacity.level2).hexa(),
+                onSurface: color(palette.neutral10).alpha(opacity.level2).hexa(),
+            },
         },
         palette,
         opacity,
