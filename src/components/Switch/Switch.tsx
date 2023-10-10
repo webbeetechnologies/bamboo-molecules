@@ -3,7 +3,7 @@ import { Animated, Easing, Pressable, SwitchProps, ViewStyle } from 'react-nativ
 import { useActionState, useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { IconType } from '../Icon';
 
-export type ToggleProps = SwitchProps & {
+export type Props = SwitchProps & {
     checkedIcon?: string;
     unCheckedIcon?: string;
     size?: number;
@@ -13,6 +13,18 @@ export type ToggleProps = SwitchProps & {
 
 // TODO: Ask alex to create design tokens
 const MOTION_OVERSHOOT = Easing.bezier(0.175, 0.885, 0.32, 1.275);
+const NO_ICON_UN_CHECKED_INITIAL_SIZE_OFFSET = 0.5;
+const CHECKED_OR_WITH_UNCHECKED_ICON_INITIAL_SIZE_OFFSET = 0.74;
+const MAX_INITIAL_SIZE_OFFSET = 0.88;
+const CHECKED_PRESSED_FINAL_SIZE_OFFSET = 0.81;
+const MIN_FINAL_SIZE_OFFSET = 0.64;
+const UN_CHECKED_INITIAL_MARGIN_OFFSET = 0.04;
+const DEFAULT_INITIAL_MARGIN_OFFSET = 0.2;
+const PRESSED_FINAL_MARGIN_OFFSET = 0.74;
+const DEFAULT_FINAL_MARGIN_OFFSET = 0.81;
+const SWITCH_SIZE_OFFSET = 1.62;
+const SWITCH_BORDER_OFFSET = 0.0625;
+const SWITCH_OVERLAY_SIZE_OFFSET = 1.2;
 
 const Switch = ({
     trackColor,
@@ -26,14 +38,15 @@ const Switch = ({
     style,
     checkedIconType,
     uncheckedIconType,
-}: ToggleProps) => {
+    ...rest
+}: Props) => {
     const { Icon } = useMolecules();
     const { actionsRef, focused, hovered, pressed } = useActionState();
 
     const [value, onChange] = useControlledValue({
         value: valueProp,
         onChange: onValueChange as any,
-        defaultValue: false,
+        defaultValue: !!valueProp,
         disabled,
     });
 
@@ -68,8 +81,12 @@ const Switch = ({
     const thumbPosition = toggleMarginAnimation.interpolate({
         inputRange: [0, 1],
         outputRange: [
-            !value && pressed && !unCheckedIcon ? 0 : unCheckedIcon ? size * 0.04 : size * 0.2,
-            pressed ? size * 0.74 : size * 0.81,
+            !value && pressed && !unCheckedIcon
+                ? 0
+                : unCheckedIcon
+                ? size * UN_CHECKED_INITIAL_MARGIN_OFFSET
+                : size * DEFAULT_INITIAL_MARGIN_OFFSET,
+            pressed ? size * PRESSED_FINAL_MARGIN_OFFSET : size * DEFAULT_FINAL_MARGIN_OFFSET,
         ],
     });
 
@@ -77,11 +94,15 @@ const Switch = ({
         inputRange: [0, 1],
         outputRange: [
             !value && !pressed && !unCheckedIcon
-                ? size * 0.5
+                ? size * NO_ICON_UN_CHECKED_INITIAL_SIZE_OFFSET
                 : value || unCheckedIcon
-                ? size * 0.74
-                : size * 0.88,
-            pressed && !value ? size : pressed && value ? size * 0.81 : size * 0.64,
+                ? size * CHECKED_OR_WITH_UNCHECKED_ICON_INITIAL_SIZE_OFFSET
+                : size * MAX_INITIAL_SIZE_OFFSET,
+            pressed && !value
+                ? size
+                : pressed && value
+                ? size * CHECKED_PRESSED_FINAL_SIZE_OFFSET
+                : size * MIN_FINAL_SIZE_OFFSET,
         ],
     });
 
@@ -113,9 +134,9 @@ const Switch = ({
 
         return {
             left,
-            height: size * 1.2,
-            width: size * 1.2,
-            borderRadius: (size * 1.2) / 2,
+            height: size * SWITCH_OVERLAY_SIZE_OFFSET,
+            width: size * SWITCH_OVERLAY_SIZE_OFFSET,
+            borderRadius: (size * SWITCH_OVERLAY_SIZE_OFFSET) / 2,
         };
     }, [pressed, size, unCheckedIcon, value]);
 
@@ -137,9 +158,9 @@ const Switch = ({
                     switchContainer,
                     {
                         height: size,
-                        width: size * 1.62,
-                        borderRadius: size / 1.62,
-                        borderWidth: Math.floor(size * 0.0625),
+                        width: size * SWITCH_SIZE_OFFSET,
+                        borderRadius: size / SWITCH_SIZE_OFFSET,
+                        borderWidth: Math.floor(size * SWITCH_BORDER_OFFSET),
                         backgroundColor: value ? _checkedColor : _uncheckedColor,
                     },
                     value && { borderWidth: 0 },
@@ -148,8 +169,8 @@ const Switch = ({
                     thumbContainer,
                     {
                         height: size,
-                        width: size * 1.62,
-                        borderRadius: size / 1.62,
+                        width: size * SWITCH_SIZE_OFFSET,
+                        borderRadius: size / SWITCH_SIZE_OFFSET,
                     },
                 ],
                 thumbStyle: [
@@ -196,7 +217,7 @@ const Switch = ({
     }, [value, onChange]);
 
     return (
-        <Pressable ref={actionsRef} style={switchStyle} onPress={handleValueChange}>
+        <Pressable ref={actionsRef} style={switchStyle} onPress={handleValueChange} {...rest}>
             <Animated.View style={thumbContainerStyle as ViewStyle}>
                 <Animated.View style={thumbStyle}>
                     {checkedIcon || unCheckedIcon ? (
