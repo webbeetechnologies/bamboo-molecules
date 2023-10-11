@@ -1,6 +1,12 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Animated, Easing, Pressable, SwitchProps, TextStyle, ViewStyle } from 'react-native';
-import { useActionState, useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
+import {
+    useActionState,
+    useComponentStyles,
+    useControlledValue,
+    useLatest,
+    useMolecules,
+} from '../../hooks';
 import type { IconType } from '../Icon';
 
 export type Props = SwitchProps & {
@@ -17,7 +23,7 @@ export type Props = SwitchProps & {
 
 // TODO: Ask alex to create design tokens
 const MOTION_OVERSHOOT = Easing.bezier(0.175, 0.885, 0.32, 1.275);
-const NO_ICON_UN_CHECKED_INITIAL_SIZE_OFFSET = 0.5;
+const MIN_SIZE_OFFSET = 0.5;
 const CHECKED_OR_WITH_UNCHECKED_ICON_INITIAL_SIZE_OFFSET = 0.74;
 const MAX_INITIAL_SIZE_OFFSET = 0.88;
 const CHECKED_PRESSED_FINAL_SIZE_OFFSET = 0.81;
@@ -29,6 +35,11 @@ const DEFAULT_FINAL_MARGIN_OFFSET = 0.81;
 const SWITCH_SIZE_OFFSET = 1.62;
 const SWITCH_BORDER_OFFSET = 0.0625;
 const SWITCH_OVERLAY_SIZE_OFFSET = 1.2;
+const MAX_SIZE_OFFSET = 0.88;
+const DEFAULT_OVERLAY_OFFSET = -0.16;
+const SELECTED_PRESSED_OVERLAY_OFFSET = -0.21;
+const SELECTED_OR_WITH_ICON_OVERLAY_OFFSET = -0.28;
+const WITHOUT_ICON_OVERLAY_OFFSET = -0.36;
 
 const Switch = ({
     trackColor,
@@ -57,6 +68,8 @@ const Switch = ({
         defaultValue: !!valueProp,
         disabled,
     });
+
+    const switchValueRef = useLatest(valueProp);
 
     const componentStyles = useComponentStyles(
         'Switch',
@@ -106,7 +119,7 @@ const Switch = ({
         inputRange: [0, 1],
         outputRange: [
             !value && !pressed && !unCheckedIcon
-                ? size * NO_ICON_UN_CHECKED_INITIAL_SIZE_OFFSET
+                ? size * MIN_SIZE_OFFSET
                 : value || unCheckedIcon
                 ? size * CHECKED_OR_WITH_UNCHECKED_ICON_INITIAL_SIZE_OFFSET
                 : size * MAX_INITIAL_SIZE_OFFSET,
@@ -134,14 +147,14 @@ const Switch = ({
     }, [value, toggleMarginAnimation, toggleSizeAnimation]);
 
     const thumbOverlay = useMemo(() => {
-        let left = size * -0.16;
+        let left = size * DEFAULT_OVERLAY_OFFSET;
 
         if (value && pressed) {
-            left = size * -0.21;
+            left = size * SELECTED_PRESSED_OVERLAY_OFFSET;
         } else if (value || unCheckedIcon) {
-            left = size * -0.28;
+            left = size * SELECTED_OR_WITH_ICON_OVERLAY_OFFSET;
         } else if (!unCheckedIcon && !pressed) {
-            left = size * -0.36;
+            left = size * WITHOUT_ICON_OVERLAY_OFFSET;
         }
 
         return {
@@ -191,16 +204,16 @@ const Switch = ({
                         marginLeft: thumbPosition,
                         width: thumbSize,
                         height: thumbSize,
-                        borderRadius: (size * 0.88) / 2,
+                        borderRadius: (size * MAX_SIZE_OFFSET) / 2,
                         backgroundColor: _thumbColor,
                     },
                     !value &&
                         !unCheckedIcon &&
                         !pressed && {
-                            borderRadius: (size * 0.5) / 2,
+                            borderRadius: (size * MIN_SIZE_OFFSET) / 2,
                         },
                     pressed && {
-                        borderRadius: (size * (!value ? 1 : 0.88)) / 2,
+                        borderRadius: (size * (!value ? 1 : MAX_SIZE_OFFSET)) / 2,
                     },
                 ],
                 thumbOverlayStyle: [
@@ -225,8 +238,8 @@ const Switch = ({
         ]);
 
     const handleValueChange = useCallback(() => {
-        onChange(!value);
-    }, [value, onChange]);
+        onChange(!switchValueRef.current);
+    }, [onChange, switchValueRef]);
 
     return (
         <Pressable ref={actionsRef} style={switchStyle} onPress={handleValueChange} {...rest}>
@@ -236,7 +249,7 @@ const Switch = ({
                         <Icon
                             style={iconStyle}
                             name={(value ? checkedIcon : unCheckedIcon) as string}
-                            size={size * 0.5}
+                            size={size * MIN_SIZE_OFFSET}
                             type={value ? checkedIconType : uncheckedIconType}
                         />
                     ) : null}
