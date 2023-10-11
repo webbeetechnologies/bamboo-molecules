@@ -7,7 +7,6 @@ export default {
     component: Example,
 
     argTypes: {
-        thumbTintColor: { control: { type: 'color' } },
         thumbColor: { control: { type: 'color' } },
         trackColor: { control: { type: 'color' } },
         disabled: { control: { type: 'boolean' } },
@@ -23,8 +22,7 @@ Default.parameters = {
         source: {
             code: `
 const { state: isOn, onToggle } = useToggle();
-
-<Switch value={isOn} onValueChange={onToggle} />
+<Switch value={isOn} onValueChange={onToggle} checkedIcon={"check"} unCheckedIcon={"close"} />
 `,
             language: 'tsx',
             type: 'auto',

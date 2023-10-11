@@ -20,7 +20,9 @@ it('renders disabled switch', () => {
 });
 
 it('renders switch with secondary color', () => {
-    const tree = renderWithWrapper(<Switch value color="colors.secondary" />).toJSON();
+    const tree = renderWithWrapper(
+        <Switch value trackColor={{ true: 'colors.secondary' }} />,
+    ).toJSON();
 
     expect(tree).toMatchSnapshot();
 });

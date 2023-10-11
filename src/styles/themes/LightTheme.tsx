@@ -48,6 +48,7 @@ export const generateLightThemeColors = (
         neutral1: palette.neutral100,
         onNeutral1: palette.neutral70,
         lines: palette.neutral90, // #E4E1E6
+        surfaceContainerHighest: palette.neutral90,
         elevation: {
             level0: 'transparent',
             // Note: Color values with transparency cause RN to transfer shadows to children nodes
@@ -74,6 +75,14 @@ export const generateLightThemeColors = (
             disabled: {
                 onSurface: color(palette.neutral10).alpha(opacity.level2).hexa(),
                 onSurface_Level4: color(palette.neutral10).alpha(opacity.level4).hexa(),
+            },
+            pressed: {
+                primary: color(palette.primary40).alpha(opacity.level2).hexa(),
+                onSurface: color(palette.neutral10).alpha(opacity.level2).hexa(),
+            },
+            focussed: {
+                primary: color(palette.primary40).alpha(opacity.level2).hexa(),
+                onSurface: color(palette.neutral10).alpha(opacity.level2).hexa(),
             },
         },
         palette,
