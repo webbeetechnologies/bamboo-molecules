@@ -178,6 +178,8 @@ const Switch = ({
                 thumbColor: _thumbColor,
             } = componentStyles;
 
+            const borderWidth = Math.floor(size * SWITCH_BORDER_OFFSET);
+
             return {
                 switchStyle: [
                     switchContainer,
@@ -185,7 +187,7 @@ const Switch = ({
                         height: size,
                         width: size * SWITCH_SIZE_OFFSET,
                         borderRadius: size / SWITCH_SIZE_OFFSET,
-                        borderWidth: Math.floor(size * SWITCH_BORDER_OFFSET),
+                        borderWidth: borderWidth <= 1 ? 1 : borderWidth,
                         backgroundColor: value ? _checkedColor : _uncheckedColor,
                     },
                     value && { borderWidth: 0 },
