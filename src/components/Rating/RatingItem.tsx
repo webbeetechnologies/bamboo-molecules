@@ -1,5 +1,5 @@
 import { forwardRef, memo, useCallback, useMemo } from 'react';
-import { ViewStyle, Pressable } from 'react-native';
+import type { ViewStyle } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import type { IconProps, IconType } from '../Icon';
 import type { TooltipProps } from '../Tooltip';
@@ -40,7 +40,7 @@ const RatingItem = (
     }: Props,
     ref: any,
 ) => {
-    const { Icon, Tooltip } = useMolecules();
+    const { Icon, Tooltip, Pressable } = useMolecules();
     const active = value >= index;
 
     const componentStyles = useComponentStyles(
@@ -78,6 +78,7 @@ const RatingItem = (
         ),
         [
             Icon,
+            Pressable,
             activeIconName,
             activeIconType,
             componentStyles,

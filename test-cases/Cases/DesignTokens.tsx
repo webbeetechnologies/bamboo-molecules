@@ -1,5 +1,5 @@
 import { ProvideMolecules, extendTheme, useComponentStyles, useMolecules } from 'bamboo-molecules';
-import { StyleSheet, Pressable } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 /**
  *
@@ -42,7 +42,7 @@ const theme = extendTheme({
 });
 
 const Example = () => {
-    const { View, Text } = useMolecules();
+    const { View, Text, Pressable } = useMolecules();
     const buttonStyles = useComponentStyles('CustomButton');
 
     return (

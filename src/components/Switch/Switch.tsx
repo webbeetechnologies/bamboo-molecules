@@ -1,5 +1,5 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
-import { Animated, Easing, Pressable, SwitchProps, TextStyle, ViewStyle } from 'react-native';
+import { Animated, Easing, SwitchProps, TextStyle, ViewStyle } from 'react-native';
 import {
     useActionState,
     useComponentStyles,
@@ -59,7 +59,7 @@ const Switch = ({
     iconStyle: _iconStyle,
     ...rest
 }: Props) => {
-    const { Icon } = useMolecules();
+    const { Icon, Pressable } = useMolecules();
     const { actionsRef, focused, hovered, pressed } = useActionState();
 
     const [value, onChange] = useControlledValue({

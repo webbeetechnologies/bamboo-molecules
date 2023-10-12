@@ -8,7 +8,7 @@ import {
     ReactNode,
 } from 'react';
 import {
-    TouchableWithoutFeedback,
+    TouchableWithoutFeedback as NativeTouchableWithoutFeedback,
     StyleProp,
     GestureResponderEvent,
     StyleSheet,
@@ -17,7 +17,7 @@ import {
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 
-export type Props = ComponentPropsWithRef<typeof TouchableWithoutFeedback> & {
+export type Props = ComponentPropsWithRef<typeof NativeTouchableWithoutFeedback> & {
     /**
      * Whether to render the ripple outside the view bounds.
      */
@@ -103,7 +103,7 @@ const TouchableRipple = (
     }: Props,
     ref: any,
 ) => {
-    const { View } = useMolecules();
+    const { View, TouchableWithoutFeedback } = useMolecules();
     // TODO - enable ripple onLongPress, need to check for mobile as well
     const disabled = disabledProp || !onPress;
 

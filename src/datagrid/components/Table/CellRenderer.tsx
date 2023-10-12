@@ -1,12 +1,6 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
-import {
-    StyleSheet,
-    Pressable,
-    PressableProps,
-    ViewStyle,
-    GestureResponderEvent,
-} from 'react-native';
-import type { ViewProps } from '@bambooapp/bamboo-atoms';
+import { StyleSheet, ViewStyle, GestureResponderEvent } from 'react-native';
+import type { ViewProps, PressableProps } from '@bambooapp/bamboo-atoms';
 import {
     RenderCellProps,
     useMolecules,
@@ -36,7 +30,7 @@ const _DataCell = (
     { innerContainerProps = emptyObj, style, readonly: cellReadonly = false, ...rest }: Props,
     ref: any,
 ) => {
-    const { View, CellBorder } = useMolecules();
+    const { View, CellBorder, Pressable } = useMolecules();
     const cellRef = useRef<any>(null);
 
     const { hovered = false } = useActionState({ ref: cellRef });

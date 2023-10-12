@@ -11,7 +11,7 @@ import {
     useRef,
     useState,
 } from 'react';
-import { LayoutChangeEvent, Pressable, SectionList, StyleSheet, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, SectionList, StyleSheet, ViewStyle } from 'react-native';
 import { useComponentStyles, useControlledValue, useMolecules, useToggle } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 import type { DropdownListProps } from '../DropdownList';
@@ -129,7 +129,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
     }: Props<TItem>,
     ref: any,
 ) => {
-    const { TextInput, IconButton, DropdownList, ListItem } = useMolecules();
+    const { TextInput, IconButton, DropdownList, ListItem, Pressable } = useMolecules();
     const componentStyles = useComponentStyles('Select', [
         style,
         {

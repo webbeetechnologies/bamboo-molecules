@@ -1,6 +1,6 @@
 import { forwardRef, memo, useCallback, useMemo } from 'react';
-import { GestureResponderEvent, Pressable, PressableProps, StyleSheet } from 'react-native';
-import type { TextProps, ViewProps } from '@bambooapp/bamboo-atoms';
+import { GestureResponderEvent, StyleSheet } from 'react-native';
+import type { TextProps, ViewProps, PressableProps } from '@bambooapp/bamboo-atoms';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import { CallbackActionState, withActionState } from '../../hocs';
@@ -101,7 +101,8 @@ const NavigationRailItem = memo(
                 }: Props,
                 ref: any,
             ) => {
-                const { Badge, Icon, TouchableRipple, StateLayer, Text } = useMolecules();
+                const { Badge, Icon, TouchableRipple, StateLayer, Text, Pressable } =
+                    useMolecules();
 
                 const componentStyles = useComponentStyles(
                     'NavigationRail_Item',

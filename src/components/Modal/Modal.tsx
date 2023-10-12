@@ -6,7 +6,6 @@ import {
     NativeEventSubscription,
     StyleProp,
     StyleSheet,
-    TouchableWithoutFeedback,
     useWindowDimensions,
     ViewProps,
     ViewStyle,
@@ -86,7 +85,7 @@ function Modal(
     }: Props,
     ref: any,
 ) {
-    const { Surface, View } = useMolecules();
+    const { Surface, View, TouchableWithoutFeedback } = useMolecules();
     const componentStyles = useComponentStyles('Modal', style, {
         size,
     });
