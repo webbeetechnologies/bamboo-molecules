@@ -1,10 +1,11 @@
-import { Pressable, PressableProps, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ProvideMolecules, useMolecules, withRipple, TouchableRippleProps } from '../../../src';
+import type { PressableProps } from '@bambooapp/bamboo-atoms';
 
 export type Props = PressableProps & TouchableRippleProps;
 
 export const RippleView = withRipple(({ children, ...rest }: Props) => {
-    const { Text } = useMolecules();
+    const { Text, Pressable } = useMolecules();
 
     return (
         <Pressable {...(rest as any)}>

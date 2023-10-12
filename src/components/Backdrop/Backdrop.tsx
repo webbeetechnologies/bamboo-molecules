@@ -1,10 +1,10 @@
 import { memo } from 'react';
-import { Pressable } from 'react-native';
-import { useComponentStyles } from '../../hooks';
+import { useComponentStyles, useMolecules } from '../../hooks';
 import type { BackdropProps } from './types';
 
 const Backdrop = ({ style, ...rest }: BackdropProps) => {
     const componentStyles = useComponentStyles('Backdrop', style);
+    const { Pressable } = useMolecules();
 
     return (
         <Pressable
