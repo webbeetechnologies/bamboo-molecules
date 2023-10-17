@@ -33,6 +33,7 @@ export const popoverFactory = (componentName: string) =>
                 triggerRef,
                 isKeyboardDismissable = true,
                 popoverContentProps,
+                backdropProps,
                 ...props
             }: PopoverProps,
             ref: any,
@@ -95,7 +96,11 @@ export const popoverFactory = (componentName: string) =>
                         visible={isOpen}
                         style={StyleSheet.absoluteFill}
                         {...popoverContentProps}>
-                        <Backdrop onPress={onClose} style={popoverStyles.backdrop} />
+                        <Backdrop
+                            onPress={onClose}
+                            style={popoverStyles.backdrop}
+                            {...backdropProps}
+                        />
 
                         <Popper
                             isOpen={isOpen}
