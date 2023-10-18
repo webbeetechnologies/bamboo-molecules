@@ -173,19 +173,19 @@ const _DataCell = (
     const leftElement = useMemo(
         () => (
             <>
-                left ? (
-                <>
-                    {typeof left === 'function'
-                        ? left?.({
-                              field,
-                              value,
-                              setValue,
-                              focused: isFocused,
-                              pressedKey,
-                          })
-                        : left}
-                </>
-                ) : null,
+                {left ? (
+                    <>
+                        {typeof left === 'function'
+                            ? left?.({
+                                  field,
+                                  value,
+                                  setValue,
+                                  focused: isFocused,
+                                  pressedKey,
+                              })
+                            : left}
+                    </>
+                ) : null}
             </>
         ),
         [field, isFocused, left, pressedKey, setValue, value],
@@ -194,19 +194,19 @@ const _DataCell = (
     const rightElement = useMemo(
         () => (
             <>
-                right ? (
-                <>
-                    {typeof right === 'function'
-                        ? right?.({
-                              field,
-                              value,
-                              setValue,
-                              focused: isFocused,
-                              pressedKey,
-                          })
-                        : right}
-                </>
-                ) : null,
+                {right ? (
+                    <>
+                        {typeof right === 'function'
+                            ? right?.({
+                                  field,
+                                  value,
+                                  setValue,
+                                  focused: isFocused,
+                                  pressedKey,
+                              })
+                            : right}
+                    </>
+                ) : null}
             </>
         ),
         [field, isFocused, pressedKey, right, setValue, value],
