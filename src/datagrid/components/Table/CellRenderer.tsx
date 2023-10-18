@@ -1,4 +1,4 @@
-import { forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, ReactNode } from 'react';
 import { StyleSheet, ViewStyle, GestureResponderEvent } from 'react-native';
 import type { ViewProps, PressableProps } from '@bambooapp/bamboo-atoms';
 import {
@@ -7,6 +7,7 @@ import {
     useDataTableCell,
     useActionState,
     useLatest,
+    WithElements,
 } from '@bambooapp/bamboo-molecules';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
@@ -17,9 +18,19 @@ import { DragAndExtendHandle } from '../DragAndExtendHandle';
 import { useCellFocusMethods, useCellSelectionMethods } from '../../plugins';
 import { CellSelectionIndicator } from '../CellSelectionIndicator';
 import '../CellBorder';
+import type { Field } from '../../types';
 
-export type Props = RenderCellProps &
-    Omit<PressableProps, 'ref'> & {
+export type Props<T = any> = RenderCellProps &
+    Omit<PressableProps, 'ref'> &
+    WithElements<
+        (args: {
+            field: Field;
+            focused: boolean;
+            value: T;
+            setValue: (newValue: T) => void;
+            pressedKey?: string;
+        }) => ReactNode
+    > & {
         innerContainerProps?: Partial<ViewProps>;
         readonly?: boolean;
     };
@@ -27,7 +38,14 @@ export type Props = RenderCellProps &
 const emptyObj = {};
 
 const _DataCell = (
-    { innerContainerProps = emptyObj, style, readonly: cellReadonly = false, ...rest }: Props,
+    {
+        innerContainerProps = emptyObj,
+        style,
+        readonly: cellReadonly = false,
+        left,
+        right,
+        ...rest
+    }: Props,
     ref: any,
 ) => {
     const { View, CellBorder, Pressable } = useMolecules();
@@ -37,7 +55,8 @@ const _DataCell = (
 
     const { row, column, rowIndex, columnIndex } = useDataTableCell();
 
-    const { type, ...restField } = useField(column);
+    const field = useField(column);
+    const { type, ...restField } = field;
     const { readonly, displayEditorOnHover, showEditor } = useFieldType(type);
 
     const { useOnSelectCell, useOnDragAndSelectStart, useOnDragAndSelectEnd } =
@@ -151,6 +170,48 @@ const _DataCell = (
         }));
     }, [onFocus, setFocusCellPluginStore]);
 
+    const leftElement = useMemo(
+        () => (
+            <>
+                {left ? (
+                    <>
+                        {typeof left === 'function'
+                            ? left?.({
+                                  field,
+                                  value,
+                                  setValue,
+                                  focused: isFocused,
+                                  pressedKey,
+                              })
+                            : left}
+                    </>
+                ) : null}
+            </>
+        ),
+        [field, isFocused, left, pressedKey, setValue, value],
+    );
+
+    const rightElement = useMemo(
+        () => (
+            <>
+                {right ? (
+                    <>
+                        {typeof right === 'function'
+                            ? right?.({
+                                  field,
+                                  value,
+                                  setValue,
+                                  focused: isFocused,
+                                  pressedKey,
+                              })
+                            : right}
+                    </>
+                ) : null}
+            </>
+        ),
+        [field, isFocused, pressedKey, right, setValue, value],
+    );
+
     useEffect(() => {
         if (isFocused || !isEditing) return;
 
@@ -170,6 +231,7 @@ const _DataCell = (
             {...rest}>
             <GestureDetector gesture={onDrag}>
                 <View ref={ref} style={innerContainerStyle} {...innerContainerProps}>
+                    {leftElement}
                     {displayViewRenderer ? (
                         <ViewRenderer value={value} type={type} {...restField} />
                     ) : (
@@ -181,6 +243,7 @@ const _DataCell = (
                             {...restField}
                         />
                     )}
+                    {rightElement}
                 </View>
             </GestureDetector>
 
