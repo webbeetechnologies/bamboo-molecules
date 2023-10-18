@@ -171,8 +171,9 @@ const _DataCell = (
     }, [onFocus, setFocusCellPluginStore]);
 
     const leftElement = useMemo(
-        () =>
-            left ? (
+        () => (
+            <>
+                left ? (
                 <>
                     {typeof left === 'function'
                         ? left?.({
@@ -184,13 +185,16 @@ const _DataCell = (
                           })
                         : left}
                 </>
-            ) : null,
+                ) : null,
+            </>
+        ),
         [field, isFocused, left, pressedKey, setValue, value],
     );
 
     const rightElement = useMemo(
-        () =>
-            right ? (
+        () => (
+            <>
+                right ? (
                 <>
                     {typeof right === 'function'
                         ? right?.({
@@ -202,7 +206,9 @@ const _DataCell = (
                           })
                         : right}
                 </>
-            ) : null,
+                ) : null,
+            </>
+        ),
         [field, isFocused, pressedKey, right, setValue, value],
     );
 
