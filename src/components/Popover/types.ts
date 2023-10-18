@@ -1,5 +1,6 @@
 import type { MutableRefObject, PropsWithChildren, ReactElement } from 'react';
 import type { TextStyle, ViewProps, ViewStyle } from 'react-native';
+import type { BackdropProps } from '../Backdrop';
 import type { TPopperContext } from '../Popper/types';
 
 export type PopoverProps = PropsWithChildren<
@@ -24,6 +25,7 @@ export type PopoverProps = PropsWithChildren<
 
         isKeyboardDismissable?: boolean;
         popoverContentProps?: ViewProps;
+        backdropProps?: BackdropProps;
     }
 >;
 
