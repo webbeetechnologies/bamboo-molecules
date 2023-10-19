@@ -134,6 +134,7 @@ export {
     DataTableProps,
     TDataTableColumn,
     TDataTableRow,
+    TDataTableRowTruthy,
     DataTableRowProps,
     UseRowRenderer,
     RenderHeaderCellProps,

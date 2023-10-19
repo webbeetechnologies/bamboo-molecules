@@ -13,7 +13,8 @@ type RowProps = Omit<ViewProps, 'children'> & { size?: string };
 
 export type TDataTableColumn = string | number;
 
-export type TDataTableRow = string | number;
+export type TDataTableRowTruthy = string | number;
+export type TDataTableRow = TDataTableRowTruthy | undefined;
 
 export interface DataTableComponentProps<T = any> {
     FlatListComponent?: ComponentType<

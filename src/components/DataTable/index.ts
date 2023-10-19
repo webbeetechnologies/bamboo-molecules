@@ -15,6 +15,7 @@ export {
     DataTableRowProps,
     TDataTableColumn,
     TDataTableRow,
+    TDataTableRowTruthy,
     UseRowRenderer,
 } from './types';
 
