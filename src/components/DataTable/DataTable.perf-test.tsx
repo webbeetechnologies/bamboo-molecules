@@ -4,6 +4,7 @@ import { getDataTableMockProps } from './__mocks__/getDataTableProps';
 import { ProvideMolecules } from '../../core';
 import { View } from 'react-native';
 
+// TODO - fix types
 const mockArgs = getDataTableMockProps(2, 10) as any;
 
 const viewStyle = { height: 200 };
