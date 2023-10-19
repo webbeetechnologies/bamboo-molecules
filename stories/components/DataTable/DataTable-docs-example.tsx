@@ -88,7 +88,7 @@ const TableRenderer = () => {
         records,
     };
 
-    return <DataTable {...props} rowProps={tableRowProps} />;
+    return <DataTable {...(props as any)} rowProps={tableRowProps} />;
 };
 
 export default memo(() => (

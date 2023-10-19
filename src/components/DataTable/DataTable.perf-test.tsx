@@ -4,7 +4,7 @@ import { getDataTableMockProps } from './__mocks__/getDataTableProps';
 import { ProvideMolecules } from '../../core';
 import { View } from 'react-native';
 
-const mockArgs = getDataTableMockProps(2, 10);
+const mockArgs = getDataTableMockProps(2, 10) as any;
 
 const viewStyle = { height: 200 };
 test('Count increments on press', done => {
