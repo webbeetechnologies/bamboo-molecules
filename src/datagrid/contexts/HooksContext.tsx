@@ -8,7 +8,7 @@ import type {
     UseRowRenderer,
     UseShowGroupFooter,
 } from '../types';
-import type { RecordWithId, GroupMeta } from '../utils';
+import type { GroupMeta } from '../utils';
 import { useRecordByInternalId } from './TableManagerContext';
 
 export type HooksContextType = {
@@ -16,13 +16,10 @@ export type HooksContextType = {
     useRowRenderer?: UseRowRenderer<DataGridRowRendererProps>;
     useShowGroupFooter?: UseShowGroupFooter;
     useGroupRowState?: UseGroupRowState;
-    useCellValue: (
+    useCellValue: <T>(
         rowId: TDataTableRow,
         columnId: TDataTableColumn,
-    ) => readonly [
-        RecordWithId,
-        (newValue: Partial<RecordWithId> & Pick<RecordWithId, 'id'>) => void,
-    ];
+    ) => readonly [T, (newValue: T) => void];
 };
 
 const HooksContext = createContext<HooksContextType | null>(null);
