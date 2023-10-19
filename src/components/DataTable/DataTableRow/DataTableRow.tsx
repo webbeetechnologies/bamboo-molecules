@@ -1,5 +1,6 @@
 import { forwardRef, memo, useMemo } from 'react';
-import type { ListRenderItem, ViewStyle } from 'react-native';
+import { ViewStyle, StyleSheet } from 'react-native';
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 
 import { useActionState, useComponentStyles, useMolecules } from '../../../hooks';
 import { shallowCompare } from '../../../utils';
@@ -9,18 +10,18 @@ import {
     DataTableContextRowProvider,
     useDataTable,
 } from '../DataTableContext';
-import type { DataTableRowProps, TDataTableRow } from '../types';
+import type { DataTableRowProps, TDataTableColumn, TDataTableRow } from '../types';
 
 // import { useRowWithinBounds } from '../DataTable';
 
 const DataTableRowWrapper = memo((props: DataTableRowProps) => {
-    const { rowId, index, rowProps, isSelected = false } = props;
+    const { rowId, index, rowProps, isSelected = false, style } = props;
 
     const { hovered = false, actionsRef } = useActionState();
 
     const rowSize = useDataTable(store => store.rowSize);
 
-    const rowStyle = useComponentStyles('DataTable_Row', undefined, {
+    const rowStyle = useComponentStyles('DataTable_Row', style, {
         size: rowProps?.size ?? rowSize,
         states: {
             selected_hovered: isSelected && hovered,
@@ -89,9 +90,17 @@ DataTableRowPresentation.displayName = 'DataTableRowPresentation';
  * Allow component consumer to render a separate row
  * UseCase: Data grid can have header rows, footer rows and data rows.
  */
-const DataTableRow = memo(({ index }: Pick<DataTableRowProps, 'index'>) => {
+const DataTableRow = memo(({ index, style }: Pick<DataTableRowProps, 'index' | 'style'>) => {
     const { columns, rowProps, isSelected, rowId } = useDataTable(store => {
         const recordId = store.records[index];
+        if (!recordId)
+            return {} as {
+                rowId: TDataTableRow;
+                columns: TDataTableColumn[];
+                rowProps: ViewProps;
+                isSelected: boolean;
+            };
+
         return {
             rowId: recordId,
             columns: store.columns || [],
@@ -109,16 +118,38 @@ const DataTableRow = memo(({ index }: Pick<DataTableRowProps, 'index'>) => {
     const RowComponent = useRowRenderer?.(props, DataTableRowWrapper) ?? DataTableRowWrapper;
 
     return (
-        <RowComponent {...props} columns={columns} rowProps={rowProps} isSelected={isSelected} />
+        <RowComponent
+            {...props}
+            style={style}
+            columns={columns}
+            rowProps={rowProps}
+            isSelected={isSelected}
+        />
     );
 });
-DataTableRow.displayName = 'DataTableRow';
 
-/**
- *
- * Used internally by data table for FlatList renderItem
- *
- */
-export const renderRow: ListRenderItem<TDataTableRow> = ({ index }) => {
-    return <DataTableRow index={index} />;
-};
+const DataTableRowWithPlaceHolder = memo(
+    ({ index, style }: Pick<DataTableRowProps, 'index' | 'style'>) => {
+        const { View } = useMolecules();
+        const isLoaded = useDataTable(store => !!store.records[index]);
+
+        const placeHolderRowStyle = useMemo(() => [styles.placeHolderRow, style], [style]);
+
+        if (!isLoaded) {
+            return <View style={placeHolderRowStyle} />;
+        }
+
+        return <DataTableRow index={index} style={style} />;
+    },
+);
+
+const styles = StyleSheet.create({
+    placeHolderRow: {
+        borderBottomWidth: 1,
+        borderBottomColor: 'colors.outlineVariant',
+    },
+});
+
+DataTableRowWithPlaceHolder.displayName = 'DataTableRow';
+
+export default DataTableRowWithPlaceHolder;

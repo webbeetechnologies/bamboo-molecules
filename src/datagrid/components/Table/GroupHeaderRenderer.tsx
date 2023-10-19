@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import type { ViewStyle } from 'react-native';
 import { useMolecules } from '@bambooapp/bamboo-molecules';
-import { areEqual } from '@bambooapp/bamboo-molecules/virtualized-list';
+import { areEqual } from '@bambooapp/virtualized-list';
 // import type { RenderCellProps } from '../../../components';
 import { useField, useGroupMeta } from '../../contexts';
 import { ViewRenderer } from '../FieldRenderers';

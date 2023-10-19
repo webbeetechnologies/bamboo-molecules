@@ -138,6 +138,7 @@ export const Example: FC<{ groups?: string[] }> = () => {
                         contextMenuProps={contextMenuProps}
                         useField={useField}
                         useCellValue={useCellValue}
+                        getRowSize={() => 40}
                     />
                 </View>
                 <ToastContainer />
@@ -206,10 +207,11 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
                     <DataGrid
                         plugins={plugins}
                         groups={props.groups}
-                        records={virtaulizationMockRecords}
+                        records={prepareGroupedData(virtaulizationMockRecords)}
                         columnIds={columnIds}
                         useField={useField}
                         useCellValue={useCellValue}
+                        getRowSize={() => 40}
                     />
                 </View>
             </RecordsProvider>

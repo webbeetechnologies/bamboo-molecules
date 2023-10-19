@@ -6,9 +6,13 @@ import type {
     ScrollView,
     ScrollViewProps,
 } from 'react-native';
-import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
+import {
+    VariableSizeList,
+    InfiniteLoader,
+    InfiniteLoaderChildrenArg,
+} from '@bambooapp/virtualized-list';
 
-import { useComponentStyles } from '../../hooks';
+import { useComponentStyles, useMolecules } from '../../hooks';
 import {
     useDataTable,
     useDataTableComponent,
@@ -16,17 +20,28 @@ import {
 } from './DataTableContext/DataTableContext';
 import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
 import { DataTableHeaderRow } from './DataTableHeader';
-import { renderRow } from './DataTableRow';
+import { DataTableRow } from './DataTableRow';
 import { defaultProps } from './defaults';
-import {
-    HorizontalScrollIndexProvider,
-    defaultValue,
-    useStoreRef,
-    useViewabilityConfigCallbackPairs,
-} from './hooks';
+import { HorizontalScrollIndexProvider, defaultValue, useStoreRef } from './hooks';
+import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
+
+const defaultGetItemSize = () => 40;
 
 type DataTableComponentProps = DataTableBase &
-    ScrollViewProps & {
+    ScrollViewProps &
+    Pick<
+        Partial<DataTableProps>,
+        | 'rowCount'
+        | 'rowKey'
+        | 'rowSize'
+        | 'onRowsRendered'
+        | 'getRowSize'
+        | 'rowsMinimumBatchSize'
+        | 'rowsLoadingThreshold'
+        | 'loadMoreRows'
+        | 'isRowLoaded'
+        | 'rowOverscanCount'
+    > & {
         flatListRef?: RefObject<any>;
     };
 type DataTablePresentationProps = DataTableComponentProps &
@@ -41,44 +56,35 @@ const DataTablePresentationComponent = memo(
             verticalScrollProps = {},
             horizontalScrollProps = {},
             style: hStyleProp,
-            stickyRowIndices,
             records,
-            tableWidth,
             // tableHeight,
-            FlatListComponent,
             ScrollViewComponent,
             onLayout: onLayoutProp,
             HeaderRowComponent: HeaderRowComponentProp,
             flatListRef,
+            rowsMinimumBatchSize = 50,
+            isRowLoaded: isItemLoadedProp,
+            rowCount: rowCountProp,
+            rowsLoadingThreshold = 5,
+            loadMoreRows: loadMoreItemsProp,
+            onRowsRendered: onItemsRenderedProp,
+            getRowSize,
+            rowOverscanCount = 5,
             ...restScrollViewProps
         } = props;
 
-        const {
-            style: vStyleProp,
-            windowSize = defaultProps.windowSize,
-            maxToRenderPerBatch = defaultProps.maxToRenderPerBatch,
-            keyExtractor: keyExtractorProp = defaultProps.keyExtractor,
-            viewabilityConfigCallbackPairs: viewabilityConfigCallbackPairsProp = [],
-            ...vProps
-        } = { ...defaultProps, ...verticalScrollProps };
-
+        const { View } = useMolecules();
         const hStyle = useComponentStyles('DataTable', [hStyleProp]);
-        const vStyle = useMemo(() => [{ width: tableWidth }, vStyleProp], [vStyleProp, tableWidth]);
 
-        const containerWidth = useDataTable(store => store.containerWidth);
+        const containerHeight = useDataTable(store => store.containerHeight);
+        const contentWidth = useDataTable(store => store.contentWidth);
 
         const { set: setStore } = useStoreRef();
         const { set: setDataTableStore } = useDataTableStoreRef();
 
         const HeaderRowComponent = HeaderRowComponentProp || DataTableHeaderRow;
 
-        const stickyHeaderIndices = useMemo(
-            () =>
-                stickyRowIndices
-                    ? Array.from(new Set([0, ...stickyRowIndices.map(x => x + 1)]))
-                    : [0],
-            [stickyRowIndices],
-        );
+        const itemCount = rowCountProp || records.length;
 
         const onScroll = useCallback(
             (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -97,19 +103,94 @@ const DataTablePresentationComponent = memo(
         //     [setStore],
         // );
 
-        const viewabilityConfigCallbackPairs = useViewabilityConfigCallbackPairs(
-            viewabilityConfigCallbackPairsProp,
-        );
-
         const onLayout = useCallback(
             (e: LayoutChangeEvent) => {
                 onLayoutProp?.(e);
 
                 setDataTableStore(() => ({
                     containerWidth: e.nativeEvent.layout.width,
+                    containerHeight: e.nativeEvent.layout.height,
                 }));
             },
             [onLayoutProp, setDataTableStore],
+        );
+        const onContentSizeChange = useCallback(
+            (w: number) =>
+                setDataTableStore(() => ({
+                    contentWidth: w,
+                })),
+            [setDataTableStore],
+        );
+
+        const isItemLoaded = useCallback(
+            (index: number) => {
+                if (isItemLoadedProp) {
+                    return isItemLoadedProp(index);
+                }
+
+                return !!records[index];
+            },
+            [isItemLoadedProp, records],
+        );
+
+        const loadMoreItems = useCallback(
+            async (startIndex: number, stopIndex: number) => {
+                loadMoreItemsProp?.(startIndex, stopIndex);
+            },
+            [loadMoreItemsProp],
+        );
+
+        const itemSize = useCallback(
+            (index: number) => {
+                return getRowSize ? getRowSize(index) : defaultGetItemSize();
+            },
+            [getRowSize],
+        );
+
+        const vProps = useMemo(
+            () => ({ ...defaultProps, ...verticalScrollProps }),
+            [verticalScrollProps],
+        );
+
+        const renderList = useCallback(
+            ({ onItemsRendered, ref: _ref }: InfiniteLoaderChildrenArg) => {
+                const setRef = (listRef: any) => {
+                    if (flatListRef) {
+                        (flatListRef as any).current = listRef;
+                    }
+                    _ref(listRef);
+                };
+
+                const _onItemsRenderer: DataTableProps['onRowsRendered'] = args => {
+                    onItemsRenderedProp?.(args);
+                    onItemsRendered(args);
+                };
+
+                return (
+                    <VariableSizeList
+                        onItemsRendered={_onItemsRenderer}
+                        ref={setRef}
+                        width={contentWidth || 0}
+                        height={containerHeight || 0}
+                        itemSize={itemSize}
+                        overscanCount={rowOverscanCount}
+                        itemCount={itemCount}
+                        {...vProps}>
+                        {/*@ts-ignore */}
+                        {DataTableRow}
+                    </VariableSizeList>
+                );
+            },
+            [
+                containerHeight,
+                contentWidth,
+                flatListRef,
+                itemCount,
+                itemSize,
+                onItemsRenderedProp,
+                rowOverscanCount,
+                vProps,
+            ],
         );
 
         return (
@@ -117,26 +198,26 @@ const DataTablePresentationComponent = memo(
                 {...restScrollViewProps}
                 {...horizontalScrollProps}
                 onLayout={onLayout}
+                onContentSizeChange={onContentSizeChange}
                 onScroll={onScroll}
                 scrollEventThrottle={16}
                 horizontal={true}
                 ref={ref}
                 style={hStyle}>
-                {!!containerWidth && (
-                    <FlatListComponent
-                        ref={flatListRef}
-                        {...vProps}
-                        data={records}
-                        windowSize={windowSize}
-                        style={vStyle}
-                        ListHeaderComponent={HeaderRowComponent}
-                        maxToRenderPerBatch={maxToRenderPerBatch}
-                        keyExtractor={keyExtractorProp}
-                        renderItem={renderRow}
-                        stickyHeaderIndices={stickyHeaderIndices}
-                        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-                    />
-                )}
+                <View>
+                    <HeaderRowComponent />
+
+                    {!!contentWidth && (
+                        <InfiniteLoader
+                            isItemLoaded={isItemLoaded}
+                            threshold={rowsLoadingThreshold}
+                            minimumBatchSize={rowsMinimumBatchSize}
+                            itemCount={itemCount}
+                            loadMoreItems={loadMoreItems}>
+                            {renderList}
+                        </InfiniteLoader>
+                    )}
+                </View>
             </ScrollViewComponent>
         );
     }),

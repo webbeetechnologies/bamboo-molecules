@@ -39,6 +39,8 @@ type DataTableContextType = Pick<
     > & {
         tableWidth: number;
         containerWidth?: number;
+        containerHeight?: number;
+        contentWidth?: number;
         /*
          * columnIds as keys
          * */

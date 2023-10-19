@@ -1,7 +1,13 @@
 import type { ComponentPropsWithRef, ComponentType, ReactNode, RefObject } from 'react';
-import type { FlatListProps, ScrollViewProps, ViewProps } from 'react-native';
-import type { ScrollView } from 'react-native';
+import type {
+    FlatListProps,
+    ScrollViewProps,
+    ViewProps,
+    ViewStyle,
+    ScrollView,
+} from 'react-native';
 import type { ViewAbilityConfigPair } from 'src/datagrid/types';
+import type { VariableSizeListProps, InfiniteLoaderProps } from '@bambooapp/virtualized-list';
 
 type RowProps = Omit<ViewProps, 'children'> & { size?: string };
 
@@ -36,9 +42,11 @@ export type RenderCellProps = {
 
 export type ScrollProps = {
     verticalScrollProps?: Omit<
-        FlatListProps<any>,
-        'data' | 'renderItem' | 'viewabilityConfigCallbackPairs'
-    > & { viewabilityConfigCallbackPairs?: ViewAbilityConfigPair[] };
+        VariableSizeListProps,
+        'itemSize' | 'itemCount' | 'itemKey' | 'estimatedItemSize' | 'onItemsRendered'
+    > & {
+        viewabilityConfigCallbackPairs?: ViewAbilityConfigPair[];
+    };
     horizontalScrollProps?: ScrollViewProps;
 };
 
@@ -53,6 +61,7 @@ export type DataTableRowProps = {
     columns: TDataTableColumn[];
     rowProps?: RowProps;
     isSelected?: boolean;
+    style?: ViewStyle;
 };
 
 export type UseRowRenderer<T extends DataTableRowProps = DataTableRowProps> = (
@@ -164,4 +173,14 @@ export interface DataTableProps<RecordType = any>
      */
     CellWrapperComponent?: ComponentType<DataCellProps>;
     flatListRef?: RefObject<any>;
+    getRowSize: (index: number) => number;
+    rowCount: VariableSizeListProps['itemCount'];
+    rowOverscanCount?: VariableSizeListProps['overscanCount'];
+    rowKey?: VariableSizeListProps['itemKey'];
+    estimatedRowSize?: VariableSizeListProps['estimatedItemSize'];
+    onRowsRendered?: VariableSizeListProps['onItemsRendered'];
+    rowsLoadingThreshold?: InfiniteLoaderProps['threshold'];
+    rowsMinimumBatchSize?: InfiniteLoaderProps['minimumBatchSize'];
+    loadMoreRows?: InfiniteLoaderProps['loadMoreItems'];
+    isRowLoaded?: InfiniteLoaderProps['isItemLoaded'];
 }

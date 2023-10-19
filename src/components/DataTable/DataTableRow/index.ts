@@ -1,7 +1,7 @@
 import type { ComponentStylePropWithResolvers } from '../../../types';
 import type { ViewStyle } from 'react-native';
 
-export * from './DataTableRow';
+export { default as DataTableRow } from './DataTableRow';
 
 export const dataTableRowStyles: ComponentStylePropWithResolvers<
     ViewStyle,

@@ -12,7 +12,7 @@ import {
     renderDataTableCellComponent,
     useDataTable,
 } from '@bambooapp/bamboo-molecules/components';
-import { areEqual } from '@bambooapp/bamboo-molecules/virtualized-list';
+import { areEqual } from '@bambooapp/virtualized-list';
 
 import type { DataGridRowRendererProps } from '../../types';
 import { useCellFocusMethods, useDragAndExtendMethods } from '../../plugins';

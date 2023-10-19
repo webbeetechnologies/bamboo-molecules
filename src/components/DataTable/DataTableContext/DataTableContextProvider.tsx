@@ -34,7 +34,9 @@ const calculateXOffset = (
         [0],
     );
 
-export const DataTableContextProvider: FC<PropsWithChildren<DataTableProps>> = memo(
+export const DataTableContextProvider: FC<
+    PropsWithChildren<Omit<DataTableProps, 'getRowSize' | 'rowCount'>>
+> = memo(
     ({
         records,
         columns,
