@@ -20,10 +20,6 @@ const storybookPlugins = [
                     __dirname,
                     './src/shortcuts-manager',
                 ),
-                '@bambooapp/bamboo-molecules/virtualized-list': path.resolve(
-                    __dirname,
-                    './src/virtualized-list',
-                ),
             },
         },
     ],

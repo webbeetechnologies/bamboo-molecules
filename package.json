@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "@bambooapp/bamboo-atoms": "^0.0.31",
+    "@bambooapp/virtualized-list": "^0.0.1",
     "@gorhom/portal": "^1.0.14",
     "@react-native-aria/overlays": "^0.3.2",
     "@sharcoux/slider": "^6.1.2",

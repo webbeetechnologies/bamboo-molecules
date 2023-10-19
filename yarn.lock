@@ -2137,6 +2137,7 @@ __metadata:
   resolution: "@bambooapp/bamboo-molecules@workspace:."
   dependencies:
     "@bambooapp/bamboo-atoms": ^0.0.31
+    "@bambooapp/virtualized-list": ^0.0.1
     "@gorhom/portal": ^1.0.14
     "@react-native-aria/overlays": ^0.3.2
     "@react-native-community/eslint-config": ^3.1.0
@@ -2215,6 +2216,13 @@ __metadata:
     react-native-vector-icons: ">=9.2.0"
   languageName: unknown
   linkType: soft
+
+"@bambooapp/virtualized-list@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "@bambooapp/virtualized-list@npm:0.0.1"
+  checksum: 6268593e3c670d28c45def4633155d09abe0932f0625699ec6bf51459b531392158b4591db533de190b7337b3fc9368c3716b47ca67099e5da5e8bbd392feba6
+  languageName: node
+  linkType: hard
 
 "@base2/pretty-print-object@npm:1.0.1":
   version: 1.0.1

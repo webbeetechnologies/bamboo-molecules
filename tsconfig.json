@@ -8,7 +8,6 @@
       "@bambooapp/bamboo-molecules/components": ["./src/components"],
       "@bambooapp/bamboo-molecules/fast-context": ["./src/fast-context/index.tsx"],
       "@bambooapp/bamboo-molecules/shortcuts-manager": ["./src/shortcuts-manager/index.tsx"],
-      "@bambooapp/bamboo-molecules/virtualized-list": ["./src/virtualized-list/index.tsx"]
     },
     "declaration": true,
     "allowUnreachableCode": false,

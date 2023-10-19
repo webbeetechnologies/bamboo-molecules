@@ -51,7 +51,8 @@ export const useRowRenderer: UseRowRenderer = (rowRendererProps, DefaultRowCompo
      * Normalize rowId which is the internal Id into the actual ID of the row.
      * this is to prevent duplicates.
      */
-    const rowId = useRecordByInternalId(rowRendererProps.rowId);
+
+    const rowId = useRecordByInternalId(rowRendererProps?.rowId);
     return useRowRendererProp?.({ ...rowRendererProps, rowId }, DefaultRowComponent);
 };
 

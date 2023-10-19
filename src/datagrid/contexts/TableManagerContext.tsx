@@ -126,7 +126,7 @@ export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
 };
 
 export const useRecordType = (id: TDataTableRow) => {
-    return useTableManagerValueSelector(({ records }) => getRecordsMap(records)[id].rowType);
+    return useTableManagerValueSelector(({ records }) => getRecordsMap(records)[id]?.rowType);
 };
 
 export const useRecord = <T extends unknown>(
@@ -146,5 +146,5 @@ export const useRecordByInternalId = (id: TDataTableRow) => {
      * Normalize rowId which is the internal Id into the actual ID of the row.
      * this is to prevent duplicates.
      */
-    return useRecord(id, record => record.id);
+    return useRecord(id, record => record?.id);
 };

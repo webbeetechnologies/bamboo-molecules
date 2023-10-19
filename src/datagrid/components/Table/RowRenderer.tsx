@@ -1,3 +1,5 @@
+import { forwardRef, memo, useMemo } from 'react';
+import type { ViewStyle } from 'react-native';
 import {
     DataTableRowProps,
     useActionState,
@@ -10,22 +12,37 @@ import {
     renderDataTableCellComponent,
     useDataTable,
 } from '@bambooapp/bamboo-molecules/components';
-import { forwardRef, memo, useMemo } from 'react';
+import { areEqual } from '@bambooapp/bamboo-molecules/virtualized-list';
+
 import type { DataGridRowRendererProps } from '../../types';
-import type { ViewStyle } from 'react-native';
+import { useCellFocusMethods, useDragAndExtendMethods } from '../../plugins';
 
 export type Props = DataGridRowRendererProps;
 
+const useBoolean = () => false;
+const emptyObj = {};
+
 export const TableRow = memo((props: DataTableRowProps) => {
-    const { rowId, index, rowProps, isSelected = false } = props;
+    const { rowId, index, rowProps, isSelected = false, style } = props;
 
     const { hovered = false, actionsRef } = useActionState();
 
     const rowSize = useDataTable(store => store.rowSize);
 
+    const { useIsRowFocused } = useCellFocusMethods();
+    const { useIsDragHandleVisibleRow = useBoolean } = useDragAndExtendMethods() || emptyObj;
+
+    const isRowFocused = useIsRowFocused(index);
+    const isDragHandleVisibleOnRow = useIsDragHandleVisibleRow({ rowIndex: index });
+
     const rowStyle = useComponentStyles(
         'DataTable_Row',
-        [rowProps?.style, { flexDirection: 'row' }],
+        [
+            rowProps?.style,
+            style,
+            (isRowFocused || isDragHandleVisibleOnRow) && { zIndex: 9 },
+            { flexDirection: 'row' },
+        ],
         {
             size: rowProps?.size ?? rowSize,
             states: {
@@ -46,7 +63,7 @@ export const TableRow = memo((props: DataTableRowProps) => {
             <TableRowInner {...props} rowId={rowId} style={rowStyle} ref={actionsRef} />
         </DataTableContextRowProvider>
     );
-});
+}, areEqual);
 
 const TableRowComponent = (
     { rowId, index, columns, rowProps, style }: Props & { style?: ViewStyle },

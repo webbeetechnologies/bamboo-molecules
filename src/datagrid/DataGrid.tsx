@@ -22,7 +22,6 @@ import {
     CellWrapperComponent,
     ColumnHeaderCell,
     ContextMenu,
-    RowWrapperComponent,
     TableHeaderRow,
 } from './components';
 import {
@@ -56,7 +55,7 @@ const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
 
 type DataGridPropsBase = Omit<
     DataTableProps,
-    'title' | 'renderHeader' | 'renderCell' | 'columns' | 'records'
+    'title' | 'renderHeader' | 'renderCell' | 'columns' | 'records' | 'getRowSize' | 'rowCount'
 > &
     Omit<ViewProps, 'ref'> & {
         onEndReached?: () => void;
@@ -66,6 +65,7 @@ type DataGridPropsBase = Omit<
         renderCell?: DataTableProps['renderCell'];
         plugins?: Plugin[];
         groups?: TDataTableColumn[];
+        rowCount?: DataTableProps['rowCount'];
     };
 
 export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
@@ -74,6 +74,7 @@ export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
         records: GroupedData[];
         spacerWidth?: string | number;
         focusIgnoredColumns?: TDataTableColumn[];
+        getRowSize: (records: GroupedData[], index: number) => number;
     };
 
 export type ContextMenuProps = Partial<MenuProps> & {
@@ -93,6 +94,7 @@ export type ContextMenuProps = Partial<MenuProps> & {
 
 type DataGridPresentationProps = DataGridPropsBase & {
     records: TDataTableRow[];
+    getRowSize: (records: GroupedData[], index: number) => number;
 };
 
 const emptyObj = {};
@@ -106,6 +108,8 @@ const DataGrid = ({
     rowProps: _rowProps,
     cellProps: _cellProps,
     horizontalScrollProps: _horizontalScrollProps,
+    rowCount,
+    getRowSize,
     ...rest
 }: DataGridPresentationProps) => {
     const { DataTable } = useMolecules();
@@ -155,12 +159,17 @@ const DataGrid = ({
     );
 
     const verticalScrollProps = useMemo(
-        () =>
-            addDataToCallbackPairs(store, {
+        () => ({
+            ...addDataToCallbackPairs(store, {
                 ..._verticalScrollProps,
-                CellRendererComponent: RowWrapperComponent,
             }),
+        }),
         [store, _verticalScrollProps],
+    );
+
+    const itemSize = useCallback(
+        (index: number) => getRowSize(store.current.records as GroupedData[], index),
+        [getRowSize, store],
     );
 
     const onContextMenuOpen = useCallback(
@@ -217,6 +226,8 @@ const DataGrid = ({
                 renderHeader={renderHeader}
                 renderCell={renderCell}
                 {...rest}
+                getRowSize={itemSize}
+                rowCount={rowCount ?? records.length}
                 columns={columnIds}
                 records={records}
                 rowSize={rowHeight}
@@ -224,7 +235,7 @@ const DataGrid = ({
                 rowProps={rowProps}
                 headerCellProps={cellProps}
                 headerRowProps={rowProps}
-                verticalScrollProps={verticalScrollProps}
+                verticalScrollProps={verticalScrollProps as any}
                 horizontalScrollProps={horizontalScrollProps}
                 HeaderRowComponent={TableHeaderRow}
                 useRowRenderer={useRowRenderer}

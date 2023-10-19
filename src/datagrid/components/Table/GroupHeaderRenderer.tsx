@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react';
 import type { ViewStyle } from 'react-native';
 import { useMolecules } from '@bambooapp/bamboo-molecules';
+import { areEqual } from '@bambooapp/bamboo-molecules/virtualized-list';
 // import type { RenderCellProps } from '../../../components';
 import { useField, useGroupMeta } from '../../contexts';
 import { ViewRenderer } from '../FieldRenderers';
@@ -13,7 +14,7 @@ import { GroupExpandCollapseToggle } from '../GroupExpandCollapseToggle';
  * Can be replaced by the component consumer.
  *
  */
-export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps }: GroupMetaRowProps) => {
+export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps, style }: GroupMetaRowProps) => {
     const { View, Text } = useMolecules();
     const field = useField(meta.fieldId!);
 
@@ -22,9 +23,10 @@ export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps }: GroupMetaRow
             rowStyle: [
                 { flexDirection: 'row', alignItems: 'center', padding: 'spacings.1' },
                 rowProps?.style,
+                style,
             ] as ViewStyle,
         }),
-        [rowProps?.style],
+        [rowProps?.style, style],
     );
 
     return (
@@ -37,7 +39,7 @@ export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps }: GroupMetaRow
             </View>
         </View>
     );
-});
+}, areEqual);
 
 /**
  *
