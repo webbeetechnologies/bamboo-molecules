@@ -152,6 +152,7 @@ const DataTablePresentationComponent = memo(
             [verticalScrollProps],
         );
 
+        // TODO - Revisit // create separate component to make it cleaner
         const renderList = useCallback(
             ({ onItemsRendered, ref: _ref }: InfiniteLoaderChildrenArg) => {
                 const setRef = (listRef: any) => {
