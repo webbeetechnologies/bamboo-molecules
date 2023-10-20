@@ -47,7 +47,7 @@ type DataTableContextType = Pick<
         columnWidths?: Record<TDataTableColumn, number>;
         // tableHeight: number;
         cellXOffsets: number[];
-        isRowLoaded: (index: number) => boolean;
+        hasRowLoaded: (index: number) => boolean;
     };
 
 export const {

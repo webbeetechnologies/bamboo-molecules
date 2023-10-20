@@ -39,7 +39,7 @@ type DataTableComponentProps = DataTableBase &
         | 'rowsMinimumBatchSize'
         | 'rowsLoadingThreshold'
         | 'loadMoreRows'
-        | 'isRowLoaded'
+        | 'hasRowLoaded'
         | 'rowOverscanCount'
     > & {
         flatListRef?: RefObject<any>;
@@ -77,7 +77,7 @@ const DataTablePresentationComponent = memo(
 
         const containerHeight = useDataTable(store => store.containerHeight);
         const contentWidth = useDataTable(store => store.contentWidth);
-        const isRowLoaded = useDataTable(store => store.isRowLoaded);
+        const hasRowLoaded = useDataTable(store => store.hasRowLoaded);
 
         const { set: setStore } = useStoreRef();
         const { set: setDataTableStore } = useDataTableStoreRef();
@@ -126,7 +126,7 @@ const DataTablePresentationComponent = memo(
             [setDataTableStore],
         );
 
-        const isItemLoaded = useCallback((index: number) => isRowLoaded(index), [isRowLoaded]);
+        const isItemLoaded = useCallback((index: number) => hasRowLoaded(index), [hasRowLoaded]);
 
         const loadMoreItems = useCallback(
             async (startIndex: number, stopIndex: number) => {
@@ -264,7 +264,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 CellWrapperComponent,
                 horizontalOffset,
                 getRowId,
-                isRowLoaded,
+                hasRowLoaded,
                 ...rest
             } = props;
 
@@ -292,10 +292,10 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                     index => getRowId?.(index) ?? index,
                     [getRowId],
                 ),
-                isRowLoaded: useCallback(
+                hasRowLoaded: useCallback(
                     (index: number) =>
-                        !!latestRecordsRef.current[index] || isRowLoaded?.(index) || false,
-                    [isRowLoaded, latestRecordsRef],
+                        !!latestRecordsRef.current[index] || hasRowLoaded?.(index) || false,
+                    [hasRowLoaded, latestRecordsRef],
                 ),
             };
 

@@ -123,7 +123,7 @@ const DataTableRow = memo(({ index, style }: Pick<DataTableRowProps, 'index' | '
 const DataTableRowWithPlaceHolder = memo(
     ({ index, style }: Pick<DataTableRowProps, 'index' | 'style'>) => {
         const { View } = useMolecules();
-        const isLoaded = useDataTable(store => !!store.isRowLoaded(index));
+        const isLoaded = useDataTable(store => !!store.hasRowLoaded(index));
 
         const placeHolderRowStyle = useMemo(() => [styles.placeHolderRow, style], [style]);
 

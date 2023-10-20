@@ -236,7 +236,7 @@ export interface DataTableProps<RecordType = any>
      * To be used for displaying a placeholder row.
      *
      */
-    isRowLoaded?: (index: number, recordExists: boolean) => boolean;
+    hasRowLoaded?: (index: number) => boolean;
 
     /**
      *

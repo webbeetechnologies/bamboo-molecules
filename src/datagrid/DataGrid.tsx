@@ -70,7 +70,7 @@ type DataGridPropsBase = Omit<
         getRowId: (groupId: string, index: number) => boolean;
     };
 
-export type Props = Omit<DataGridPropsBase, 'horizontalOffset' | 'getRowId' | 'isRowLoaded'> &
+export type Props = Omit<DataGridPropsBase, 'horizontalOffset' | 'getRowId' | 'hasRowLoaded'> &
     HooksContextType & {
         fieldTypes?: FieldTypes;
         records: GroupedData[];
@@ -78,7 +78,7 @@ export type Props = Omit<DataGridPropsBase, 'horizontalOffset' | 'getRowId' | 'i
         focusIgnoredColumns?: TDataTableColumn[];
         getRowSize: (records: GroupedData[], index: number) => number;
         getRowId: (groupId: string, index: number) => TDataTableRowTruthy;
-        isRowLoaded: (groupId: string, index: number) => boolean;
+        hasRowLoaded: (groupId: string, index: number) => boolean;
     };
 
 export type ContextMenuProps = Partial<MenuProps> & {
@@ -360,7 +360,7 @@ const TableManagerProviderWrapper = ({
     Component,
     focusIgnoredColumns,
     getRowId,
-    isRowLoaded,
+    hasRowLoaded,
     ...rest
 }: Omit<Props, 'useField' | 'useCellValue'> & {
     Component: ComponentType<DataGridPresentationProps>;
@@ -388,10 +388,10 @@ const TableManagerProviderWrapper = ({
                 index => getRowId(getRecordByIndex(latestRecordsRef.current, index).groupId, index),
                 [latestRecordsRef, getRowId],
             )}
-            isRowLoaded={useCallback(
+            hasRowLoaded={useCallback(
                 index =>
-                    isRowLoaded(getRecordByIndex(latestRecordsRef.current, index).groupId, index),
-                [latestRecordsRef, isRowLoaded],
+                    hasRowLoaded(getRecordByIndex(latestRecordsRef.current, index).groupId, index),
+                [latestRecordsRef, hasRowLoaded],
             )}
             withContextMenu={!!contextMenuProps}
             focusIgnoredColumns={focusIgnoredColumns}>

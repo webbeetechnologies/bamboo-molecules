@@ -13,7 +13,7 @@ export type TableManagerContextProviderProps = {
     spacerWidth: number;
     focusIgnoredColumns?: TDataTableColumn[];
     getRowId: (index: number) => TDataTableRowTruthy;
-    isRowLoaded: (index: number) => boolean;
+    hasRowLoaded: (index: number) => boolean;
     isEditing?: boolean;
 };
 
@@ -30,7 +30,7 @@ const defaultContextValue: TableManagerContextType = {
     tableFlatListRef: createRef(),
     focusIgnoredColumns: [],
     getRowId: index => index,
-    isRowLoaded: () => true,
+    hasRowLoaded: () => true,
 };
 
 export const {
@@ -49,7 +49,7 @@ export const TableManagerProvider = memo(
         records,
         focusIgnoredColumns,
         getRowId,
-        isRowLoaded,
+        hasRowLoaded,
     }: PropsWithChildren<TableManagerContextProviderProps>) => {
         const contextValue = useMemo(
             () =>
@@ -61,7 +61,7 @@ export const TableManagerProvider = memo(
                     focusIgnoredColumns,
 
                     getRowId,
-                    isRowLoaded,
+                    hasRowLoaded,
                 } as TableManagerContextType),
             [
                 tableRef,
@@ -70,7 +70,7 @@ export const TableManagerProvider = memo(
                 spacerWidth,
                 focusIgnoredColumns,
                 getRowId,
-                isRowLoaded,
+                hasRowLoaded,
             ],
         );
 
