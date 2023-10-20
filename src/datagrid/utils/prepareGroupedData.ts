@@ -1,4 +1,4 @@
-import { isNil, memoize, allArgumentResolver } from './lodash';
+import { memoize, allArgumentResolver } from './lodash';
 
 import type {
     GroupConstantValues,
@@ -22,14 +22,7 @@ export const isDataRow = (x: GroupedData): x is GroupRecord => x!.rowType === Ro
  *
  *
  */
-const toStringValue = (value: unknown) => {
-    if (isNil(value)) return `$$${value}`;
-    if (!value) return `##${value}`;
-    if (typeof value === 'boolean') return `!!${value}`;
-    if (!(value instanceof Object)) return `%%${value}`;
-    if (Array.isArray(value)) return value.map(({ id }) => id).join('&');
-    return '@@unknown';
-};
+const toStringValue = (value: unknown) => allArgumentResolver(value);
 
 /**
  *
@@ -83,6 +76,7 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
         { children, field, value, ...aggregateRow },
         groupConstants,
         index,
+        lastIndex,
         startIndex,
         totalItems: number,
         groupIdRoot = '',
@@ -115,6 +109,7 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
             index: startIndex++,
             field,
             value,
+            realIndex: lastIndex++,
             rowType: RowType.HEADER,
             id: `${groupId}::header`,
             ...sharedProps,
@@ -127,6 +122,7 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
                         child,
                         groupConstants,
                         childIndex,
+                        !array.length ? lastIndex++ : array.at(-1)!.realIndex + 1,
                         !array.length ? startIndex++ : array.at(-1)!.index + 1,
                         children.length,
                         groupId,
@@ -139,6 +135,7 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
             index: subGroups.length ? subGroups.at(-1)!.index + 1 : startIndex + aggregateRow.count,
             field,
             value,
+            realIndex: lastIndex++,
             rowType: RowType.FOOTER,
             id: `${groupId}::footer`,
             ...sharedProps,

@@ -26,6 +26,7 @@ export type GroupMeta = GroupMetaStates & {
     groupConstants: GroupConstantValues[];
     isRealGroup?: boolean;
     isCollapsed: boolean;
+    realIndex: number;
 };
 
 export interface RecordWithId extends Record<string, any> {
@@ -79,6 +80,7 @@ export type NormalizeAggregatesFunc = (
     arg: AggregateRecord,
     groupConstants: GroupConstantValues[],
     index: number,
+    lastIndex: number,
     normalizedIndex: number,
     totalItems: number,
     groupIdRoot?: string,
