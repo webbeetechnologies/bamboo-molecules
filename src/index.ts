@@ -151,6 +151,7 @@ export {
     MenuProps,
     MenuItemProps,
     StateLayerProps,
+    If,
 } from './components';
 
 // to avoid circular dependencies
