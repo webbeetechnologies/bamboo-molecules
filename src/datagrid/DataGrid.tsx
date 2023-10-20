@@ -47,7 +47,7 @@ import {
 } from './plugins';
 import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
-import { GroupedData, addDataToCallbackPairs, getRecordByIndex, getRowIds } from './utils';
+import { GroupedData, addDataToCallbackPairs, getRecordByIndexNoId, getRowIds } from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
 import { isSpaceKey } from '../shortcuts-manager/utils';
 
@@ -77,8 +77,8 @@ export type Props = Omit<DataGridPropsBase, 'horizontalOffset' | 'getRowId' | 'h
         spacerWidth?: string | number;
         focusIgnoredColumns?: TDataTableColumn[];
         getRowSize: (records: GroupedData[], index: number) => number;
-        getRowId: (groupId: string, index: number) => TDataTableRowTruthy;
-        hasRowLoaded: (groupId: string, index: number) => boolean;
+        getRowId: (record: Exclude<Omit<GroupedData, 'id'>, undefined>) => TDataTableRowTruthy;
+        hasRowLoaded: (record: Exclude<Omit<GroupedData, 'id'>, undefined>) => boolean;
     };
 
 export type ContextMenuProps = Partial<MenuProps> & {
@@ -387,12 +387,11 @@ const TableManagerProviderWrapper = ({
             spacerWidth={spacerWidth}
             records={records}
             getRowId={useCallback(
-                index => getRowId(getRecordByIndex(latestRecordsRef.current, index).groupId, index),
+                index => getRowId(getRecordByIndexNoId(latestRecordsRef.current, index)),
                 [latestRecordsRef, getRowId],
             )}
             hasRowLoaded={useCallback(
-                index =>
-                    hasRowLoaded(getRecordByIndex(latestRecordsRef.current, index).groupId, index),
+                index => hasRowLoaded(getRecordByIndexNoId(latestRecordsRef.current, index)),
                 [latestRecordsRef, hasRowLoaded],
             )}
             withContextMenu={!!contextMenuProps}

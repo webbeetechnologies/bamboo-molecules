@@ -15,13 +15,19 @@ const uniqueIdFactory = () => {
 
 const getUniqueId = uniqueIdFactory();
 const weakMemoize = Object.assign(memoize.bind(null), { Cache: WeakMap });
-const getObjectMemoryAddress = weakMemoize((x: object | null) => x && getUniqueId());
+const getObjectMemoryAddress = weakMemoize((x: unknown | null) => x && getUniqueId());
 
 export const allArgumentResolver = (...args: unknown[]) =>
     args
         .map(x => {
-            if (typeof x !== 'object') return typeof x + String(x);
-            return 'object' + getObjectMemoryAddress(x);
+            const type = typeof x;
+            switch (type) {
+                case 'object':
+                case 'function':
+                    return type.slice(0, 2)! + getObjectMemoryAddress(x);
+                default:
+                    return type.slice(0, 2)! + String(x);
+            }
         })
         .join('_');
 

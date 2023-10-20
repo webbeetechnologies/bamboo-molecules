@@ -134,6 +134,7 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
                 ),
             [],
         );
+
         const footer: GroupFooter = {
             index: subGroups.length ? subGroups.at(-1)!.index + 1 : startIndex + aggregateRow.count,
             field,
@@ -195,6 +196,15 @@ export const getRecordByIndex = memoize(
             indexInGroup: index - group.index,
             groupConstants: group.groupConstants,
         };
+    },
+    allArgumentResolver,
+);
+
+// TODO: Revisit Groupby - Add way to add correct id.
+export const getRecordByIndexNoId = memoize(
+    (records: GroupedData[], index: number): Exclude<Omit<GroupedData, 'id'>, undefined> => {
+        const { id: _, ...record } = getRecordByIndex(records, index);
+        return record;
     },
     allArgumentResolver,
 );
