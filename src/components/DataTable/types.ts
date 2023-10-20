@@ -183,5 +183,5 @@ export interface DataTableProps<RecordType = any>
     rowsLoadingThreshold?: InfiniteLoaderProps['threshold'];
     rowsMinimumBatchSize?: InfiniteLoaderProps['minimumBatchSize'];
     loadMoreRows?: InfiniteLoaderProps['loadMoreItems'];
-    isRowLoaded?: InfiniteLoaderProps['isItemLoaded'];
+    isRowLoaded?: (index: number, recordExists: boolean) => boolean;
 }

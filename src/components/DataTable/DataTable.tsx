@@ -62,12 +62,12 @@ const DataTablePresentationComponent = memo(
             onLayout: onLayoutProp,
             HeaderRowComponent: HeaderRowComponentProp,
             flatListRef,
-            rowsMinimumBatchSize = 50,
+            rowsMinimumBatchSize,
             isRowLoaded: isItemLoadedProp,
             rowCount: rowCountProp,
             rowsLoadingThreshold = 5,
-            loadMoreRows: loadMoreItemsProp,
-            onRowsRendered: onItemsRenderedProp,
+            loadMoreRows,
+            onRowsRendered,
             getRowSize,
             rowOverscanCount = 5,
             ...restScrollViewProps
@@ -84,7 +84,7 @@ const DataTablePresentationComponent = memo(
 
         const HeaderRowComponent = HeaderRowComponentProp || DataTableHeaderRow;
 
-        const itemCount = rowCountProp || records.length;
+        const rowCount = rowCountProp || records.length;
 
         const onScroll = useCallback(
             (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -124,10 +124,7 @@ const DataTablePresentationComponent = memo(
 
         const isItemLoaded = useCallback(
             (index: number) => {
-                if (isItemLoadedProp) {
-                    return isItemLoadedProp(index);
-                }
-
+                if (isItemLoadedProp) return isItemLoadedProp(index, !!records[index]);
                 return !!records[index];
             },
             [isItemLoadedProp, records],
@@ -135,9 +132,9 @@ const DataTablePresentationComponent = memo(
 
         const loadMoreItems = useCallback(
             async (startIndex: number, stopIndex: number) => {
-                loadMoreItemsProp?.(startIndex, stopIndex);
+                loadMoreRows?.(startIndex, stopIndex);
             },
-            [loadMoreItemsProp],
+            [loadMoreRows],
         );
 
         const itemSize = useCallback(
@@ -163,7 +160,7 @@ const DataTablePresentationComponent = memo(
                 };
 
                 const _onItemsRenderer: DataTableProps['onRowsRendered'] = args => {
-                    onItemsRenderedProp?.(args);
+                    onRowsRendered?.(args);
                     onItemsRendered(args);
                 };
 
@@ -175,7 +172,7 @@ const DataTablePresentationComponent = memo(
                         height={containerHeight || 0}
                         itemSize={itemSize}
                         overscanCount={rowOverscanCount}
-                        itemCount={itemCount}
+                        itemCount={rowCount}
                         {...vProps}>
                         {/*@ts-ignore */}
                         {DataTableRow}
@@ -186,9 +183,9 @@ const DataTablePresentationComponent = memo(
                 containerHeight,
                 contentWidth,
                 flatListRef,
-                itemCount,
+                rowCount,
                 itemSize,
-                onItemsRenderedProp,
+                onRowsRendered,
                 rowOverscanCount,
                 vProps,
             ],
@@ -213,7 +210,7 @@ const DataTablePresentationComponent = memo(
                             isItemLoaded={isItemLoaded}
                             threshold={rowsLoadingThreshold}
                             minimumBatchSize={rowsMinimumBatchSize}
-                            itemCount={itemCount}
+                            itemCount={rowCount}
                             loadMoreItems={loadMoreItems}>
                             {renderList}
                         </InfiniteLoader>
