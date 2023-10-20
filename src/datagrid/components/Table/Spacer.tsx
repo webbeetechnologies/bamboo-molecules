@@ -68,7 +68,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
             },
         });
 
-        const { View } = useMolecules();
+        const { View, If } = useMolecules();
 
         const groupMeta = useGroupMeta(rowId);
         const isDataRowHeader = isGroupHeader(groupRow) && groupRow.isLastLevel;
@@ -78,7 +78,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
             [
                 props.rowProps?.style,
                 isGroupsEnabled && level === 0 ? { minHeight: spacerWidth } : null,
-                isGroupsEnabled && { flex: 1 },
+                { flex: 1 },
                 groupMeta.isRealGroup === false
                     ? { borderLeftWidth: 0, borderRightWidth: 0 }
                     : null,
@@ -97,25 +97,25 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
             [style, props.rowProps],
         );
 
-        if (!isGroupsEnabled) {
-            return <Component {...props} rowId={rowId} rowProps={rowProps} />;
-        }
-
         return (
             <View style={groupSpacerWrapStyles}>
-                <SpacerList
-                    edgeIndex={0}
-                    level={level}
-                    variant="left"
-                    isLastLevel={groupMeta.isLastLevel}
-                />
+                <If shouldRender={isGroupsEnabled}>
+                    <SpacerList
+                        edgeIndex={0}
+                        level={level}
+                        variant="left"
+                        isLastLevel={groupMeta.isLastLevel}
+                    />
+                </If>
                 <Component {...props} rowId={rowId} rowProps={rowProps} />
-                <SpacerList
-                    edgeIndex={level - 1}
-                    level={level}
-                    variant="right"
-                    isLastLevel={groupMeta.isLastLevel}
-                />
+                <If shouldRender={isGroupsEnabled}>
+                    <SpacerList
+                        edgeIndex={level - 1}
+                        level={level}
+                        variant="right"
+                        isLastLevel={groupMeta.isLastLevel}
+                    />
+                </If>
             </View>
         );
     });
