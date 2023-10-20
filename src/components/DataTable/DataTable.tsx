@@ -294,8 +294,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 ),
                 isRowLoaded: useCallback(
                     (index: number) =>
-                        isRowLoaded?.(index, !!latestRecordsRef.current[index]) ??
-                        !!latestRecordsRef.current[index],
+                        !!latestRecordsRef.current[index] || isRowLoaded?.(index) || false,
                     [isRowLoaded, latestRecordsRef],
                 ),
             };

@@ -7,6 +7,7 @@ import type {
     RenderHeaderCellProps,
     TDataTableColumn,
     TDataTableRow,
+    TDataTableRowTruthy,
 } from '@bambooapp/bamboo-molecules/components';
 import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Platform, StyleSheet } from 'react-native';
@@ -46,7 +47,7 @@ import {
 } from './plugins';
 import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
-import { GroupedData, addDataToCallbackPairs, getRowIds } from './utils';
+import { GroupedData, addDataToCallbackPairs, getRecordByIndex, getRowIds } from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
 import { isSpaceKey } from '../shortcuts-manager/utils';
 
@@ -66,15 +67,18 @@ type DataGridPropsBase = Omit<
         plugins?: Plugin[];
         groups?: TDataTableColumn[];
         rowCount?: DataTableProps['rowCount'];
+        getRowId: (groupId: string, index: number) => boolean;
     };
 
-export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
+export type Props = Omit<DataGridPropsBase, 'horizontalOffset' | 'getRowId' | 'isRowLoaded'> &
     HooksContextType & {
         fieldTypes?: FieldTypes;
         records: GroupedData[];
         spacerWidth?: string | number;
         focusIgnoredColumns?: TDataTableColumn[];
         getRowSize: (records: GroupedData[], index: number) => number;
+        getRowId: (groupId: string, index: number) => TDataTableRowTruthy;
+        isRowLoaded: (groupId: string, index: number) => boolean;
     };
 
 export type ContextMenuProps = Partial<MenuProps> & {
@@ -355,6 +359,8 @@ const TableManagerProviderWrapper = ({
     spacerWidth: spacerWidthProp = 'spacings.3',
     Component,
     focusIgnoredColumns,
+    getRowId,
+    isRowLoaded,
     ...rest
 }: Omit<Props, 'useField' | 'useCellValue'> & {
     Component: ComponentType<DataGridPresentationProps>;
@@ -371,12 +377,22 @@ const TableManagerProviderWrapper = ({
     const spacerWidth = useToken(spacerWidthProp as string) ?? spacerWidthProp;
 
     const offsetWidth = (groups?.length ?? 0) * spacerWidth;
+    const latestRecordsRef = useLatest(records);
 
     return (
         <TableManagerProvider
             tableRef={ref}
             spacerWidth={spacerWidth}
             records={records}
+            getRowId={useCallback(
+                index => getRowId(getRecordByIndex(latestRecordsRef.current, index).groupId, index),
+                [latestRecordsRef, getRowId],
+            )}
+            isRowLoaded={useCallback(
+                index =>
+                    isRowLoaded(getRecordByIndex(latestRecordsRef.current, index).groupId, index),
+                [latestRecordsRef, isRowLoaded],
+            )}
             withContextMenu={!!contextMenuProps}
             focusIgnoredColumns={focusIgnoredColumns}>
             {/* @ts-ignore - we don't want to pass down unnecessary props */}

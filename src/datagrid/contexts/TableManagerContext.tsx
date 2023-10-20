@@ -1,5 +1,5 @@
 import { createRef, memo, PropsWithChildren, RefObject, useMemo } from 'react';
-import type { TDataTableColumn } from '@bambooapp/bamboo-molecules/components';
+import type { TDataTableColumn, TDataTableRowTruthy } from '@bambooapp/bamboo-molecules/components';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
 import type { GroupConstantValues, GroupedData } from '../utils';
@@ -12,15 +12,16 @@ export type TableManagerContextProviderProps = {
     tableRef: RefObject<any>;
     spacerWidth: number;
     focusIgnoredColumns?: TDataTableColumn[];
+    getRowId: (index: number) => TDataTableRowTruthy;
+    isRowLoaded: (index: number) => boolean;
+    isEditing?: boolean;
 };
 
 export type TableManagerContextType = TableManagerContextProviderProps & {
     tableFlatListRef: RefObject<any>;
 };
 
-const defaultContextValue = {
-    focusedCell: null,
-    focusedCellRef: null,
+const defaultContextValue: TableManagerContextType = {
     isEditing: false,
     withContextMenu: false,
     spacerWidth: 0,
@@ -28,6 +29,8 @@ const defaultContextValue = {
     tableRef: createRef(),
     tableFlatListRef: createRef(),
     focusIgnoredColumns: [],
+    getRowId: index => index,
+    isRowLoaded: () => true,
 };
 
 export const {
@@ -45,6 +48,8 @@ export const TableManagerProvider = memo(
         spacerWidth,
         records,
         focusIgnoredColumns,
+        getRowId,
+        isRowLoaded,
     }: PropsWithChildren<TableManagerContextProviderProps>) => {
         const contextValue = useMemo(
             () =>
@@ -54,8 +59,19 @@ export const TableManagerProvider = memo(
                     records,
                     spacerWidth,
                     focusIgnoredColumns,
+
+                    getRowId,
+                    isRowLoaded,
                 } as TableManagerContextType),
-            [tableRef, withContextMenu, records, spacerWidth, focusIgnoredColumns],
+            [
+                tableRef,
+                withContextMenu,
+                records,
+                spacerWidth,
+                focusIgnoredColumns,
+                getRowId,
+                isRowLoaded,
+            ],
         );
 
         return (
