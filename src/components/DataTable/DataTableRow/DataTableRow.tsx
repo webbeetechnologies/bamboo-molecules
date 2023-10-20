@@ -1,5 +1,5 @@
 import { forwardRef, memo, useMemo } from 'react';
-import { ViewStyle, StyleSheet } from 'react-native';
+import type { ViewStyle } from 'react-native';
 
 import { useActionState, useComponentStyles, useMolecules } from '../../../hooks';
 import { shallowCompare } from '../../../utils';
@@ -10,10 +10,11 @@ import {
     useDataTable,
 } from '../DataTableContext';
 import type { DataTableRowProps } from '../types';
+import { withRowLoadingPlaceholder } from '../hoc';
 
 // import { useRowWithinBounds } from '../DataTable';
 
-const DataTableRowWrapper = memo((props: DataTableRowProps) => {
+const DataTableRowWrapper = withRowLoadingPlaceholder((props: DataTableRowProps) => {
     const { rowId, index, rowProps, isSelected = false, style } = props;
 
     const { hovered = false, actionsRef } = useActionState();
@@ -120,26 +121,6 @@ const DataTableRow = memo(({ index, style }: Pick<DataTableRowProps, 'index' | '
     );
 });
 
-const DataTableRowWithPlaceHolder = memo(
-    ({ index, style }: Pick<DataTableRowProps, 'index' | 'style'>) => {
-        const { View } = useMolecules();
-        const isLoaded = useDataTable(store => !!store.hasRowLoaded(index));
+DataTableRow.displayName = 'DataTableRow';
 
-        const placeHolderRowStyle = useMemo(() => [styles.placeHolderRow, style], [style]);
-
-        if (!isLoaded) return <View style={placeHolderRowStyle} />;
-
-        return <DataTableRow index={index} style={style} />;
-    },
-);
-
-const styles = StyleSheet.create({
-    placeHolderRow: {
-        borderBottomWidth: 1,
-        borderBottomColor: 'colors.outlineVariant',
-    },
-});
-
-DataTableRowWithPlaceHolder.displayName = 'DataTableRow';
-
-export default DataTableRowWithPlaceHolder;
+export default DataTableRow;

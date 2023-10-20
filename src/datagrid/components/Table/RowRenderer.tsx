@@ -1,10 +1,11 @@
-import { forwardRef, memo, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import type { ViewStyle } from 'react-native';
 import {
     DataTableRowProps,
     useActionState,
     useComponentStyles,
     useMolecules,
+    withRowLoadingPlaceholder,
 } from '@bambooapp/bamboo-molecules';
 import {
     DataTableCellContextProvider,
@@ -94,4 +95,4 @@ const TableRowComponent = (
     );
 };
 
-const TableRowInner = memo(forwardRef(TableRowComponent));
+const TableRowInner = withRowLoadingPlaceholder(TableRowComponent);

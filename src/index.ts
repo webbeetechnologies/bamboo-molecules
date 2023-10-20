@@ -143,6 +143,7 @@ export {
     useDataTable,
     useDataTableRow,
     useDataTableHeaderCell,
+    withRowLoadingPlaceholder,
     Slider,
     SliderProps,
     RangeSlider,

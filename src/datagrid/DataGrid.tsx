@@ -244,6 +244,8 @@ const DataGrid = ({
                 HeaderRowComponent={TableHeaderRow}
                 useRowRenderer={useRowRenderer}
                 CellWrapperComponent={CellWrapperComponent}
+                getRowId={store.current.getRowId}
+                hasRowLoaded={store.current.hasRowLoaded}
             />
 
             {shouldContextMenuDisplayed && (

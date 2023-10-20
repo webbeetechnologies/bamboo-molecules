@@ -21,6 +21,8 @@ export {
     LoadMoreRows,
 } from './types';
 
+export * from './hoc';
+
 export {
     dataTableCellStyles,
     renderCellComponent as renderDataTableCellComponent,
