@@ -82,7 +82,7 @@ export type NormalizeAggregatesFunc = (
     groupConstants: GroupConstantValues[],
     index: number,
     lastIndex: number,
-    normalizedIndex: number,
+    startIndex: number,
     totalItems: number,
     groupIdRoot?: string,
 ) => GroupMetaRow[];
