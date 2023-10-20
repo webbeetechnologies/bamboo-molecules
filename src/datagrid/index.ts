@@ -26,6 +26,7 @@ export {
     getRelatedGroupByIndex,
     RowType,
     GroupedData,
+    GroupedDataTruthy,
     RecordWithId,
     isDataRow,
     isGroupHeader,

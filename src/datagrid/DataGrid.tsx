@@ -47,7 +47,13 @@ import {
 } from './plugins';
 import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
-import { GroupedData, addDataToCallbackPairs, getRecordByIndexNoId, getRowIds } from './utils';
+import {
+    GroupedData,
+    GroupedDataTruthy,
+    addDataToCallbackPairs,
+    getRecordByIndexNoId,
+    getRowIds,
+} from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
 import { isSpaceKey } from '../shortcuts-manager/utils';
 
@@ -56,7 +62,15 @@ const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
 
 type DataGridPropsBase = Omit<
     DataTableProps,
-    'title' | 'renderHeader' | 'renderCell' | 'columns' | 'records' | 'getRowSize' | 'rowCount'
+    | 'title'
+    | 'renderHeader'
+    | 'renderCell'
+    | 'columns'
+    | 'records'
+    | 'getRowSize'
+    | 'rowCount'
+    | 'getRowId'
+    | 'hasRowLoaded'
 > &
     Omit<ViewProps, 'ref'> & {
         onEndReached?: () => void;
@@ -67,18 +81,18 @@ type DataGridPropsBase = Omit<
         plugins?: Plugin[];
         groups?: TDataTableColumn[];
         rowCount?: DataTableProps['rowCount'];
-        getRowId: (groupId: string, index: number) => boolean;
+
+        getRowId: (record: Omit<GroupedDataTruthy, 'id'>) => TDataTableRowTruthy;
+        hasRowLoaded: (record: Omit<GroupedDataTruthy, 'id'>) => boolean;
     };
 
-export type Props = Omit<DataGridPropsBase, 'horizontalOffset' | 'getRowId' | 'hasRowLoaded'> &
+export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
     HooksContextType & {
         fieldTypes?: FieldTypes;
         records: GroupedData[];
         spacerWidth?: string | number;
         focusIgnoredColumns?: TDataTableColumn[];
         getRowSize: (records: GroupedData[], index: number) => number;
-        getRowId: (record: Exclude<Omit<GroupedData, 'id'>, undefined>) => TDataTableRowTruthy;
-        hasRowLoaded: (record: Exclude<Omit<GroupedData, 'id'>, undefined>) => boolean;
     };
 
 export type ContextMenuProps = Partial<MenuProps> & {

@@ -20,7 +20,7 @@ import {
     useDragAndExtendPlugin,
     useCellFocusPlugin,
 } from '../../../src/datagrid/plugins';
-import type { DataGridProps, RecordWithId } from '../../../src/datagrid';
+import type { DataGridProps, GroupedDataTruthy, RecordWithId } from '../../../src/datagrid';
 
 const containerStyle = { width: '100%' };
 
@@ -33,17 +33,18 @@ const prepareGroupedData = (data: RecordWithId[]) =>
         isCollapsed: false,
         index: i,
         indexInGroup: i,
+        realIndex: i,
         rowType: 'data' as const,
     }));
 
 const useDataGridProps = (
-    records: RecordWithId[],
+    data: RecordWithId[],
 ): Pick<DataGridProps, 'records' | 'getRowId' | 'hasRowLoaded'> => {
-    const latestRecordsRef = useLatest(prepareGroupedData(records));
+    const latestRecordsRef = useLatest(prepareGroupedData(data));
     return {
         records: latestRecordsRef.current,
-        getRowId: useCallback(
-            (_g, index) => latestRecordsRef.current[index]!.id,
+        getRowId: useCallback<DataGridProps['getRowId']>(
+            (row: Omit<GroupedDataTruthy, 'id'>) => latestRecordsRef.current[row.index]!.id,
             [latestRecordsRef],
         ),
         hasRowLoaded: useCallback(() => true, []),

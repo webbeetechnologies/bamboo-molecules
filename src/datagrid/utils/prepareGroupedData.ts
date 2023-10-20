@@ -3,6 +3,7 @@ import { memoize, allArgumentResolver } from './lodash';
 import type {
     GroupConstantValues,
     GroupedData,
+    GroupedDataTruthy,
     GroupFooter,
     GroupHeader,
     GroupMetaRow,
@@ -166,6 +167,7 @@ export const getRelatedGroupByIndex = memoize(
                 index: 0,
                 groupConstants: [],
                 indexInGroup: 0,
+                realIndex: 0,
             };
 
         const record = records[index];
@@ -178,7 +180,7 @@ export const getRelatedGroupByIndex = memoize(
 
 // TODO: Revisit Groupby - Add way to add correct id.
 export const getRecordByIndex = memoize(
-    (records: GroupedData[], index: number): Exclude<GroupedData, undefined> => {
+    (records: GroupedData[], index: number): GroupedDataTruthy => {
         const record = records[index];
         if (record) return record;
 
@@ -192,6 +194,7 @@ export const getRecordByIndex = memoize(
             rowType: 'data',
             indexInGroup: index - group.index,
             groupConstants: group.groupConstants,
+            realIndex: index - group.realIndex,
         };
     },
     allArgumentResolver,
@@ -199,7 +202,7 @@ export const getRecordByIndex = memoize(
 
 // TODO: Revisit Groupby - Add way to add correct id.
 export const getRecordByIndexNoId = memoize(
-    (records: GroupedData[], index: number): Exclude<Omit<GroupedData, 'id'>, undefined> => {
+    (records: GroupedData[], index: number): Omit<GroupedDataTruthy, 'id'> => {
         const { id: _, ...record } = getRecordByIndex(records, index);
         return record;
     },

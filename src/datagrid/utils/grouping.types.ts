@@ -26,7 +26,6 @@ export type GroupMeta = GroupMetaStates & {
     groupConstants: GroupConstantValues[];
     isRealGroup?: boolean;
     isCollapsed: boolean;
-    realIndex: number;
 };
 
 export interface RecordWithId extends Record<string, any> {
@@ -47,6 +46,7 @@ type GroupBase = {
     id: TDataTableColumn;
     index: number;
     groupConstants: GroupConstantValues[];
+    realIndex: number;
 };
 
 export type AggregateRecord = AggregateBase & {
@@ -74,7 +74,8 @@ export type GroupRecord = GroupBase & {
 
 export type GroupMetaRow = GroupFooter | GroupHeader;
 
-export type GroupedData = GroupMetaRow | GroupRecord | undefined;
+export type GroupedDataTruthy = GroupMetaRow | GroupRecord;
+export type GroupedData = GroupedDataTruthy | undefined;
 
 export type NormalizeAggregatesFunc = (
     arg: AggregateRecord,
