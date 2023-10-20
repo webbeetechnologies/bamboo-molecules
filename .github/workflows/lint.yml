@@ -1,45 +1,46 @@
 name: Lint
 
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    # Trigger the workflow on push or pull request,
+    # but only for the main branch
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
 
 jobs:
-  run-linters:
-    runs-on: [self-hosted, bamboo]
+    run-linters:
+        if: '! github.event.pull_request.draft'
+        runs-on: [self-hosted, bamboo]
 
-    steps:
-      - name: Get Yarn cache path
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+        steps:
+            - name: Get Yarn cache path
+              id: yarn-cache
+              run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - name: Check out Git repository
-        uses: actions/checkout@v3
+            - name: Check out Git repository
+              uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 16
 
-      - name: Cache dependencies
-        id: cache-deps
-        uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+            - name: Cache dependencies
+              id: cache-deps
+              uses: actions/cache@v2
+              with:
+                  path: '**/node_modules'
+                  key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install dependencies
-        # install deps only if lockfile has changed
-        if: steps.cache-deps.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+            - name: Install dependencies
+              # install deps only if lockfile has changed
+              if: steps.cache-deps.outputs.cache-hit != 'true'
+              run: yarn install --frozen-lockfile
 
-      - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
+            - name: Run linters
+              uses: wearerequired/lint-action@v2
+              with:
+                  eslint: true
