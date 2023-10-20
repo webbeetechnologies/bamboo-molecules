@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, memo, RefObject, useCallback, useMemo } from 'react';
+import { ForwardedRef, forwardRef, memo, RefObject, useCallback, useMemo, useRef } from 'react';
 import type {
     LayoutChangeEvent,
     NativeScrollEvent,
@@ -23,7 +23,7 @@ import { DataTableHeaderRow } from './DataTableHeader';
 import { DataTableRow } from './DataTableRow';
 import { defaultProps } from './defaults';
 import { HorizontalScrollIndexProvider, defaultValue, useStoreRef } from './hooks';
-import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
+import type { DataTableBase, DataTableProps, LoadMoreRowsArg, TDataTableRow } from './types';
 
 const defaultGetItemSize = () => 40;
 
@@ -81,6 +81,9 @@ const DataTablePresentationComponent = memo(
 
         const { set: setStore } = useStoreRef();
         const { set: setDataTableStore } = useDataTableStoreRef();
+        const renderedRowsRef = useRef<Omit<LoadMoreRowsArg, 'startIndex' | 'stopIndex'> | null>(
+            null,
+        );
 
         const HeaderRowComponent = HeaderRowComponentProp || DataTableHeaderRow;
 
@@ -132,7 +135,7 @@ const DataTablePresentationComponent = memo(
 
         const loadMoreItems = useCallback(
             async (startIndex: number, stopIndex: number) => {
-                loadMoreRows?.(startIndex, stopIndex);
+                loadMoreRows?.({ startIndex, stopIndex, ...renderedRowsRef.current! });
             },
             [loadMoreRows],
         );
@@ -160,6 +163,7 @@ const DataTablePresentationComponent = memo(
                 };
 
                 const _onItemsRenderer: DataTableProps['onRowsRendered'] = args => {
+                    renderedRowsRef.current = args;
                     onRowsRendered?.(args);
                     onItemsRendered(args);
                 };

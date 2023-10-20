@@ -70,6 +70,15 @@ export type UseRowRenderer<T extends DataTableRowProps = DataTableRowProps> = (
     DefaultComponent: ComponentType<DataTableRowProps>,
 ) => ComponentType<T> | undefined;
 
+export type LoadMoreRowsArg = Parameters<
+    Exclude<VariableSizeListProps['onItemsRendered'], undefined>
+>[0] & {
+    startIndex: number;
+    stopIndex: number;
+};
+
+export type LoadMoreRows = (arg: LoadMoreRowsArg) => void;
+
 export interface DataTableProps<RecordType = any>
     extends Omit<ScrollViewProps, 'children'>,
         Partial<DataTableComponentProps<RecordType>>,
@@ -182,6 +191,6 @@ export interface DataTableProps<RecordType = any>
     onRowsRendered?: VariableSizeListProps['onItemsRendered'];
     rowsLoadingThreshold?: InfiniteLoaderProps['threshold'];
     rowsMinimumBatchSize?: InfiniteLoaderProps['minimumBatchSize'];
-    loadMoreRows?: InfiniteLoaderProps['loadMoreItems'];
+    loadMoreRows?: LoadMoreRows;
     isRowLoaded?: (index: number, recordExists: boolean) => boolean;
 }

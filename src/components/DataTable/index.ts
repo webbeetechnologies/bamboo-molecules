@@ -17,6 +17,8 @@ export {
     TDataTableRow,
     TDataTableRowTruthy,
     UseRowRenderer,
+    LoadMoreRowsArg,
+    LoadMoreRows,
 } from './types';
 
 export {
