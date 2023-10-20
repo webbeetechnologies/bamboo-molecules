@@ -23,7 +23,7 @@ const useInvariant = <T>(value: T, message: string): Exclude<T, null> => {
 
 type DataTableContextType = Pick<
     Required<DataTableProps>,
-    'records' | 'columns' | 'defaultColumnWidth'
+    'records' | 'columns' | 'defaultColumnWidth' | 'getRowId'
 > &
     Pick<
         DataTableProps,
@@ -47,6 +47,7 @@ type DataTableContextType = Pick<
         columnWidths?: Record<TDataTableColumn, number>;
         // tableHeight: number;
         cellXOffsets: number[];
+        isRowLoaded: (index: number) => boolean;
     };
 
 export const {

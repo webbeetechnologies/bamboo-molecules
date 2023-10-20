@@ -183,14 +183,64 @@ export interface DataTableProps<RecordType = any>
      */
     CellWrapperComponent?: ComponentType<DataCellProps>;
     flatListRef?: RefObject<any>;
+
+    /**
+     *
+     * define the height of the row
+     *
+     */
     getRowSize: (index: number) => number;
-    rowCount: VariableSizeListProps['itemCount'];
+
+    /**
+     *
+     * Optional row count; prefer to use records length if you have all the records loaded upfront.
+     */
+    rowCount?: VariableSizeListProps['itemCount'];
+
+    /**
+     *
+     * Window size outside the viewport to see; is vector based.
+     *
+     */
     rowOverscanCount?: VariableSizeListProps['overscanCount'];
     rowKey?: VariableSizeListProps['itemKey'];
     estimatedRowSize?: VariableSizeListProps['estimatedItemSize'];
+
+    /**
+     *
+     * Triggered everytime a row is rendered.
+     *
+     */
     onRowsRendered?: VariableSizeListProps['onItemsRendered'];
     rowsLoadingThreshold?: InfiniteLoaderProps['threshold'];
+
+    /**
+     *
+     * Infinite loader callback.
+     * minimum batch size to fetch records.
+     *
+     */
     rowsMinimumBatchSize?: InfiniteLoaderProps['minimumBatchSize'];
+
+    /**
+     *
+     * Infinite loader callback.
+     * Will trigger everytime a new row is required to be loaded
+     *
+     */
     loadMoreRows?: LoadMoreRows;
+
+    /**
+     *
+     * derive if the cell has loaded or not
+     * To be used for displaying a placeholder row.
+     *
+     */
     isRowLoaded?: (index: number, recordExists: boolean) => boolean;
+
+    /**
+     *
+     * get the row id from the component consumer.
+     */
+    getRowId?: (index: number) => TDataTableRowTruthy;
 }

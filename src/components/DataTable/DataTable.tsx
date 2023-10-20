@@ -12,7 +12,7 @@ import {
     InfiniteLoaderChildrenArg,
 } from '@bambooapp/virtualized-list';
 
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { useComponentStyles, useLatest, useMolecules } from '../../hooks';
 import {
     useDataTable,
     useDataTableComponent,
@@ -63,7 +63,6 @@ const DataTablePresentationComponent = memo(
             HeaderRowComponent: HeaderRowComponentProp,
             flatListRef,
             rowsMinimumBatchSize,
-            isRowLoaded: isItemLoadedProp,
             rowCount: rowCountProp,
             rowsLoadingThreshold = 5,
             loadMoreRows,
@@ -78,6 +77,7 @@ const DataTablePresentationComponent = memo(
 
         const containerHeight = useDataTable(store => store.containerHeight);
         const contentWidth = useDataTable(store => store.contentWidth);
+        const isRowLoaded = useDataTable(store => store.isRowLoaded);
 
         const { set: setStore } = useStoreRef();
         const { set: setDataTableStore } = useDataTableStoreRef();
@@ -117,6 +117,7 @@ const DataTablePresentationComponent = memo(
             },
             [onLayoutProp, setDataTableStore],
         );
+
         const onContentSizeChange = useCallback(
             (w: number) =>
                 setDataTableStore(() => ({
@@ -125,13 +126,7 @@ const DataTablePresentationComponent = memo(
             [setDataTableStore],
         );
 
-        const isItemLoaded = useCallback(
-            (index: number) => {
-                if (isItemLoadedProp) return isItemLoadedProp(index, !!records[index]);
-                return !!records[index];
-            },
-            [isItemLoadedProp, records],
-        );
+        const isItemLoaded = useCallback((index: number) => isRowLoaded(index), [isRowLoaded]);
 
         const loadMoreItems = useCallback(
             async (startIndex: number, stopIndex: number) => {
@@ -268,8 +263,12 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 useRowRenderer,
                 CellWrapperComponent,
                 horizontalOffset,
+                getRowId,
+                isRowLoaded,
                 ...rest
             } = props;
+
+            const latestRecordsRef = useLatest(records);
 
             const context = {
                 records,
@@ -289,6 +288,16 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 useRowRenderer,
                 CellWrapperComponent,
                 horizontalOffset,
+                getRowId: useCallback<Exclude<DataTableProps['getRowId'], undefined>>(
+                    index => getRowId?.(index) ?? index,
+                    [getRowId],
+                ),
+                isRowLoaded: useCallback(
+                    (index: number) =>
+                        isRowLoaded?.(index, !!latestRecordsRef.current[index]) ??
+                        !!latestRecordsRef.current[index],
+                    [isRowLoaded, latestRecordsRef],
+                ),
             };
 
             return (
