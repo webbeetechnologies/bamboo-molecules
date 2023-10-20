@@ -1,6 +1,6 @@
-import { FC, memo, useMemo, useState } from 'react';
+import { FC, memo, useCallback, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Toast, useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
+import { Toast, useLatest, useMolecules, useToggle } from '@bambooapp/bamboo-molecules';
 
 import '../../../src/datagrid';
 import {
@@ -20,7 +20,7 @@ import {
     useDragAndExtendPlugin,
     useCellFocusPlugin,
 } from '../../../src/datagrid/plugins';
-import type { RecordWithId } from '../../../src/datagrid';
+import type { DataGridProps, RecordWithId } from '../../../src/datagrid';
 
 const containerStyle = { width: '100%' };
 
@@ -35,6 +35,20 @@ const prepareGroupedData = (data: RecordWithId[]) =>
         indexInGroup: i,
         rowType: 'data' as const,
     }));
+
+const useDataGridProps = (
+    records: RecordWithId[],
+): Pick<DataGridProps, 'records' | 'getRowId' | 'hasRowLoaded'> => {
+    const latestRecordsRef = useLatest(prepareGroupedData(records));
+    return {
+        records: latestRecordsRef.current,
+        getRowId: useCallback(
+            (_g, index) => latestRecordsRef.current[index]!.id,
+            [latestRecordsRef],
+        ),
+        hasRowLoaded: useCallback(() => true, []),
+    };
+};
 
 export const Example: FC<{ groups?: string[] }> = () => {
     const { View, DataGrid, ToastContainer } = useMolecules();
@@ -145,12 +159,12 @@ export const Example: FC<{ groups?: string[] }> = () => {
                     <DataGrid
                         plugins={plugins}
                         columnWidths={columnWidth}
-                        records={prepareGroupedData(records)}
                         columnIds={columnIds}
                         contextMenuProps={contextMenuProps}
                         useField={useField}
                         useCellValue={useCellValue}
                         getRowSize={() => 40}
+                        {...useDataGridProps(records)}
                     />
                 </View>
                 <ToastContainer />
@@ -219,11 +233,11 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
                     <DataGrid
                         plugins={plugins}
                         groups={props.groups}
-                        records={prepareGroupedData(virtaulizationMockRecords)}
                         columnIds={columnIds}
                         useField={useField}
                         useCellValue={useCellValue}
                         getRowSize={() => 40}
+                        {...useDataGridProps(records)}
                     />
                 </View>
             </RecordsProvider>
