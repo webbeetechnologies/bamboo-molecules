@@ -21,7 +21,6 @@ const GroupFooterRendererInternal = memo((props: GroupMetaRowProps) => {
         return (
             <GroupEmptyFooter
                 {...rowProps}
-                style={props.style}
                 isRealGroup={!!meta.isRealGroup}
                 isLastLevel={meta.isLastLevel}
             />

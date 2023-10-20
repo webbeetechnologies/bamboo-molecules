@@ -3,9 +3,6 @@ import type { GroupMeta } from '../utils';
 
 export type DataGridRowRendererProps = DataTableRowProps;
 
-export type GroupMetaRowProps = Pick<
-    DataTableRowProps,
-    'rowProps' | 'rowId' | 'index' | 'style'
-> & {
+export type GroupMetaRowProps = Pick<DataTableRowProps, 'rowProps' | 'rowId' | 'index'> & {
     meta: GroupMeta;
 };

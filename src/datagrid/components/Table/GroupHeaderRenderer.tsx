@@ -23,10 +23,9 @@ export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps, style }: Group
             rowStyle: [
                 { flexDirection: 'row', alignItems: 'center', padding: 'spacings.1' },
                 rowProps?.style,
-                style,
             ] as ViewStyle,
         }),
-        [rowProps?.style, style],
+        [rowProps?.style],
     );
 
     return (

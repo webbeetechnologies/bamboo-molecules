@@ -52,7 +52,7 @@ const rowTypes = {
 };
 
 export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
-    const SpacedComponent = memo((props: DataTableRowProps) => {
+    const SpacedComponent = memo(({ style: styleProp, ...props }: DataTableRowProps) => {
         const rowId = useRecordByInternalId(props.rowId);
         const groupRow = useRecordById(rowId) as GroupedData;
         const { level, rowType: variant } = groupRow;
@@ -61,7 +61,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
 
         const spacerWidth = useTableManagerValueSelector(store => store.spacerWidth);
 
-        const groupSpacerWrapStyles = useComponentStyles('DataGrid_SpacerRow', null, {
+        const groupSpacerWrapStyles = useComponentStyles('DataGrid_SpacerRow', styleProp, {
             variant,
             states: {
                 isFirstGroup: props.index === 0,
