@@ -9,7 +9,6 @@ import type {
     UseShowGroupFooter,
 } from '../types';
 import type { GroupMeta } from '../utils';
-import { useRecordByInternalId } from './TableManagerContext';
 
 export type HooksContextType = {
     useField: (columnId: TDataTableColumn) => Field;
@@ -49,8 +48,7 @@ export const useRowRenderer: UseRowRenderer = (rowRendererProps, DefaultRowCompo
      * this is to prevent duplicates.
      */
 
-    const rowId = useRecordByInternalId(rowRendererProps?.rowId);
-    return useRowRendererProp?.({ ...rowRendererProps, rowId }, DefaultRowComponent);
+    return useRowRendererProp?.(rowRendererProps, DefaultRowComponent);
 };
 
 export const useShowGroupFooter: UseShowGroupFooter = (meta: GroupMeta) => {

@@ -1,4 +1,4 @@
-import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules';
+import type { TDataTableColumn } from '@bambooapp/bamboo-molecules';
 
 export type GroupConstantValues = { field: TDataTableColumn; value: any };
 
@@ -20,10 +20,12 @@ export type GroupMetaStates = {
 
 export type GroupMeta = GroupMetaStates & {
     groupId: string;
-    fieldId?: TDataTableColumn;
+    fieldId?: TDataTableColumn | null;
     count: number;
     level: number;
     groupConstants: GroupConstantValues[];
+    isRealGroup?: boolean;
+    isCollapsed: boolean;
 };
 
 export interface RecordWithId extends Record<string, any> {
@@ -36,17 +38,14 @@ type AggregateBase = {
     count: number;
     value: any;
     field: TDataTableColumn;
-    recordIds: TDataTableRow[];
 };
 
 type GroupBase = {
-    groupConstants: GroupConstantValues[];
     level: number;
     groupId: string;
     id: TDataTableColumn;
-    isRealGroup?: boolean;
-    isCollapsed: boolean;
-    uniqueId: string;
+    index: number;
+    groupConstants: GroupConstantValues[];
 };
 
 export type AggregateRecord = AggregateBase & {
@@ -63,23 +62,24 @@ export type GroupHeader = NormalizedAggregateRecordBase & {
     rowType: 'header';
 };
 
-export type GroupFooter = Omit<NormalizedAggregateRecordBase, 'value' | 'recordIds'> & {
+export type GroupFooter = Omit<NormalizedAggregateRecordBase, 'recordIds'> & {
     rowType: 'footer';
 };
 
 export type GroupRecord = GroupBase & {
     rowType: 'data';
-    index: number;
     indexInGroup: number;
 };
 
 export type GroupMetaRow = GroupFooter | GroupHeader;
 
-export type GroupedData = GroupMetaRow | GroupRecord;
+export type GroupedData = GroupMetaRow | GroupRecord | undefined;
 
 export type NormalizeAggregatesFunc = (
     arg: AggregateRecord,
     groupConstants: GroupConstantValues[],
     index: number,
+    normalizedIndex: number,
     totalItems: number,
+    groupIdRoot?: string,
 ) => GroupMetaRow[];

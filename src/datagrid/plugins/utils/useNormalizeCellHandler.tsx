@@ -1,6 +1,7 @@
 // TODO - fix alias issue with Jest
 import { useCallback } from 'react';
-import { GroupRecord, useTableManagerStoreRef } from '../..';
+import { useTableManagerStoreRef, isDataRow } from '../..';
+import { getRecordByIndex } from '../../utils';
 import { TDataTableColumn, TDataTableRow, useDataTableStoreRef } from '../../../components';
 
 // TODO - add testcases
@@ -31,13 +32,13 @@ const useNormalizeCellHandler = () => {
             )
                 return undefined;
 
-            const getCorrectRowIndex = (index: number) => {
-                if (tableManagerStore.current.records[index].rowType === 'data') return index;
-                throw new Error('Record is not a data row');
+            const getDataRow = (index: number) => {
+                const record = getRecordByIndex(tableManagerStore.current.records, index);
+                if (!isDataRow(record)) throw new Error('Record is not a data row');
+                return record;
             };
 
-            const correctIndex = getCorrectRowIndex(rowIndex);
-            const record = tableManagerStore.current.records[correctIndex] as GroupRecord;
+            const record = getDataRow(rowIndex);
 
             return {
                 columnIndex,

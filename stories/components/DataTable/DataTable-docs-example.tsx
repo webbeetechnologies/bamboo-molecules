@@ -26,7 +26,7 @@ const columnsMap = keyBy(columns, 'id');
 const recordsMap = keyBy(records, 'id');
 
 const getColumn = (column: keyof typeof columnsMap) => columnsMap[column];
-const getRow = (row: TDataTableRow) => recordsMap[row] as typeof records[number];
+const getRow = (row: TDataTableRow) => recordsMap[row!] as typeof records[number];
 
 const styles = StyleSheet.create({
     dataRow: { alignItems: 'center' },

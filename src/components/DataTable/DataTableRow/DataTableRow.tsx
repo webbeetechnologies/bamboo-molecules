@@ -1,6 +1,5 @@
 import { forwardRef, memo, useMemo } from 'react';
-import { ViewStyle, StyleSheet } from 'react-native';
-import type { ViewProps } from '@bambooapp/bamboo-atoms';
+import type { ViewStyle } from 'react-native';
 
 import { useActionState, useComponentStyles, useMolecules } from '../../../hooks';
 import { shallowCompare } from '../../../utils';
@@ -10,7 +9,7 @@ import {
     DataTableContextRowProvider,
     useDataTable,
 } from '../DataTableContext';
-import type { DataTableRowProps, TDataTableColumn, TDataTableRow } from '../types';
+import type { DataTableRowProps } from '../types';
 
 // import { useRowWithinBounds } from '../DataTable';
 
@@ -92,14 +91,7 @@ DataTableRowPresentation.displayName = 'DataTableRowPresentation';
  */
 const DataTableRow = memo(({ index, style }: Pick<DataTableRowProps, 'index' | 'style'>) => {
     const { columns, rowProps, isSelected, rowId } = useDataTable(store => {
-        const recordId = store.records[index];
-        if (!recordId)
-            return {} as {
-                rowId: TDataTableRow;
-                columns: TDataTableColumn[];
-                rowProps: ViewProps;
-                isSelected: boolean;
-            };
+        const recordId = store.records[index] ?? -1;
 
         return {
             rowId: recordId,
@@ -130,25 +122,25 @@ const DataTableRow = memo(({ index, style }: Pick<DataTableRowProps, 'index' | '
 
 const DataTableRowWithPlaceHolder = memo(
     ({ index, style }: Pick<DataTableRowProps, 'index' | 'style'>) => {
-        const { View } = useMolecules();
-        const isLoaded = useDataTable(store => !!store.records[index]);
+        // const { View } = useMolecules();
+        // const isLoaded = useDataTable(store => !!store.records[index]);
 
-        const placeHolderRowStyle = useMemo(() => [styles.placeHolderRow, style], [style]);
+        // const placeHolderRowStyle = useMemo(() => [styles.placeHolderRow, style], [style]);
 
-        if (!isLoaded) {
-            return <View style={placeHolderRowStyle} />;
-        }
+        // if (!isLoaded) {
+        //     return <View style={placeHolderRowStyle} />;
+        // }
 
         return <DataTableRow index={index} style={style} />;
     },
 );
 
-const styles = StyleSheet.create({
-    placeHolderRow: {
-        borderBottomWidth: 1,
-        borderBottomColor: 'colors.outlineVariant',
-    },
-});
+// const styles = StyleSheet.create({
+//     placeHolderRow: {
+//         borderBottomWidth: 1,
+//         borderBottomColor: 'colors.outlineVariant',
+//     },
+// });
 
 DataTableRowWithPlaceHolder.displayName = 'DataTableRow';
 

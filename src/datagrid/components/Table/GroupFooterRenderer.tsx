@@ -75,7 +75,7 @@ GroupEmptyFooter.displayName = 'GroupEmptyFooter';
  * Can be replaced with useRowRenderer prop on datagrid.
  */
 export const GroupFooterRow = memo((props: DataGridRowRendererProps) => {
-    const meta = useGroupMeta(props.rowId);
+    const meta = useGroupMeta(props.index);
 
     const rendererProps = {
         meta,

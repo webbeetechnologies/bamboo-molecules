@@ -78,6 +78,7 @@ export const useCellValue = (id: TDataTableRow, fieldId: TDataTableColumn) => {
     const setCellValue = useCallback(
         (newValue: any) => {
             setStore(prev => {
+                if (!id) return prev;
                 return {
                     ...prev,
                     records: {

@@ -20,9 +20,21 @@ import {
     useDragAndExtendPlugin,
     useCellFocusPlugin,
 } from '../../../src/datagrid/plugins';
-import { prepareGroupedData } from '../../../src/datagrid';
+import type { RecordWithId } from '../../../src/datagrid';
 
 const containerStyle = { width: '100%' };
+
+const prepareGroupedData = (data: RecordWithId[]) =>
+    data.map((record, i) => ({
+        groupConstants: [],
+        level: 0,
+        groupId: '',
+        id: record.id,
+        isCollapsed: false,
+        index: i,
+        indexInGroup: i,
+        rowType: 'data' as const,
+    }));
 
 export const Example: FC<{ groups?: string[] }> = () => {
     const { View, DataGrid, ToastContainer } = useMolecules();
@@ -133,7 +145,7 @@ export const Example: FC<{ groups?: string[] }> = () => {
                     <DataGrid
                         plugins={plugins}
                         columnWidths={columnWidth}
-                        records={prepareGroupedData(records, [])}
+                        records={prepareGroupedData(records)}
                         columnIds={columnIds}
                         contextMenuProps={contextMenuProps}
                         useField={useField}

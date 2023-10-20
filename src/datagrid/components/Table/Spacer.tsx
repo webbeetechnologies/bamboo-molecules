@@ -2,14 +2,13 @@ import { ComponentType, memo, useMemo } from 'react';
 import { useComponentStyles, useMolecules } from '@bambooapp/bamboo-molecules';
 import type { DataTableRowProps } from '@bambooapp/bamboo-molecules';
 import {
-    useRecordById,
     useGroupRowState,
     useTableManagerValueSelector,
     useGroupMeta,
     useHasGroupedData,
-    useRecordByInternalId,
+    useFindRecordWithIndex,
 } from '../../contexts';
-import { GroupedData, isGroupHeader, GroupHeader } from '../../utils';
+import { isGroupHeader, GroupHeader } from '../../utils';
 
 type SpacerProp = { variant: 'left' | 'right'; isLastLevel?: boolean };
 
@@ -53,9 +52,8 @@ const rowTypes = {
 
 export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
     const SpacedComponent = memo(({ style: styleProp, ...props }: DataTableRowProps) => {
-        const rowId = useRecordByInternalId(props.rowId);
-        const groupRow = useRecordById(rowId) as GroupedData;
-        const { level, rowType: variant } = groupRow;
+        const groupRow = useFindRecordWithIndex(props.index);
+        const { id: rowId, level, rowType: variant } = groupRow;
 
         const isGroupsEnabled = useHasGroupedData();
 
@@ -70,7 +68,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
 
         const { View, If } = useMolecules();
 
-        const groupMeta = useGroupMeta(rowId);
+        const groupMeta = useGroupMeta(props.index);
         const isDataRowHeader = isGroupHeader(groupRow) && groupRow.isLastLevel;
 
         const style = useComponentStyles(

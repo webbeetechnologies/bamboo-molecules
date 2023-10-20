@@ -37,6 +37,8 @@ export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
         style,
     ]);
 
+    // TODO: Groupby Revisit - Ensure row id much before this issue.
+    // @ts-ignore
     const isWithinBounds = useIsCellWithinBounds(cellXOffsets[columnIndex], row, column);
 
     // const isVisible = usePrevious(isWithinBounds) || isWithinBounds;

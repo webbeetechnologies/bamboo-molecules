@@ -14,7 +14,7 @@ import { GroupExpandCollapseToggle } from '../GroupExpandCollapseToggle';
  * Can be replaced by the component consumer.
  *
  */
-export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps, style }: GroupMetaRowProps) => {
+export const GroupHeaderRenderer = memo(({ meta, index, rowProps }: GroupMetaRowProps) => {
     const { View, Text } = useMolecules();
     const field = useField(meta.fieldId!);
 
@@ -30,7 +30,7 @@ export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps, style }: Group
 
     return (
         <View {...rowProps} style={rowStyle}>
-            <GroupExpandCollapseToggle rowId={rowId} />
+            <GroupExpandCollapseToggle rowIndex={index} />
 
             <View>
                 <Text>{field.title}</Text>
@@ -46,7 +46,7 @@ export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps, style }: Group
  * Can be replaced with useRowRenderer prop on datagrid.
  */
 export const GroupHeaderRow = memo((props: DataGridRowRendererProps) => {
-    const meta = useGroupMeta(props.rowId);
+    const meta = useGroupMeta(props.index);
     const { GroupHeaderRenderer: RowRenderer } = useMolecules();
 
     const rendererProps = {

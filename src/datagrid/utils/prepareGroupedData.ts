@@ -1,4 +1,4 @@
-import { isNil, keyBy, memoize } from './lodash';
+import { isNil, memoize, allArgumentResolver } from './lodash';
 
 import type {
     GroupConstantValues,
@@ -8,37 +8,13 @@ import type {
     GroupMetaRow,
     GroupRecord,
     NormalizeAggregatesFunc,
-    RecordWithId,
 } from './grouping.types';
 import { RowType } from './grouping.types';
 import type { TDataTableColumn } from '@bambooapp/bamboo-molecules';
 
-export const isGroupFooter = (x: GroupedData): x is GroupFooter => x.rowType === RowType.FOOTER;
-export const isGroupHeader = (x: GroupedData): x is GroupHeader => x.rowType === RowType.HEADER;
-export const isDataRow = (x: GroupedData): x is GroupHeader => x.rowType === RowType.DATA;
-
-const defaultConstants: GroupConstantValues[] = [];
-
-const getDefaultFooterRow = memoize(
-    (recordsCount: number): GroupFooter => ({
-        count: recordsCount,
-        groupConstants: defaultConstants,
-        groupId: '',
-        title: '',
-        level: 0,
-        isFirstLevel: true,
-        isLastLevel: true,
-        isFirst: true,
-        isLast: true,
-        isOnly: recordsCount === 0,
-        isRealGroup: true,
-        isCollapsed: false,
-        id: `empty::footer`,
-        uniqueId: `empty::footer`,
-        rowType: RowType.FOOTER,
-        field: defaultConstants.at(-1)?.field ?? '',
-    }),
-);
+export const isGroupFooter = (x: GroupedData): x is GroupFooter => x!.rowType === RowType.FOOTER;
+export const isGroupHeader = (x: GroupedData): x is GroupHeader => x!.rowType === RowType.HEADER;
+export const isDataRow = (x: GroupedData): x is GroupRecord => x!.rowType === RowType.DATA;
 
 /**
  *
@@ -80,28 +56,6 @@ const getMemoizedConstants = memoize(
 
 /**
  *
- * Takes a record and the array of strings as groups,
- * generates group constants for the record
- *
- */
-const generateConstantsForRecord = (
-    modelRecord: Record<TDataTableColumn, unknown>,
-    groups: TDataTableColumn[],
-) => groups.map(key => createConstant(key, modelRecord[key]));
-
-/**
- *
- * Takes a record, and the group by fields.
- * Returns a string of
- *
- */
-const generateValueKey = (
-    modelRecord: Record<TDataTableColumn, unknown>,
-    groups: TDataTableColumn[],
-) => generateGroupId(generateConstantsForRecord(modelRecord, groups));
-
-/**
- *
  * returns a memoized constant value from the passed field and value pair.
  *
  */
@@ -111,104 +65,13 @@ const createConstant = memoize(
 );
 
 /**
- *
- * get cached record
- */
-const getStringifieldRecordMemoized = memoize(
-    (record: RecordWithId) => JSON.stringify(record),
-    record => record,
-);
-
-/**
- *
- * Generates a unique object for the record.
- * This is only for memoization. the record generated will always be unique given a memoized record and group pair.
- *
- */
-const generateRecordId = <T extends RecordWithId = RecordWithId>(
-    modelRecord: T,
-    groups: TDataTableColumn[],
-) => [getStringifieldRecordMemoized(modelRecord), generateValueKey(modelRecord, groups)].join('__');
-
-/**
- *
- * From the normalized aggregations provided, extract the group fields.
- *
- */
-const extractGroupFields = memoize(
-    (groupedData: GroupMetaRow[]) => {
-        for (const row of groupedData) {
-            if (!row.isLastLevel) continue;
-            return row.groupConstants.map(({ field }) => field);
-        }
-
-        return [];
-    },
-    groups => groups.join(','),
-);
-
-/**
- *
- * Takes a record of type RecordWithId and prepares the record for grouping.
- * Adds indexInGroup property though they'll be replaced later.
- */
-const prepareGroupableRecord = memoize(
-    <T extends RecordWithId = RecordWithId>(record: T, groups: TDataTableColumn[]): GroupRecord => {
-        // const groupConstants = getMemoizedConstants(generateConstantsForRecord(record, groups));
-        return {
-            id: record.id,
-            level: groups.length,
-            isCollapsed: false,
-            rowType: RowType.DATA as const,
-
-            // Props will be overwritten later.
-            uniqueId: record.id + '',
-
-            // Earlier, we used the record to determine the group, not possible anymore.
-            // We now expect recordIds that belong to a group. When preparing the grouped record,
-            groupId: '',
-            groupConstants: defaultConstants,
-            // with pagination, there is a possibility that the index is incorrect, thus a new index will be assigned when preparing the record for the group.
-            index: 0,
-
-            // At this point, this information is not available.
-            indexInGroup: 0,
-        };
-    },
-    (record, groups) => generateRecordId(record, groups),
-);
-
-/**
- *
- * Add the indexInGroup Prop
- */
-const prepareRecordWithGroup = memoize(
-    <T extends RecordWithId>(
-        record: T,
-        groupId: string,
-        groupConstants: GroupConstantValues[],
-        index: number,
-        indexInGroup?: number,
-    ) => ({
-        ...record,
-        groupConstants,
-        groupId,
-        uniqueId: `${record.id}-ig:${indexInGroup}`,
-        index,
-        indexInGroup,
-    }),
-    (record, groupId, index, indexInGroup) =>
-        `${getStringifieldRecordMemoized(record)}-%%${groupId}%-i:${index}-ig:${indexInGroup}`,
-);
-
-/**
  * Takes a set of records and returns row ids.
  * It's memoized so that data updates don't trigger a rerender of the Flatlist.
  */
-const _getRowIds = (records: GroupedData[]) => records.map(({ uniqueId }) => uniqueId);
+const _getRowIds = (records: GroupedData[]) => records.map(record => record?.id);
 export const getRowIds = memoize(_getRowIds, records => _getRowIds(records).join('__'));
 
-const getRecordsById = memoize((records: GroupRecord[]) => keyBy(records, 'id'));
+// const getRecordsById = memoize((records: GroupRecord[]) => keyBy(records, 'id'));
 
 /**
  *
@@ -216,31 +79,31 @@ const getRecordsById = memoize((records: GroupRecord[]) => keyBy(records, 'id'))
  *
  */
 export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
-    ({ children, ...aggregateRow }, groupConstants, index: number, totalItems: number) => {
-        groupConstants = getMemoizedConstants([
-            ...groupConstants,
-            createConstant(aggregateRow.field, aggregateRow.value),
-        ]);
+    (
+        { children, field, value, ...aggregateRow },
+        groupConstants,
+        index,
+        startIndex,
+        totalItems: number,
+        groupIdRoot = '',
+    ) => {
+        groupConstants = getMemoizedConstants([...groupConstants, createConstant(field, value)]);
 
-        const subGroups = children.map((child, i) =>
-            prepareAggregateRow(child, groupConstants, i, children.length),
-        );
-        const groupId = generateGroupId(groupConstants);
+        // Group Id doesn't depend on the value
+        const groupId = [groupIdRoot, `${index}`].filter(Boolean).join('_');
 
-        const title =
-            !Array.isArray(aggregateRow.value) || typeof aggregateRow.value.at(0) === 'object'
-                ? aggregateRow.value
-                : aggregateRow.value[0];
+        const isLastLevel = children.length === 0;
+
+        const title = !Array.isArray(value) || typeof value.at(0) === 'object' ? value : value[0];
 
         const sharedProps = {
             ...aggregateRow,
             groupConstants,
             groupId,
             title,
+            isLastLevel,
             level: groupConstants.length,
-            index,
             isFirstLevel: groupConstants.length === 1,
-            isLastLevel: children.length === 0,
             isFirst: index === 0,
             isLast: totalItems - 1 === index,
             isOnly: totalItems === 1,
@@ -249,108 +112,89 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
         };
 
         const header: GroupHeader = {
-            ...sharedProps,
-            id: `${groupId}::header`,
-            uniqueId: `${groupId}::header`,
+            index: startIndex++,
+            field,
+            value,
             rowType: RowType.HEADER,
-        };
-
-        const footer: GroupFooter = {
+            id: `${groupId}::header`,
             ...sharedProps,
-            id: `${groupId}::footer`,
-            uniqueId: `${groupId}::footer`,
-            rowType: RowType.FOOTER,
         };
 
-        return [header, ...subGroups.flat(), footer];
-    },
-);
-
-const getEmptyRecord = memoize(
-    (group: GroupMetaRow, indexInGroup: number) => ({
-        id: `${group.groupId};unknown:${indexInGroup}`,
-        uniqueId: `${group.groupId};unknown:${indexInGroup}`,
-        level: group.level,
-        rowType: RowType.DATA as const,
-        isCollapsed: false,
-    }),
-    (group, indexInGroup) => `${group.groupId};unknown:${indexInGroup}`,
-);
-
-/**
- * Accept a list of records and GroupMetaRows and convertes it into a normalized records.
- */
-export const prepareGroupedData = <T extends RecordWithId = RecordWithId>(
-    modelRecords: T[],
-    groupRecordsBy: GroupMetaRow[] = [],
-): GroupedData[] => {
-    const groups = extractGroupFields(groupRecordsBy);
-    const normalizedModelRecords = modelRecords.map(record =>
-        prepareGroupableRecord(record, groups),
-    );
-
-    if (!groupRecordsBy.length)
-        return [
-            ...normalizedModelRecords.map((record, index) =>
-                prepareRecordWithGroup(record, '', defaultConstants, index, index),
-            ),
-            getDefaultFooterRow(modelRecords.length),
-        ];
-
-    let index = 0;
-    const groupedRecords: Record<string, GroupRecord> = getRecordsById(normalizedModelRecords);
-
-    const finalData = groupRecordsBy.reduce(
-        (groupedAggregates: GroupedData[], group, groupIndex) => {
-            groupedAggregates = [
-                ...groupedAggregates,
-                prepareRecordWithGroup(
-                    group,
-                    group.groupId,
-                    group.groupConstants,
-                    groupIndex,
-                    undefined,
-                ),
-            ];
-
-            if (!isGroupHeader(group)) return groupedAggregates;
-            if (!(group as GroupHeader).isLastLevel) return groupedAggregates;
-
-            return [
-                ...groupedAggregates,
-                ...group.recordIds.map((recordId, indexInGroup) =>
-                    prepareRecordWithGroup(
-                        groupedRecords[recordId] ?? getEmptyRecord(group, indexInGroup),
-                        group.groupId,
-                        group.groupConstants,
-                        index++,
-                        indexInGroup,
+        const subGroups = children.reduce(
+            (array: GroupMetaRow[], child, childIndex) =>
+                array.concat(
+                    prepareAggregateRow(
+                        child,
+                        groupConstants,
+                        childIndex,
+                        !array.length ? startIndex++ : array.at(-1)!.index + 1,
+                        children.length,
+                        groupId,
                     ),
                 ),
-            ];
-        },
+            [],
+        );
+        const footer: GroupFooter = {
+            index: subGroups.length ? subGroups.at(-1)!.index + 1 : startIndex + aggregateRow.count,
+            field,
+            value,
+            rowType: RowType.FOOTER,
+            id: `${groupId}::footer`,
+            ...sharedProps,
+        };
+
+        return [header, ...subGroups, footer];
+    },
+    allArgumentResolver,
+);
+
+export const findGroupIds = (arg: GroupMetaRow[]) =>
+    arg.reduce(
+        (groupIds: Record<number, string>, group) =>
+            isGroupFooter(group) || !group.isLastLevel
+                ? groupIds
+                : { ...groupIds, [group.index]: group.groupId },
         [],
     );
 
-    const unRealFooter: GroupFooter = {
-        isRealGroup: false,
-        groupConstants: defaultConstants,
-        level: 0,
-        groupId: '',
-        id: 'last-footer-row',
-        uniqueId: 'last-footer-row',
-        isCollapsed: false,
-        rowType: RowType.FOOTER,
-        isFirstLevel: false,
-        isLastLevel: false,
-        isFirst: false,
-        isLast: false,
-        isOnly: false,
-        count: 0,
-        title: '',
-        field: '',
-    };
+export const getRelatedGroupByIndex = memoize(
+    (records: GroupedData[], index: number): Exclude<GroupedData, undefined> => {
+        if (index < -1)
+            return {
+                level: 0,
+                groupId: '',
+                id: '',
+                rowType: 'data' as const,
+                index: 0,
+                groupConstants: [],
+                indexInGroup: 0,
+            };
 
-    return [...finalData, unRealFooter];
-};
-export default prepareGroupedData;
+        const record = records[index];
+        if (record) return record;
+
+        return getRelatedGroupByIndex(records, index - 1);
+    },
+    allArgumentResolver,
+);
+
+// TODO: Revisit Groupby - Add way to add correct id.
+export const getRecordByIndex = memoize(
+    (records: GroupedData[], index: number): Exclude<GroupedData, undefined> => {
+        const record = records[index];
+        if (record) return record;
+
+        const group = getRelatedGroupByIndex(records, index)!;
+
+        return {
+            level: group.level,
+            groupId: group.groupId,
+            index,
+            id: -1,
+            rowType: 'data',
+            indexInGroup: index - group.index,
+            groupConstants: group.groupConstants,
+        };
+    },
+    allArgumentResolver,
+);

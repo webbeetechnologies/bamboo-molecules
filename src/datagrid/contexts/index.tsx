@@ -5,12 +5,9 @@ export {
     useTableManagerValueSelector,
     useShouldContextMenuDisplayed,
     useRecordsMap,
-    useRecordById,
-    useRecordType,
     useGroupMeta,
     useHasGroupedData,
-    useRecord,
-    useRecordByInternalId,
+    useFindRecordWithIndex,
 } from './TableManagerContext';
 
 export {
