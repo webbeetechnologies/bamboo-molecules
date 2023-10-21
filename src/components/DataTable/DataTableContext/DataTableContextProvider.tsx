@@ -61,6 +61,7 @@ export const DataTableContextProvider: FC<
         horizontalOffset = 0,
         getRowId,
         hasRowLoaded,
+        useGetRowId,
     }) => {
         const { FlatList } = useMolecules();
 
@@ -107,6 +108,7 @@ export const DataTableContextProvider: FC<
                 CellWrapperComponent,
                 getRowId,
                 hasRowLoaded,
+                useGetRowId,
             }),
             [
                 CellWrapperComponent,
@@ -125,6 +127,7 @@ export const DataTableContextProvider: FC<
                 useRowRenderer,
                 getRowId,
                 hasRowLoaded,
+                useGetRowId,
             ],
         );
 

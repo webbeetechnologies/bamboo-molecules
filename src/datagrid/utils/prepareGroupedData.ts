@@ -13,9 +13,12 @@ import type {
 import { RowType } from './grouping.types';
 import type { TDataTableColumn } from '@bambooapp/bamboo-molecules';
 
-export const isGroupFooter = (x: GroupedData): x is GroupFooter => x!.rowType === RowType.FOOTER;
-export const isGroupHeader = (x: GroupedData): x is GroupHeader => x!.rowType === RowType.HEADER;
-export const isDataRow = (x: GroupedData): x is GroupRecord => x!.rowType === RowType.DATA;
+type NarrowGroupRecordArg = Partial<GroupedDataTruthy> & Pick<GroupedDataTruthy, 'rowType'>;
+export const isGroupFooter = (x: NarrowGroupRecordArg): x is GroupFooter =>
+    x!.rowType === RowType.FOOTER;
+export const isGroupHeader = (x: NarrowGroupRecordArg): x is GroupHeader =>
+    x!.rowType === RowType.HEADER;
+export const isDataRow = (x: NarrowGroupRecordArg): x is GroupRecord => x!.rowType === RowType.DATA;
 
 /**
  *
@@ -190,7 +193,7 @@ export const getRecordByIndex = memoize(
             level: group.level,
             groupId: group.groupId,
             index,
-            id: -1,
+            id: undefined,
             rowType: 'data',
             indexInGroup: index - group.index,
             groupConstants: group.groupConstants,

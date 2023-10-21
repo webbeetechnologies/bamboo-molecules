@@ -48,10 +48,11 @@ import {
 import PluginsManager from './plugins/plugins-manager';
 import type { FieldTypes } from './types';
 import {
+    GroupRecord,
     GroupedData,
     GroupedDataTruthy,
     addDataToCallbackPairs,
-    getRecordByIndexNoId,
+    getRecordByIndex,
     getRowIds,
 } from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
@@ -71,6 +72,7 @@ type DataGridPropsBase = Omit<
     | 'rowCount'
     | 'getRowId'
     | 'hasRowLoaded'
+    | 'useGetRowId'
 > &
     Omit<ViewProps, 'ref'> & {
         onEndReached?: () => void;
@@ -82,8 +84,11 @@ type DataGridPropsBase = Omit<
         groups?: TDataTableColumn[];
         rowCount?: DataTableProps['rowCount'];
 
-        getRowId: (record: Omit<GroupedDataTruthy, 'id'>) => TDataTableRowTruthy;
-        hasRowLoaded: (record: Omit<GroupedDataTruthy, 'id'>) => boolean;
+        getRowId: (record: Omit<GroupRecord, 'id'>) => TDataTableRowTruthy | null;
+        hasRowLoaded: (record: Omit<GroupRecord, 'id'>) => boolean;
+        useGetRowId: (
+            record: Omit<Exclude<GroupedDataTruthy, undefined>, 'id'>,
+        ) => TDataTableRowTruthy | null;
     };
 
 export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
@@ -116,6 +121,11 @@ type DataGridPresentationProps = DataGridPropsBase & {
 };
 
 const emptyObj = {};
+
+const useGetRowId = (index: number) => {
+    const { store } = useTableManagerStoreRef();
+    return store.current.useGetRowId(getRecordByIndex(store.current.records, index));
+};
 
 const DataGrid = ({
     verticalScrollProps: _verticalScrollProps,
@@ -178,11 +188,11 @@ const DataGrid = ({
 
     const verticalScrollProps = useMemo(
         () => ({
-            ...addDataToCallbackPairs(store, {
+            ...addDataToCallbackPairs({
                 ..._verticalScrollProps,
             }),
         }),
-        [store, _verticalScrollProps],
+        [_verticalScrollProps],
     );
 
     const itemSize = useCallback(
@@ -260,6 +270,7 @@ const DataGrid = ({
                 CellWrapperComponent={CellWrapperComponent}
                 getRowId={store.current.getRowId}
                 hasRowLoaded={store.current.hasRowLoaded}
+                useGetRowId={useGetRowId}
             />
 
             {shouldContextMenuDisplayed && (
@@ -377,6 +388,7 @@ const TableManagerProviderWrapper = ({
     focusIgnoredColumns,
     getRowId,
     hasRowLoaded,
+    useGetRowId: useGetRowIdProp,
     ...rest
 }: Omit<Props, 'useField' | 'useCellValue'> & {
     Component: ComponentType<DataGridPresentationProps>;
@@ -400,12 +412,25 @@ const TableManagerProviderWrapper = ({
             tableRef={ref}
             spacerWidth={spacerWidth}
             records={records}
+            useGetRowId={useRef(useGetRowIdProp).current}
             getRowId={useCallback(
-                index => getRowId(getRecordByIndexNoId(latestRecordsRef.current, index)),
+                index =>
+                    getRowId(
+                        getRecordByIndex(latestRecordsRef.current, index) as Omit<
+                            GroupRecord,
+                            'id'
+                        >,
+                    ),
                 [latestRecordsRef, getRowId],
             )}
             hasRowLoaded={useCallback(
-                index => hasRowLoaded(getRecordByIndexNoId(latestRecordsRef.current, index)),
+                index =>
+                    hasRowLoaded(
+                        getRecordByIndex(latestRecordsRef.current, index) as Omit<
+                            GroupRecord,
+                            'id'
+                        >,
+                    ),
                 [latestRecordsRef, hasRowLoaded],
             )}
             withContextMenu={!!contextMenuProps}

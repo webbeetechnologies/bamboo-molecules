@@ -2,9 +2,11 @@ import { createRef, memo, PropsWithChildren, RefObject, useMemo } from 'react';
 import type { TDataTableColumn, TDataTableRowTruthy } from '@bambooapp/bamboo-molecules/components';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
-import type { GroupConstantValues, GroupedData } from '../utils';
+import type { GroupConstantValues, GroupedData, GroupedDataTruthy } from '../utils';
 import { weakMemoized, keyBy, GroupMeta, getRowIds, isDataRow, getRecordByIndex } from '../utils';
 import { shallowCompare } from '../../utils';
+
+import { useGetRowId } from '../../components/DataTable';
 
 export type TableManagerContextProviderProps = {
     withContextMenu: boolean;
@@ -12,7 +14,9 @@ export type TableManagerContextProviderProps = {
     tableRef: RefObject<any>;
     spacerWidth: number;
     focusIgnoredColumns?: TDataTableColumn[];
-    getRowId: (index: number) => TDataTableRowTruthy;
+    useGetRowId: (arg: Omit<GroupedDataTruthy, 'id'>) => TDataTableRowTruthy | null;
+
+    getRowId: (index: number) => TDataTableRowTruthy | null;
     hasRowLoaded: (index: number) => boolean;
     isEditing?: boolean;
 };
@@ -29,6 +33,7 @@ const defaultContextValue: TableManagerContextType = {
     tableRef: createRef(),
     tableFlatListRef: createRef(),
     focusIgnoredColumns: [],
+    useGetRowId: record => record.index,
     getRowId: index => index,
     hasRowLoaded: () => true,
 };
@@ -50,6 +55,7 @@ export const TableManagerProvider = memo(
         focusIgnoredColumns,
         getRowId,
         hasRowLoaded,
+        useGetRowId,
     }: PropsWithChildren<TableManagerContextProviderProps>) => {
         const contextValue = useMemo(
             () =>
@@ -62,6 +68,7 @@ export const TableManagerProvider = memo(
 
                     getRowId,
                     hasRowLoaded,
+                    useGetRowId,
                 } as TableManagerContextType),
             [
                 tableRef,
@@ -71,6 +78,7 @@ export const TableManagerProvider = memo(
                 focusIgnoredColumns,
                 getRowId,
                 hasRowLoaded,
+                useGetRowId,
             ],
         );
 
@@ -132,8 +140,9 @@ export const useGroupMeta = (rowIndex: number): GroupMeta => {
 };
 
 export const useFindRecordWithIndex = (index: number) => {
-    return useTableManagerValueSelector(
-        ({ records }): Exclude<GroupedData, undefined> => getRecordByIndex(records, index),
-        shallowCompare,
-    );
+    const rowId = useGetRowId(index);
+    return useTableManagerValueSelector(({ records }): Exclude<GroupedData, undefined> => {
+        const record = getRecordByIndex(records, index);
+        return { ...record, id: rowId ?? record.id! };
+    }, shallowCompare);
 };

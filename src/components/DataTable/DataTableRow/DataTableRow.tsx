@@ -14,33 +14,42 @@ import { withRowLoadingPlaceholder } from '../hoc';
 
 // import { useRowWithinBounds } from '../DataTable';
 
-const DataTableRowWrapper = withRowLoadingPlaceholder((props: DataTableRowProps) => {
-    const { rowId, index, rowProps, isSelected = false, style } = props;
+const DataTableRowWrapper = withRowLoadingPlaceholder(
+    Object.assign(
+        forwardRef<any, DataTableRowProps>((props: DataTableRowProps, ref) => {
+            const { rowId, index, rowProps, isSelected = false, style } = props;
 
-    const { hovered = false, actionsRef } = useActionState();
+            const { hovered = false, actionsRef } = useActionState({ ref });
 
-    const rowSize = useDataTable(store => store.rowSize);
+            const rowSize = useDataTable(store => store.rowSize);
 
-    const rowStyle = useComponentStyles('DataTable_Row', style, {
-        size: rowProps?.size ?? rowSize,
-        states: {
-            selected_hovered: isSelected && hovered,
-            selected: isSelected,
-            hovered,
-        },
-    });
+            const rowStyle = useComponentStyles('DataTable_Row', style, {
+                size: rowProps?.size ?? rowSize,
+                states: {
+                    selected_hovered: isSelected && hovered,
+                    selected: isSelected,
+                    hovered,
+                },
+            });
 
-    const rowContext = useMemo(
-        () => ({ row: rowId, rowIndex: index, hovered }),
-        [rowId, index, hovered],
-    );
+            const rowContext = useMemo(
+                () => ({ row: rowId, rowIndex: index, hovered }),
+                [rowId, index, hovered],
+            );
 
-    return (
-        <DataTableContextRowProvider value={rowContext}>
-            <DataTableRowPresentationWithActionState {...props} style={rowStyle} ref={actionsRef} />
-        </DataTableContextRowProvider>
-    );
-});
+            return (
+                <DataTableContextRowProvider value={rowContext}>
+                    <DataTableRowPresentationWithActionState
+                        {...props}
+                        style={rowStyle}
+                        ref={actionsRef}
+                    />
+                </DataTableContextRowProvider>
+            );
+        }),
+        { displayName: 'DataTableRowWrapper' },
+    ),
+);
 
 /**
  *
@@ -91,14 +100,13 @@ DataTableRowPresentation.displayName = 'DataTableRowPresentation';
  * UseCase: Data grid can have header rows, footer rows and data rows.
  */
 const DataTableRow = memo(({ index, style }: Pick<DataTableRowProps, 'index' | 'style'>) => {
-    const { columns, rowProps, isSelected, rowId } = useDataTable(store => {
-        const recordId = store.records[index] ?? -1;
+    const rowId = useDataTable(state => state.useGetRowId)(index)!;
 
+    const { columns, rowProps, isSelected } = useDataTable(store => {
         return {
-            rowId: recordId,
             columns: store.columns || [],
             rowProps: store.rowProps,
-            isSelected: Boolean(store.selectedRows?.[recordId]),
+            isSelected: Boolean(store.selectedRows?.[rowId]),
         };
     }, shallowCompare);
 

@@ -36,6 +36,7 @@ type DataTableContextType = Pick<
         | 'useRowRenderer'
         | 'CellWrapperComponent'
         | 'horizontalOffset'
+        | 'useGetRowId'
     > & {
         tableWidth: number;
         containerWidth?: number;
@@ -145,4 +146,8 @@ export const useDataTableColumnWidth = (column: TDataTableColumn): number => {
     return useDataTable(({ columnWidths, defaultColumnWidth }) =>
         deriveColumnWidth({ columnWidths, column, defaultColumnWidth }),
     );
+};
+
+export const useGetRowId = (index: number) => {
+    return useDataTableStoreRef().store.current.useGetRowId(index);
 };

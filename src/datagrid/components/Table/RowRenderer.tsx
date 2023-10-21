@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { forwardRef, memo, useMemo } from 'react';
 import type { ViewStyle } from 'react-native';
 import {
     DataTableRowProps,
@@ -95,4 +95,6 @@ const TableRowComponent = (
     );
 };
 
-const TableRowInner = withRowLoadingPlaceholder(TableRowComponent);
+TableRowComponent.displayName = 'DataGridRowRenderer';
+
+const TableRowInner = withRowLoadingPlaceholder(forwardRef(TableRowComponent));

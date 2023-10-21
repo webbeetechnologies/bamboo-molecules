@@ -242,5 +242,11 @@ export interface DataTableProps<RecordType = any>
      *
      * get the row id from the component consumer.
      */
-    getRowId?: (index: number) => TDataTableRowTruthy;
+    getRowId?: (index: number) => TDataTableRowTruthy | null;
+
+    /**
+     *
+     * hook toget the row id from the component consumer.
+     */
+    useGetRowId: (index: number) => TDataTableRowTruthy | null;
 }

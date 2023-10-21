@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react';
 import { IconButtonProps, useMolecules } from '@bambooapp/bamboo-molecules';
-import { useFindRecordWithIndex } from '@bambooapp/bamboo-molecules/datagrid';
+import { useFindRecordWithIndex } from '../../contexts';
 import {
     EXPAND_COLLAPSE_GROUPS_KEY,
     useExpandCollapseGroupsMethods,

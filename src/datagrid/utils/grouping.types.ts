@@ -1,4 +1,4 @@
-import type { TDataTableColumn } from '@bambooapp/bamboo-molecules';
+import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules';
 
 export type GroupConstantValues = { field: TDataTableColumn; value: any };
 
@@ -67,9 +67,10 @@ export type GroupFooter = Omit<NormalizedAggregateRecordBase, 'recordIds'> & {
     rowType: 'footer';
 };
 
-export type GroupRecord = GroupBase & {
+export type GroupRecord = Omit<GroupBase, 'id'> & {
     rowType: 'data';
     indexInGroup: number;
+    id: TDataTableRow;
 };
 
 export type GroupMetaRow = GroupFooter | GroupHeader;

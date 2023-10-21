@@ -1,5 +1,4 @@
 import type { ViewToken, ViewabilityConfig } from 'react-native';
-import type { RecordWithId } from '../utils';
 
 export type ViewabilityCallback<ExtendedProps = {}> = (
     info: ExtendedProps & {
@@ -9,8 +8,8 @@ export type ViewabilityCallback<ExtendedProps = {}> = (
 ) => void;
 
 export type ViewTokenExtended = {
-    viewableRecords: RecordWithId[];
-    changedRecords: RecordWithId[];
+    // viewableRecords: RecordWithId[];
+    // changedRecords: RecordWithId[];
 };
 
 export type ViewAbilityConfigPair = {

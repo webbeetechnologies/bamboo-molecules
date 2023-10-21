@@ -8,10 +8,10 @@ export type UseActionStateProps = {
 };
 
 export const useActionState = (
-    props: UseActionStateProps & { ref?: MutableRefObject<any> } = {},
+    props: UseActionStateProps & { ref?: MutableRefObject<any> | React.ForwardedRef<any> } = {},
 ) => {
     const ref = useRef(null);
-    const actionsRef = props.ref ?? ref;
+    const actionsRef = (props.ref ?? ref) as MutableRefObject<any>;
     const hovered = useHover(actionsRef) || !!props.hovered;
     const pressed = useActive(actionsRef) || !!props.pressed;
     const focused = useFocus(actionsRef) || !!props.focused;

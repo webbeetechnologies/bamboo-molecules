@@ -51,9 +51,9 @@ const rowTypes = {
 };
 
 export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
-    const SpacedComponent = memo(({ style: styleProp, ...props }: DataTableRowProps) => {
+    const SpacedComponent = memo(({ style: styleProp, rowId, ...props }: DataTableRowProps) => {
         const groupRow = useFindRecordWithIndex(props.index);
-        const { id: rowId, level, rowType: variant } = groupRow;
+        const { level, rowType: variant } = groupRow;
 
         const isGroupsEnabled = useHasGroupedData();
 

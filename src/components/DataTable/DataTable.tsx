@@ -242,6 +242,8 @@ const DataTableComponent = memo(
     }),
 );
 
+const useGetRowIdDefault = (index: number) => index;
+
 const withDataTableContext = (Component: typeof DataTableComponent) =>
     memo(
         forwardRef((props: DataTableProps, ref: ForwardedRef<ScrollView>) => {
@@ -265,10 +267,12 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 horizontalOffset,
                 getRowId,
                 hasRowLoaded,
+                useGetRowId = useGetRowIdDefault,
                 ...rest
             } = props;
 
             const latestRecordsRef = useLatest(records);
+            const useGetRowIdCached = useRef(useGetRowId).current;
 
             const context = {
                 records,
@@ -297,6 +301,7 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                         !!latestRecordsRef.current[index] || hasRowLoaded?.(index) || false,
                     [hasRowLoaded, latestRecordsRef],
                 ),
+                useGetRowId: useGetRowIdCached,
             };
 
             return (

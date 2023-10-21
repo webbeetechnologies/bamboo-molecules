@@ -21,7 +21,7 @@ export const withRowLoadingPlaceholder = (
         return <Component {...props} ref={ref} />;
     });
 
-    RowRenderer.displayName = RowRenderer.displayName + 'WithPlaceholder';
+    RowRenderer.displayName = (Component.displayName ?? '') + 'WithPlaceholder';
     return memo(RowRenderer);
 };
 
