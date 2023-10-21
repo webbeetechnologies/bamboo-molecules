@@ -86,9 +86,7 @@ type DataGridPropsBase = Omit<
 
         getRowId: (record: Omit<GroupRecord, 'id'>) => TDataTableRowTruthy | null;
         hasRowLoaded: (record: Omit<GroupRecord, 'id'>) => boolean;
-        useGetRowId: (
-            record: Omit<Exclude<GroupedDataTruthy, undefined>, 'id'>,
-        ) => TDataTableRowTruthy | null;
+        useGetRowId: (record: Exclude<GroupedDataTruthy, undefined>) => TDataTableRowTruthy | null;
     };
 
 export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
