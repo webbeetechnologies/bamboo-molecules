@@ -8,6 +8,7 @@ import type {
     TDataTableColumn,
     TDataTableRow,
     TDataTableRowTruthy,
+    LoadMoreRows,
 } from '@bambooapp/bamboo-molecules/components';
 import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Platform, StyleSheet } from 'react-native';
@@ -46,14 +47,16 @@ import {
     usePluginsDataStoreRef,
 } from './plugins';
 import PluginsManager from './plugins/plugins-manager';
-import type { FieldTypes } from './types';
+import type { DataGridLoadMoreRows, FieldTypes } from './types';
 import {
     GroupRecord,
     GroupedData,
     GroupedDataTruthy,
     addDataToCallbackPairs,
     getRecordByIndex,
+    getRecordByIndexNoId,
     getRowIds,
+    isDataRow,
 } from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
 import { isSpaceKey } from '../shortcuts-manager/utils';
@@ -73,6 +76,7 @@ type DataGridPropsBase = Omit<
     | 'getRowId'
     | 'hasRowLoaded'
     | 'useGetRowId'
+    | 'loadMoreRows'
 > &
     Omit<ViewProps, 'ref'> & {
         onEndReached?: () => void;
@@ -87,6 +91,7 @@ type DataGridPropsBase = Omit<
         getRowId: (record: Omit<GroupRecord, 'id'>) => TDataTableRowTruthy | null;
         hasRowLoaded: (record: Omit<GroupRecord, 'id'>) => boolean;
         useGetRowId: (record: Exclude<GroupedDataTruthy, undefined>) => TDataTableRowTruthy | null;
+        loadMoreRows?: DataGridLoadMoreRows;
     };
 
 export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
@@ -125,6 +130,46 @@ const useGetRowId = (index: number) => {
     return store.current.useGetRowId(getRecordByIndex(store.current.records, index));
 };
 
+const createVisibilityArray = (records: GroupedData[], startIndex: number, stopIndex: number) => {
+    if (startIndex > stopIndex) [startIndex, stopIndex] = [stopIndex, startIndex];
+
+    return new Array(stopIndex + 1 - startIndex)
+        .fill(null)
+        .reduce((rows: GroupRecord[], ...rest) => {
+            const record = getRecordByIndexNoId(records, startIndex + rest[1]);
+            if (!isDataRow(record)) return rows;
+            return [...rows, record];
+        }, []);
+};
+
+const useLoadMoreRows = (loadMoreRows?: DataGridLoadMoreRows) => {
+    const { store } = useTableManagerStoreRef();
+
+    const loadMoreRowsHandled = useCallback<LoadMoreRows>(
+        visibility =>
+            loadMoreRows!({
+                ...visibility,
+                visibleGroups: createVisibilityArray(
+                    store.current.records,
+                    visibility.visibleStartIndex,
+                    visibility.visibleStopIndex,
+                ),
+                overscanGroups: createVisibilityArray(
+                    store.current.records,
+                    visibility.overscanStartIndex,
+                    visibility.overscanStopIndex,
+                ),
+                pendingRowGroups: createVisibilityArray(
+                    store.current.records,
+                    visibility.startIndex,
+                    visibility.stopIndex,
+                ),
+            }),
+        [loadMoreRows, store],
+    );
+    return loadMoreRows && loadMoreRowsHandled;
+};
+
 const DataGrid = ({
     verticalScrollProps: _verticalScrollProps,
     rowSize: rowHeight = 'sm',
@@ -136,6 +181,7 @@ const DataGrid = ({
     horizontalScrollProps: _horizontalScrollProps,
     rowCount,
     getRowSize,
+    loadMoreRows,
     ...rest
 }: DataGridPresentationProps) => {
     const { DataTable } = useMolecules();
@@ -269,6 +315,7 @@ const DataGrid = ({
                 getRowId={store.current.getRowId}
                 hasRowLoaded={store.current.hasRowLoaded}
                 useGetRowId={useGetRowId}
+                loadMoreRows={useLoadMoreRows(loadMoreRows)}
             />
 
             {shouldContextMenuDisplayed && (
