@@ -195,9 +195,9 @@ export const getRecordByIndex = memoize(
             index,
             id: undefined,
             rowType: 'data',
-            indexInGroup: index - group.index,
+            indexInGroup: index - group.index - 1,
             groupConstants: group.groupConstants,
-            realIndex: index - group.realIndex,
+            realIndex: index - group.realIndex - 1,
         };
     },
     allArgumentResolver,
