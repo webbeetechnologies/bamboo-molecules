@@ -14,6 +14,7 @@ const useNormalizeCellHandler = () => {
             columnIndex,
             rowIndex,
             columnId,
+            rowId,
         }: {
             columnIndex: number;
             rowIndex: number;
@@ -29,7 +30,7 @@ const useNormalizeCellHandler = () => {
             const record = getDataRow(rowIndex);
 
             // for the case when the record is deleted
-            if (!record.id) return undefined;
+            if (!rowId && !record.id) return undefined;
 
             // for focused cell, we can't just check the indices, we have to check with the ids to see if it exists or not
             // it's allowed for the record to be undefined thus we do not check for rowId.
@@ -39,7 +40,7 @@ const useNormalizeCellHandler = () => {
             return {
                 columnIndex,
                 rowIndex: record.index,
-                rowId: record.id,
+                rowId: rowId ?? record.id,
                 record,
                 columnId: dataTableStore.current.columns[columnIndex],
             };

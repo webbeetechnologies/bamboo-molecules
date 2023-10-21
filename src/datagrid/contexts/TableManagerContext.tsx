@@ -14,7 +14,7 @@ export type TableManagerContextProviderProps = {
     tableRef: RefObject<any>;
     spacerWidth: number;
     focusIgnoredColumns?: TDataTableColumn[];
-    useGetRowId: (arg: Omit<GroupedDataTruthy, 'id'>) => TDataTableRowTruthy | null;
+    useGetRowId: (arg: GroupedDataTruthy) => TDataTableRowTruthy | null;
 
     getRowId: (index: number) => TDataTableRowTruthy | null;
     hasRowLoaded: (index: number) => boolean;
