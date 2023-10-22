@@ -31,6 +31,7 @@ export {
     isDataRow,
     isGroupHeader,
     isGroupFooter,
+    prepareGroupRecord,
 } from './utils';
 
 export {

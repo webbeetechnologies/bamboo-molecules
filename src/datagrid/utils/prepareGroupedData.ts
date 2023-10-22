@@ -216,15 +216,26 @@ export const getRecordByIndexNoId = memoize(
 );
 
 export const prepareGroupRecord = memoize(
-    (record: RecordWithId, index: number) => ({
-        level: 0,
-        groupId: '',
+    (
+        record: RecordWithId,
         index,
+        {
+            level = 0,
+            groupId = '',
+            rowType = 'data',
+            indexInGroup = index,
+            groupConstants = defaultConstants,
+            realIndex = index,
+        }: Partial<Omit<GroupRecord, 'id' | 'index'>> = {},
+    ) => ({
         id: record.id,
-        rowType: 'data',
-        indexInGroup: 0,
-        groupConstants: defaultConstants,
-        realIndex: index,
+        level,
+        groupId,
+        index,
+        rowType,
+        indexInGroup,
+        groupConstants,
+        realIndex,
     }),
     allArgumentResolver,
 );
