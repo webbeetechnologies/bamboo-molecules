@@ -9,6 +9,7 @@ import type {
     GroupMetaRow,
     GroupRecord,
     NormalizeAggregatesFunc,
+    RecordWithId,
 } from './grouping.types';
 import { RowType } from './grouping.types';
 import type { TDataTableColumn } from '@bambooapp/bamboo-molecules';
@@ -19,6 +20,8 @@ export const isGroupFooter = (x: NarrowGroupRecordArg): x is GroupFooter =>
 export const isGroupHeader = (x: NarrowGroupRecordArg): x is GroupHeader =>
     x!.rowType === RowType.HEADER;
 export const isDataRow = (x: NarrowGroupRecordArg): x is GroupRecord => x!.rowType === RowType.DATA;
+
+const defaultConstants: GroupConstantValues[] = [];
 
 /**
  *
@@ -168,7 +171,7 @@ export const getRelatedGroupByIndex = memoize(
                 id: '',
                 rowType: 'data' as const,
                 index: 0,
-                groupConstants: [],
+                groupConstants: defaultConstants,
                 indexInGroup: 0,
                 realIndex: 0,
             };
@@ -209,5 +212,19 @@ export const getRecordByIndexNoId = memoize(
         const { id: _, ...record } = getRecordByIndex(records, index);
         return record;
     },
+    allArgumentResolver,
+);
+
+export const prepareGroupRecord = memoize(
+    (record: RecordWithId, index: number) => ({
+        level: 0,
+        groupId: '',
+        index,
+        id: record.id,
+        rowType: 'data',
+        indexInGroup: 0,
+        groupConstants: defaultConstants,
+        realIndex: index,
+    }),
     allArgumentResolver,
 );
