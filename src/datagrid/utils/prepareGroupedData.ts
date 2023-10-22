@@ -190,17 +190,19 @@ export const getRecordByIndex = memoize(
         const record = records[index];
         if (record) return record;
 
-        const group = getRelatedGroupByIndex(records, index)!;
+        const referenceRow = getRelatedGroupByIndex(records, index)!;
+
+        const isMetaRow = !isDataRow(referenceRow);
 
         return {
-            level: group.level,
-            groupId: group.groupId,
+            level: referenceRow.level,
+            groupId: referenceRow.groupId,
             index,
             id: undefined,
             rowType: 'data',
-            indexInGroup: index - group.index - 1,
-            groupConstants: group.groupConstants,
-            realIndex: index - group.realIndex - 1,
+            groupConstants: referenceRow.groupConstants,
+            indexInGroup: !isMetaRow ? index : index - referenceRow.index - 1,
+            realIndex: !isMetaRow ? index : index - referenceRow.realIndex - 1,
         };
     },
     allArgumentResolver,
