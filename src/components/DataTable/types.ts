@@ -77,7 +77,7 @@ export type LoadMoreRowsArg = Parameters<
     stopIndex: number;
 };
 
-export type LoadMoreRows = (arg: LoadMoreRowsArg) => void;
+export type LoadMoreRows = (arg: LoadMoreRowsArg, forced?: boolean) => void;
 
 export interface DataTableProps<RecordType = any>
     extends Omit<ScrollViewProps, 'children'>,

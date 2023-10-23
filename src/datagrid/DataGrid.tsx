@@ -92,6 +92,8 @@ type DataGridPropsBase = Omit<
         hasRowLoaded: (record: Omit<GroupRecord, 'id'>) => boolean;
         useGetRowId: (record: Exclude<GroupedDataTruthy, undefined>) => TDataTableRowTruthy | null;
         loadMoreRows?: DataGridLoadMoreRows;
+        // Return a unique timestamp on change
+        useShouldLoadMoreRows: (updatedIndexTuple: [number]) => number;
     };
 
 export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
@@ -146,26 +148,29 @@ const useLoadMoreRows = (loadMoreRows?: DataGridLoadMoreRows) => {
     const { store } = useTableManagerStoreRef();
 
     const loadMoreRowsHandled = useCallback<LoadMoreRows>(
-        visibility => {
+        (visibility, forced = false) => {
             store.current.visibleRowsRef.current = visibility;
-            loadMoreRows!({
-                ...visibility,
-                visibleGroups: createVisibilityArray(
-                    store.current.records,
-                    visibility.visibleStartIndex,
-                    visibility.visibleStopIndex,
-                ),
-                overscanGroups: createVisibilityArray(
-                    store.current.records,
-                    visibility.overscanStartIndex,
-                    visibility.overscanStopIndex,
-                ),
-                pendingRowGroups: createVisibilityArray(
-                    store.current.records,
-                    visibility.startIndex,
-                    visibility.stopIndex,
-                ),
-            });
+            loadMoreRows!(
+                {
+                    ...visibility,
+                    visibleGroups: createVisibilityArray(
+                        store.current.records,
+                        visibility.visibleStartIndex,
+                        visibility.visibleStopIndex,
+                    ),
+                    overscanGroups: createVisibilityArray(
+                        store.current.records,
+                        visibility.overscanStartIndex,
+                        visibility.overscanStopIndex,
+                    ),
+                    pendingRowGroups: createVisibilityArray(
+                        store.current.records,
+                        visibility.startIndex,
+                        visibility.stopIndex,
+                    ),
+                },
+                forced,
+            );
         },
         [loadMoreRows, store],
     );
@@ -175,42 +180,59 @@ const useLoadMoreRows = (loadMoreRows?: DataGridLoadMoreRows) => {
 const useAutoUpdateRecords = ({
     records,
     flatListRef,
-    infiniteLoaderRef,
     rowSize,
-    groups,
     loadMoreRows,
-}: Pick<Props, 'groups' | 'records' | 'flatListRef' | 'rowSize' | 'infiniteLoaderRef'> &
+    useShouldLoadMoreRows,
+}: Pick<Props, 'records' | 'flatListRef' | 'rowSize' | 'useShouldLoadMoreRows'> &
     Pick<DataTableProps, 'loadMoreRows'>) => {
+    const defaultEmptyTuple = useRef<[number]>([-1]).current;
     const hasRowSizeUpdated = usePrevious(rowSize).current !== rowSize;
-    const hasGroupsUpdated = usePrevious(groups).current !== groups;
     const { store } = useTableManagerStoreRef();
 
     const oldRecords = usePrevious(records);
-    const updatedRowIndex = useMemo(() => {
-        if (records === oldRecords.current) return -1;
-        return records.findIndex((record, index) => oldRecords.current[index] !== record);
-    }, [oldRecords, records]);
 
+    /**
+     *
+     * Find the first index that updated.
+     * though records update there is a possibility that the first record updated is same index.
+     *
+     * Making updatedRowIndex return tuple ensures that the useEffect will run always
+     */
+    const updatedRowIndex = useMemo((): [number] => {
+        if (records === oldRecords.current) return defaultEmptyTuple;
+
+        return [records.findIndex((record, index) => oldRecords.current[index] !== record)];
+    }, [oldRecords, records, defaultEmptyTuple]);
+
+    /**
+     *
+     * Reset the row height cache if `updatedRowIndex` or `rowSize` changes
+     *
+     */
     useEffect(() => {
-        if (!hasRowSizeUpdated || updatedRowIndex === -1) return;
-        flatListRef!.current?.resetAfterIndex(updatedRowIndex);
+        if (!hasRowSizeUpdated && updatedRowIndex.at(0) === -1) return;
+        flatListRef!.current?.resetAfterIndex((updatedRowIndex as [number]).at(0));
     }, [hasRowSizeUpdated, updatedRowIndex, flatListRef]);
 
+    /**
+     *
+     * Load more rows when shouldUpdate triggers
+     *
+     */
+    const shouldUpdate = useShouldLoadMoreRows(updatedRowIndex);
     useEffect(() => {
+        if (!shouldUpdate) return;
         const visibleRows = store.current.visibleRowsRef.current;
-        if (!hasGroupsUpdated && updatedRowIndex === -1 && !!hasRowSizeUpdated) return;
+
+        /**
+         *
+         * if visibleRows is empty, return
+         *
+         */
         if (!Object.keys(visibleRows || {}).length) return;
-        loadMoreRows?.(visibleRows!);
-        flatListRef!.current?.resetAfterIndex(updatedRowIndex);
-    }, [
-        store,
-        hasGroupsUpdated,
-        loadMoreRows,
-        updatedRowIndex,
-        flatListRef,
-        hasRowSizeUpdated,
-        infiniteLoaderRef,
-    ]);
+
+        loadMoreRows?.(visibleRows!, true);
+    }, [store, loadMoreRows, shouldUpdate]);
 };
 
 const DataGrid = ({
@@ -225,7 +247,8 @@ const DataGrid = ({
     rowCount,
     getRowSize,
     loadMoreRows,
-    groups,
+    groups: _groups,
+    useShouldLoadMoreRows,
     ...rest
 }: DataGridPresentationProps) => {
     const { DataTable } = useMolecules();
@@ -336,9 +359,8 @@ const DataGrid = ({
     useAutoUpdateRecords({
         records: store.current.records,
         flatListRef: store.current.tableFlatListRef,
-        infiniteLoaderRef: store.current.infiniteLoaderRef,
-        groups,
         loadMoreRows: handleLoadMoreRows,
+        useShouldLoadMoreRows,
     });
 
     return (

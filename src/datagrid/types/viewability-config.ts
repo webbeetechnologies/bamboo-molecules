@@ -25,4 +25,4 @@ export type DataGridLoadMoreRowsArg = LoadMoreRowsArg & {
     pendingRowGroups: Omit<GroupRecord, 'id'>[];
 };
 
-export type DataGridLoadMoreRows = (visiblity: DataGridLoadMoreRowsArg) => void;
+export type DataGridLoadMoreRows = (visiblity: DataGridLoadMoreRowsArg, forced: boolean) => void;
