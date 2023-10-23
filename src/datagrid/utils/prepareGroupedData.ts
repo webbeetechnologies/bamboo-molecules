@@ -162,12 +162,13 @@ export const findGroupIds = (arg: GroupMetaRow[]) =>
         [],
     );
 
+export const DATAGRID_DEFAULT_GROUP = 'ALL';
 export const getRelatedGroupByIndex = memoize(
     (records: GroupedData[], index: number): Exclude<GroupedData, undefined> => {
-        if (index < -1)
+        if (index < 0)
             return {
                 level: 0,
-                groupId: '',
+                groupId: DATAGRID_DEFAULT_GROUP,
                 id: '',
                 rowType: 'data' as const,
                 index: 0,
@@ -223,7 +224,7 @@ export const prepareGroupRecord = memoize(
         index,
         {
             level = 0,
-            groupId = '',
+            groupId = DATAGRID_DEFAULT_GROUP,
             rowType = 'data',
             indexInGroup = index,
             groupConstants = defaultConstants,

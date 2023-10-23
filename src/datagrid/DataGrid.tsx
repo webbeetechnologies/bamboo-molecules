@@ -18,7 +18,7 @@ import {
     useSetScopes,
 } from '@bambooapp/bamboo-molecules/shortcuts-manager';
 
-import { useMolecules, useToken } from '../hooks';
+import { useMolecules, usePrevious, useToken } from '../hooks';
 import {
     CellRenderer,
     CellWrapperComponent,
@@ -146,7 +146,8 @@ const useLoadMoreRows = (loadMoreRows?: DataGridLoadMoreRows) => {
     const { store } = useTableManagerStoreRef();
 
     const loadMoreRowsHandled = useCallback<LoadMoreRows>(
-        visibility =>
+        visibility => {
+            store.current.visibleRowsRef.current = visibility;
             loadMoreRows!({
                 ...visibility,
                 visibleGroups: createVisibilityArray(
@@ -164,10 +165,52 @@ const useLoadMoreRows = (loadMoreRows?: DataGridLoadMoreRows) => {
                     visibility.startIndex,
                     visibility.stopIndex,
                 ),
-            }),
+            });
+        },
         [loadMoreRows, store],
     );
     return loadMoreRows && loadMoreRowsHandled;
+};
+
+const useAutoUpdateRecords = ({
+    records,
+    flatListRef,
+    infiniteLoaderRef,
+    rowSize,
+    groups,
+    loadMoreRows,
+}: Pick<Props, 'groups' | 'records' | 'flatListRef' | 'rowSize' | 'infiniteLoaderRef'> &
+    Pick<DataTableProps, 'loadMoreRows'>) => {
+    const hasRowSizeUpdated = usePrevious(rowSize).current !== rowSize;
+    const hasGroupsUpdated = usePrevious(groups).current !== groups;
+    const { store } = useTableManagerStoreRef();
+
+    const oldRecords = usePrevious(records);
+    const updatedRowIndex = useMemo(() => {
+        if (records === oldRecords.current) return -1;
+        return records.findIndex((record, index) => oldRecords.current[index] !== record);
+    }, [oldRecords, records]);
+
+    useEffect(() => {
+        if (!hasRowSizeUpdated || updatedRowIndex === -1) return;
+        flatListRef!.current?.resetAfterIndex(updatedRowIndex);
+    }, [hasRowSizeUpdated, updatedRowIndex, flatListRef]);
+
+    useEffect(() => {
+        const visibleRows = store.current.visibleRowsRef.current;
+        if (!hasGroupsUpdated && updatedRowIndex === -1 && !!hasRowSizeUpdated) return;
+        if (!Object.keys(visibleRows || {}).length) return;
+        loadMoreRows?.(visibleRows!);
+        flatListRef!.current?.resetAfterIndex(updatedRowIndex);
+    }, [
+        store,
+        hasGroupsUpdated,
+        loadMoreRows,
+        updatedRowIndex,
+        flatListRef,
+        hasRowSizeUpdated,
+        infiniteLoaderRef,
+    ]);
 };
 
 const DataGrid = ({
@@ -182,6 +225,7 @@ const DataGrid = ({
     rowCount,
     getRowSize,
     loadMoreRows,
+    groups,
     ...rest
 }: DataGridPresentationProps) => {
     const { DataTable } = useMolecules();
@@ -244,6 +288,8 @@ const DataGrid = ({
         [getRowSize, store],
     );
 
+    const handleLoadMoreRows = useLoadMoreRows(loadMoreRows);
+
     const onContextMenuOpen = useCallback(
         (e: any) => {
             e.preventDefault();
@@ -287,11 +333,20 @@ const DataGrid = ({
     // TODO - move this to plugins
     useContextMenu({ ref: store.current.tableRef, callback: onContextMenuOpen });
 
+    useAutoUpdateRecords({
+        records: store.current.records,
+        flatListRef: store.current.tableFlatListRef,
+        infiniteLoaderRef: store.current.infiniteLoaderRef,
+        groups,
+        loadMoreRows: handleLoadMoreRows,
+    });
+
     return (
         <>
             <DataTable
                 ref={store.current.tableRef}
                 flatListRef={store.current.tableFlatListRef}
+                infiniteLoaderRef={store.current.infiniteLoaderRef}
                 // @ts-ignore
                 dataSet={dataSet}
                 testID="datagrid"
@@ -315,7 +370,7 @@ const DataGrid = ({
                 getRowId={store.current.getRowId}
                 hasRowLoaded={store.current.hasRowLoaded}
                 useGetRowId={useGetRowId}
-                loadMoreRows={useLoadMoreRows(loadMoreRows)}
+                loadMoreRows={handleLoadMoreRows}
             />
 
             {shouldContextMenuDisplayed && (
@@ -483,6 +538,7 @@ const TableManagerProviderWrapper = ({
             {/* @ts-ignore - we don't want to pass down unnecessary props */}
             <Component
                 {...rest}
+                groups={groups}
                 records={rowIds}
                 horizontalOffset={offsetWidth}
                 contextMenuProps={contextMenuProps}

@@ -12,7 +12,7 @@ import {
     InfiniteLoaderChildrenArg,
 } from '@bambooapp/virtualized-list';
 
-import { useComponentStyles, useLatest, useMolecules } from '../../hooks';
+import { useComponentStyles, useLatest, useMergedRefs, useMolecules } from '../../hooks';
 import {
     useDataTable,
     useDataTableComponent,
@@ -41,6 +41,7 @@ type DataTableComponentProps = DataTableBase &
         | 'loadMoreRows'
         | 'hasRowLoaded'
         | 'rowOverscanCount'
+        | 'infiniteLoaderRef'
     > & {
         flatListRef?: RefObject<any>;
     };
@@ -62,6 +63,7 @@ const DataTablePresentationComponent = memo(
             onLayout: onLayoutProp,
             HeaderRowComponent: HeaderRowComponentProp,
             flatListRef,
+            infiniteLoaderRef,
             rowsMinimumBatchSize,
             rowCount: rowCountProp,
             rowsLoadingThreshold = 5,
@@ -73,6 +75,8 @@ const DataTablePresentationComponent = memo(
         } = props;
 
         const { View } = useMolecules();
+
+        const mergedRef = useMergedRefs([ref, flatListRef!]);
         const hStyle = useComponentStyles('DataTable', [hStyleProp]);
 
         const containerHeight = useDataTable(store => store.containerHeight);
@@ -154,6 +158,7 @@ const DataTablePresentationComponent = memo(
                     if (flatListRef) {
                         (flatListRef as any).current = listRef;
                     }
+                    mergedRef(listRef);
                     _ref(listRef);
                 };
 
@@ -187,6 +192,7 @@ const DataTablePresentationComponent = memo(
                 onRowsRendered,
                 rowOverscanCount,
                 vProps,
+                mergedRef,
             ],
         );
 
@@ -206,6 +212,7 @@ const DataTablePresentationComponent = memo(
 
                     {!!contentWidth && (
                         <InfiniteLoader
+                            ref={infiniteLoaderRef}
                             isItemLoaded={isItemLoaded}
                             threshold={rowsLoadingThreshold}
                             minimumBatchSize={rowsMinimumBatchSize}

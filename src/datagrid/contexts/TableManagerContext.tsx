@@ -1,5 +1,9 @@
-import { createRef, memo, PropsWithChildren, RefObject, useMemo } from 'react';
-import type { TDataTableColumn, TDataTableRowTruthy } from '@bambooapp/bamboo-molecules/components';
+import { createRef, memo, MutableRefObject, PropsWithChildren, RefObject, useMemo } from 'react';
+import type {
+    LoadMoreRowsArg,
+    TDataTableColumn,
+    TDataTableRowTruthy,
+} from '@bambooapp/bamboo-molecules/components';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
 import type { GroupConstantValues, GroupedData, GroupedDataTruthy } from '../utils';
@@ -23,6 +27,8 @@ export type TableManagerContextProviderProps = {
 
 export type TableManagerContextType = TableManagerContextProviderProps & {
     tableFlatListRef: RefObject<any>;
+    infiniteLoaderRef: RefObject<any>;
+    visibleRowsRef: MutableRefObject<LoadMoreRowsArg | null>;
 };
 
 const defaultContextValue: TableManagerContextType = {
@@ -32,6 +38,8 @@ const defaultContextValue: TableManagerContextType = {
     records: [],
     tableRef: createRef(),
     tableFlatListRef: createRef(),
+    infiniteLoaderRef: createRef(),
+    visibleRowsRef: { current: {} as LoadMoreRowsArg },
     focusIgnoredColumns: [],
     useGetRowId: record => record.index,
     getRowId: index => index,

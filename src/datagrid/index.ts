@@ -32,6 +32,7 @@ export {
     isGroupHeader,
     isGroupFooter,
     prepareGroupRecord,
+    DATAGRID_DEFAULT_GROUP,
 } from './utils';
 
 export {

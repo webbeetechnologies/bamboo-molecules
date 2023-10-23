@@ -183,6 +183,7 @@ export interface DataTableProps<RecordType = any>
      */
     CellWrapperComponent?: ComponentType<DataCellProps>;
     flatListRef?: RefObject<any>;
+    infiniteLoaderRef?: RefObject<any>;
 
     /**
      *
