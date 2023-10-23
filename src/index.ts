@@ -206,6 +206,7 @@ export {
     useSearchable,
     UseSearchableProps,
     usePrevious,
+    useMergedRefs,
     useSubcomponents,
     useBackHandler,
     useKeyboardDismissable,
