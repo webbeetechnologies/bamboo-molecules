@@ -29,8 +29,9 @@ const useNormalizeCellHandler = () => {
 
             const record = getDataRow(rowIndex);
 
-            // for the case when the record is deleted
-            if (!rowId && !record.id) return undefined;
+            // Drop row id entirely. Let the component consumer be responsible for clearing the state when records are removed.
+            // // for the case when the record is deleted
+            // if (!rowId && !record.id) return undefined;
 
             // for focused cell, we can't just check the indices, we have to check with the ids to see if it exists or not
             // it's allowed for the record to be undefined thus we do not check for rowId.
