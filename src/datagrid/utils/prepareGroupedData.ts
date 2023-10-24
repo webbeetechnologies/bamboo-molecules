@@ -175,6 +175,7 @@ export const getRelatedGroupByIndex = memoize(
                 groupConstants: defaultConstants,
                 indexInGroup: 0,
                 realIndex: 0,
+                isPlaceholder: true,
             };
 
         const record = records[index];
@@ -204,6 +205,7 @@ export const getRecordByIndex = memoize(
             groupConstants: referenceRow.groupConstants,
             indexInGroup: !isMetaRow ? index : index - referenceRow.index - 1,
             realIndex: !isMetaRow ? index : index - referenceRow.realIndex - 1,
+            isPlaceholder: true,
         };
     },
     allArgumentResolver,

@@ -2,7 +2,7 @@
 import { useCallback } from 'react';
 import { useDataTableStoreRef } from '../../../components';
 import type { SelectionIndices, TableSelection, TableSelectionBeforeCommit } from '../types';
-import { useTableManagerStoreRef } from '../..';
+import { GroupRecord, getRecordByIndex, useTableManagerStoreRef } from '../..';
 
 const getItemsInRange = (array: any[], startIndex: number, endIndex: number) => {
     const [start, end] = [startIndex, endIndex].sort((x, y) => x - y);
@@ -15,15 +15,12 @@ export const normalizeSelectionHandler = ({
     columnIds,
     records,
 }: TableSelection): TableSelectionBeforeCommit => {
-    const _records = getItemsInRange(records, start?.rowIndex, end?.rowIndex);
-
     return {
         start,
         end,
-        startRecord: records[start.rowIndex],
-        endRecord: records[end?.rowIndex],
-        records: _records,
-        recordIds: _records.map(record => record.id),
+        records,
+        startRecord: getRecordByIndex(records, start.rowIndex) as GroupRecord,
+        endRecord: getRecordByIndex(records, end?.rowIndex) as GroupRecord,
         columnIds: getItemsInRange(columnIds, start?.columnIndex, end?.columnIndex),
     };
 };
@@ -39,7 +36,6 @@ const useNormalizeSelectionHandler = () => {
                 start,
                 end,
                 columnIds: datatableStore.current.columns,
-                recordIds: datatableStore.current.records,
                 records: tableManagerStore.current.records,
             });
         },
