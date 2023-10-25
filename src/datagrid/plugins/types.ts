@@ -103,12 +103,21 @@ export type PluginManagerEvents = {
     [PluginEvents.ON_PASTE_CELL]: (args: { selection: Selection }) => void;
     [PluginEvents.AFTER_PASTE_CELL]: () => void;
 
-    [PluginEvents.BEFORE_CELL_SELECTION]: (args: { selection: Selection | null }) => void | boolean;
-    [PluginEvents.ON_CELL_SELECTION]: (args: { selection: Selection | null }) => void;
+    [PluginEvents.BEFORE_CELL_SELECTION]: (args: {
+        selection: TableSelectionBeforeCommit | null;
+    }) => void | boolean;
+    [PluginEvents.ON_CELL_SELECTION]: (args: {
+        selection: TableSelectionBeforeCommit | null;
+    }) => void;
     [PluginEvents.AFTER_CELL_SELECTION]: () => void;
 
-    [PluginEvents.BEFORE_DRAG_AND_EXTEND]: (args: { selection: Selection }) => void | boolean;
-    [PluginEvents.ON_DRAG_AND_EXTEND]: (args: { selection: Selection; target: Selection }) => void;
+    [PluginEvents.BEFORE_DRAG_AND_EXTEND]: (args: {
+        selection: TableSelectionBeforeCommit;
+    }) => void | boolean;
+    [PluginEvents.ON_DRAG_AND_EXTEND]: (args: {
+        selection: TableSelectionBeforeCommit;
+        target: TableSelectionBeforeCommit;
+    }) => void;
     [PluginEvents.AFTER_DRAG_AND_EXTEND]: () => void;
 
     [PluginEvents.BEFORE_GROUP_COLLAPSE]: (args: {
