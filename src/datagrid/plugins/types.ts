@@ -103,8 +103,8 @@ export type PluginManagerEvents = {
     [PluginEvents.ON_PASTE_CELL]: (args: { selection: Selection }) => void;
     [PluginEvents.AFTER_PASTE_CELL]: () => void;
 
-    [PluginEvents.BEFORE_CELL_SELECTION]: (args: { selection: Selection }) => void | boolean;
-    [PluginEvents.ON_CELL_SELECTION]: (args: { selection: Selection }) => void;
+    [PluginEvents.BEFORE_CELL_SELECTION]: (args: { selection: Selection | null }) => void | boolean;
+    [PluginEvents.ON_CELL_SELECTION]: (args: { selection: Selection | null }) => void;
     [PluginEvents.AFTER_CELL_SELECTION]: () => void;
 
     [PluginEvents.BEFORE_DRAG_AND_EXTEND]: (args: { selection: Selection }) => void | boolean;

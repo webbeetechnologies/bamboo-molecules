@@ -22,7 +22,7 @@ const useOnSelectCell = () => {
     const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(
-        (cell: CellIndices) => {
+        (cell: CellIndices | null) => {
             const focusedCell = pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
 
             // this wouldn't be possible
@@ -34,18 +34,21 @@ const useOnSelectCell = () => {
                 return;
             }
 
-            const selection = normalizeSelection({
-                start: focusedCell as CellIndices,
-                end: cell as CellIndices,
-            });
+            const selection = !cell
+                ? null
+                : normalizeSelection({
+                      start: focusedCell as CellIndices,
+                      end: cell as CellIndices,
+                  });
 
             const continueSelection = beforeCellSelection({ selection });
 
             if (continueSelection === false) return;
 
             onCellSelection({ selection });
+
             setStore(prev => ({
-                [CELL_SELECTION_PLUGIN_KEY]: {
+                [CELL_SELECTION_PLUGIN_KEY]: selection && {
                     ...prev[CELL_SELECTION_PLUGIN_KEY],
                     ...selection,
                 },
@@ -67,18 +70,17 @@ const useOnSelectCell = () => {
 const allowedTargetIds = ['drag-handle'];
 
 const useOnResetSelectionOnClickOutside = () => {
-    const { set: setStore, store } = usePluginsDataStoreRef();
+    const { store } = usePluginsDataStoreRef();
+    const onSelectCell = useOnSelectCell();
 
     return useCallback(
         (e: MouseEvent) => {
             if (!store.current[CELL_SELECTION_PLUGIN_KEY]) return;
             if (allowedTargetIds.includes((e.target as HTMLDivElement)?.id)) return;
 
-            setStore(() => ({
-                [CELL_SELECTION_PLUGIN_KEY]: undefined,
-            }));
+            onSelectCell(null);
         },
-        [setStore, store],
+        [store, onSelectCell],
     );
 };
 
