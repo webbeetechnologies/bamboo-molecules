@@ -1,12 +1,16 @@
-import type { TDataTableRow, TDataTableColumn } from '@bambooapp/bamboo-molecules';
+import { TDataTableRow, TDataTableColumn, useLatest } from '@bambooapp/bamboo-molecules';
 
-import { shallowCompare } from '../../../utils';
+import { isNil, shallowCompare } from '../../../utils';
 import { createPlugin } from '../createPlugin';
 import { PluginEvents } from '../types';
 import { usePluginsDataStoreRef, usePluginsDataValueSelector } from '../plugins-manager';
 import { useResetFocusCellState, useSetFocusCellPluginStore } from './useSetFocusCellPluginStore';
 import { useSetFocusCellByDirection } from './useSetFocusCellByDirection';
 import { useEnsureCorrectFocusCellState } from './useEnsureFocusCellState';
+
+import { useEffect } from 'react';
+import { useTableManagerStoreRef } from '../../contexts';
+import { GroupRecord, getRecordByIndex } from '../../utils';
 
 export const CELL_FOCUS_PLUGIN_KEY = 'cell-focus';
 
@@ -42,6 +46,39 @@ const useIsCellFocused = (
     }, shallowCompare);
 };
 
+export const useEnsureFocusedCellRowId = () => {
+    const tableManagerStoreRef = useTableManagerStoreRef().store;
+    const setFocusedCell = useSetFocusCellPluginStore();
+    const recordRef = useLatest(
+        usePluginsDataValueSelector(store => {
+            const focusedCell = store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell ?? {};
+            return {
+                record: getRecordByIndex(
+                    tableManagerStoreRef.current.records,
+                    focusedCell?.rowIndex ?? -1,
+                ) as GroupRecord,
+                rowId: focusedCell?.rowId,
+                hasFocusedCell: Object.keys(focusedCell ?? {}).length > 0,
+            };
+        }, shallowCompare),
+    );
+
+    const rowId = tableManagerStoreRef.current.useGetRowId(recordRef.current.record);
+
+    useEffect(() => {
+        if (!recordRef.current.hasFocusedCell || isNil(rowId) || recordRef.current.rowId === rowId)
+            return;
+        setFocusedCell(prev =>
+            !prev?.focusedCell
+                ? prev
+                : {
+                      ...prev,
+                      focusedCell: { ...prev.focusedCell, rowId },
+                  },
+        );
+    }, [rowId, recordRef, setFocusedCell]);
+};
+
 const usePressedKeyRef = () => {
     const { store } = usePluginsDataStoreRef();
 
@@ -67,5 +104,6 @@ export const [useCellFocusPlugin, useCellFocusEvents, useCellFocusMethods] = cre
         useResetFocusCellState,
         useSetFocusCellByDirection,
         usePressedKeyRef,
+        useEnsureFocusedCellRowId,
     },
 });

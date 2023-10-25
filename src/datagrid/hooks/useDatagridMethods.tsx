@@ -14,7 +14,12 @@ import useToggleCellEditingState from './useToggleCellEditingState';
 
 const useDatagridMethods = () => {
     const { store: storeRef } = useTableManagerStoreRef();
-    const { useResetFocusCellState } = useCellFocusMethods();
+    const {
+        useResetFocusCellState,
+        useEnsureFocusedCellRowId,
+        useEnsureCorrectFocusCellState,
+        useSetFocusCellByDirection,
+    } = useCellFocusMethods();
     const resetFocusCellState = useResetFocusCellState();
 
     const { store: pluginsStore } = usePluginsDataStoreRef();
@@ -22,7 +27,6 @@ const useDatagridMethods = () => {
         hasFocusedCell: !!store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell,
     }));
 
-    const { useEnsureCorrectFocusCellState, useSetFocusCellByDirection } = useCellFocusMethods();
     const { useResetSelectionOnFocusCellChange, useSetSelectionByDirection } =
         useCellSelectionMethods();
 
@@ -36,6 +40,8 @@ const useDatagridMethods = () => {
     useResetSelectionOnFocusCellChange();
 
     useToggleCellEditingState();
+
+    useEnsureFocusedCellRowId();
 
     useShortcut(
         'move-cell-focus',

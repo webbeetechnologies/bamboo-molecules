@@ -102,12 +102,12 @@ export const useSetFocusCellByDirection = () => {
             }
 
             const rowId = tableManagerStore.current.getRowId(newRowIndex);
-            if (isNil(rowId)) return;
+            scrollToCell({ columnIndex: newColumnIndex, rowIndex: newRowIndex, direction });
 
             setFocusCell(prev => ({
                 ...prev,
                 focusedCell: {
-                    rowId,
+                    rowId: rowId ?? undefined,
                     columnId: columns[newColumnIndex],
                     columnIndex: newColumnIndex,
                     rowIndex: newRowIndex,
@@ -116,8 +116,6 @@ export const useSetFocusCellByDirection = () => {
                 isEditing: false,
                 pressedKey: '',
             }));
-
-            scrollToCell({ columnIndex: newColumnIndex, rowIndex: newRowIndex, direction });
         },
         [dataTableStoreRef, pluginsStoreRef, scrollToCell, setFocusCell, tableManagerStore],
     );
