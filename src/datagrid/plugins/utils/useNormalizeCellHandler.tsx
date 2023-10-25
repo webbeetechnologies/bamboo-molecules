@@ -41,7 +41,7 @@ const useNormalizeCellHandler = () => {
             return {
                 columnIndex,
                 rowIndex: record.index,
-                rowId: rowId ?? record.id,
+                rowId: rowId ?? tableManagerStore.current.getRowId(rowIndex) ?? record.id,
                 record,
                 columnId: dataTableStore.current.columns[columnIndex],
             };

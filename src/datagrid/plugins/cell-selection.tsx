@@ -12,6 +12,7 @@ import { CELL_FOCUS_PLUGIN_KEY } from './cell-focus';
 import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
 import { isNil } from '../../utils';
 import { Direction, directions, useScrollToCell } from './cell-focus/useSetFocusCellByDirection';
+import { getRecordByIndex, isDataRow } from '../utils';
 
 export const CELL_SELECTION_PLUGIN_KEY = 'cell-selection';
 
@@ -226,7 +227,7 @@ export const useSetSelectionByDirection = () => {
                     newRowIndex = scrollToEdge ? 0 : newRowIndex - 1;
 
                     // keep finding the rowIndex unless the type is data
-                    while (records[newRowIndex]?.rowType !== 'data') {
+                    while (!isDataRow(getRecordByIndex(records, newRowIndex))) {
                         newRowIndex = scrollToEdge ? newRowIndex + 1 : newRowIndex - 1;
 
                         if (scrollToEdge ? newRowIndex > records?.length - 1 : newRowIndex <= 0)
@@ -239,7 +240,7 @@ export const useSetSelectionByDirection = () => {
                     newRowIndex = scrollToEdge ? records?.length - 1 : newRowIndex + 1;
 
                     // keep finding the rowIndex unless the type is data
-                    while (records[newRowIndex]?.rowType !== 'data') {
+                    while (!isDataRow(getRecordByIndex(records, newRowIndex))) {
                         newRowIndex = scrollToEdge ? newRowIndex - 1 : newRowIndex + 1;
 
                         if (scrollToEdge ? newRowIndex <= 0 : newRowIndex > records?.length - 1)
