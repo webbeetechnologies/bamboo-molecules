@@ -92,8 +92,10 @@ type DataGridPropsBase = Omit<
         hasRowLoaded: (record: Omit<GroupRecord, 'id'>) => boolean;
         useGetRowId: (record: Exclude<GroupedDataTruthy, undefined>) => TDataTableRowTruthy | null;
         loadMoreRows?: DataGridLoadMoreRows;
-        // Return a unique timestamp on change
-        useShouldLoadMoreRows: (updatedIndexTuple: [number]) => number;
+        /**
+         * Return a unique timestamp on change, the value would be used to trigger an update.
+         */
+        useShouldLoadMoreRows: (updatedIndexTuple: [number]) => 1;
     };
 
 export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &

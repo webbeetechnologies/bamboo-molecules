@@ -39,7 +39,10 @@ const prepareGroupedData = (data: RecordWithId[]) =>
 
 const useDataGridProps = (
     data: RecordWithId[],
-): Pick<DataGridProps, 'records' | 'getRowId' | 'hasRowLoaded' | 'useGetRowId'> => {
+): Pick<
+    DataGridProps,
+    'records' | 'getRowId' | 'hasRowLoaded' | 'useGetRowId' | 'useShouldLoadMoreRows'
+> => {
     const latestRecordsRef = useLatest(prepareGroupedData(data));
     return {
         records: latestRecordsRef.current,
@@ -49,6 +52,7 @@ const useDataGridProps = (
         ),
         hasRowLoaded: useCallback(() => true, []),
         useGetRowId: record => record.id ?? null,
+        useShouldLoadMoreRows: () => 1,
     };
 };
 
