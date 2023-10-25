@@ -15,10 +15,16 @@ import { useFieldType, useField, useCellValue } from '../../contexts';
 import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
 import { DragAndExtendHandle } from '../DragAndExtendHandle';
-import { useCellFocusMethods, useCellSelectionMethods } from '../../plugins';
+import {
+    CELL_FOCUS_PLUGIN_KEY,
+    useCellFocusMethods,
+    useCellSelectionMethods,
+    usePluginsDataStoreRef,
+} from '../../plugins';
 import { CellSelectionIndicator } from '../CellSelectionIndicator';
 import '../CellBorder';
 import type { Field } from '../../types';
+import { shallowCompare } from '../../../utils';
 
 export type Props<T = any> = RenderCellProps &
     Omit<PressableProps, 'ref'> &
@@ -69,6 +75,7 @@ const _DataCell = (
     const onDragAndSelectStart = useOnDragAndSelectStart();
     const onDragAndSelectEnd = useOnDragAndSelectEnd();
 
+    const pluginDataStore = usePluginsDataStoreRef().store;
     const setFocusCellPluginStore = useSetFocusCellPluginStore();
     const pressedKey = usePressedKeyRef();
 
@@ -79,22 +86,30 @@ const _DataCell = (
 
     const onFocus = useCallback(
         (e: GestureResponderEvent) => {
-            const cell = { columnIndex, rowIndex, columnId: column, rowId: row };
+            const cell = { columnIndex, rowIndex, columnId: column, rowId: row, type: 'cell' };
 
             if ((e as unknown as MouseEvent).shiftKey) {
                 onSelectCell({ columnIndex, rowIndex });
                 return;
             }
 
+            if (shallowCompare(cell, pluginDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell))
+                return;
+
             setFocusCellPluginStore(() => ({
-                focusedCell: {
-                    ...cell,
-                    type: 'cell',
-                },
+                focusedCell: cell,
                 isEditing: false,
             }));
         },
-        [column, columnIndex, onSelectCell, row, rowIndex, setFocusCellPluginStore],
+        [
+            column,
+            columnIndex,
+            onSelectCell,
+            row,
+            rowIndex,
+            setFocusCellPluginStore,
+            pluginDataStore,
+        ],
     );
 
     const onPress = useCallback(
