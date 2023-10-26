@@ -86,5 +86,6 @@ export type NormalizeAggregatesFunc = (
     lastIndex: number,
     startIndex: number,
     totalItems: number,
+    collapsedState: Record<string, boolean>,
     groupIdRoot?: string,
 ) => GroupMetaRow[];
