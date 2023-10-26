@@ -57,7 +57,7 @@ export type DataTableBase = ScrollProps & {
 };
 
 export type DataTableRowProps = {
-    rowId: TDataTableRow;
+    rowId: TDataTableRowTruthy;
     index: number;
     columns: TDataTableColumn[];
     rowProps?: RowProps;
