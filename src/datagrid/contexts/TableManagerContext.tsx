@@ -141,7 +141,7 @@ export const useGroupMeta = (rowIndex: number): GroupMeta => {
                 ? record.groupConstants
                 : (defaultArray as GroupConstantValues[]),
             isOnly: isDataRow(record) || record.isOnly,
-            isRealGroup: isDataRow(record) || record.isOnly,
+            isRealGroup: isDataRow(record) || record.isRealGroup,
             isCollapsed: !isDataRow(record) && record.isCollapsed,
         };
     }, [record]);
