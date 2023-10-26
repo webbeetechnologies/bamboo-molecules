@@ -85,7 +85,8 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
         index,
         lastIndex,
         startIndex,
-        totalItems: number,
+        totalItems,
+        collapsedState,
         groupIdRoot = '',
     ) => {
         groupConstants = getMemoizedConstants([...groupConstants, createConstant(field, value)]);
@@ -109,7 +110,7 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
             isLast: totalItems - 1 === index,
             isOnly: totalItems === 1,
             isRealGroup: true,
-            isCollapsed: false,
+            isCollapsed: !!collapsedState[groupId],
         };
 
         const header: GroupHeader = {
@@ -122,24 +123,30 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
             ...sharedProps,
         };
 
-        const subGroups = children.reduce(
-            (array: GroupMetaRow[], child, childIndex) =>
-                array.concat(
-                    prepareAggregateRow(
-                        child,
-                        groupConstants,
-                        childIndex,
-                        !array.length ? lastIndex++ : array.at(-1)!.realIndex + 1,
-                        !array.length ? startIndex++ : array.at(-1)!.index + 1,
-                        children.length,
-                        groupId,
-                    ),
-                ),
-            [],
-        );
+        const subGroups = collapsedState[groupId]
+            ? []
+            : children.reduce(
+                  (array: GroupMetaRow[], child, childIndex) =>
+                      array.concat(
+                          prepareAggregateRow(
+                              child,
+                              groupConstants,
+                              childIndex,
+                              !array.length ? lastIndex++ : array.at(-1)!.realIndex + 1,
+                              !array.length ? startIndex++ : array.at(-1)!.index + 1,
+                              children.length,
+                              collapsedState,
 
+                              // Optional Params
+                              groupId,
+                          ),
+                      ),
+                  [],
+              );
+
+        const footerIndexOffset = collapsedState[groupId] ? 0 : aggregateRow.count;
         const footer: GroupFooter = {
-            index: subGroups.length ? subGroups.at(-1)!.index + 1 : startIndex + aggregateRow.count,
+            index: subGroups.length ? subGroups.at(-1)!.index + 1 : startIndex + footerIndexOffset,
             field,
             value,
             realIndex: lastIndex++,

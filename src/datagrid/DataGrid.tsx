@@ -95,7 +95,7 @@ type DataGridPropsBase = Omit<
         /**
          * Return a unique timestamp on change, the value would be used to trigger an update.
          */
-        useShouldLoadMoreRows: (updatedIndexTuple: [number]) => 1;
+        useShouldLoadMoreRows: (updatedIndexTuple: [number]) => number;
     };
 
 export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
