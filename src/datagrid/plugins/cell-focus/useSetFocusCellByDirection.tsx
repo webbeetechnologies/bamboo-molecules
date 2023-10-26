@@ -12,6 +12,7 @@ import {
 
 import { isNil } from '../../../utils';
 import { useSetFocusCellPluginStore } from './useSetFocusCellPluginStore';
+import { getRecordByIndex, isDataRow } from '../../utils';
 
 export const directions = ['up', 'down', 'left', 'right'] as const;
 export type Direction = typeof directions[number];
@@ -52,7 +53,7 @@ export const useSetFocusCellByDirection = () => {
                     newRowIndex = scrollToEdge ? 0 : newRowIndex - 1;
 
                     // keep finding the rowIndex unless the type is data
-                    while (records[newRowIndex]?.rowType !== 'data') {
+                    while (!isDataRow(getRecordByIndex(records, newRowIndex))) {
                         newRowIndex = scrollToEdge ? newRowIndex + 1 : newRowIndex - 1;
 
                         if (scrollToEdge ? newRowIndex > records?.length - 1 : newRowIndex <= 0)
@@ -60,12 +61,12 @@ export const useSetFocusCellByDirection = () => {
                     }
                     break;
                 case 'down':
-                    if (rowIndex === records?.length - 1) return;
+                    if (rowIndex >= records?.length - 1) return;
 
                     newRowIndex = scrollToEdge ? records?.length - 1 : newRowIndex + 1;
 
                     // keep finding the rowIndex unless the type is data
-                    while (records[newRowIndex]?.rowType !== 'data') {
+                    while (!isDataRow(getRecordByIndex(records, newRowIndex))) {
                         newRowIndex = scrollToEdge ? newRowIndex - 1 : newRowIndex + 1;
 
                         if (scrollToEdge ? newRowIndex <= 0 : newRowIndex > records?.length - 1)
@@ -87,7 +88,7 @@ export const useSetFocusCellByDirection = () => {
 
                     break;
                 case 'right':
-                    if (newColumnIndex === columns?.length - 1) return;
+                    if (newColumnIndex >= columns?.length - 1) return;
 
                     newColumnIndex = scrollToEdge ? columns?.length - 1 : newColumnIndex + 1;
 
@@ -100,10 +101,13 @@ export const useSetFocusCellByDirection = () => {
                     }
             }
 
+            const rowId = tableManagerStore.current.getRowId(newRowIndex);
+            scrollToCell({ columnIndex: newColumnIndex, rowIndex: newRowIndex, direction });
+
             setFocusCell(prev => ({
                 ...prev,
                 focusedCell: {
-                    rowId: records[newRowIndex]?.id,
+                    rowId: rowId ?? undefined,
                     columnId: columns[newColumnIndex],
                     columnIndex: newColumnIndex,
                     rowIndex: newRowIndex,
@@ -112,8 +116,6 @@ export const useSetFocusCellByDirection = () => {
                 isEditing: false,
                 pressedKey: '',
             }));
-
-            scrollToCell({ columnIndex: newColumnIndex, rowIndex: newRowIndex, direction });
         },
         [dataTableStoreRef, pluginsStoreRef, scrollToCell, setFocusCell, tableManagerStore],
     );
@@ -127,10 +129,7 @@ export const useScrollToCell = () => {
     return useCallback(
         ({ columnIndex, rowIndex, direction }: CellIndices & { direction: Direction }) => {
             if (direction === 'up' || direction === 'down') {
-                tableManagerStore.current.tableFlatListRef?.current?.scrollToIndex({
-                    index: rowIndex,
-                    animated: false,
-                });
+                tableManagerStore.current.tableFlatListRef?.current?.scrollToItem(rowIndex);
 
                 return;
             }

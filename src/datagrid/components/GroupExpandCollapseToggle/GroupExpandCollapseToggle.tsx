@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react';
-import { IconButtonProps, useMolecules, TDataTableRow } from '@bambooapp/bamboo-molecules';
-import { useRecordById } from '@bambooapp/bamboo-molecules/datagrid';
+import { IconButtonProps, useMolecules } from '@bambooapp/bamboo-molecules';
+import { useFindRecordWithIndex } from '../../contexts';
 import {
     EXPAND_COLLAPSE_GROUPS_KEY,
     useExpandCollapseGroupsMethods,
@@ -8,13 +8,13 @@ import {
 } from '../../plugins';
 
 export type Props = Partial<IconButtonProps> & {
-    rowId: TDataTableRow;
+    rowIndex: number;
 };
 
-const GroupExpandCollapseToggle = ({ rowId, style, ...rest }: Props) => {
+const GroupExpandCollapseToggle = ({ rowIndex, style, ...rest }: Props) => {
     const { IconButton } = useMolecules();
 
-    const { groupId } = useRecordById(rowId);
+    const { groupId } = useFindRecordWithIndex(rowIndex)!;
     const { useIsGroupCollapsed, useOnToggleGroupExpandAndCollapse } =
         useExpandCollapseGroupsMethods();
 

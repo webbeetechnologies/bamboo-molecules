@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, memo, RefObject, useCallback, useMemo } from 'react';
+import { ForwardedRef, forwardRef, memo, RefObject, useCallback, useMemo, useRef } from 'react';
 import type {
     LayoutChangeEvent,
     NativeScrollEvent,
@@ -6,9 +6,13 @@ import type {
     ScrollView,
     ScrollViewProps,
 } from 'react-native';
-import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
+import {
+    VariableSizeList,
+    InfiniteLoader,
+    InfiniteLoaderChildrenArg,
+} from '@bambooapp/virtualized-list';
 
-import { useComponentStyles } from '../../hooks';
+import { useComponentStyles, useLatest, useMergedRefs, useMolecules } from '../../hooks';
 import {
     useDataTable,
     useDataTableComponent,
@@ -16,17 +20,29 @@ import {
 } from './DataTableContext/DataTableContext';
 import { DataTableContextProvider } from './DataTableContext/DataTableContextProvider';
 import { DataTableHeaderRow } from './DataTableHeader';
-import { renderRow } from './DataTableRow';
+import { DataTableRow } from './DataTableRow';
 import { defaultProps } from './defaults';
-import {
-    HorizontalScrollIndexProvider,
-    defaultValue,
-    useStoreRef,
-    useViewabilityConfigCallbackPairs,
-} from './hooks';
+import { HorizontalScrollIndexProvider, defaultValue, useStoreRef } from './hooks';
+import type { DataTableBase, DataTableProps, LoadMoreRowsArg, TDataTableRow } from './types';
+
+const defaultGetItemSize = () => 40;
 
 type DataTableComponentProps = DataTableBase &
-    ScrollViewProps & {
+    ScrollViewProps &
+    Pick<
+        Partial<DataTableProps>,
+        | 'rowCount'
+        | 'rowKey'
+        | 'rowSize'
+        | 'onRowsRendered'
+        | 'getRowSize'
+        | 'rowsMinimumBatchSize'
+        | 'rowsLoadingThreshold'
+        | 'loadMoreRows'
+        | 'hasRowLoaded'
+        | 'rowOverscanCount'
+        | 'infiniteLoaderRef'
+    > & {
         flatListRef?: RefObject<any>;
     };
 type DataTablePresentationProps = DataTableComponentProps &
@@ -41,44 +57,41 @@ const DataTablePresentationComponent = memo(
             verticalScrollProps = {},
             horizontalScrollProps = {},
             style: hStyleProp,
-            stickyRowIndices,
             records,
-            tableWidth,
             // tableHeight,
-            FlatListComponent,
             ScrollViewComponent,
             onLayout: onLayoutProp,
             HeaderRowComponent: HeaderRowComponentProp,
             flatListRef,
+            infiniteLoaderRef,
+            rowsMinimumBatchSize,
+            rowCount: rowCountProp,
+            rowsLoadingThreshold = 5,
+            loadMoreRows,
+            onRowsRendered,
+            getRowSize,
+            rowOverscanCount = 5,
             ...restScrollViewProps
         } = props;
 
-        const {
-            style: vStyleProp,
-            windowSize = defaultProps.windowSize,
-            maxToRenderPerBatch = defaultProps.maxToRenderPerBatch,
-            keyExtractor: keyExtractorProp = defaultProps.keyExtractor,
-            viewabilityConfigCallbackPairs: viewabilityConfigCallbackPairsProp = [],
-            ...vProps
-        } = { ...defaultProps, ...verticalScrollProps };
+        const { View } = useMolecules();
 
+        const mergedRef = useMergedRefs([ref, flatListRef!]);
         const hStyle = useComponentStyles('DataTable', [hStyleProp]);
-        const vStyle = useMemo(() => [{ width: tableWidth }, vStyleProp], [vStyleProp, tableWidth]);
 
-        const containerWidth = useDataTable(store => store.containerWidth);
+        const containerHeight = useDataTable(store => store.containerHeight);
+        const contentWidth = useDataTable(store => store.contentWidth);
+        const hasRowLoaded = useDataTable(store => store.hasRowLoaded);
 
         const { set: setStore } = useStoreRef();
         const { set: setDataTableStore } = useDataTableStoreRef();
+        const renderedRowsRef = useRef<Omit<LoadMoreRowsArg, 'startIndex' | 'stopIndex'> | null>(
+            null,
+        );
 
         const HeaderRowComponent = HeaderRowComponentProp || DataTableHeaderRow;
 
-        const stickyHeaderIndices = useMemo(
-            () =>
-                stickyRowIndices
-                    ? Array.from(new Set([0, ...stickyRowIndices.map(x => x + 1)]))
-                    : [0],
-            [stickyRowIndices],
-        );
+        const rowCount = rowCountProp || records.length;
 
         const onScroll = useCallback(
             (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -97,19 +110,90 @@ const DataTablePresentationComponent = memo(
         //     [setStore],
         // );
 
-        const viewabilityConfigCallbackPairs = useViewabilityConfigCallbackPairs(
-            viewabilityConfigCallbackPairsProp,
-        );
-
         const onLayout = useCallback(
             (e: LayoutChangeEvent) => {
                 onLayoutProp?.(e);
 
                 setDataTableStore(() => ({
                     containerWidth: e.nativeEvent.layout.width,
+                    containerHeight: e.nativeEvent.layout.height,
                 }));
             },
             [onLayoutProp, setDataTableStore],
+        );
+
+        const onContentSizeChange = useCallback(
+            (w: number) =>
+                setDataTableStore(() => ({
+                    contentWidth: w,
+                })),
+            [setDataTableStore],
+        );
+
+        const isItemLoaded = useCallback((index: number) => hasRowLoaded(index), [hasRowLoaded]);
+
+        const loadMoreItems = useCallback(
+            async (startIndex: number, stopIndex: number) => {
+                loadMoreRows?.({ startIndex, stopIndex, ...renderedRowsRef.current! });
+            },
+            [loadMoreRows],
+        );
+
+        const itemSize = useCallback(
+            (index: number) => {
+                return getRowSize ? getRowSize(index) : defaultGetItemSize();
+            },
+            [getRowSize],
+        );
+
+        const vProps = useMemo(
+            () => ({ ...defaultProps, ...verticalScrollProps }),
+            [verticalScrollProps],
+        );
+
+        // TODO - Revisit // create separate component to make it cleaner
+        const renderList = useCallback(
+            ({ onItemsRendered, ref: _ref }: InfiniteLoaderChildrenArg) => {
+                const setRef = (listRef: any) => {
+                    if (flatListRef) {
+                        (flatListRef as any).current = listRef;
+                    }
+                    mergedRef(listRef);
+                    _ref(listRef);
+                };
+
+                const _onItemsRenderer: DataTableProps['onRowsRendered'] = args => {
+                    renderedRowsRef.current = args;
+                    onRowsRendered?.(args);
+                    onItemsRendered(args);
+                };
+
+                return (
+                    <VariableSizeList
+                        onItemsRendered={_onItemsRenderer}
+                        ref={setRef}
+                        width={contentWidth || 0}
+                        height={containerHeight || 0}
+                        itemSize={itemSize}
+                        overscanCount={rowOverscanCount}
+                        itemCount={rowCount}
+                        {...vProps}>
+                        {/*@ts-ignore */}
+                        {DataTableRow}
+                    </VariableSizeList>
+                );
+            },
+            [
+                containerHeight,
+                contentWidth,
+                flatListRef,
+                rowCount,
+                itemSize,
+                onRowsRendered,
+                rowOverscanCount,
+                vProps,
+                mergedRef,
+            ],
         );
 
         return (
@@ -117,26 +201,27 @@ const DataTablePresentationComponent = memo(
                 {...restScrollViewProps}
                 {...horizontalScrollProps}
                 onLayout={onLayout}
+                onContentSizeChange={onContentSizeChange}
                 onScroll={onScroll}
                 scrollEventThrottle={16}
                 horizontal={true}
                 ref={ref}
                 style={hStyle}>
-                {!!containerWidth && (
-                    <FlatListComponent
-                        ref={flatListRef}
-                        {...vProps}
-                        data={records}
-                        windowSize={windowSize}
-                        style={vStyle}
-                        ListHeaderComponent={HeaderRowComponent}
-                        maxToRenderPerBatch={maxToRenderPerBatch}
-                        keyExtractor={keyExtractorProp}
-                        renderItem={renderRow}
-                        stickyHeaderIndices={stickyHeaderIndices}
-                        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-                    />
-                )}
+                <View>
+                    <HeaderRowComponent />
+
+                    {!!contentWidth && (
+                        <InfiniteLoader
+                            ref={infiniteLoaderRef}
+                            isItemLoaded={isItemLoaded}
+                            threshold={rowsLoadingThreshold}
+                            minimumBatchSize={rowsMinimumBatchSize}
+                            itemCount={rowCount}
+                            loadMoreItems={loadMoreItems}>
+                            {renderList}
+                        </InfiniteLoader>
+                    )}
+                </View>
             </ScrollViewComponent>
         );
     }),
@@ -164,6 +249,8 @@ const DataTableComponent = memo(
     }),
 );
 
+const useGetRowIdDefault = (index: number) => index;
+
 const withDataTableContext = (Component: typeof DataTableComponent) =>
     memo(
         forwardRef((props: DataTableProps, ref: ForwardedRef<ScrollView>) => {
@@ -185,8 +272,14 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 useRowRenderer,
                 CellWrapperComponent,
                 horizontalOffset,
+                getRowId,
+                hasRowLoaded,
+                useGetRowId = useGetRowIdDefault,
                 ...rest
             } = props;
+
+            const latestRecordsRef = useLatest(records);
+            const useGetRowIdCached = useRef(useGetRowId).current;
 
             const context = {
                 records,
@@ -206,6 +299,16 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 useRowRenderer,
                 CellWrapperComponent,
                 horizontalOffset,
+                getRowId: useCallback<Exclude<DataTableProps['getRowId'], undefined>>(
+                    index => getRowId?.(index) ?? index,
+                    [getRowId],
+                ),
+                hasRowLoaded: useCallback(
+                    (index: number) =>
+                        !!latestRecordsRef.current[index] || hasRowLoaded?.(index) || false,
+                    [hasRowLoaded, latestRecordsRef],
+                ),
+                useGetRowId: useGetRowIdCached,
             };
 
             return (

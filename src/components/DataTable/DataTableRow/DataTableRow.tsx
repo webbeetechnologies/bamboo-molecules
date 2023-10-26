@@ -1,5 +1,5 @@
 import { forwardRef, memo, useMemo } from 'react';
-import type { ListRenderItem, ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
 
 import { useActionState, useComponentStyles, useMolecules } from '../../../hooks';
 import { shallowCompare } from '../../../utils';
@@ -9,37 +9,47 @@ import {
     DataTableContextRowProvider,
     useDataTable,
 } from '../DataTableContext';
-import type { DataTableRowProps, TDataTableRow } from '../types';
+import type { DataTableRowProps } from '../types';
+import { withRowLoadingPlaceholder } from '../hoc';
 
 // import { useRowWithinBounds } from '../DataTable';
 
-const DataTableRowWrapper = memo((props: DataTableRowProps) => {
-    const { rowId, index, rowProps, isSelected = false } = props;
+const DataTableRowWrapper = withRowLoadingPlaceholder(
+    Object.assign(
+        forwardRef<any, DataTableRowProps>((props: DataTableRowProps, ref) => {
+            const { rowId, index, rowProps, isSelected = false, style } = props;
 
-    const { hovered = false, actionsRef } = useActionState();
+            const { hovered = false, actionsRef } = useActionState({ ref });
 
-    const rowSize = useDataTable(store => store.rowSize);
+            const rowSize = useDataTable(store => store.rowSize);
 
-    const rowStyle = useComponentStyles('DataTable_Row', undefined, {
-        size: rowProps?.size ?? rowSize,
-        states: {
-            selected_hovered: isSelected && hovered,
-            selected: isSelected,
-            hovered,
-        },
-    });
+            const rowStyle = useComponentStyles('DataTable_Row', style, {
+                size: rowProps?.size ?? rowSize,
+                states: {
+                    selected_hovered: isSelected && hovered,
+                    selected: isSelected,
+                    hovered,
+                },
+            });
 
-    const rowContext = useMemo(
-        () => ({ row: rowId, rowIndex: index, hovered }),
-        [rowId, index, hovered],
-    );
+            const rowContext = useMemo(
+                () => ({ row: rowId, rowIndex: index, hovered }),
+                [rowId, index, hovered],
+            );
 
-    return (
-        <DataTableContextRowProvider value={rowContext}>
-            <DataTableRowPresentationWithActionState {...props} style={rowStyle} ref={actionsRef} />
-        </DataTableContextRowProvider>
-    );
-});
+            return (
+                <DataTableContextRowProvider value={rowContext}>
+                    <DataTableRowPresentationWithActionState
+                        {...props}
+                        style={rowStyle}
+                        ref={actionsRef}
+                    />
+                </DataTableContextRowProvider>
+            );
+        }),
+        { displayName: 'DataTableRowWrapper' },
+    ),
+);
 
 /**
  *
@@ -89,14 +99,14 @@ DataTableRowPresentation.displayName = 'DataTableRowPresentation';
  * Allow component consumer to render a separate row
  * UseCase: Data grid can have header rows, footer rows and data rows.
  */
-const DataTableRow = memo(({ index }: Pick<DataTableRowProps, 'index'>) => {
-    const { columns, rowProps, isSelected, rowId } = useDataTable(store => {
-        const recordId = store.records[index];
+const DataTableRow = memo(({ index, style }: Pick<DataTableRowProps, 'index' | 'style'>) => {
+    const rowId = useDataTable(state => state.useGetRowId)(index)!;
+
+    const { columns, rowProps, isSelected } = useDataTable(store => {
         return {
-            rowId: recordId,
             columns: store.columns || [],
             rowProps: store.rowProps,
-            isSelected: Boolean(store.selectedRows?.[recordId]),
+            isSelected: Boolean(store.selectedRows?.[rowId]),
         };
     }, shallowCompare);
 
@@ -109,16 +119,16 @@ const DataTableRow = memo(({ index }: Pick<DataTableRowProps, 'index'>) => {
     const RowComponent = useRowRenderer?.(props, DataTableRowWrapper) ?? DataTableRowWrapper;
 
     return (
-        <RowComponent {...props} columns={columns} rowProps={rowProps} isSelected={isSelected} />
+        <RowComponent
+            {...props}
+            style={style}
+            columns={columns}
+            rowProps={rowProps}
+            isSelected={isSelected}
+        />
     );
 });
+
 DataTableRow.displayName = 'DataTableRow';
 
-/**
- *
- * Used internally by data table for FlatList renderItem
- *
- */
-export const renderRow: ListRenderItem<TDataTableRow> = ({ index }) => {
-    return <DataTableRow index={index} />;
-};
+export default DataTableRow;

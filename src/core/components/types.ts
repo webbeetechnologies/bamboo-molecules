@@ -66,6 +66,7 @@ import type {
     Menu,
     AvatarProps,
     Tabs,
+    If,
 } from '../../components';
 
 import type { MaterialToastProps, ToastContainerProps } from '../../components/Toast';
@@ -156,6 +157,7 @@ export interface DefaultComponents {
     Menu: typeof Menu;
     Avatar: ComponentType<AvatarProps>;
     Tabs: typeof Tabs;
+    If: typeof If;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext &

@@ -134,6 +134,7 @@ export {
     DataTableProps,
     TDataTableColumn,
     TDataTableRow,
+    TDataTableRowTruthy,
     DataTableRowProps,
     UseRowRenderer,
     RenderHeaderCellProps,
@@ -142,6 +143,7 @@ export {
     useDataTable,
     useDataTableRow,
     useDataTableHeaderCell,
+    withRowLoadingPlaceholder,
     Slider,
     SliderProps,
     RangeSlider,
@@ -150,6 +152,7 @@ export {
     MenuProps,
     MenuItemProps,
     StateLayerProps,
+    If,
 } from './components';
 
 // to avoid circular dependencies
@@ -203,6 +206,7 @@ export {
     useSearchable,
     UseSearchableProps,
     usePrevious,
+    useMergedRefs,
     useSubcomponents,
     useBackHandler,
     useKeyboardDismissable,

@@ -1,10 +1,16 @@
-import { createRef, memo, PropsWithChildren, RefObject, useMemo } from 'react';
-import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules/components';
+import { createRef, memo, MutableRefObject, PropsWithChildren, RefObject, useMemo } from 'react';
+import type {
+    LoadMoreRowsArg,
+    TDataTableColumn,
+    TDataTableRowTruthy,
+} from '@bambooapp/bamboo-molecules/components';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
-import type { GroupedData, GroupFooter } from '../utils';
-import { weakMemoized, keyBy, GroupMeta } from '../utils';
+import type { GroupConstantValues, GroupedData, GroupedDataTruthy } from '../utils';
+import { weakMemoized, keyBy, GroupMeta, getRowIds, isDataRow, getRecordByIndex } from '../utils';
 import { shallowCompare } from '../../utils';
+
+import { useGetRowId } from '../../components/DataTable';
 
 export type TableManagerContextProviderProps = {
     withContextMenu: boolean;
@@ -12,22 +18,32 @@ export type TableManagerContextProviderProps = {
     tableRef: RefObject<any>;
     spacerWidth: number;
     focusIgnoredColumns?: TDataTableColumn[];
+    useGetRowId: (arg: GroupedDataTruthy) => TDataTableRowTruthy | null;
+
+    getRowId: (index: number) => TDataTableRowTruthy | null;
+    hasRowLoaded: (index: number) => boolean;
+    isEditing?: boolean;
 };
 
 export type TableManagerContextType = TableManagerContextProviderProps & {
     tableFlatListRef: RefObject<any>;
+    infiniteLoaderRef: RefObject<any>;
+    visibleRowsRef: MutableRefObject<LoadMoreRowsArg | null>;
 };
 
-const defaultContextValue = {
-    focusedCell: null,
-    focusedCellRef: null,
+const defaultContextValue: TableManagerContextType = {
     isEditing: false,
     withContextMenu: false,
     spacerWidth: 0,
     records: [],
     tableRef: createRef(),
     tableFlatListRef: createRef(),
+    infiniteLoaderRef: createRef(),
+    visibleRowsRef: { current: {} as LoadMoreRowsArg },
     focusIgnoredColumns: [],
+    useGetRowId: record => record.index,
+    getRowId: index => index,
+    hasRowLoaded: () => true,
 };
 
 export const {
@@ -45,6 +61,9 @@ export const TableManagerProvider = memo(
         spacerWidth,
         records,
         focusIgnoredColumns,
+        getRowId,
+        hasRowLoaded,
+        useGetRowId,
     }: PropsWithChildren<TableManagerContextProviderProps>) => {
         const contextValue = useMemo(
             () =>
@@ -54,8 +73,21 @@ export const TableManagerProvider = memo(
                     records,
                     spacerWidth,
                     focusIgnoredColumns,
+
+                    getRowId,
+                    hasRowLoaded,
+                    useGetRowId,
                 } as TableManagerContextType),
-            [tableRef, withContextMenu, records, spacerWidth, focusIgnoredColumns],
+            [
+                tableRef,
+                withContextMenu,
+                records,
+                spacerWidth,
+                focusIgnoredColumns,
+                getRowId,
+                hasRowLoaded,
+                useGetRowId,
+            ],
         );
 
         return (
@@ -73,10 +105,7 @@ export const useShouldContextMenuDisplayed = () => {
 };
 
 export const useRecordIds = () => {
-    return useTableManagerValueSelector(
-        ({ records }) => records.map(({ id }) => id),
-        shallowCompare,
-    );
+    return useTableManagerValueSelector(({ records }) => getRowIds(records), shallowCompare);
 };
 
 type GroupedDataMap = Record<TDataTableColumn, GroupedData>;
@@ -84,67 +113,44 @@ const getRecordsMap = weakMemoized((records: GroupedData[]) => keyBy(records, 'i
     records: GroupedData[],
 ) => GroupedDataMap;
 
-const getRecordByInternalId = weakMemoized((records: GroupedData[]) =>
-    keyBy(records, 'uniqueId'),
-) as (records: GroupedData[]) => GroupedDataMap;
-
-const getRecordById = (records: GroupedData[], id: TDataTableRow) => getRecordsMap(records)[id];
-
 export const useRecordsMap = () => {
     return useTableManagerValueSelector(({ records }) => getRecordsMap(records));
-};
-
-export const useRecordById = (id: TDataTableRow) => {
-    return useTableManagerValueSelector(({ records }) => getRecordById(records, id));
 };
 
 export const useHasGroupedData = () => {
     return useTableManagerValueSelector(({ records }) => !!records.at(0)?.groupId);
 };
 
-export const useGroupMeta = (id: TDataTableRow): GroupMeta => {
-    return useTableManagerValueSelector(({ records }) => {
-        const record = getRecordById(records, id) as GroupFooter;
-
+const defaultArray: unknown[] = [];
+export const useGroupMeta = (rowIndex: number): GroupMeta => {
+    const record = useFindRecordWithIndex(rowIndex);
+    return useMemo(() => {
         return {
             groupId: record.groupId,
-            fieldId: record.fieldId,
-            value: record.title,
-            count: record.count,
-            isFirst: record.isFirst,
-            isLast: record.isLast,
-            isFirstLevel: record.isFirstLevel,
-            isLastLevel: record.isLastLevel,
-            isOnly: record.isOnly,
-            title: record.title,
             level: record.level,
-            groupConstants: record.groupConstants,
             rowType: record.rowType,
-            isRealGroup: record.isRealGroup,
+            fieldId: isDataRow(record) ? null : record.fieldId,
+            value: !isDataRow(record) && record.title,
+            title: !isDataRow(record) && record.title,
+            count: !isDataRow(record) ? record.count : 1,
+            isFirst: !isDataRow(record) && record.isFirst,
+            isLast: !isDataRow(record) && record.isLast,
+            isFirstLevel: !isDataRow(record) && record.isFirstLevel,
+            isLastLevel: !isDataRow(record) && record.isLastLevel,
+            groupConstants: !isDataRow(record)
+                ? record.groupConstants
+                : (defaultArray as GroupConstantValues[]),
+            isOnly: isDataRow(record) || record.isOnly,
+            isRealGroup: isDataRow(record) || record.isOnly,
+            isCollapsed: !isDataRow(record) && record.isCollapsed,
         };
+    }, [record]);
+};
+
+export const useFindRecordWithIndex = (index: number) => {
+    const rowId = useGetRowId(index);
+    return useTableManagerValueSelector(({ records }): Exclude<GroupedData, undefined> => {
+        const record = getRecordByIndex(records, index);
+        return { ...record, id: rowId ?? record.id! };
     }, shallowCompare);
-};
-
-export const useRecordType = (id: TDataTableRow) => {
-    return useTableManagerValueSelector(({ records }) => getRecordsMap(records)[id].rowType);
-};
-
-export const useRecord = <T extends unknown>(
-    /**
-     * Internal Id of the record.
-     */
-    id: TDataTableRow,
-    selector: (arg: GroupedData) => T,
-) => {
-    return useTableManagerValueSelector(({ records }) =>
-        selector(getRecordByInternalId(records)[id]),
-    );
-};
-
-export const useRecordByInternalId = (id: TDataTableRow) => {
-    /**
-     * Normalize rowId which is the internal Id into the actual ID of the row.
-     * this is to prevent duplicates.
-     */
-    return useRecord(id, record => record.id);
 };

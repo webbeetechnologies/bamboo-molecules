@@ -43,3 +43,5 @@ export {
     UseHandleNumberFormatProps,
     NumberMaskConfig,
 } from './useHandleNumberFormat';
+
+export { useMergedRefs } from './useMergedRefs';

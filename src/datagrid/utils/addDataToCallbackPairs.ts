@@ -1,12 +1,9 @@
-import type { FlatListProps } from '@bambooapp/bamboo-molecules';
-import type { RefObject } from 'react';
+import type { DataTableProps } from '@bambooapp/bamboo-molecules';
 import type { ViewAbilityConfigPair, ViewTokenExtended, ViewabilityCallback } from '../types';
-import type { GroupedData } from './grouping.types';
 
 export const addDataToCallbackPairs = (
-    data: RefObject<{ records: GroupedData[] }>,
     props: Partial<
-        Omit<FlatListProps<any>, 'viewabilityConfigCallbackPairs'> & {
+        Omit<Pick<DataTableProps, 'verticalScrollProps'>, 'viewabilityConfigCallbackPairs'> & {
             viewabilityConfigCallbackPairs: ViewAbilityConfigPair[];
         }
     >,
@@ -21,8 +18,6 @@ export const addDataToCallbackPairs = (
             callback!({
                 viewableItems: viewableItems,
                 changed: changed,
-                viewableRecords: viewableItems.map(({ index }) => data.current!.records[index!]),
-                changedRecords: changed.map(({ index }) => data.current!.records[index!]),
             });
         };
 

@@ -12,7 +12,7 @@ import {
     usePluginsDataStoreRef,
 } from '../plugins';
 import { useNormalizeSelectionHandler } from '../plugins/utils';
-import type { GroupRecord } from '../utils';
+import { isDataRow, GroupRecord, getRecordByIndex } from '../utils';
 import type { TableManagerContextType } from '../contexts/TableManagerContext';
 
 export type Props = {
@@ -102,22 +102,19 @@ const normalizeSelectionForGrouping = (
     store: React.MutableRefObject<TableManagerContextType>,
 ) => {
     // Normalize selection in case of grouping
-    const getCorrectRowIndex = (index: number) => {
-        if (store.current.records[index].rowType === 'data') return index;
-        throw new Error('Record is not a data row');
+    const getRowData = (index: number): GroupRecord => {
+        const record = getRecordByIndex(store.current.records, index);
+        if (!isDataRow(record)) throw new Error('Record is not a data row');
+        return record;
     };
 
-    const correctStartRowIndex = getCorrectRowIndex(start.rowIndex);
     const {
         index: startIndex,
         indexInGroup: startRowIndexInGroup,
         groupConstants,
-    } = store.current.records[correctStartRowIndex] as GroupRecord;
+    } = getRowData(start.rowIndex);
 
-    const correctEndRowIndex = getCorrectRowIndex(end.rowIndex);
-    const { index: endIndex, indexInGroup: endRowIndexInGroup } = store.current.records[
-        correctEndRowIndex
-    ] as GroupRecord;
+    const { index: endIndex, indexInGroup: endRowIndexInGroup } = getRowData(end.rowIndex);
 
     return {
         ...rest,

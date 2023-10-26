@@ -74,6 +74,7 @@ import {
     Menu,
     Avatar,
     Tabs,
+    If,
 } from '../../components';
 
 import { MaterialToast, ToastContainer } from '../../components/Toast';
@@ -157,6 +158,7 @@ const defaultComponents: DefaultComponents = {
     Menu,
     Avatar,
     Tabs,
+    If,
 };
 
 export const ProvideComponents = ({ components = {}, children }: ProvideComponentsProps) => {

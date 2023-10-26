@@ -1,5 +1,6 @@
 import type { ViewToken, ViewabilityConfig } from 'react-native';
-import type { RecordWithId } from '../utils';
+import type { LoadMoreRowsArg } from '../../components';
+import type { GroupRecord } from '../utils';
 
 export type ViewabilityCallback<ExtendedProps = {}> = (
     info: ExtendedProps & {
@@ -9,11 +10,19 @@ export type ViewabilityCallback<ExtendedProps = {}> = (
 ) => void;
 
 export type ViewTokenExtended = {
-    viewableRecords: RecordWithId[];
-    changedRecords: RecordWithId[];
+    // viewableRecords: RecordWithId[];
+    // changedRecords: RecordWithId[];
 };
 
 export type ViewAbilityConfigPair = {
     viewabilityConfig: ViewabilityConfig;
     onViewableItemsChanged: ViewabilityCallback<ViewTokenExtended> | null;
 };
+
+export type DataGridLoadMoreRowsArg = LoadMoreRowsArg & {
+    visibleGroups: Omit<GroupRecord, 'id'>[];
+    overscanGroups: Omit<GroupRecord, 'id'>[];
+    pendingRowGroups: Omit<GroupRecord, 'id'>[];
+};
+
+export type DataGridLoadMoreRows = (visiblity: DataGridLoadMoreRowsArg, forced: boolean) => void;

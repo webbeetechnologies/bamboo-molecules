@@ -2,7 +2,7 @@ import type { ComponentType } from 'react';
 import type { UseRowRenderer } from '@bambooapp/bamboo-molecules';
 
 import { RowType, weakMemoized } from '../../utils';
-import { useRecordType } from '../../contexts';
+import { useFindRecordWithIndex } from '../../contexts';
 import { GroupFooterRow } from './GroupFooterRenderer';
 import { GroupHeaderRow } from './GroupHeaderRenderer';
 import type { DataGridRowRendererProps } from '../../types';
@@ -29,6 +29,6 @@ export const useRowRendererDefault: UseRowRenderer<DataGridRowRendererProps> = (
     props,
     DefaultRenderer,
 ) => {
-    const rowType = useRecordType(props.rowId);
+    const rowType = useFindRecordWithIndex(props.index).rowType;
     return getRowWithSpacers(renderers[rowType] ?? DefaultRenderer);
 };

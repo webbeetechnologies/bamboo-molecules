@@ -1,13 +1,20 @@
 import type { ComponentPropsWithRef, ComponentType, ReactNode, RefObject } from 'react';
-import type { FlatListProps, ScrollViewProps, ViewProps } from 'react-native';
-import type { ScrollView } from 'react-native';
+import type {
+    FlatListProps,
+    ScrollViewProps,
+    ViewProps,
+    ViewStyle,
+    ScrollView,
+} from 'react-native';
 import type { ViewAbilityConfigPair } from 'src/datagrid/types';
+import type { VariableSizeListProps, InfiniteLoaderProps } from '@bambooapp/virtualized-list';
 
 type RowProps = Omit<ViewProps, 'children'> & { size?: string };
 
 export type TDataTableColumn = string | number;
 
-export type TDataTableRow = string | number;
+export type TDataTableRowTruthy = string | number;
+export type TDataTableRow = TDataTableRowTruthy | undefined;
 
 export interface DataTableComponentProps<T = any> {
     FlatListComponent?: ComponentType<
@@ -36,9 +43,11 @@ export type RenderCellProps = {
 
 export type ScrollProps = {
     verticalScrollProps?: Omit<
-        FlatListProps<any>,
-        'data' | 'renderItem' | 'viewabilityConfigCallbackPairs'
-    > & { viewabilityConfigCallbackPairs?: ViewAbilityConfigPair[] };
+        VariableSizeListProps,
+        'itemSize' | 'itemCount' | 'itemKey' | 'estimatedItemSize' | 'onItemsRendered'
+    > & {
+        viewabilityConfigCallbackPairs?: ViewAbilityConfigPair[];
+    };
     horizontalScrollProps?: ScrollViewProps;
 };
 
@@ -48,17 +57,27 @@ export type DataTableBase = ScrollProps & {
 };
 
 export type DataTableRowProps = {
-    rowId: TDataTableRow;
+    rowId: TDataTableRowTruthy;
     index: number;
     columns: TDataTableColumn[];
     rowProps?: RowProps;
     isSelected?: boolean;
+    style?: ViewStyle;
 };
 
 export type UseRowRenderer<T extends DataTableRowProps = DataTableRowProps> = (
     props: Pick<DataTableRowProps, 'rowId' | 'index'>,
     DefaultComponent: ComponentType<DataTableRowProps>,
 ) => ComponentType<T> | undefined;
+
+export type LoadMoreRowsArg = Parameters<
+    Exclude<VariableSizeListProps['onItemsRendered'], undefined>
+>[0] & {
+    startIndex: number;
+    stopIndex: number;
+};
+
+export type LoadMoreRows = (arg: LoadMoreRowsArg, forced?: boolean) => void;
 
 export interface DataTableProps<RecordType = any>
     extends Omit<ScrollViewProps, 'children'>,
@@ -164,4 +183,71 @@ export interface DataTableProps<RecordType = any>
      */
     CellWrapperComponent?: ComponentType<DataCellProps>;
     flatListRef?: RefObject<any>;
+    infiniteLoaderRef?: RefObject<any>;
+
+    /**
+     *
+     * define the height of the row
+     *
+     */
+    getRowSize: (index: number) => number;
+
+    /**
+     *
+     * Optional row count; prefer to use records length if you have all the records loaded upfront.
+     */
+    rowCount?: VariableSizeListProps['itemCount'];
+
+    /**
+     *
+     * Window size outside the viewport to see; is vector based.
+     *
+     */
+    rowOverscanCount?: VariableSizeListProps['overscanCount'];
+    rowKey?: VariableSizeListProps['itemKey'];
+    estimatedRowSize?: VariableSizeListProps['estimatedItemSize'];
+
+    /**
+     *
+     * Triggered everytime a row is rendered.
+     *
+     */
+    onRowsRendered?: VariableSizeListProps['onItemsRendered'];
+    rowsLoadingThreshold?: InfiniteLoaderProps['threshold'];
+
+    /**
+     *
+     * Infinite loader callback.
+     * minimum batch size to fetch records.
+     *
+     */
+    rowsMinimumBatchSize?: InfiniteLoaderProps['minimumBatchSize'];
+
+    /**
+     *
+     * Infinite loader callback.
+     * Will trigger everytime a new row is required to be loaded
+     *
+     */
+    loadMoreRows?: LoadMoreRows;
+
+    /**
+     *
+     * derive if the cell has loaded or not
+     * To be used for displaying a placeholder row.
+     *
+     */
+    hasRowLoaded?: (index: number) => boolean;
+
+    /**
+     *
+     * get the row id from the component consumer.
+     */
+    getRowId?: (index: number) => TDataTableRowTruthy | null;
+
+    /**
+     *
+     * hook toget the row id from the component consumer.
+     */
+    useGetRowId: (index: number) => TDataTableRowTruthy | null;
 }

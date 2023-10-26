@@ -15,14 +15,19 @@ export {
     DataTableRowProps,
     TDataTableColumn,
     TDataTableRow,
+    TDataTableRowTruthy,
     UseRowRenderer,
+    LoadMoreRowsArg,
+    LoadMoreRows,
 } from './types';
+
+export * from './hoc';
 
 export {
     dataTableCellStyles,
     renderCellComponent as renderDataTableCellComponent,
 } from './DataTableCell';
-export { dataTableRowStyles, renderRow as renderDataTableRow } from './DataTableRow';
+export { dataTableRowStyles } from './DataTableRow';
 export { dataTableStyles } from './utils';
 export {
     dataTableHeaderCellStyles,

@@ -5,7 +5,7 @@ import type { ViewToken } from 'react-native';
 import type { ViewAbilityConfigPair } from 'src/datagrid/types';
 import { useDataTable, useDataTableColumnWidth } from './DataTableContext';
 import { DEFAULT_VIEWABILITY_CONFIG } from './constants';
-import type { TDataTableColumn, TDataTableRow } from './types';
+import type { TDataTableColumn, TDataTableRowTruthy } from './types';
 
 export const {
     useStoreRef,
@@ -24,7 +24,7 @@ const defaultOffset = 500;
 
 export const useIsCellWithinBounds = (
     left: number,
-    rowId: TDataTableRow,
+    rowId: TDataTableRowTruthy,
     columnId: TDataTableColumn,
 ) => {
     const cellWidth = useDataTableColumnWidth(columnId);

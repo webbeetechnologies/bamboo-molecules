@@ -1,4 +1,4 @@
-import { TDataTableColumn, TDataTableRow, useDataTable } from '@bambooapp/bamboo-molecules';
+import { TDataTableColumn, TDataTableRowTruthy, useDataTable } from '@bambooapp/bamboo-molecules';
 import { useEffect, useMemo } from 'react';
 import {
     CELL_FOCUS_PLUGIN_KEY,
@@ -15,7 +15,8 @@ export const useEnsureCorrectFocusCellState = () => {
 
     const { recordsMap, columnsMap } = useMemo(
         () => ({
-            recordsMap: recordIds.reduce((acc: Record<TDataTableRow, true>, recordId) => {
+            recordsMap: recordIds.reduce((acc: Record<TDataTableRowTruthy, true>, recordId) => {
+                if (!recordId) return acc;
                 acc[recordId] = true;
 
                 return acc;

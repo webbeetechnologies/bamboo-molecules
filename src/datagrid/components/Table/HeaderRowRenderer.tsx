@@ -9,6 +9,11 @@ import {
 
 import { useDatagridMethods } from '../../hooks';
 
+const DataGridMethodsWrapper = memo(() => {
+    useDatagridMethods();
+    return null;
+});
+
 export const TableHeaderRow = memo(() => {
     const { View } = useMolecules();
 
@@ -40,12 +45,13 @@ export const TableHeaderRow = memo(() => {
         [columns],
     );
 
-    useDatagridMethods();
-
     return (
-        <View {...headerRowProps} style={headerStyle}>
-            {cells}
-        </View>
+        <>
+            <DataGridMethodsWrapper />
+            <View {...headerRowProps} style={headerStyle}>
+                {cells}
+            </View>
+        </>
     );
 });
 

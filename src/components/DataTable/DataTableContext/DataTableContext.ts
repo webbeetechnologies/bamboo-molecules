@@ -1,6 +1,11 @@
 import { createContext, useContext } from 'react';
 import { createFastContext } from '../../../fast-context';
-import type { DataTableProps, TDataTableColumn, TDataTableRow } from '../types';
+import type {
+    DataTableProps,
+    TDataTableColumn,
+    TDataTableRow,
+    TDataTableRowTruthy,
+} from '../types';
 
 /**
  *
@@ -23,7 +28,7 @@ const useInvariant = <T>(value: T, message: string): Exclude<T, null> => {
 
 type DataTableContextType = Pick<
     Required<DataTableProps>,
-    'records' | 'columns' | 'defaultColumnWidth'
+    'records' | 'columns' | 'defaultColumnWidth' | 'getRowId'
 > &
     Pick<
         DataTableProps,
@@ -36,15 +41,19 @@ type DataTableContextType = Pick<
         | 'useRowRenderer'
         | 'CellWrapperComponent'
         | 'horizontalOffset'
+        | 'useGetRowId'
     > & {
         tableWidth: number;
         containerWidth?: number;
+        containerHeight?: number;
+        contentWidth?: number;
         /*
          * columnIds as keys
          * */
         columnWidths?: Record<TDataTableColumn, number>;
         // tableHeight: number;
         cellXOffsets: number[];
+        hasRowLoaded: (index: number) => boolean;
     };
 
 export const {
@@ -94,10 +103,11 @@ export const {
  * also adds event handlers
  */
 // TODO: Add event handlers here
-export type DataTableCellContextType = Omit<DataTableRowContextType, 'hovered'> & {
+export type DataTableCellContextType = Omit<DataTableRowContextType, 'hovered' | 'row'> & {
     column: TDataTableColumn;
     columnIndex: number;
     isLast: boolean;
+    row: TDataTableRowTruthy;
 };
 export const DataTableCellContext = createContext<DataTableCellContextType | null>(null);
 export const useDataTableCell = () =>
@@ -142,4 +152,8 @@ export const useDataTableColumnWidth = (column: TDataTableColumn): number => {
     return useDataTable(({ columnWidths, defaultColumnWidth }) =>
         deriveColumnWidth({ columnWidths, column, defaultColumnWidth }),
     );
+};
+
+export const useGetRowId = (index: number) => {
+    return useDataTableStoreRef().store.current.useGetRowId(index);
 };

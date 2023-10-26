@@ -8,15 +8,37 @@ export { default as noop } from 'lodash.noop';
 export { default as keyBy } from 'lodash.keyby';
 export { default as groupBy } from 'lodash.groupby';
 
-const defaultResolver = (arg: any) => JSON.stringify(arg);
+const uniqueIdFactory = () => {
+    let number = Number.MAX_SAFE_INTEGER;
+    return () => number--;
+};
+
+const getUniqueId = uniqueIdFactory();
+const weakMemoize = Object.assign(memoize.bind(null), { Cache: WeakMap });
+const getObjectMemoryAddress = weakMemoize((x: unknown | null) => x && getUniqueId());
+
+export const allArgumentResolver = (...args: unknown[]) =>
+    args
+        .map(x => {
+            const type = typeof x;
+            switch (type) {
+                case 'object':
+                case 'function':
+                    return type.slice(0, 2)! + getObjectMemoryAddress(x);
+                default:
+                    return type.slice(0, 2)! + String(x);
+            }
+        })
+        .join('_');
+
 export const createMemoizedFunction = ({
-    resolver = defaultResolver,
+    resolver = allArgumentResolver,
     Cache = Map,
 }: {
     resolver?: (...args: any[]) => any;
     Cache?: typeof memoize.Cache;
 } = {}) => {
-    const memo = Object.assign(memoize, { Cache });
+    const memo = Object.assign(memoize.bind(null), { Cache });
     return Object.assign(
         <T extends (...args: any[]) => any>(func: T, resolverOverwride?: (...args: any[]) => any) =>
             memo(func, resolverOverwride ?? resolver),

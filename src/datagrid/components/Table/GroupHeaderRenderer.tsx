@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react';
 import type { ViewStyle } from 'react-native';
 import { useMolecules } from '@bambooapp/bamboo-molecules';
+import { areEqual } from '@bambooapp/virtualized-list';
 // import type { RenderCellProps } from '../../../components';
 import { useField, useGroupMeta } from '../../contexts';
 import { ViewRenderer } from '../FieldRenderers';
@@ -13,7 +14,7 @@ import { GroupExpandCollapseToggle } from '../GroupExpandCollapseToggle';
  * Can be replaced by the component consumer.
  *
  */
-export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps }: GroupMetaRowProps) => {
+export const GroupHeaderRenderer = memo(({ meta, index, rowProps }: GroupMetaRowProps) => {
     const { View, Text } = useMolecules();
     const field = useField(meta.fieldId!);
 
@@ -29,7 +30,7 @@ export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps }: GroupMetaRow
 
     return (
         <View {...rowProps} style={rowStyle}>
-            <GroupExpandCollapseToggle rowId={rowId} />
+            <GroupExpandCollapseToggle rowIndex={index} />
 
             <View>
                 <Text>{field.title}</Text>
@@ -37,7 +38,7 @@ export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps }: GroupMetaRow
             </View>
         </View>
     );
-});
+}, areEqual);
 
 /**
  *
@@ -45,7 +46,7 @@ export const GroupHeaderRenderer = memo(({ meta, rowId, rowProps }: GroupMetaRow
  * Can be replaced with useRowRenderer prop on datagrid.
  */
 export const GroupHeaderRow = memo((props: DataGridRowRendererProps) => {
-    const meta = useGroupMeta(props.rowId);
+    const meta = useGroupMeta(props.index);
     const { GroupHeaderRenderer: RowRenderer } = useMolecules();
 
     const rendererProps = {
