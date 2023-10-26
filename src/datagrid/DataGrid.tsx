@@ -7,6 +7,8 @@ import type {
     RenderHeaderCellProps,
     TDataTableColumn,
     TDataTableRow,
+    TDataTableRowTruthy,
+    LoadMoreRows,
 } from '@bambooapp/bamboo-molecules/components';
 import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Platform, StyleSheet } from 'react-native';
@@ -16,7 +18,7 @@ import {
     useSetScopes,
 } from '@bambooapp/bamboo-molecules/shortcuts-manager';
 
-import { useMolecules, useToken } from '../hooks';
+import { useMolecules, usePrevious, useToken } from '../hooks';
 import {
     CellRenderer,
     CellWrapperComponent,
@@ -45,8 +47,17 @@ import {
     usePluginsDataStoreRef,
 } from './plugins';
 import PluginsManager from './plugins/plugins-manager';
-import type { FieldTypes } from './types';
-import { GroupedData, addDataToCallbackPairs, getRowIds } from './utils';
+import type { DataGridLoadMoreRows, FieldTypes } from './types';
+import {
+    GroupRecord,
+    GroupedData,
+    GroupedDataTruthy,
+    addDataToCallbackPairs,
+    getRecordByIndex,
+    getRecordByIndexNoId,
+    getRowIds,
+    isDataRow,
+} from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
 import { isSpaceKey } from '../shortcuts-manager/utils';
 
@@ -55,7 +66,17 @@ const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
 
 type DataGridPropsBase = Omit<
     DataTableProps,
-    'title' | 'renderHeader' | 'renderCell' | 'columns' | 'records' | 'getRowSize' | 'rowCount'
+    | 'title'
+    | 'renderHeader'
+    | 'renderCell'
+    | 'columns'
+    | 'records'
+    | 'getRowSize'
+    | 'rowCount'
+    | 'getRowId'
+    | 'hasRowLoaded'
+    | 'useGetRowId'
+    | 'loadMoreRows'
 > &
     Omit<ViewProps, 'ref'> & {
         onEndReached?: () => void;
@@ -66,6 +87,15 @@ type DataGridPropsBase = Omit<
         plugins?: Plugin[];
         groups?: TDataTableColumn[];
         rowCount?: DataTableProps['rowCount'];
+
+        getRowId: (record: Omit<GroupRecord, 'id'>) => TDataTableRowTruthy | null;
+        hasRowLoaded: (record: Omit<GroupRecord, 'id'>) => boolean;
+        useGetRowId: (record: Exclude<GroupedDataTruthy, undefined>) => TDataTableRowTruthy | null;
+        loadMoreRows?: DataGridLoadMoreRows;
+        /**
+         * Return a unique timestamp on change, the value would be used to trigger an update.
+         */
+        useShouldLoadMoreRows: (updatedIndexTuple: [number]) => 1;
     };
 
 export type Props = Omit<DataGridPropsBase, 'horizontalOffset'> &
@@ -99,6 +129,114 @@ type DataGridPresentationProps = DataGridPropsBase & {
 
 const emptyObj = {};
 
+const useGetRowId = (index: number) => {
+    const { store } = useTableManagerStoreRef();
+    return store.current.useGetRowId(getRecordByIndex(store.current.records, index));
+};
+
+const createVisibilityArray = (records: GroupedData[], startIndex: number, stopIndex: number) => {
+    if (startIndex > stopIndex) [startIndex, stopIndex] = [stopIndex, startIndex];
+
+    return new Array(stopIndex + 1 - startIndex)
+        .fill(null)
+        .reduce((rows: GroupRecord[], ...rest) => {
+            const record = getRecordByIndexNoId(records, startIndex + rest[1]);
+            if (!isDataRow(record)) return rows;
+            return [...rows, record];
+        }, []);
+};
+
+const useLoadMoreRows = (loadMoreRows?: DataGridLoadMoreRows) => {
+    const { store } = useTableManagerStoreRef();
+
+    const loadMoreRowsHandled = useCallback<LoadMoreRows>(
+        (visibility, forced = false) => {
+            store.current.visibleRowsRef.current = visibility;
+            loadMoreRows!(
+                {
+                    ...visibility,
+                    visibleGroups: createVisibilityArray(
+                        store.current.records,
+                        visibility.visibleStartIndex,
+                        visibility.visibleStopIndex,
+                    ),
+                    overscanGroups: createVisibilityArray(
+                        store.current.records,
+                        visibility.overscanStartIndex,
+                        visibility.overscanStopIndex,
+                    ),
+                    pendingRowGroups: createVisibilityArray(
+                        store.current.records,
+                        visibility.startIndex,
+                        visibility.stopIndex,
+                    ),
+                },
+                forced,
+            );
+        },
+        [loadMoreRows, store],
+    );
+    return loadMoreRows && loadMoreRowsHandled;
+};
+
+const useAutoUpdateRecords = ({
+    records,
+    flatListRef,
+    rowSize,
+    loadMoreRows,
+    useShouldLoadMoreRows,
+}: Pick<Props, 'records' | 'flatListRef' | 'rowSize' | 'useShouldLoadMoreRows'> &
+    Pick<DataTableProps, 'loadMoreRows'>) => {
+    const defaultEmptyTuple = useRef<[number]>([-1]).current;
+    const hasRowSizeUpdated = usePrevious(rowSize).current !== rowSize;
+    const { store } = useTableManagerStoreRef();
+
+    const oldRecords = usePrevious(records);
+
+    /**
+     *
+     * Find the first index that updated.
+     * though records update there is a possibility that the first record updated is same index.
+     *
+     * Making updatedRowIndex return tuple ensures that the useEffect will run always
+     */
+    const updatedRowIndex = useMemo((): [number] => {
+        if (records === oldRecords.current) return defaultEmptyTuple;
+
+        return [records.findIndex((record, index) => oldRecords.current[index] !== record)];
+    }, [oldRecords, records, defaultEmptyTuple]);
+
+    /**
+     *
+     * Reset the row height cache if `updatedRowIndex` or `rowSize` changes
+     *
+     */
+    useEffect(() => {
+        if (!hasRowSizeUpdated && updatedRowIndex.at(0) === -1) return;
+        flatListRef!.current?.resetAfterIndex((updatedRowIndex as [number]).at(0));
+    }, [hasRowSizeUpdated, updatedRowIndex, flatListRef]);
+
+    /**
+     *
+     * Load more rows when shouldUpdate triggers
+     *
+     */
+    const shouldUpdate = useShouldLoadMoreRows(updatedRowIndex);
+    useEffect(() => {
+        if (!shouldUpdate) return;
+        const visibleRows = store.current.visibleRowsRef.current;
+
+        /**
+         *
+         * if visibleRows is empty, return
+         *
+         */
+        if (!Object.keys(visibleRows || {}).length) return;
+
+        loadMoreRows?.(visibleRows!, true);
+    }, [store, loadMoreRows, shouldUpdate]);
+};
+
 const DataGrid = ({
     verticalScrollProps: _verticalScrollProps,
     rowSize: rowHeight = 'sm',
@@ -110,6 +248,9 @@ const DataGrid = ({
     horizontalScrollProps: _horizontalScrollProps,
     rowCount,
     getRowSize,
+    loadMoreRows,
+    groups: _groups,
+    useShouldLoadMoreRows,
     ...rest
 }: DataGridPresentationProps) => {
     const { DataTable } = useMolecules();
@@ -160,17 +301,19 @@ const DataGrid = ({
 
     const verticalScrollProps = useMemo(
         () => ({
-            ...addDataToCallbackPairs(store, {
+            ...addDataToCallbackPairs({
                 ..._verticalScrollProps,
             }),
         }),
-        [store, _verticalScrollProps],
+        [_verticalScrollProps],
     );
 
     const itemSize = useCallback(
         (index: number) => getRowSize(store.current.records as GroupedData[], index),
         [getRowSize, store],
     );
+
+    const handleLoadMoreRows = useLoadMoreRows(loadMoreRows);
 
     const onContextMenuOpen = useCallback(
         (e: any) => {
@@ -215,11 +358,19 @@ const DataGrid = ({
     // TODO - move this to plugins
     useContextMenu({ ref: store.current.tableRef, callback: onContextMenuOpen });
 
+    useAutoUpdateRecords({
+        records: store.current.records,
+        flatListRef: store.current.tableFlatListRef,
+        loadMoreRows: handleLoadMoreRows,
+        useShouldLoadMoreRows,
+    });
+
     return (
         <>
             <DataTable
                 ref={store.current.tableRef}
                 flatListRef={store.current.tableFlatListRef}
+                infiniteLoaderRef={store.current.infiniteLoaderRef}
                 // @ts-ignore
                 dataSet={dataSet}
                 testID="datagrid"
@@ -240,6 +391,10 @@ const DataGrid = ({
                 HeaderRowComponent={TableHeaderRow}
                 useRowRenderer={useRowRenderer}
                 CellWrapperComponent={CellWrapperComponent}
+                getRowId={store.current.getRowId}
+                hasRowLoaded={store.current.hasRowLoaded}
+                useGetRowId={useGetRowId}
+                loadMoreRows={handleLoadMoreRows}
             />
 
             {shouldContextMenuDisplayed && (
@@ -355,6 +510,9 @@ const TableManagerProviderWrapper = ({
     spacerWidth: spacerWidthProp = 'spacings.3',
     Component,
     focusIgnoredColumns,
+    getRowId,
+    hasRowLoaded,
+    useGetRowId: useGetRowIdProp,
     ...rest
 }: Omit<Props, 'useField' | 'useCellValue'> & {
     Component: ComponentType<DataGridPresentationProps>;
@@ -371,17 +529,40 @@ const TableManagerProviderWrapper = ({
     const spacerWidth = useToken(spacerWidthProp as string) ?? spacerWidthProp;
 
     const offsetWidth = (groups?.length ?? 0) * spacerWidth;
+    const latestRecordsRef = useLatest(records);
 
     return (
         <TableManagerProvider
             tableRef={ref}
             spacerWidth={spacerWidth}
             records={records}
+            useGetRowId={useRef(useGetRowIdProp).current}
+            getRowId={useCallback(
+                index =>
+                    getRowId(
+                        getRecordByIndex(latestRecordsRef.current, index) as Omit<
+                            GroupRecord,
+                            'id'
+                        >,
+                    ),
+                [latestRecordsRef, getRowId],
+            )}
+            hasRowLoaded={useCallback(
+                index =>
+                    hasRowLoaded(
+                        getRecordByIndex(latestRecordsRef.current, index) as Omit<
+                            GroupRecord,
+                            'id'
+                        >,
+                    ),
+                [latestRecordsRef, hasRowLoaded],
+            )}
             withContextMenu={!!contextMenuProps}
             focusIgnoredColumns={focusIgnoredColumns}>
             {/* @ts-ignore - we don't want to pass down unnecessary props */}
             <Component
                 {...rest}
+                groups={groups}
                 records={rowIds}
                 horizontalOffset={offsetWidth}
                 contextMenuProps={contextMenuProps}

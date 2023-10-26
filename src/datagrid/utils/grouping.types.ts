@@ -20,10 +20,12 @@ export type GroupMetaStates = {
 
 export type GroupMeta = GroupMetaStates & {
     groupId: string;
-    fieldId?: TDataTableColumn;
+    fieldId?: TDataTableColumn | null;
     count: number;
     level: number;
     groupConstants: GroupConstantValues[];
+    isRealGroup?: boolean;
+    isCollapsed: boolean;
 };
 
 export interface RecordWithId extends Record<string, any> {
@@ -36,17 +38,15 @@ type AggregateBase = {
     count: number;
     value: any;
     field: TDataTableColumn;
-    recordIds: TDataTableRow[];
 };
 
 type GroupBase = {
-    groupConstants: GroupConstantValues[];
     level: number;
     groupId: string;
     id: TDataTableColumn;
-    isRealGroup?: boolean;
-    isCollapsed: boolean;
-    uniqueId: string;
+    index: number;
+    groupConstants: GroupConstantValues[];
+    realIndex: number;
 };
 
 export type AggregateRecord = AggregateBase & {
@@ -63,23 +63,28 @@ export type GroupHeader = NormalizedAggregateRecordBase & {
     rowType: 'header';
 };
 
-export type GroupFooter = Omit<NormalizedAggregateRecordBase, 'value' | 'recordIds'> & {
+export type GroupFooter = Omit<NormalizedAggregateRecordBase, 'recordIds'> & {
     rowType: 'footer';
 };
 
-export type GroupRecord = GroupBase & {
+export type GroupRecord = Omit<GroupBase, 'id'> & {
     rowType: 'data';
-    index: number;
     indexInGroup: number;
+    id: TDataTableRow;
+    isPlaceholder?: boolean;
 };
 
 export type GroupMetaRow = GroupFooter | GroupHeader;
 
-export type GroupedData = GroupMetaRow | GroupRecord;
+export type GroupedDataTruthy = GroupMetaRow | GroupRecord;
+export type GroupedData = GroupedDataTruthy | undefined;
 
 export type NormalizeAggregatesFunc = (
     arg: AggregateRecord,
     groupConstants: GroupConstantValues[],
     index: number,
+    lastIndex: number,
+    startIndex: number,
     totalItems: number,
+    groupIdRoot?: string,
 ) => GroupMetaRow[];

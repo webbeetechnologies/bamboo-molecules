@@ -2,7 +2,6 @@ import type { GroupedData } from '../../../utils';
 import type { CellIndices } from '../../types';
 import { normalizeSelectionHandler } from '../useNormalizeSelection';
 
-const recordIds = ['record-1', 'record-2', 'record-3', 'record-4', 'record-5'];
 const columnIds = ['column-1', 'column-2', 'column-3', 'column-4', 'column-5'];
 
 const records = [
@@ -27,7 +26,6 @@ describe('normalizeSelectionHandler', () => {
         const expectedSelection = {
             start: startIndexes,
             end: endIndexes,
-            recordIds: ['record-2', 'record-3', 'record-4', 'record-5'],
             columnIds: ['column-3', 'column-4', 'column-5'],
             records: records.slice(1, 4),
             startRecord: records.at(1),
@@ -37,20 +35,15 @@ describe('normalizeSelectionHandler', () => {
         const returnedSelection = normalizeSelectionHandler({
             start: startIndexes,
             end: endIndexes,
-            recordIds,
             columnIds,
             records,
         });
 
-        expect(returnedSelection.recordIds).toEqual(
-            expect.arrayContaining(expectedSelection.recordIds),
-        );
         expect(returnedSelection.columnIds).toEqual(
             expect.arrayContaining(expectedSelection.columnIds),
         );
         expect(returnedSelection.start).toBe(expectedSelection.start);
         expect(returnedSelection.end).toBe(expectedSelection.end);
-        expect(returnedSelection.records).toBe(expectedSelection.records);
         expect(returnedSelection.startRecord).toBe(expectedSelection.startRecord);
         expect(returnedSelection.endRecord).toBe(expectedSelection.endRecord);
     });
@@ -67,7 +60,6 @@ describe('normalizeSelectionHandler', () => {
         const expectedSelection = {
             start: startIndexes,
             end: endIndexes,
-            recordIds: ['record-3', 'record-4', 'record-5'],
             columnIds: ['column-5'],
             startRecord: records.at(2),
             endRecord: records.at(4),
@@ -77,20 +69,15 @@ describe('normalizeSelectionHandler', () => {
         const returnedSelection = normalizeSelectionHandler({
             start: startIndexes,
             end: endIndexes,
-            recordIds,
             columnIds,
             records,
         });
 
-        expect(returnedSelection.recordIds).toEqual(
-            expect.arrayContaining(expectedSelection.recordIds),
-        );
         expect(returnedSelection.columnIds).toEqual(
             expect.arrayContaining(expectedSelection.columnIds),
         );
         expect(returnedSelection.start).toBe(expectedSelection.start);
         expect(returnedSelection.end).toBe(expectedSelection.end);
-        expect(returnedSelection.records).toBe(expectedSelection.records);
         expect(returnedSelection.startRecord).toBe(expectedSelection.startRecord);
         expect(returnedSelection.endRecord).toBe(expectedSelection.endRecord);
     });

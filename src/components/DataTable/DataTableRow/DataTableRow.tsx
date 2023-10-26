@@ -1,6 +1,5 @@
 import { forwardRef, memo, useMemo } from 'react';
-import { ViewStyle, StyleSheet } from 'react-native';
-import type { ViewProps } from '@bambooapp/bamboo-atoms';
+import type { ViewStyle } from 'react-native';
 
 import { useActionState, useComponentStyles, useMolecules } from '../../../hooks';
 import { shallowCompare } from '../../../utils';
@@ -10,37 +9,47 @@ import {
     DataTableContextRowProvider,
     useDataTable,
 } from '../DataTableContext';
-import type { DataTableRowProps, TDataTableColumn, TDataTableRow } from '../types';
+import type { DataTableRowProps } from '../types';
+import { withRowLoadingPlaceholder } from '../hoc';
 
 // import { useRowWithinBounds } from '../DataTable';
 
-const DataTableRowWrapper = memo((props: DataTableRowProps) => {
-    const { rowId, index, rowProps, isSelected = false, style } = props;
+const DataTableRowWrapper = withRowLoadingPlaceholder(
+    Object.assign(
+        forwardRef<any, DataTableRowProps>((props: DataTableRowProps, ref) => {
+            const { rowId, index, rowProps, isSelected = false, style } = props;
 
-    const { hovered = false, actionsRef } = useActionState();
+            const { hovered = false, actionsRef } = useActionState({ ref });
 
-    const rowSize = useDataTable(store => store.rowSize);
+            const rowSize = useDataTable(store => store.rowSize);
 
-    const rowStyle = useComponentStyles('DataTable_Row', style, {
-        size: rowProps?.size ?? rowSize,
-        states: {
-            selected_hovered: isSelected && hovered,
-            selected: isSelected,
-            hovered,
-        },
-    });
+            const rowStyle = useComponentStyles('DataTable_Row', style, {
+                size: rowProps?.size ?? rowSize,
+                states: {
+                    selected_hovered: isSelected && hovered,
+                    selected: isSelected,
+                    hovered,
+                },
+            });
 
-    const rowContext = useMemo(
-        () => ({ row: rowId, rowIndex: index, hovered }),
-        [rowId, index, hovered],
-    );
+            const rowContext = useMemo(
+                () => ({ row: rowId, rowIndex: index, hovered }),
+                [rowId, index, hovered],
+            );
 
-    return (
-        <DataTableContextRowProvider value={rowContext}>
-            <DataTableRowPresentationWithActionState {...props} style={rowStyle} ref={actionsRef} />
-        </DataTableContextRowProvider>
-    );
-});
+            return (
+                <DataTableContextRowProvider value={rowContext}>
+                    <DataTableRowPresentationWithActionState
+                        {...props}
+                        style={rowStyle}
+                        ref={actionsRef}
+                    />
+                </DataTableContextRowProvider>
+            );
+        }),
+        { displayName: 'DataTableRowWrapper' },
+    ),
+);
 
 /**
  *
@@ -91,21 +100,13 @@ DataTableRowPresentation.displayName = 'DataTableRowPresentation';
  * UseCase: Data grid can have header rows, footer rows and data rows.
  */
 const DataTableRow = memo(({ index, style }: Pick<DataTableRowProps, 'index' | 'style'>) => {
-    const { columns, rowProps, isSelected, rowId } = useDataTable(store => {
-        const recordId = store.records[index];
-        if (!recordId)
-            return {} as {
-                rowId: TDataTableRow;
-                columns: TDataTableColumn[];
-                rowProps: ViewProps;
-                isSelected: boolean;
-            };
+    const rowId = useDataTable(state => state.useGetRowId)(index)!;
 
+    const { columns, rowProps, isSelected } = useDataTable(store => {
         return {
-            rowId: recordId,
             columns: store.columns || [],
             rowProps: store.rowProps,
-            isSelected: Boolean(store.selectedRows?.[recordId]),
+            isSelected: Boolean(store.selectedRows?.[rowId]),
         };
     }, shallowCompare);
 
@@ -128,28 +129,6 @@ const DataTableRow = memo(({ index, style }: Pick<DataTableRowProps, 'index' | '
     );
 });
 
-const DataTableRowWithPlaceHolder = memo(
-    ({ index, style }: Pick<DataTableRowProps, 'index' | 'style'>) => {
-        const { View } = useMolecules();
-        const isLoaded = useDataTable(store => !!store.records[index]);
+DataTableRow.displayName = 'DataTableRow';
 
-        const placeHolderRowStyle = useMemo(() => [styles.placeHolderRow, style], [style]);
-
-        if (!isLoaded) {
-            return <View style={placeHolderRowStyle} />;
-        }
-
-        return <DataTableRow index={index} style={style} />;
-    },
-);
-
-const styles = StyleSheet.create({
-    placeHolderRow: {
-        borderBottomWidth: 1,
-        borderBottomColor: 'colors.outlineVariant',
-    },
-});
-
-DataTableRowWithPlaceHolder.displayName = 'DataTableRow';
-
-export default DataTableRowWithPlaceHolder;
+export default DataTableRow;

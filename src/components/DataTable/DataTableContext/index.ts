@@ -9,6 +9,8 @@ export {
     useDataTableColumnWidth,
     useDataTableComponent,
     useDataTableStoreRef,
+    useDataTableStore,
+    useGetRowId,
     deriveColumnWidth,
     DataTableHeaderCellContextType,
     DataTableCellContextType,

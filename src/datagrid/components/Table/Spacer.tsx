@@ -2,14 +2,13 @@ import { ComponentType, memo, useMemo } from 'react';
 import { useComponentStyles, useMolecules } from '@bambooapp/bamboo-molecules';
 import type { DataTableRowProps } from '@bambooapp/bamboo-molecules';
 import {
-    useRecordById,
     useGroupRowState,
     useTableManagerValueSelector,
     useGroupMeta,
     useHasGroupedData,
-    useRecordByInternalId,
+    useFindRecordWithIndex,
 } from '../../contexts';
-import { GroupedData, isGroupHeader, GroupHeader } from '../../utils';
+import { isGroupHeader, GroupHeader } from '../../utils';
 
 type SpacerProp = { variant: 'left' | 'right'; isLastLevel?: boolean };
 
@@ -52,25 +51,24 @@ const rowTypes = {
 };
 
 export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
-    const SpacedComponent = memo((props: DataTableRowProps) => {
-        const rowId = useRecordByInternalId(props.rowId);
-        const groupRow = useRecordById(rowId) as GroupedData;
+    const SpacedComponent = memo(({ style: styleProp, rowId, ...props }: DataTableRowProps) => {
+        const groupRow = useFindRecordWithIndex(props.index);
         const { level, rowType: variant } = groupRow;
 
         const isGroupsEnabled = useHasGroupedData();
 
         const spacerWidth = useTableManagerValueSelector(store => store.spacerWidth);
 
-        const groupSpacerWrapStyles = useComponentStyles('DataGrid_SpacerRow', null, {
+        const groupSpacerWrapStyles = useComponentStyles('DataGrid_SpacerRow', styleProp, {
             variant,
             states: {
                 isFirstGroup: props.index === 0,
             },
         });
 
-        const { View } = useMolecules();
+        const { View, If } = useMolecules();
 
-        const groupMeta = useGroupMeta(rowId);
+        const groupMeta = useGroupMeta(props.index);
         const isDataRowHeader = isGroupHeader(groupRow) && groupRow.isLastLevel;
 
         const style = useComponentStyles(
@@ -78,7 +76,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
             [
                 props.rowProps?.style,
                 isGroupsEnabled && level === 0 ? { minHeight: spacerWidth } : null,
-                isGroupsEnabled && { flex: 1 },
+                { flex: 1 },
                 groupMeta.isRealGroup === false
                     ? { borderLeftWidth: 0, borderRightWidth: 0 }
                     : null,
@@ -97,25 +95,25 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
             [style, props.rowProps],
         );
 
-        if (!isGroupsEnabled) {
-            return <Component {...props} rowId={rowId} rowProps={rowProps} />;
-        }
-
         return (
             <View style={groupSpacerWrapStyles}>
-                <SpacerList
-                    edgeIndex={0}
-                    level={level}
-                    variant="left"
-                    isLastLevel={groupMeta.isLastLevel}
-                />
+                <If shouldRender={isGroupsEnabled}>
+                    <SpacerList
+                        edgeIndex={0}
+                        level={level}
+                        variant="left"
+                        isLastLevel={groupMeta.isLastLevel}
+                    />
+                </If>
                 <Component {...props} rowId={rowId} rowProps={rowProps} />
-                <SpacerList
-                    edgeIndex={level - 1}
-                    level={level}
-                    variant="right"
-                    isLastLevel={groupMeta.isLastLevel}
-                />
+                <If shouldRender={isGroupsEnabled}>
+                    <SpacerList
+                        edgeIndex={level - 1}
+                        level={level}
+                        variant="right"
+                        isLastLevel={groupMeta.isLastLevel}
+                    />
+                </If>
             </View>
         );
     });

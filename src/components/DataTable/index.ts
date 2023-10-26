@@ -15,8 +15,13 @@ export {
     DataTableRowProps,
     TDataTableColumn,
     TDataTableRow,
+    TDataTableRowTruthy,
     UseRowRenderer,
+    LoadMoreRowsArg,
+    LoadMoreRows,
 } from './types';
+
+export * from './hoc';
 
 export {
     dataTableCellStyles,

@@ -8,6 +8,7 @@ import { createPlugin } from './createPlugin';
 import { Cell, CellIndices, PluginEvents, SelectionIndices } from './types';
 import { checkSelection, useNormalizeCellHandler, useNormalizeSelectionHandler } from './utils';
 import { CELL_FOCUS_PLUGIN_KEY } from './cell-focus';
+import { getRecordByIndex, isDataRow } from '../utils';
 
 export const DRAG_AND_EXTEND_PLUGIN_KEY = 'drag-and-extend';
 
@@ -131,7 +132,10 @@ const useOnDragSelection = ({
         if (!pluginsDataStore.current[DRAG_AND_EXTEND_PLUGIN_KEY]?.start || !rowHovered || !hovered)
             return;
 
-        if (tableManagerStore.current.records[rowIndex].rowType !== 'data') return;
+        const validateDataRow = (index: number) =>
+            isDataRow(getRecordByIndex(tableManagerStore.current.records, index));
+
+        if (!validateDataRow(rowIndex)) return;
 
         const focusedCell = pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
 
@@ -167,10 +171,7 @@ const useOnDragSelection = ({
             const startRowIndex = cellsSelection.start?.rowIndex;
             const endRowIndex = cellsSelection.end?.rowIndex;
 
-            if (
-                tableManagerStore.current.records[startRowIndex].rowType !== 'data' ||
-                tableManagerStore.current.records[endRowIndex].rowType !== 'data'
-            ) {
+            if (!validateDataRow(startRowIndex) || !validateDataRow(endRowIndex)) {
                 setPluginsDataStore(() => ({
                     [DRAG_AND_EXTEND_PLUGIN_KEY]: {},
                 }));
@@ -197,7 +198,7 @@ const useOnDragSelection = ({
 
             const endColumnIndex = cellsSelection.end?.columnIndex;
 
-            if (tableManagerStore.current.records[startRowIndex].rowType !== 'data') {
+            if (!validateDataRow(startRowIndex)) {
                 setPluginsDataStore(() => ({
                     [DRAG_AND_EXTEND_PLUGIN_KEY]: {},
                 }));

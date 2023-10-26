@@ -5,6 +5,7 @@ import {
     useActionState,
     useComponentStyles,
     useMolecules,
+    withRowLoadingPlaceholder,
 } from '@bambooapp/bamboo-molecules';
 import {
     DataTableCellContextProvider,
@@ -94,4 +95,6 @@ const TableRowComponent = (
     );
 };
 
-const TableRowInner = memo(forwardRef(TableRowComponent));
+TableRowComponent.displayName = 'DataGridRowRenderer';
+
+const TableRowInner = withRowLoadingPlaceholder(forwardRef(TableRowComponent));

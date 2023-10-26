@@ -12,6 +12,7 @@ import { CELL_FOCUS_PLUGIN_KEY } from './cell-focus';
 import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
 import { isNil } from '../../utils';
 import { Direction, directions, useScrollToCell } from './cell-focus/useSetFocusCellByDirection';
+import { getRecordByIndex, isDataRow } from '../utils';
 
 export const CELL_SELECTION_PLUGIN_KEY = 'cell-selection';
 
@@ -21,7 +22,7 @@ const useOnSelectCell = () => {
     const normalizeSelection = useNormalizeSelectionHandler();
 
     return useCallback(
-        (cell: CellIndices) => {
+        (cell: CellIndices | null) => {
             const focusedCell = pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
 
             // this wouldn't be possible
@@ -33,18 +34,21 @@ const useOnSelectCell = () => {
                 return;
             }
 
-            const selection = normalizeSelection({
-                start: focusedCell as CellIndices,
-                end: cell as CellIndices,
-            });
+            const selection = !cell
+                ? null
+                : normalizeSelection({
+                      start: focusedCell as CellIndices,
+                      end: cell as CellIndices,
+                  });
 
             const continueSelection = beforeCellSelection({ selection });
 
             if (continueSelection === false) return;
 
             onCellSelection({ selection });
+
             setStore(prev => ({
-                [CELL_SELECTION_PLUGIN_KEY]: {
+                [CELL_SELECTION_PLUGIN_KEY]: selection && {
                     ...prev[CELL_SELECTION_PLUGIN_KEY],
                     ...selection,
                 },
@@ -66,18 +70,17 @@ const useOnSelectCell = () => {
 const allowedTargetIds = ['drag-handle'];
 
 const useOnResetSelectionOnClickOutside = () => {
-    const { set: setStore, store } = usePluginsDataStoreRef();
+    const { store } = usePluginsDataStoreRef();
+    const onSelectCell = useOnSelectCell();
 
     return useCallback(
         (e: MouseEvent) => {
             if (!store.current[CELL_SELECTION_PLUGIN_KEY]) return;
             if (allowedTargetIds.includes((e.target as HTMLDivElement)?.id)) return;
 
-            setStore(() => ({
-                [CELL_SELECTION_PLUGIN_KEY]: undefined,
-            }));
+            onSelectCell(null);
         },
-        [setStore, store],
+        [store, onSelectCell],
     );
 };
 
@@ -226,7 +229,7 @@ export const useSetSelectionByDirection = () => {
                     newRowIndex = scrollToEdge ? 0 : newRowIndex - 1;
 
                     // keep finding the rowIndex unless the type is data
-                    while (records[newRowIndex]?.rowType !== 'data') {
+                    while (!isDataRow(getRecordByIndex(records, newRowIndex))) {
                         newRowIndex = scrollToEdge ? newRowIndex + 1 : newRowIndex - 1;
 
                         if (scrollToEdge ? newRowIndex > records?.length - 1 : newRowIndex <= 0)
@@ -239,7 +242,7 @@ export const useSetSelectionByDirection = () => {
                     newRowIndex = scrollToEdge ? records?.length - 1 : newRowIndex + 1;
 
                     // keep finding the rowIndex unless the type is data
-                    while (records[newRowIndex]?.rowType !== 'data') {
+                    while (!isDataRow(getRecordByIndex(records, newRowIndex))) {
                         newRowIndex = scrollToEdge ? newRowIndex - 1 : newRowIndex + 1;
 
                         if (scrollToEdge ? newRowIndex <= 0 : newRowIndex > records?.length - 1)

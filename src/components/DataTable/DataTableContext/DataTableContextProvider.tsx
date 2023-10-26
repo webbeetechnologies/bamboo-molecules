@@ -35,7 +35,10 @@ const calculateXOffset = (
     );
 
 export const DataTableContextProvider: FC<
-    PropsWithChildren<Omit<DataTableProps, 'getRowSize' | 'rowCount'>>
+    PropsWithChildren<
+        Omit<DataTableProps, 'getRowSize' | 'rowCount'> &
+            Pick<Required<DataTableProps>, 'getRowId'> & { hasRowLoaded: (x: number) => boolean }
+    >
 > = memo(
     ({
         records,
@@ -56,6 +59,9 @@ export const DataTableContextProvider: FC<
         useRowRenderer: useRowRendererProp,
         CellWrapperComponent,
         horizontalOffset = 0,
+        getRowId,
+        hasRowLoaded,
+        useGetRowId,
     }) => {
         const { FlatList } = useMolecules();
 
@@ -100,6 +106,9 @@ export const DataTableContextProvider: FC<
                 columnWidths,
                 useRowRenderer,
                 CellWrapperComponent,
+                getRowId,
+                hasRowLoaded,
+                useGetRowId,
             }),
             [
                 CellWrapperComponent,
@@ -116,6 +125,9 @@ export const DataTableContextProvider: FC<
                 columnWidths,
                 horizontalOffset,
                 useRowRenderer,
+                getRowId,
+                hasRowLoaded,
+                useGetRowId,
             ],
         );
 

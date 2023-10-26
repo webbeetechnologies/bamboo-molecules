@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, memo, RefObject, useCallback, useMemo } from 'react';
+import { ForwardedRef, forwardRef, memo, RefObject, useCallback, useMemo, useRef } from 'react';
 import type {
     LayoutChangeEvent,
     NativeScrollEvent,
@@ -12,7 +12,7 @@ import {
     InfiniteLoaderChildrenArg,
 } from '@bambooapp/virtualized-list';
 
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { useComponentStyles, useLatest, useMergedRefs, useMolecules } from '../../hooks';
 import {
     useDataTable,
     useDataTableComponent,
@@ -23,7 +23,7 @@ import { DataTableHeaderRow } from './DataTableHeader';
 import { DataTableRow } from './DataTableRow';
 import { defaultProps } from './defaults';
 import { HorizontalScrollIndexProvider, defaultValue, useStoreRef } from './hooks';
-import type { DataTableBase, DataTableProps, TDataTableRow } from './types';
+import type { DataTableBase, DataTableProps, LoadMoreRowsArg, TDataTableRow } from './types';
 
 const defaultGetItemSize = () => 40;
 
@@ -39,8 +39,9 @@ type DataTableComponentProps = DataTableBase &
         | 'rowsMinimumBatchSize'
         | 'rowsLoadingThreshold'
         | 'loadMoreRows'
-        | 'isRowLoaded'
+        | 'hasRowLoaded'
         | 'rowOverscanCount'
+        | 'infiniteLoaderRef'
     > & {
         flatListRef?: RefObject<any>;
     };
@@ -62,29 +63,35 @@ const DataTablePresentationComponent = memo(
             onLayout: onLayoutProp,
             HeaderRowComponent: HeaderRowComponentProp,
             flatListRef,
-            rowsMinimumBatchSize = 50,
-            isRowLoaded: isItemLoadedProp,
+            infiniteLoaderRef,
+            rowsMinimumBatchSize,
             rowCount: rowCountProp,
             rowsLoadingThreshold = 5,
-            loadMoreRows: loadMoreItemsProp,
-            onRowsRendered: onItemsRenderedProp,
+            loadMoreRows,
+            onRowsRendered,
             getRowSize,
             rowOverscanCount = 5,
             ...restScrollViewProps
         } = props;
 
         const { View } = useMolecules();
+
+        const mergedRef = useMergedRefs([ref, flatListRef!]);
         const hStyle = useComponentStyles('DataTable', [hStyleProp]);
 
         const containerHeight = useDataTable(store => store.containerHeight);
         const contentWidth = useDataTable(store => store.contentWidth);
+        const hasRowLoaded = useDataTable(store => store.hasRowLoaded);
 
         const { set: setStore } = useStoreRef();
         const { set: setDataTableStore } = useDataTableStoreRef();
+        const renderedRowsRef = useRef<Omit<LoadMoreRowsArg, 'startIndex' | 'stopIndex'> | null>(
+            null,
+        );
 
         const HeaderRowComponent = HeaderRowComponentProp || DataTableHeaderRow;
 
-        const itemCount = rowCountProp || records.length;
+        const rowCount = rowCountProp || records.length;
 
         const onScroll = useCallback(
             (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -114,6 +121,7 @@ const DataTablePresentationComponent = memo(
             },
             [onLayoutProp, setDataTableStore],
         );
+
         const onContentSizeChange = useCallback(
             (w: number) =>
                 setDataTableStore(() => ({
@@ -122,22 +130,13 @@ const DataTablePresentationComponent = memo(
             [setDataTableStore],
         );
 
-        const isItemLoaded = useCallback(
-            (index: number) => {
-                if (isItemLoadedProp) {
-                    return isItemLoadedProp(index);
-                }
-
-                return !!records[index];
-            },
-            [isItemLoadedProp, records],
-        );
+        const isItemLoaded = useCallback((index: number) => hasRowLoaded(index), [hasRowLoaded]);
 
         const loadMoreItems = useCallback(
             async (startIndex: number, stopIndex: number) => {
-                loadMoreItemsProp?.(startIndex, stopIndex);
+                loadMoreRows?.({ startIndex, stopIndex, ...renderedRowsRef.current! });
             },
-            [loadMoreItemsProp],
+            [loadMoreRows],
         );
 
         const itemSize = useCallback(
@@ -159,11 +158,13 @@ const DataTablePresentationComponent = memo(
                     if (flatListRef) {
                         (flatListRef as any).current = listRef;
                     }
+                    mergedRef(listRef);
                     _ref(listRef);
                 };
 
                 const _onItemsRenderer: DataTableProps['onRowsRendered'] = args => {
-                    onItemsRenderedProp?.(args);
+                    renderedRowsRef.current = args;
+                    onRowsRendered?.(args);
                     onItemsRendered(args);
                 };
 
@@ -175,7 +176,7 @@ const DataTablePresentationComponent = memo(
                         height={containerHeight || 0}
                         itemSize={itemSize}
                         overscanCount={rowOverscanCount}
-                        itemCount={itemCount}
+                        itemCount={rowCount}
                         {...vProps}>
                         {/*@ts-ignore */}
                         {DataTableRow}
@@ -186,11 +187,12 @@ const DataTablePresentationComponent = memo(
                 containerHeight,
                 contentWidth,
                 flatListRef,
-                itemCount,
+                rowCount,
                 itemSize,
-                onItemsRenderedProp,
+                onRowsRendered,
                 rowOverscanCount,
                 vProps,
+                mergedRef,
             ],
         );
 
@@ -210,10 +212,11 @@ const DataTablePresentationComponent = memo(
 
                     {!!contentWidth && (
                         <InfiniteLoader
+                            ref={infiniteLoaderRef}
                             isItemLoaded={isItemLoaded}
                             threshold={rowsLoadingThreshold}
                             minimumBatchSize={rowsMinimumBatchSize}
-                            itemCount={itemCount}
+                            itemCount={rowCount}
                             loadMoreItems={loadMoreItems}>
                             {renderList}
                         </InfiniteLoader>
@@ -246,6 +249,8 @@ const DataTableComponent = memo(
     }),
 );
 
+const useGetRowIdDefault = (index: number) => index;
+
 const withDataTableContext = (Component: typeof DataTableComponent) =>
     memo(
         forwardRef((props: DataTableProps, ref: ForwardedRef<ScrollView>) => {
@@ -267,8 +272,14 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 useRowRenderer,
                 CellWrapperComponent,
                 horizontalOffset,
+                getRowId,
+                hasRowLoaded,
+                useGetRowId = useGetRowIdDefault,
                 ...rest
             } = props;
+
+            const latestRecordsRef = useLatest(records);
+            const useGetRowIdCached = useRef(useGetRowId).current;
 
             const context = {
                 records,
@@ -288,6 +299,16 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 useRowRenderer,
                 CellWrapperComponent,
                 horizontalOffset,
+                getRowId: useCallback<Exclude<DataTableProps['getRowId'], undefined>>(
+                    index => getRowId?.(index) ?? index,
+                    [getRowId],
+                ),
+                hasRowLoaded: useCallback(
+                    (index: number) =>
+                        !!latestRecordsRef.current[index] || hasRowLoaded?.(index) || false,
+                    [hasRowLoaded, latestRecordsRef],
+                ),
+                useGetRowId: useGetRowIdCached,
             };
 
             return (

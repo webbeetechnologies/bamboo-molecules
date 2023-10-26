@@ -23,7 +23,7 @@ const useInvariant = <T>(value: T, message: string): Exclude<T, null> => {
 
 type DataTableContextType = Pick<
     Required<DataTableProps>,
-    'records' | 'columns' | 'defaultColumnWidth'
+    'records' | 'columns' | 'defaultColumnWidth' | 'getRowId'
 > &
     Pick<
         DataTableProps,
@@ -36,6 +36,7 @@ type DataTableContextType = Pick<
         | 'useRowRenderer'
         | 'CellWrapperComponent'
         | 'horizontalOffset'
+        | 'useGetRowId'
     > & {
         tableWidth: number;
         containerWidth?: number;
@@ -47,6 +48,7 @@ type DataTableContextType = Pick<
         columnWidths?: Record<TDataTableColumn, number>;
         // tableHeight: number;
         cellXOffsets: number[];
+        hasRowLoaded: (index: number) => boolean;
     };
 
 export const {
@@ -144,4 +146,8 @@ export const useDataTableColumnWidth = (column: TDataTableColumn): number => {
     return useDataTable(({ columnWidths, defaultColumnWidth }) =>
         deriveColumnWidth({ columnWidths, column, defaultColumnWidth }),
     );
+};
+
+export const useGetRowId = (index: number) => {
+    return useDataTableStoreRef().store.current.useGetRowId(index);
 };
