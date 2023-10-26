@@ -7,7 +7,10 @@ import { useDataTable } from '../DataTableContext';
 export const withRowLoadingPlaceholder = (
     Component: ComponentType<DataTableRowProps & RefAttributes<any>>,
 ) => {
-    const RowRenderer = forwardRef<any, DataTableRowProps>((props, ref: any) => {
+    const RowRenderer = forwardRef<
+        any,
+        DataTableRowProps & { rowId: DataTableRowProps['rowId'] | undefined }
+    >((props, ref: any) => {
         const { View } = useMolecules();
         const isLoaded = useDataTable(store => !!store.hasRowLoaded(props.index));
 

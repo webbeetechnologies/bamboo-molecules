@@ -1,6 +1,11 @@
 import { createContext, useContext } from 'react';
 import { createFastContext } from '../../../fast-context';
-import type { DataTableProps, TDataTableColumn, TDataTableRow } from '../types';
+import type {
+    DataTableProps,
+    TDataTableColumn,
+    TDataTableRow,
+    TDataTableRowTruthy,
+} from '../types';
 
 /**
  *
@@ -98,10 +103,11 @@ export const {
  * also adds event handlers
  */
 // TODO: Add event handlers here
-export type DataTableCellContextType = Omit<DataTableRowContextType, 'hovered'> & {
+export type DataTableCellContextType = Omit<DataTableRowContextType, 'hovered' | 'row'> & {
     column: TDataTableColumn;
     columnIndex: number;
     isLast: boolean;
+    row: TDataTableRowTruthy;
 };
 export const DataTableCellContext = createContext<DataTableCellContextType | null>(null);
 export const useDataTableCell = () =>
