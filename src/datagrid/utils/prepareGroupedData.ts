@@ -115,6 +115,7 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
 
         const header: GroupHeader = {
             index: startIndex++,
+            groupIndex: startIndex,
             field,
             value,
             realIndex: lastIndex++,
@@ -147,6 +148,7 @@ export const prepareAggregateRow: NormalizeAggregatesFunc = memoize(
         const footerIndexOffset = collapsedState[groupId] ? 0 : aggregateRow.count;
         const footer: GroupFooter = {
             index: subGroups.length ? subGroups.at(-1)!.index + 1 : startIndex + footerIndexOffset,
+            groupIndex: header.groupIndex,
             field,
             value,
             realIndex: lastIndex++,
@@ -214,7 +216,7 @@ export const getRecordByIndex = memoize(
             indexInGroup: !isMetaRow ? index : index - referenceRow.index - 1,
             realIndex: !isMetaRow ? index : index - referenceRow.realIndex - 1,
             isPlaceholder: true,
-            groupIndex: isDataRow(referenceRow) ? referenceRow.groupIndex : referenceRow.index,
+            groupIndex: referenceRow.groupIndex,
         };
     },
     allArgumentResolver,
