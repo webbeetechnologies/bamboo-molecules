@@ -10,7 +10,7 @@ import { useEnsureCorrectFocusCellState } from './useEnsureFocusCellState';
 
 import { useEffect } from 'react';
 import { useTableManagerStoreRef } from '../../contexts';
-import { GroupRecord, getRecordByIndex } from '../../utils';
+import { GroupFooter, GroupRecord, getRecordByIndex } from '../../utils';
 
 export const CELL_FOCUS_PLUGIN_KEY = 'cell-focus';
 
@@ -55,7 +55,7 @@ export const useEnsureFocusedCellRowId = () => {
             const groupRecord = getRecordByIndex(
                 tableManagerStoreRef.current.records,
                 focusedCell?.rowIndex ?? -1,
-            ) as GroupRecord;
+            ) as GroupRecord | GroupFooter;
             return {
                 record: groupRecord,
                 groupIndex: groupRecord.groupIndex,
@@ -74,7 +74,7 @@ export const useEnsureFocusedCellRowId = () => {
         if (!recordRef.current.hasFocusedCell || isNil(row)) return;
 
         const newIndex =
-            row.indexInGroup > -1 ? recordRef.current.groupIndex + row.indexInGroup + 1 : -1;
+            row.indexInGroup > -1 ? recordRef.current.groupIndex + row.indexInGroup : null;
         if (recordRef.current.rowId === row.id && newIndex === recordRef.current.record.index)
             return;
 
@@ -84,7 +84,7 @@ export const useEnsureFocusedCellRowId = () => {
                 : {
                       ...prev,
                       focusedCell:
-                          !row.id || newIndex < 0
+                          !row.id || newIndex === null
                               ? undefined
                               : {
                                     ...prev.focusedCell,
