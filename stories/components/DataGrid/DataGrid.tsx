@@ -35,6 +35,7 @@ const prepareGroupedData = (data: RecordWithId[]) =>
         indexInGroup: i,
         realIndex: i,
         rowType: 'data' as const,
+        groupIndex: 0,
     }));
 
 const useDataGridProps = (
@@ -51,7 +52,7 @@ const useDataGridProps = (
             [latestRecordsRef],
         ),
         hasRowLoaded: useCallback(() => true, []),
-        useGetRowId: record => record.id ?? null,
+        useGetRowId: record => ({ id: record.index, indexInGroup: record.index }),
         useShouldLoadMoreRows: () => 1,
     };
 };
