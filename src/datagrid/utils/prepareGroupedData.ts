@@ -183,6 +183,7 @@ export const getRelatedGroupByIndex = memoize(
                 indexInGroup: 0,
                 realIndex: 0,
                 isPlaceholder: true,
+                groupIndex: 0,
             };
 
         const record = records[index];
@@ -213,6 +214,7 @@ export const getRecordByIndex = memoize(
             indexInGroup: !isMetaRow ? index : index - referenceRow.index - 1,
             realIndex: !isMetaRow ? index : index - referenceRow.realIndex - 1,
             isPlaceholder: true,
+            groupIndex: isDataRow(referenceRow) ? referenceRow.groupIndex : referenceRow.index,
         };
     },
     allArgumentResolver,
@@ -239,7 +241,7 @@ export const prepareGroupRecord = memoize(
             groupConstants = defaultConstants,
             realIndex = index,
         }: Partial<Omit<GroupRecord, 'id' | 'index'>> = {},
-    ) => ({
+    ): GroupRecord => ({
         id: record.id,
         level,
         groupId,
@@ -248,6 +250,7 @@ export const prepareGroupRecord = memoize(
         indexInGroup,
         groupConstants,
         realIndex,
+        groupIndex: 0,
     }),
     allArgumentResolver,
 );

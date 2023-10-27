@@ -72,6 +72,7 @@ export type GroupRecord = Omit<GroupBase, 'id'> & {
     indexInGroup: number;
     id: TDataTableRow;
     isPlaceholder?: boolean;
+    groupIndex: number;
 };
 
 export type GroupMetaRow = GroupFooter | GroupHeader;

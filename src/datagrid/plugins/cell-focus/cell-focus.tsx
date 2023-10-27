@@ -52,31 +52,47 @@ export const useEnsureFocusedCellRowId = () => {
     const recordRef = useLatest(
         usePluginsDataValueSelector(store => {
             const focusedCell = store[CELL_FOCUS_PLUGIN_KEY]?.focusedCell ?? {};
+            const groupRecord = getRecordByIndex(
+                tableManagerStoreRef.current.records,
+                focusedCell?.rowIndex ?? -1,
+            ) as GroupRecord;
             return {
-                record: getRecordByIndex(
-                    tableManagerStoreRef.current.records,
-                    focusedCell?.rowIndex ?? -1,
-                ) as GroupRecord,
+                record: groupRecord,
+                groupIndex: groupRecord.groupIndex,
                 rowId: focusedCell?.rowId,
                 hasFocusedCell: Object.keys(focusedCell ?? {}).length > 0,
             };
         }, shallowCompare),
     );
 
-    const rowId = tableManagerStoreRef.current.useGetRowId(recordRef.current.record);
+    const row = tableManagerStoreRef.current.useGetRowId(
+        recordRef.current.record,
+        recordRef.current.rowId,
+    );
 
     useEffect(() => {
-        if (!recordRef.current.hasFocusedCell || isNil(rowId) || recordRef.current.rowId === rowId)
+        if (!recordRef.current.hasFocusedCell || isNil(row)) return;
+
+        const newIndex =
+            row.indexInGroup > -1 ? recordRef.current.groupIndex + row.indexInGroup + 1 : -1;
+        if (recordRef.current.rowId === row.id && newIndex === recordRef.current.record.index)
             return;
+
         setFocusedCell(prev =>
             !prev?.focusedCell
                 ? prev
                 : {
                       ...prev,
-                      focusedCell: { ...prev.focusedCell, rowId },
+                      focusedCell:
+                          !row.id || newIndex < 0
+                              ? undefined
+                              : {
+                                    ...prev.focusedCell,
+                                    rowIndex: newIndex,
+                                },
                   },
         );
-    }, [rowId, recordRef, setFocusedCell]);
+    }, [row, recordRef, setFocusedCell]);
 };
 
 const usePressedKeyRef = () => {

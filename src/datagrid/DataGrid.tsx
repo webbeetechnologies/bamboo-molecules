@@ -51,7 +51,6 @@ import type { DataGridLoadMoreRows, FieldTypes } from './types';
 import {
     GroupRecord,
     GroupedData,
-    GroupedDataTruthy,
     addDataToCallbackPairs,
     getRecordByIndex,
     getRecordByIndexNoId,
@@ -60,6 +59,7 @@ import {
 } from './utils';
 import { useRowRendererDefault } from './components/Table/useRowRendererDefault';
 import { isSpaceKey } from '../shortcuts-manager/utils';
+import type { TableManagerContextProviderProps } from './contexts/TableManagerContext';
 
 const renderHeader = (props: RenderHeaderCellProps) => <ColumnHeaderCell {...props} />;
 const renderCell = (props: RenderCellProps) => <CellRenderer {...props} />;
@@ -90,7 +90,7 @@ type DataGridPropsBase = Omit<
 
         getRowId: (record: Omit<GroupRecord, 'id'>) => TDataTableRowTruthy | null;
         hasRowLoaded: (record: Omit<GroupRecord, 'id'>) => boolean;
-        useGetRowId: (record: Exclude<GroupedDataTruthy, undefined>) => TDataTableRowTruthy | null;
+        useGetRowId: TableManagerContextProviderProps['useGetRowId'];
         loadMoreRows?: DataGridLoadMoreRows;
         /**
          * Return a unique timestamp on change, the value would be used to trigger an update.
@@ -131,7 +131,7 @@ const emptyObj = {};
 
 const useGetRowId = (index: number) => {
     const { store } = useTableManagerStoreRef();
-    return store.current.useGetRowId(getRecordByIndex(store.current.records, index));
+    return store.current.useGetRowId(getRecordByIndex(store.current.records, index))?.id ?? null;
 };
 
 const createVisibilityArray = (records: GroupedData[], startIndex: number, stopIndex: number) => {
