@@ -18,7 +18,10 @@ export type TableManagerContextProviderProps = {
     tableRef: RefObject<any>;
     spacerWidth: number;
     focusIgnoredColumns?: TDataTableColumn[];
-    useGetRowId: (arg: GroupedDataTruthy) => TDataTableRowTruthy | null;
+    useGetRowId: (
+        record: Exclude<GroupedDataTruthy, undefined>,
+        currentRowId?: TDataTableRowTruthy,
+    ) => { id: TDataTableRowTruthy; indexInGroup: number } | null;
 
     getRowId: (index: number) => TDataTableRowTruthy | null;
     hasRowLoaded: (index: number) => boolean;
@@ -41,7 +44,7 @@ const defaultContextValue: TableManagerContextType = {
     infiniteLoaderRef: createRef(),
     visibleRowsRef: { current: {} as LoadMoreRowsArg },
     focusIgnoredColumns: [],
-    useGetRowId: record => record.index,
+    useGetRowId: record => ({ id: record.index, indexInGroup: record.index }),
     getRowId: index => index,
     hasRowLoaded: () => true,
 };
@@ -63,7 +66,7 @@ export const TableManagerProvider = memo(
         focusIgnoredColumns,
         getRowId,
         hasRowLoaded,
-        useGetRowId,
+        useGetRowId: useGetRowIdProp,
     }: PropsWithChildren<TableManagerContextProviderProps>) => {
         const contextValue = useMemo(
             () =>
@@ -76,7 +79,7 @@ export const TableManagerProvider = memo(
 
                     getRowId,
                     hasRowLoaded,
-                    useGetRowId,
+                    useGetRowId: useGetRowIdProp,
                 } as TableManagerContextType),
             [
                 tableRef,
@@ -86,7 +89,7 @@ export const TableManagerProvider = memo(
                 focusIgnoredColumns,
                 getRowId,
                 hasRowLoaded,
-                useGetRowId,
+                useGetRowIdProp,
             ],
         );
 
