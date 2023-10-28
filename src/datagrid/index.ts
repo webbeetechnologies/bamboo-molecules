@@ -16,14 +16,10 @@ export {
     GroupRecord,
     GroupFooter,
     GroupHeader,
-    AggregateRecord,
     GroupMetaRow,
     GroupMeta,
-    prepareAggregateRow,
     GroupConstantValues,
-    findGroupIds,
     getRecordByIndex,
-    getRelatedGroupByIndex,
     RowType,
     GroupedData,
     GroupedDataTruthy,
@@ -31,7 +27,6 @@ export {
     isDataRow,
     isGroupHeader,
     isGroupFooter,
-    prepareGroupRecord,
     DATAGRID_DEFAULT_GROUP,
 } from './utils';
 
