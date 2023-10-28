@@ -34,12 +34,6 @@ export interface RecordWithId extends Record<string, any> {
 
 export type PrimitiveTypes = string | boolean | number | null | undefined;
 
-type AggregateBase = {
-    count: number;
-    value: any;
-    field: TDataTableColumn;
-};
-
 type GroupBase = {
     level: number;
     groupId: string;
@@ -50,14 +44,12 @@ type GroupBase = {
     groupIndex: number;
 };
 
-export type AggregateRecord = AggregateBase & {
-    children: AggregateRecord[];
-};
-
-export type NormalizedAggregateRecordBase = AggregateBase &
-    GroupBase &
+export type NormalizedAggregateRecordBase = GroupBase &
     GroupMeta & {
         title: any;
+        count: number;
+        value: unknown;
+        field: TDataTableColumn;
     };
 
 export type GroupHeader = NormalizedAggregateRecordBase & {
@@ -79,14 +71,3 @@ export type GroupMetaRow = GroupFooter | GroupHeader;
 
 export type GroupedDataTruthy = GroupMetaRow | GroupRecord;
 export type GroupedData = GroupedDataTruthy | undefined;
-
-export type NormalizeAggregatesFunc = (
-    arg: AggregateRecord,
-    groupConstants: GroupConstantValues[],
-    index: number,
-    lastIndex: number,
-    startIndex: number,
-    totalItems: number,
-    collapsedState: Record<string, boolean>,
-    groupIdRoot?: string,
-) => GroupMetaRow[];
