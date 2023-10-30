@@ -188,7 +188,7 @@ const useAutoUpdateRecords = ({
 }: Pick<Props, 'records' | 'flatListRef' | 'rowSize' | 'useShouldLoadMoreRows'> &
     Pick<DataTableProps, 'loadMoreRows'>) => {
     const defaultEmptyTuple = useRef<[number]>([-1]).current;
-    const hasRowSizeUpdated = usePrevious(rowSize).current !== rowSize;
+    const prevRowSize = usePrevious(rowSize);
     const { store } = useTableManagerStoreRef();
 
     const oldRecords = usePrevious(records);
@@ -201,11 +201,10 @@ const useAutoUpdateRecords = ({
      * Making updatedRowIndex return tuple ensures that the useEffect will run always
      */
     const updatedRowIndex = useMemo((): [number] => {
-        if (hasRowSizeUpdated) return [0];
         if (records === oldRecords.current) return defaultEmptyTuple;
 
         return [records.findIndex((record, index) => oldRecords.current[index] !== record)];
-    }, [oldRecords, records, hasRowSizeUpdated, defaultEmptyTuple]);
+    }, [oldRecords, records, defaultEmptyTuple]);
 
     /**
      *
@@ -213,9 +212,9 @@ const useAutoUpdateRecords = ({
      *
      */
     useEffect(() => {
-        if (updatedRowIndex.at(0) === -1) return;
+        if (prevRowSize.current === rowSize && updatedRowIndex.at(0) === -1) return;
         flatListRef!.current?.resetAfterIndex((updatedRowIndex as [number]).at(0));
-    }, [hasRowSizeUpdated, updatedRowIndex, flatListRef]);
+    }, [updatedRowIndex, flatListRef, prevRowSize, rowSize]);
 
     /**
      *
