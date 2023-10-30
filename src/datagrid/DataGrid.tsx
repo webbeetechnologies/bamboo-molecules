@@ -201,10 +201,11 @@ const useAutoUpdateRecords = ({
      * Making updatedRowIndex return tuple ensures that the useEffect will run always
      */
     const updatedRowIndex = useMemo((): [number] => {
+        if (hasRowSizeUpdated) return [0];
         if (records === oldRecords.current) return defaultEmptyTuple;
 
         return [records.findIndex((record, index) => oldRecords.current[index] !== record)];
-    }, [oldRecords, records, defaultEmptyTuple]);
+    }, [oldRecords, records, hasRowSizeUpdated, defaultEmptyTuple]);
 
     /**
      *
@@ -212,7 +213,7 @@ const useAutoUpdateRecords = ({
      *
      */
     useEffect(() => {
-        if (!hasRowSizeUpdated && updatedRowIndex.at(0) === -1) return;
+        if (updatedRowIndex.at(0) === -1) return;
         flatListRef!.current?.resetAfterIndex((updatedRowIndex as [number]).at(0));
     }, [hasRowSizeUpdated, updatedRowIndex, flatListRef]);
 
@@ -363,6 +364,7 @@ const DataGrid = ({
         flatListRef: store.current.tableFlatListRef,
         loadMoreRows: handleLoadMoreRows,
         useShouldLoadMoreRows,
+        rowSize: rowHeight,
     });
 
     return (
