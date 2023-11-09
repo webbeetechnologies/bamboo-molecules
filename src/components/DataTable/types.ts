@@ -5,6 +5,7 @@ import type {
     VariableSizeListProps,
     InfiniteLoaderProps,
     VariableSizeList,
+    InfiniteLoader,
 } from '@bambooapp/virtualized-list';
 
 type RowProps = Omit<ViewProps, 'children'> & { size?: string };
@@ -175,7 +176,7 @@ export interface DataTableProps
      */
     CellWrapperComponent?: ComponentType<DataCellProps>;
     virtualListRef?: ForwardedRef<VariableSizeList>;
-    infiniteLoaderRef?: ForwardedRef<any>;
+    infiniteLoaderRef?: ForwardedRef<InfiniteLoader>;
 
     /**
      *
