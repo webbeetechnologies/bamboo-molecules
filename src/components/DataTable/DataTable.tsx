@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, memo, RefObject, useCallback, useMemo, useRef } from 'react';
+import { ForwardedRef, forwardRef, memo, useCallback, useMemo, useRef } from 'react';
 import type {
     LayoutChangeEvent,
     NativeScrollEvent,
@@ -23,7 +23,7 @@ import { DataTableHeaderRow } from './DataTableHeader';
 import { DataTableRow } from './DataTableRow';
 import { defaultProps } from './defaults';
 import { HorizontalScrollIndexProvider, defaultValue, useStoreRef } from './hooks';
-import type { DataTableBase, DataTableProps, LoadMoreRowsArg, TDataTableRow } from './types';
+import type { DataTableBase, DataTableProps, LoadMoreRowsArg } from './types';
 
 const defaultGetItemSize = () => 40;
 
@@ -43,12 +43,12 @@ type DataTableComponentProps = DataTableBase &
         | 'rowOverscanCount'
         | 'infiniteLoaderRef'
     > & {
-        flatListRef?: RefObject<any>;
+        virtualListRef?: ForwardedRef<VariableSizeList>;
     };
 type DataTablePresentationProps = DataTableComponentProps &
     Pick<DataTableProps, 'records'> & { tableWidth: number } & Pick<
         Required<DataTableProps>,
-        'FlatListComponent' | 'ScrollViewComponent'
+        'ScrollViewComponent'
     >;
 
 const DataTablePresentationComponent = memo(
@@ -62,7 +62,7 @@ const DataTablePresentationComponent = memo(
             ScrollViewComponent,
             onLayout: onLayoutProp,
             HeaderRowComponent: HeaderRowComponentProp,
-            flatListRef,
+            virtualListRef,
             infiniteLoaderRef,
             rowsMinimumBatchSize,
             rowCount: rowCountProp,
@@ -76,7 +76,7 @@ const DataTablePresentationComponent = memo(
 
         const { View } = useMolecules();
 
-        const mergedRef = useMergedRefs([ref, flatListRef!]);
+        const mergedRef = useMergedRefs([virtualListRef]);
         const hStyle = useComponentStyles('DataTable', [hStyleProp]);
 
         const containerHeight = useDataTable(store => store.containerHeight);
@@ -155,9 +155,6 @@ const DataTablePresentationComponent = memo(
         const renderList = useCallback(
             ({ onItemsRendered, ref: _ref }: InfiniteLoaderChildrenArg) => {
                 const setRef = (listRef: any) => {
-                    if (flatListRef) {
-                        (flatListRef as any).current = listRef;
-                    }
                     mergedRef(listRef);
                     _ref(listRef);
                 };
@@ -186,7 +183,6 @@ const DataTablePresentationComponent = memo(
             [
                 containerHeight,
                 contentWidth,
-                flatListRef,
                 rowCount,
                 itemSize,
                 onRowsRendered,
@@ -233,7 +229,7 @@ const DataTableComponent = memo(
             records: store.records || [],
             tableWidth: store.tableWidth,
         }));
-        const { FlatListComponent, ScrollViewComponent } = useDataTableComponent<TDataTableRow>();
+        const { ScrollViewComponent } = useDataTableComponent();
 
         return (
             <DataTablePresentationComponent
@@ -242,7 +238,6 @@ const DataTableComponent = memo(
                 records={records}
                 tableWidth={tableWidth}
                 // tableHeight={tableHeight}
-                FlatListComponent={FlatListComponent}
                 ScrollViewComponent={ScrollViewComponent}
             />
         );
@@ -258,7 +253,6 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 records,
                 columns,
                 defaultColumnWidth,
-                FlatListComponent,
                 ScrollViewComponent,
                 renderCell,
                 renderHeader,
@@ -285,7 +279,6 @@ const withDataTableContext = (Component: typeof DataTableComponent) =>
                 records,
                 columns,
                 defaultColumnWidth,
-                FlatListComponent,
                 ScrollViewComponent,
                 renderCell,
                 renderHeader,

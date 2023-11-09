@@ -2,7 +2,6 @@ import type { FC, PropsWithChildren } from 'react';
 import { memo, useMemo, useRef } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import { useMolecules } from '../../../hooks';
 import type { DataTableProps, TDataTableColumn } from '../types';
 import {
     DataTableCellContext,
@@ -45,7 +44,6 @@ export const DataTableContextProvider: FC<
         columns,
         children,
         defaultColumnWidth = 150,
-        FlatListComponent: FlatListComponentProp,
         ScrollViewComponent: ScrollViewComponentProp,
         renderCell: renderCellProp,
         renderHeader: renderHeaderProp,
@@ -63,13 +61,8 @@ export const DataTableContextProvider: FC<
         hasRowLoaded,
         useGetRowId,
     }) => {
-        const { FlatList } = useMolecules();
-
-        const { FlatListComponent, useRowRenderer } = useRef({
+        const { useRowRenderer } = useRef({
             useRowRenderer: useRowRendererProp,
-            FlatListComponent:
-                FlatListComponentProp ??
-                (FlatList as Required<DataTableProps>['FlatListComponent']),
         }).current;
 
         // TODO: Adopt ScrollView from Molecules.
@@ -78,8 +71,8 @@ export const DataTableContextProvider: FC<
         const renderHeader = useRef(renderHeaderProp).current;
 
         const components = useMemo(
-            () => ({ FlatListComponent, ScrollViewComponent, renderCell, renderHeader }),
-            [FlatListComponent, ScrollViewComponent, renderCell, renderHeader],
+            () => ({ ScrollViewComponent, renderCell, renderHeader }),
+            [ScrollViewComponent, renderCell, renderHeader],
         );
 
         const tableWidth = useMemo(() => {

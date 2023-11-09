@@ -129,7 +129,7 @@ export const useScrollToCell = () => {
     return useCallback(
         ({ columnIndex, rowIndex, direction }: CellIndices & { direction: Direction }) => {
             if (direction === 'up' || direction === 'down') {
-                tableManagerStore.current.tableFlatListRef?.current?.scrollToItem(rowIndex);
+                tableManagerStore.current.tableVirtualListRef?.current?.scrollToItem(rowIndex);
 
                 return;
             }

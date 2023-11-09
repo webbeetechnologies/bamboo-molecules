@@ -67,14 +67,12 @@ export const {
  * Context for all the Components: ScrollView, FlatList, renderHeader and renderCell.
  * We do not want all the components to update when data changes.
  */
-type DataTableComponentContextType<RecordType = any> = Pick<
-    Required<DataTableProps<RecordType>>,
-    'renderHeader' | 'renderCell' | 'FlatListComponent' | 'ScrollViewComponent'
+type DataTableComponentContextType = Pick<
+    Required<DataTableProps>,
+    'renderHeader' | 'renderCell' | 'ScrollViewComponent'
 >;
 export const DataTableComponentContext = createContext<DataTableComponentContextType | null>(null);
-export const useDataTableComponent = <
-    RecordType extends any,
->(): DataTableComponentContextType<RecordType> =>
+export const useDataTableComponent = (): DataTableComponentContextType =>
     useInvariant(
         useContext(DataTableComponentContext),
         'Trying to read DataTableComponent context outside the provider',

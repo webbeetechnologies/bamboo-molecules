@@ -75,13 +75,6 @@ const DocsPage = () => {
             </Text>
 
             <H3>
-                <Code>FlatListComponent</Code>
-            </H3>
-            <Text>
-                Used for vertical scrolling, Can be used to replace the virtualized scroll component
-                {'\n'}
-            </Text>
-            <H3>
                 <Code>ScrollViewComponent</Code>
             </H3>
             <Text>
