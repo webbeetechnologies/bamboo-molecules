@@ -121,7 +121,7 @@ export const useRecordsMap = () => {
 };
 
 export const useHasGroupedData = () => {
-    return useTableManagerValueSelector(({ records }) => !!records.at(0)?.groupId);
+    return useTableManagerValueSelector(({ records }) => records.at(0)?.rowType === 'header');
 };
 
 const defaultArray: unknown[] = [];
