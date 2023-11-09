@@ -17,7 +17,7 @@ import { areEqual } from '@bambooapp/virtualized-list';
 
 import type { DataGridRowRendererProps } from '../../types';
 import { useCellFocusMethods, useDragAndExtendMethods } from '../../plugins';
-import { useHasGroupedData } from '../..';
+import { useHasGroupedData } from '../../contexts';
 
 export type Props = DataGridRowRendererProps;
 
