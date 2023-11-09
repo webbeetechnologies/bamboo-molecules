@@ -17,6 +17,7 @@ import { areEqual } from '@bambooapp/virtualized-list';
 
 import type { DataGridRowRendererProps } from '../../types';
 import { useCellFocusMethods, useDragAndExtendMethods } from '../../plugins';
+import { useHasGroupedData } from '../..';
 
 export type Props = DataGridRowRendererProps;
 
@@ -30,6 +31,8 @@ export const TableRow = memo((props: DataTableRowProps) => {
 
     const rowSize = useDataTable(store => store.rowSize);
 
+    const isGroupsEnabled = useHasGroupedData();
+
     const { useIsRowFocused } = useCellFocusMethods();
     const { useIsDragHandleVisibleRow = useBoolean } = useDragAndExtendMethods() || emptyObj;
 
@@ -42,6 +45,7 @@ export const TableRow = memo((props: DataTableRowProps) => {
             rowProps?.style,
             style,
             (isRowFocused || isDragHandleVisibleOnRow) && { zIndex: 9 },
+            !isGroupsEnabled && { borderLeftWidth: 0 },
             { flexDirection: 'row' },
         ],
         {
