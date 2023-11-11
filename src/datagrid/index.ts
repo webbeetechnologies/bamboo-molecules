@@ -26,6 +26,7 @@ export {
     RecordWithId,
     isDataRow,
     isGroupHeader,
+    isNestedGroupHeader,
     isGroupFooter,
     DATAGRID_DEFAULT_GROUP,
 } from './utils';
