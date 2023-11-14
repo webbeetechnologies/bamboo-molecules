@@ -1,9 +1,7 @@
-import { ComponentType, FC, memo } from 'react';
+import { FC, memo } from 'react';
 import type { RenderCellProps, RenderHeaderCellProps } from '../types';
 import { generateFlatListData } from '../../../../__mocks__/generateFlatListData';
-import type { FlatListProps } from 'react-native';
 import { useMolecules } from '../../../hooks';
-import type { ViewAbilityConfigPair } from 'src/datagrid/types';
 
 export const CellRenderer: FC<RenderCellProps> = memo(({ row, column }) => {
     const { Text } = useMolecules();
@@ -19,15 +17,7 @@ export const HeaderRenderer: FC<RenderHeaderCellProps> = memo(({ column }) => {
     return <H4>{column}</H4>;
 });
 
-export const getDataTableMockProps = (
-    rows: number,
-    columns: number,
-    FlatListComponent?: ComponentType<
-        Omit<FlatListProps<any>, 'viewabilityConfigCallbackPairs'> & {
-            viewabilityConfigCallbackPairs: ViewAbilityConfigPair[];
-        }
-    >,
-) => ({
+export const getDataTableMockProps = (rows: number, columns: number) => ({
     rowSize: 'sm',
     columns: generateFlatListData(columns, index => `column-${index}`),
     records: generateFlatListData(rows, index => `row-${index}`),
@@ -36,7 +26,6 @@ export const getDataTableMockProps = (
         'row-13': true,
         'row-15': true,
     },
-    FlatListComponent,
     renderCell: (props: RenderCellProps) => <CellRenderer {...props} />,
     renderHeader: (props: RenderHeaderCellProps) => <HeaderRenderer {...props} />,
 });

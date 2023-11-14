@@ -10,7 +10,15 @@ import type {
     TDataTableRowTruthy,
     LoadMoreRows,
 } from '@bambooapp/bamboo-molecules/components';
-import { ComponentType, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
+import {
+    ComponentType,
+    ReactNode,
+    RefObject,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+} from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import {
     getPressedModifierKeys,
@@ -18,7 +26,7 @@ import {
     useSetScopes,
 } from '@bambooapp/bamboo-molecules/shortcuts-manager';
 
-import { useMolecules, usePrevious, useToken } from '../hooks';
+import { useMergedRefs, useMolecules, usePrevious, useToken } from '../hooks';
 import {
     CellRenderer,
     CellWrapperComponent,
@@ -181,12 +189,12 @@ const useLoadMoreRows = (loadMoreRows?: DataGridLoadMoreRows) => {
 
 const useAutoUpdateRecords = ({
     records,
-    flatListRef,
+    virtualListRef,
     rowSize,
     loadMoreRows,
     useShouldLoadMoreRows,
-}: Pick<Props, 'records' | 'flatListRef' | 'rowSize' | 'useShouldLoadMoreRows'> &
-    Pick<DataTableProps, 'loadMoreRows'>) => {
+}: Pick<Props, 'records' | 'rowSize' | 'useShouldLoadMoreRows'> &
+    Pick<DataTableProps, 'loadMoreRows'> & { virtualListRef: RefObject<any> }) => {
     const defaultEmptyTuple = useRef<[number]>([-1]).current;
     const prevRowSize = usePrevious(rowSize);
     const { store } = useTableManagerStoreRef();
@@ -213,8 +221,8 @@ const useAutoUpdateRecords = ({
      */
     useEffect(() => {
         if (prevRowSize.current === rowSize && updatedRowIndex.at(0) === -1) return;
-        flatListRef!.current?.resetAfterIndex((updatedRowIndex as [number]).at(0));
-    }, [updatedRowIndex, flatListRef, prevRowSize, rowSize]);
+        virtualListRef!.current?.resetAfterIndex((updatedRowIndex as [number]).at(0));
+    }, [updatedRowIndex, virtualListRef, prevRowSize, rowSize]);
 
     /**
      *
@@ -360,17 +368,18 @@ const DataGrid = ({
 
     useAutoUpdateRecords({
         records: store.current.records,
-        flatListRef: store.current.tableFlatListRef,
+        virtualListRef: store.current.tableVirtualListRef,
         loadMoreRows: handleLoadMoreRows,
         useShouldLoadMoreRows,
         rowSize: rowHeight,
     });
 
+    const virtualListRef = useMergedRefs([store.current.tableVirtualListRef, rest.virtualListRef]);
+
     return (
         <>
             <DataTable
                 ref={store.current.tableRef}
-                flatListRef={store.current.tableFlatListRef}
                 infiniteLoaderRef={store.current.infiniteLoaderRef}
                 // @ts-ignore
                 dataSet={dataSet}
@@ -378,6 +387,7 @@ const DataGrid = ({
                 renderHeader={renderHeader}
                 renderCell={renderCell}
                 {...rest}
+                virtualListRef={virtualListRef}
                 getRowSize={itemSize}
                 rowCount={rowCount ?? records.length}
                 columns={columnIds}

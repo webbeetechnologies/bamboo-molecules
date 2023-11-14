@@ -1,6 +1,6 @@
 {
     "name": "@bambooapp/bamboo-molecules",
-    "version": "0.3.11",
+    "version": "0.3.12",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/webbeetechnologies/bamboo-molecules.git"
@@ -57,7 +57,7 @@
     },
     "dependencies": {
         "@bambooapp/bamboo-atoms": "^0.0.32",
-        "@bambooapp/virtualized-list": "^0.0.1",
+        "@bambooapp/virtualized-list": "^0.0.4",
         "@gorhom/portal": "^1.0.14",
         "@react-native-aria/overlays": "^0.3.2",
         "@sharcoux/slider": "^6.1.2",

@@ -4,7 +4,10 @@ import useLatest from './useLatest';
 
 export const useMergedRefs: typeof mergeRefs = refs => {
     const latestRefs = useLatest(refs);
-    return useCallback(() => {
-        mergeRefs(latestRefs.current);
-    }, [latestRefs]);
+    return useCallback(
+        value => {
+            mergeRefs(latestRefs.current)(value);
+        },
+        [latestRefs],
+    );
 };

@@ -1,13 +1,12 @@
-import type { ComponentPropsWithRef, ComponentType, ReactNode, RefObject } from 'react';
-import type {
-    FlatListProps,
-    ScrollViewProps,
-    ViewProps,
-    ViewStyle,
-    ScrollView,
-} from 'react-native';
+import type { ComponentPropsWithRef, ComponentType, ReactNode, ForwardedRef } from 'react';
+import type { ScrollViewProps, ViewProps, ViewStyle, ScrollView } from 'react-native';
 import type { ViewAbilityConfigPair } from 'src/datagrid/types';
-import type { VariableSizeListProps, InfiniteLoaderProps } from '@bambooapp/virtualized-list';
+import type {
+    VariableSizeListProps,
+    InfiniteLoaderProps,
+    VariableSizeList,
+    InfiniteLoader,
+} from '@bambooapp/virtualized-list';
 
 type RowProps = Omit<ViewProps, 'children'> & { size?: string };
 
@@ -16,13 +15,7 @@ export type TDataTableColumn = string | number;
 export type TDataTableRowTruthy = string | number;
 export type TDataTableRow = TDataTableRowTruthy | undefined;
 
-export interface DataTableComponentProps<T = any> {
-    FlatListComponent?: ComponentType<
-        Omit<FlatListProps<T>, 'viewabilityConfigCallbackPairs'> & {
-            viewabilityConfigCallbackPairs: ViewAbilityConfigPair[];
-            ref?: RefObject<any>;
-        }
-    >;
+export interface DataTableComponentProps {
     ScrollViewComponent?: ComponentType<ComponentPropsWithRef<typeof ScrollView>>;
 }
 
@@ -79,9 +72,9 @@ export type LoadMoreRowsArg = Parameters<
 
 export type LoadMoreRows = (arg: LoadMoreRowsArg, forced?: boolean) => void;
 
-export interface DataTableProps<RecordType = any>
+export interface DataTableProps
     extends Omit<ScrollViewProps, 'children'>,
-        Partial<DataTableComponentProps<RecordType>>,
+        Partial<DataTableComponentProps>,
         DataTableBase {
     /**
      *
@@ -182,8 +175,8 @@ export interface DataTableProps<RecordType = any>
      * CellWrapperComponent
      */
     CellWrapperComponent?: ComponentType<DataCellProps>;
-    flatListRef?: RefObject<any>;
-    infiniteLoaderRef?: RefObject<any>;
+    virtualListRef?: ForwardedRef<VariableSizeList>;
+    infiniteLoaderRef?: ForwardedRef<InfiniteLoader>;
 
     /**
      *

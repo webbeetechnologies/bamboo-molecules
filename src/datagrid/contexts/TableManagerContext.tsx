@@ -11,6 +11,7 @@ import { weakMemoized, keyBy, GroupMeta, getRowIds, isDataRow, getRecordByIndex 
 import { shallowCompare } from '../../utils';
 
 import { useGetRowId } from '../../components/DataTable';
+import type { InfiniteLoader, VariableSizeList } from '@bambooapp/virtualized-list';
 
 export type TableManagerContextProviderProps = {
     withContextMenu: boolean;
@@ -29,8 +30,8 @@ export type TableManagerContextProviderProps = {
 };
 
 export type TableManagerContextType = TableManagerContextProviderProps & {
-    tableFlatListRef: RefObject<any>;
-    infiniteLoaderRef: RefObject<any>;
+    tableVirtualListRef: RefObject<VariableSizeList>;
+    infiniteLoaderRef: RefObject<InfiniteLoader>;
     visibleRowsRef: MutableRefObject<LoadMoreRowsArg | null>;
 };
 
@@ -40,7 +41,7 @@ const defaultContextValue: TableManagerContextType = {
     spacerWidth: 0,
     records: [],
     tableRef: createRef(),
-    tableFlatListRef: createRef(),
+    tableVirtualListRef: createRef(),
     infiniteLoaderRef: createRef(),
     visibleRowsRef: { current: {} as LoadMoreRowsArg },
     focusIgnoredColumns: [],

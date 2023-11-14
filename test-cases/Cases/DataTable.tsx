@@ -1,8 +1,7 @@
 import type { FC } from 'react';
 import { DataTableProps, useMolecules, useToggle } from 'bamboo-molecules';
 import { useCallback, useState } from 'react';
-import { Text, FlatList as RnFlatList } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { Text } from 'react-native';
 
 import type { LayoutChangeEvent } from 'react-native';
 
@@ -45,10 +44,10 @@ const getData = (): DataTableProps => {
             title: `row ${i}`,
             id: `row-${i}-${startTime}`,
         })),
-        renderHeader: ({ column }) => <Text key={column.id}>{column.title}</Text>,
-        renderCell: ({ column, row }) => (
-            <Text key={column.id}>{`${column.title} ${row.title}`}</Text>
-        ),
+        getRowSize: index => index,
+        useGetRowId: index => index,
+        renderHeader: ({ column }) => <Text key={column}>{column}</Text>,
+        renderCell: ({ column, row }) => <Text key={column}>{`${column} ${row}`}</Text>,
     };
 };
 
@@ -59,8 +58,6 @@ export const DataTableDemo: FC = () => {
     const [dimensions, setDimensions] = useState('');
 
     const handleUpdateProps = useCallback(() => setProps(getData()), [setProps]);
-
-    const FlatListComponent = isRnFlatList ? RnFlatList : FlatList;
 
     const handleLayout = useCallback((e: LayoutChangeEvent) => {
         setDimensions(
@@ -87,12 +84,7 @@ export const DataTableDemo: FC = () => {
                 </Text>
                 <Text>{dimensions}</Text>
             </View>
-            <DataTable
-                onLayout={handleLayout}
-                key={isRnFlatList.toString()}
-                {...props}
-                FlatListComponent={FlatListComponent}
-            />
+            <DataTable onLayout={handleLayout} key={isRnFlatList.toString()} {...props} />
         </>
     );
 };
