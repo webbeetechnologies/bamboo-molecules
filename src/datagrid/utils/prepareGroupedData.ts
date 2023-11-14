@@ -15,6 +15,8 @@ export const isGroupFooter = (x: NarrowGroupRecordArg): x is GroupFooter =>
     x!.rowType === RowType.FOOTER;
 export const isGroupHeader = (x: NarrowGroupRecordArg): x is GroupHeader =>
     x!.rowType === RowType.HEADER;
+export const isNestedGroupHeader = (x: NarrowGroupRecordArg): x is GroupHeader =>
+    x!.rowType === RowType.HEADER && (x!.level ?? 0) > 1;
 export const isDataRow = (x: NarrowGroupRecordArg): x is GroupRecord => x!.rowType === RowType.DATA;
 
 const defaultConstants: GroupConstantValues[] = [];

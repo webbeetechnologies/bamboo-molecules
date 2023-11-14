@@ -62,7 +62,7 @@ export const withSpacers = (Component: ComponentType<DataTableRowProps>) => {
         const groupSpacerWrapStyles = useComponentStyles('DataGrid_SpacerRow', styleProp, {
             variant,
             states: {
-                isFirstGroup: props.index === 0,
+                isFirstGroup: props.index === 0 && isGroupsEnabled,
             },
         });
 

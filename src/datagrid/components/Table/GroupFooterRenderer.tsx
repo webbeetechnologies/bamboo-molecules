@@ -84,6 +84,8 @@ export const GroupFooterRow = memo((props: DataGridRowRendererProps) => {
         index: props.index,
     };
 
+    if (meta.isCollapsed) return null;
+
     return <GroupFooterRendererInternal {...rendererProps} />;
 });
 GroupFooterRow.displayName = 'GroupFooterRow';

@@ -196,7 +196,7 @@ const useAutoUpdateRecords = ({
 }: Pick<Props, 'records' | 'rowSize' | 'useShouldLoadMoreRows'> &
     Pick<DataTableProps, 'loadMoreRows'> & { virtualListRef: RefObject<any> }) => {
     const defaultEmptyTuple = useRef<[number]>([-1]).current;
-    const hasRowSizeUpdated = usePrevious(rowSize).current !== rowSize;
+    const prevRowSize = usePrevious(rowSize);
     const { store } = useTableManagerStoreRef();
 
     const oldRecords = usePrevious(records);
@@ -220,9 +220,9 @@ const useAutoUpdateRecords = ({
      *
      */
     useEffect(() => {
-        if (!hasRowSizeUpdated && updatedRowIndex.at(0) === -1) return;
+        if (prevRowSize.current === rowSize && updatedRowIndex.at(0) === -1) return;
         virtualListRef!.current?.resetAfterIndex((updatedRowIndex as [number]).at(0));
-    }, [hasRowSizeUpdated, updatedRowIndex, virtualListRef]);
+    }, [updatedRowIndex, virtualListRef, prevRowSize, rowSize]);
 
     /**
      *
@@ -371,6 +371,7 @@ const DataGrid = ({
         virtualListRef: store.current.tableVirtualListRef,
         loadMoreRows: handleLoadMoreRows,
         useShouldLoadMoreRows,
+        rowSize: rowHeight,
     });
 
     const virtualListRef = useMergedRefs([store.current.tableVirtualListRef, rest.virtualListRef]);
