@@ -15,8 +15,8 @@ export const withRowLoadingPlaceholder = (
         const isLoaded = useDataTable(store => !!store.hasRowLoaded(props.index));
 
         const placeHolderRowStyle = useMemo(
-            () => [styles.placeHolderRow, props.style],
-            [props.style],
+            () => (isLoaded ? [styles.placeHolderRow, props.style] : undefined),
+            [props.style, isLoaded],
         );
 
         if (!isLoaded) return <View style={placeHolderRowStyle} ref={ref} />;
