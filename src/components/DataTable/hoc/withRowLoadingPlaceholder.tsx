@@ -19,11 +19,9 @@ export const withRowLoadingPlaceholder = (
             [props.style, isLoaded],
         );
 
-        return (
-            <View style={placeHolderRowStyle} ref={ref}>
-                {isLoaded ? <Component {...props} ref={ref} /> : null}
-            </View>
-        );
+        if (!isLoaded) return <View style={placeHolderRowStyle} ref={ref} />;
+
+        return <Component {...props} ref={ref} />;
     });
 
     RowRenderer.displayName = (Component.displayName ?? '') + 'WithPlaceholder';
