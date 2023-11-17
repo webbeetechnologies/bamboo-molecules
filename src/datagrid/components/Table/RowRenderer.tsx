@@ -1,5 +1,3 @@
-import { forwardRef, memo, useMemo } from 'react';
-import type { ViewStyle } from 'react-native';
 import {
     DataTableRowProps,
     useActionState,
@@ -14,10 +12,11 @@ import {
     useDataTable,
 } from '@bambooapp/bamboo-molecules/components';
 import { areEqual } from '@bambooapp/virtualized-list';
+import { memo, useMemo } from 'react';
 
-import type { DataGridRowRendererProps } from '../../types';
-import { useCellFocusMethods, useDragAndExtendMethods } from '../../plugins';
 import { useHasGroupedData } from '../../contexts';
+import { useCellFocusMethods, useDragAndExtendMethods } from '../../plugins';
+import type { DataGridRowRendererProps } from '../../types';
 
 export type Props = DataGridRowRendererProps;
 
@@ -26,6 +25,7 @@ const emptyObj = {};
 
 export const TableRow = memo((props: DataTableRowProps) => {
     const { rowId, index, rowProps, isSelected = false, style } = props;
+    const { View } = useMolecules();
 
     const { hovered = false, actionsRef } = useActionState();
 
@@ -65,17 +65,14 @@ export const TableRow = memo((props: DataTableRowProps) => {
 
     return (
         <DataTableContextRowProvider value={rowContext}>
-            <TableRowInner {...props} rowId={rowId} style={rowStyle} ref={actionsRef} />
+            <View {...rowProps} style={rowStyle} ref={actionsRef}>
+                <TableRowInner {...props} rowId={rowId} />
+            </View>
         </DataTableContextRowProvider>
     );
 }, areEqual);
 
-const TableRowComponent = (
-    { rowId, index, columns, rowProps, style }: Props & { style?: ViewStyle },
-    ref: any,
-) => {
-    const { View } = useMolecules();
-
+const TableRowComponent = memo(({ rowId, index, columns }: Omit<Props, 'rowProps' | 'style'>) => {
     const cells = useMemo(
         () =>
             columns.map((item, i, self) => (
@@ -92,13 +89,9 @@ const TableRowComponent = (
         [columns, rowId, index],
     );
 
-    return (
-        <View {...rowProps} style={style} ref={ref}>
-            {cells}
-        </View>
-    );
-};
+    return <>{cells}</>;
+});
 
 TableRowComponent.displayName = 'DataGridRowRenderer';
 
-const TableRowInner = withRowLoadingPlaceholder(forwardRef(TableRowComponent));
+const TableRowInner = withRowLoadingPlaceholder(TableRowComponent);
