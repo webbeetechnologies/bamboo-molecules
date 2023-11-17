@@ -196,7 +196,6 @@ const useAutoUpdateRecords = ({
 }: Pick<Props, 'records' | 'rowSize' | 'useShouldLoadMoreRows'> &
     Pick<DataTableProps, 'loadMoreRows'> & { virtualListRef: RefObject<any> }) => {
     const defaultEmptyTuple = useRef<[number]>([-1]).current;
-    const prevRowSize = usePrevious(rowSize);
     const { store } = useTableManagerStoreRef();
 
     const oldRecords = usePrevious(records);
@@ -216,13 +215,13 @@ const useAutoUpdateRecords = ({
 
     /**
      *
-     * Reset the row height cache if `updatedRowIndex` or `rowSize` changes
+     * Reset the row height cache if `rowSize` changes
      *
      */
+
     useEffect(() => {
-        if (prevRowSize.current === rowSize && updatedRowIndex.at(0) === -1) return;
-        virtualListRef!.current?.resetAfterIndex((updatedRowIndex as [number]).at(0));
-    }, [updatedRowIndex, virtualListRef, prevRowSize, rowSize]);
+        virtualListRef!.current?.resetAfterIndex(0);
+    }, [rowSize, virtualListRef]);
 
     /**
      *
