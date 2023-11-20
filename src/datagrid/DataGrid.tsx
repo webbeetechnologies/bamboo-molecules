@@ -215,13 +215,14 @@ const useAutoUpdateRecords = ({
 
     /**
      *
-     * Reset the row height cache if `rowSize` changes
+     * Reset the row height cache if `updatedRowIndex` or `rowSize` changes
      *
      */
 
     useEffect(() => {
+        if (updatedRowIndex.at(0) === -1) return;
         virtualListRef!.current?.resetAfterIndex(0);
-    }, [rowSize, virtualListRef]);
+    }, [rowSize, updatedRowIndex, virtualListRef]);
 
     /**
      *
