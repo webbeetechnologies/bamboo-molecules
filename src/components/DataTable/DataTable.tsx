@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, memo, useCallback, useMemo, useRef } from 'react';
+import { ForwardedRef, forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import type {
     LayoutChangeEvent,
     NativeScrollEvent,
@@ -26,6 +26,7 @@ import { HorizontalScrollIndexProvider, defaultValue, useStoreRef } from './hook
 import type { DataTableBase, DataTableProps, LoadMoreRowsArg } from './types';
 
 const defaultGetItemSize = () => 40;
+const defaultColumnOverscanSize = 200;
 
 type DataTableComponentProps = DataTableBase &
     ScrollViewProps &
@@ -84,7 +85,7 @@ const DataTablePresentationComponent = memo(
         const hasRowLoaded = useDataTable(store => store.hasRowLoaded);
 
         const { set: setStore } = useStoreRef();
-        const { set: setDataTableStore } = useDataTableStoreRef();
+        const { set: setDataTableStore, store } = useDataTableStoreRef();
         const renderedRowsRef = useRef<Omit<LoadMoreRowsArg, 'startIndex' | 'stopIndex'> | null>(
             null,
         );
@@ -93,14 +94,51 @@ const DataTablePresentationComponent = memo(
 
         const rowCount = rowCountProp || records.length;
 
+        const getVisibleColumnIndices = useCallback(
+            (x: number = 0) => {
+                const columns = store.current.columns || [];
+                const visibleColumns: number[] = [];
+                const containerWidth = store.current.containerWidth || 0;
+
+                for (let index = 0; index < columns.length; index++) {
+                    const left = store.current.cellXOffsets[index];
+                    const cellWidth =
+                        store.current.columnWidths?.[index] || store.current.defaultColumnWidth;
+
+                    const isWithinLeftBoundary = left + cellWidth >= x - defaultColumnOverscanSize;
+
+                    const isWithinRightBoundary =
+                        left <= x + defaultColumnOverscanSize + containerWidth;
+
+                    if (isWithinLeftBoundary && isWithinRightBoundary) {
+                        visibleColumns.push(index);
+                    }
+
+                    // we want to break the loop as soon as we found everything
+                    if (left > x + defaultColumnOverscanSize + containerWidth) {
+                        break;
+                    }
+                }
+
+                return visibleColumns;
+            },
+            [store],
+        );
+
         const onScroll = useCallback(
             (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+                const x = e.nativeEvent.contentOffset.x;
+
                 setStore(prev => ({
-                    x: e.nativeEvent.contentOffset.x,
+                    x,
                     scrollXVelocity: e.nativeEvent.contentOffset.x - prev.x,
                 }));
+
+                setDataTableStore(() => ({
+                    visibleColumnIndices: getVisibleColumnIndices(x),
+                }));
             },
-            [setStore],
+            [getVisibleColumnIndices, setDataTableStore, setStore],
         );
 
         // const onFlatListScroll = useCallback(
@@ -191,6 +229,13 @@ const DataTablePresentationComponent = memo(
                 mergedRef,
             ],
         );
+
+        useEffect(() => {
+            if (!containerHeight) return;
+            setDataTableStore(() => ({
+                visibleColumnIndices: getVisibleColumnIndices(),
+            }));
+        }, [getVisibleColumnIndices, setDataTableStore, containerHeight]);
 
         return (
             <ScrollViewComponent
