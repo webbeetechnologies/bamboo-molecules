@@ -33,7 +33,7 @@ export const useRecordsStoreRef = useStoreRef;
 const recordSelector = (id: string, records: Record<string, Row>) => {
     if (!records[id]) {
         // throw new Error(`could not find the row ${id}`);
-        return {};
+        return {} as Row;
     }
 
     return records[id] as Row;
