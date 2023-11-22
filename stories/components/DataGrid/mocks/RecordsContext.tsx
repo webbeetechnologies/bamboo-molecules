@@ -32,7 +32,8 @@ export const useRecordsStoreRef = useStoreRef;
 
 const recordSelector = (id: string, records: Record<string, Row>) => {
     if (!records[id]) {
-        throw new Error(`could not find the row ${id}`);
+        // throw new Error(`could not find the row ${id}`);
+        return {};
     }
 
     return records[id] as Row;
@@ -64,7 +65,8 @@ export const useRecord = (id: string): [Row, (value: any) => void] => {
 
 const cellValueSelector = (id: string, fieldId: string, records: Record<string, Row>) => {
     if (!records[id]) {
-        throw new Error(`could not find the row ${id}`);
+        // throw new Error(`could not find the row ${id}`);
+        return 'asasfaf';
     }
 
     return records[id][fieldId] as any;
