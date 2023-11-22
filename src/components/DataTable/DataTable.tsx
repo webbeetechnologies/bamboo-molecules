@@ -72,6 +72,7 @@ const DataTablePresentationComponent = memo(
             onRowsRendered,
             getRowSize,
             rowOverscanCount = 5,
+            columnOverscanSize = defaultColumnOverscanSize,
             ...restScrollViewProps
         } = props;
 
@@ -81,6 +82,8 @@ const DataTablePresentationComponent = memo(
         const hStyle = useComponentStyles('DataTable', [hStyleProp]);
 
         const containerHeight = useDataTable(store => store.containerHeight);
+        const containerWidth = useDataTable(store => store.containerWidth);
+
         const contentWidth = useDataTable(store => store.contentWidth);
         const hasRowLoaded = useDataTable(store => store.hasRowLoaded);
 
@@ -98,31 +101,30 @@ const DataTablePresentationComponent = memo(
             (x: number = 0) => {
                 const columns = store.current.columns || [];
                 const visibleColumns: number[] = [];
-                const containerWidth = store.current.containerWidth || 0;
+                const _containerWidth = store.current.containerWidth || 0;
 
                 for (let index = 0; index < columns.length; index++) {
                     const left = store.current.cellXOffsets[index];
                     const cellWidth =
                         store.current.columnWidths?.[index] || store.current.defaultColumnWidth;
 
-                    const isWithinLeftBoundary = left + cellWidth >= x - defaultColumnOverscanSize;
+                    const isWithinLeftBoundary = left + cellWidth >= x - columnOverscanSize;
 
-                    const isWithinRightBoundary =
-                        left <= x + defaultColumnOverscanSize + containerWidth;
+                    const isWithinRightBoundary = left <= x + columnOverscanSize + _containerWidth;
 
                     if (isWithinLeftBoundary && isWithinRightBoundary) {
                         visibleColumns.push(index);
                     }
 
                     // we want to break the loop as soon as we found everything
-                    if (left > x + defaultColumnOverscanSize + containerWidth) {
+                    if (left > x + columnOverscanSize + _containerWidth) {
                         break;
                     }
                 }
 
                 return visibleColumns;
             },
-            [store],
+            [store, columnOverscanSize],
         );
 
         const onScroll = useCallback(
@@ -231,11 +233,12 @@ const DataTablePresentationComponent = memo(
         );
 
         useEffect(() => {
-            if (!containerHeight) return;
+            if (!containerWidth) return;
+
             setDataTableStore(() => ({
                 visibleColumnIndices: getVisibleColumnIndices(),
             }));
-        }, [getVisibleColumnIndices, setDataTableStore, containerHeight]);
+        }, [getVisibleColumnIndices, setDataTableStore, containerWidth]);
 
         return (
             <ScrollViewComponent
