@@ -52,7 +52,15 @@ function Day(props: {
         },
     );
     const onPress = useCallback(() => {
-        onPressDate(new Date(year, month, day));
+        const specificDate = new Date(year, month, day);
+
+        const currentDate = new Date();
+
+        currentDate.setFullYear(specificDate.getFullYear());
+        currentDate.setMonth(specificDate.getMonth());
+        currentDate.setDate(specificDate.getDate());
+
+        onPressDate(currentDate);
     }, [onPressDate, year, month, day]);
 
     const { containerStyle, buttonStyle, dayStyle, textStyle } = useMemo(() => {
