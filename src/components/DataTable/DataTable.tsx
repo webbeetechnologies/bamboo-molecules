@@ -22,7 +22,12 @@ import { DataTableContextProvider } from './DataTableContext/DataTableContextPro
 import { DataTableHeaderRow } from './DataTableHeader';
 import { DataTableRow } from './DataTableRow';
 import { defaultProps } from './defaults';
-import { HorizontalScrollIndexProvider, defaultValue, useStoreRef } from './hooks';
+import {
+    HorizontalScrollIndexProvider,
+    defaultValue,
+    useStoreRef,
+    useGetVisibleColumnIndices,
+} from './hooks';
 import type { DataTableBase, DataTableProps, LoadMoreRowsArg } from './types';
 
 const defaultGetItemSize = () => 40;
@@ -88,7 +93,7 @@ const DataTablePresentationComponent = memo(
         const hasRowLoaded = useDataTable(store => store.hasRowLoaded);
 
         const { set: setStore } = useStoreRef();
-        const { set: setDataTableStore, store } = useDataTableStoreRef();
+        const { set: setDataTableStore } = useDataTableStoreRef();
         const renderedRowsRef = useRef<Omit<LoadMoreRowsArg, 'startIndex' | 'stopIndex'> | null>(
             null,
         );
@@ -97,35 +102,7 @@ const DataTablePresentationComponent = memo(
 
         const rowCount = rowCountProp || records.length;
 
-        const getVisibleColumnIndices = useCallback(
-            (x: number = 0) => {
-                const columns = store.current.columns || [];
-                const visibleColumns: number[] = [];
-                const _containerWidth = store.current.containerWidth || 0;
-
-                for (let index = 0; index < columns.length; index++) {
-                    const left = store.current.cellXOffsets[index];
-                    const cellWidth =
-                        store.current.columnWidths?.[index] || store.current.defaultColumnWidth;
-
-                    const isWithinLeftBoundary = left + cellWidth >= x - columnOverscanSize;
-
-                    const isWithinRightBoundary = left <= x + columnOverscanSize + _containerWidth;
-
-                    if (isWithinLeftBoundary && isWithinRightBoundary) {
-                        visibleColumns.push(index);
-                    }
-
-                    // we want to break the loop as soon as we found everything
-                    if (left > x + columnOverscanSize + _containerWidth) {
-                        break;
-                    }
-                }
-
-                return visibleColumns;
-            },
-            [store, columnOverscanSize],
-        );
+        const getVisibleColumnIndices = useGetVisibleColumnIndices(columnOverscanSize);
 
         const onScroll = useCallback(
             (e: NativeSyntheticEvent<NativeScrollEvent>) => {
