@@ -201,3 +201,5 @@ export * from './Avatar';
 export * from './Tabs';
 
 export * from './If';
+
+export * from './SearchInput';
