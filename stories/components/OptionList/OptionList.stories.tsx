@@ -1,10 +1,9 @@
-import { StyleSheet, View } from 'react-native';
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import { StyleSheet, View } from 'react-native';
 import { generateSectionListData } from '../../common';
 
+import { useCallback, useMemo, useState } from 'react';
 import { Example } from './OptionList';
-import { useArgs } from '@storybook/addons';
-import { useCallback, useMemo } from 'react';
 
 export default {
     title: 'components/OptionList',
@@ -12,27 +11,24 @@ export default {
 } as ComponentMeta<typeof Example>;
 
 export const Default: ComponentStory<typeof Example> = args => {
-    const [_, updateArgs] = useArgs();
+    const [query, setQuery] = useState('');
 
     const records = useMemo(() => {
         return args.records.map(section => ({
             ...section,
             data: section.data.filter(item =>
-                item.title.toLowerCase().includes(args.query?.toLowerCase()),
+                item.title.toLowerCase().includes(query?.toLowerCase()),
             ),
         }));
-    }, [args.query, args.records]);
+    }, [query, args.records]);
 
-    const onQueryChange = useCallback(
-        (text: string) => {
-            updateArgs({ ...args, query: text });
-        },
-        [args, updateArgs],
-    );
+    const onQueryChange = useCallback((text: string) => {
+        setQuery(text);
+    }, []);
 
     return (
         <View style={styles.container}>
-            <Example {...args} records={records} onQueryChange={onQueryChange} />
+            <Example {...args} query={query} records={records} onQueryChange={onQueryChange} />
         </View>
     );
 };

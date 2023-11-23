@@ -8,19 +8,18 @@ import {
     useCallback,
     useMemo,
 } from 'react';
-import type { ViewStyle, SectionList } from 'react-native';
+import type { SectionList, ViewStyle } from 'react-native';
+import { typedMemo } from '../../hocs';
+import withKeyboardAccessibility, {
+    useCurrentIndexStoreValue,
+} from '../../hocs/withKeyboardAccessibility';
 import {
     useComponentStyles,
     useControlledValue,
     useMolecules,
-    useSearchable,
     UseSearchableProps,
 } from '../../hooks';
 import type { SectionListProps, SectionListRenderItemInfo } from '../SectionList';
-import withKeyboardAccessibility, {
-    useCurrentIndexStoreValue,
-} from '../../hocs/withKeyboardAccessibility';
-import { typedMemo } from '../../hocs';
 
 type DefaultSectionT<TItem> = {
     data: TItem[];
@@ -116,8 +115,7 @@ const OptionList = <
     }: Props<TItem, TSection>,
     ref: any,
 ) => {
-    const { SectionList, View } = useMolecules();
-    const SearchField = useSearchable({ query, onQueryChange, searchable, searchInputProps });
+    const { SectionList, View, SearchInput } = useMolecules();
     const [selection, onSelectionChange] = useControlledValue<TItem | TItem[] | null>({
         value: selectionProp,
         onChange: onSelectionChangeProp,
@@ -181,7 +179,14 @@ const OptionList = <
 
     return (
         <View style={containerStyles}>
-            <>{SearchField && <View style={searchInputContainerStyles}>{SearchField}</View>}</>
+            <View style={searchInputContainerStyles}>
+                <SearchInput
+                    value={query}
+                    onChangeText={onQueryChange}
+                    disabled={!searchable}
+                    {...searchInputProps}
+                />
+            </View>
             <SectionList
                 ref={ref}
                 keyExtractor={keyExtractor}
