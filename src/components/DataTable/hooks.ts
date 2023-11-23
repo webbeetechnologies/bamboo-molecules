@@ -17,7 +17,5 @@ export const defaultValue = {
 };
 
 export const useIsCellWithinBounds = (columnIndex: number) => {
-    const visibleColumnIndices = useDataTable(store => store.visibleColumnIndices ?? []);
-
-    return visibleColumnIndices.includes(columnIndex);
+    return useDataTable(store => (store.visibleColumnIndices ?? []).includes(columnIndex));
 };
