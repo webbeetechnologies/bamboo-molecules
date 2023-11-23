@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, memo, useCallback, useMemo, useRef } from 'react';
+import { ForwardedRef, forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import type {
     LayoutChangeEvent,
     NativeScrollEvent,
@@ -22,10 +22,16 @@ import { DataTableContextProvider } from './DataTableContext/DataTableContextPro
 import { DataTableHeaderRow } from './DataTableHeader';
 import { DataTableRow } from './DataTableRow';
 import { defaultProps } from './defaults';
-import { HorizontalScrollIndexProvider, defaultValue, useStoreRef } from './hooks';
+import {
+    HorizontalScrollIndexProvider,
+    defaultValue,
+    useStoreRef,
+    useGetVisibleColumnIndices,
+} from './hooks';
 import type { DataTableBase, DataTableProps, LoadMoreRowsArg } from './types';
 
 const defaultGetItemSize = () => 40;
+const defaultColumnOverscanSize = 200;
 
 type DataTableComponentProps = DataTableBase &
     ScrollViewProps &
@@ -71,6 +77,7 @@ const DataTablePresentationComponent = memo(
             onRowsRendered,
             getRowSize,
             rowOverscanCount = 5,
+            columnOverscanSize = defaultColumnOverscanSize,
             ...restScrollViewProps
         } = props;
 
@@ -80,6 +87,8 @@ const DataTablePresentationComponent = memo(
         const hStyle = useComponentStyles('DataTable', [hStyleProp]);
 
         const containerHeight = useDataTable(store => store.containerHeight);
+        const containerWidth = useDataTable(store => store.containerWidth);
+
         const contentWidth = useDataTable(store => store.contentWidth);
         const hasRowLoaded = useDataTable(store => store.hasRowLoaded);
 
@@ -93,14 +102,22 @@ const DataTablePresentationComponent = memo(
 
         const rowCount = rowCountProp || records.length;
 
+        const getVisibleColumnIndices = useGetVisibleColumnIndices(columnOverscanSize);
+
         const onScroll = useCallback(
             (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+                const x = e.nativeEvent.contentOffset.x;
+
                 setStore(prev => ({
-                    x: e.nativeEvent.contentOffset.x,
+                    x,
                     scrollXVelocity: e.nativeEvent.contentOffset.x - prev.x,
                 }));
+
+                setDataTableStore(() => ({
+                    visibleColumnIndices: getVisibleColumnIndices(x),
+                }));
             },
-            [setStore],
+            [getVisibleColumnIndices, setDataTableStore, setStore],
         );
 
         // const onFlatListScroll = useCallback(
@@ -191,6 +208,14 @@ const DataTablePresentationComponent = memo(
                 mergedRef,
             ],
         );
+
+        useEffect(() => {
+            if (!containerWidth) return;
+
+            setDataTableStore(() => ({
+                visibleColumnIndices: getVisibleColumnIndices(),
+            }));
+        }, [getVisibleColumnIndices, setDataTableStore, containerWidth]);
 
         return (
             <ScrollViewComponent
