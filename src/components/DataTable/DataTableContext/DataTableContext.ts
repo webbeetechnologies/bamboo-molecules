@@ -54,7 +54,7 @@ type DataTableContextType = Pick<
         // tableHeight: number;
         cellXOffsets: number[];
         hasRowLoaded: (index: number) => boolean;
-        visibleColumnIndices?: number[];
+        visibleColumnIndices?: Record<number, boolean>;
     };
 
 export const {

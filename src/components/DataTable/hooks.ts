@@ -19,7 +19,7 @@ export const defaultValue = {
 };
 
 export const useIsCellWithinBounds = (columnIndex: number) => {
-    return useDataTable(store => (store.visibleColumnIndices ?? []).includes(columnIndex));
+    return useDataTable(store => (store.visibleColumnIndices ?? {})[columnIndex]);
 };
 
 export const useGetVisibleColumnIndices = (columnOverscanSize: number) => {
@@ -37,7 +37,7 @@ export const useGetVisibleColumnIndices = (columnOverscanSize: number) => {
 
     return useCallback(
         (x: number = 0) => {
-            const visibleColumns: number[] = [];
+            const visibleColumns: Record<number, boolean> = {};
 
             for (let index = 0; index < numColumns; index++) {
                 const left = cellXOffsets[index];
@@ -48,7 +48,7 @@ export const useGetVisibleColumnIndices = (columnOverscanSize: number) => {
                 const isWithinRightBoundary = left <= x + columnOverscanSize + containerWidth;
 
                 if (isWithinLeftBoundary && isWithinRightBoundary) {
-                    visibleColumns.push(index);
+                    visibleColumns[index] = true;
                 }
 
                 // we want to break the loop as soon as we found everything
