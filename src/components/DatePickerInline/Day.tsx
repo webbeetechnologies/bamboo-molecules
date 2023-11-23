@@ -4,6 +4,16 @@ import type { ViewStyle } from 'react-native';
 import { useComponentStyles, useMolecules } from '../../hooks';
 import DayRange from './DayRange';
 
+const normalizeDateWithCurrentTime = (specificDate: Date) => {
+    const date = new Date();
+
+    date.setFullYear(specificDate.getFullYear());
+    date.setMonth(specificDate.getMonth());
+    date.setDate(specificDate.getDate());
+
+    return date;
+};
+
 function EmptyDayPure() {
     const { View } = useMolecules();
     const componentStyles = useComponentStyles('DatePicker_DayEmpty');
@@ -52,15 +62,7 @@ function Day(props: {
         },
     );
     const onPress = useCallback(() => {
-        const specificDate = new Date(year, month, day);
-
-        const currentDate = new Date();
-
-        currentDate.setFullYear(specificDate.getFullYear());
-        currentDate.setMonth(specificDate.getMonth());
-        currentDate.setDate(specificDate.getDate());
-
-        onPressDate(currentDate);
+        onPressDate(normalizeDateWithCurrentTime(new Date(year, month, day)));
     }, [onPressDate, year, month, day]);
 
     const { containerStyle, buttonStyle, dayStyle, textStyle } = useMemo(() => {
