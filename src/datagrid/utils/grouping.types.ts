@@ -42,6 +42,7 @@ type GroupBase = {
     groupConstants: GroupConstantValues[];
     realIndex: number;
     groupIndex: number;
+    nextGroupIndex: number;
 };
 
 export type NormalizedAggregateRecordBase = GroupBase &
@@ -60,7 +61,7 @@ export type GroupFooter = Omit<NormalizedAggregateRecordBase, 'recordIds'> & {
     rowType: 'footer';
 };
 
-export type GroupRecord = Omit<GroupBase, 'id'> & {
+export type GroupRecord = Omit<GroupBase, 'id' | 'nextGroupIndex'> & {
     rowType: 'data';
     indexInGroup: number;
     id: TDataTableRow;
