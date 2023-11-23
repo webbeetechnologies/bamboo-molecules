@@ -1,14 +1,14 @@
 import type { TDataTableColumn, TDataTableRow } from '@bambooapp/bamboo-molecules';
-export declare type GroupConstantValues = {
-    field: TDataTableColumn;
-    value: any;
-};
-export declare enum RowType {
+
+export type GroupConstantValues = { field: TDataTableColumn; value: any };
+
+export enum RowType {
     HEADER = 'header',
     FOOTER = 'footer',
     DATA = 'data',
 }
-export declare type GroupMetaStates = {
+
+export type GroupMetaStates = {
     isFirstLevel: boolean;
     isLastLevel: boolean;
     isFirst: boolean;
@@ -17,7 +17,8 @@ export declare type GroupMetaStates = {
     isRealGroup: boolean;
     rowType: `${RowType}`;
 };
-export declare type GroupMeta = GroupMetaStates & {
+
+export type GroupMeta = GroupMetaStates & {
     groupId: string;
     fieldId?: TDataTableColumn | null;
     count: number;
@@ -26,11 +27,14 @@ export declare type GroupMeta = GroupMetaStates & {
     isRealGroup?: boolean;
     isCollapsed: boolean;
 };
+
 export interface RecordWithId extends Record<string, any> {
     id: number | string;
 }
-export declare type PrimitiveTypes = string | boolean | number | null | undefined;
-declare type GroupBase = {
+
+export type PrimitiveTypes = string | boolean | number | null | undefined;
+
+type GroupBase = {
     level: number;
     groupId: string;
     id: TDataTableColumn;
@@ -40,26 +44,31 @@ declare type GroupBase = {
     groupIndex: number;
     nextGroupIndex: number;
 };
-export declare type NormalizedAggregateRecordBase = GroupBase &
+
+export type NormalizedAggregateRecordBase = GroupBase &
     GroupMeta & {
         title: any;
         count: number;
         value: unknown;
         field: TDataTableColumn;
     };
-export declare type GroupHeader = NormalizedAggregateRecordBase & {
+
+export type GroupHeader = NormalizedAggregateRecordBase & {
     rowType: 'header';
 };
-export declare type GroupFooter = NormalizedAggregateRecordBase & {
+
+export type GroupFooter = Omit<NormalizedAggregateRecordBase, 'recordIds'> & {
     rowType: 'footer';
 };
-export declare type GroupRecord = Omit<GroupBase, 'id' | 'nextGroupIndex'> & {
+
+export type GroupRecord = Omit<GroupBase, 'id' | 'nextGroupIndex'> & {
     rowType: 'data';
     indexInGroup: number;
     id: TDataTableRow;
     isPlaceholder?: boolean;
 };
-export declare type GroupMetaRow = GroupFooter | GroupHeader;
-export declare type GroupedDataTruthy = GroupMetaRow | GroupRecord;
-export declare type GroupedData = GroupedDataTruthy | undefined;
-export {};
+
+export type GroupMetaRow = GroupFooter | GroupHeader;
+
+export type GroupedDataTruthy = GroupMetaRow | GroupRecord;
+export type GroupedData = GroupedDataTruthy | undefined;
