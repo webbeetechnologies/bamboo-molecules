@@ -1,11 +1,9 @@
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
-import { useCallback, useRef } from 'react';
-import type { ViewToken } from 'react-native';
 
-import type { ViewAbilityConfigPair } from 'src/datagrid/types';
-import { useDataTable, useDataTableColumnWidth } from './DataTableContext';
-import { DEFAULT_VIEWABILITY_CONFIG } from './constants';
-import type { TDataTableColumn, TDataTableRowTruthy } from './types';
+import { useDataTable } from './DataTableContext';
+import type { TDataTableColumn } from './types';
+import { shallowCompare } from '../../utils';
+import { useCallback } from 'react';
 
 export const {
     useStoreRef,
@@ -20,57 +18,54 @@ export const defaultValue = {
     scrollXVelocity: 0,
 };
 
-const defaultOffset = 500;
-
-export const useIsCellWithinBounds = (
-    left: number,
-    rowId: TDataTableRowTruthy,
-    columnId: TDataTableColumn,
-) => {
-    const cellWidth = useDataTableColumnWidth(columnId);
-    // this is a quick fix // TODO - revisit this later
-    const containerWidth = useDataTable(store => store.containerWidth ?? 0);
-
-    const checkLeft = useCallback(
-        (x: number, offset: number) => left + cellWidth >= x - offset,
-        [cellWidth, left],
-    );
-    const checkRight = useCallback(
-        (x: number, offset: number) => left <= x + offset + containerWidth,
-        [containerWidth, left],
-    );
-    const isViewableItem = useCallback(
-        (viewItemIds: TDataTableColumn[]) => viewItemIds.includes(rowId),
-        [rowId],
-    );
-
-    return useContextValue(({ x, viewItemIds }) => {
-        return (
-            checkLeft(x, isViewableItem(viewItemIds) ? defaultOffset : 0) &&
-            checkRight(x, isViewableItem(viewItemIds) ? defaultOffset : 0)
-        );
-    });
+export const useIsCellWithinBounds = (columnIndex: number) => {
+    return useDataTable(store => (store.visibleColumnIndices ?? {})[columnIndex]);
 };
 
-export const useViewabilityConfigCallbackPairs = (
-    viewabilityConfigCallbackPairs: ViewAbilityConfigPair[],
-) => {
-    const { set: setStore } = useStoreRef();
+export const useGetVisibleColumnIndices = (columnOverscanSize: number) => {
+    const { columnWidths, defaultColumnWidth, containerWidth, cellXOffsets, numColumns } =
+        useDataTable(
+            store => ({
+                columnWidths: store.columnWidths,
+                defaultColumnWidth: store.defaultColumnWidth,
+                containerWidth: store.containerWidth || 0,
+                numColumns: (store.columns || []).length,
+                cellXOffsets: store.cellXOffsets,
+            }),
+            shallowCompare,
+        );
 
-    const onViewableItemsChanged = useCallback(
-        ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-            setStore(() => ({
-                viewItemIds: viewableItems.map(item => item.item),
-            }));
+    return useCallback(
+        (x: number = 0) => {
+            const visibleColumns: Record<number, boolean> = {};
+
+            for (let index = 0; index < numColumns; index++) {
+                const left = cellXOffsets[index];
+                const cellWidth = columnWidths?.[index] || defaultColumnWidth;
+
+                const isWithinLeftBoundary = left + cellWidth >= x - columnOverscanSize;
+
+                const isWithinRightBoundary = left <= x + columnOverscanSize + containerWidth;
+
+                if (isWithinLeftBoundary && isWithinRightBoundary) {
+                    visibleColumns[index] = true;
+                }
+
+                // we want to break the loop as soon as we found everything
+                if (left > x + columnOverscanSize + containerWidth) {
+                    break;
+                }
+            }
+
+            return visibleColumns;
         },
-        [setStore],
+        [
+            numColumns,
+            cellXOffsets,
+            columnWidths,
+            defaultColumnWidth,
+            columnOverscanSize,
+            containerWidth,
+        ],
     );
-
-    return useRef([
-        {
-            viewabilityConfig: DEFAULT_VIEWABILITY_CONFIG,
-            onViewableItemsChanged,
-        },
-        ...viewabilityConfigCallbackPairs,
-    ]);
 };

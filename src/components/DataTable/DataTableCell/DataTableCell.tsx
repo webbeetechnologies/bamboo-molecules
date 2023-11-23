@@ -23,7 +23,7 @@ type CellComponentProps = {
 export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
     const { View } = useMolecules();
 
-    const { columnIndex, column, row } = useDataTableCell();
+    const { columnIndex } = useDataTableCell();
     const { cellProps, cellXOffsets, CellWrapperComponent } = useDataTable(store => ({
         cellProps: store.cellProps,
         cellXOffsets: store.cellXOffsets,
@@ -37,7 +37,7 @@ export const DataCell = memo(({ width, style, ...props }: DataCellProps) => {
         style,
     ]);
 
-    const isWithinBounds = useIsCellWithinBounds(cellXOffsets[columnIndex], row, column);
+    const isWithinBounds = useIsCellWithinBounds(columnIndex);
 
     // const isVisible = usePrevious(isWithinBounds) || isWithinBounds;
 

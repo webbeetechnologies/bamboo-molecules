@@ -47,6 +47,7 @@ export type ScrollProps = {
 export type DataTableBase = ScrollProps & {
     stickyRowIndices?: number[];
     HeaderRowComponent?: ComponentType<any>;
+    columnOverscanSize?: number;
 };
 
 export type DataTableRowProps = {
