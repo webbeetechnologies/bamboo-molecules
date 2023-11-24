@@ -180,7 +180,6 @@ const OptionList = <
     return (
         <View style={containerStyles}>
             <>
-                {' '}
                 {searchable && (
                     <View style={searchInputContainerStyles}>
                         <SearchInput
