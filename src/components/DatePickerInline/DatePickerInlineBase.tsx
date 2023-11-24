@@ -54,7 +54,7 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
         disableWeekDays,
         dates,
         validRange,
-        dateMode,
+        dateMode = 'start',
         style,
         HeaderComponent,
         onToggle,
