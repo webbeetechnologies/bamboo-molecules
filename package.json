@@ -63,6 +63,7 @@
         "@sharcoux/slider": "^6.1.2",
         "color": "^4.2.3",
         "date-fns": "^2.29.3",
+        "eventemitter3": "^5.0.1",
         "lodash.get": "^4.4.2",
         "lodash.groupby": "^4.6.0",
         "lodash.isnil": "^4.0.0",
