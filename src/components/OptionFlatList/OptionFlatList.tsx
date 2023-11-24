@@ -9,21 +9,19 @@ import {
     useCallback,
     useMemo,
 } from 'react';
-import type { ViewStyle } from 'react-native';
-import type { FlatList, ListRenderItemInfo } from 'react-native';
+import type { FlatList, ListRenderItemInfo, ViewStyle } from 'react-native';
 
+import { typedMemo } from '../../hocs';
+import withKeyboardAccessibility, {
+    useCurrentIndexStoreValue,
+} from '../../hocs/withKeyboardAccessibility';
 import {
     useComponentStyles,
     useControlledValue,
     useMolecules,
-    useSearchable,
     UseSearchableProps,
 } from '../../hooks';
 import type { FlatListProps } from '../FlatList';
-import withKeyboardAccessibility, {
-    useCurrentIndexStoreValue,
-} from '../../hocs/withKeyboardAccessibility';
-import { typedMemo } from '../../hocs';
 
 type DefaultItemT = {
     id: string | number;
@@ -93,10 +91,8 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
     }: Props<TItem>,
     ref: any,
 ) => {
-    const { FlatList, View } = useMolecules();
+    const { FlatList, View, SearchInput } = useMolecules();
     const FlatListComponent = CustomFlatList || FlatList;
-
-    const SearchField = useSearchable({ query, onQueryChange, searchable, searchInputProps });
 
     const [selection, onSelectionChange] = useControlledValue<TItem | TItem[]>({
         value: selectionProp,
@@ -156,7 +152,14 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
 
     return (
         <View style={containerStyles}>
-            <>{SearchField && <View style={searchInputContainerStyles}>{SearchField}</View>}</>
+            <View style={searchInputContainerStyles}>
+                <SearchInput
+                    value={query}
+                    onChangeText={onQueryChange}
+                    disabled={!searchable}
+                    {...searchInputProps}
+                />
+            </View>
             <FlatListComponent
                 ref={ref}
                 keyExtractor={keyExtractor}
