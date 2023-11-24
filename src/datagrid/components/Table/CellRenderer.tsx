@@ -1,4 +1,13 @@
-import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, ReactNode } from 'react';
+import {
+    forwardRef,
+    memo,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    ReactNode,
+    useLayoutEffect,
+} from 'react';
 import { StyleSheet, ViewStyle, GestureResponderEvent } from 'react-native';
 import type { ViewProps, PressableProps } from '@bambooapp/bamboo-atoms';
 import {
@@ -15,16 +24,12 @@ import { useFieldType, useField, useCellValue } from '../../contexts';
 import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
 import { DragAndExtendHandle } from '../DragAndExtendHandle';
-import {
-    CELL_FOCUS_PLUGIN_KEY,
-    useCellFocusMethods,
-    useCellSelectionMethods,
-    usePluginsDataStoreRef,
-} from '../../plugins';
+import { CELL_FOCUS_PLUGIN_KEY, useCellFocusMethods, usePluginsDataStoreRef } from '../../plugins';
 import { CellSelectionIndicator } from '../CellSelectionIndicator';
 import '../CellBorder';
 import type { Field } from '../../types';
 import { shallowCompare } from '../../../utils';
+import { cellEventsEmitter } from './utils';
 
 export type Props<T = any> = RenderCellProps &
     Omit<PressableProps, 'ref'> &
@@ -65,18 +70,10 @@ const _DataCell = (
     const { type, ...restField } = field;
     const { readonly, displayEditorOnHover, showEditor } = useFieldType(type);
 
-    const { useOnSelectCell, useOnDragAndSelectStart, useOnDragAndSelectEnd } =
-        useCellSelectionMethods();
-    const { useSetFocusCellPluginStore, useIsCellFocused, usePressedKeyRef } =
-        useCellFocusMethods();
-
+    const { useIsCellFocused, usePressedKeyRef } = useCellFocusMethods();
     const { isFocused, isEditing } = useIsCellFocused(row, column);
-    const onSelectCell = useOnSelectCell();
-    const onDragAndSelectStart = useOnDragAndSelectStart();
-    const onDragAndSelectEnd = useOnDragAndSelectEnd();
 
     const pluginDataStore = usePluginsDataStoreRef().store;
-    const setFocusCellPluginStore = useSetFocusCellPluginStore();
     const pressedKey = usePressedKeyRef();
 
     const isTappedRef = useRef(0);
@@ -89,27 +86,19 @@ const _DataCell = (
             const cell = { columnIndex, rowIndex, columnId: column, rowId: row, type: 'cell' };
 
             if ((e as unknown as MouseEvent).shiftKey) {
-                onSelectCell({ columnIndex, rowIndex });
+                cellEventsEmitter.emit('onSelectCell', { columnIndex, rowIndex });
                 return;
             }
 
             if (shallowCompare(cell, pluginDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell))
                 return;
 
-            setFocusCellPluginStore(() => ({
+            cellEventsEmitter.emit('setFocusCellPluginStore', () => ({
                 focusedCell: cell,
                 isEditing: false,
             }));
         },
-        [
-            column,
-            columnIndex,
-            onSelectCell,
-            row,
-            rowIndex,
-            setFocusCellPluginStore,
-            pluginDataStore,
-        ],
+        [column, columnIndex, row, rowIndex, pluginDataStore],
     );
 
     const onPress = useCallback(
@@ -121,9 +110,12 @@ const _DataCell = (
             if (delta < 500) {
                 if (cellReadonly || readonly || displayEditorOnHover) return;
 
-                setFocusCellPluginStore((prev: { isEditing?: boolean } | undefined) => ({
-                    isEditing: !prev?.isEditing,
-                }));
+                cellEventsEmitter.emit(
+                    'setFocusCellPluginStore',
+                    (prev: { isEditing?: boolean } | undefined) => ({
+                        isEditing: !prev?.isEditing,
+                    }),
+                );
 
                 return;
             }
@@ -132,14 +124,7 @@ const _DataCell = (
 
             onFocus(e);
         },
-        [
-            cellReadonly,
-            displayEditorOnHover,
-            isEditingRef,
-            onFocus,
-            readonly,
-            setFocusCellPluginStore,
-        ],
+        [cellReadonly, displayEditorOnHover, isEditingRef, onFocus, readonly],
     );
 
     const displayViewRenderer = useMemo(() => {
@@ -168,22 +153,24 @@ const _DataCell = (
         return Gesture.Pan()
             .onBegin(() => {
                 onFocus({} as GestureResponderEvent);
-                onDragAndSelectStart({
+
+                cellEventsEmitter.emit('onDragAndSelectStart', {
                     rowIndex,
                     columnIndex,
                 });
             })
             .onEnd(() => {
-                onDragAndSelectEnd();
+                cellEventsEmitter.emit('onDragAndSelectEnd');
             });
-    }, [onFocus, onDragAndSelectStart, rowIndex, columnIndex, onDragAndSelectEnd]);
+    }, [onFocus, rowIndex, columnIndex]);
 
     const handleContextMenu = useCallback(() => {
         onFocus({} as GestureResponderEvent);
-        setFocusCellPluginStore(() => ({
+
+        cellEventsEmitter.emit('setFocusCellPluginStore', () => ({
             focusedCellRef: cellRef,
         }));
-    }, [onFocus, setFocusCellPluginStore]);
+    }, [onFocus]);
 
     const leftElement = useMemo(
         () => (
@@ -230,8 +217,8 @@ const _DataCell = (
     useEffect(() => {
         if (isFocused || !isEditing) return;
 
-        setFocusCellPluginStore(() => ({ isEditing: false }));
-    }, [isEditing, isFocused, setFocusCellPluginStore]);
+        cellEventsEmitter.emit('setFocusCellPluginStore', () => ({ isEditing: false }));
+    }, [isEditing, isFocused]);
 
     useContextMenu({ ref: cellRef, callback: handleContextMenu });
 
