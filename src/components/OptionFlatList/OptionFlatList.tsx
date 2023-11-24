@@ -152,14 +152,17 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
 
     return (
         <View style={containerStyles}>
-            <View style={searchInputContainerStyles}>
-                <SearchInput
-                    value={query}
-                    onChangeText={onQueryChange}
-                    disabled={!searchable}
-                    {...searchInputProps}
-                />
-            </View>
+            <>
+                {searchable && (
+                    <View style={searchInputContainerStyles}>
+                        <SearchInput
+                            value={query}
+                            onChangeText={onQueryChange}
+                            {...searchInputProps}
+                        />
+                    </View>
+                )}
+            </>
             <FlatListComponent
                 ref={ref}
                 keyExtractor={keyExtractor}

@@ -179,14 +179,17 @@ const OptionList = <
 
     return (
         <View style={containerStyles}>
-            <View style={searchInputContainerStyles}>
-                <SearchInput
-                    value={query}
-                    onChangeText={onQueryChange}
-                    disabled={!searchable}
-                    {...searchInputProps}
-                />
-            </View>
+            <>
+                {searchable && (
+                    <View style={searchInputContainerStyles}>
+                        <SearchInput
+                            value={query}
+                            onChangeText={onQueryChange}
+                            {...searchInputProps}
+                        />
+                    </View>
+                )}
+            </>
             <SectionList
                 ref={ref}
                 keyExtractor={keyExtractor}
