@@ -97,24 +97,23 @@ const useDatagridMethods = () => {
 
     // storing the functions here and instead of inside each cellrenderer as to make cellrenderer size smaller
     useEffect(() => {
-        cellEventsEmitter.addListener('onDragAndSelectStart', onDragAndSelectStart);
+        const events = {
+            onDragAndSelectStart,
+            onDragAndSelectEnd,
+            onSelectCell,
+            setFocusCellPluginStore,
+            onDragSelection,
+            onProcessDragCellSelection,
+        };
 
-        cellEventsEmitter.addListener('onDragAndSelectEnd', onDragAndSelectEnd);
-
-        cellEventsEmitter.addListener('onSelectCell', onSelectCell);
-
-        cellEventsEmitter.addListener('setFocusCellPluginStore', setFocusCellPluginStore);
-
-        cellEventsEmitter.addListener('onDragSelection', onDragSelection);
-
-        cellEventsEmitter.addListener('onProcessDragCellSelection', onProcessDragCellSelection);
+        Object.keys(events).forEach(key => {
+            cellEventsEmitter.addListener(key, events[key as keyof typeof events]);
+        });
 
         return () => {
-            cellEventsEmitter.removeListener('onDragAndSelectStart');
-            cellEventsEmitter.removeListener('onDragAndSelectEnd');
-            cellEventsEmitter.removeListener('onSelectCell');
-            cellEventsEmitter.removeListener('onDragSelection');
-            cellEventsEmitter.removeListener('onProcessDragCellSelection');
+            Object.keys(events).forEach(key => {
+                cellEventsEmitter.removeListener(key);
+            });
         };
     }, [
         onDragAndSelectEnd,
