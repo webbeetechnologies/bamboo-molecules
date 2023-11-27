@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import {
     StateLayerProps,
     useDataTableCell,
@@ -7,12 +7,12 @@ import {
 } from '@bambooapp/bamboo-molecules';
 import { StyleSheet } from 'react-native';
 import { useDragAndExtendMethods, useCellSelectionMethods } from '../../plugins';
+import { cellEventsEmitter } from '../Table/utils';
 
 export type Props = StateLayerProps & {
     hovered: boolean;
 };
 
-const useVoid = () => {};
 const useBoolean = () => false;
 
 const CellSelectionIndicator = ({ hovered, style, ...rest }: Props) => {
@@ -22,20 +22,22 @@ const CellSelectionIndicator = ({ hovered, style, ...rest }: Props) => {
 
     const { hovered: rowHovered } = useDataTableRow(store => ({ hovered: store.hovered }));
 
-    const { useOnDragSelection = useVoid, useHasDragAndExtendSelection = useBoolean } =
-        useDragAndExtendMethods() || {};
-    const { useProcessDragCellSelection = useVoid, useHasCellSelection = useBoolean } =
-        useCellSelectionMethods() || {};
+    const { useHasDragAndExtendSelection = useBoolean } = useDragAndExtendMethods() || {};
+    const { useHasCellSelection = useBoolean } = useCellSelectionMethods() || {};
 
     const selected = useHasCellSelection({ columnIndex, rowIndex });
     const dragAndExtendSelected = useHasDragAndExtendSelection({ columnIndex, rowIndex });
 
-    useProcessDragCellSelection({
-        hovered,
-        cell: { columnIndex, rowIndex, rowId: row, columnId: column },
-    });
+    useEffect(() => {
+        cellEventsEmitter.emit('onDragSelection', { hovered, rowHovered, columnIndex, rowIndex });
+    }, [columnIndex, hovered, rowHovered, rowIndex]);
 
-    useOnDragSelection({ hovered, rowHovered, columnIndex, rowIndex });
+    useEffect(() => {
+        cellEventsEmitter.emit('onProcessDragCellSelection', {
+            hovered,
+            cell: { columnIndex, rowIndex, rowId: row, columnId: column },
+        });
+    }, [column, columnIndex, hovered, row, rowHovered, rowIndex]);
 
     const layerStyle = useMemo(
         () => [

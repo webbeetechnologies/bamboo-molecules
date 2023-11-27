@@ -4,6 +4,7 @@ import {
     CELL_FOCUS_PLUGIN_KEY,
     useCellFocusMethods,
     useCellSelectionMethods,
+    useDragAndExtendMethods,
     usePluginsDataStoreRef,
     usePluginsDataValueSelector,
 } from '../plugins';
@@ -11,6 +12,10 @@ import { useTableManagerStoreRef } from '../contexts';
 import useHandleClickOutside from './useHandleClickOutside';
 import useHandleKeydownEvents from './useHandleKeydownEvents';
 import useToggleCellEditingState from './useToggleCellEditingState';
+import { useEffect } from 'react';
+import { cellEventsEmitter } from '../components/Table/utils';
+
+const useFunc = () => () => {};
 
 const useDatagridMethods = () => {
     const { store: storeRef } = useTableManagerStoreRef();
@@ -21,6 +26,18 @@ const useDatagridMethods = () => {
         useSetFocusCellByDirection,
     } = useCellFocusMethods();
     const resetFocusCellState = useResetFocusCellState();
+    const { useOnSelectCell, useOnDragAndSelectStart, useOnDragAndSelectEnd } =
+        useCellSelectionMethods();
+    const { useSetFocusCellPluginStore } = useCellFocusMethods();
+    const { useOnDragSelection = useFunc } = useDragAndExtendMethods() || {};
+    const { useProcessDragCellSelection = useFunc } = useCellSelectionMethods() || {};
+
+    const onDragSelection = useOnDragSelection();
+    const onProcessDragCellSelection = useProcessDragCellSelection();
+    const onSelectCell = useOnSelectCell();
+    const onDragAndSelectStart = useOnDragAndSelectStart();
+    const onDragAndSelectEnd = useOnDragAndSelectEnd();
+    const setFocusCellPluginStore = useSetFocusCellPluginStore();
 
     const { store: pluginsStore } = usePluginsDataStoreRef();
     const { hasFocusedCell } = usePluginsDataValueSelector(store => ({
@@ -77,6 +94,35 @@ const useDatagridMethods = () => {
         },
         !hasFocusedCell,
     );
+
+    // storing the functions here and instead of inside each cellrenderer as to make cellrenderer size smaller
+    useEffect(() => {
+        const events = {
+            onDragAndSelectStart,
+            onDragAndSelectEnd,
+            onSelectCell,
+            setFocusCellPluginStore,
+            onDragSelection,
+            onProcessDragCellSelection,
+        };
+
+        Object.keys(events).forEach(key => {
+            cellEventsEmitter.addListener(key, events[key as keyof typeof events]);
+        });
+
+        return () => {
+            Object.keys(events).forEach(key => {
+                cellEventsEmitter.removeListener(key);
+            });
+        };
+    }, [
+        onDragAndSelectEnd,
+        onDragAndSelectStart,
+        onDragSelection,
+        onProcessDragCellSelection,
+        onSelectCell,
+        setFocusCellPluginStore,
+    ]);
 };
 
 export default useDatagridMethods;

@@ -155,21 +155,19 @@ const useOnDragAndSelectEnd = () => {
     ]);
 };
 
-const useProcessDragCellSelection = ({
-    cell,
-    hovered,
-}: {
-    cell: CellIndices;
-    hovered: boolean;
-}) => {
+const useProcessDragCellSelection = () => {
     const { store: pluginsDataStore } = usePluginsDataStoreRef();
     const onSelectCell = useOnSelectCell();
 
-    useEffect(() => {
-        if (!pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.isSelecting || !hovered) return;
+    return useCallback(
+        ({ cell, hovered }: { cell: CellIndices; hovered: boolean }) => {
+            if (!pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.isSelecting || !hovered)
+                return;
 
-        onSelectCell(cell);
-    });
+            onSelectCell(cell);
+        },
+        [onSelectCell, pluginsDataStore],
+    );
 };
 
 const useHasCellSelection = ({ columnIndex, rowIndex }: CellIndices) => {

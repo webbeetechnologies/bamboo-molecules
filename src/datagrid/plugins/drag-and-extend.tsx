@@ -1,5 +1,4 @@
-import { useCallback, useEffect } from 'react';
-import { useDataTableStoreRef } from '@bambooapp/bamboo-molecules/components';
+import { useCallback } from 'react';
 
 import { useTableManagerStoreRef } from '../contexts';
 import { CELL_SELECTION_PLUGIN_KEY } from './cell-selection';
@@ -108,137 +107,128 @@ const useOnDragEnd = () => {
     ]);
 };
 
-const useOnDragSelection = ({
-    columnIndex,
-    rowIndex,
-    hovered,
-    rowHovered,
-}: {
-    columnIndex: number;
-    rowIndex: number;
-    hovered: boolean;
-    rowHovered: boolean;
-}) => {
-    const { store: datatableStore } = useDataTableStoreRef();
+const useOnDragSelection = () => {
     const { store: tableManagerStore } = useTableManagerStoreRef();
     const { store: pluginsDataStore, set: setPluginsDataStore } = usePluginsDataStoreRef();
-    const { beforeDragAndExtend, onDragAndExtend } = useDragAndExtendEvents();
-
-    const normalizeCell = useNormalizeCellHandler();
     const normalizeSelection = useNormalizeSelectionHandler();
 
-    useEffect(() => {
-        // we need hovered because only hovered cell would trigger the event instead of the entire row
-        if (!pluginsDataStore.current[DRAG_AND_EXTEND_PLUGIN_KEY]?.start || !rowHovered || !hovered)
-            return;
+    return useCallback(
+        ({
+            columnIndex,
+            rowIndex,
+            hovered,
+            rowHovered,
+        }: {
+            columnIndex: number;
+            rowIndex: number;
+            hovered: boolean;
+            rowHovered: boolean;
+        }) => {
+            // we need hovered because only hovered cell would trigger the event instead of the entire row
+            if (
+                !pluginsDataStore.current[DRAG_AND_EXTEND_PLUGIN_KEY]?.start ||
+                !rowHovered ||
+                !hovered
+            )
+                return;
 
-        const validateDataRow = (index: number) =>
-            isDataRow(getRecordByIndex(tableManagerStore.current.records, index));
+            const validateDataRow = (index: number) =>
+                isDataRow(getRecordByIndex(tableManagerStore.current.records, index));
 
-        if (!validateDataRow(rowIndex)) return;
+            if (!validateDataRow(rowIndex)) return;
 
-        const focusedCell = pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
+            const focusedCell = pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
 
-        const hasSelection =
-            pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.start &&
-            pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.end;
-        // if there is no selection, we use focusedCell
-        const cellsSelection = hasSelection
-            ? pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]
-            : {
-                  start: focusedCell,
-                  end: focusedCell,
-              };
+            const hasSelection =
+                pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.start &&
+                pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]?.end;
+            // if there is no selection, we use focusedCell
+            const cellsSelection = hasSelection
+                ? pluginsDataStore.current[CELL_SELECTION_PLUGIN_KEY]
+                : {
+                      start: focusedCell,
+                      end: focusedCell,
+                  };
 
-        if (checkSelection(cellsSelection, { columnIndex, rowIndex })) {
+            if (checkSelection(cellsSelection, { columnIndex, rowIndex })) {
+                setPluginsDataStore(prev => ({
+                    [DRAG_AND_EXTEND_PLUGIN_KEY]: {
+                        ...prev[DRAG_AND_EXTEND_PLUGIN_KEY],
+                        start: {},
+                        end: undefined,
+                    },
+                }));
+
+                return;
+            }
+
+            let selection = {};
+
+            // This means it's horizontal selection
+            if (rowHovered && checkIfWithinRow(cellsSelection, { rowIndex })) {
+                const startColumnIndexOffset =
+                    columnIndex > cellsSelection.end?.columnIndex ? 1 : -1;
+                const startColumnIndex = cellsSelection.end?.columnIndex + startColumnIndexOffset;
+                const startRowIndex = cellsSelection.start?.rowIndex;
+                const endRowIndex = cellsSelection.end?.rowIndex;
+
+                if (!validateDataRow(startRowIndex) || !validateDataRow(endRowIndex)) {
+                    setPluginsDataStore(() => ({
+                        [DRAG_AND_EXTEND_PLUGIN_KEY]: {},
+                    }));
+                    return;
+                }
+
+                selection = {
+                    start: {
+                        columnIndex: startColumnIndex,
+                        rowIndex: startRowIndex,
+                    },
+                    end: {
+                        columnIndex,
+                        rowIndex: endRowIndex,
+                    },
+                };
+            }
+
+            // This means it's vertical selection
+            if (rowHovered && !checkIfWithinRow(cellsSelection, { rowIndex })) {
+                const startRowIndexOffset = rowIndex > cellsSelection.end?.rowIndex ? 1 : -1;
+                const startColumnIndex = cellsSelection.start?.columnIndex;
+                const startRowIndex = cellsSelection.end?.rowIndex + startRowIndexOffset;
+
+                const endColumnIndex = cellsSelection.end?.columnIndex;
+
+                if (!validateDataRow(startRowIndex)) {
+                    setPluginsDataStore(() => ({
+                        [DRAG_AND_EXTEND_PLUGIN_KEY]: {},
+                    }));
+                    return;
+                }
+
+                selection = {
+                    start: {
+                        columnIndex: startColumnIndex,
+                        rowIndex: startRowIndex,
+                    },
+                    end: {
+                        columnIndex: endColumnIndex,
+                        rowIndex,
+                    },
+                };
+            }
+
+            selection = normalizeSelection(selection as SelectionIndices);
+
             setPluginsDataStore(prev => ({
                 [DRAG_AND_EXTEND_PLUGIN_KEY]: {
                     ...prev[DRAG_AND_EXTEND_PLUGIN_KEY],
-                    start: {},
-                    end: undefined,
+                    ...selection,
                 },
             }));
-
-            return;
-        }
-
-        let selection = {};
-
-        // This means it's horizontal selection
-        if (rowHovered && checkIfWithinRow(cellsSelection, { rowIndex })) {
-            const startColumnIndexOffset = columnIndex > cellsSelection.end?.columnIndex ? 1 : -1;
-            const startColumnIndex = cellsSelection.end?.columnIndex + startColumnIndexOffset;
-            const startRowIndex = cellsSelection.start?.rowIndex;
-            const endRowIndex = cellsSelection.end?.rowIndex;
-
-            if (!validateDataRow(startRowIndex) || !validateDataRow(endRowIndex)) {
-                setPluginsDataStore(() => ({
-                    [DRAG_AND_EXTEND_PLUGIN_KEY]: {},
-                }));
-                return;
-            }
-
-            selection = {
-                start: {
-                    columnIndex: startColumnIndex,
-                    rowIndex: startRowIndex,
-                },
-                end: {
-                    columnIndex,
-                    rowIndex: endRowIndex,
-                },
-            };
-        }
-
-        // This means it's vertical selection
-        if (rowHovered && !checkIfWithinRow(cellsSelection, { rowIndex })) {
-            const startRowIndexOffset = rowIndex > cellsSelection.end?.rowIndex ? 1 : -1;
-            const startColumnIndex = cellsSelection.start?.columnIndex;
-            const startRowIndex = cellsSelection.end?.rowIndex + startRowIndexOffset;
-
-            const endColumnIndex = cellsSelection.end?.columnIndex;
-
-            if (!validateDataRow(startRowIndex)) {
-                setPluginsDataStore(() => ({
-                    [DRAG_AND_EXTEND_PLUGIN_KEY]: {},
-                }));
-                return;
-            }
-
-            selection = {
-                start: {
-                    columnIndex: startColumnIndex,
-                    rowIndex: startRowIndex,
-                },
-                end: {
-                    columnIndex: endColumnIndex,
-                    rowIndex,
-                },
-            };
-        }
-
-        selection = normalizeSelection(selection as SelectionIndices);
-
-        setPluginsDataStore(prev => ({
-            [DRAG_AND_EXTEND_PLUGIN_KEY]: {
-                ...prev[DRAG_AND_EXTEND_PLUGIN_KEY],
-                ...selection,
-            },
-        }));
-    }, [
-        normalizeCell,
-        rowHovered,
-        hovered,
-        rowIndex,
-        setPluginsDataStore,
-        columnIndex,
-        pluginsDataStore,
-        tableManagerStore,
-        beforeDragAndExtend,
-        onDragAndExtend,
-        datatableStore,
-        normalizeSelection,
-    ]);
+        },
+        [setPluginsDataStore, pluginsDataStore, tableManagerStore, normalizeSelection],
+    );
 };
 
 const useHasDragAndExtendSelection = ({ columnIndex, rowIndex }: CellIndices) => {
