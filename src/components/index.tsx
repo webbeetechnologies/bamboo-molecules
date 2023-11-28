@@ -14,7 +14,7 @@ export {
     ViewProps,
 } from '@bambooapp/bamboo-atoms';
 
-export { Icon, registerCustomIconType, IconProps, IconType, iconStyles } from './Icon';
+export { Icon, registerCustomIconType, IconProps, IconType, iconStyles, iconFactory } from './Icon';
 export { TouchableRipple, TouchableRippleProps, touchableRippleStyles } from './TouchableRipple';
 export {
     ActivityIndicator,

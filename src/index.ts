@@ -15,6 +15,7 @@ export {
     ViewProps,
     IconProps,
     IconType,
+    iconFactory,
     PopoverProps,
     IconButtonProps,
     ActivityIndicatorProps,

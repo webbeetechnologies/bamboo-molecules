@@ -1,5 +1,11 @@
 import { memo, PropsWithoutRef, ReactElement, RefAttributes, useCallback, useMemo } from 'react';
-import { Platform, SectionList, StyleSheet, useWindowDimensions } from 'react-native';
+import {
+    GestureResponderEvent,
+    Platform,
+    SectionList,
+    StyleSheet,
+    useWindowDimensions,
+} from 'react-native';
 
 import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
 import type { PopoverProps } from '../Popover';
@@ -105,8 +111,8 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     }, [isOpen, setIsOpen]);
 
     const onSelectionChange = useCallback(
-        (item: TItem | TItem[] | null) => {
-            onSelectionChangeProp?.(item);
+        (item: TItem | TItem[] | null, event?: GestureResponderEvent) => {
+            onSelectionChangeProp?.(item, event);
 
             if (hideOnSelect) {
                 setIsOpen(false);

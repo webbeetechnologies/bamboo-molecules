@@ -8,7 +8,7 @@ export const registerCustomIconType = (id: string, customIcon: any) => {
     customIcons[id] = customIcon;
 };
 
-export default memoize((type: IconType): any =>
+export const iconFactory = memoize((type: IconType): any =>
     textFactory(
         'Icon',
         {},

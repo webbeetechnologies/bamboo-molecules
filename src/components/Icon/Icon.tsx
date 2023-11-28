@@ -1,7 +1,7 @@
 import { forwardRef, memo } from 'react';
 import type { TextStyle } from 'react-native';
 import type { ComponentStylePropWithVariants } from '../../types';
-import iconFactory from './iconFactory';
+import { iconFactory } from './iconFactory';
 import type { IconProps } from './types';
 import { useComponentStyles } from '../../hooks';
 
