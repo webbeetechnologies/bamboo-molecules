@@ -11,7 +11,13 @@ import {
     useRef,
     useState,
 } from 'react';
-import { LayoutChangeEvent, SectionList, StyleSheet, ViewStyle } from 'react-native';
+import {
+    GestureResponderEvent,
+    LayoutChangeEvent,
+    SectionList,
+    StyleSheet,
+    ViewStyle,
+} from 'react-native';
 import { useComponentStyles, useControlledValue, useMolecules, useToggle } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 import type { DropdownListProps } from '../DropdownList';
@@ -174,8 +180,8 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
     }, [labelKey, selectionValue]);
 
     const onSelectItemChange = useCallback(
-        (item: TItem | TItem[] | null) => {
-            onSelectionValueChange(item);
+        (item: TItem | TItem[] | null, event?: GestureResponderEvent) => {
+            onSelectionValueChange(item, event);
         },
         [onSelectionValueChange],
     );

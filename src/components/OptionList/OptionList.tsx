@@ -8,7 +8,7 @@ import {
     useCallback,
     useMemo,
 } from 'react';
-import type { SectionList, ViewStyle } from 'react-native';
+import type { GestureResponderEvent, SectionList, ViewStyle } from 'react-native';
 import { typedMemo } from '../../hocs';
 import withKeyboardAccessibility, {
     useCurrentIndexStoreValue,
@@ -64,10 +64,10 @@ export type Props<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = Use
         /*
          * passes the current selectedItem. Will be an array in multiple mode
          * */
-        onSelectionChange?: (item: TItem | TItem[] | null) => void;
+        onSelectionChange?: (item: TItem | TItem[] | null, event?: GestureResponderEvent) => void;
         renderItem: (
             info: SectionListRenderItemInfo<TItem, TSection> & {
-                onPress: () => void;
+                onPress: (e?: GestureResponderEvent) => void;
                 focused: boolean;
             },
         ) => ReactNode;
@@ -139,7 +139,7 @@ const OptionList = <
     const idToIndexMap = useMemo(() => getIdToIndexMapFromRecords(records), [records]);
 
     const onPressItem = useCallback(
-        (item: TItem) => {
+        (item: TItem, event?: GestureResponderEvent) => {
             const isSelected = Array.isArray(selection)
                 ? selection.find(sItem => sItem?.id === item.id)
                 : selection?.id === item.id;
@@ -153,6 +153,7 @@ const OptionList = <
                             : [...selection, item]
                         : [item]
                     : item,
+                event,
             );
         },
         [multiple, onSelectionChange, selection],
@@ -208,7 +209,7 @@ type OptionListItemProps<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>
     'renderItem'
 > & {
     info: SectionListRenderItemInfo<TItem, TSection>;
-    onPressItem?: (item: TItem) => void;
+    onPressItem?: (item: TItem, e?: GestureResponderEvent) => void;
     selectable?: boolean;
     index: number;
     testID?: string;
@@ -231,9 +232,12 @@ const OptionListItem = typedMemo(
         const focused = useCurrentIndexStoreValue(state => {
             return state.currentIndex === index;
         });
-        const onPress = useCallback(() => {
-            onPressItem?.(info.item);
-        }, [info.item, onPressItem]);
+        const onPress = useCallback(
+            (event?: GestureResponderEvent) => {
+                onPressItem?.(info.item, event);
+            },
+            [info.item, onPressItem],
+        );
 
         const renderItemInfo = useMemo(
             () => ({
