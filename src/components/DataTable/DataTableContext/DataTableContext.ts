@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, MutableRefObject, useContext } from 'react';
 import { createFastContext } from '../../../fast-context';
 import type {
     DataTableProps,
@@ -6,6 +6,7 @@ import type {
     TDataTableRow,
     TDataTableRowTruthy,
 } from '../types';
+import type { VariableSizeList } from '@bambooapp/virtualized-list';
 
 /**
  *
@@ -55,6 +56,7 @@ type DataTableContextType = Pick<
         cellXOffsets: number[];
         hasRowLoaded: (index: number) => boolean;
         visibleColumnIndices?: Record<number, boolean>;
+        virtualListRef: MutableRefObject<VariableSizeList>;
     };
 
 export const {

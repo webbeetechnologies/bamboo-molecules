@@ -18,7 +18,7 @@ export const withRowLoadingPlaceholder = (
         });
 
     RowRenderer.displayName = (Component.displayName ?? '') + 'WithPlaceholder';
-    return memo(RowRenderer);
+    return RowRenderer;
 };
 
 const styles = StyleSheet.create({

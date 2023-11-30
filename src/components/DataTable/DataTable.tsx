@@ -68,7 +68,7 @@ const DataTablePresentationComponent = memo(
             ScrollViewComponent,
             onLayout: onLayoutProp,
             HeaderRowComponent: HeaderRowComponentProp,
-            virtualListRef,
+            virtualListRef: virtualListRefProp,
             infiniteLoaderRef,
             rowsMinimumBatchSize,
             rowCount: rowCountProp,
@@ -83,7 +83,9 @@ const DataTablePresentationComponent = memo(
 
         const { View } = useMolecules();
 
-        const mergedRef = useMergedRefs([virtualListRef]);
+        const virtualListRef = useDataTable(store => store.virtualListRef);
+
+        const mergedRef = useMergedRefs([virtualListRef, virtualListRefProp]);
         const hStyle = useComponentStyles('DataTable', [hStyleProp]);
 
         const containerHeight = useDataTable(store => store.containerHeight);
