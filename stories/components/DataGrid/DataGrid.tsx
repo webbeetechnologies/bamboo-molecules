@@ -21,6 +21,7 @@ import {
     useCellFocusPlugin,
 } from '../../../src/datagrid/plugins';
 import type { DataGridProps, GroupedDataTruthy, RecordWithId } from '../../../src/datagrid';
+import type { VariableSizeListProps } from '@bambooapp/virtualized-list';
 
 const containerStyle = { width: '100%' };
 
@@ -171,6 +172,8 @@ export const Example: FC<{ groups?: string[] }> = () => {
                         useField={useField}
                         useCellValue={useCellValue}
                         getRowSize={() => 40}
+                        rowCount={records.length}
+                        verticalScrollProps={verticalScrollProps}
                         {...useDataGridProps(records)}
                     />
                 </View>
@@ -244,6 +247,8 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
                         useField={useField}
                         useCellValue={useCellValue}
                         getRowSize={() => 40}
+                        rowCount={records.length}
+                        verticalScrollProps={verticalScrollProps}
                         {...useDataGridProps(records)}
                     />
                 </View>
@@ -251,6 +256,8 @@ export const ExampleHorizontalVirtualization = (props: { groups?: string[] }) =>
         </FieldsProvider>
     );
 };
+
+const verticalScrollProps = { height: 500 } as VariableSizeListProps;
 
 const styles = StyleSheet.create({
     menuItem: {

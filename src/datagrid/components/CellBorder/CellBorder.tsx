@@ -18,7 +18,7 @@ const CellBorder = ({ style, isFocused, columnIndex, ...rest }: Props) => {
 
     const { isLast } = useDataTableCell();
 
-    const borderStyle = useComponentStyles('DataGrid_CellBorder', [style], {
+    const borderStyle = useComponentStyles('DataGrid_CellBorder', style, {
         variant: columnIndex === 0 ? 'first' : isLast ? 'last' : '',
         states: {
             focused: isFocused,

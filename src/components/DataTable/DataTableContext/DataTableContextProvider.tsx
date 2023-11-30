@@ -1,4 +1,4 @@
-import type { FC, PropsWithChildren } from 'react';
+import type { FC, MutableRefObject, PropsWithChildren } from 'react';
 import { memo, useMemo, useRef } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -12,6 +12,7 @@ import {
     DataTableProvider,
     deriveColumnWidth,
 } from './DataTableContext';
+import type { VariableSizeList } from '@bambooapp/virtualized-list';
 
 const calculateXOffset = (
     columns: TDataTableColumn[],
@@ -67,6 +68,7 @@ export const DataTableContextProvider: FC<
 
         // TODO: Adopt ScrollView from Molecules.
         const ScrollViewComponent = useRef(ScrollViewComponentProp ?? ScrollView).current;
+        const virtualListRef = useRef<MutableRefObject<VariableSizeList>>(null);
         const renderCell = useRef(renderCellProp).current;
         const renderHeader = useRef(renderHeaderProp).current;
 
@@ -102,6 +104,7 @@ export const DataTableContextProvider: FC<
                 getRowId,
                 hasRowLoaded,
                 useGetRowId,
+                virtualListRef: virtualListRef as MutableRefObject<VariableSizeList>,
             }),
             [
                 CellWrapperComponent,

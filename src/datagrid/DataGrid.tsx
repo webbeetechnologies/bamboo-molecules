@@ -44,15 +44,15 @@ import {
     useTableManagerStoreRef,
 } from './contexts';
 import { FieldTypes as DefaultFieldTypes } from './field-types';
-import { useContextMenu } from './hooks';
+// import { useContextMenu } from './hooks';
 import {
-    CELL_FOCUS_PLUGIN_KEY,
+    // CELL_FOCUS_PLUGIN_KEY,
     Plugin,
     useCellFocusPlugin,
     useCellSelectionPlugin,
     // TODO: Revisit collapse
     // useExpandCollapseGroupsMethods,
-    usePluginsDataStoreRef,
+    // usePluginsDataStoreRef,
 } from './plugins';
 import PluginsManager from './plugins/plugins-manager';
 import type { DataGridLoadMoreRows, FieldTypes } from './types';
@@ -264,19 +264,19 @@ const DataGrid = ({
     const { DataTable } = useMolecules();
 
     const { store } = useTableManagerStoreRef();
-    const { store: pluginsDataStore } = usePluginsDataStoreRef();
+    // const { store: pluginsDataStore } = usePluginsDataStoreRef();
 
     const setScopes = useSetScopes();
 
-    const { handleContextMenuOpen, isOpen, onClose, ...restContextMenuProps } =
+    const { isOpen, onClose, ...restContextMenuProps } =
         contextMenuProps || (emptyObj as ContextMenuProps);
 
     const shouldContextMenuDisplayed = useShouldContextMenuDisplayed();
 
-    const dataRef = useLatest<{ records: TDataTableRow[]; columns: TDataTableColumn[] }>({
-        records,
-        columns: columnIds,
-    });
+    // const dataRef = useLatest<{ records: TDataTableRow[]; columns: TDataTableColumn[] }>({
+    //     records,
+    //     columns: columnIds,
+    // });
 
     const cellProps = useMemo(
         () => ({
@@ -323,34 +323,34 @@ const DataGrid = ({
 
     const handleLoadMoreRows = useLoadMoreRows(loadMoreRows);
 
-    const onContextMenuOpen = useCallback(
-        (e: any) => {
-            e.preventDefault();
-
-            if (
-                !shouldContextMenuDisplayed ||
-                !pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell
-            )
-                return;
-
-            const { type, rowIndex, columnIndex } =
-                pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
-            const rowId = rowIndex !== undefined ? dataRef.current.records[rowIndex] : undefined;
-            const columnId =
-                columnIndex !== undefined ? dataRef.current.records[columnIndex] : undefined;
-
-            handleContextMenuOpen({
-                type: type,
-                selection: {
-                    rowIndex,
-                    rowId,
-                    columnId,
-                    columnIndex,
-                },
-            });
-        },
-        [dataRef, handleContextMenuOpen, pluginsDataStore, shouldContextMenuDisplayed],
-    );
+    // const onContextMenuOpen = useCallback(
+    //     (e: any) => {
+    //         e.preventDefault();
+    //
+    //         if (
+    //             !shouldContextMenuDisplayed ||
+    //             !pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell
+    //         )
+    //             return;
+    //
+    //         const { type, rowIndex, columnIndex } =
+    //             pluginsDataStore.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell;
+    //         const rowId = rowIndex !== undefined ? dataRef.current.records[rowIndex] : undefined;
+    //         const columnId =
+    //             columnIndex !== undefined ? dataRef.current.records[columnIndex] : undefined;
+    //
+    //         handleContextMenuOpen({
+    //             type: type,
+    //             selection: {
+    //                 rowIndex,
+    //                 rowId,
+    //                 columnId,
+    //                 columnIndex,
+    //             },
+    //         });
+    //     },
+    //     [dataRef, handleContextMenuOpen, pluginsDataStore, shouldContextMenuDisplayed],
+    // );
 
     useEffect(() => {
         if (Platform.OS !== 'web') return;
@@ -364,7 +364,7 @@ const DataGrid = ({
     }, [setScopes]);
 
     // TODO - move this to plugins
-    useContextMenu({ ref: store.current.tableRef, callback: onContextMenuOpen });
+    // useContextMenu({ ref: store.current.tableRef, callback: onContextMenuOpen });
 
     useAutoUpdateRecords({
         records: store.current.records,

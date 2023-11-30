@@ -12,7 +12,7 @@ import {
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 import { useFieldType, useField, useCellValue } from '../../contexts';
-import { useContextMenu } from '../../hooks';
+// import { useContextMenu } from '../../hooks';
 import { ViewRenderer, EditRenderer } from '../FieldRenderers';
 import { DragAndExtendHandle } from '../DragAndExtendHandle';
 import { CELL_FOCUS_PLUGIN_KEY, useCellFocusMethods, usePluginsDataStoreRef } from '../../plugins';
@@ -131,13 +131,13 @@ const _DataCell = (
             containerStyle: [
                 styles.cellContainer,
                 actionContainerProps.style,
-                !isEditing ? styles.centered : styles.editContainer,
+                // !isEditing ? styles.centered : styles.editContainer,
                 style,
             ] as ViewStyle,
             innerContainerStyle: [styles.cell, innerContainerProps.style] as ViewStyle,
             dataSet: { elementtype: 'cell' },
         }),
-        [style, isEditing, innerContainerProps.style],
+        [style, innerContainerProps.style],
     );
 
     const onDrag = useMemo(() => {
@@ -154,14 +154,14 @@ const _DataCell = (
                 cellEventsEmitter.emit('onDragAndSelectEnd');
             });
     }, [onFocus, rowIndex, columnIndex]);
-
-    const handleContextMenu = useCallback(() => {
-        onFocus({} as GestureResponderEvent);
-
-        cellEventsEmitter.emit('setFocusCellPluginStore', () => ({
-            focusedCellRef: cellRef,
-        }));
-    }, [onFocus]);
+    //
+    // const handleContextMenu = useCallback(() => {
+    //     onFocus({} as GestureResponderEvent);
+    //
+    //     cellEventsEmitter.emit('setFocusCellPluginStore', () => ({
+    //         focusedCellRef: cellRef,
+    //     }));
+    // }, [onFocus]);
 
     const leftElement = useMemo(
         () => (
@@ -211,7 +211,7 @@ const _DataCell = (
         cellEventsEmitter.emit('setFocusCellPluginStore', () => ({ isEditing: false }));
     }, [isEditing, isFocused]);
 
-    useContextMenu({ ref: cellRef, callback: handleContextMenu });
+    // useContextMenu({ ref: cellRef, callback: handleContextMenu });
 
     return (
         <Pressable

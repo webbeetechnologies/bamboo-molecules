@@ -6,7 +6,7 @@ import type {
 } from '@bambooapp/bamboo-molecules/components';
 import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 
-import type { GroupConstantValues, GroupedData, GroupedDataTruthy } from '../utils';
+import type { GroupConstantValues, GroupedData, GroupedDataTruthy, GroupMetaRow } from '../utils';
 import { weakMemoized, keyBy, GroupMeta, getRowIds, isDataRow, getRecordByIndex } from '../utils';
 import { shallowCompare } from '../../utils';
 
@@ -128,25 +128,27 @@ export const useHasGroupedData = () => {
 const defaultArray: unknown[] = [];
 export const useGroupMeta = (rowIndex: number): GroupMeta => {
     const record = useFindRecordWithIndex(rowIndex);
+
     return useMemo(() => {
+        const isData = isDataRow(record);
         return {
             groupId: record.groupId,
             level: record.level,
             rowType: record.rowType,
-            fieldId: isDataRow(record) ? null : record.fieldId,
-            value: !isDataRow(record) && record.title,
-            title: !isDataRow(record) && record.title,
-            count: !isDataRow(record) ? record.count : 1,
-            isFirst: !isDataRow(record) && record.isFirst,
-            isLast: !isDataRow(record) && record.isLast,
-            isFirstLevel: !isDataRow(record) && record.isFirstLevel,
-            isLastLevel: !isDataRow(record) && record.isLastLevel,
-            groupConstants: !isDataRow(record)
+            fieldId: isData ? null : (record as GroupMetaRow).fieldId,
+            value: !isData && (record as GroupMetaRow).title,
+            title: !isData && (record as GroupMetaRow).title,
+            count: !isData ? (record as GroupMetaRow).count : 1,
+            isFirst: !isData && (record as GroupMetaRow).isFirst,
+            isLast: !isData && (record as GroupMetaRow).isLast,
+            isFirstLevel: !isData && (record as GroupMetaRow).isFirstLevel,
+            isLastLevel: !isData && (record as GroupMetaRow).isLastLevel,
+            groupConstants: !isData
                 ? record.groupConstants
                 : (defaultArray as GroupConstantValues[]),
-            isOnly: isDataRow(record) || record.isOnly,
-            isRealGroup: isDataRow(record) || record.isRealGroup,
-            isCollapsed: !isDataRow(record) && record.isCollapsed,
+            isOnly: isData || (record as GroupMetaRow).isOnly,
+            isRealGroup: isData || (record as GroupMetaRow).isRealGroup,
+            isCollapsed: !isData && (record as GroupMetaRow).isCollapsed,
         };
     }, [record]);
 };

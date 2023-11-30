@@ -1,11 +1,8 @@
 import type { StyleProp } from 'react-native';
 import type { MD3Theme, MD3Typescale } from '../core/theme/types';
-import { createMemoizedFunction, get } from './lodash';
+import { allArgumentResolver, createMemoizedFunction, get } from './lodash';
 
-export const maybeIsToken = (value: any) => {
-    if (typeof value !== 'string') return false;
-    return value.includes('.');
-};
+export const maybeIsToken = (value: any) => typeof value === 'string' && value.includes('.');
 
 const normalizeStylesMemo = createMemoizedFunction({
     /**
@@ -18,7 +15,7 @@ const normalizeStylesMemo = createMemoizedFunction({
         styles: StyleProp<any> | StyleProp<any>[],
         { themeName }: MD3Theme,
         cacheKey: string,
-    ) => `${cacheKey}_${themeName}_${JSON.stringify(styles)}`,
+    ) => `${cacheKey}_${themeName}_${allArgumentResolver(styles)}`,
 });
 
 const flattenTypescale = (style: Partial<Record<string, any> & { typescale: MD3Typescale }>) => {
@@ -49,9 +46,13 @@ const normalizeStyles = normalizeStylesMemo(
         }
 
         const newStyles = Object.assign({}, styles);
-        const normalizableProperties = Object.keys(newStyles).filter(
-            key => maybeIsToken(newStyles[key]) || typeof newStyles[key] === 'object',
-        );
+
+        const normalizableProperties = [];
+        for (const key in styles) {
+            if (maybeIsToken(styles[key]) || typeof styles[key] === 'object') {
+                normalizableProperties.push(key);
+            }
+        }
 
         normalizableProperties.forEach(key => {
             if (typeof newStyles[key] === 'string') {
