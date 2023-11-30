@@ -2137,7 +2137,7 @@ __metadata:
   resolution: "@bambooapp/bamboo-molecules@workspace:."
   dependencies:
     "@bambooapp/bamboo-atoms": ^0.0.32
-    "@bambooapp/virtualized-list": ^0.0.6
+    "@bambooapp/virtualized-list": ^0.0.7
     "@gorhom/portal": ^1.0.14
     "@react-native-aria/overlays": ^0.3.2
     "@react-native-community/eslint-config": ^3.1.0
@@ -2218,10 +2218,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@bambooapp/virtualized-list@npm:^0.0.6":
-  version: 0.0.6
-  resolution: "@bambooapp/virtualized-list@npm:0.0.6"
-  checksum: 821f2dab8ec104062adcf85456073379f87cae556964e0e357eb62bcfa41652f55e68c4776862572e74e6dac8afb21b986ae8cd2688a65350bafefe9c4db09d8
+"@bambooapp/virtualized-list@npm:^0.0.7":
+  version: 0.0.7
+  resolution: "@bambooapp/virtualized-list@npm:0.0.7"
+  checksum: d86f26ffac40e85639a57e7525afaabd16bed100efe3313e2a8b536e1f49f613638c07abf6b6fae88824903afce14a84c141217510a1593eebeab2b2dbf2d913
   languageName: node
   linkType: hard
 
