@@ -21,7 +21,7 @@ function is(x: any, y: any) {
  * when any key has values which are not strictly equal between the arguments.
  * Returns true when the values of all keys are strictly equal.
  */
-export function shallowCompare(objA: Record<any, any>, objB: Record<any, any>) {
+export function shallowCompare(objA?: unknown, objB?: unknown) {
     if (is(objA, objB)) {
         return true;
     }
@@ -39,7 +39,13 @@ export function shallowCompare(objA: Record<any, any>, objB: Record<any, any>) {
 
     // Test for A's keys different from B.
     for (let i = 0; i < keysA.length; i++) {
-        if (!hasOwnProperty.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
+        if (
+            !hasOwnProperty.call(objB, keysA[i]) ||
+            !is(
+                (objA as Record<string, unknown>)[keysA[i]],
+                (objB as Record<string, unknown>)[keysA[i]],
+            )
+        ) {
             return false;
         }
     }

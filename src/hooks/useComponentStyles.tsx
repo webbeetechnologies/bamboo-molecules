@@ -1,7 +1,8 @@
 import { StyleProp, StyleSheet } from 'react-native';
 import { useTheme } from './useTheme';
 import { useNormalizeStyles } from './useNormalizeStyles';
-import { useEffect } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { shallowCompare } from '../utils';
 
 const defaultStyleObject = {};
 
@@ -22,6 +23,19 @@ const useComponentStyles = (
 ) => {
     const { variant, states, size } = resolvers || {};
     const theme = useTheme<ITheme>();
+    const styleRef = useRef(null);
+    const statesRef = useRef(states);
+
+    const memoizedStyle = useMemo(() => {
+        const flattenedStyles = StyleSheet.flatten(style);
+        if (!shallowCompare(styleRef.current, flattenedStyles)) styleRef.current = flattenedStyles;
+        return styleRef.current;
+    }, [style]);
+
+    const memoizedStates = useMemo(() => {
+        if (!shallowCompare(statesRef.current, states)) statesRef.current = states;
+        return statesRef.current;
+    }, [states]);
 
     const componentTheme = theme[componentName];
 
@@ -32,13 +46,17 @@ const useComponentStyles = (
     }, [componentName, hasTheme]);
 
     return useNormalizeStyles(
-        theme.resolveComponentStyles({
-            componentTheme,
-            variant,
-            states,
-            size,
-            style: StyleSheet.flatten(style),
-        }),
+        useMemo(
+            () =>
+                theme.resolveComponentStyles({
+                    componentTheme,
+                    variant,
+                    states: memoizedStates,
+                    size,
+                    style: memoizedStyle,
+                }),
+            [theme, componentTheme, variant, memoizedStates, size, memoizedStyle],
+        ),
         componentName,
     );
 };
