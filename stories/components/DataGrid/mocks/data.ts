@@ -113,7 +113,7 @@ export const fields: Field[] = [
         type: 'singleLineText',
         title: 'Name 2',
     },
-].slice(0, 10);
+];
 
 const record = {
     _name: 'Thet Aung',
