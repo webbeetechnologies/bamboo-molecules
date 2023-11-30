@@ -106,8 +106,11 @@ const DataTablePresentationComponent = memo(
 
         const getVisibleColumnIndices = useGetVisibleColumnIndices(columnOverscanSize);
 
+        const onScrollProp = horizontalScrollProps?.onScroll;
         const onScroll = useCallback(
             (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+                onScrollProp?.(e);
+
                 const x = e.nativeEvent.contentOffset.x;
 
                 setStore(prev => ({
@@ -119,7 +122,7 @@ const DataTablePresentationComponent = memo(
                     visibleColumnIndices: getVisibleColumnIndices(x),
                 }));
             },
-            [getVisibleColumnIndices, setDataTableStore, setStore],
+            [getVisibleColumnIndices, setDataTableStore, setStore, onScrollProp],
         );
 
         // const onFlatListScroll = useCallback(

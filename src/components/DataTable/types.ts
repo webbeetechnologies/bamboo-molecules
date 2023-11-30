@@ -36,12 +36,12 @@ export type RenderCellProps = {
 
 export type ScrollProps = {
     verticalScrollProps?: Omit<
-        VariableSizeListProps,
+        Partial<VariableSizeListProps>,
         'itemSize' | 'itemCount' | 'itemKey' | 'estimatedItemSize' | 'onItemsRendered'
     > & {
         viewabilityConfigCallbackPairs?: ViewAbilityConfigPair[];
     };
-    horizontalScrollProps?: ScrollViewProps;
+    horizontalScrollProps?: Partial<ScrollViewProps>;
 };
 
 export type DataTableBase = ScrollProps & {

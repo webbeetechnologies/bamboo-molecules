@@ -9,17 +9,22 @@ import type {
     TDataTableRow,
     TDataTableRowTruthy,
     LoadMoreRows,
+    ScrollViewProps,
 } from '@bambooapp/bamboo-molecules/components';
 import {
     ComponentType,
+    ForwardedRef,
     ReactNode,
+    RefAttributes,
     RefObject,
+    forwardRef,
+    memo,
     useCallback,
     useEffect,
     useMemo,
     useRef,
 } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, ScrollView, StyleSheet, VirtualizedListProps } from 'react-native';
 import {
     getPressedModifierKeys,
     ShortcutsManager,
@@ -294,7 +299,7 @@ const DataGrid = ({
         [_rowProps],
     );
 
-    const horizontalScrollProps = useMemo(
+    const horizontalScrollProps: Partial<ScrollViewProps> = useMemo(
         () => ({
             ..._horizontalScrollProps,
             ...defaultHorizontalScrollProps,
@@ -307,7 +312,7 @@ const DataGrid = ({
         [_horizontalScrollProps],
     );
 
-    const verticalScrollProps = useMemo(
+    const verticalScrollProps: Partial<VirtualizedListProps<unknown>> = useMemo(
         () => ({
             ...addDataToCallbackPairs({
                 ..._verticalScrollProps,
@@ -416,16 +421,19 @@ const DataGrid = ({
 };
 
 const withContextProviders = (Component: ComponentType<DataGridPresentationProps>) => {
-    return ({
-        fieldTypes = DefaultFieldTypes as FieldTypes,
-        useField,
-        useCellValue,
-        plugins: _plugins,
-        useRowRenderer: useRowRendererProp = useRowRendererDefault,
-        useGroupRowState: useGroupRowStateProp,
-        useShowGroupFooter: useShowGroupFooterProp,
-        ...rest
-    }: Props) => {
+    const WrappedComponent = (
+        {
+            fieldTypes = DefaultFieldTypes as FieldTypes,
+            useField,
+            useCellValue,
+            plugins: _plugins,
+            useRowRenderer: useRowRendererProp = useRowRendererDefault,
+            useGroupRowState: useGroupRowStateProp,
+            useShowGroupFooter: useShowGroupFooterProp,
+            ...rest
+        }: Props,
+        ref: ForwardedRef<ScrollView>,
+    ) => {
         const hooksContextValue = useRef({
             useField,
             useCellValue,
@@ -500,13 +508,18 @@ const withContextProviders = (Component: ComponentType<DataGridPresentationProps
                 <HooksProvider value={hooksContextValue}>
                     <ShortcutsManager shortcuts={shortcuts}>
                         <PluginsManager plugins={plugins}>
-                            <TableManagerProviderWrapper Component={Component} {...rest} />
+                            <TableManagerProviderWrapper
+                                Component={Component}
+                                {...rest}
+                                ref={ref}
+                            />
                         </PluginsManager>
                     </ShortcutsManager>
                 </HooksProvider>
             </FieldTypesProvider>
         );
     };
+    return memo(forwardRef(WrappedComponent));
 };
 
 const dataSet = { id: 'datagrid' };
@@ -514,73 +527,79 @@ const dataSet = { id: 'datagrid' };
 // TODO: Revisit collapse
 // const defaultExpandCollapseMethods = { useCollapsedGroupIds: () => [] };
 
-const TableManagerProviderWrapper = ({
-    records,
-    groups,
-    contextMenuProps,
-    spacerWidth: spacerWidthProp = 'spacings.3',
-    Component,
-    focusIgnoredColumns,
-    getRowId,
-    hasRowLoaded,
-    useGetRowId: useGetRowIdProp,
-    ...rest
-}: Omit<Props, 'useField' | 'useCellValue'> & {
-    Component: ComponentType<DataGridPresentationProps>;
-}) => {
-    const ref = useRef(null);
-    // TODO: Revisit collapse
-    // in case expanse collapse plugins in not defined
-    // const { useCollapsedGroupIds } =
-    //     useExpandCollapseGroupsMethods() || defaultExpandCollapseMethods;
+const TableManagerProviderWrapper = forwardRef(
+    (
+        {
+            records,
+            groups,
+            contextMenuProps,
+            spacerWidth: spacerWidthProp = 'spacings.3',
+            Component,
+            focusIgnoredColumns,
+            getRowId,
+            hasRowLoaded,
+            useGetRowId: useGetRowIdProp,
+            ...rest
+        }: Omit<Props, 'useField' | 'useCellValue'> & {
+            Component: ComponentType<DataGridPresentationProps & RefAttributes<ScrollView>>;
+        },
+        ref: ForwardedRef<ScrollView>,
+    ) => {
+        const tableRef = useRef(null);
+        // TODO: Revisit collapse
+        // in case expanse collapse plugins in not defined
+        // const { useCollapsedGroupIds } =
+        //     useExpandCollapseGroupsMethods() || defaultExpandCollapseMethods;
 
-    // const collapsedGroupIds = useCollapsedGroupIds();
+        // const collapsedGroupIds = useCollapsedGroupIds();
 
-    const rowIds = useMemo(() => getRowIds(records), [records]);
-    const spacerWidth = useToken(spacerWidthProp as string) ?? spacerWidthProp;
+        const rowIds = useMemo(() => getRowIds(records), [records]);
+        const spacerWidth = useToken(spacerWidthProp as string) ?? spacerWidthProp;
 
-    const offsetWidth = (groups?.length ?? 0) * spacerWidth;
-    const latestRecordsRef = useLatest(records);
+        const offsetWidth = (groups?.length ?? 0) * spacerWidth;
+        const latestRecordsRef = useLatest(records);
 
-    return (
-        <TableManagerProvider
-            tableRef={ref}
-            spacerWidth={spacerWidth}
-            records={records}
-            useGetRowId={useRef(useGetRowIdProp).current}
-            getRowId={useCallback(
-                index =>
-                    getRowId(
-                        getRecordByIndex(latestRecordsRef.current, index) as Omit<
-                            GroupRecord,
-                            'id'
-                        >,
-                    ),
-                [latestRecordsRef, getRowId],
-            )}
-            hasRowLoaded={useCallback(
-                index =>
-                    hasRowLoaded(
-                        getRecordByIndex(latestRecordsRef.current, index) as Omit<
-                            GroupRecord,
-                            'id'
-                        >,
-                    ),
-                [latestRecordsRef, hasRowLoaded],
-            )}
-            withContextMenu={!!contextMenuProps}
-            focusIgnoredColumns={focusIgnoredColumns}>
-            {/* @ts-ignore - we don't want to pass down unnecessary props */}
-            <Component
-                {...rest}
-                groups={groups}
-                records={rowIds}
-                horizontalOffset={offsetWidth}
-                contextMenuProps={contextMenuProps}
-            />
-        </TableManagerProvider>
-    );
-};
+        return (
+            <TableManagerProvider
+                tableRef={tableRef}
+                spacerWidth={spacerWidth}
+                records={records}
+                useGetRowId={useRef(useGetRowIdProp).current}
+                getRowId={useCallback(
+                    index =>
+                        getRowId(
+                            getRecordByIndex(latestRecordsRef.current, index) as Omit<
+                                GroupRecord,
+                                'id'
+                            >,
+                        ),
+                    [latestRecordsRef, getRowId],
+                )}
+                hasRowLoaded={useCallback(
+                    index =>
+                        hasRowLoaded(
+                            getRecordByIndex(latestRecordsRef.current, index) as Omit<
+                                GroupRecord,
+                                'id'
+                            >,
+                        ),
+                    [latestRecordsRef, hasRowLoaded],
+                )}
+                withContextMenu={!!contextMenuProps}
+                focusIgnoredColumns={focusIgnoredColumns}>
+                {/* @ts-ignore - we don't want to pass down unnecessary props */}
+                <Component
+                    {...rest}
+                    ref={ref}
+                    groups={groups}
+                    records={rowIds}
+                    horizontalOffset={offsetWidth}
+                    contextMenuProps={contextMenuProps}
+                />
+            </TableManagerProvider>
+        );
+    },
+);
 
 const defaultHorizontalScrollProps = { contentContainerStyle: { flexGrow: 1 } };
 
