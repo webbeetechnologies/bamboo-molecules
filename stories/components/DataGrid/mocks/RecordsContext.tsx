@@ -66,7 +66,7 @@ export const useRecord = (id: string): [Row, (value: any) => void] => {
 const cellValueSelector = (id: string, fieldId: string, records: Record<string, Row>) => {
     if (!records[id]) {
         // throw new Error(`could not find the row ${id}`);
-        return 'asasfaf';
+        return 'asasfaf' + id;
     }
 
     return records[id][fieldId] as any;
