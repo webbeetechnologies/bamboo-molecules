@@ -12,7 +12,7 @@ import {
     usePluginsDataStoreRef,
 } from '../plugins';
 import { useNormalizeSelectionHandler } from '../plugins/utils';
-import { isDataRow, GroupRecord, getRecordByIndex } from '../utils';
+import { GroupRecord, getRecordByIndex } from '../utils';
 import type { TableManagerContextType } from '../contexts/TableManagerContext';
 
 export type Props = {
@@ -67,6 +67,7 @@ const useHandleKeydownEvents = ({ ref }: Props) => {
             const continuePaste = beforePasteCell({
                 selection,
             });
+
             if (osKeyMap.paste && continuePaste !== false) {
                 onPasteCell({
                     selection: normalizeSelectionForGrouping(selection, tableManagerStore),
@@ -102,19 +103,18 @@ const normalizeSelectionForGrouping = (
     store: React.MutableRefObject<TableManagerContextType>,
 ) => {
     // Normalize selection in case of grouping
-    const getRowData = (index: number): GroupRecord => {
-        const record = getRecordByIndex(store.current.records, index);
-        if (!isDataRow(record)) throw new Error('Record is not a data row');
-        return record;
-    };
+    const getRowData = (index: number) =>
+        getRecordByIndex(store.current.records, index) as GroupRecord;
 
     const {
         index: startIndex,
-        indexInGroup: startRowIndexInGroup,
+        indexInGroup: startRowIndexInGroup = startIndex,
         groupConstants,
     } = getRowData(start.rowIndex);
 
-    const { index: endIndex, indexInGroup: endRowIndexInGroup } = getRowData(end.rowIndex);
+    const { index: endIndex, indexInGroup: endRowIndexInGroup = endIndex } = getRowData(
+        end.rowIndex,
+    );
 
     return {
         ...rest,

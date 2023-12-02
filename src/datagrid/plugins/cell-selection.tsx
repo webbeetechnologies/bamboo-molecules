@@ -114,7 +114,7 @@ const useOnDragAndSelectStart = () => {
                 [CELL_SELECTION_PLUGIN_KEY]: {
                     ...prev[CELL_SELECTION_PLUGIN_KEY],
                     start: normalizeCell(cell),
-                    isSelecting: true,
+                    isSelecting: !!normalizeCell(cell),
                 },
             }));
         },

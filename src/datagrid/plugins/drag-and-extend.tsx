@@ -58,7 +58,7 @@ const useOnDragEnd = () => {
 
         if (!start && !end) return;
 
-        if (!start || !end) {
+        if (!start || !end || !normalizeCell(start) || !normalizeCell(end)) {
             setPluginsDataStore(() => ({
                 [DRAG_AND_EXTEND_PLUGIN_KEY]: undefined,
             }));
