@@ -21,6 +21,16 @@ export type Props = ViewProps & {
 
 const emptyObj = {};
 
+const normalizeDateWithCurrentTime = (specificDate: Date) => {
+    const date = new Date();
+
+    date.setFullYear(specificDate.getFullYear());
+    date.setMonth(specificDate.getMonth());
+    date.setDate(specificDate.getDate());
+
+    return date;
+};
+
 const DateTimePicker = (
     {
         is24Hour = false,
@@ -55,7 +65,7 @@ const DateTimePicker = (
             }
 
             if (!date) {
-                onChange(newDate);
+                onChange(normalizeDateWithCurrentTime(newDate));
                 return;
             }
 
