@@ -47,7 +47,9 @@ export const useSetFocusCellPluginStore = () => {
             if (focusedCell === null) {
                 const shouldContinue = beforeUnFocusCell({
                     cell: pluginsStoreRef.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell
-                        ? normalizeCell(pluginsStoreRef.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell)
+                        ? normalizeCell(
+                              pluginsStoreRef.current[CELL_FOCUS_PLUGIN_KEY]?.focusedCell,
+                          ) ?? null
                         : null,
                 });
 

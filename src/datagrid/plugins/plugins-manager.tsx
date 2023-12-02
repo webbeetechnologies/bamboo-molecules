@@ -38,7 +38,7 @@ const defaultPlugins = [] as PluginsManagerContextType['plugins'];
 const defaultContextValue = {};
 
 const withPluginsData =
-    <P,>(Component: ComponentType<P>) =>
+    <P extends {}>(Component: ComponentType<P>) =>
     (props: P) => {
         return (
             <PluginsDataContextProvider value={defaultContextValue}>
