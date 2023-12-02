@@ -8,6 +8,7 @@ import type { WithElements } from '../../types';
 import type { TouchableRippleProps } from '../TouchableRipple';
 import type { IconButtonProps } from '../IconButton';
 import type { ActivityIndicatorProps } from '../ActivityIndicator';
+import type { IconProps } from '../Icon';
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
     WithElements<ReactNode> & {
@@ -101,7 +102,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
         stateLayerProps?: PropsWithoutRef<ViewProps>;
         testID?: string;
         containerProps?: Omit<PropsWithoutRef<ViewProps>, 'style'>;
-        iconColor?: string;
+        leftElementIconProps?: IconProps;
     };
 
 const Chip = (
@@ -130,7 +131,7 @@ const Chip = (
         stateLayerProps = {},
         testID = 'chip',
         containerProps,
-        iconColor,
+        leftElementIconProps,
         ...rest
     }: Props,
     ref: any,
@@ -232,12 +233,12 @@ const Chip = (
                 <>
                     <LeftElement
                         iconSize={iconSize}
-                        iconColor={iconColor}
                         leftElementStyle={leftElementStyle}
                         left={left}
                         activityIndicatorProps={activityIndicatorProps}
                         loading={loading}
                         selected={selected}
+                        iconProps={leftElementIconProps}
                     />
                     <Text selectable={false} style={labelStyle}>
                         {label.length < labelCharacterLimit
@@ -267,17 +268,17 @@ const Chip = (
 type LeftElementProps = Pick<Props, 'activityIndicatorProps' | 'left' | 'loading' | 'selected'> & {
     leftElementStyle: ViewStyle;
     iconSize: number;
-    iconColor?: string;
+    iconProps?: IconProps;
 };
 const LeftElement = memo(
     ({
         iconSize,
-        iconColor,
         loading,
         left,
         selected,
         activityIndicatorProps,
         leftElementStyle,
+        iconProps,
     }: LeftElementProps) => {
         const { View, ActivityIndicator, Icon } = useMolecules();
 
@@ -286,7 +287,7 @@ const LeftElement = memo(
                 {loading ? (
                     <ActivityIndicator size={iconSize} {...(activityIndicatorProps || {})} />
                 ) : (
-                    left || <Icon name="check" color={iconColor} size={iconSize} />
+                    left || <Icon name="check" size={iconSize} iconProps={iconProps} />
                 )}
             </View>
         ) : (
