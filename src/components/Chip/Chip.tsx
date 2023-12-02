@@ -101,6 +101,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
         stateLayerProps?: PropsWithoutRef<ViewProps>;
         testID?: string;
         containerProps?: Omit<PropsWithoutRef<ViewProps>, 'style'>;
+        iconColor?: string;
     };
 
 const Chip = (
@@ -129,6 +130,7 @@ const Chip = (
         stateLayerProps = {},
         testID = 'chip',
         containerProps,
+        iconColor,
         ...rest
     }: Props,
     ref: any,
@@ -230,6 +232,7 @@ const Chip = (
                 <>
                     <LeftElement
                         iconSize={iconSize}
+                        iconColor={iconColor}
                         leftElementStyle={leftElementStyle}
                         left={left}
                         activityIndicatorProps={activityIndicatorProps}
@@ -264,10 +267,12 @@ const Chip = (
 type LeftElementProps = Pick<Props, 'activityIndicatorProps' | 'left' | 'loading' | 'selected'> & {
     leftElementStyle: ViewStyle;
     iconSize: number;
+    iconColor?: string;
 };
 const LeftElement = memo(
     ({
         iconSize,
+        iconColor,
         loading,
         left,
         selected,
@@ -281,7 +286,7 @@ const LeftElement = memo(
                 {loading ? (
                     <ActivityIndicator size={iconSize} {...(activityIndicatorProps || {})} />
                 ) : (
-                    left || <Icon name="check" size={iconSize} />
+                    left || <Icon name="check" color={iconColor} size={iconSize} />
                 )}
             </View>
         ) : (
