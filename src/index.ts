@@ -254,6 +254,8 @@ export {
     normalizeToNumberString,
     isMac,
     getOS,
+    color,
+    resolveContrastColor,
 } from './utils';
 
 export { ComponentStylePropWithVariants, WithElements } from './types';
