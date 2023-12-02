@@ -35,3 +35,4 @@ export const clearStylesCache = () => {
 export { getYearRange } from './getyearRange';
 
 export * from './getOS';
+export { default as color, resolveContrastColor } from './color';
