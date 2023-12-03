@@ -287,7 +287,7 @@ const LeftElement = memo(
                 {loading ? (
                     <ActivityIndicator size={iconSize} {...(activityIndicatorProps || {})} />
                 ) : (
-                    left || <Icon name="check" size={iconSize} iconProps={iconProps} />
+                    left || <Icon name="check" size={iconSize} {...iconProps} />
                 )}
             </View>
         ) : (
