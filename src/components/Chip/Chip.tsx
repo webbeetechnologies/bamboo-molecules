@@ -8,6 +8,7 @@ import type { WithElements } from '../../types';
 import type { TouchableRippleProps } from '../TouchableRipple';
 import type { IconButtonProps } from '../IconButton';
 import type { ActivityIndicatorProps } from '../ActivityIndicator';
+import type { IconProps } from '../Icon';
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
     WithElements<ReactNode> & {
@@ -101,6 +102,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
         stateLayerProps?: PropsWithoutRef<ViewProps>;
         testID?: string;
         containerProps?: Omit<PropsWithoutRef<ViewProps>, 'style'>;
+        leftElementIconProps?: IconProps;
     };
 
 const Chip = (
@@ -129,6 +131,7 @@ const Chip = (
         stateLayerProps = {},
         testID = 'chip',
         containerProps,
+        leftElementIconProps,
         ...rest
     }: Props,
     ref: any,
@@ -235,6 +238,7 @@ const Chip = (
                         activityIndicatorProps={activityIndicatorProps}
                         loading={loading}
                         selected={selected}
+                        iconProps={leftElementIconProps}
                     />
                     <Text selectable={false} style={labelStyle}>
                         {label.length < labelCharacterLimit
@@ -264,6 +268,7 @@ const Chip = (
 type LeftElementProps = Pick<Props, 'activityIndicatorProps' | 'left' | 'loading' | 'selected'> & {
     leftElementStyle: ViewStyle;
     iconSize: number;
+    iconProps?: IconProps;
 };
 const LeftElement = memo(
     ({
@@ -273,6 +278,7 @@ const LeftElement = memo(
         selected,
         activityIndicatorProps,
         leftElementStyle,
+        iconProps,
     }: LeftElementProps) => {
         const { View, ActivityIndicator, Icon } = useMolecules();
 
@@ -281,7 +287,7 @@ const LeftElement = memo(
                 {loading ? (
                     <ActivityIndicator size={iconSize} {...(activityIndicatorProps || {})} />
                 ) : (
-                    left || <Icon name="check" size={iconSize} />
+                    left || <Icon name="check" size={iconSize} iconProps={iconProps} />
                 )}
             </View>
         ) : (
