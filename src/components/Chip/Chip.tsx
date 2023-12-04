@@ -369,7 +369,8 @@ const RightElement = memo(
 const withInvertColorResolved =
     <T extends { style?: TextProps['style'] } = {}>(Component: ComponentType<T>) =>
     ({ invert, ...props }: T & { invert?: boolean }) => {
-        const contrastColor = useContext(BackgroundContext).color;
+        const { color: contrastColor } = useContext(BackgroundContext);
+
         const componentStyle = useMemo(
             () => (!invert ? props.style : [props.style, { color: contrastColor }]),
             [invert, props.style, contrastColor],
