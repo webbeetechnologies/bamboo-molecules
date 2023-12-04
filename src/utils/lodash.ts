@@ -46,6 +46,5 @@ export const createMemoizedFunction = ({
 };
 
 export const weakMemoized = createMemoizedFunction({
-    resolver: x => x,
     Cache: WeakMap,
 });

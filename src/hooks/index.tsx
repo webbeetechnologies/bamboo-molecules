@@ -45,3 +45,5 @@ export {
 } from './useHandleNumberFormat';
 
 export { useMergedRefs } from './useMergedRefs';
+
+export { useContrastColor } from './useContrastColor';

@@ -1,6 +1,15 @@
-import { forwardRef, memo, PropsWithoutRef, ReactNode, useImperativeHandle, useMemo } from 'react';
+import {
+    ComponentType,
+    forwardRef,
+    memo,
+    PropsWithoutRef,
+    ReactNode,
+    useContext,
+    useImperativeHandle,
+    useMemo,
+} from 'react';
 import type { GestureResponderEvent, TextStyle, ViewStyle } from 'react-native';
-import type { ViewProps } from '@bambooapp/bamboo-atoms';
+import type { TextProps, ViewProps } from '@bambooapp/bamboo-atoms';
 
 import type { MD3Elevation } from '../../core/theme/types';
 import { useActionState, useComponentStyles, useMolecules } from '../../hooks';
@@ -9,6 +18,7 @@ import type { TouchableRippleProps } from '../TouchableRipple';
 import type { IconButtonProps } from '../IconButton';
 import type { ActivityIndicatorProps } from '../ActivityIndicator';
 import type { IconProps } from '../Icon';
+import { BackgroundContext } from '../../utils';
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
     WithElements<ReactNode> & {
@@ -47,12 +57,12 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
          * props for the close icon
          * default is { name: 'close', onPress: onClose, disabled, accessibilityLabel: 'Close' }
          */
-        closeIconProps?: IconButtonProps;
+        closeIconProps?: Partial<IconButtonProps>;
         /**
          * props for the ActivityIndicator
          * default is { size: 18 }
          */
-        activityIndicatorProps?: ActivityIndicatorProps;
+        activityIndicatorProps?: Partial<ActivityIndicatorProps>;
         /**
          * Whether to style the chip color as selected.
          */
@@ -92,7 +102,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
         /**
          * label style
          */
-        labelStyle?: TextStyle;
+        labelStyle?: Partial<TextStyle>;
         /**
          * Pass down testID from chip props to touchable for Detox tests.
          */
@@ -103,6 +113,9 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
         testID?: string;
         containerProps?: Omit<PropsWithoutRef<ViewProps>, 'style'>;
         leftElementIconProps?: IconProps;
+        rightElementIconProps?: IconProps;
+
+        invertLabelColor?: boolean;
     };
 
 const Chip = (
@@ -132,11 +145,12 @@ const Chip = (
         testID = 'chip',
         containerProps,
         leftElementIconProps,
+        invertLabelColor,
         ...rest
     }: Props,
     ref: any,
 ) => {
-    const { Surface, TouchableRipple, Text, StateLayer } = useMolecules();
+    const { Surface, TouchableRipple, StateLayer } = useMolecules();
 
     const { hovered, actionsRef } = useActionState();
 
@@ -239,12 +253,16 @@ const Chip = (
                         loading={loading}
                         selected={selected}
                         iconProps={leftElementIconProps}
+                        invert={invertLabelColor}
                     />
-                    <Text selectable={false} style={labelStyle}>
+                    <Label
+                        selectable={false}
+                        style={labelStyle as TextProps['style']}
+                        invert={invertLabelColor}>
                         {label.length < labelCharacterLimit
                             ? `${label}`
                             : `${label.substring(0, labelCharacterLimit - 3)}...`}
-                    </Text>
+                    </Label>
                     <RightElement
                         rightElementStyle={rightElementStyle}
                         accessibilityState={accessibilityState}
@@ -252,6 +270,7 @@ const Chip = (
                         disabled={disabled}
                         onClose={onClose}
                         closeIconProps={closeIconProps}
+                        invert={invertLabelColor}
                     />
 
                     <StateLayer
@@ -269,6 +288,7 @@ type LeftElementProps = Pick<Props, 'activityIndicatorProps' | 'left' | 'loading
     leftElementStyle: ViewStyle;
     iconSize: number;
     iconProps?: IconProps;
+    invert?: boolean;
 };
 const LeftElement = memo(
     ({
@@ -279,15 +299,23 @@ const LeftElement = memo(
         activityIndicatorProps,
         leftElementStyle,
         iconProps,
+        invert,
     }: LeftElementProps) => {
-        const { View, ActivityIndicator, Icon } = useMolecules();
+        const { View, ActivityIndicator } = useMolecules();
 
         return loading || left || selected ? (
             <View style={leftElementStyle}>
                 {loading ? (
                     <ActivityIndicator size={iconSize} {...(activityIndicatorProps || {})} />
                 ) : (
-                    left || <Icon name="check" size={iconSize} {...iconProps} />
+                    left || (
+                        <IconWithContrastColor
+                            name="check"
+                            size={iconSize}
+                            {...iconProps}
+                            invert={invert}
+                        />
+                    )
                 )}
             </View>
         ) : (
@@ -301,6 +329,7 @@ type RightElementProps = Pick<
     'onClose' | 'right' | 'closeIconProps' | 'disabled' | 'accessibilityState'
 > & {
     rightElementStyle: ViewStyle;
+    invert?: boolean;
 };
 const RightElement = memo(
     ({
@@ -310,13 +339,14 @@ const RightElement = memo(
         closeIconProps,
         rightElementStyle,
         accessibilityState,
+        invert,
     }: RightElementProps) => {
-        const { View, IconButton } = useMolecules();
+        const { View } = useMolecules();
 
         return onClose || right ? (
             <View style={rightElementStyle}>
                 {onClose ? (
-                    <IconButton
+                    <IconButtonWithContrastColor
                         name="close"
                         size={18}
                         accessibilityLabel="Close"
@@ -324,6 +354,7 @@ const RightElement = memo(
                         onPress={onClose}
                         accessibilityState={accessibilityState}
                         {...(closeIconProps || {})}
+                        invert={invert}
                     />
                 ) : (
                     right
@@ -334,5 +365,37 @@ const RightElement = memo(
         );
     },
 );
+
+const withInvertColorResolved =
+    <T extends { style?: TextProps['style'] } = {}>(Component: ComponentType<T>) =>
+    ({ invert, ...props }: T & { invert?: boolean }) => {
+        const contrastColor = useContext(BackgroundContext).color;
+        const componentStyle = useMemo(
+            () => (!invert ? props.style : [props.style, { color: contrastColor }]),
+            [invert, props.style, contrastColor],
+        );
+
+        const normalizedProps = {
+            ...props,
+            style: componentStyle,
+        } as unknown as T;
+
+        return <Component {...normalizedProps} />;
+    };
+
+const Label = withInvertColorResolved((props: TextProps) => {
+    const { Text } = useMolecules();
+    return <Text {...props} />;
+});
+
+const IconWithContrastColor = withInvertColorResolved((props: IconProps) => {
+    const { Icon } = useMolecules();
+    return <Icon {...props} />;
+});
+
+const IconButtonWithContrastColor = withInvertColorResolved((props: IconButtonProps) => {
+    const { IconButton } = useMolecules();
+    return <IconButton {...props} />;
+});
 
 export default memo(forwardRef(Chip));
