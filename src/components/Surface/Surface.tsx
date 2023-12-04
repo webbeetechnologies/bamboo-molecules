@@ -89,7 +89,7 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props, re
     }, [elevation, surfaceStyles, contrastColor]);
 
     return (
-        <BackgroundContext.Provider value={isTransparent ? surfaceContextValue : parentContext}>
+        <BackgroundContext.Provider value={isTransparent ? parentContext : surfaceContextValue}>
             <Animated.View ref={ref} {...props} testID={testID} style={surfaceStyle}>
                 {children}
             </Animated.View>
