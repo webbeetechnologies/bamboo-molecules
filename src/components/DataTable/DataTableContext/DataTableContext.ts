@@ -7,6 +7,7 @@ import type {
     TDataTableRowTruthy,
 } from '../types';
 import type { VariableSizeList } from '@bambooapp/virtualized-list';
+import { registerPortalContext } from '../../../core';
 
 /**
  *
@@ -116,6 +117,8 @@ export const useDataTableCell = () =>
         useContext(DataTableCellContext),
         'Trying to read DataTableCell context outside the provider',
     );
+
+registerPortalContext(DataTableCellContext);
 
 /**
  * Context to store row selections and actions
