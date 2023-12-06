@@ -1,6 +1,6 @@
 {
     "name": "@bambooapp/bamboo-molecules",
-    "version": "0.3.30",
+    "version": "0.3.31",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/webbeetechnologies/bamboo-molecules.git"
@@ -29,6 +29,7 @@
         "fast-context",
         "shortcuts-manager",
         "components",
+        "context-bridge",
         "!**/__tests__",
         "!**/__fixtures__",
         "!**/__mocks__"

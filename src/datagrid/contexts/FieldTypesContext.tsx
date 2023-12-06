@@ -1,7 +1,8 @@
 import { createContext, memo, ReactNode, useContext } from 'react';
 import type { FieldType, FieldTypes } from '../types';
+import { registerPortalContext } from '@bambooapp/bamboo-molecules';
 
-export const FieldTypesContext = createContext<FieldTypes>({});
+const FieldTypesContext = createContext<FieldTypes>({});
 
 export const useFieldTypes = () => useContext(FieldTypesContext);
 
@@ -24,3 +25,5 @@ export const useFieldType = (type: string): FieldType => {
 
     return fieldType;
 };
+
+registerPortalContext(FieldTypesContext);

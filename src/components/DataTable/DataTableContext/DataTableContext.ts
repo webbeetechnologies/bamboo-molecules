@@ -1,5 +1,5 @@
 import { createContext, MutableRefObject, useContext } from 'react';
-import { createFastContext } from '../../../fast-context';
+import { createFastContext } from '@bambooapp/bamboo-molecules/fast-context';
 import type {
     DataTableProps,
     TDataTableColumn,
@@ -7,6 +7,7 @@ import type {
     TDataTableRowTruthy,
 } from '../types';
 import type { VariableSizeList } from '@bambooapp/virtualized-list';
+import { registerPortalContext } from '../../../components/Portal';
 
 /**
  *
@@ -131,6 +132,9 @@ export type DataTableHeaderCellContextType = {
 export const DataTableHeaderCellContext = createContext<DataTableHeaderCellContextType | null>(
     null,
 );
+
+registerPortalContext(DataTableCellContext);
+
 export const useDataTableHeaderCell = () =>
     useInvariant(
         useContext(DataTableHeaderCellContext),
