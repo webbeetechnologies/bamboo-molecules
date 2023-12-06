@@ -29,6 +29,7 @@
         "fast-context",
         "shortcuts-manager",
         "components",
+        "context-bridge",
         "!**/__tests__",
         "!**/__fixtures__",
         "!**/__mocks__"

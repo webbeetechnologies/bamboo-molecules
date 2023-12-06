@@ -1,9 +1,8 @@
 import type { ComponentType } from 'react';
-import { registerMolecule, registerPortalContext } from '@bambooapp/bamboo-molecules';
+import { registerMolecule } from '@bambooapp/bamboo-molecules';
 import DataGrid, { Props as DataGridProps } from './DataGrid';
 import { ViewRenderer, ViewRendererProps } from './components';
 import * as dataGridStyles from './components/styles';
-import { FieldTypesContext } from './contexts';
 
 export * from './types';
 export { default as DataGrid, Props as DataGridProps, ContextMenuProps } from './DataGrid';
@@ -69,8 +68,6 @@ registerMolecule('DataGrid', {
 registerMolecule('DataGrid_ViewRenderer', {
     Component: ViewRenderer,
 });
-
-registerPortalContext(FieldTypesContext);
 
 declare global {
     namespace BambooMolecules {

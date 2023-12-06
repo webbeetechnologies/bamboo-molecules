@@ -1,4 +1,4 @@
-export { FieldTypesContext, FieldTypesProvider, useFieldType } from './FieldTypesContext';
+export { FieldTypesProvider, useFieldType } from './FieldTypesContext';
 export {
     useTableManagerStoreRef,
     TableManagerProvider,

@@ -153,6 +153,8 @@ export {
     MenuItemProps,
     StateLayerProps,
     If,
+    Portal,
+    registerPortalContext,
 } from './components';
 
 // to avoid circular dependencies
@@ -184,8 +186,6 @@ export {
     ProvidePortalProps,
     extractStyles,
     registerMolecule,
-    createContextBridge,
-    registerPortalContext,
 } from './core';
 
 export { withRipple, withActionState, CallbackActionState, typedMemo } from './hocs';

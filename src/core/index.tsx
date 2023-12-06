@@ -1,6 +1,3 @@
-import { DataTableCellContext } from '../components';
-import { registerPortalContext } from './ContextBridge';
-
 export {
     ProvideComponents,
     ConsumeComponents,
@@ -28,7 +25,3 @@ export {
 } from './ProvideMolecules';
 
 export { registerMolecule } from './registerMolecule';
-
-export { createContextBridge, registerPortalContext } from './ContextBridge';
-
-registerPortalContext(DataTableCellContext);
