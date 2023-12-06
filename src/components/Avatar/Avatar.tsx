@@ -126,7 +126,7 @@ const AvatarInner = memo(
         const { onError } = imageProps;
 
         const normalizeLabel = useMemo(() => {
-            const { firstWord, lastWord } = extractFirstAndLastWord(labelProp || '');
+            const { firstWord, lastWord } = extractFirstAndLastWordArrays(labelProp || '');
 
             return `${firstWord[0] || ''}${lastWord[0] || firstWord[1] || ''}`;
         }, [labelProp]);
@@ -175,12 +175,13 @@ const AvatarInner = memo(
     },
 );
 
-const extractFirstAndLastWord = (text: string) => {
+// convert words into array of chars to handle words that contain surrogate pairs e.g. "👨‍👩‍👧‍👦", "🐶".
+const extractFirstAndLastWordArrays = (text: string) => {
     const words = text.split(' ');
 
     return {
-        firstWord: words[0] || '',
-        lastWord: words.length <= 1 ? '' : words[words.length - 1],
+        firstWord: Array.from(words[0]) || '',
+        lastWord: Array.from(words.length <= 1 ? '' : words[words.length - 1]),
     };
 };
 
