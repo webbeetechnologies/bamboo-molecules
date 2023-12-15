@@ -227,6 +227,7 @@ export {
     NumberMaskConfig,
     useActionState,
     useToken,
+    useContrastColor,
 } from './hooks';
 
 export {
