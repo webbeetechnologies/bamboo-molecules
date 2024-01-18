@@ -7,6 +7,7 @@ import {
     useRef,
     Context,
     useEffect,
+    useMemo,
 } from 'react';
 import typedMemo from '../hocs/typedMemo';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
@@ -66,12 +67,15 @@ const useStoreData = <IStore extends StoreDataType>(
         store.current = { ...store.current, ...value };
     }
 
-    return {
-        get,
-        set,
-        subscribe,
-        store,
-    };
+    return useMemo(
+        () => ({
+            get,
+            set,
+            subscribe,
+            store,
+        }),
+        [get, set, subscribe],
+    );
 };
 
 export const createFastContext = <T extends StoreDataType = {}>(
