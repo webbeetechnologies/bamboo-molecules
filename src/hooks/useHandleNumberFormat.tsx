@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { formatNumberWithMask, isNil, normalizeToNumberString } from '../utils';
 import type { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
+import usePrevious from './usePrevious';
 
 export type NumberMaskConfig = {
     prefix?: string;
@@ -19,6 +20,7 @@ export type UseHandleNumberFormatProps<T extends DefaultPropsT = DefaultPropsT> 
     config?: NumberMaskConfig;
     onBlur?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
     onFocus?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+    formatInitialValue?: boolean;
 };
 
 const useHandleNumberFormat = <T extends DefaultPropsT = DefaultPropsT>({
@@ -27,13 +29,22 @@ const useHandleNumberFormat = <T extends DefaultPropsT = DefaultPropsT>({
     config,
     onFocus: onFocusProp,
     onBlur: onBlurProp,
+    formatInitialValue = true,
     ...rest
 }: UseHandleNumberFormatProps<T>) => {
     const [displayValue, setDisplayValue] = useState(() =>
-        isNil(valueProp) ? `${formatNumberWithMask({ number: valueProp, ...config })}` : '',
+        !isNil(valueProp)
+            ? formatInitialValue
+                ? `${formatNumberWithMask({ number: valueProp, ...config })}`
+                : `${valueProp}`
+            : '',
     );
 
     const [isBlur, setIsBlur] = useState(true);
+
+    const firstRenderRef = useRef(true);
+
+    const isFirstRender = usePrevious(firstRenderRef.current);
 
     const onChangeText = useCallback(
         (text: string) => {
@@ -69,10 +80,14 @@ const useHandleNumberFormat = <T extends DefaultPropsT = DefaultPropsT>({
     );
 
     useEffect(() => {
-        if (!isBlur) return;
+        firstRenderRef.current = false;
+    });
+
+    useEffect(() => {
+        if (!isBlur || isFirstRender.current) return;
 
         setDisplayValue(`${formatNumberWithMask({ number: valueProp, ...config })}`);
-    }, [config, isBlur, valueProp]);
+    }, [config, formatInitialValue, isBlur, isFirstRender, valueProp]);
 
     return useMemo(
         () => ({
