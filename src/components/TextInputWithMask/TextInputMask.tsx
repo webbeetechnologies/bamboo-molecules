@@ -1,5 +1,5 @@
 import { useState, useEffect, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
-import { useMolecules } from '../../hooks';
+import { useLatest, useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 import { enhanceTextWithMask } from './utils';
 
@@ -29,9 +29,18 @@ function TextInputWithMask(
         onChangeTextProp?.(controlledValue);
     }, [controlledValue, onChangeTextProp]);
 
+    const onBlurRef = useLatest(onBlur);
+
     useEffect(() => {
         setControlledValue(value || '');
     }, [value]);
+
+    useEffect(() => {
+        const _onBlurRef = onBlurRef;
+        return () => {
+            _onBlurRef.current();
+        };
+    }, [onBlurRef]);
 
     useImperativeHandle(ref, () => ({
         setDisplayValue: setControlledValue,
