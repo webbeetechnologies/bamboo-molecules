@@ -3,7 +3,6 @@ import {
     forwardRef,
     useState,
     useEffect,
-    useImperativeHandle,
     ReactNode,
     useCallback,
     useMemo,
@@ -21,10 +20,17 @@ import {
 import type { TextInputProps, ViewProps } from '@bambooapp/bamboo-atoms';
 
 import { withActionState, CallbackActionState } from '../../hocs';
-import { useComponentStyles, useControlledValue, useMolecules } from '../../hooks';
+import {
+    useComponentStyles,
+    useControlledValue,
+    useLatest,
+    useMergedRefs,
+    useMolecules,
+} from '../../hooks';
 import type { WithElements } from '../../types';
 import TextInputBase from './TextInputBase';
 import type { RenderProps, TextInputLabelProp, TextInputSize } from './types';
+import { createSyntheticEvent } from 'src/utils';
 
 const BLUR_ANIMATION_DURATION = 180;
 const FOCUS_ANIMATION_DURATION = 150;
@@ -198,6 +204,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             style,
             containerStyle,
             hovered = false,
+            onBlur,
             ...rest
         }: Props,
         ref,
@@ -222,6 +229,8 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             onChange: rest.onChangeText,
             disabled: !editable || disabled,
         });
+
+        const onBlurRef = useLatest(onBlur);
 
         const styles = useComponentStyles(
             'TextInput',
@@ -265,20 +274,9 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
         const timer = useRef<NodeJS.Timeout | undefined>();
 
-        const root = useRef<NativeTextInput | undefined | null>();
+        const inputRefLocal = useRef<NativeTextInput | undefined | null>();
 
-        useImperativeHandle(
-            ref,
-            () => ({
-                focus: () => root.current?.focus(),
-                clear: () => root.current?.clear(),
-                setNativeProps: (args: Object) => root.current?.setNativeProps(args),
-                isFocused: () => root.current?.isFocused() || false,
-                blur: () => root.current?.blur(),
-                forceFocus: () => root.current?.focus(),
-            }),
-            [],
-        );
+        const mergedInputRef = useMergedRefs([inputRefLocal, ref]);
 
         useEffect(() => {
             // When the input has an error, we wiggle the label and apply error styles
@@ -290,17 +288,17 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                     // To prevent this - https://github.com/callstack/react-native-paper/issues/941
                     useNativeDriver: true,
                 }).start();
-            } else {
-                // hide error
-                {
-                    Animated.timing(errorAnimation, {
-                        toValue: 0,
-                        duration: BLUR_ANIMATION_DURATION * (styles.animationScale || 1),
-                        // To prevent this - https://github.com/callstack/react-native-paper/issues/941
-                        useNativeDriver: true,
-                    }).start();
-                }
+
+                return;
             }
+
+            // hide error
+            Animated.timing(errorAnimation, {
+                toValue: 0,
+                duration: BLUR_ANIMATION_DURATION * (styles.animationScale || 1),
+                // To prevent this - https://github.com/callstack/react-native-paper/issues/941
+                useNativeDriver: true,
+            }).start();
         }, [errorProp, errorAnimation, styles]);
 
         useEffect(() => {
@@ -370,9 +368,9 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                 }
 
                 setFocused(false);
-                rest.onBlur?.(args);
+                onBlur?.(args);
             },
-            [editable, rest],
+            [editable, onBlur],
         );
 
         const handleLayoutAnimatedText = useCallback((e: LayoutChangeEvent) => {
@@ -383,7 +381,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             });
         }, []);
 
-        const forceFocus = useCallback(() => root.current?.focus(), []);
+        const forceFocus = useCallback(() => inputRefLocal.current?.focus(), []);
 
         const parentState = useMemo(
             () => ({
@@ -396,6 +394,23 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             }),
             [errorAnimation, focused, labelLayout, labelAnimation, placeholder, value],
         );
+
+        useEffect(() => {
+            const _onBlurRef = onBlurRef;
+            const inputRef = inputRefLocal;
+
+            return () => {
+                const event = new Event('change', { bubbles: true });
+                Object.defineProperty(event, 'target', {
+                    writable: false,
+                    value: inputRef?.current,
+                });
+                const syntheticEvent = createSyntheticEvent(
+                    event,
+                ) as React.ChangeEvent<HTMLInputElement>;
+                _onBlurRef.current?.(syntheticEvent);
+            };
+        }, [onBlurRef]);
 
         return (
             <View style={containerStyle}>
@@ -411,9 +426,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                     {...rest}
                     value={value}
                     parentState={parentState}
-                    innerRef={ref => {
-                        root.current = ref;
-                    }}
+                    innerRef={mergedInputRef}
                     onFocus={handleFocus}
                     forceFocus={forceFocus}
                     onBlur={handleBlur}
