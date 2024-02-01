@@ -30,7 +30,7 @@ import {
 import type { WithElements } from '../../types';
 import TextInputBase from './TextInputBase';
 import type { RenderProps, TextInputLabelProp, TextInputSize } from './types';
-import { createSyntheticEvent } from 'src/utils';
+import { createSyntheticEvent } from '../../utils';
 
 const BLUR_ANIMATION_DURATION = 180;
 const FOCUS_ANIMATION_DURATION = 150;
@@ -395,6 +395,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             [errorAnimation, focused, labelLayout, labelAnimation, placeholder, value],
         );
 
+        // This is because of a bug in react 18 doesn't trigger onBlur when the component is unmounted // we can remove it when it's fixed
         useEffect(() => {
             const _onBlurRef = onBlurRef;
             const inputRef = inputRefLocal;
