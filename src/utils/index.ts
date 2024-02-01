@@ -36,3 +36,5 @@ export { getYearRange } from './getyearRange';
 
 export * from './getOS';
 export { default as color, resolveContrastColor } from './color';
+
+export * from './createSyntheticEvent';
