@@ -406,7 +406,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             return () => {
                 if (!isVersion18) return;
 
-                const event = new Event('change', { bubbles: true });
+                const event = new Event('blur', { bubbles: true });
                 Object.defineProperty(event, 'target', {
                     writable: false,
                     value: inputRef?.current,
