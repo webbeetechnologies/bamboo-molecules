@@ -1,4 +1,4 @@
-import {
+import React, {
     useRef,
     forwardRef,
     useState,
@@ -397,10 +397,15 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
         // This is because of a bug in react 18 doesn't trigger onBlur when the component is unmounted // we can remove it when it's fixed
         useEffect(() => {
+            const isVersion18 =
+                typeof React.version === 'string' ? +React.version.split('.')[0] >= 18 : false;
+
             const _onBlurRef = onBlurRef;
             const inputRef = inputRefLocal;
 
             return () => {
+                if (!isVersion18) return;
+
                 const event = new Event('change', { bubbles: true });
                 Object.defineProperty(event, 'target', {
                     writable: false,
