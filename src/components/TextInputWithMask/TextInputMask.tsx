@@ -33,10 +33,9 @@ function TextInputWithMask(
         setControlledValue(value || '');
     }, [value]);
 
-    useImperativeHandle(ref, () => ({
-        setDisplayValue: setControlledValue,
-        ...(inputRef?.current || {}),
-    }));
+    useImperativeHandle(ref, () =>
+        Object.assign({ setDisplayValue: setControlledValue }, inputRef?.current || {}),
+    );
 
     return (
         <TextInput
