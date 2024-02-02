@@ -13,7 +13,7 @@ export type TextInputLabelProp = string | ReactElement;
 export type TextInputSize = 'lg' | 'md' | 'sm';
 
 export type RenderProps = {
-    ref: (a?: NativeTextInput | null) => void;
+    ref: MutableRefObject<NativeTextInput | null>;
     onChangeText?: (a: string) => void;
     placeholder?: string;
     placeholderTextColor?: ColorValue;
