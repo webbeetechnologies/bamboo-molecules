@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import type { ReactElement, MutableRefObject } from 'react';
 import type {
     TextInput as NativeTextInput,
     Animated,
@@ -13,7 +13,7 @@ export type TextInputLabelProp = string | ReactElement;
 export type TextInputSize = 'lg' | 'md' | 'sm';
 
 export type RenderProps = {
-    ref: (a?: NativeTextInput | null) => void;
+    ref: MutableRefObject<NativeTextInput | null>;
     onChangeText?: (a: string) => void;
     placeholder?: string;
     placeholderTextColor?: ColorValue;
@@ -42,7 +42,7 @@ export type State = {
 
 export type InputBaseProps = {
     parentState: State;
-    innerRef: (ref?: NativeTextInput | null) => void;
+    innerRef: MutableRefObject<NativeTextInput | null>;
     onFocus?: (args: any) => void;
     onBlur?: (args: any) => void;
     forceFocus: () => void;

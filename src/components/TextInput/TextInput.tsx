@@ -8,6 +8,7 @@ import React, {
     useMemo,
     memo,
     PropsWithoutRef,
+    useImperativeHandle,
 } from 'react';
 import {
     Animated,
@@ -20,13 +21,7 @@ import {
 import type { TextInputProps, ViewProps } from '@bambooapp/bamboo-atoms';
 
 import { withActionState, CallbackActionState } from '../../hocs';
-import {
-    useComponentStyles,
-    useControlledValue,
-    useLatest,
-    useMergedRefs,
-    useMolecules,
-} from '../../hooks';
+import { useComponentStyles, useControlledValue, useLatest, useMolecules } from '../../hooks';
 import type { WithElements } from '../../types';
 import TextInputBase from './TextInputBase';
 import type { RenderProps, TextInputLabelProp, TextInputSize } from './types';
@@ -274,9 +269,17 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
         const timer = useRef<NodeJS.Timeout | undefined>();
 
-        const inputRefLocal = useRef<NativeTextInput | undefined | null>();
+        const inputRefLocal = useRef<NativeTextInput>(null);
 
-        const mergedInputRef = useMergedRefs([inputRefLocal, ref]);
+        useImperativeHandle(ref, () => ({
+            ...inputRefLocal.current,
+            focus: () => inputRefLocal.current?.focus(),
+            clear: () => inputRefLocal.current?.clear(),
+            setNativeProps: (args: Object) => inputRefLocal.current?.setNativeProps(args),
+            isFocused: () => inputRefLocal.current?.isFocused() || false,
+            blur: () => inputRefLocal.current?.blur(),
+            forceFocus: () => inputRefLocal.current?.focus(),
+        }));
 
         useEffect(() => {
             // When the input has an error, we wiggle the label and apply error styles
@@ -432,7 +435,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                     {...rest}
                     value={value}
                     parentState={parentState}
-                    innerRef={mergedInputRef}
+                    innerRef={inputRefLocal}
                     onFocus={handleFocus}
                     forceFocus={forceFocus}
                     onBlur={handleBlur}
