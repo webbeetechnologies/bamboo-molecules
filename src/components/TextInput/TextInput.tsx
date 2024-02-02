@@ -269,7 +269,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
         const timer = useRef<NodeJS.Timeout | undefined>();
 
-        const inputRefLocal = useRef<NativeTextInput | null>(null);
+        const inputRefLocal = useRef<NativeTextInput>(null);
 
         useImperativeHandle(ref, () => ({
             ...inputRefLocal.current,

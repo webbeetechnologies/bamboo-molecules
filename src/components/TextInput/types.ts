@@ -42,7 +42,7 @@ export type State = {
 
 export type InputBaseProps = {
     parentState: State;
-    innerRef: MutableRefObject<NativeTextInput>;
+    innerRef: MutableRefObject<NativeTextInput | null>;
     onFocus?: (args: any) => void;
     onBlur?: (args: any) => void;
     forceFocus: () => void;
