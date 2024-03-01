@@ -399,7 +399,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             const inputRef = inputRefLocal;
 
             return () => {
-                if (!isVersion18) return;
+                if (!isVersion18 || !inputRef.current?.isFocused()) return;
 
                 const event = new Event('blur', { bubbles: true });
                 Object.defineProperty(event, 'target', {
