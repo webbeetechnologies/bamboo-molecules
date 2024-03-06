@@ -10,6 +10,7 @@ const useShortcut = (
     name: string,
     callback: (args: ShortcutCallbackArgs) => void,
     disabled: boolean = false,
+    capture: boolean = false,
 ) => {
     const { store } = useShortcutsManagerStoreRef();
 
@@ -38,7 +39,7 @@ const useShortcut = (
             )
                 return;
 
-            callbackRef.current({ ...e.detail, shortcut: shortcut });
+            callbackRef.current({ ...e.detail, shortcut: shortcut, event: e });
         },
         [callbackRef, nameRef, store],
     );
@@ -48,11 +49,12 @@ const useShortcut = (
 
         const eventName = calculateShortcutEventName(nameRef.current);
 
-        document.addEventListener(eventName, onCallback as (e: Event) => void);
+        document.addEventListener(eventName, onCallback as (e: Event) => void, capture);
 
         return () => {
-            document.removeEventListener(eventName, onCallback as (e: Event) => void);
+            document.removeEventListener(eventName, onCallback as (e: Event) => void, capture);
         };
+        // eslint-disable-next-line
     }, [onCallback, nameRef, disabled]);
 };
 
