@@ -396,15 +396,15 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                 typeof React.version === 'string' ? +React.version.split('.')[0] >= 18 : false;
 
             const _onBlurRef = onBlurRef;
-            const inputRef = inputRefLocal;
+            const input = inputRefLocal.current;
 
             return () => {
-                if (!isVersion18 || !inputRef.current?.isFocused()) return;
+                if (!isVersion18) return;
 
                 const event = new Event('blur', { bubbles: true });
                 Object.defineProperty(event, 'target', {
                     writable: false,
-                    value: inputRef?.current,
+                    value: input,
                 });
                 const syntheticEvent = createSyntheticEvent(
                     event,
