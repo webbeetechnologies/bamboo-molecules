@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useCallback, useEffect, useState } from 'react';
 
 import { useRangeChecker } from '../DatePickerInline/dateUtils';
 import type { ValidRangeType } from '../DatePickerInline';
@@ -17,8 +17,9 @@ export default function useDateInput({
     dateFormat,
     onBlur: onBlurProp,
     onFocus: onFocusProp,
+    isBlurredRef,
 }: {
-    onChange?: (d: Date | null, ...args: any) => void;
+    onChange?: (d: Date | null) => void;
     onBlur?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
     onFocus?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
     // locale: undefined | string;
@@ -26,24 +27,23 @@ export default function useDateInput({
     validRange?: ValidRangeType;
     inputMode: 'start' | 'end';
     dateFormat: string;
+    isBlurredRef: MutableRefObject<boolean>;
 }) {
     const { isDisabled, isWithinValidRange } = useRangeChecker(validRange);
 
     const [formattedValue, setFormattedValue] = useState(() => formatValue(value, dateFormat));
 
-    const isBlurredRef = useRef(true);
-
     // const [error, setError] = useState<null | string>(null);
 
     const onChangeText = useCallback(
-        (date: string, ...args: any) => {
+        (date: string) => {
             setFormattedValue(date);
             const parsedDate = parse(date, dateFormat, new Date());
 
             if (!isValid(parsedDate)) {
                 // TODO: Translate
                 // setError(`Date format must be ${dateFormat}`);
-                onChange?.(null, ...args);
+                onChange?.(null);
 
                 return;
             }
@@ -53,7 +53,7 @@ export default function useDateInput({
             if (isDisabled(finalDate)) {
                 // TODO: Translate
                 // setError('Day is not allowed');
-                onChange?.(null, ...args);
+                onChange?.(null);
 
                 return;
             }
@@ -73,12 +73,12 @@ export default function useDateInput({
                 //           ];
 
                 // setError(errors.filter(n => n).join(' '));
-                onChange?.(null, ...args);
+                onChange?.(null);
 
                 return;
             }
 
-            onChange?.(finalDate, ...args);
+            onChange?.(finalDate);
             // setError(null);
         },
         [dateFormat, inputMode, isDisabled, isWithinValidRange, onChange],
@@ -90,7 +90,7 @@ export default function useDateInput({
             onBlurProp?.(e);
             setFormattedValue(formatValue(value, dateFormat));
         },
-        [dateFormat, onBlurProp, value],
+        [dateFormat, isBlurredRef, onBlurProp, value],
     );
 
     const onFocus = useCallback(
@@ -98,14 +98,14 @@ export default function useDateInput({
             isBlurredRef.current = false;
             onFocusProp?.(e);
         },
-        [onFocusProp],
+        [isBlurredRef, onFocusProp],
     );
 
     useEffect(() => {
         if (!isBlurredRef.current) return;
 
         setFormattedValue(formatValue(value, dateFormat));
-    }, [value, dateFormat]);
+    }, [value, dateFormat, isBlurredRef]);
 
     return {
         onChange,

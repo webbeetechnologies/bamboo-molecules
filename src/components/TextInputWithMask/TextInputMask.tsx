@@ -6,7 +6,7 @@ import type { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native
 
 export type Props = Omit<TextInputProps, 'onChangeText'> & {
     mask: string;
-    onChangeText?: (text: string, isBlur?: boolean) => void;
+    onChangeText?: (text: string) => void;
 };
 
 // TODO - make it more universal
@@ -31,7 +31,7 @@ function TextInputWithMask(
     const onBlur = useCallback(
         (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
             onBlurProp?.(e);
-            onChangeTextProp?.(controlledValue, true);
+            onChangeTextProp?.(controlledValue);
         },
         [controlledValue, onBlurProp, onChangeTextProp],
     );
