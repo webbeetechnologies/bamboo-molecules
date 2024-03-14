@@ -1,4 +1,4 @@
-import { forwardRef, memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
 
 import { useComponentStyles, useMolecules, useToggle } from '../../hooks';
@@ -27,6 +27,7 @@ const TimePickerField = (
         modalProps = {},
         iconButtonProps = {},
         disabled,
+        onFocus: onFocusProp,
         ...rest
     }: Props,
     ref: any,
@@ -35,10 +36,23 @@ const TimePickerField = (
     const componentStyles = useComponentStyles('TimePickerField', style);
 
     const [timeString, setTimeString] = useState(() => getFormattedTime({ time, is24Hour }));
+    const isBlurredRef = useRef(true);
 
     const currentTimeFormat = useMemo(() => timeFormat[!is24Hour ? '12' : '24'], [is24Hour]);
 
     const { state: isOpen, handleOpen: onOpenModal, handleClose: onCloseModal } = useToggle(false);
+
+    const onChangeText = useCallback(
+        (text: string) => {
+            setTimeString(text);
+
+            if (disabled) return;
+
+            const outputTime = getOutputTime({ time: text || time, is24Hour });
+            onTimeChangeProp(outputTime);
+        },
+        [disabled, is24Hour, onTimeChangeProp, time],
+    );
 
     const onConfirmTime = useCallback(
         (newTime: string) => {
@@ -51,18 +65,28 @@ const TimePickerField = (
 
     const onBlur = useCallback(
         (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+            isBlurredRef.current = true;
             onBlurProp?.(e);
 
             if (disabled) return;
 
             const outputTime = getOutputTime({ time: timeString || time, is24Hour });
-            onTimeChangeProp(outputTime);
+            // onTimeChangeProp(outputTime);
 
             if (time === outputTime) {
                 setTimeString(getFormattedTime({ time, is24Hour }));
             }
         },
-        [disabled, is24Hour, onBlurProp, onTimeChangeProp, time, timeString],
+        [disabled, is24Hour, onBlurProp, time, timeString],
+    );
+
+    const onFocus = useCallback(
+        (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+            isBlurredRef.current = false;
+
+            onFocusProp?.(e);
+        },
+        [onFocusProp],
     );
 
     const rightElement = useMemo(() => {
@@ -101,7 +125,10 @@ const TimePickerField = (
         withModal,
     ]);
 
+    // only change masked string when the input is not focus so as to not interrup the user
     useEffect(() => {
+        if (!isBlurredRef.current) return;
+
         setTimeString(getFormattedTime({ time, is24Hour }));
     }, [is24Hour, time]);
 
@@ -113,7 +140,8 @@ const TimePickerField = (
             {...rest}
             disabled={disabled}
             value={timeString}
-            onChangeText={setTimeString}
+            onFocus={onFocus}
+            onChangeText={onChangeText}
             style={componentStyles}
             onBlur={onBlur}
             right={rightElement}

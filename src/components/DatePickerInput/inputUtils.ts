@@ -1,8 +1,9 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useState } from 'react';
 
 import { useRangeChecker } from '../DatePickerInline/dateUtils';
 import type { ValidRangeType } from '../DatePickerInline';
 import { format, isNil, parse, isValid, endOfDay } from '../../utils';
+import type { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
 
 export default function useDateInput({
     // locale,
@@ -11,8 +12,10 @@ export default function useDateInput({
     inputMode = 'start',
     onChange,
     dateFormat,
+    onBlur: onBlurProp,
 }: {
-    onChange?: (d: Date | null) => void;
+    onChange?: (d: Date | null, ...args: any) => void;
+    onBlur?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
     // locale: undefined | string;
     value?: Date | null;
     validRange?: ValidRangeType;
@@ -20,24 +23,29 @@ export default function useDateInput({
     dateFormat: string;
 }) {
     const { isDisabled, isWithinValidRange } = useRangeChecker(validRange);
+
+    const [formattedValue, setFormattedValue] = useState(() =>
+        !isNil(value) ? format(value, dateFormat) || '' : '',
+    );
     // const [error, setError] = useState<null | string>(null);
 
-    const formattedValue = useMemo(() => {
-        try {
-            return !isNil(value) ? format(value, dateFormat) || '' : '';
-        } catch (e) {
-            return '';
-        }
-    }, [dateFormat, value]);
+    // const formattedValue = useMemo(() => {
+    //     try {
+    //         return !isNil(value) ? format(value, dateFormat) || '' : '';
+    //     } catch (e) {
+    //         return '';
+    //     }
+    // }, [dateFormat, value]);
 
     const onChangeText = useCallback(
-        (date: string) => {
+        (date: string, ...args: any) => {
+            setFormattedValue(date);
             const parsedDate = parse(date, dateFormat, new Date());
 
             if (!isValid(parsedDate)) {
                 // TODO: Translate
                 // setError(`Date format must be ${dateFormat}`);
-                onChange?.(null);
+                onChange?.(null, ...args);
 
                 return;
             }
@@ -47,7 +55,7 @@ export default function useDateInput({
             if (isDisabled(finalDate)) {
                 // TODO: Translate
                 // setError('Day is not allowed');
-                onChange?.(null);
+                onChange?.(null, ...args);
 
                 return;
             }
@@ -67,15 +75,23 @@ export default function useDateInput({
                 //           ];
 
                 // setError(errors.filter(n => n).join(' '));
-                onChange?.(null);
+                onChange?.(null, ...args);
 
                 return;
             }
 
-            onChange?.(finalDate);
+            onChange?.(finalDate, ...args);
             // setError(null);
         },
         [dateFormat, inputMode, isDisabled, isWithinValidRange, onChange],
+    );
+
+    const onBlur = useCallback(
+        (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+            onBlurProp?.(e);
+            setFormattedValue(!isNil(value) ? format(value, dateFormat) || '' : '');
+        },
+        [dateFormat, onBlurProp, value],
     );
 
     return {
@@ -83,5 +99,6 @@ export default function useDateInput({
         // error,
         formattedValue,
         onChangeText,
+        onBlur,
     };
 }

@@ -1,4 +1,13 @@
-import { forwardRef, memo, useCallback, useEffect, useMemo } from 'react';
+import {
+    MutableRefObject,
+    forwardRef,
+    memo,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+} from 'react';
 import type { ViewProps } from '@bambooapp/bamboo-atoms';
 import { set, format, parse } from 'date-fns';
 
@@ -6,6 +15,7 @@ import { useComponentStyles, useControlledValue, useMolecules } from '../../hook
 import type { DatePickerInputProps } from '../DatePickerInput';
 import { TimePickerFieldProps, sanitizeTimeString } from '../TimePickerField';
 import { isValid } from '../../utils';
+import type { TextInputHandles } from '../TextInput/TextInput';
 
 export type Props = ViewProps & {
     is24Hour?: boolean;
@@ -17,6 +27,8 @@ export type Props = ViewProps & {
         'value' | 'onChangeText' | 'date' | 'onTimeChange'
     >;
     datePickerInputProps?: Omit<Partial<DatePickerInputProps>, 'value' | 'onChange'>;
+    datePickerInputRef?: MutableRefObject<TextInputHandles | null>;
+    timePickerInputRef?: MutableRefObject<TextInputHandles | null>;
 };
 
 const emptyObj = {};
@@ -41,12 +53,18 @@ const DateTimePicker = (
         timePickerFieldProps = emptyObj,
         style,
         testID,
+        datePickerInputRef: _datePickerInputRef,
+        timePickerInputRef: _timePickerInputRef,
         ...rest
     }: Props,
     ref: any,
 ) => {
     const { DatePickerInput, ElementGroup, TimePickerField } = useMolecules();
     const componentStyles = useComponentStyles('DateTimePicker', style);
+
+    const containerRef = useRef(null);
+    const datePickerInputRef = useRef<TextInputHandles>(null);
+    const timePickerInputRef = useRef<TextInputHandles>(null);
 
     const [date, onChange] = useControlledValue<Date | null>({
         value: dateProp,
@@ -98,10 +116,23 @@ const DateTimePicker = (
         onChange(null);
     }, [date, onChange]);
 
+    useImperativeHandle(_datePickerInputRef, () => datePickerInputRef.current as TextInputHandles);
+    useImperativeHandle(_timePickerInputRef, () => timePickerInputRef.current as TextInputHandles);
+
+    useImperativeHandle(ref, () =>
+        Object.assign(containerRef.current || {}, {
+            blur: () => {
+                datePickerInputRef.current?.blur?.();
+                timePickerInputRef.current?.blur?.();
+            },
+        }),
+    );
+
     return (
         <>
-            <ElementGroup style={componentStyles} testID={testID} {...rest} ref={ref}>
+            <ElementGroup style={componentStyles} testID={testID} {...rest} ref={containerRef}>
                 <DatePickerInput
+                    ref={datePickerInputRef}
                     inputMode="start"
                     variant="outlined"
                     testID={testID ? `${testID}--datepickerinput` : undefined}
@@ -110,6 +141,7 @@ const DateTimePicker = (
                     onChange={onDateChange}
                 />
                 <TimePickerField
+                    ref={timePickerInputRef}
                     variant="outlined"
                     testID={testID ? `${testID}--timepickerinput` : undefined}
                     is24Hour={is24Hour}

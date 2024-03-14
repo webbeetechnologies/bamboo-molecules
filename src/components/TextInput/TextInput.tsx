@@ -9,6 +9,7 @@ import React, {
     memo,
     PropsWithoutRef,
     useImperativeHandle,
+    MutableRefObject,
 } from 'react';
 import {
     Animated,
@@ -38,9 +39,10 @@ export type ElementProps = {
 
 type Element = ReactNode | ((props: ElementProps) => ReactNode);
 
-export type Props = TextInputProps &
+export type Props = Omit<TextInputProps, 'ref'> &
     CallbackActionState &
     WithElements<Element> & {
+        ref?: MutableRefObject<TextInputHandles | null>;
         /**
          * Variant of the TextInput.
          * - `flat` - flat input with an underline.
@@ -173,7 +175,7 @@ export type Props = TextInputProps &
         testID?: string;
     };
 
-type TextInputHandles = Pick<
+export type TextInputHandles = Pick<
     NativeTextInput,
     'focus' | 'clear' | 'blur' | 'isFocused' | 'setNativeProps'
 >;
@@ -399,7 +401,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             const input = inputRefLocal.current;
 
             return () => {
-                if (!isVersion18) return;
+                if (!isVersion18 || !input?.isFocused()) return;
 
                 const event = new Event('blur', { bubbles: true });
                 Object.defineProperty(event, 'target', {

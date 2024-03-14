@@ -2,14 +2,16 @@ import { useState, useEffect, forwardRef, useCallback, useImperativeHandle, useR
 import { useMolecules } from '../../hooks';
 import type { TextInputProps } from '../TextInput';
 import { enhanceTextWithMask } from './utils';
+import type { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
 
-export type Props = TextInputProps & {
+export type Props = Omit<TextInputProps, 'onChangeText'> & {
     mask: string;
+    onChangeText?: (text: string, isBlur?: boolean) => void;
 };
 
 // TODO - make it more universal
 function TextInputWithMask(
-    { onChangeText: onChangeTextProp, value = '', mask, ...rest }: Props,
+    { onChangeText: onChangeTextProp, value = '', mask, onBlur: onBlurProp, ...rest }: Props,
     ref: any,
 ) {
     const { TextInput } = useMolecules();
@@ -21,13 +23,18 @@ function TextInputWithMask(
         (text: string) => {
             const enhancedText = enhanceTextWithMask(text, mask, controlledValue);
             setControlledValue(enhancedText);
+            onChangeTextProp?.(enhancedText);
         },
-        [controlledValue, mask],
+        [controlledValue, mask, onChangeTextProp],
     );
 
-    const onBlur = useCallback(() => {
-        onChangeTextProp?.(controlledValue);
-    }, [controlledValue, onChangeTextProp]);
+    const onBlur = useCallback(
+        (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+            onBlurProp?.(e);
+            onChangeTextProp?.(controlledValue, true);
+        },
+        [controlledValue, onBlurProp, onChangeTextProp],
+    );
 
     useEffect(() => {
         setControlledValue(value || '');

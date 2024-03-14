@@ -5,7 +5,8 @@ import { useMolecules } from '../../../hooks';
 
 import type { Value } from './types';
 
-export type Props = FieldRendererProps<Value> & Omit<TextInputProps, 'value' | 'onChange'> & {};
+export type Props = FieldRendererProps<Value> &
+    Omit<TextInputProps, 'value' | 'onChange' | 'ref'> & {};
 
 const SingleLineTextValueRenderer = ({ value, ...rest }: Props) => {
     const { Text } = useMolecules();
