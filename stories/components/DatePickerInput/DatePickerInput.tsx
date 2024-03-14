@@ -11,7 +11,5 @@ export const ControlledExample = (props: Props) => {
     const [date, setDate] = useState<Date | null>(new Date(2022, 11, 5));
     const onChange = useCallback((d: Date | null) => setDate(d), []);
 
-    console.log({ date });
-
     return <DatePickerInput {...props} value={date} onChange={onChange} />;
 };
