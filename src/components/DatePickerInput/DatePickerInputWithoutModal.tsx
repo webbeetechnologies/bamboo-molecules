@@ -15,6 +15,8 @@ function DatePickerInputWithoutModal(
         inputButtons,
         dateFormat = 'dd/MM/yyyy',
         style,
+        onBlur: onBlurProp,
+        onFocus: onFocusProp,
         ...rest
     }: DatePickerInputWithoutModalProps,
     ref: any,
@@ -25,24 +27,30 @@ function DatePickerInputWithoutModal(
     const theme = useCurrentTheme();
 
     const inputRef = useRef(null);
+    const isBlurredRef = useRef(true);
 
     const onChange = useCallback(
         (date: Date | null) => {
-            onChangeProp?.(date);
+            // because onChange was already trigger not need to trigger again on
+            if (!isBlurredRef.current) {
+                onChangeProp?.(date);
+            }
 
-            if (!date) (inputRef.current as any)?.setDisplayValue('');
+            if (!date && isBlurredRef.current) (inputRef.current as any)?.setDisplayValue('');
         },
         [onChangeProp],
     );
 
-    // TODO - revisit error
-    const { formattedValue, onChangeText } = useDateInput({
+    const { formattedValue, onChangeText, onBlur, onFocus } = useDateInput({
         // locale,
         value,
         validRange,
         inputMode,
         onChange,
         dateFormat,
+        onBlur: onBlurProp,
+        onFocus: onFocusProp,
+        isBlurredRef,
     });
 
     useImperativeHandle(ref, () => inputRef.current);
@@ -52,6 +60,8 @@ function DatePickerInputWithoutModal(
             placeholder={dateFormat}
             style={componentStyles}
             {...rest}
+            onBlur={onBlur}
+            onFocus={onFocus}
             ref={inputRef}
             label={label}
             value={formattedValue}

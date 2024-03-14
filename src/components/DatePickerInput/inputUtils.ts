@@ -1,8 +1,12 @@
-import { useCallback, useMemo } from 'react';
+import { MutableRefObject, useCallback, useEffect, useState } from 'react';
 
 import { useRangeChecker } from '../DatePickerInline/dateUtils';
 import type { ValidRangeType } from '../DatePickerInline';
 import { format, isNil, parse, isValid, endOfDay } from '../../utils';
+import type { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
+
+const formatValue = (value: Date | null | undefined, dateFormat: string) =>
+    !isNil(value) ? format(value, dateFormat) || '' : '';
 
 export default function useDateInput({
     // locale,
@@ -11,27 +15,29 @@ export default function useDateInput({
     inputMode = 'start',
     onChange,
     dateFormat,
+    onBlur: onBlurProp,
+    onFocus: onFocusProp,
+    isBlurredRef,
 }: {
     onChange?: (d: Date | null) => void;
+    onBlur?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+    onFocus?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
     // locale: undefined | string;
     value?: Date | null;
     validRange?: ValidRangeType;
     inputMode: 'start' | 'end';
     dateFormat: string;
+    isBlurredRef: MutableRefObject<boolean>;
 }) {
     const { isDisabled, isWithinValidRange } = useRangeChecker(validRange);
-    // const [error, setError] = useState<null | string>(null);
 
-    const formattedValue = useMemo(() => {
-        try {
-            return !isNil(value) ? format(value, dateFormat) || '' : '';
-        } catch (e) {
-            return '';
-        }
-    }, [dateFormat, value]);
+    const [formattedValue, setFormattedValue] = useState(() => formatValue(value, dateFormat));
+
+    // const [error, setError] = useState<null | string>(null);
 
     const onChangeText = useCallback(
         (date: string) => {
+            setFormattedValue(date);
             const parsedDate = parse(date, dateFormat, new Date());
 
             if (!isValid(parsedDate)) {
@@ -78,10 +84,35 @@ export default function useDateInput({
         [dateFormat, inputMode, isDisabled, isWithinValidRange, onChange],
     );
 
+    const onBlur = useCallback(
+        (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+            isBlurredRef.current = true;
+            onBlurProp?.(e);
+            setFormattedValue(formatValue(value, dateFormat));
+        },
+        [dateFormat, isBlurredRef, onBlurProp, value],
+    );
+
+    const onFocus = useCallback(
+        (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+            isBlurredRef.current = false;
+            onFocusProp?.(e);
+        },
+        [isBlurredRef, onFocusProp],
+    );
+
+    useEffect(() => {
+        if (!isBlurredRef.current) return;
+
+        setFormattedValue(formatValue(value, dateFormat));
+    }, [value, dateFormat, isBlurredRef]);
+
     return {
         onChange,
         // error,
         formattedValue,
         onChangeText,
+        onBlur,
+        onFocus,
     };
 }

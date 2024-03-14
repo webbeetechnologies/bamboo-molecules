@@ -5,7 +5,8 @@ import { useMolecules } from '../../../hooks';
 import { formatNumberWithMask } from '../../../utils';
 import type { Value } from './types';
 
-export type Props = FieldRendererProps<Value> & Omit<TextInputProps, 'value' | 'onChange'> & {};
+export type Props = FieldRendererProps<Value> &
+    Omit<TextInputProps, 'value' | 'onChange' | 'ref'> & {};
 
 const NumberFieldValueRenderer = ({ value: valueProp = null, ...rest }: Props) => {
     const { Text } = useMolecules();
