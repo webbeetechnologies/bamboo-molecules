@@ -57,7 +57,7 @@
         "perf": "npx reassure"
     },
     "dependencies": {
-        "@bambooapp/bamboo-atoms": "^0.0.32",
+        "@bambooapp/bamboo-atoms": "^0.0.33",
         "@bambooapp/virtualized-list": "^0.0.7",
         "@gorhom/portal": "^1.0.14",
         "@react-native-aria/overlays": "^0.3.2",
