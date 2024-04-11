@@ -204,6 +204,7 @@ export {
     useFilePicker,
     useLatest,
     useSearchable,
+    useSearchInputProps,
     UseSearchableProps,
     usePrevious,
     useMergedRefs,
