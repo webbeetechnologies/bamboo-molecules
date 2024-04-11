@@ -20,6 +20,7 @@ import {
     UseSearchableProps,
 } from '../../hooks';
 import type { SectionListProps, SectionListRenderItemInfo } from '../SectionList';
+import { useSearchInputProps } from '../../hooks/useSearchable';
 
 type DefaultSectionT<TItem> = {
     data: TItem[];
@@ -99,7 +100,7 @@ const OptionList = <
     {
         query,
         onQueryChange,
-        searchInputProps,
+        searchInputProps: dirtySearchInputProps,
         searchable,
         containerStyle = {},
         searchInputContainerStyle = {},
@@ -115,7 +116,7 @@ const OptionList = <
     }: Props<TItem, TSection>,
     ref: any,
 ) => {
-    const { SectionList, View, SearchInput } = useMolecules();
+    const { SectionList, View, TextInput } = useMolecules();
     const [selection, onSelectionChange] = useControlledValue<TItem | TItem[] | null>({
         value: selectionProp,
         onChange: onSelectionChangeProp,
@@ -124,6 +125,8 @@ const OptionList = <
     const componentStyles = useComponentStyles('OptionList', [
         { container: containerStyle, searchInputContainer: searchInputContainerStyle },
     ]);
+
+    const searchInputProps = useSearchInputProps(dirtySearchInputProps);
 
     const { containerStyles, searchInputContainerStyles, style } = useMemo(() => {
         const { container, searchInputContainer, ...restStyle } = componentStyles;
@@ -183,7 +186,7 @@ const OptionList = <
             <>
                 {searchable && (
                     <View style={searchInputContainerStyles}>
-                        <SearchInput
+                        <TextInput
                             value={query}
                             onChangeText={onQueryChange}
                             {...searchInputProps}
