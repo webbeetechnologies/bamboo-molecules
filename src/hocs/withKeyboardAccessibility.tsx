@@ -15,6 +15,7 @@ import type { FlatList } from 'react-native';
 import type { SectionList } from 'react-native';
 import { Platform } from 'react-native';
 import { createFastContext } from '../fast-context';
+import { useLatest } from '../hooks';
 
 export type Store = {
     currentIndex: number | null;
@@ -166,9 +167,15 @@ const AccessibilityWrapper = memo(
             [keyToFunctionMap],
         );
 
+        const listLengthLatest = useLatest(listLength);
         useEffect(() => {
             if (listRef && !!listRef.current) {
-                if (currentIndex === null || currentIndex < 0 || currentIndex > length - 1) return;
+                if (
+                    currentIndex === null ||
+                    currentIndex < 0 ||
+                    currentIndex > listLengthLatest.current - 1
+                )
+                    return;
 
                 if (isFlat) {
                     (listRef as RefObject<FlatList>).current?.scrollToIndex?.({
@@ -183,7 +190,7 @@ const AccessibilityWrapper = memo(
                     });
                 }
             }
-        }, [currentIndex, isFlat, listRef]);
+        }, [currentIndex, isFlat, listRef, listLengthLatest]);
 
         useEffect(() => {
             const controller = new AbortController();
