@@ -116,6 +116,13 @@ type AccessibilityWrapperProps = {
     onCancel?: () => void;
 };
 
+const withPreventDefault =
+    (func: (e: KeyboardEvent) => void, preventDefault = true) =>
+    (e: KeyboardEvent) => {
+        if (preventDefault) e.preventDefault();
+        func(e);
+    };
+
 const AccessibilityWrapper = memo(
     ({
         children,
@@ -132,25 +139,34 @@ const AccessibilityWrapper = memo(
 
         const keyToFunctionMap = useMemo(
             () => ({
-                ArrowUp: () =>
+                ArrowUp: withPreventDefault(() =>
                     setStore(prev => ({
                         currentIndex:
                             prev.currentIndex === null || prev.currentIndex === 0
                                 ? listLength - 1
                                 : prev.currentIndex - 1,
                     })),
-                ArrowDown: () =>
+                ),
+                ArrowDown: withPreventDefault(() =>
                     setStore(prev => ({
                         currentIndex:
                             prev.currentIndex === null || prev.currentIndex === listLength - 1
                                 ? 0
                                 : prev.currentIndex + 1,
                     })),
-                Enter: () => {
+                ),
+                Enter: withPreventDefault(e => {
                     if (currentIndexRef.current.currentIndex === null) return;
+                    e.preventDefault();
                     onSelectItem(currentIndexRef.current.currentIndex);
-                },
-                Escape: () => onCancel?.(),
+                }, false),
+                Escape: withPreventDefault(e => {
+                    if (currentIndexRef.current.currentIndex === null) onCancel?.();
+                    e.preventDefault();
+                    setStore(() => ({
+                        currentIndex: null,
+                    }));
+                }, false),
             }),
             [currentIndexRef, listLength, onCancel, onSelectItem, setStore],
         );
@@ -161,8 +177,7 @@ const AccessibilityWrapper = memo(
 
                 if (!keyFunction) return;
 
-                e.preventDefault();
-                keyFunction();
+                keyFunction(e);
             },
             [keyToFunctionMap],
         );
