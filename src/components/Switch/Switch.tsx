@@ -1,4 +1,12 @@
-import { forwardRef, memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import {
+    forwardRef,
+    memo,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+} from 'react';
 import { Animated, Easing, SwitchProps, TextStyle, ViewStyle } from 'react-native';
 import {
     useActionState,
@@ -41,24 +49,27 @@ const SELECTED_PRESSED_OVERLAY_OFFSET = -0.21;
 const SELECTED_OR_WITH_ICON_OVERLAY_OFFSET = -0.22;
 const WITHOUT_ICON_OVERLAY_OFFSET = -0.36;
 
-const Switch = ({
-    trackColor,
-    size = 32,
-    thumbColor,
-    onValueChange,
-    disabled,
-    value: valueProp,
-    checkedIcon,
-    unCheckedIcon,
-    style,
-    checkedIconType,
-    uncheckedIconType,
-    thumbStyle: _thumbStyle,
-    thumbContainerStyle: _thumbContainerStyle,
-    switchOverlayStyle: _switchOverlayStyle,
-    iconStyle: _iconStyle,
-    ...rest
-}: Props) => {
+const Switch = (
+    {
+        trackColor,
+        size = 32,
+        thumbColor,
+        onValueChange,
+        disabled,
+        value: valueProp,
+        checkedIcon,
+        unCheckedIcon,
+        style,
+        checkedIconType,
+        uncheckedIconType,
+        thumbStyle: _thumbStyle,
+        thumbContainerStyle: _thumbContainerStyle,
+        switchOverlayStyle: _switchOverlayStyle,
+        iconStyle: _iconStyle,
+        ...rest
+    }: Props,
+    ref: any,
+) => {
     const { Icon, Pressable } = useMolecules();
     const { actionsRef, focused, hovered, pressed } = useActionState();
 
@@ -242,6 +253,8 @@ const Switch = ({
     const handleValueChange = useCallback(() => {
         onChange(!switchValueRef.current);
     }, [onChange, switchValueRef]);
+
+    useImperativeHandle(ref, () => actionsRef);
 
     return (
         <Pressable ref={actionsRef} style={switchStyle} onPress={handleValueChange} {...rest}>
