@@ -22,6 +22,7 @@ import {
     UseSearchableProps,
 } from '../../hooks';
 import type { FlatListProps } from '../FlatList';
+import { useSearchInputProps } from '../../hooks/useSearchable';
 
 type DefaultItemT = {
     id: string | number;
@@ -74,7 +75,7 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
     {
         query,
         onQueryChange,
-        searchInputProps,
+        searchInputProps: dirtySearchInputProps,
         searchable,
         containerStyle = {},
         searchInputContainerStyle = {},
@@ -91,7 +92,7 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
     }: Props<TItem>,
     ref: any,
 ) => {
-    const { FlatList, View, SearchInput } = useMolecules();
+    const { FlatList, View, TextInput } = useMolecules();
     const FlatListComponent = CustomFlatList || FlatList;
 
     const [selection, onSelectionChange] = useControlledValue<TItem | TItem[]>({
@@ -112,6 +113,8 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
             style: [restStyle, styleProp],
         };
     }, [componentStyles, styleProp]);
+
+    const searchInputProps = useSearchInputProps(dirtySearchInputProps);
 
     const onPressItem = useCallback(
         (item: TItem) => {
@@ -155,7 +158,7 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
             <>
                 {searchable && (
                     <View style={searchInputContainerStyles}>
-                        <SearchInput
+                        <TextInput
                             value={query}
                             onChangeText={onQueryChange}
                             {...searchInputProps}

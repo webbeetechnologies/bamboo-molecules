@@ -15,6 +15,7 @@ import type { FlatList } from 'react-native';
 import type { SectionList } from 'react-native';
 import { Platform } from 'react-native';
 import { createFastContext } from '../fast-context';
+import { useLatest } from '../hooks';
 
 export type Store = {
     currentIndex: number | null;
@@ -115,6 +116,13 @@ type AccessibilityWrapperProps = {
     onCancel?: () => void;
 };
 
+const withPreventDefault =
+    (func: (e: KeyboardEvent) => void, preventDefault = true) =>
+    (e: KeyboardEvent) => {
+        if (preventDefault) e.preventDefault();
+        func(e);
+    };
+
 const AccessibilityWrapper = memo(
     ({
         children,
@@ -131,25 +139,34 @@ const AccessibilityWrapper = memo(
 
         const keyToFunctionMap = useMemo(
             () => ({
-                ArrowUp: () =>
+                ArrowUp: withPreventDefault(() =>
                     setStore(prev => ({
                         currentIndex:
                             prev.currentIndex === null || prev.currentIndex === 0
                                 ? listLength - 1
                                 : prev.currentIndex - 1,
                     })),
-                ArrowDown: () =>
+                ),
+                ArrowDown: withPreventDefault(() =>
                     setStore(prev => ({
                         currentIndex:
                             prev.currentIndex === null || prev.currentIndex === listLength - 1
                                 ? 0
                                 : prev.currentIndex + 1,
                     })),
-                Enter: () => {
+                ),
+                Enter: withPreventDefault(e => {
                     if (currentIndexRef.current.currentIndex === null) return;
+                    e.preventDefault();
                     onSelectItem(currentIndexRef.current.currentIndex);
-                },
-                Escape: () => onCancel?.(),
+                }, false),
+                Escape: withPreventDefault(e => {
+                    if (currentIndexRef.current.currentIndex === null) onCancel?.();
+                    e.preventDefault();
+                    setStore(() => ({
+                        currentIndex: null,
+                    }));
+                }, false),
             }),
             [currentIndexRef, listLength, onCancel, onSelectItem, setStore],
         );
@@ -160,15 +177,20 @@ const AccessibilityWrapper = memo(
 
                 if (!keyFunction) return;
 
-                e.preventDefault();
-                keyFunction();
+                keyFunction(e);
             },
             [keyToFunctionMap],
         );
 
+        const listLengthLatest = useLatest(listLength);
         useEffect(() => {
             if (listRef && !!listRef.current) {
-                if (currentIndex === null || currentIndex < 0 || currentIndex > length - 1) return;
+                if (
+                    currentIndex === null ||
+                    currentIndex < 0 ||
+                    currentIndex > listLengthLatest.current - 1
+                )
+                    return;
 
                 if (isFlat) {
                     (listRef as RefObject<FlatList>).current?.scrollToIndex?.({
@@ -183,7 +205,7 @@ const AccessibilityWrapper = memo(
                     });
                 }
             }
-        }, [currentIndex, isFlat, listRef]);
+        }, [currentIndex, isFlat, listRef, listLengthLatest]);
 
         useEffect(() => {
             const controller = new AbortController();

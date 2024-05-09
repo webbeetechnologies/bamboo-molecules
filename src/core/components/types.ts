@@ -158,7 +158,6 @@ export interface DefaultComponents {
     Avatar: ComponentType<AvatarProps>;
     Tabs: typeof Tabs;
     If: typeof If;
-    SearchInput: ComponentType<TextInputProps>;
 }
 
 export type IComponentsProviderContext = IAtomsComponentsProviderContext &
