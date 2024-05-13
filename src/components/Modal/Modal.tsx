@@ -1,9 +1,7 @@
 import { useRef, useEffect, ReactNode, useCallback, useMemo, memo, forwardRef } from 'react';
 import {
     Animated,
-    BackHandler,
     Easing,
-    NativeEventSubscription,
     StyleProp,
     StyleSheet,
     useWindowDimensions,
@@ -12,8 +10,7 @@ import {
 } from 'react-native';
 
 import type { MD3Elevation } from '../../core/theme/types';
-import { addEventListener } from '../../utils';
-import { useComponentStyles, useMolecules } from '../../hooks';
+import { useBackHandler, useComponentStyles, useMolecules } from '../../hooks';
 
 export type Props = ViewProps & {
     /**
@@ -91,7 +88,6 @@ function Modal(
     });
 
     const visibleRef = useRef<boolean>(isOpen);
-    const subscriptionRef = useRef<NativeEventSubscription | undefined>(undefined);
     const prevVisible = useRef<boolean | null>(null);
     const opacityRef = useRef(new Animated.Value(isOpen ? 1 : 0));
     const hideModalRef = useRef<() => void>(() => {});
@@ -138,32 +134,21 @@ function Modal(
         return true;
     }, [dismissible]);
 
+    useBackHandler({
+        enabled: isOpen,
+        callback: handleBack,
+    });
+
     const showModal = useCallback(() => {
-        subscriptionRef.current?.remove();
-
-        subscriptionRef.current = addEventListener(BackHandler, 'hardwareBackPress', handleBack);
-
         Animated.timing(opacityRef.current, {
             toValue: 1,
             duration: animationScale * animationDuration,
             easing: Easing.out(Easing.cubic),
             useNativeDriver: true,
         }).start();
-    }, [animationDuration, animationScale, handleBack, opacityRef]);
-
-    const removeListeners = useCallback(() => {
-        if (subscriptionRef.current?.remove) {
-            subscriptionRef.current?.remove();
-
-            return;
-        }
-
-        BackHandler.removeEventListener('hardwareBackPress', handleBack);
-    }, [handleBack]);
+    }, [animationDuration, animationScale, opacityRef]);
 
     const hideModal = useCallback(() => {
-        removeListeners();
-
         Animated.timing(opacityRef.current, {
             toValue: 0,
             duration: animationScale * animationDuration,
@@ -178,7 +163,7 @@ function Modal(
                 onClose();
             }
         });
-    }, [removeListeners, opacityRef, animationScale, animationDuration, isOpen, onClose]);
+    }, [opacityRef, animationScale, animationDuration, isOpen, onClose]);
 
     useEffect(() => {
         hideModalRef.current = hideModal;
@@ -198,10 +183,6 @@ function Modal(
         }
         prevVisible.current = isOpen;
     }, [hideModal, showModal, isOpen]);
-
-    useEffect(() => {
-        return removeListeners;
-    }, [removeListeners]);
 
     if (!isOpen) return null;
 
