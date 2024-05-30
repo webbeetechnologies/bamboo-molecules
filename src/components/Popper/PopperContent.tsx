@@ -11,7 +11,7 @@ import {
     useMemo,
     useRef,
 } from 'react';
-import type { TextStyle, ViewProps } from 'react-native';
+import { StyleSheet, TextStyle, ViewProps, ViewStyle } from 'react-native';
 import { useOverlayPosition } from '@react-native-aria/overlays';
 
 import { useMolecules } from '../../hooks';
@@ -27,10 +27,19 @@ type PopperContentProps = SurfaceProps & {
     showArrow?: boolean;
     contentTextStyles?: TextStyle;
     numberOfLines?: number;
+    overlayStyles?: ViewStyle;
 };
 
 const PopperContent = (
-    { children, style, showArrow, contentTextStyles, numberOfLines, ...rest }: PopperContentProps,
+    {
+        children,
+        style,
+        showArrow,
+        contentTextStyles,
+        numberOfLines,
+        overlayStyles,
+        ...rest
+    }: PopperContentProps,
     ref: any,
 ) => {
     const { Text, View, Surface } = useMolecules();
@@ -130,14 +139,18 @@ const PopperContent = (
     );
 
     const overlayStyle = useMemo(
-        () => ({
-            ...overlayProps.style,
-            // To handle translucent android StatusBar
-            // marginTop: Platform.select({ android: top, default: 0 }),
-            opacity: rendered ? 1 : 0,
-            position: 'absolute' as 'absolute',
-        }),
-        [rendered, overlayProps.style],
+        () =>
+            StyleSheet.flatten([
+                overlayProps.style,
+                {
+                    // To handle translucent android StatusBar
+                    // marginTop: Platform.select({ android: top, default: 0 }),
+                    opacity: rendered ? 1 : 0,
+                    position: 'absolute' as 'absolute',
+                },
+                overlayStyles,
+            ]),
+        [overlayProps.style, overlayStyles, rendered],
     );
 
     if (!isOpen) return <View ref={overlayRef} />;
