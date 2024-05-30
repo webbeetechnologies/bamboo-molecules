@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BackHandler } from 'react-native';
+import { BackHandler, Platform } from 'react-native';
 
 type TKeyboardDismissableParams = {
     enabled?: boolean;
@@ -48,6 +48,8 @@ export const useKeyboardDismissable = ({ enabled, callback }: TKeyboardDismissab
  */
 export function useBackHandler({ enabled, callback }: TBackHandler) {
     useEffect(() => {
+        if (Platform.OS === 'web') return;
+
         const backHandler = () => {
             callback();
             return true;
