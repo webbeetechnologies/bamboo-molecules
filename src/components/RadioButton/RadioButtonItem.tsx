@@ -44,6 +44,10 @@ export type Props = {
      */
     style?: StyleProp<ViewStyle>;
     /**
+     * TouchableRipple style
+     */
+    rippleContainerStyle?: StyleProp<ViewStyle>;
+    /**
      * Style that is passed to Label element.
      */
     labelStyle?: StyleProp<TextStyle>;
@@ -105,6 +109,7 @@ const RadioButtonItem = (
         testID,
         position = 'trailing',
         containerStyle,
+        rippleContainerStyle,
     }: Props,
     ref: any,
 ) => {
@@ -201,7 +206,8 @@ const RadioButtonItem = (
             accessibilityRole="radio"
             accessibilityState={accessibilityState}
             testID={testID}
-            disabled={disabled}>
+            disabled={disabled}
+            style={rippleContainerStyle}>
             <View style={containerStyles} pointerEvents="none">
                 {isLeading && <RadioButton {...radioButtonProps} />}
                 <Text style={labelStyles}>{label}</Text>

@@ -109,6 +109,7 @@ export const popoverFactory = (componentName: string) =>
                             arrowProps={arrowPropsWithStyle}>
                             <PopoverContext.Provider value={popoverContextValue}>
                                 <PopperContent
+                                    overlayStyles={styles.overlayStyles}
                                     style={popoverStyles.content}
                                     contentTextStyles={popoverStyles.contentText}
                                     arrowProps={arrowProps}
