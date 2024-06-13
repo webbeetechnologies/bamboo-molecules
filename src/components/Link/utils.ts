@@ -5,7 +5,7 @@ type States = 'disabled' | 'hovered';
 
 export const linkStyles: ComponentStylePropWithVariants<TextStyle, States> = {
     // @ts-ignore
-    cursor: 'pointer',
+    // cursor: 'pointer',
     color: 'colors.primary',
     fontSize: 'typescale.labelLarge.fontSize' as unknown as number,
     fontWeight: 'typescale.labelLarge.fontWeight' as unknown as TextStyle['fontWeight'],
@@ -16,7 +16,7 @@ export const linkStyles: ComponentStylePropWithVariants<TextStyle, States> = {
             color: 'colors.onSurfaceDisabled',
             opacity: 0.38,
             // @ts-ignore
-            cursor: 'default',
+            // cursor: 'default',
         },
         hovered: {
             textDecorationLine: 'underline',
