@@ -30,8 +30,12 @@ export const Example = () => {
                 iconName="airplanemode-on"
                 iconType="material"
             />
-            <Tabs.Item name="trips" label="Trips" iconName="bag-checked" />
-            <Tabs.Item name="explore" label="Explore" iconName="compass-outline" />
+            <Tabs.Item name="trips" accessibilityLabel="Trips">
+                <Tabs.Label label="Trips" iconName="bag-checked" />
+            </Tabs.Item>
+            <Tabs.Item name="explore" accessibilityLabel="Explore">
+                <Tabs.Label label="Explore" iconName="compass-outline" />
+            </Tabs.Item>
         </Tabs>
     );
 };
@@ -66,9 +70,15 @@ export const Controlled = () => {
                 label="Flightsasfaf"
                 iconName="airplanemode-on"
                 iconType="material"
-            />
-            <Tabs.Item name="trips" label="Trips" iconName="bag-checked" />
-            <Tabs.Item name="explore" label="Explore" iconName="compass-outline" />
+            >
+                <Tabs.Label label="Flightsasfaf" iconName="airplanemode-on" />
+            </Tabs.Item>
+            <Tabs.Item name="trips" label="Trips" iconName="bag-checked">
+                <Tabs.Label label="Trips" iconName="bag-checked" />
+            </Tabs.Item>
+            <Tabs.Item name="explore" label="Explore" iconName="compass-outline">
+                <Tabs.Label label="Explore" iconName="compass-outline" />
+            </Tabs.Item>
         </Tabs>
     );
 };

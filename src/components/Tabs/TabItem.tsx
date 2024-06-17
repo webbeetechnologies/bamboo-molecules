@@ -1,12 +1,20 @@
 import type { TouchableRippleProps } from '../TouchableRipple';
-import { memo, useMemo } from 'react';
+import {
+    Children,
+    JSXElementConstructor,
+    ReactElement,
+    cloneElement,
+    isValidElement,
+    memo,
+    useCallback,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { useComponentStyles, useMolecules } from '../../hooks';
-import type { LayoutChangeEvent, TextStyle, ViewStyle } from 'react-native';
-import type { IconType, IconProps } from '../Icon';
+import type { LayoutChangeEvent, ViewStyle } from 'react-native';
 import { CallbackActionState, withActionState } from '../../hocs';
-import type { TextProps, ViewProps } from '@bambooapp/bamboo-atoms';
-
-const DEFAULT_ICON_SIZE = 24;
+import type { ViewProps } from '@bambooapp/bamboo-atoms';
 
 export type TabItemProps = Omit<TouchableRippleProps, 'children'> &
     CallbackActionState & {
@@ -22,60 +30,48 @@ export type TabItemProps = Omit<TouchableRippleProps, 'children'> &
          * variant according to m3 guidelines
          * */
         variant?: 'primary' | 'secondary';
-        /**
-         * active color for the label and the icon. This should normally come from the parent component - (Tabs)
-         * */
-        activeColor?: string;
-        /**
-         * label of the tab
-         * */
-        label?: string;
-        labelStyle?: TextStyle;
-        labelProps?: Omit<TextProps, 'children' | 'style'>;
-        /**
-         * icon properties
-         * */
-        iconName?: string;
-        iconType?: IconType;
-        iconProps?: Omit<IconProps, 'name' | 'type'>;
-        iconStyle?: TextStyle;
+
         contentsContainerStyle?: ViewStyle;
         contentsContainerProps?: Omit<ViewProps, 'children' | 'style' | 'onLayout'>;
         onLayoutContent?: (e: LayoutChangeEvent) => void;
+        accessibilityLabel?: string;
+        children: ReactElement<
+            {
+                active: boolean;
+                hovered: boolean;
+                variant: 'primary' | 'secondary';
+            },
+            JSXElementConstructor<{
+                active: boolean;
+                hovered: boolean;
+                variant: 'primary' | 'secondary';
+            }>
+        >;
     };
-
-const emptyObj = {};
 
 const TabItemWithActionState = withActionState(
     ({
         active = false,
         variant = 'primary',
-        label,
         style,
         onLayout,
         onLayoutContent,
-        iconName,
-        iconType,
-        iconProps,
-        iconStyle: iconStyleProp = emptyObj,
-        activeColor: activeColorProp,
         hovered = false,
-        labelStyle: labelStyleProp,
-        labelProps,
         contentsContainerStyle: contentsContainerStyleProp,
         contentsContainerProps,
+        accessibilityLabel,
+        children,
         ...rest
     }: TabItemProps) => {
-        const { TouchableRipple, Text, Icon, View, StateLayer } = useMolecules();
+        const { TouchableRipple, View, StateLayer } = useMolecules();
+
+        const [itemHeight, setItemHeight] = useState(0);
 
         const componentStyles = useComponentStyles(
             'Tabs_Item',
             [
                 style,
                 {
-                    icon: iconStyleProp,
-                    ...(activeColorProp ? { activeColor: activeColorProp } : {}),
-                    label: labelStyleProp || {},
                     contentsContainer: contentsContainerStyleProp || {},
                 },
             ],
@@ -89,51 +85,42 @@ const TabItemWithActionState = withActionState(
             },
         );
 
-        const { contentsContainerStyle, stateLayerStyle, labelStyle, iconStyle, containerStyle } =
-            useMemo(() => {
-                const {
-                    minHeight,
-                    activeColor,
-                    contentsContainer,
-                    label: _labelStyle,
-                    icon,
-                    stateLayer,
-                    ...restStyle
-                } = componentStyles;
+        const { contentsContainerStyle, stateLayerStyle, containerStyle } = useMemo(() => {
+            const {
+                minHeight,
+                contentsContainer,
+                label: _labelStyle,
+                stateLayer,
+                ...restStyle
+            } = componentStyles;
 
-                return {
-                    containerStyle: [
-                        {
-                            minHeight:
-                                iconName && label
-                                    ? minHeight + (iconProps?.size || DEFAULT_ICON_SIZE) - 4
-                                    : minHeight,
-                        },
-                        restStyle,
-                    ],
-                    contentsContainerStyle: contentsContainer,
-                    labelStyle: [
-                        _labelStyle,
-                        active && {
-                            color: activeColor,
-                        },
-                    ],
-                    iconStyle: [
-                        icon,
-                        active && {
-                            color: activeColor,
-                        },
-                    ],
-                    stateLayerStyle: stateLayer,
-                };
-            }, [active, componentStyles, iconName, iconProps?.size, label]);
+            return {
+                containerStyle: [
+                    {
+                        minHeight: Math.max(itemHeight, minHeight),
+                    },
+                    restStyle,
+                ],
+                contentsContainerStyle: contentsContainer,
+                stateLayerStyle: stateLayer,
+            };
+        }, [componentStyles, itemHeight]);
+
+        const useLayoutContentRef = useRef(onLayoutContent);
+        const onLayoutHandled = useCallback((e: LayoutChangeEvent) => {
+            useLayoutContentRef.current?.(e);
+            setItemHeight(e.nativeEvent.layout.height);
+        }, []);
 
         const { accessibilityState, accessibilityValue } = useMemo(
             () => ({
                 accessibilityState: { selected: active },
-                accessibilityValue: typeof label === 'string' ? { text: label } : undefined,
+                accessibilityValue:
+                    typeof accessibilityLabel === 'string'
+                        ? { text: accessibilityLabel }
+                        : undefined,
             }),
-            [active, label],
+            [active, accessibilityLabel],
         );
 
         return (
@@ -148,19 +135,15 @@ const TabItemWithActionState = withActionState(
                     <View
                         style={contentsContainerStyle}
                         {...contentsContainerProps}
-                        onLayout={onLayoutContent}>
-                        {iconName && (
-                            <Icon
-                                style={iconStyle}
-                                name={iconName}
-                                type={iconType}
-                                size={DEFAULT_ICON_SIZE}
-                                {...iconProps}
-                            />
-                        )}
-                        <Text style={labelStyle} numberOfLines={1} {...labelProps}>
-                            {label}
-                        </Text>
+                        onLayout={onLayoutHandled}>
+                        {Children.map(children, child => {
+                            if (!isValidElement(child)) return null;
+                            return cloneElement(child, {
+                                active,
+                                hovered,
+                                variant,
+                            });
+                        })}
                     </View>
 
                     <StateLayer style={stateLayerStyle} />

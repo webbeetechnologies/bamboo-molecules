@@ -42,8 +42,6 @@ export const tabsStyles: ComponentStylePropWithVariants<ViewStyle, '', CustomPro
 
 type TabsItemCustomProps = {
     contentsContainer?: ViewStyle;
-    label?: TextStyle;
-    icon?: TextStyle;
     activeColor?: string;
     stateLayer?: ViewStyle;
 };
@@ -67,17 +65,6 @@ export const tabsItemStyles: ComponentStylePropWithVariants<
     contentsContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-    },
-
-    label: {
-        fontSize: 'typescale.titleSmall.fontSize' as unknown as number,
-        fontWeight: 'typescale.titleSmall.fontWeight' as unknown as TextStyle['fontWeight'],
-        lineHeight: 'typescale.titleSmall.lineHeight' as unknown as number,
-        color: 'colors.onSurface',
-    },
-
-    icon: {
-        color: 'colors.onSurfaceVariant',
     },
 
     variants: {
@@ -111,5 +98,23 @@ export const tabsItemStyles: ComponentStylePropWithVariants<
                 },
             },
         },
+    },
+};
+
+type TabsLabelCustomProps = {
+    label?: TextStyle;
+    icon?: TextStyle;
+};
+
+export const tabsLabelStyles: ComponentStylePropWithVariants<{}, States, TabsLabelCustomProps> = {
+    label: {
+        fontSize: 'typescale.titleSmall.fontSize' as unknown as number,
+        fontWeight: 'typescale.titleSmall.fontWeight' as unknown as TextStyle['fontWeight'],
+        lineHeight: 'typescale.titleSmall.lineHeight' as unknown as number,
+        color: 'colors.onSurface',
+    },
+
+    icon: {
+        color: 'colors.onSurfaceVariant',
     },
 };
