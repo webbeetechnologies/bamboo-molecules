@@ -43,6 +43,7 @@ export const menuItemStyles: ComponentStylePropWithVariants<
 
     text: {
         flex: 1,
+        color: 'colors.onSurface',
     },
 
     leftElement: {
