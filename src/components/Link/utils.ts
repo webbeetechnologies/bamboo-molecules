@@ -1,11 +1,11 @@
 import type { ComponentStylePropWithVariants } from '../../types';
 import type { TextStyle } from 'react-native';
+import { getCursorStyle } from '../../utils';
 
 type States = 'disabled' | 'hovered';
 
 export const linkStyles: ComponentStylePropWithVariants<TextStyle, States> = {
-    // @ts-ignore
-    // cursor: 'pointer',
+    ...getCursorStyle('pointer'),
     color: 'colors.primary',
     fontSize: 'typescale.labelLarge.fontSize' as unknown as number,
     fontWeight: 'typescale.labelLarge.fontWeight' as unknown as TextStyle['fontWeight'],
@@ -15,8 +15,7 @@ export const linkStyles: ComponentStylePropWithVariants<TextStyle, States> = {
         disabled: {
             color: 'colors.onSurfaceDisabled',
             opacity: 0.38,
-            // @ts-ignore
-            // cursor: 'default',
+            ...getCursorStyle('pointer'),
         },
         hovered: {
             textDecorationLine: 'underline',
