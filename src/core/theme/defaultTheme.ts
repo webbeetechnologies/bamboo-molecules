@@ -125,6 +125,7 @@ import {
     menuItemStyles,
     tabsStyles,
     tabsItemStyles,
+    tabsLabelStyles,
 } from '../../components';
 import { materialToastStyles } from '../../components/Toast/utils';
 import { MD3DarkTheme, MD3LightTheme } from '../../styles';
@@ -339,4 +340,5 @@ export const defaultThemeValue: Partial<ITheme> = {
 
     Tabs: tabsStyles,
     Tabs_Item: tabsItemStyles,
+    Tabs_Label: tabsLabelStyles,
 };
