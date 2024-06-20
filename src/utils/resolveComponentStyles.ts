@@ -5,23 +5,29 @@ import { createMemoizedFunction } from './lodash';
 
 const resolveComponentStylesMemo = createMemoizedFunction();
 
+const emptyObj = {};
+
 export const resolveComponentStyles = resolveComponentStylesMemo(
     ({
         componentTheme,
         variant,
         states,
         size,
-        style, // style prop from the component
+        style = emptyObj, // style prop from the component
     }: ResolveComponentStylesArgs) => {
         const {
             variants,
-            states: componentStates,
-            sizes: componentSizes,
+            states: componentStates = emptyObj,
+            sizes: componentSizes = emptyObj,
             ...styles
-        } = componentTheme ?? {};
+        } = componentTheme ?? emptyObj;
 
-        const variantStyles = variant ? variants?.[variant] || {} : {};
-        const { states: variantStates, sizes: variantSizes, ...nonStateStyles } = variantStyles; // filtering the unused state styles
+        const variantStyles = variant ? variants?.[variant] || emptyObj : emptyObj;
+        const {
+            states: variantStates = emptyObj,
+            sizes: variantSizes = emptyObj,
+            ...nonStateStyles
+        } = variantStyles; // filtering the unused state styles
 
         return deepmerge(
             styles,

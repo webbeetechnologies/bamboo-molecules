@@ -18,6 +18,7 @@ import {
     StyleProp,
     TextStyle,
     ViewStyle,
+    Platform,
 } from 'react-native';
 import type { TextInputProps, ViewProps } from '@bambooapp/bamboo-atoms';
 
@@ -401,7 +402,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             const input = inputRefLocal.current;
 
             return () => {
-                if (!isVersion18 || !input?.isFocused()) return;
+                if (!isVersion18 || !input?.isFocused() || Platform.OS !== 'web') return;
 
                 const event = new Event('blur', { bubbles: true });
                 Object.defineProperty(event, 'target', {

@@ -11,7 +11,9 @@ export const Default: ComponentStory<typeof ControlledExample> = args => (
     <ControlledExample {...args} />
 );
 
-Default.args = {};
+Default.args = {
+    inputType: 'picker',
+};
 
 Default.parameters = {
     docs: {
