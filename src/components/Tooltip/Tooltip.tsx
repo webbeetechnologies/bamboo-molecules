@@ -76,9 +76,11 @@ const Tooltip = ({
                 ? {
                       onMouseEnter: () => {
                           preventCloseRef.current = true;
+                          clearTimeout(timeOutRef.current);
                           setIsOpen(true);
                       },
                       onMouseLeave: () => {
+                          preventCloseRef.current = false;
                           clearTimeout(timeOutRef.current);
                           setIsOpen(false);
                       },
