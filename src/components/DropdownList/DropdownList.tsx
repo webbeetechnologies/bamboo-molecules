@@ -111,8 +111,8 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     }, [isOpen, setIsOpen]);
 
     const onSelectionChange = useCallback(
-        (item: TItem | TItem[] | null, event?: GestureResponderEvent) => {
-            onSelectionChangeProp?.(item, event);
+        (selection: TItem | TItem[] | null, item: TItem, event?: GestureResponderEvent) => {
+            onSelectionChangeProp?.(selection, item, event);
 
             if (hideOnSelect) {
                 setIsOpen(false);

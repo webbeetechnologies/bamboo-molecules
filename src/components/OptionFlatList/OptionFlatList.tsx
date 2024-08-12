@@ -57,9 +57,9 @@ export type Props<TItem extends DefaultItemT = DefaultItemT> = UseSearchableProp
          * */
         selection?: TItem | TItem[];
         /*
-         * passes the current selectedItem. Will be an array in multiple mode
+         * passes the current selectedItem. Will be an array in multiple mode. Item is the specific item which is pressed
          * */
-        onSelectionChange?: (item: TItem | TItem[]) => void;
+        onSelectionChange?: (selection: TItem | TItem[], item: TItem) => void;
         customFlatList?: ComponentType<FlatListProps<TItem>>;
         renderItem: (
             info: ListRenderItemInfo<TItem> & {

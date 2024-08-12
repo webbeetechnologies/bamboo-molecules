@@ -80,7 +80,7 @@ export type Props<
     /*
      * passes the current selectedItem. Will be an array in multiple mode
      * */
-    onChange?: (item: TItem | TItem[] | null) => void;
+    onChange?: DropdownListProps<TItem>['onSelectionChange'];
     /*
      * whether or not pressing the field will open the popup
      * if false, the popup can be controlled using the ref
@@ -180,8 +180,8 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
     }, [labelKey, selectionValue]);
 
     const onSelectItemChange = useCallback(
-        (item: TItem | TItem[] | null, event?: GestureResponderEvent) => {
-            onSelectionValueChange(item, event);
+        (selection: TItem | TItem[] | null, item: TItem, event?: GestureResponderEvent) => {
+            onSelectionValueChange(selection, item, event);
         },
         [onSelectionValueChange],
     );
