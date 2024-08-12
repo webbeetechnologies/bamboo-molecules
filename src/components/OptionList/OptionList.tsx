@@ -63,9 +63,13 @@ export type Props<TItem = DefaultItemT, TSection = DefaultSectionT<TItem>> = Use
          * */
         selection?: TItem | TItem[] | null;
         /*
-         * passes the current selectedItem. Will be an array in multiple mode
+         * passes the current selectedItem. Will be an array in multiple mode. Item is the specific item which is pressed
          * */
-        onSelectionChange?: (item: TItem | TItem[] | null, event?: GestureResponderEvent) => void;
+        onSelectionChange?: (
+            selection: TItem | TItem[] | null,
+            item: TItem,
+            event?: GestureResponderEvent,
+        ) => void;
         renderItem: (
             info: SectionListRenderItemInfo<TItem, TSection> & {
                 onPress: (e?: GestureResponderEvent) => void;

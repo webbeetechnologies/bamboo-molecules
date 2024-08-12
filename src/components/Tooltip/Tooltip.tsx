@@ -1,4 +1,4 @@
-import { createContext, memo, ReactElement, useCallback, useMemo, useRef } from 'react';
+import { createContext, memo, ReactElement, useCallback, useEffect, useMemo, useRef } from 'react';
 import { ViewStyle, TextStyle, StyleSheet, ViewProps } from 'react-native';
 
 import { useSubcomponents, useToggle } from '../../hooks';
@@ -88,6 +88,13 @@ const Tooltip = ({
                 : {}) as ViewProps,
         [hoverableContent, setIsOpen],
     );
+
+    useEffect(() => {
+        return () => {
+            clearTimeout(timeOutRef.current);
+            clearTimeout(popoverTimeoutRef.current);
+        };
+    }, []);
 
     return (
         <TooltipContext.Provider value={contextValue}>
