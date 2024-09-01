@@ -160,6 +160,7 @@ const OptionList = <
                             : [...selection, item]
                         : [item]
                     : item,
+                item,
                 event,
             );
         },
