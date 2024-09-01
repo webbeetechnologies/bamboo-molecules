@@ -1,4 +1,5 @@
 import {
+    ComponentType,
     MutableRefObject,
     forwardRef,
     memo,
@@ -29,6 +30,7 @@ export type Props = ViewProps & {
     datePickerInputProps?: Omit<Partial<DatePickerInputProps>, 'value' | 'onChange'>;
     datePickerInputRef?: MutableRefObject<TextInputHandles | null>;
     timePickerInputRef?: MutableRefObject<TextInputHandles | null>;
+    Wrapper?: ComponentType<any>;
 };
 
 const emptyObj = {};
@@ -55,12 +57,15 @@ const DateTimePicker = (
         testID,
         datePickerInputRef: _datePickerInputRef,
         timePickerInputRef: _timePickerInputRef,
+        Wrapper: _WrapperProp,
         ...rest
     }: Props,
     ref: any,
 ) => {
     const { DatePickerInput, ElementGroup, TimePickerField } = useMolecules();
     const componentStyles = useComponentStyles('DateTimePicker', style);
+
+    const Wrapper = _WrapperProp ?? ElementGroup;
 
     const containerRef = useRef(null);
     const datePickerInputRef = useRef<TextInputHandles>(null);
@@ -74,6 +79,8 @@ const DateTimePicker = (
 
     const timeString = useMemo(() => (date && isValid(date) ? format(date, 'HH:mm') : ''), [date]);
 
+    const timeStringRef = useRef(timeString);
+
     const onDateChange = useCallback(
         (newDate: Date | null) => {
             if (!newDate) {
@@ -82,8 +89,13 @@ const DateTimePicker = (
                 return;
             }
 
+            const addTimeString = (_date: Date) =>
+                timeStringRef.current
+                    ? parse(timeStringRef.current ?? '00:00', 'HH:mm', _date)
+                    : _date;
+
             if (!date) {
-                onChange(normalizeDateWithCurrentTime(newDate));
+                onChange(addTimeString(normalizeDateWithCurrentTime(newDate)));
                 return;
             }
 
@@ -94,7 +106,7 @@ const DateTimePicker = (
 
             const [day, month, year] = format(newDate, 'dd/MM/yyyy').split('/');
 
-            onChange(set(date, { date: +day, month: +month - 1, year: +year }));
+            onChange(addTimeString(set(date, { date: +day, month: +month - 1, year: +year })));
         },
         [date, onChange],
     );
@@ -104,6 +116,8 @@ const DateTimePicker = (
             if (!time) return;
 
             const newTime = sanitizeTimeString(time);
+
+            timeStringRef.current = newTime;
 
             onChange(date ? parse(newTime, 'HH:mm', date) : null);
         },
@@ -130,7 +144,7 @@ const DateTimePicker = (
 
     return (
         <>
-            <ElementGroup style={componentStyles} testID={testID} {...rest} ref={containerRef}>
+            <Wrapper style={componentStyles} testID={testID} {...rest} ref={containerRef}>
                 <DatePickerInput
                     ref={datePickerInputRef}
                     inputMode="start"
@@ -149,7 +163,7 @@ const DateTimePicker = (
                     time={timeString}
                     onTimeChange={onTimeChange}
                 />
-            </ElementGroup>
+            </Wrapper>
         </>
     );
 };
