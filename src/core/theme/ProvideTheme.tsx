@@ -22,11 +22,14 @@ export const defaultExtractStyles = memoize(
     },
 );
 
+const defaultOverwritableProperties = ['light', 'dark'];
+
 export const ProvideTheme = ({
     theme,
     resolveComponentStyles = defaultResolveComponentStyles,
     extractStyles = defaultExtractStyles,
     children,
+    overwritableProperties = defaultOverwritableProperties,
 }: ProvideThemeArgs) => {
     const memoizedTheme = useMemo(
         () => ({
@@ -48,7 +51,10 @@ export const ProvideTheme = ({
     );
 
     return (
-        <AtomProvideTheme theme={memoizedTheme} extractStyles={extractStyles}>
+        <AtomProvideTheme
+            theme={memoizedTheme}
+            extractStyles={extractStyles}
+            overwritableProperties={overwritableProperties}>
             {children}
         </AtomProvideTheme>
     );
