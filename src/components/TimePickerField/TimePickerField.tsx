@@ -6,6 +6,7 @@ import type { TimePickerModalProps } from '../TimePickerModal';
 import type { TextInputProps } from '../TextInput';
 import { timeFormat, getFormattedTime, getOutputTime } from './utils';
 import type { IconButtonProps } from '../IconButton';
+import { sanitizeTime } from './sanitizeTime';
 
 export type Props = TextInputProps & {
     time: string;
@@ -32,7 +33,7 @@ const TimePickerField = (
     }: Props,
     ref: any,
 ) => {
-    const { MaskedInput, IconButton, TimePickerModal } = useMolecules();
+    const { TextInput, IconButton, TimePickerModal } = useMolecules();
     const componentStyles = useComponentStyles('TimePickerField', style);
 
     const [timeString, setTimeString] = useState(() => getFormattedTime({ time, is24Hour }));
@@ -43,12 +44,14 @@ const TimePickerField = (
     const { state: isOpen, handleOpen: onOpenModal, handleClose: onCloseModal } = useToggle(false);
 
     const onChangeText = useCallback(
-        (text: string) => {
-            setTimeString(text);
+        (_text: string) => {
+            const text = sanitizeTime(_text, is24Hour);
+            setTimeString(_text);
 
-            if (disabled) return;
+            if (disabled || !text) return;
 
             const outputTime = getOutputTime({ time: text || time, is24Hour });
+
             onTimeChangeProp(outputTime);
         },
         [disabled, is24Hour, onTimeChangeProp, time],
@@ -70,14 +73,14 @@ const TimePickerField = (
 
             if (disabled) return;
 
-            const outputTime = getOutputTime({ time: timeString || time, is24Hour });
+            // const outputTime = getOutputTime({ time: timeString || time, is24Hour });
             // onTimeChangeProp(outputTime);
 
-            if (time === outputTime) {
-                setTimeString(getFormattedTime({ time, is24Hour }));
-            }
+            // if (time === outputTime) {
+            setTimeString(sanitizeTime(getFormattedTime({ time, is24Hour }), is24Hour));
+            // }
         },
-        [disabled, is24Hour, onBlurProp, time, timeString],
+        [disabled, is24Hour, onBlurProp, time],
     );
 
     const onFocus = useCallback(
@@ -133,9 +136,8 @@ const TimePickerField = (
     }, [is24Hour, time]);
 
     return (
-        <MaskedInput
+        <TextInput
             ref={ref}
-            mask={currentTimeFormat.mask}
             placeholder={currentTimeFormat.format}
             {...rest}
             disabled={disabled}

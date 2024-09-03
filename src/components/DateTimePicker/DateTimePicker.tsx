@@ -84,7 +84,7 @@ const DateTimePicker = (
     const onDateChange = useCallback(
         (newDate: Date | null) => {
             if (!newDate) {
-                onChange(null);
+                onChange(date);
 
                 return;
             }
@@ -100,7 +100,7 @@ const DateTimePicker = (
             }
 
             if (!isValid(newDate)) {
-                onChange(null);
+                onChange(date);
                 return;
             }
 
