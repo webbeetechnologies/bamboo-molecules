@@ -52,7 +52,7 @@ export default function useDateInput({
             if (!isValid(parsedDate)) {
                 // TODO: Translate
                 // setError(`Date format must be ${dateFormat}`);
-                onChange?.(value ?? null);
+                onChange?.(date ? value ?? null : null);
 
                 return;
             }
