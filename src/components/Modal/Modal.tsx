@@ -1,7 +1,7 @@
 import { useRef, useEffect, ReactNode, useCallback, useMemo, memo, forwardRef } from 'react';
 import {
     Animated,
-    Easing,
+    // Easing,
     StyleProp,
     StyleSheet,
     useWindowDimensions,
@@ -52,18 +52,18 @@ export type Props = ViewProps & {
      * Use this prop to change the default wrapper style or to override safe area insets with marginTop and marginBottom.
      */
     style?: StyleProp<ViewStyle>;
-    /**
-     * Duration of the animations in the modal
-     * @default 220
-     * */
-    animationDuration?: number;
+    // /**
+    //  * Duration of the animations in the modal
+    //  * @default 220
+    //  * */
+    // animationDuration?: number;
     /**
      * testID to be used on tests.
      */
     testID?: string;
 };
 
-const DEFAULT_DURATION = 220;
+// const DEFAULT_DURATION = 220;
 
 function Modal(
     {
@@ -76,7 +76,7 @@ function Modal(
         elevation,
         size = 'md',
         style,
-        animationDuration = DEFAULT_DURATION,
+        // animationDuration = DEFAULT_DURATION,
         testID = 'modal',
         ...rest
     }: Props,
@@ -88,13 +88,13 @@ function Modal(
     });
 
     const visibleRef = useRef<boolean>(isOpen);
-    const prevVisible = useRef<boolean | null>(null);
-    const opacityRef = useRef(new Animated.Value(isOpen ? 1 : 0));
+    // const prevVisible = useRef<boolean | null>(null);
+    // const opacityRef = useRef(new Animated.Value(isOpen ? 1 : 0));
     const hideModalRef = useRef<() => void>(() => {});
 
     const dimensions = useWindowDimensions();
 
-    const { animationScale, backdropStyle, contentContainerStyle, contentStyle } = useMemo(() => {
+    const { backdropStyle, contentContainerStyle, contentStyle } = useMemo(() => {
         const {
             animationScale: _animationScale = 1,
             backdrop,
@@ -110,7 +110,7 @@ function Modal(
                 {
                     // @ts-ignore to resolve maximum callstack exceeded issue
                     // TODO - find out why this is happening(it isn't happening on contentStyle)
-                    opacity: opacityRef.current._value,
+                    opacity: 1,
                 },
             ],
             contentContainerStyle: [
@@ -118,14 +118,10 @@ function Modal(
                 contentContainer,
                 contentContainerStyleProp,
             ],
-            contentStyle: [
-                modalContent,
-                { width: dimensions.width, opacity: opacityRef.current },
-                restStyle,
-            ],
+            contentStyle: [modalContent, { width: dimensions.width, opacity: 1 }, restStyle],
             style: restStyle,
         };
-    }, [componentStyles, contentContainerStyleProp, dimensions.width, opacityRef]);
+    }, [componentStyles, contentContainerStyleProp, dimensions.width]);
 
     const handleBack = useCallback(() => {
         if (dismissible) {
@@ -139,31 +135,35 @@ function Modal(
         callback: handleBack,
     });
 
-    const showModal = useCallback(() => {
-        Animated.timing(opacityRef.current, {
-            toValue: 1,
-            duration: animationScale * animationDuration,
-            easing: Easing.out(Easing.cubic),
-            useNativeDriver: true,
-        }).start();
-    }, [animationDuration, animationScale, opacityRef]);
+    // const showModal = useCallback(() => {
+    //     Animated.timing(opacityRef.current, {
+    //         toValue: 1,
+    //         duration: animationScale * animationDuration,
+    //         easing: Easing.out(Easing.cubic),
+    //         useNativeDriver: true,
+    //     }).start();
+    // }, [animationDuration, animationScale, opacityRef]);
 
     const hideModal = useCallback(() => {
-        Animated.timing(opacityRef.current, {
-            toValue: 0,
-            duration: animationScale * animationDuration,
-            easing: Easing.out(Easing.cubic),
-            useNativeDriver: true,
-        }).start(({ finished }) => {
-            if (!finished) {
-                return;
-            }
+        // Animated.timing(opacityRef.current, {
+        //     toValue: 0,
+        //     duration: animationScale * animationDuration,
+        //     easing: Easing.out(Easing.cubic),
+        //     useNativeDriver: true,
+        // }).start(({ finished }) => {
+        //     if (!finished) {
+        //         return;
+        //     }
 
-            if (isOpen && onClose) {
-                onClose();
-            }
-        });
-    }, [opacityRef, animationScale, animationDuration, isOpen, onClose]);
+        //     if (isOpen && onClose) {
+        //         onClose();
+        //     }
+        // });
+
+        if (isOpen && onClose) {
+            onClose();
+        }
+    }, [isOpen, onClose]);
 
     useEffect(() => {
         hideModalRef.current = hideModal;
@@ -173,16 +173,16 @@ function Modal(
         visibleRef.current = isOpen;
     });
 
-    useEffect(() => {
-        if (prevVisible.current !== isOpen) {
-            if (isOpen) {
-                showModal();
-            } else {
-                hideModal();
-            }
-        }
-        prevVisible.current = isOpen;
-    }, [hideModal, showModal, isOpen]);
+    // useEffect(() => {
+    //     if (prevVisible.current !== isOpen) {
+    //         if (isOpen) {
+    //             showModal();
+    //         } else {
+    //             hideModal();
+    //         }
+    //     }
+    //     prevVisible.current = isOpen;
+    // }, [hideModal, showModal, isOpen]);
 
     if (!isOpen) return null;
 
