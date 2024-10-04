@@ -194,7 +194,7 @@ export const TabBase = ({
     useEffect(() => {
         Animated.timing(positionAnimationRef.current, {
             toValue: valueIndex,
-            useNativeDriver: true,
+            useNativeDriver: false,
             duration: 170,
         }).start();
 
@@ -204,7 +204,7 @@ export const TabBase = ({
     useEffect(() => {
         Animated.timing(widthAnimationRef.current, {
             toValue: valueIndex,
-            useNativeDriver: true,
+            useNativeDriver: false,
             duration: 170,
         }).start();
     }, [positionAnimationRef, scrollHandler, valueIndex]);

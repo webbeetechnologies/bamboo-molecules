@@ -187,7 +187,7 @@ function Modal(
     if (!isOpen) return null;
 
     return (
-        <Animated.View
+        <View
             pointerEvents={isOpen ? 'auto' : 'none'}
             accessibilityViewIsModal
             accessibilityLiveRegion="polite"
@@ -212,7 +212,7 @@ function Modal(
                     {children}
                 </Surface>
             </View>
-        </Animated.View>
+        </View>
     );
 }
 
