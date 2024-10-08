@@ -10,12 +10,14 @@ type Args<T> = {
     manipulateValue?: (value: T | undefined, prevValue: T | undefined) => T;
 };
 
+const defaultManipulateValue = (val: any) => val;
+
 const useControlledValue = <T,>({
     value: valueProp,
     defaultValue,
     disabled = false,
     onChange,
-    manipulateValue = val => val as T,
+    manipulateValue = defaultManipulateValue,
 }: Args<T>): ReturnType<T> => {
     const value = useMemo(
         () =>

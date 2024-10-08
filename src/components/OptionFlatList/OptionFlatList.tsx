@@ -131,6 +131,7 @@ const OptionFlatList = <TItem extends DefaultItemT = DefaultItemT>(
                             : [...selection, item]
                         : [item]
                     : item,
+                item,
             );
         },
         [multiple, onSelectionChange, selection],

@@ -4,6 +4,7 @@ import { useRangeChecker } from '../DatePickerInline/dateUtils';
 import type { ValidRangeType } from '../DatePickerInline';
 import { format, isNil, parse, isValid, endOfDay } from '../../utils';
 import type { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
+import { useLatest } from '../../hooks';
 
 const formatValue = (value: Date | null | undefined, dateFormat: string) =>
     !isNil(value) ? format(value, dateFormat) || '' : '';
@@ -32,18 +33,26 @@ export default function useDateInput({
     const { isDisabled, isWithinValidRange } = useRangeChecker(validRange);
 
     const [formattedValue, setFormattedValue] = useState(() => formatValue(value, dateFormat));
+    const formattedValueRef = useLatest(formattedValue);
 
     // const [error, setError] = useState<null | string>(null);
 
     const onChangeText = useCallback(
         (date: string) => {
-            setFormattedValue(date);
             const parsedDate = parse(date, dateFormat, new Date());
+
+            setFormattedValue(
+                isBlurredRef.current
+                    ? isValid(parsedDate)
+                        ? date
+                        : formattedValueRef.current
+                    : date,
+            );
 
             if (!isValid(parsedDate)) {
                 // TODO: Translate
                 // setError(`Date format must be ${dateFormat}`);
-                onChange?.(null);
+                onChange?.(date ? value ?? null : null);
 
                 return;
             }
@@ -81,16 +90,26 @@ export default function useDateInput({
             onChange?.(finalDate);
             // setError(null);
         },
-        [dateFormat, inputMode, isDisabled, isWithinValidRange, onChange],
+        [
+            dateFormat,
+            formattedValueRef,
+            inputMode,
+            isBlurredRef,
+            isDisabled,
+            isWithinValidRange,
+            onChange,
+            value,
+        ],
     );
 
     const onBlur = useCallback(
         (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
             isBlurredRef.current = true;
             onBlurProp?.(e);
-            setFormattedValue(formatValue(value, dateFormat));
+            formattedValueRef.current = formatValue(value, dateFormat);
+            setFormattedValue(formattedValueRef.current);
         },
-        [dateFormat, isBlurredRef, onBlurProp, value],
+        [dateFormat, formattedValueRef, isBlurredRef, onBlurProp, value],
     );
 
     const onFocus = useCallback(

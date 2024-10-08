@@ -44,6 +44,7 @@ export interface ProvideThemeArgs {
     resolveComponentStyles?: (args: ResolveComponentStylesArgs) => StyleProp<any>;
     extractStyles?: (args: IExtractStylesFuncArgs) => StyleProp<any>;
     children: ReactNode;
+    overwritableProperties?: (keyof ITheme)[];
 }
 
 export type Font = {
