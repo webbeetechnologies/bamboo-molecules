@@ -1,9 +1,9 @@
-import type { ComponentType, Context as ContextType, ReactNode } from 'react';
-import { useContext, useMemo, useRef, useState } from 'react';
+import type { ComponentType, Context as ContextType, PropsWithChildren } from 'react';
+import { Fragment, useContext, useId, useMemo, useRef, useState } from 'react';
 import typedMemo from '../hocs/typedMemo';
 import { Repository } from '@bambooapp/bamboo-atoms/repository';
 
-export const createContextBridge = <T extends { children: ReactNode }>(
+export const createContextBridge = <T extends object>(
     bridgeName: string,
     Wrapper: ComponentType<T>,
     contexts: ContextType<any>[] = [],
@@ -19,8 +19,11 @@ export const createContextBridge = <T extends { children: ReactNode }>(
         registerContextToBridge: (updatedContexts: ContextType<any> | ContextType<any>[]) => {
             respository.register('contexts', ([] as ContextType<any>[]).concat(updatedContexts));
         },
-        BridgedComponent: typedMemo(({ children, ...rest }: T) => {
+        BridgedComponent: typedMemo((props: PropsWithChildren<T> & { forwardedKey?: string }) => {
+            const { forwardedKey: key, ...rest } = props;
             const contextValuesRef = useRef<any[]>([]);
+
+            const id = useId();
 
             const [allContexts] = useState(() =>
                 Array.from(new Set([...contexts, ...Object.values(respository.getAll()).flat()])),
@@ -38,11 +41,16 @@ export const createContextBridge = <T extends { children: ReactNode }>(
                             {acc}
                         </Context.Provider>
                     );
-                }, <>{children}</>);
+                }, <>{props.children}</>);
                 // eslint-disable-next-line react-hooks/exhaustive-deps
-            }, [...contextValuesRef.current, allContexts, children]);
+            }, [...contextValuesRef.current, allContexts, props.children, key, id]);
 
-            return <Wrapper {...(rest as T)}>{content}</Wrapper>;
+            const _key = key ? key + id : id;
+            return (
+                <Wrapper {...(rest as T)}>
+                    <Fragment key={_key}>{content}</Fragment>
+                </Wrapper>
+            );
         }),
     };
 };

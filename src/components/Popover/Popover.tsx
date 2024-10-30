@@ -19,8 +19,7 @@ export const popoverFactory = (componentName: string) =>
                 finalFocusRef,
 
                 // TODO: Implement trap focus functionality
-                // eslint-disable-next-line
-                trapFocus = true,
+                trapFocus: _trapFocus = true,
                 showArrow = false,
                 overlayStyles = {},
                 contentStyles = {},
@@ -34,6 +33,7 @@ export const popoverFactory = (componentName: string) =>
                 isKeyboardDismissable = true,
                 popoverContentProps,
                 backdropProps,
+                name,
                 ...props
             }: PopoverProps,
             ref: any,
@@ -87,8 +87,9 @@ export const popoverFactory = (componentName: string) =>
 
             if (!isOpen) return null;
 
+            const key = name ? `${name}:${popoverId}` : popoverId;
             return (
-                <Portal>
+                <Portal name={key} forwardedKey={key}>
                     <Transition
                         initial={popoverStyles.initialTransition}
                         animate={popoverStyles.animateTransition}
