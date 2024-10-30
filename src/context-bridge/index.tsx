@@ -19,8 +19,8 @@ export const createContextBridge = <T extends object>(
         registerContextToBridge: (updatedContexts: ContextType<any> | ContextType<any>[]) => {
             respository.register('contexts', ([] as ContextType<any>[]).concat(updatedContexts));
         },
-        BridgedComponent: typedMemo((props: PropsWithChildren<T> & { forwardedKey?: string }) => {
-            const { forwardedKey: key, ...rest } = props;
+        BridgedComponent: typedMemo((props: PropsWithChildren<T> & { name?: string }) => {
+            const { name, ...rest } = props;
             const contextValuesRef = useRef<any[]>([]);
 
             const id = useId();
@@ -43,11 +43,11 @@ export const createContextBridge = <T extends object>(
                     );
                 }, <>{props.children}</>);
                 // eslint-disable-next-line react-hooks/exhaustive-deps
-            }, [...contextValuesRef.current, allContexts, props.children, key, id]);
+            }, [...contextValuesRef.current, allContexts, props.children]);
 
-            const _key = key ? key + id : id;
+            const _key = name ? name + id : id;
             return (
-                <Wrapper {...(rest as T)}>
+                <Wrapper name={name} {...(rest as T)}>
                     <Fragment key={_key}>{content}</Fragment>
                 </Wrapper>
             );

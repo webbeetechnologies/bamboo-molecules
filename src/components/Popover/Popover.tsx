@@ -89,7 +89,7 @@ export const popoverFactory = (componentName: string) =>
 
             const key = name ? `${name}:${popoverId}` : popoverId;
             return (
-                <Portal name={key} forwardedKey={key}>
+                <Portal name={key}>
                     <Transition
                         initial={popoverStyles.initialTransition}
                         animate={popoverStyles.animateTransition}
