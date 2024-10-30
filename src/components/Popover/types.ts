@@ -26,6 +26,11 @@ export type PopoverProps = PropsWithChildren<
         isKeyboardDismissable?: boolean;
         popoverContentProps?: ViewProps;
         backdropProps?: BackdropProps;
+        /**
+         *
+         * Name is used to identify the portal
+         */
+        name?: string;
     }
 >;
 
