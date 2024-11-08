@@ -40,17 +40,18 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
     const { Text, View } = useMolecules();
     const monthStyles = useComponentStyles('DatePicker_Month', customMonthStyles);
 
-    const realIndex = getRealIndex(index);
     const isHorizontal = scrollMode === 'horizontal';
     const { isDisabled, isWithinValidRange } = useRangeChecker(validRange);
 
     const { monthName, month, year } = useMemo(() => {
+        const realIndex = getRealIndex(index);
+
         const md = addMonths(new Date(), realIndex);
         const y = mode === 'single' ? localDate.getFullYear() : md.getFullYear();
         const m = mode === 'single' ? localDate.getMonth() : md.getMonth();
 
         return { monthName: format(md, 'LLLL'), month: m, year: y };
-    }, [realIndex, localDate, mode]);
+    }, [index, localDate, mode]);
 
     const grid = useMemo(
         () =>

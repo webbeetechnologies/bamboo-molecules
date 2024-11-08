@@ -270,6 +270,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
                     right={<IconButton name="chevron-down" onPress={onToggle} />}
                     editable={false}
                     value={inputValue}
+                    pointerEvents="none"
                     {...inputProps}
                 />
             </Pressable>
@@ -289,6 +290,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
                     searchable={searchable}
                     onQueryChange={onQueryChange}
                     testID={dropdownTestID}
+                    nestedScrollEnabled
                 />
             )}
         </>

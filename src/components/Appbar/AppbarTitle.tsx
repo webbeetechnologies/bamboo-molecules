@@ -1,4 +1,4 @@
-import { memo, useContext, useMemo } from 'react';
+import { ComponentType, memo, useContext, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import type { TextProps } from '@bambooapp/bamboo-atoms';
 import { useComponentStyles, useMolecules } from '../../hooks';
@@ -6,10 +6,14 @@ import { AppbarContext } from './AppbarBase';
 
 export type Props = TextProps & {
     size?: 'sm' | 'md' | 'lg';
+    Wrapper?: ComponentType<any>;
 };
 
-const AppbarTitle = memo(({ style, children, ...rest }: Props) => {
+const AppbarTitle = memo(({ style, children, Wrapper: WrapperProp, ...rest }: Props) => {
     const { Text } = useMolecules();
+
+    const Wrapper = WrapperProp ?? Text;
+
     const { type } = useContext(AppbarContext);
     const componentStyles = useComponentStyles('Appbar_Title', style, {
         size: type === 'large' ? 'lg' : type === 'medium' ? 'md' : 'sm',
@@ -21,9 +25,9 @@ const AppbarTitle = memo(({ style, children, ...rest }: Props) => {
     );
 
     return (
-        <Text style={titleStyles} accessibilityRole="header" {...rest}>
+        <Wrapper style={titleStyles} accessibilityRole="header" {...rest}>
             {children}
-        </Text>
+        </Wrapper>
     );
 });
 
