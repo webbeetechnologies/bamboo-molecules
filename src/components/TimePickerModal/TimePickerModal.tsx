@@ -1,5 +1,5 @@
-import { memo, useState, useCallback, useEffect } from 'react';
-import { KeyboardAvoidingView } from 'react-native';
+import { memo, useState, useCallback, useEffect, useMemo } from 'react';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 
 import { useComponentStyles, useMolecules } from '../../hooks';
 import {
@@ -39,6 +39,7 @@ export function TimePickerModal({
     keyboardIcon = 'keyboard-outline',
     clockIcon = 'clock-outline',
     isLandscape = false,
+    style,
     ...rest
 }: Props) {
     const { IconButton, Button, Modal, Portal, TimePicker, View, Text } = useMolecules();
@@ -47,6 +48,11 @@ export function TimePickerModal({
     const [inputType, setInputType] = useState<PossibleInputTypes>(inputTypes.picker);
     const [focused, setFocused] = useState<PossibleClockTypes>(clockTypes.hours);
     const [time, setTime] = useState(() => timeProp || format(new Date(), 'HH:mm'));
+
+    const modelStyle = useMemo(
+        () => [componentStyles.modalContent, style],
+        [componentStyles.modalContent, style],
+    );
 
     const onFocusInput = useCallback((type: PossibleClockTypes) => setFocused(type), []);
 
@@ -69,8 +75,10 @@ export function TimePickerModal({
 
     return (
         <Portal>
-            <Modal {...rest} isOpen={isOpen} style={componentStyles.modalContent} onClose={onClose}>
-                <KeyboardAvoidingView style={componentStyles.keyboardView} behavior={'padding'}>
+            <Modal {...rest} isOpen={isOpen} style={modelStyle} onClose={onClose}>
+                <KeyboardAvoidingView
+                    style={componentStyles.keyboardView}
+                    behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
                     <View style={componentStyles.labelContainer}>
                         <Text style={componentStyles.label}>
                             {uppercase ? label.toUpperCase() : label}

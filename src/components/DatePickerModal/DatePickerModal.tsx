@@ -39,7 +39,7 @@ export function DatePickerModal(props: DatePickerModalProps) {
             modalContentStyle:
                 dimensions.width > 650
                     ? { flex: 1, maxHeight: 600 }
-                    : { flex: 1, maxWidth: undefined, maxHeight: undefined, borderRadius: 0 },
+                    : { flex: 1, maxWidth: undefined, borderRadius: 0 },
         };
     }, [componentStyles, dimensions.width]);
 
