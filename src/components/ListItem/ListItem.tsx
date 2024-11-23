@@ -7,7 +7,7 @@ import type { TouchableRippleProps } from '../TouchableRipple';
 import { CallbackActionState, withActionState } from '../../hocs';
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
-    WithElements<ReactNode> &
+    WithElements<ReactNode | ((renderArgs: { hovered: boolean }) => ReactNode)> &
     CallbackActionState & {
         /**
          * Description text for the list item or callback which returns a React element to display the description.
@@ -98,13 +98,21 @@ const ListItem = (
             ref={ref}>
             <>
                 <View style={innerContainerStyle}>
-                    {left ? <View style={leftElementStyle}>{left}</View> : null}
+                    {left ? (
+                        <View style={leftElementStyle}>
+                            {typeof left === 'function' ? left({ hovered }) : left}
+                        </View>
+                    ) : null}
                     <View style={contentStyle}>
                         <ListItemContext.Provider value={contextValue}>
                             <>{children}</>
                         </ListItemContext.Provider>
                     </View>
-                    {right ? <View style={rightElementStyle}>{right}</View> : null}
+                    {right ? (
+                        <View style={rightElementStyle}>
+                            {typeof right === 'function' ? right({ hovered }) : right}
+                        </View>
+                    ) : null}
                 </View>
                 {divider && <HorizontalDivider />}
             </>
