@@ -96,7 +96,8 @@ const DrawerItem = (
         };
     }, [componentStyles]);
 
-    const _hoveredForElements = typeof left === 'function' ? hovered : false;
+    const _hoveredForLeftElement = typeof left === 'function' ? hovered : false;
+    const _hoveredForRightElement = typeof right === 'function' ? hovered : false;
 
     const leftElement = useMemo(
         () =>
@@ -105,12 +106,12 @@ const DrawerItem = (
                     {typeof left === 'function'
                         ? left?.({
                               color: leftElementColor,
-                              hovered: _hoveredForElements,
+                              hovered: _hoveredForLeftElement,
                           })
                         : left}
                 </View>
             ) : null,
-        [View, left, leftElementColor, leftElementStyle, _hoveredForElements],
+        [View, left, leftElementColor, leftElementStyle, _hoveredForLeftElement],
     );
 
     const rightElement = useMemo(
@@ -120,12 +121,12 @@ const DrawerItem = (
                     {typeof right === 'function'
                         ? right?.({
                               color: rightElementColor,
-                              hovered: _hoveredForElements,
+                              hovered: _hoveredForRightElement,
                           })
                         : right}
                 </View>
             ) : null,
-        [View, right, rightElementColor, rightElementStyle, _hoveredForElements],
+        [View, right, rightElementColor, rightElementStyle, _hoveredForRightElement],
     );
 
     return (
