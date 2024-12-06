@@ -1,4 +1,14 @@
-import { memo, PropsWithoutRef, ReactElement, RefAttributes, useCallback, useMemo } from 'react';
+import {
+    ComponentType,
+    memo,
+    PropsWithoutRef,
+    ReactElement,
+    ReactNode,
+    RefAttributes,
+    useCallback,
+    useMemo,
+    useRef,
+} from 'react';
 import {
     GestureResponderEvent,
     Platform,
@@ -56,6 +66,13 @@ export type Props<
     triggerRef: any;
 
     maxHeight?: number;
+    WrapperComponent?: ComponentType<{
+        isOpen: boolean;
+        onClose: () => void;
+        onOpen: () => void;
+        children: ReactNode;
+        [key: string]: any;
+    }>;
 };
 
 const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
@@ -75,10 +92,13 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     style,
     onQueryChange,
     onCancel,
+    WrapperComponent: Wrapper,
     ...optionListProps
 }: Props<TItem>) => {
     const { OptionList, ActionSheet, Dialog, DropdownListPopover } = useMolecules();
     const componentStyles = useComponentStyles('DropdownList', style);
+
+    const scrollRef = useRef(null);
 
     const resolvedMode = useResolvedMode(mode, records, optionsThreshold);
 
@@ -123,6 +143,7 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     );
 
     const [WrapperComponent, props] = useMemo(() => {
+        if (Wrapper) return [Wrapper, { isOpen, onClose, onOpen, scrollRef }];
         switch (resolvedMode) {
             case DropdownListMode.ActionSheet:
                 return [ActionSheet, { ...actionSheetProps, isOpen, onClose, onOpen }];
@@ -132,12 +153,13 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
                 return [DropdownListPopover, { ...popoverProps, triggerRef, isOpen, onClose }];
         }
     }, [
-        resolvedMode,
-        ActionSheet,
-        actionSheetProps,
+        Wrapper,
         isOpen,
         onClose,
         onOpen,
+        resolvedMode,
+        ActionSheet,
+        actionSheetProps,
         Dialog,
         dialogProps,
         DropdownListPopover,
@@ -148,6 +170,7 @@ const DropdownList = <TItem extends DefaultItemT = DefaultItemT>({
     return (
         <WrapperComponent {...(props as any)}>
             <OptionList
+                ref={scrollRef}
                 enableKeyboardNavigation
                 onCancel={onClose}
                 {...optionListProps}

@@ -128,6 +128,7 @@ function SwiperInner({
 
     return (
         <>
+            {renderHeader && renderHeader()}
             <ScrollView
                 scrollsToTop={false}
                 ref={parentRef}
@@ -151,7 +152,6 @@ function SwiperInner({
                         : null}
                 </View>
             </ScrollView>
-            {renderHeader && renderHeader()}
             {renderFooter && renderFooter()}
         </>
     );

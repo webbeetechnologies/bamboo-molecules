@@ -21,7 +21,13 @@ export const useQueryFilter = <TItem extends DefaultItem = DefaultItem>({
 
     const records = useMemo(
         // TODO: match all unicode character with regex
-        () => _records.filter(item => item[filterKey].toLowerCase().includes(query.toLowerCase())),
+        () =>
+            _records.filter(item => {
+                const value = item[filterKey];
+                if (typeof value !== 'string') return !query;
+
+                return value.toLowerCase().includes(query.toLowerCase());
+            }),
         [_records, filterKey, query],
     );
 

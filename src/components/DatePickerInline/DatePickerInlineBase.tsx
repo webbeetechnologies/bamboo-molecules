@@ -121,10 +121,10 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
         [mode, dateMode, onChangeRef, startDateRef, endDateRef, datesRef, onToggle],
     );
 
-    const { containerStyle, firstDate } = useMemo(() => {
+    const { containerStyle, initialIndex } = useMemo(() => {
         return {
             containerStyle: [styles.root, componentStyles],
-            firstDate: startDate || date || dates?.[0],
+            initialIndex: getInitialIndex(startDate || date || dates?.[0]),
         };
     }, [componentStyles, date, dates, startDate]);
 
@@ -178,7 +178,7 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
     return (
         <View style={containerStyle}>
             <Swiper
-                initialIndex={getInitialIndex(firstDate)}
+                initialIndex={initialIndex}
                 scrollMode={scrollMode}
                 renderItem={renderMonthComponent}
                 renderHeader={renderCalenderHeader}

@@ -89,17 +89,18 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
     })();
 
     const { sharedStyle, layer0Style, layer1Style } = useMemo(() => {
-        const { position, alignSelf, top, left, right, bottom, ...restStyle } = surfaceStyles || {};
+        const { position, alignSelf, top, left, right, bottom, borderRadius, ...restStyle } =
+            surfaceStyles || {};
         const absoluteStyle = { position, alignSelf, top, right, bottom, left };
 
         return {
-            sharedStyle: [{ backgroundColor }, restStyle],
+            sharedStyle: [{ backgroundColor, borderRadius }, restStyle],
             layer0Style: isAnimatedValue(elevation)
-                ? [getStyleForAnimatedShadowLayer(0, elevation), absoluteStyle]
-                : [getStyleForShadowLayer(0, elevation), absoluteStyle],
+                ? [getStyleForAnimatedShadowLayer(0, elevation), absoluteStyle, { borderRadius }]
+                : [getStyleForShadowLayer(0, elevation), absoluteStyle, { borderRadius }],
             layer1Style: isAnimatedValue(elevation)
-                ? getStyleForAnimatedShadowLayer(1, elevation)
-                : getStyleForShadowLayer(1, elevation),
+                ? [getStyleForAnimatedShadowLayer(1, elevation), { borderRadius }]
+                : [getStyleForShadowLayer(1, elevation), { borderRadius }],
         };
     }, [backgroundColor, elevation, surfaceStyles]);
 

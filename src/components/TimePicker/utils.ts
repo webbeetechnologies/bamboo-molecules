@@ -110,6 +110,7 @@ export const timePickerInputStyles: ComponentStylePropWithVariants<
     },
     input: {
         fontSize: 'typescale.displayLarge.fontSize' as unknown as number,
+        lineHeight: 'typescale.displayLarge.lineHeight' as unknown as number,
         textAlign: 'center',
         textAlignVertical: 'center',
         width: 96,

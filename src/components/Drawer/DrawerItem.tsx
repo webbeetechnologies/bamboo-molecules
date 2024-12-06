@@ -7,7 +7,7 @@ import { withActionState } from '../../hocs';
 import type { TextStyle, ViewStyle } from 'react-native';
 import type { TextProps } from '@bambooapp/bamboo-atoms';
 
-export type DrawerItemElementProps = { color: string };
+export type DrawerItemElementProps = { color: string; hovered: boolean };
 
 export type DrawerItemElement = ReactNode | ((props: DrawerItemElementProps) => ReactNode);
 
@@ -96,6 +96,9 @@ const DrawerItem = (
         };
     }, [componentStyles]);
 
+    const _hoveredForLeftElement = typeof left === 'function' ? hovered : false;
+    const _hoveredForRightElement = typeof right === 'function' ? hovered : false;
+
     const leftElement = useMemo(
         () =>
             left ? (
@@ -103,11 +106,12 @@ const DrawerItem = (
                     {typeof left === 'function'
                         ? left?.({
                               color: leftElementColor,
+                              hovered: _hoveredForLeftElement,
                           })
                         : left}
                 </View>
             ) : null,
-        [View, left, leftElementColor, leftElementStyle],
+        [View, left, leftElementColor, leftElementStyle, _hoveredForLeftElement],
     );
 
     const rightElement = useMemo(
@@ -117,11 +121,12 @@ const DrawerItem = (
                     {typeof right === 'function'
                         ? right?.({
                               color: rightElementColor,
+                              hovered: _hoveredForRightElement,
                           })
                         : right}
                 </View>
             ) : null,
-        [View, right, rightElementColor, rightElementStyle],
+        [View, right, rightElementColor, rightElementStyle, _hoveredForRightElement],
     );
 
     return (
