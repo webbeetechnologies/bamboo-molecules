@@ -13,7 +13,7 @@ export const useNormalizeStyles = (
 
     const uniqueId = useId();
 
-    cacheKey = cacheKey || uniqueId;
+    cacheKey = cacheKey ?? uniqueId;
     return useMemo(
         () => normalizeStyles(style, currentTheme, cacheKey),
         [style, currentTheme, cacheKey],
