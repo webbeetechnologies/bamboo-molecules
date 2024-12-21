@@ -1,5 +1,5 @@
-import normalizeStyles from './normalizeStyles';
-import { resolveComponentStyles } from './resolveComponentStyles';
+import { normalizeStylesCache } from './normalizeStyles';
+import { resolveComponentStylesCache } from './resolveComponentStyles';
 export { default as normalizeStyles } from './normalizeStyles';
 export { resolveComponentStyles, flattenStateStyles } from './resolveComponentStyles';
 export { default as mergeRefs } from './mergeRefs';
@@ -28,8 +28,8 @@ export { normalizeToNumberString, NormalizeToNumberStringProps } from './normali
 export { addEventListener, addListener } from './addEventListener';
 
 export const clearStylesCache = () => {
-    normalizeStyles.cache.clear();
-    resolveComponentStyles.cache.clear();
+    normalizeStylesCache.clear();
+    resolveComponentStylesCache.clear();
 };
 
 export { getYearRange } from './getyearRange';
