@@ -1,6 +1,6 @@
 {
     "name": "@bambooapp/bamboo-molecules",
-    "version": "0.3.74",
+    "version": "0.3.75",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/webbeetechnologies/bamboo-molecules.git"
@@ -73,6 +73,7 @@
         "lodash.noop": "^3.0.1",
         "lodash.omit": "^4.5.0",
         "lodash.omitby": "^4.6.0",
+        "lru-cache": "^11.0.2",
         "react-native-actions-sheet": "^0.8.10",
         "react-native-mask-input": "^1.2.2",
         "react-native-super-grid": "^5.0.0",

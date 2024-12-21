@@ -3475,6 +3475,7 @@ __metadata:
     lodash.noop: ^3.0.1
     lodash.omit: ^4.5.0
     lodash.omitby: ^4.6.0
+    lru-cache: ^11.0.2
     prettier: ^2.7.1
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -20853,6 +20854,13 @@ __metadata:
   version: 10.4.3
   resolution: "lru-cache@npm:10.4.3"
   checksum: 6476138d2125387a6d20f100608c2583d415a4f64a0fecf30c9e2dda976614f09cad4baa0842447bd37dd459a7bd27f57d9d8f8ce558805abd487c583f3d774a
+  languageName: node
+  linkType: hard
+
+"lru-cache@npm:^11.0.2":
+  version: 11.0.2
+  resolution: "lru-cache@npm:11.0.2"
+  checksum: f9c27c58919a30f42834de9444de9f75bcbbb802c459239f96dd449ad880d8f9a42f51556d13659864dc94ab2dbded9c4a4f42a3e25a45b6da01bb86111224df
   languageName: node
   linkType: hard
 
