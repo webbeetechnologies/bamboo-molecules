@@ -4,8 +4,8 @@ import { get, allArgumentResolver } from './lodash'; // Assuming you have a `get
 
 import { LRUCache } from 'lru-cache';
 
-const cache = new LRUCache({
-    max: 1000,
+export const normalizeStylesCache = new LRUCache({
+    max: 500,
 });
 
 export const maybeIsToken = (value: any) => typeof value === 'string' && value.includes('.');
@@ -34,8 +34,8 @@ function normalizeStyles(
     const cacheKey = `${_cacheKey}_${currentTheme.themeName}_${allArgumentResolver(styles)}`;
 
     // Check if the result is cached
-    if (cache.has(cacheKey)) {
-        return cache.get(cacheKey);
+    if (normalizeStylesCache.has(cacheKey)) {
+        return normalizeStylesCache.get(cacheKey);
     }
 
     // Proceed to normalize styles
@@ -65,7 +65,7 @@ function normalizeStyles(
     }
 
     // Cache the result
-    cache.set(cacheKey, normalizedStyles);
+    normalizeStylesCache.set(cacheKey, normalizedStyles);
 
     return normalizedStyles;
 }

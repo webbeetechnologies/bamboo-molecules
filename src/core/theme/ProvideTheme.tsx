@@ -14,9 +14,9 @@ export const defaultExtractStyles = memoize(
         const normalizedComponentStyles = normalizeStyles(
             theme[componentName],
             theme[colorMode],
-            componentName,
+            `${componentName}`,
         );
-        const normalizedStyleProp = normalizeStyles(style, theme[colorMode], componentName);
+        const normalizedStyleProp = normalizeStyles(style, theme[colorMode], `${componentName}`);
 
         return { ...normalizedComponentStyles, ...normalizedStyleProp };
     },
