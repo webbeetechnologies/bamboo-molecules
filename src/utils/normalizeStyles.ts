@@ -1,70 +1,73 @@
 import type { StyleProp } from 'react-native';
 import type { MD3Theme, MD3Typescale } from '../core/theme/types';
-import { allArgumentResolver, createMemoizedFunction, get } from './lodash';
+import { get, allArgumentResolver } from './lodash'; // Assuming you have a `get` utility function
+
+import { LRUCache } from 'lru-cache';
+
+const cache = new LRUCache({
+    max: 1000,
+});
 
 export const maybeIsToken = (value: any) => typeof value === 'string' && value.includes('.');
-
-const normalizeStylesMemo = createMemoizedFunction({
-    /**
-     *
-     * @param styles the style object to normalize
-     * @param currentTheme for switching between themes
-     * @param cacheKey to resolve unique values for different components
-     */
-    resolver: (
-        styles: StyleProp<any> | StyleProp<any>[],
-        { themeName }: MD3Theme,
-        cacheKey: string,
-    ) => `${cacheKey}_${themeName}_${allArgumentResolver(styles)}`,
-});
 
 const flattenTypescale = (style: Partial<Record<string, any> & { typescale: MD3Typescale }>) => {
     if ('typescale' in style) {
         const { typescale = {}, ...rest } = style;
         style = { ...rest, ...typescale };
     }
-
     return style;
 };
 
 // normalize tokens inside the styles object and the subsequent objects inside it
-const normalizeStyles = normalizeStylesMemo(
-    /**
-     *
-     * @param styles the style object to normalize
-     * @param currentTheme for switching between themes
-     * @param cacheKey to resolve unique values for different components
-     */
-    (styles: StyleProp<any> | StyleProp<any>[], currentTheme: MD3Theme, cacheKey: string) => {
+/**
+ *
+ * @param styles the style object to normalize
+ * @param currentTheme for switching between themes
+ * @param cacheKey to resolve unique values for different components
+ */
+function normalizeStyles(
+    styles: StyleProp<any> | StyleProp<any>[],
+    currentTheme: MD3Theme,
+    _cacheKey: string,
+): any {
+    // Generate a unique cache key
+    const cacheKey = `${_cacheKey}_${currentTheme.themeName}_${allArgumentResolver(styles)}`;
+
+    // Check if the result is cached
+    if (cache.has(cacheKey)) {
+        return cache.get(cacheKey);
+    }
+
+    // Proceed to normalize styles
+    let normalizedStyles;
+    if (Array.isArray(styles)) {
         // if the styles is an array, we want to normalize each entry
-        if (Array.isArray(styles)) {
-            return styles.map(styleObj => normalizeStyles(styleObj, currentTheme, cacheKey));
-        }
+        normalizedStyles = styles.map(styleObj =>
+            normalizeStyles(styleObj, currentTheme, cacheKey),
+        );
+    } else if (!styles) {
+        normalizedStyles = undefined;
+    } else {
+        const newStyles = { ...styles };
 
-        if (!styles) {
-            return undefined;
-        }
-
-        const newStyles = Object.assign({}, styles);
-
-        const normalizableProperties = [];
-        for (const key in styles) {
-            if (maybeIsToken(styles[key]) || typeof styles[key] === 'object') {
-                normalizableProperties.push(key);
-            }
-        }
-
-        normalizableProperties.forEach(key => {
-            if (typeof newStyles[key] === 'string') {
-                newStyles[key] = get(currentTheme, newStyles[key], '');
-            } else {
+        for (const [key, value] of Object.entries(newStyles)) {
+            if (maybeIsToken(value)) {
+                // Replace token with actual value from theme
+                newStyles[key] = get(currentTheme, value as string, '');
+            } else if (typeof value === 'object' && value !== null) {
                 // it's an object // we want to normalize everything inside it as well
-                newStyles[key] = normalizeStyles(newStyles[key], currentTheme, cacheKey);
+                newStyles[key] = normalizeStyles(value, currentTheme, cacheKey);
             }
-        });
+            // Primitive values (numbers, booleans, etc.) are left as is
+        }
 
-        return flattenTypescale(newStyles);
-    },
-);
+        normalizedStyles = flattenTypescale(newStyles);
+    }
+
+    // Cache the result
+    cache.set(cacheKey, normalizedStyles);
+
+    return normalizedStyles;
+}
 
 export default normalizeStyles;
