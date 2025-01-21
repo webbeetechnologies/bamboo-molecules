@@ -94,25 +94,28 @@ const TouchableRipple = (
         style,
         background: _background,
         borderless = false,
-        disabled: disabledProp,
+        disabled,
         rippleColor: rippleColorProp,
         underlayColor: _underlayColor,
         onPress,
         children,
+        onPressIn: onPressInProp,
+        onPressOut: onPressOutProp,
+        centered,
         ...rest
     }: Props,
     ref: any,
 ) => {
     const { View, TouchableWithoutFeedback } = useMolecules();
     // TODO - enable ripple onLongPress, need to check for mobile as well
-    const disabled = disabledProp || !onPress;
+    const disableRipple = disabled || !onPress;
 
     const componentStyles = useComponentStyles(
         'TouchableRipple',
         [style, { normalizedRippleColorProp: rippleColorProp }],
         {
             states: {
-                pressable: !disabled,
+                pressable: !disableRipple,
             },
         },
     );
@@ -136,9 +139,9 @@ const TouchableRipple = (
 
     const handlePressIn = useCallback(
         (e: any) => {
-            const { centered, onPressIn } = rest;
+            onPressInProp?.(e);
 
-            onPressIn?.(e);
+            if (disableRipple) return;
 
             const button = e.currentTarget;
             const computedStyle = window.getComputedStyle(button);
@@ -227,12 +230,14 @@ const TouchableRipple = (
                 });
             });
         },
-        [rest, rippleColor],
+        [onPressInProp, disableRipple, centered, rippleColor],
     );
 
     const handlePressOut = useCallback(
         (e: any) => {
-            rest.onPressOut?.(e);
+            onPressOutProp?.(e);
+
+            if (disableRipple) return;
 
             const containers = e.currentTarget.querySelectorAll(
                 '[data-paper-ripple]',
@@ -260,7 +265,7 @@ const TouchableRipple = (
                 });
             });
         },
-        [rest],
+        [onPressOutProp, disableRipple],
     );
 
     return (
