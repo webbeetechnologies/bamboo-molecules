@@ -37,6 +37,7 @@ export type IOptionFlatList = <ItemType extends DefaultItemT = DefaultItemT>(
 
 export type OptionFlatListRenderItemInfo<TItem = DefaultItemT> = ListRenderItemInfo<TItem> & {
     focused: boolean;
+    onPress: () => void;
 };
 
 export type Props<TItem extends DefaultItemT = DefaultItemT> = UseSearchableProps &
