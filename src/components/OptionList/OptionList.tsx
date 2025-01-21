@@ -37,6 +37,7 @@ export type OptionListRenderItemInfo<
     TSection = DefaultSectionT<TItem>,
 > = SectionListRenderItemInfo<TItem, TSection> & {
     focused: boolean;
+    onPress: (e?: GestureResponderEvent) => void;
     [key: string]: any;
 };
 
