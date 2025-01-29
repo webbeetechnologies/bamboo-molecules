@@ -7,7 +7,7 @@ import { DatePickerInlineBase } from '../DatePickerInline';
 import DatePickerDockedHeader from './DatePickerDockedHeader';
 
 const DatePickerDocked = (props: DatePickerDockedProps) => {
-    const { triggerRef, isOpen, onToggle } = props;
+    const { triggerRef, isOpen, onToggle, onClose } = props;
     const dockedMonthStyles = useComponentStyles('DatePickerDocked_Month');
     const { Popover } = useMolecules();
 
@@ -26,7 +26,7 @@ const DatePickerDocked = (props: DatePickerDockedProps) => {
             contentStyles={styles.popoverContainer}
             triggerRef={triggerRef}
             isOpen={isOpen}
-            onClose={onToggle}
+            onClose={onClose}
             popoverContentProps={props.popoverContentProps}>
             <DatePickerInlineBase
                 {...props}
