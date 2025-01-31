@@ -1,10 +1,10 @@
-import { ComponentPropsWithRef, ReactNode, memo, useMemo, forwardRef, useContext } from 'react';
+import { ComponentPropsWithRef, ReactNode, memo, useMemo, forwardRef } from 'react';
 import { Animated, View, StyleProp, ViewStyle } from 'react-native';
 
 import type { MD3Elevation } from '../../core/theme/types';
-import { useComponentStyles, useContrastColor } from '../../hooks';
+import { useComponentStyles } from '../../hooks';
 import shadow from '../../styles/shadow';
-import { BackgroundContext } from '../../utils';
+import { BackgroundContextWrapper } from './BackgroundContextWrapper';
 
 export type Props = ComponentPropsWithRef<typeof View> & {
     /**
@@ -73,27 +73,19 @@ export type Props = ComponentPropsWithRef<typeof View> & {
 // for Web
 const Surface = ({ elevation = 1, style, children, testID, ...props }: Props, ref: any) => {
     const surfaceStyles = useComponentStyles('Surface', style);
-    const contrastColor = useContrastColor(surfaceStyles?.backgroundColor, undefined, undefined);
 
-    const parentContext = useContext(BackgroundContext);
-    const isTransparent = surfaceStyles?.backgroundColor === 'transparent';
-
-    const { surfaceStyle, surfaceContextValue } = useMemo(() => {
+    const { surfaceStyle } = useMemo(() => {
         return {
-            surfaceContextValue: {
-                backgroundColor: surfaceStyles?.backgroundColor,
-                color: contrastColor,
-            },
             surfaceStyle: [elevation ? shadow(elevation) : null, surfaceStyles],
         };
-    }, [elevation, surfaceStyles, contrastColor]);
+    }, [elevation, surfaceStyles]);
 
     return (
-        <BackgroundContext.Provider value={isTransparent ? parentContext : surfaceContextValue}>
+        <BackgroundContextWrapper backgroundColor={surfaceStyles.backgroundColor}>
             <Animated.View ref={ref} {...props} testID={testID} style={surfaceStyle}>
                 {children}
             </Animated.View>
-        </BackgroundContext.Provider>
+        </BackgroundContextWrapper>
     );
 };
 

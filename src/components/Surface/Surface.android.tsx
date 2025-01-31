@@ -6,6 +6,7 @@ import { isAnimatedValue } from '../../styles/overlay';
 import { inputRange } from '../../styles/shadow';
 import type { MD3Elevation } from '../../core/theme/types';
 import { getElevationAndroid } from './utils';
+import { BackgroundContextWrapper } from './BackgroundContextWrapper';
 
 export type Props = ComponentPropsWithRef<typeof View> & {
     /**
@@ -109,9 +110,11 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
     }, [backgroundColor, elevation, surfaceStyles]);
 
     return (
-        <Animated.View {...props} testID={testID} style={memoizedStyles}>
-            {children}
-        </Animated.View>
+        <BackgroundContextWrapper backgroundColor={surfaceStyles.backgroundColor}>
+            <Animated.View {...props} testID={testID} style={memoizedStyles}>
+                {children}
+            </Animated.View>
+        </BackgroundContextWrapper>
     );
 };
 
