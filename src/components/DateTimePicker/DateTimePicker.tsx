@@ -38,11 +38,11 @@ const emptyObj = {};
 const normalizeDateWithCurrentTime = (specificDate: Date) => {
     const date = new Date();
 
-    date.setFullYear(specificDate.getFullYear());
-    date.setMonth(specificDate.getMonth());
-    date.setDate(specificDate.getDate());
-
-    return date;
+    return set(specificDate, {
+        hours: date.getHours(),
+        minutes: date.getHours(),
+        seconds: date.getSeconds(),
+    });
 };
 
 const DateTimePicker = (
