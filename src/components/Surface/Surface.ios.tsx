@@ -6,6 +6,7 @@ import { isAnimatedValue } from '../../styles/overlay';
 import { inputRange } from '../../styles/shadow';
 import type { MD3Elevation } from '../../core/theme/types';
 import { getStyleForAnimatedShadowLayer, getStyleForShadowLayer } from './utils';
+import { BackgroundContextWrapper } from './BackgroundContextWrapper';
 
 export type Props = ComponentPropsWithRef<typeof View> & {
     /**
@@ -106,6 +107,20 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
 
     if (isAnimatedValue(elevation)) {
         return (
+            <BackgroundContextWrapper backgroundColor={surfaceStyles.backgroundColor}>
+                <Animated.View style={layer0Style}>
+                    <Animated.View style={layer1Style}>
+                        <Animated.View {...props} testID={testID} style={sharedStyle}>
+                            {children}
+                        </Animated.View>
+                    </Animated.View>
+                </Animated.View>
+            </BackgroundContextWrapper>
+        );
+    }
+
+    return (
+        <BackgroundContextWrapper backgroundColor={surfaceStyles.backgroundColor}>
             <Animated.View style={layer0Style}>
                 <Animated.View style={layer1Style}>
                     <Animated.View {...props} testID={testID} style={sharedStyle}>
@@ -113,17 +128,7 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
                     </Animated.View>
                 </Animated.View>
             </Animated.View>
-        );
-    }
-
-    return (
-        <Animated.View style={layer0Style}>
-            <Animated.View style={layer1Style}>
-                <Animated.View {...props} testID={testID} style={sharedStyle}>
-                    {children}
-                </Animated.View>
-            </Animated.View>
-        </Animated.View>
+        </BackgroundContextWrapper>
     );
 };
 
