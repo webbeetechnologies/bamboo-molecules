@@ -1,5 +1,5 @@
 import type { ComponentType, Context as ContextType, PropsWithChildren } from 'react';
-import { Fragment, useId, useMemo, useState } from 'react';
+import { Fragment, useContext, useId, useMemo, useRef, useState } from 'react';
 import typedMemo from '../hocs/typedMemo';
 import { Repository } from '@bambooapp/bamboo-atoms/repository';
 
@@ -51,21 +51,29 @@ export const createContextBridge = <T extends object>(
         },
         BridgedComponent: typedMemo((props: PropsWithChildren<T> & { name?: string }) => {
             const { name, ...rest } = props;
+            const contextValuesRef = useRef<any[]>([]);
+
             const id = useId();
 
             const [allContexts] = useState(() =>
                 Array.from(new Set([...contexts, ...Object.values(respository.getAll()).flat()])),
             );
 
+            for (const i in allContexts) {
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                contextValuesRef.current[i] = useContext(allContexts[i]);
+            }
+
             const content = useMemo(() => {
-                return allContexts.reduce((acc, Context) => {
+                return allContexts.reduce((acc, Context, currentIndex) => {
                     return (
-                        <Context.Consumer>
-                            {value => <Context.Provider value={value}>{acc}</Context.Provider>}
-                        </Context.Consumer>
+                        <Context.Provider value={contextValuesRef.current[currentIndex]}>
+                            {acc}
+                        </Context.Provider>
                     );
                 }, <>{props.children}</>);
-            }, [allContexts, props.children]);
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+            }, [...contextValuesRef.current, allContexts, props.children]);
 
             const _key = name ? name + id : id;
             return (
