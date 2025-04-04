@@ -329,34 +329,28 @@ const datePickerYearItemStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    datePickerStyles: datePickerStylesDefault,
-    datePickerMonthStyles: datePickerMonthStylesDefault,
-    datePickerYearPickerStyles: datePickerYearPickerStylesDefault,
-    datePickerDayStyles: datePickerDayStylesDefault,
-    datePickerDayEmptyStyles: datePickerDayEmptyStylesDefault,
-    datePickerWeekStyles: datePickerWeekStylesDefault,
-    datePickerHeaderStyles: datePickerHeaderStylesDefault,
-    dateDayNameStyles: dateDayNameStylesDefault,
-    datePickerDayRangeStyles: datePickerDayRangeStylesDefault,
-    datePickerYearItemStyles: datePickerYearItemStylesDefault,
+    DatePickerInline: datePickerStylesDefault,
+    DatePicker_Month: datePickerMonthStylesDefault,
+    DatePicker_YearPicker: datePickerYearPickerStylesDefault,
+    DatePicker_Day: datePickerDayStylesDefault,
+    DatePicker_DayEmpty: datePickerDayEmptyStylesDefault,
+    DatePicker_Week: datePickerWeekStylesDefault,
+    DatePicker_Header: datePickerHeaderStylesDefault,
+    DatePicker_DayName: dateDayNameStylesDefault,
+    DatePicker_DayRange: datePickerDayRangeStylesDefault,
+    DatePicker_YearItem: datePickerYearItemStylesDefault,
 });
 
-export const datePickerStyles = getRegisteredMoleculesComponentStyles('datePickerStyles');
-export const datePickerMonthStyles = getRegisteredMoleculesComponentStyles('datePickerMonthStyles');
-export const datePickerYearPickerStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerYearPickerStyles',
-);
-export const datePickerDayStyles = getRegisteredMoleculesComponentStyles('datePickerDayStyles');
-export const datePickerDayEmptyStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerDayEmptyStyles',
-);
-export const datePickerWeekStyles = getRegisteredMoleculesComponentStyles('datePickerWeekStyles');
-export const datePickerHeaderStyles =
-    getRegisteredMoleculesComponentStyles('datePickerHeaderStyles');
-export const dateDayNameStyles = getRegisteredMoleculesComponentStyles('dateDayNameStyles');
-export const datePickerDayRangeStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerDayRangeStyles',
-);
-export const datePickerYearItemStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerYearItemStyles',
-);
+export const datePickerStyles = getRegisteredMoleculesComponentStyles('DatePickerInline');
+export const datePickerMonthStyles = getRegisteredMoleculesComponentStyles('DatePicker_Month');
+export const datePickerYearPickerStyles =
+    getRegisteredMoleculesComponentStyles('DatePicker_YearPicker');
+export const datePickerDayStyles = getRegisteredMoleculesComponentStyles('DatePicker_Day');
+export const DatePicker_DayEmpty = getRegisteredMoleculesComponentStyles('DatePicker_DayEmpty');
+export const datePickerWeekStyles = getRegisteredMoleculesComponentStyles('DatePicker_Week');
+export const datePickerHeaderStyles = getRegisteredMoleculesComponentStyles('DatePicker_Header');
+export const dateDayNameStyles = getRegisteredMoleculesComponentStyles('DatePicker_DayName');
+export const datePickerDayRangeStyles =
+    getRegisteredMoleculesComponentStyles('DatePicker_DayRange');
+export const datePickerYearItemStyles =
+    getRegisteredMoleculesComponentStyles('DatePicker_YearItem');

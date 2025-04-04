@@ -26,7 +26,7 @@ const linkStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    linkStyles: linkStylesDefault,
+    Link: linkStylesDefault,
 });
 
-export const linkStyles = getRegisteredMoleculesComponentStyles('linkStyles');
+export const linkStyles = getRegisteredMoleculesComponentStyles('Link');

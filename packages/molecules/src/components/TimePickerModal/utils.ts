@@ -41,7 +41,7 @@ const timepickerModalStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    timepickerModalStyles: timepickerModalStylesDefault,
+    TimePickerModal: timepickerModalStylesDefault,
 });
 
-export const styles = getRegisteredMoleculesComponentStyles('timepickerModalStyles');
+export const styles = getRegisteredMoleculesComponentStyles('TimePickerModal');

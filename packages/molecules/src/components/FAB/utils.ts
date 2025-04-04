@@ -191,9 +191,9 @@ const fabStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    fabStyles: fabStylesDefault,
+    FAB: fabStylesDefault,
 });
 
-export const fabStyles = getRegisteredMoleculesComponentStyles('fabStyles');
+export const fabStyles = getRegisteredMoleculesComponentStyles('FAB');
 
 export type States = 'hovered' | 'disabled';

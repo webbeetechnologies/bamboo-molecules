@@ -217,7 +217,7 @@ const defaultStylesDefault = StyleSheet.create(theme => {
 });
 
 registerComponentsStyles({
-    buttonStyles: defaultStylesDefault,
+    Button: defaultStylesDefault,
 });
 
-export const defaultStyles = getRegisteredMoleculesComponentStyles('buttonStyles');
+export const defaultStyles = getRegisteredMoleculesComponentStyles('Button');

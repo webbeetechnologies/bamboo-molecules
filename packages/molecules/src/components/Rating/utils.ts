@@ -29,9 +29,9 @@ const ratingItemStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    ratingStyles: ratingStylesDefault,
-    ratingItemStyles: ratingItemStylesDefault,
+    Rating: ratingStylesDefault,
+    Rating_Item: ratingItemStylesDefault,
 });
 
-export const ratingStyles = getRegisteredMoleculesComponentStyles('ratingStyles');
-export const ratingItemStyles = getRegisteredMoleculesComponentStyles('ratingItemStyles');
+export const ratingStyles = getRegisteredMoleculesComponentStyles('Rating');
+export const ratingItemStyles = getRegisteredMoleculesComponentStyles('Rating_Item');

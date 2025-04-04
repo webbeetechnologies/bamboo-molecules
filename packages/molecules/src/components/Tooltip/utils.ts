@@ -13,7 +13,7 @@ const tooltipStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    tooltipStyles: tooltipStylesDefault,
+    Tooltip: tooltipStylesDefault,
 });
 
-export const tooltipStyles = getRegisteredMoleculesComponentStyles('tooltipStyles');
+export const tooltipStyles = getRegisteredMoleculesComponentStyles('Tooltip');

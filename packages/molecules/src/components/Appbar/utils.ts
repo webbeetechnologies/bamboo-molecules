@@ -105,23 +105,22 @@ const appbarLeftDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    appbarBaseStyles: appbarBaseStylesDefault,
-    appbarCenterAlignedStyles: appbarCenterAlignedStylesDefault,
-    appbarSmallStyles: appbarSmallStylesDefault,
-    appbarMediumStyles: appbarMediumStylesDefault,
-    appbarLargeStyles: appbarLargeStylesDefault,
-    appbarTitle: appbarTitleDefault,
-    appbarRight: appbarRightDefault,
-    appbarLeft: appbarLeftDefault,
+    Appbar: appbarBaseStylesDefault,
+    Appbar_CenterAligned: appbarCenterAlignedStylesDefault,
+    Appbar_Small: appbarSmallStylesDefault,
+    Appbar_Medium: appbarMediumStylesDefault,
+    Appbar_Large: appbarLargeStylesDefault,
+    Appbar_Left: appbarLeftDefault,
+    Appbar_Right: appbarRightDefault,
+    Appbar_Title: appbarTitleDefault,
 });
 
-export const appbarBaseStyles = getRegisteredMoleculesComponentStyles('appbarBaseStyles');
-export const appbarCenterAlignedStyles = getRegisteredMoleculesComponentStyles(
-    'appbarCenterAlignedStyles',
-);
-export const appbarSmallStyles = getRegisteredMoleculesComponentStyles('appbarSmallStyles');
-export const appbarMediumStyles = getRegisteredMoleculesComponentStyles('appbarMediumStyles');
-export const appbarLargeStyles = getRegisteredMoleculesComponentStyles('appbarLargeStyles');
-export const appbarTitle = getRegisteredMoleculesComponentStyles('appbarTitle');
-export const appbarRight = getRegisteredMoleculesComponentStyles('appbarRight');
-export const appbarLeft = getRegisteredMoleculesComponentStyles('appbarLeft');
+export const appbarBaseStyles = getRegisteredMoleculesComponentStyles('Appbar');
+export const appbarCenterAlignedStyles =
+    getRegisteredMoleculesComponentStyles('Appbar_CenterAligned');
+export const appbarSmallStyles = getRegisteredMoleculesComponentStyles('Appbar_Small');
+export const appbarMediumStyles = getRegisteredMoleculesComponentStyles('Appbar_Medium');
+export const appbarLargeStyles = getRegisteredMoleculesComponentStyles('Appbar_Large');
+export const appbarTitle = getRegisteredMoleculesComponentStyles('Appbar_Title');
+export const appbarRight = getRegisteredMoleculesComponentStyles('Appbar_Right');
+export const appbarLeft = getRegisteredMoleculesComponentStyles('Appbar_Left');

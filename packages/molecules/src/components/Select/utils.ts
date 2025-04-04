@@ -7,7 +7,7 @@ const selectStylesDefault = StyleSheet.create({
 });
 
 registerComponentsStyles({
-    selectStyles: selectStylesDefault,
+    Select: selectStylesDefault,
 });
 
-export const selectStyles = getRegisteredMoleculesComponentStyles('selectStyles');
+export const selectStyles = getRegisteredMoleculesComponentStyles('Select');

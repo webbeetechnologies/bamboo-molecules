@@ -107,17 +107,22 @@ const drawerItemGroupStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    drawerStyles: drawerStylesDefault,
-    drawerContentStyles: drawerContentStylesDefault,
-    drawerHeaderStyles: drawerHeaderStylesDefault,
-    drawerFooterStyles: drawerFooterStylesDefault,
-    drawerItemStyles: drawerItemStylesDefault,
-    drawerItemGroupStyles: drawerItemGroupStylesDefault,
+    // Drawer_Collapsible: drawerCollapsibleStyles,
+    // Drawer_CollapsibleItem: drawerCollapsibleItemStyles,
+    // Drawer_CollapsibleItem_Header: drawerCollapsibleItemHeaderStyles,
+    // Drawer_CollapsibleItem_Content: drawerCollapsibleItemContentStyles,
+
+    Drawer: drawerStylesDefault,
+    Drawer_Content: drawerContentStylesDefault,
+    Drawer_Header: drawerHeaderStylesDefault,
+    Drawer_Footer: drawerFooterStylesDefault,
+    Drawer_Item: drawerItemStylesDefault,
+    Drawer_ItemGroup: drawerItemGroupStylesDefault,
 });
 
-export const drawerStyles = getRegisteredMoleculesComponentStyles('drawerStyles');
-export const drawerContentStyles = getRegisteredMoleculesComponentStyles('drawerContentStyles');
-export const drawerHeaderStyles = getRegisteredMoleculesComponentStyles('drawerHeaderStyles');
-export const drawerFooterStyles = getRegisteredMoleculesComponentStyles('drawerFooterStyles');
-export const drawerItemStyles = getRegisteredMoleculesComponentStyles('drawerItemStyles');
-export const drawerItemGroupStyles = getRegisteredMoleculesComponentStyles('drawerItemGroupStyles');
+export const drawerStyles = getRegisteredMoleculesComponentStyles('Drawer');
+export const drawerContentStyles = getRegisteredMoleculesComponentStyles('Drawer_Content');
+export const drawerHeaderStyles = getRegisteredMoleculesComponentStyles('Drawer_Header');
+export const drawerFooterStyles = getRegisteredMoleculesComponentStyles('Drawer_Footer');
+export const drawerItemStyles = getRegisteredMoleculesComponentStyles('Drawer_Item');
+export const drawerItemGroupStyles = getRegisteredMoleculesComponentStyles('Drawer_ItemGroup');

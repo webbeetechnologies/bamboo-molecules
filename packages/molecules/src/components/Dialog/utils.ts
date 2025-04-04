@@ -63,18 +63,17 @@ const dialogActionsStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    dialogStyles: dialogStylesDefault,
-    dialogTitleStyles: dialogTitleStylesDefault,
-    dialogScrollAreaStyles: dialogScrollAreaStylesDefault,
-    dialogIconStyles: dialogIconStylesDefault,
-    dialogContentStyles: dialogContentStylesDefault,
-    dialogActionsStyles: dialogActionsStylesDefault,
+    Dialog: dialogStylesDefault,
+    Dialog_Title: dialogTitleStylesDefault,
+    Dialog_ScrollArea: dialogScrollAreaStylesDefault,
+    Dialog_Icon: dialogIconStylesDefault,
+    Dialog_Content: dialogContentStylesDefault,
+    Dialog_Actions: dialogActionsStylesDefault,
 });
 
-export const dialogStyles = getRegisteredMoleculesComponentStyles('dialogStyles');
-export const dialogTitleStyles = getRegisteredMoleculesComponentStyles('dialogTitleStyles');
-export const dialogScrollAreaStyles =
-    getRegisteredMoleculesComponentStyles('dialogScrollAreaStyles');
-export const dialogIconStyles = getRegisteredMoleculesComponentStyles('dialogIconStyles');
-export const dialogContentStyles = getRegisteredMoleculesComponentStyles('dialogContentStyles');
-export const dialogActionsStyles = getRegisteredMoleculesComponentStyles('dialogActionsStyles');
+export const dialogStyles = getRegisteredMoleculesComponentStyles('Dialog');
+export const dialogTitleStyles = getRegisteredMoleculesComponentStyles('Dialog_Title');
+export const dialogScrollAreaStyles = getRegisteredMoleculesComponentStyles('Dialog_ScrollArea');
+export const dialogIconStyles = getRegisteredMoleculesComponentStyles('Dialog_Icon');
+export const dialogContentStyles = getRegisteredMoleculesComponentStyles('Dialog_Content');
+export const dialogActionsStyles = getRegisteredMoleculesComponentStyles('Dialog_Actions');

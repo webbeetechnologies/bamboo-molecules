@@ -8,10 +8,10 @@ const defaultStylesDefault = StyleSheet.create({
 });
 
 registerComponentsStyles({
-    surfaceStyles: defaultStylesDefault,
+    Surface: defaultStylesDefault,
 });
 
-export const defaultStyles = getRegisteredMoleculesComponentStyles('surfaceStyles');
+export const defaultStyles = getRegisteredMoleculesComponentStyles('Surface');
 
 const _shadowColor = '#000';
 

@@ -35,7 +35,7 @@ const modalStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    modalStyles: modalStylesDefault,
+    Modal: modalStylesDefault,
 });
 
-export const modalStyles = getRegisteredMoleculesComponentStyles('modalStyles');
+export const modalStyles = getRegisteredMoleculesComponentStyles('Modal');

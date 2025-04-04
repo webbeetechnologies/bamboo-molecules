@@ -31,7 +31,7 @@ const dropdownListPopoverStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    dropdownListPopoverStyles: dropdownListPopoverStylesDefault,
+    DropdownListPopover: dropdownListPopoverStylesDefault,
 });
 
-export const defaultStyles = getRegisteredMoleculesComponentStyles('dropdownListPopoverStyles');
+export const defaultStyles = getRegisteredMoleculesComponentStyles('DropdownListPopover');

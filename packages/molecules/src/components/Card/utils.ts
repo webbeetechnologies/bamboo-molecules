@@ -275,17 +275,17 @@ const cardHeaderStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    cardStyles: cardStylesDefault,
-    cardTypograhyStyles: cardTypograhyStylesDefault,
-    cardMediaStyles: cardMediaStylesDefault,
-    cardContentStyles: cardContentStylesDefault,
-    cardActionsStyles: cardActionsStylesDefault,
-    cardHeaderStyles: cardHeaderStylesDefault,
+    Card: cardStylesDefault,
+    Card_Header: cardHeaderStylesDefault,
+    Card_Content: cardContentStylesDefault,
+    Card_Typography: cardTypograhyStylesDefault,
+    Card_Media: cardMediaStylesDefault,
+    Card_Actions: cardActionsStylesDefault,
 });
 
-export const cardStyles = getRegisteredMoleculesComponentStyles('cardStyles');
-export const cardTypograhyStyles = getRegisteredMoleculesComponentStyles('cardTypograhyStyles');
-export const cardMediaStyles = getRegisteredMoleculesComponentStyles('cardMediaStyles');
-export const cardContentStyles = getRegisteredMoleculesComponentStyles('cardContentStyles');
-export const cardActionsStyles = getRegisteredMoleculesComponentStyles('cardActionsStyles');
-export const cardHeaderStyles = getRegisteredMoleculesComponentStyles('cardHeaderStyles');
+export const cardStyles = getRegisteredMoleculesComponentStyles('Card');
+export const cardTypograhyStyles = getRegisteredMoleculesComponentStyles('Card_Typography');
+export const cardMediaStyles = getRegisteredMoleculesComponentStyles('Card_Media');
+export const cardContentStyles = getRegisteredMoleculesComponentStyles('Card_Content');
+export const cardActionsStyles = getRegisteredMoleculesComponentStyles('Card_Actions');
+export const cardHeaderStyles = getRegisteredMoleculesComponentStyles('Card_Header');

@@ -540,7 +540,7 @@ const textInputStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    textInputStyles: textInputStylesDefault,
+    TextInput: textInputStylesDefault,
 });
 
 export const styles = getRegisteredMoleculesComponentStyles('textInputStyles');

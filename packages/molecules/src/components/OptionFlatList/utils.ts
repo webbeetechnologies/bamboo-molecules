@@ -9,7 +9,7 @@ const optionFlatListStylesDefault = StyleSheet.create({
 });
 
 registerComponentsStyles({
-    optionFlatListStyles: optionFlatListStylesDefault,
+    OptionFlatList: optionFlatListStylesDefault,
 });
 
-export const optionFlatListStyles = getRegisteredMoleculesComponentStyles('optionFlatListStyles');
+export const optionFlatListStyles = getRegisteredMoleculesComponentStyles('OptionFlatList');

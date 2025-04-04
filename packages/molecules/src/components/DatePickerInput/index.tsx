@@ -5,7 +5,10 @@ registerMoleculesComponents({
     DatePickerInput: DatePickerInputDefault,
 });
 
-export const DatePickerInput = getRegisteredComponentWithFallback('DatePickerInput');
+export const DatePickerInput = getRegisteredComponentWithFallback(
+    'DatePickerInput',
+    DatePickerInputDefault,
+);
 
 export { DatePickerInputProps } from './types';
 export { datePickerInputStyles } from './utils';

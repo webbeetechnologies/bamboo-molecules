@@ -185,7 +185,7 @@ const checkboxStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    checkboxStyles: checkboxStylesDefault,
+    Checkbox: checkboxStylesDefault,
 });
 
-export const styles = getRegisteredMoleculesComponentStyles('checkboxStyles');
+export const styles = getRegisteredMoleculesComponentStyles('Checkbox');

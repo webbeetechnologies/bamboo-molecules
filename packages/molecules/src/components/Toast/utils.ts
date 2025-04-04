@@ -51,7 +51,7 @@ const stylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    toastStyles: stylesDefault,
+    Toast: stylesDefault,
 });
 
-export const styles = getRegisteredMoleculesComponentStyles('toastStyles');
+export const styles = getRegisteredMoleculesComponentStyles('Toast');

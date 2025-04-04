@@ -22,7 +22,7 @@ const helperTextStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    helperTextStyles: helperTextStylesDefault,
+    HelperText: helperTextStylesDefault,
 });
 
-export const styles = getRegisteredMoleculesComponentStyles('helperTextStyles');
+export const styles = getRegisteredMoleculesComponentStyles('HelperText');

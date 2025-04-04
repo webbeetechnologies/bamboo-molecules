@@ -237,7 +237,7 @@ const iconButtonStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    iconButtonStyles: iconButtonStylesDefault,
+    IconButton: iconButtonStylesDefault,
 });
 
-export const defaultStyles = getRegisteredMoleculesComponentStyles('iconButtonStyles');
+export const defaultStyles = getRegisteredMoleculesComponentStyles('IconButton');

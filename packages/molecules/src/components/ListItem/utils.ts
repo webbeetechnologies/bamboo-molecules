@@ -94,13 +94,12 @@ const listItemDescriptionStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    listItemStyles: listItemStylesDefault,
-    listItemTitleStyles: listItemTitleStylesDefault,
-    listItemDescriptionStyles: listItemDescriptionStylesDefault,
+    ListItem: listItemStylesDefault,
+    ListItem_Title: listItemTitleStylesDefault,
+    ListItem_Description: listItemDescriptionStylesDefault,
 });
 
-export const listItemStyles = getRegisteredMoleculesComponentStyles('listItemStyles');
-export const listItemTitleStyles = getRegisteredMoleculesComponentStyles('listItemTitleStyles');
-export const listItemDescriptionStyles = getRegisteredMoleculesComponentStyles(
-    'listItemDescriptionStyles',
-);
+export const listItemStyles = getRegisteredMoleculesComponentStyles('ListItem');
+export const listItemTitleStyles = getRegisteredMoleculesComponentStyles('ListItem_Title');
+export const listItemDescriptionStyles =
+    getRegisteredMoleculesComponentStyles('ListItem_Description');

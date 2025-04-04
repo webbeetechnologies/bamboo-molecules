@@ -10,6 +10,7 @@ import {
 
 import AnimatedSpinner from './AnimatedSpinner';
 import { StyleSheet } from 'react-native-unistyles';
+import { getRegisteredMoleculesComponentStyles, registerComponentStyles } from '../../core';
 
 export type Props = ActivityIndicatorProps & {
     /**
@@ -72,7 +73,7 @@ const ActivityIndicator = ({
     //     styleProp,
     //     { normalizedIndicatorColorProp: indicatorColorProp },
     // ]);
-    const componentStyles = defaultStyles;
+    const componentStyles = activityIndicatorStyles;
     const { current: timer } = useRef<Animated.Value>(new Animated.Value(0));
     const { current: fade } = useRef<Animated.Value>(
         new Animated.Value(!animating && hidesWhenStopped ? 0 : 1),
@@ -185,7 +186,7 @@ const ActivityIndicator = ({
     );
 };
 
-export const defaultStyles = StyleSheet.create(theme => ({
+export const activityIndicatorStylesDefault = StyleSheet.create(theme => ({
     root: {
         animationScale: theme.animation.scale,
         color: theme.colors.primary,
@@ -202,5 +203,9 @@ export const defaultStyles = StyleSheet.create(theme => ({
         alignItems: 'center',
     },
 }));
+
+registerComponentStyles('ActivityIndicator', activityIndicatorStylesDefault);
+
+export const activityIndicatorStyles = getRegisteredMoleculesComponentStyles('ActivityIndicator');
 
 export default memo(ActivityIndicator);

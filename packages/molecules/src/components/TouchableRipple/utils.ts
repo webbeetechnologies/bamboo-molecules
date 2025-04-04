@@ -8,7 +8,7 @@ const touchableRippleStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    touchableRippleStyles: touchableRippleStylesDefault,
+    TouchableRipple: touchableRippleStylesDefault,
 });
 
-export const touchableRippleStyles = getRegisteredMoleculesComponentStyles('touchableRippleStyles');
+export const touchableRippleStyles = getRegisteredMoleculesComponentStyles('TouchableRipple');

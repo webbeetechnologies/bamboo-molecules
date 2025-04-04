@@ -26,7 +26,7 @@ const inputAddonStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    inputAddonStyles: inputAddonStylesDefault,
+    InputAddon: inputAddonStylesDefault,
 });
 
-export const inputAddonStyles = getRegisteredMoleculesComponentStyles('inputAddonStyles');
+export const inputAddonStyles = getRegisteredMoleculesComponentStyles('InputAddon');

@@ -126,23 +126,19 @@ const navigationRailItemStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    navigationRailStyles: navigationRailStylesDefault,
-    navigationRailHeaderStyles: navigationRailHeaderStylesDefault,
-    navigationRailContentStyles: navigationRailContentStylesDefault,
-    navigationRailFooterStyles: navigationRailFooterStylesDefault,
-    navigationRailItemStyles: navigationRailItemStylesDefault,
+    NavigationRail: navigationRailStylesDefault,
+    NavigationRail_Header: navigationRailHeaderStylesDefault,
+    NavigationRail_Content: navigationRailContentStylesDefault,
+    NavigationRail_Footer: navigationRailFooterStylesDefault,
+    NavigationRail_Item: navigationRailItemStylesDefault,
 });
 
-export const navigationRailStyles = getRegisteredMoleculesComponentStyles('navigationRailStyles');
-export const navigationRailHeaderStyles = getRegisteredMoleculesComponentStyles(
-    'navigationRailHeaderStyles',
-);
-export const navigationRailContentStyles = getRegisteredMoleculesComponentStyles(
-    'navigationRailContentStyles',
-);
-export const navigationRailFooterStyles = getRegisteredMoleculesComponentStyles(
-    'navigationRailFooterStyles',
-);
-export const navigationRailItemStyles = getRegisteredMoleculesComponentStyles(
-    'navigationRailItemStyles',
-);
+export const navigationRailStyles = getRegisteredMoleculesComponentStyles('NavigationRail');
+export const navigationRailHeaderStyles =
+    getRegisteredMoleculesComponentStyles('NavigationRail_Header');
+export const navigationRailContentStyles =
+    getRegisteredMoleculesComponentStyles('NavigationRail_Content');
+export const navigationRailFooterStyles =
+    getRegisteredMoleculesComponentStyles('NavigationRail_Footer');
+export const navigationRailItemStyles =
+    getRegisteredMoleculesComponentStyles('NavigationRail_Item');

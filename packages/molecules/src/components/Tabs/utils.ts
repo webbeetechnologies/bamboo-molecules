@@ -102,13 +102,13 @@ const tabsLabelStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    tabsStyles: tabsStylesDefault,
-    tabsItemStyles: tabsItemStylesDefault,
-    tabsLabelStyles: tabsLabelStylesDefault,
+    Tabs: tabsStylesDefault,
+    Tabs_Item: tabsItemStylesDefault,
+    Tabs_Label: tabsLabelStylesDefault,
 });
 
-export const tabsStyles = getRegisteredMoleculesComponentStyles('tabsStyles');
-export const tabsItemStyles = getRegisteredMoleculesComponentStyles('tabsItemStyles');
-export const tabsLabelStyles = getRegisteredMoleculesComponentStyles('tabsLabelStyles');
+export const tabsStyles = getRegisteredMoleculesComponentStyles('Tabs');
+export const tabsItemStyles = getRegisteredMoleculesComponentStyles('Tabs_Item');
+export const tabsLabelStyles = getRegisteredMoleculesComponentStyles('Tabs_Label');
 
 export type States = 'hovered' | 'active' | 'activeAndHovered' | 'disabled';

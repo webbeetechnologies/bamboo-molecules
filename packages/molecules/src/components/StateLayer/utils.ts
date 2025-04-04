@@ -10,7 +10,7 @@ const stateLayerStylesDefault = StyleSheet.create({
 });
 
 registerComponentsStyles({
-    stateLayerStyles: stateLayerStylesDefault,
+    StateLayer: stateLayerStylesDefault,
 });
 
-export const stateLayerStyles = getRegisteredMoleculesComponentStyles('stateLayerStyles');
+export const stateLayerStyles = getRegisteredMoleculesComponentStyles('StateLayer');

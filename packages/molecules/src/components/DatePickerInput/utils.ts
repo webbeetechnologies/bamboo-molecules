@@ -9,7 +9,7 @@ const datePickerInputStylesDefault = StyleSheet.create({
 });
 
 registerComponentsStyles({
-    datePickerInputStyles: datePickerInputStylesDefault,
+    DatePickerInput: datePickerInputStylesDefault,
 });
 
-export const datePickerInputStyles = getRegisteredMoleculesComponentStyles('datePickerInputStyles');
+export const datePickerInputStyles = getRegisteredMoleculesComponentStyles('DatePickerInput');

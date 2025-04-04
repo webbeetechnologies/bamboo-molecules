@@ -18,7 +18,7 @@ const elementGroupStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    elementGroupStyles: elementGroupStylesDefault,
+    ElementGroup: elementGroupStylesDefault,
 });
 
-export const elementGroupStyles = getRegisteredMoleculesComponentStyles('elementGroupStyles');
+export const elementGroupStyles = getRegisteredMoleculesComponentStyles('ElementGroup');

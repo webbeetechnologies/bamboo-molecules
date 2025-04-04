@@ -8,10 +8,10 @@ const timepickerFieldStylesDefault = StyleSheet.create({
 });
 
 registerComponentsStyles({
-    timepickerFieldStyles: timepickerFieldStylesDefault,
+    TimePickerField: timepickerFieldStylesDefault,
 });
 
-export const styles = getRegisteredMoleculesComponentStyles('timepickerFieldStyles');
+export const styles = getRegisteredMoleculesComponentStyles('TimePickerField');
 
 export const timeMask24Hour: Mask = (text: string = '') => {
     const cleanTime = text.replace(/\D+/g, '');

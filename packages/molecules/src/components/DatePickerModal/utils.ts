@@ -100,23 +100,21 @@ const datePickerModalEditStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    datePickerModalStyles: datePickerModalStylesDefault,
-    datePickerModalHeaderStyles: datePickerModalHeaderStylesDefault,
-    datePickerModalContentHeaderStyles: datePickerModalContentHeaderStylesDefault,
-    datePickerModalHeaderBackgroundStyles: datePickerModalHeaderBackgroundStylesDefault,
-    datePickerModalEditStyles: datePickerModalEditStylesDefault,
+    DatePickerModal: datePickerModalStylesDefault,
+    DatePickerModal_Header: datePickerModalHeaderStylesDefault,
+    DatePickerModal_ContentHeader: datePickerModalContentHeaderStylesDefault,
+    DatePickerModal_HeaderBackground: datePickerModalHeaderBackgroundStylesDefault,
+    DatePickerModal_Edit: datePickerModalEditStylesDefault,
 });
 
-export const datePickerModalStyles = getRegisteredMoleculesComponentStyles('datePickerModalStyles');
-export const datePickerModalHeaderStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerModalHeaderStyles',
-);
+export const datePickerModalStyles = getRegisteredMoleculesComponentStyles('DatePickerModal');
+export const datePickerModalHeaderStyles =
+    getRegisteredMoleculesComponentStyles('DatePickerModal_Header');
 export const datePickerModalContentHeaderStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerModalContentHeaderStyles',
+    'DatePickerModal_ContentHeader',
 );
 export const datePickerModalHeaderBackgroundStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerModalHeaderBackgroundStyles',
+    'DatePickerModal_HeaderBackground',
 );
-export const datePickerModalEditStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerModalEditStyles',
-);
+export const datePickerModalEditStyles =
+    getRegisteredMoleculesComponentStyles('DatePickerModal_Edit');

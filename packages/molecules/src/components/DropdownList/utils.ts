@@ -11,7 +11,7 @@ const dropdownListStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    dropdownListStyles: dropdownListStylesDefault,
+    DropdownList: dropdownListStylesDefault,
 });
 
-export const dropdownListStyles = getRegisteredMoleculesComponentStyles('dropdownListStyles');
+export const dropdownListStyles = getRegisteredMoleculesComponentStyles('DropdownList');

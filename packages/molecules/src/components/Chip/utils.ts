@@ -91,9 +91,9 @@ const chipStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    chipStyles: chipStylesDefault,
+    Chip: chipStylesDefault,
 });
 
-export const styles = getRegisteredMoleculesComponentStyles('chipStyles');
+export const styles = getRegisteredMoleculesComponentStyles('Chip');
 
 export type States = 'hovered' | 'selectedAndHovered' | 'selected' | 'disabled';

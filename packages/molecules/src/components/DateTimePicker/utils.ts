@@ -6,7 +6,7 @@ const dateTimePickerStylesDefault = StyleSheet.create({
 });
 
 registerComponentsStyles({
-    dateTimePickerStyles: dateTimePickerStylesDefault,
+    DateTimePicker: dateTimePickerStylesDefault,
 });
 
-export const dateTimePickerStyles = getRegisteredMoleculesComponentStyles('dateTimePickerStyles');
+export const dateTimePickerStyles = getRegisteredMoleculesComponentStyles('DateTimePicker');

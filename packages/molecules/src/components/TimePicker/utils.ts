@@ -263,26 +263,22 @@ const timePickerAmPmSwitcherStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    timePickerStyles: timePickerStylesDefault,
-    timePickerInputsStyles: timePickerInputsStylesDefault,
-    timePickerInputStyles: timePickerInputStylesDefault,
-    timePickerClockStyles: timePickerClockStylesDefault,
-    timePickerClockHoursStyles: timePickerClockHoursStylesDefault,
-    timePickerClockMinutesStyles: timePickerClockMinutesStylesDefault,
-    timePickerAmPmSwitcherStyles: timePickerAmPmSwitcherStylesDefault,
+    TimePicker: timePickerStylesDefault,
+    TimePicker_Inputs: timePickerInputsStylesDefault,
+    TimePicker_Input: timePickerInputStylesDefault,
+    TimePicker_Clock: timePickerClockStylesDefault,
+    TimePicker_ClockHours: timePickerClockHoursStylesDefault,
+    TimePicker_ClockMinutes: timePickerClockMinutesStylesDefault,
+    TimePicker_AmPmSwitcher: timePickerAmPmSwitcherStylesDefault,
 });
 
-export const timePickerStyles = getRegisteredMoleculesComponentStyles('timePickerStyles');
-export const timePickerInputsStyles =
-    getRegisteredMoleculesComponentStyles('timePickerInputsStyles');
-export const timePickerInputStyles = getRegisteredMoleculesComponentStyles('timePickerInputStyles');
-export const timePickerClockStyles = getRegisteredMoleculesComponentStyles('timePickerClockStyles');
-export const timePickerClockHoursStyles = getRegisteredMoleculesComponentStyles(
-    'timePickerClockHoursStyles',
-);
-export const timePickerClockMinutesStyles = getRegisteredMoleculesComponentStyles(
-    'timePickerClockMinutesStyles',
-);
-export const timePickerAmPmSwitcherStyles = getRegisteredMoleculesComponentStyles(
-    'timePickerAmPmSwitcherStyles',
-);
+export const timePickerStyles = getRegisteredMoleculesComponentStyles('TimePicker');
+export const timePickerInputsStyles = getRegisteredMoleculesComponentStyles('TimePicker_Inputs');
+export const timePickerInputStyles = getRegisteredMoleculesComponentStyles('TimePicker_Input');
+export const timePickerClockStyles = getRegisteredMoleculesComponentStyles('TimePicker_Clock');
+export const timePickerClockHoursStyles =
+    getRegisteredMoleculesComponentStyles('TimePicker_ClockHours');
+export const timePickerClockMinutesStyles =
+    getRegisteredMoleculesComponentStyles('TimePicker_ClockMinutes');
+export const timePickerAmPmSwitcherStyles =
+    getRegisteredMoleculesComponentStyles('TimePicker_AmPmSwitcher');

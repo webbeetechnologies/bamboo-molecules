@@ -14,7 +14,7 @@ const backdropStylesDefault = StyleSheet.create({
 });
 
 registerComponentsStyles({
-    backdropStyles: backdropStylesDefault,
+    Backdrop: backdropStylesDefault,
 });
 
-export const backdropStyles = getRegisteredMoleculesComponentStyles('backdropStyles');
+export const backdropStyles = getRegisteredMoleculesComponentStyles('Backdrop');

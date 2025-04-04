@@ -84,12 +84,12 @@ const radioButtonItemStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    radioButtonStyles: radioButtonStylesDefault,
-    radioButtonItemStyles: radioButtonItemStylesDefault,
+    RadioButton: radioButtonStylesDefault,
+    RadioButton_Item: radioButtonItemStylesDefault,
 });
 
-export const radioButtonStyles = getRegisteredMoleculesComponentStyles('radioButtonStyles');
-export const radioButtonItemStyles = getRegisteredMoleculesComponentStyles('radioButtonItemStyles');
+export const radioButtonStyles = getRegisteredMoleculesComponentStyles('RadioButton');
+export const radioButtonItemStyles = getRegisteredMoleculesComponentStyles('RadioButton_Item');
 
 export const handlePress = ({
     onPress,

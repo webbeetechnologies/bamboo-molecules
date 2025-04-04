@@ -21,7 +21,7 @@ const popoverStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    popoverStyles: popoverStylesDefault,
+    Popover: popoverStylesDefault,
 });
 
-export const defaultStyles = getRegisteredMoleculesComponentStyles('popoverStyles');
+export const defaultStyles = getRegisteredMoleculesComponentStyles('Popover');

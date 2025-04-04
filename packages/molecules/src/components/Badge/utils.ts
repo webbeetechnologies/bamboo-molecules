@@ -31,7 +31,7 @@ const badgeStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    badgeStyles: badgeStylesDefault,
+    Badge: badgeStylesDefault,
 });
 
-export const badgeStyles = getRegisteredMoleculesComponentStyles('badgeStyles');
+export const badgeStyles = getRegisteredMoleculesComponentStyles('Badge');

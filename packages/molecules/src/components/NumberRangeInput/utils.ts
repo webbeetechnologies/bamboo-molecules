@@ -15,8 +15,7 @@ const numberRangeInputStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    numberRangeInputStyles: numberRangeInputStylesDefault,
+    NumberRangeInput: numberRangeInputStylesDefault,
 });
 
-export const numberRangeInputStyles =
-    getRegisteredMoleculesComponentStyles('numberRangeInputStyles');
+export const numberRangeInputStyles = getRegisteredMoleculesComponentStyles('NumberRangeInput');

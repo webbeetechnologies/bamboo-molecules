@@ -87,9 +87,9 @@ const menuItemStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    menuStyles: menuStylesDefault,
-    menuItemStyles: menuItemStylesDefault,
+    Menu: menuStylesDefault,
+    Menu_Item: menuItemStylesDefault,
 });
 
-export const menuStyles = getRegisteredMoleculesComponentStyles('menuStyles');
-export const menuItemStyles = getRegisteredMoleculesComponentStyles('menuItemStyles');
+export const menuStyles = getRegisteredMoleculesComponentStyles('Menu');
+export const menuItemStyles = getRegisteredMoleculesComponentStyles('Menu_Item');

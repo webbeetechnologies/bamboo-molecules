@@ -131,28 +131,24 @@ const datePickerDockedMonthStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    datePickerDockedStyles: datePickerDockedStylesDefault,
-    datePickerDockedHeaderStyles: datePickerDockedHeaderStylesDefault,
-    datePickerHeaderItemStyles: datePickerHeaderItemStylesDefault,
-    datePickerMonthPickerStyles: datePickerMonthPickerStylesDefault,
-    datePickerDockedMonthItemStyles: datePickerDockedMonthItemStylesDefault,
-    datePickerDockedMonthStyles: datePickerDockedMonthStylesDefault,
+    DatePickerDocked: datePickerDockedStylesDefault,
+    DatePickerDocked_Header: datePickerDockedHeaderStylesDefault,
+    DatePicker_HeaderItem: datePickerHeaderItemStylesDefault,
+    DatePickerDocked_MonthPicker: datePickerMonthPickerStylesDefault,
+    DatePickerDocked_MonthItem: datePickerDockedMonthItemStylesDefault,
+    DatePickerDocked_Month: datePickerDockedMonthStylesDefault,
 });
 
-export const datePickerDockedStyles =
-    getRegisteredMoleculesComponentStyles('datePickerDockedStyles');
-export const datePickerDockedHeaderStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerDockedHeaderStyles',
-);
-export const datePickerHeaderItemStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerHeaderItemStyles',
-);
+export const datePickerDockedStyles = getRegisteredMoleculesComponentStyles('DatePickerDocked');
+export const datePickerDockedHeaderStyles =
+    getRegisteredMoleculesComponentStyles('DatePickerDocked_Header');
+export const datePickerHeaderItemStyles =
+    getRegisteredMoleculesComponentStyles('DatePicker_HeaderItem');
 export const datePickerMonthPickerStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerMonthPickerStyles',
+    'DatePickerDocked_MonthPicker',
 );
 export const datePickerDockedMonthItemStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerDockedMonthItemStyles',
+    'DatePickerDocked_MonthItem',
 );
-export const datePickerDockedMonthStyles = getRegisteredMoleculesComponentStyles(
-    'datePickerDockedMonthStyles',
-);
+export const datePickerDockedMonthStyles =
+    getRegisteredMoleculesComponentStyles('DatePickerDocked_Month');

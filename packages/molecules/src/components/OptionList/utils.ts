@@ -11,7 +11,7 @@ const optionListStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    optionListStyles: optionListStylesDefault,
+    OptionList: optionListStylesDefault,
 });
 
-export const optionListStyles = getRegisteredMoleculesComponentStyles('optionListStyles');
+export const optionListStyles = getRegisteredMoleculesComponentStyles('OptionList');

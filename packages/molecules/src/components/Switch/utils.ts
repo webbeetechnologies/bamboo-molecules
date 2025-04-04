@@ -210,7 +210,7 @@ const switchStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    switchStyles: switchStylesDefault,
+    Switch: switchStylesDefault,
 });
 
-export const switchStyles = getRegisteredMoleculesComponentStyles('switchStyles');
+export const switchStyles = getRegisteredMoleculesComponentStyles('Switch');

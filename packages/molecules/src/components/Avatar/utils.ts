@@ -27,7 +27,7 @@ const avatarStylesDefault = StyleSheet.create(theme => ({
 }));
 
 registerComponentsStyles({
-    avatarStyles: avatarStylesDefault,
+    Avatar: avatarStylesDefault,
 });
 
-export const avatarStyles = getRegisteredMoleculesComponentStyles('avatarStyles');
+export const avatarStyles = getRegisteredMoleculesComponentStyles('Avatar');
