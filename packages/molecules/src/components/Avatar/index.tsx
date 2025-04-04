@@ -1,2 +1,10 @@
-export { default as Avatar, Props as AvatarProps } from './Avatar';
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import AvatarDefault from './Avatar';
+
+registerMoleculesComponents({
+    Avatar: AvatarDefault,
+});
+
+export const Avatar = getRegisteredMoleculesComponent('Avatar');
+
 export { avatarStyles } from './utils';

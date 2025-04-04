@@ -1,6 +1,13 @@
-export { default as DatePickerModal } from './DatePickerModal';
-export { DatePickerModalProps } from './types';
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import DatePickerModalDefault from './DatePickerModal';
 
+registerMoleculesComponents({
+    DatePickerModal: DatePickerModalDefault,
+});
+
+export const DatePickerModal = getRegisteredMoleculesComponent('DatePickerModal');
+
+export { DatePickerModalProps } from './types';
 export {
     datePickerModalStyles,
     datePickerModalContentHeaderStyles,

@@ -1,8 +1,8 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { circleSize } from './timeUtils';
 import { StyleSheet } from 'react-native-unistyles';
 
-// TODO: cleanup hardcoded values
-export const timePickerStyles = StyleSheet.create(theme => ({
+const timePickerStylesDefault = StyleSheet.create(theme => ({
     container: {
         alignItems: 'center',
 
@@ -38,7 +38,7 @@ export const timePickerStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const timePickerInputsStyles = StyleSheet.create(theme => ({
+const timePickerInputsStylesDefault = StyleSheet.create(theme => ({
     spaceBetweenInputsAndSwitcher: { width: 12 },
     inputContainer: {
         flexDirection: 'row',
@@ -71,7 +71,7 @@ export const timePickerInputsStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const timePickerInputStyles = StyleSheet.create(theme => ({
+const timePickerInputStylesDefault = StyleSheet.create(theme => ({
     root: {
         rippleColor: theme.colors.onPrimaryContainer,
     } as any,
@@ -105,7 +105,7 @@ export const timePickerInputStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const timePickerClockStyles = StyleSheet.create(theme => ({
+const timePickerClockStylesDefault = StyleSheet.create(theme => ({
     clock: {
         height: circleSize,
         width: circleSize,
@@ -140,7 +140,7 @@ export const timePickerClockStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const timePickerClockHoursStyles = StyleSheet.create(theme => ({
+const timePickerClockHoursStylesDefault = StyleSheet.create(theme => ({
     root: {
         activeTextColor: theme.colors.onPrimary,
     } as any,
@@ -177,7 +177,7 @@ export const timePickerClockHoursStyles = StyleSheet.create(theme => ({
     innerHourText: { fontSize: 13 },
 }));
 
-export const timePickerClockMinutesStyles = StyleSheet.create(theme => ({
+const timePickerClockMinutesStylesDefault = StyleSheet.create(theme => ({
     root: {
         activeTextColor: theme.colors.onPrimary,
     } as any,
@@ -217,7 +217,7 @@ export const timePickerClockMinutesStyles = StyleSheet.create(theme => ({
     textWhite: { color: '#fff' },
 }));
 
-export const timePickerAmPmSwitcherStyles = StyleSheet.create(theme => ({
+const timePickerAmPmSwitcherStylesDefault = StyleSheet.create(theme => ({
     container: {
         width: 50,
         height: 80,
@@ -261,3 +261,28 @@ export const timePickerAmPmSwitcherStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    timePickerStyles: timePickerStylesDefault,
+    timePickerInputsStyles: timePickerInputsStylesDefault,
+    timePickerInputStyles: timePickerInputStylesDefault,
+    timePickerClockStyles: timePickerClockStylesDefault,
+    timePickerClockHoursStyles: timePickerClockHoursStylesDefault,
+    timePickerClockMinutesStyles: timePickerClockMinutesStylesDefault,
+    timePickerAmPmSwitcherStyles: timePickerAmPmSwitcherStylesDefault,
+});
+
+export const timePickerStyles = getRegisteredMoleculesComponentStyles('timePickerStyles');
+export const timePickerInputsStyles =
+    getRegisteredMoleculesComponentStyles('timePickerInputsStyles');
+export const timePickerInputStyles = getRegisteredMoleculesComponentStyles('timePickerInputStyles');
+export const timePickerClockStyles = getRegisteredMoleculesComponentStyles('timePickerClockStyles');
+export const timePickerClockHoursStyles = getRegisteredMoleculesComponentStyles(
+    'timePickerClockHoursStyles',
+);
+export const timePickerClockMinutesStyles = getRegisteredMoleculesComponentStyles(
+    'timePickerClockMinutesStyles',
+);
+export const timePickerAmPmSwitcherStyles = getRegisteredMoleculesComponentStyles(
+    'timePickerAmPmSwitcherStyles',
+);

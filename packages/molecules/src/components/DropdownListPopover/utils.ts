@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const defaultStyles = StyleSheet.create(theme => ({
+const dropdownListPopoverStylesDefault = StyleSheet.create(theme => ({
     initialTransition: {
         opacity: 0,
     },
@@ -28,3 +29,9 @@ export const defaultStyles = StyleSheet.create(theme => ({
         opacity: 0,
     },
 }));
+
+registerComponentsStyles({
+    dropdownListPopoverStyles: dropdownListPopoverStylesDefault,
+});
+
+export const defaultStyles = getRegisteredMoleculesComponentStyles('dropdownListPopoverStyles');

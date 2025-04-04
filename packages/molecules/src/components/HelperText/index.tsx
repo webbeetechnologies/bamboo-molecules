@@ -1,2 +1,10 @@
-export { default as HelperText, Props as HelperTextProps } from './HelperText';
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import HelperTextDefault from './HelperText';
+
+registerMoleculesComponents({
+    HelperText: HelperTextDefault,
+});
+
+export const HelperText = getRegisteredMoleculesComponent('HelperText');
+
 export { styles as helperTextStyles } from './utils';

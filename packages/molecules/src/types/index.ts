@@ -1,6 +1,8 @@
 import type { ComponentPropsWithoutRef, ComponentType } from 'react';
 import type { StyleProp } from 'react-native';
 
+export * from './theme';
+
 export type NoInfer<T> = [T][T extends any ? 0 : never];
 
 export type DeepPartial<T> = T extends object

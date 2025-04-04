@@ -1,7 +1,8 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { Platform } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const navigationRailStyles = StyleSheet.create(theme => ({
+const navigationRailStylesDefault = StyleSheet.create(theme => ({
     root: {
         width: 80,
         backgroundColor: theme.colors.surface,
@@ -9,27 +10,25 @@ export const navigationRailStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const navigationRailHeaderStyles = StyleSheet.create({
+const navigationRailHeaderStylesDefault = StyleSheet.create({
     root: {
         alignItems: 'center',
     },
 });
 
-export const navigationRailContentStyles = StyleSheet.create({
+const navigationRailContentStylesDefault = StyleSheet.create({
     root: {
         flexGrow: 1,
     },
 });
 
-export const navigationRailFooterStyles = StyleSheet.create({
+const navigationRailFooterStylesDefault = StyleSheet.create({
     root: {
         alignItems: 'center',
     },
 });
 
-// type ItemStates = 'activeAndHovered' | 'active' | 'hovered';
-
-export const navigationRailItemStyles = StyleSheet.create(theme => ({
+const navigationRailItemStylesDefault = StyleSheet.create(theme => ({
     root: {
         ...(Platform.OS === 'web' ? { cursor: 'pointer' } : {}),
         alignItems: 'center',
@@ -125,3 +124,25 @@ export const navigationRailItemStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    navigationRailStyles: navigationRailStylesDefault,
+    navigationRailHeaderStyles: navigationRailHeaderStylesDefault,
+    navigationRailContentStyles: navigationRailContentStylesDefault,
+    navigationRailFooterStyles: navigationRailFooterStylesDefault,
+    navigationRailItemStyles: navigationRailItemStylesDefault,
+});
+
+export const navigationRailStyles = getRegisteredMoleculesComponentStyles('navigationRailStyles');
+export const navigationRailHeaderStyles = getRegisteredMoleculesComponentStyles(
+    'navigationRailHeaderStyles',
+);
+export const navigationRailContentStyles = getRegisteredMoleculesComponentStyles(
+    'navigationRailContentStyles',
+);
+export const navigationRailFooterStyles = getRegisteredMoleculesComponentStyles(
+    'navigationRailFooterStyles',
+);
+export const navigationRailItemStyles = getRegisteredMoleculesComponentStyles(
+    'navigationRailItemStyles',
+);

@@ -1,14 +1,14 @@
 import { StyleSheet } from 'react-native-unistyles';
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 
-export const accordionStyles = StyleSheet.create({
+const accordionStylesDefault = StyleSheet.create({
+    root: {},
+});
+const accordionItemStylesDefault = StyleSheet.create({
     root: {},
 });
 
-export const accordionItemStyles = StyleSheet.create({
-    root: {},
-});
-
-export const accordionItemHeaderStyles = StyleSheet.create(theme => ({
+const accordionItemHeaderStylesDefault = StyleSheet.create(theme => ({
     root: {
         minHeight: 56,
         flexDirection: 'row',
@@ -40,8 +40,22 @@ export const accordionItemHeaderStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const accordionItemContentStyles = StyleSheet.create(theme => ({
+const accordionItemContentStylesDefault = StyleSheet.create(theme => ({
     root: {
         paddingLeft: theme.spacings['6'],
     },
 }));
+
+registerComponentsStyles({
+    Accordion: accordionStylesDefault,
+    AccordionItem: accordionItemStylesDefault,
+    AccordionItem_Header: accordionItemHeaderStylesDefault,
+    AccordionItem_Content: accordionItemContentStylesDefault,
+});
+
+export const accordionStyles = getRegisteredMoleculesComponentStyles('Accordion');
+export const accordionItemStyles = getRegisteredMoleculesComponentStyles('AccordionItem');
+export const accordionItemHeaderStyles =
+    getRegisteredMoleculesComponentStyles('AccordionItem_Header');
+export const accordionItemContentStyles =
+    getRegisteredMoleculesComponentStyles('AccordionItem_Content');

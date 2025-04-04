@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const styles = StyleSheet.create(theme => ({
+const timepickerModalStylesDefault = StyleSheet.create(theme => ({
     keyboardView: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -38,3 +39,9 @@ export const styles = StyleSheet.create(theme => ({
     inputTypeToggle: { margin: theme.spacings['1'] },
     fill: { flex: 1 },
 }));
+
+registerComponentsStyles({
+    timepickerModalStyles: timepickerModalStylesDefault,
+});
+
+export const styles = getRegisteredMoleculesComponentStyles('timepickerModalStyles');

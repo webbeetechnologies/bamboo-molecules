@@ -1,3 +1,4 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
 // type States =
@@ -13,8 +14,7 @@ import { StyleSheet } from 'react-native-unistyles';
 //     | 'selected_focused'
 //     | 'selected_hovered_pressed'
 //     | 'selected_focused_pressed';
-
-export const switchStyles = StyleSheet.create(theme => ({
+const switchStylesDefault = StyleSheet.create(theme => ({
     root: {
         ...({
             uncheckedColor: theme.colors.surfaceContainerHighest,
@@ -208,3 +208,9 @@ export const switchStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    switchStyles: switchStylesDefault,
+});
+
+export const switchStyles = getRegisteredMoleculesComponentStyles('switchStyles');

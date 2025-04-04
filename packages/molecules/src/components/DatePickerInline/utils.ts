@@ -1,9 +1,10 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { daySize } from './dateUtils';
 import { dayNamesHeight } from './DayNames';
 import { montHeaderHeight } from './Month';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const datePickerStyles = StyleSheet.create(theme => ({
+const datePickerStylesDefault = StyleSheet.create(theme => ({
     root: {
         ...({
             roundness: theme.shapes.corner.extraSmall,
@@ -17,7 +18,7 @@ export const datePickerStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const datePickerMonthStyles = StyleSheet.create(theme => ({
+const datePickerMonthStylesDefault = StyleSheet.create(theme => ({
     root: {
         backgroundColor: theme.colors.surface,
     },
@@ -52,7 +53,7 @@ export const datePickerMonthStyles = StyleSheet.create(theme => ({
     weekContainerStyle: {},
 }));
 
-export const datePickerYearPickerStyles = StyleSheet.create(theme => ({
+const datePickerYearPickerStylesDefault = StyleSheet.create(theme => ({
     root: {
         backgroundColor: theme.colors.surface,
     },
@@ -78,9 +79,7 @@ export const datePickerYearPickerStyles = StyleSheet.create(theme => ({
     },
 }));
 
-// type DatePickerDayState = 'disabled' | 'selected' | 'inRange';
-
-export const datePickerDayStyles = StyleSheet.create(theme => ({
+const datePickerDayStylesDefault = StyleSheet.create(theme => ({
     containerStyle: {
         flex: 1,
         flexBasis: 0,
@@ -186,21 +185,21 @@ export const datePickerDayStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const datePickerDayEmptyStyles = StyleSheet.create({
+const datePickerDayEmptyStylesDefault = StyleSheet.create({
     root: {
         flex: 1,
         flexBasis: 0,
     },
 });
 
-export const datePickerWeekStyles = StyleSheet.create({
+const datePickerWeekStylesDefault = StyleSheet.create({
     root: {
         flexDirection: 'row',
         height: daySize,
     },
 });
 
-export const datePickerHeaderStyles = StyleSheet.create(theme => ({
+const datePickerHeaderStylesDefault = StyleSheet.create(theme => ({
     datePickerHeader: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -233,7 +232,7 @@ export const datePickerHeaderStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const dateDayNameStyles = StyleSheet.create(theme => ({
+const dateDayNameStylesDefault = StyleSheet.create(theme => ({
     container: {
         height: dayNamesHeight,
         flexDirection: 'row',
@@ -247,7 +246,7 @@ export const dateDayNameStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const datePickerDayRangeStyles = StyleSheet.create(theme => ({
+const datePickerDayRangeStylesDefault = StyleSheet.create(theme => ({
     container: {
         flexDirection: 'row',
 
@@ -307,7 +306,7 @@ export const datePickerDayRangeStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const datePickerYearItemStyles = StyleSheet.create(theme => ({
+const datePickerYearItemStylesDefault = StyleSheet.create(theme => ({
     yearButton: {
         variants: {
             state: {
@@ -328,3 +327,36 @@ export const datePickerYearItemStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    datePickerStyles: datePickerStylesDefault,
+    datePickerMonthStyles: datePickerMonthStylesDefault,
+    datePickerYearPickerStyles: datePickerYearPickerStylesDefault,
+    datePickerDayStyles: datePickerDayStylesDefault,
+    datePickerDayEmptyStyles: datePickerDayEmptyStylesDefault,
+    datePickerWeekStyles: datePickerWeekStylesDefault,
+    datePickerHeaderStyles: datePickerHeaderStylesDefault,
+    dateDayNameStyles: dateDayNameStylesDefault,
+    datePickerDayRangeStyles: datePickerDayRangeStylesDefault,
+    datePickerYearItemStyles: datePickerYearItemStylesDefault,
+});
+
+export const datePickerStyles = getRegisteredMoleculesComponentStyles('datePickerStyles');
+export const datePickerMonthStyles = getRegisteredMoleculesComponentStyles('datePickerMonthStyles');
+export const datePickerYearPickerStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerYearPickerStyles',
+);
+export const datePickerDayStyles = getRegisteredMoleculesComponentStyles('datePickerDayStyles');
+export const datePickerDayEmptyStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerDayEmptyStyles',
+);
+export const datePickerWeekStyles = getRegisteredMoleculesComponentStyles('datePickerWeekStyles');
+export const datePickerHeaderStyles =
+    getRegisteredMoleculesComponentStyles('datePickerHeaderStyles');
+export const dateDayNameStyles = getRegisteredMoleculesComponentStyles('dateDayNameStyles');
+export const datePickerDayRangeStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerDayRangeStyles',
+);
+export const datePickerYearItemStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerYearItemStyles',
+);

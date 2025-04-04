@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const appbarBaseStyles = StyleSheet.create(theme => ({
+const appbarBaseStylesDefault = StyleSheet.create(theme => ({
     root: {
         paddingHorizontal: theme.spacings['4'],
         backgroundColor: theme.colors.surface,
@@ -16,15 +17,15 @@ export const appbarBaseStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const appbarCenterAlignedStyles = StyleSheet.create({
+const appbarCenterAlignedStylesDefault = StyleSheet.create({
     root: { minHeight: 64 },
 });
 
-export const appbarSmallStyles = StyleSheet.create({
+const appbarSmallStylesDefault = StyleSheet.create({
     root: { minHeight: 64 },
 });
 
-export const appbarMediumStyles = StyleSheet.create(theme => ({
+const appbarMediumStylesDefault = StyleSheet.create(theme => ({
     root: {
         paddingHorizontal: theme.spacings['4'],
         paddingVertical: theme.spacings['5'],
@@ -36,7 +37,7 @@ export const appbarMediumStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const appbarLargeStyles = StyleSheet.create(theme => ({
+const appbarLargeStylesDefault = StyleSheet.create(theme => ({
     root: {
         paddingHorizontal: theme.spacings['4'],
         paddingVertical: theme.spacings['5'],
@@ -48,7 +49,7 @@ export const appbarLargeStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const appbarTitle = StyleSheet.create(theme => ({
+const appbarTitleDefault = StyleSheet.create(theme => ({
     root: {
         display: 'flex',
         flex: 1,
@@ -76,7 +77,7 @@ export const appbarTitle = StyleSheet.create(theme => ({
     },
 }));
 
-export const appbarRight = StyleSheet.create(theme => ({
+const appbarRightDefault = StyleSheet.create(theme => ({
     root: {
         spacing: theme.spacings['6'],
         flexDirection: 'row',
@@ -84,7 +85,7 @@ export const appbarRight = StyleSheet.create(theme => ({
     },
 }));
 
-export const appbarLeft = StyleSheet.create(theme => ({
+const appbarLeftDefault = StyleSheet.create(theme => ({
     root: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -102,3 +103,25 @@ export const appbarLeft = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    appbarBaseStyles: appbarBaseStylesDefault,
+    appbarCenterAlignedStyles: appbarCenterAlignedStylesDefault,
+    appbarSmallStyles: appbarSmallStylesDefault,
+    appbarMediumStyles: appbarMediumStylesDefault,
+    appbarLargeStyles: appbarLargeStylesDefault,
+    appbarTitle: appbarTitleDefault,
+    appbarRight: appbarRightDefault,
+    appbarLeft: appbarLeftDefault,
+});
+
+export const appbarBaseStyles = getRegisteredMoleculesComponentStyles('appbarBaseStyles');
+export const appbarCenterAlignedStyles = getRegisteredMoleculesComponentStyles(
+    'appbarCenterAlignedStyles',
+);
+export const appbarSmallStyles = getRegisteredMoleculesComponentStyles('appbarSmallStyles');
+export const appbarMediumStyles = getRegisteredMoleculesComponentStyles('appbarMediumStyles');
+export const appbarLargeStyles = getRegisteredMoleculesComponentStyles('appbarLargeStyles');
+export const appbarTitle = getRegisteredMoleculesComponentStyles('appbarTitle');
+export const appbarRight = getRegisteredMoleculesComponentStyles('appbarRight');
+export const appbarLeft = getRegisteredMoleculesComponentStyles('appbarLeft');

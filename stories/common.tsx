@@ -1,6 +1,5 @@
 import type { ComponentType, ReactNode } from 'react';
 import {
-    extendTheme,
     ProvideMolecules as DefaultProvideMolecules,
     TextProps,
     ToastContainer,
@@ -9,60 +8,60 @@ import {
 } from '../src';
 import { linkTo } from '@storybook/addon-links';
 
-import { addDecorator } from '@storybook/react';
-import { withPerformance } from 'storybook-addon-performance';
+// import { addDecorator } from '@storybook/react';
+// import { withPerformance } from 'storybook-addon-performance';
 import { generateFlatListData } from '../__mocks__/generateFlatListData';
 
 // creating theme styles similar to mdx
-export const theme = extendTheme({
-    colorMode: 'light',
-    H1: {
-        marginTop: 20,
-        marginBottom: 8,
-        padding: 0,
-        color: '#333333',
-        fontSize: 34,
-        fontWeight: '900',
-    },
-    H3: {
-        marginTop: 20,
-        marginBottom: 4,
-        padding: 0,
-        color: '#333333',
-        fontSize: 21,
-        fontWeight: '900',
-    },
-    Text: {
-        lineHeight: 26,
-        fontSize: 15,
-        color: '#333333',
-        marginVertical: 16,
-    },
-    Strong: {
-        fontSize: 15,
-        lineHeight: 24,
-        color: '#333333',
-    },
-    Code: {
-        lineHeight: 24,
-        marginHorizontal: 2,
-        paddingVertical: 3,
-        paddingHorizontal: 5,
-        whiteSpace: 'nowrap',
-        borderRadius: 3,
-        fontSize: 14,
-        borderWidth: 1,
-        borderColor: '#EEEEEE',
-        color: 'rgba(51,51,51,0.9)',
-        backgroundColor: '#F8F8F8',
-    },
-    DocLink: {
-        fontSize: 15,
-        lineHeight: 24,
-        color: '#1a0dab',
-        fontWeight: 500,
-    },
-});
+// export const componentStyles = extendComponentStyles({
+//     // colorMode: 'light',
+//     H1: {
+//         marginTop: 20,
+//         marginBottom: 8,
+//         padding: 0,
+//         color: '#333333',
+//         fontSize: 34,
+//         fontWeight: '900',
+//     },
+//     H3: {
+//         marginTop: 20,
+//         marginBottom: 4,
+//         padding: 0,
+//         color: '#333333',
+//         fontSize: 21,
+//         fontWeight: '900',
+//     },
+//     Text: {
+//         lineHeight: 26,
+//         fontSize: 15,
+//         color: '#333333',
+//         marginVertical: 16,
+//     },
+//     Strong: {
+//         fontSize: 15,
+//         lineHeight: 24,
+//         color: '#333333',
+//     },
+//     Code: {
+//         lineHeight: 24,
+//         marginHorizontal: 2,
+//         paddingVertical: 3,
+//         paddingHorizontal: 5,
+//         whiteSpace: 'nowrap',
+//         borderRadius: 3,
+//         fontSize: 14,
+//         borderWidth: 1,
+//         borderColor: '#EEEEEE',
+//         color: 'rgba(51,51,51,0.9)',
+//         backgroundColor: '#F8F8F8',
+//     },
+//     DocLink: {
+//         fontSize: 15,
+//         lineHeight: 24,
+//         color: '#1a0dab',
+//         fontWeight: 500,
+//     },
+// });
 
 type DocLinkProps = TextProps & {
     href: { idOrTitle: string; name?: string };
@@ -75,30 +74,32 @@ export interface InjectedComponentTypes {
 
 export const useMolecules = () => useMoleculesDefault<InjectedComponentTypes>();
 
-addDecorator(Story => (
-    <ProvideMolecules>
-        <Story />
-        <ToastContainer />
-    </ProvideMolecules>
-));
+// addDecorator(Story => {
+//     return (
+//         <ProvideMolecules>
+//             <Story />
+//             <ToastContainer />
+//         </ProvideMolecules>
+//     );
+// });
 
-addDecorator(((getStory, context) => {
-    return withPerformance(getStory, {
-        ...context,
-        parameters: {
-            ...context?.parameters,
-            performance: {
-                allowedGroups: ['client'],
-            },
-        },
-    });
-}) as typeof withPerformance);
+// addDecorator(((getStory, context) => {
+//     return withPerformance(getStory, {
+//         ...context,
+//         parameters: {
+//             ...context?.parameters,
+//             performance: {
+//                 allowedGroups: ['client'],
+//             },
+//         },
+//     });
+// }) as typeof withPerformance);
 
 const Code = ({ style, ...rest }: TextProps) => {
     const { Text } = useMolecules();
     const codeStyles = useComponentStyles('Code', style);
 
-    return <Text style={codeStyles} {...rest} />;
+    return <Button style={codeStyles} {...rest} />;
 };
 
 const DocLink = ({ style, href, ...rest }: DocLinkProps) => {
@@ -114,18 +115,14 @@ export const withDocsWrapper =
     <T extends {} = {}>(Component: ComponentType<T>) =>
     (props: T) => {
         return (
-            <DefaultProvideMolecules components={components} theme={theme}>
+            <DefaultProvideMolecules components={components}>
                 <Component {...props} />
             </DefaultProvideMolecules>
         );
     };
 
-const storyTheme = extendTheme({
-    colorMode: 'light',
-});
-
 export const ProvideMolecules = ({ children }: { children: ReactNode }) => {
-    return <DefaultProvideMolecules theme={storyTheme}>{children}</DefaultProvideMolecules>;
+    return <DefaultProvideMolecules>{children}</DefaultProvideMolecules>;
 };
 
 export const generateSectionListData = (sectionsLength: number, dataLength: number) => {

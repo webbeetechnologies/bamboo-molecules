@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const tooltipStyles = StyleSheet.create(theme => ({
+const tooltipStylesDefault = StyleSheet.create(theme => ({
     content: {
         backgroundColor: theme.colors.onSurfaceVariant,
         borderRadius: theme.shapes.corner.extraSmall,
@@ -10,3 +11,9 @@ export const tooltipStyles = StyleSheet.create(theme => ({
         color: theme.colors.surface,
     },
 }));
+
+registerComponentsStyles({
+    tooltipStyles: tooltipStylesDefault,
+});
+
+export const tooltipStyles = getRegisteredMoleculesComponentStyles('tooltipStyles');

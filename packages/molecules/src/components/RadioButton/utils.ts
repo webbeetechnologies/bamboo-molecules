@@ -1,8 +1,9 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
 // type States = 'disabled' | 'checked' | 'hovered' | 'checkedAndHovered';
 
-export const radioButtonStyles = StyleSheet.create(theme => ({
+const radioButtonStylesDefault = StyleSheet.create(theme => ({
     root: {
         color: theme.colors.onSurfaceVariant,
         uncheckedColor: theme.colors.onSurfaceVariant,
@@ -56,7 +57,7 @@ export const radioButtonStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const radioButtonItemStyles = StyleSheet.create(theme => ({
+const radioButtonItemStylesDefault = StyleSheet.create(theme => ({
     root: {
         paddingVertical: theme.spacings['2'],
         paddingHorizontal: theme.spacings['4'],
@@ -81,6 +82,14 @@ export const radioButtonItemStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    radioButtonStyles: radioButtonStylesDefault,
+    radioButtonItemStyles: radioButtonItemStylesDefault,
+});
+
+export const radioButtonStyles = getRegisteredMoleculesComponentStyles('radioButtonStyles');
+export const radioButtonItemStyles = getRegisteredMoleculesComponentStyles('radioButtonItemStyles');
 
 export const handlePress = ({
     onPress,

@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const dialogStyles = StyleSheet.create(theme => ({
+const dialogStylesDefault = StyleSheet.create(theme => ({
     root: {
         spacing: theme.spacings['6'],
         justifyContent: 'flex-start',
@@ -9,7 +10,7 @@ export const dialogStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const dialogTitleStyles = StyleSheet.create(theme => ({
+const dialogTitleStylesDefault = StyleSheet.create(theme => ({
     root: {
         marginHorizontal: theme.spacings['6'],
         marginVertical: theme.spacings['3'],
@@ -18,7 +19,7 @@ export const dialogTitleStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const dialogScrollAreaStyles = StyleSheet.create(theme => ({
+const dialogScrollAreaStylesDefault = StyleSheet.create(theme => ({
     root: {
         flexGrow: 1,
         flexShrink: 1,
@@ -29,7 +30,7 @@ export const dialogScrollAreaStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const dialogIconStyles = StyleSheet.create(theme => ({
+const dialogIconStylesDefault = StyleSheet.create(theme => ({
     root: {
         color: theme.colors.secondary,
         paddingTop: theme.spacings['6'],
@@ -40,7 +41,7 @@ export const dialogIconStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const dialogContentStyles = StyleSheet.create(theme => ({
+const dialogContentStylesDefault = StyleSheet.create(theme => ({
     root: {
         paddingBottom: theme.spacings['6'],
         paddingHorizontal: theme.spacings['6'],
@@ -48,7 +49,7 @@ export const dialogContentStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const dialogActionsStyles = StyleSheet.create(theme => ({
+const dialogActionsStylesDefault = StyleSheet.create(theme => ({
     root: {
         ...({ spacing: theme.spacings['2'] } as any),
     },
@@ -60,3 +61,20 @@ export const dialogActionsStyles = StyleSheet.create(theme => ({
         paddingHorizontal: theme.spacings['6'],
     },
 }));
+
+registerComponentsStyles({
+    dialogStyles: dialogStylesDefault,
+    dialogTitleStyles: dialogTitleStylesDefault,
+    dialogScrollAreaStyles: dialogScrollAreaStylesDefault,
+    dialogIconStyles: dialogIconStylesDefault,
+    dialogContentStyles: dialogContentStylesDefault,
+    dialogActionsStyles: dialogActionsStylesDefault,
+});
+
+export const dialogStyles = getRegisteredMoleculesComponentStyles('dialogStyles');
+export const dialogTitleStyles = getRegisteredMoleculesComponentStyles('dialogTitleStyles');
+export const dialogScrollAreaStyles =
+    getRegisteredMoleculesComponentStyles('dialogScrollAreaStyles');
+export const dialogIconStyles = getRegisteredMoleculesComponentStyles('dialogIconStyles');
+export const dialogContentStyles = getRegisteredMoleculesComponentStyles('dialogContentStyles');
+export const dialogActionsStyles = getRegisteredMoleculesComponentStyles('dialogActionsStyles');

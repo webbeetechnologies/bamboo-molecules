@@ -1,9 +1,10 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { getCursorStyle } from '../../utils';
 import { StyleSheet } from 'react-native-unistyles';
 
 // type States = 'disabled' | 'hovered';
 
-export const linkStyles = StyleSheet.create(theme => ({
+const linkStylesDefault = StyleSheet.create(theme => ({
     root: {
         ...getCursorStyle('pointer'),
         color: theme.colors.primary,
@@ -23,3 +24,9 @@ export const linkStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    linkStyles: linkStylesDefault,
+});
+
+export const linkStyles = getRegisteredMoleculesComponentStyles('linkStyles');

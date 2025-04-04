@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const styles = StyleSheet.create(theme => ({
+const helperTextStylesDefault = StyleSheet.create(theme => ({
     root: {
         ...({ animationScale: theme.animation.scale } as any),
         fontSize: theme.typescale.bodySmall.fontSize,
@@ -19,3 +20,9 @@ export const styles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    helperTextStyles: helperTextStylesDefault,
+});
+
+export const styles = getRegisteredMoleculesComponentStyles('helperTextStyles');

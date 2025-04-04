@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const listItemStyles = StyleSheet.create(theme => ({
+const listItemStylesDefault = StyleSheet.create(theme => ({
     root: {
         backgroundColor: theme.colors.surface,
 
@@ -54,7 +55,7 @@ export const listItemStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const listItemTitleStyles = StyleSheet.create(theme => ({
+const listItemTitleStylesDefault = StyleSheet.create(theme => ({
     root: {
         color: theme.colors.onSurface,
         ...theme.typescale.bodyLarge,
@@ -73,7 +74,7 @@ export const listItemTitleStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const listItemDescriptionStyles = StyleSheet.create(theme => ({
+const listItemDescriptionStylesDefault = StyleSheet.create(theme => ({
     root: {
         color: theme.colors.onSurfaceVariant,
         ...theme.typescale.bodyMedium,
@@ -91,3 +92,15 @@ export const listItemDescriptionStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    listItemStyles: listItemStylesDefault,
+    listItemTitleStyles: listItemTitleStylesDefault,
+    listItemDescriptionStyles: listItemDescriptionStylesDefault,
+});
+
+export const listItemStyles = getRegisteredMoleculesComponentStyles('listItemStyles');
+export const listItemTitleStyles = getRegisteredMoleculesComponentStyles('listItemTitleStyles');
+export const listItemDescriptionStyles = getRegisteredMoleculesComponentStyles(
+    'listItemDescriptionStyles',
+);

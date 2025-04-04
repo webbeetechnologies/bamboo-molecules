@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const inputAddonStyles = StyleSheet.create(theme => ({
+const inputAddonStylesDefault = StyleSheet.create(theme => ({
     root: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -23,3 +24,9 @@ export const inputAddonStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    inputAddonStyles: inputAddonStylesDefault,
+});
+
+export const inputAddonStyles = getRegisteredMoleculesComponentStyles('inputAddonStyles');

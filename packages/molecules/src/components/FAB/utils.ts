@@ -1,8 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export type States = 'hovered' | 'disabled';
-
-export const fabStyles = StyleSheet.create(theme => ({
+const fabStylesDefault = StyleSheet.create(theme => ({
     root: {
         ...{ iconSize: 24 },
 
@@ -190,3 +189,11 @@ export const fabStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    fabStyles: fabStylesDefault,
+});
+
+export const fabStyles = getRegisteredMoleculesComponentStyles('fabStyles');
+
+export type States = 'hovered' | 'disabled';

@@ -6,8 +6,8 @@ import {
     ExampleDrawerItem,
     ExampleDrawerItemGroup,
 } from './Drawer';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { userEvent, waitFor, within } from '@storybook/test';
+import { expect } from '@storybook/test';
 import { useArgs } from '@storybook/addons';
 import { delay } from '../../common';
 

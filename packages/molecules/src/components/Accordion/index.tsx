@@ -1,19 +1,31 @@
 import AccordionItemComponent from './AccordionItem';
 import AccordionItemHeader from './AccordionItemHeader';
 import AccordionItemContent from './AccordionItemContent';
+import AccordionDefault from './Accordion';
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
 
-export const AccordionItem = Object.assign(AccordionItemComponent, {
+const AccordionItemDefault = Object.assign(AccordionItemComponent, {
     Header: AccordionItemHeader,
     Content: AccordionItemContent,
 });
 
-export { default as Accordion, Props as AccordionProps } from './Accordion';
-export { Props as AccordionItemProps } from './AccordionItem';
-export {
+registerMoleculesComponents({
+    Accordion: AccordionDefault,
+    AccordionItem: AccordionItemDefault,
+});
+
+export const Accordion = (getRegisteredMoleculesComponent('Accordion') ??
+    AccordionDefault) as typeof AccordionDefault;
+export const AccordionItem = (getRegisteredMoleculesComponent('AccordionItem') ??
+    AccordionItemDefault) as typeof AccordionItemDefault;
+
+export type { Props as AccordionProps } from './Accordion';
+export type { Props as AccordionItemProps } from './AccordionItem';
+export type {
     Props as AccordionItemHeaderProps,
     AccordionHeaderElementProps,
 } from './AccordionItemHeader';
-export { Props as AccordionItemContentProps } from './AccordionItemContent';
+export type { Props as AccordionItemContentProps } from './AccordionItemContent';
 
 export {
     accordionStyles,

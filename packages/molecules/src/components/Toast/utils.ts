@@ -1,3 +1,4 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import type { TextStyle, ViewStyle } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
@@ -10,7 +11,7 @@ export type CustomProps = {
     iconButton?: TextStyle;
 };
 
-export const styles = StyleSheet.create(theme => ({
+const stylesDefault = StyleSheet.create(theme => ({
     container: {
         minHeight: 48,
         backgroundColor: theme.colors.surface,
@@ -48,3 +49,9 @@ export const styles = StyleSheet.create(theme => ({
         color: theme.colors.onSurface,
     },
 }));
+
+registerComponentsStyles({
+    toastStyles: stylesDefault,
+});
+
+export const styles = getRegisteredMoleculesComponentStyles('toastStyles');

@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const elementGroupStyles = StyleSheet.create(theme => ({
+const elementGroupStylesDefault = StyleSheet.create(theme => ({
     root: {
         borderRadius: theme.shapes.corner.extraSmall,
         variants: {
@@ -15,3 +16,9 @@ export const elementGroupStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    elementGroupStyles: elementGroupStylesDefault,
+});
+
+export const elementGroupStyles = getRegisteredMoleculesComponentStyles('elementGroupStyles');

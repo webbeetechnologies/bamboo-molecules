@@ -1,10 +1,17 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import type { Mask } from 'react-native-mask-input';
 import { format, parse, set } from 'date-fns';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const styles = StyleSheet.create({
+const timepickerFieldStylesDefault = StyleSheet.create({
     root: {},
 });
+
+registerComponentsStyles({
+    timepickerFieldStyles: timepickerFieldStylesDefault,
+});
+
+export const styles = getRegisteredMoleculesComponentStyles('timepickerFieldStyles');
 
 export const timeMask24Hour: Mask = (text: string = '') => {
     const cleanTime = text.replace(/\D+/g, '');
@@ -21,7 +28,6 @@ export const timeMask24Hour: Mask = (text: string = '') => {
 
     return [hourFirstDigit, hourSecondDigit, ':', minuteFirstDigit, minuteSecondDigit];
 };
-
 export const timeMask12Hour: Mask = (text: string = '') => {
     const cleanTime = text.replace(/\D+/g, '');
 
@@ -37,7 +43,6 @@ export const timeMask12Hour: Mask = (text: string = '') => {
 
     return [hourFirstDigit, hourSecondDigit, ':', minuteFirstDigit, minuteSecondDigit, /[ap]/, 'm'];
 };
-
 export const timeFormat = {
     '24': {
         format: 'HH:mm',

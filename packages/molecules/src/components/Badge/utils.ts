@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const badgeStyles = StyleSheet.create(theme => ({
+const badgeStylesDefault = StyleSheet.create(theme => ({
     root: {
         backgroundColor: theme.colors.error,
         borderRadius: theme.shapes.corner.full,
@@ -28,3 +29,9 @@ export const badgeStyles = StyleSheet.create(theme => ({
         ...theme.typescale.labelSmall,
     },
 }));
+
+registerComponentsStyles({
+    badgeStyles: badgeStylesDefault,
+});
+
+export const badgeStyles = getRegisteredMoleculesComponentStyles('badgeStyles');

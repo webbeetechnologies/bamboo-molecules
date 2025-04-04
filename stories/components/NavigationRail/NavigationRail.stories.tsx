@@ -1,7 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { userEvent, within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/test';
 import { useArgs } from '@storybook/addons';
-import { expect } from '@storybook/jest';
+import { expect } from '@storybook/test';
 
 import { delay } from '../../common';
 import { Example, NavigationRailItemExample } from './NavigationRail';

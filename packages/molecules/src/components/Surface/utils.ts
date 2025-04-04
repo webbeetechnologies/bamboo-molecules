@@ -1,10 +1,17 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import type { Animated } from 'react-native';
 import { inputRange } from '../../styles/shadow';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const defaultStyles = StyleSheet.create({
+const defaultStylesDefault = StyleSheet.create({
     root: {},
 });
+
+registerComponentsStyles({
+    surfaceStyles: defaultStylesDefault,
+});
+
+export const defaultStyles = getRegisteredMoleculesComponentStyles('surfaceStyles');
 
 const _shadowColor = '#000';
 

@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const avatarStyles = StyleSheet.create(theme => ({
+const avatarStylesDefault = StyleSheet.create(theme => ({
     root: {
         backgroundColor: theme.colors.primary,
         alignItems: 'center',
@@ -24,3 +25,9 @@ export const avatarStyles = StyleSheet.create(theme => ({
         color: '#ffffff',
     },
 }));
+
+registerComponentsStyles({
+    avatarStyles: avatarStylesDefault,
+});
+
+export const avatarStyles = getRegisteredMoleculesComponentStyles('avatarStyles');

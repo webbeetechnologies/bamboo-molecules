@@ -13,7 +13,6 @@ const getArrowTop = (triggerMeasurements: number[]) => {
     const [, triggerY = 0, , triggerHeight = 0] = triggerMeasurements || [];
     return !triggerHeight ? null : triggerY + triggerHeight / 2;
 };
-
 export const getArrowStyles = (props: any) => {
     const defaultArrowHeight = DEFAULT_ARROW_HEIGHT;
 

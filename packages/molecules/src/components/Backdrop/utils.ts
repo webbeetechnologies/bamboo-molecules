@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const backdropStyles = StyleSheet.create({
+const backdropStylesDefault = StyleSheet.create({
     root: {
         position: 'absolute',
         top: 0,
@@ -11,3 +12,9 @@ export const backdropStyles = StyleSheet.create({
         opacity: 0.3,
     },
 });
+
+registerComponentsStyles({
+    backdropStyles: backdropStylesDefault,
+});
+
+export const backdropStyles = getRegisteredMoleculesComponentStyles('backdropStyles');

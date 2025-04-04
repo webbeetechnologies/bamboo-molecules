@@ -1,2 +1,10 @@
-export { default as FilePicker, Props as FilePickerProps } from './FilePicker';
-export { defaultStyles as filePickerStyles } from './utils';
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import FilePickerDefault from './FilePicker';
+
+registerMoleculesComponents({
+    FilePicker: FilePickerDefault,
+});
+
+export const FilePicker = getRegisteredMoleculesComponent('FilePicker');
+
+export { defaultStyles } from './utils';

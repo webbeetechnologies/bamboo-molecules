@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const styles = StyleSheet.create(theme => ({
+const checkboxStylesDefault = StyleSheet.create(theme => ({
     root: {
         color: theme.colors.onSurfaceVariant,
         ...{
@@ -182,3 +183,9 @@ export const styles = StyleSheet.create(theme => ({
     //     }
     // },
 }));
+
+registerComponentsStyles({
+    checkboxStyles: checkboxStylesDefault,
+});
+
+export const styles = getRegisteredMoleculesComponentStyles('checkboxStyles');

@@ -1,1 +1,8 @@
-export { default as NumberInput, Props as NumberInputProps } from './NumberInput';
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import NumberInputDefault from './NumberInput';
+
+registerMoleculesComponents({
+    NumberInput: NumberInputDefault,
+});
+
+export const NumberInput = getRegisteredMoleculesComponent('NumberInput');

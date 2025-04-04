@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const drawerStyles = StyleSheet.create(theme => ({
+const drawerStylesDefault = StyleSheet.create(theme => ({
     root: {
         borderTopRightRadius: theme.shapes.corner.large,
         borderBottomRightRadius: theme.shapes.corner.large,
@@ -11,22 +12,22 @@ export const drawerStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const drawerContentStyles = StyleSheet.create(theme => ({
+const drawerContentStylesDefault = StyleSheet.create(theme => ({
     root: {
         paddingHorizontal: theme.spacings['3'],
         flex: 1,
     },
 }));
 
-export const drawerHeaderStyles = StyleSheet.create({
+const drawerHeaderStylesDefault = StyleSheet.create({
     root: {},
 });
 
-export const drawerFooterStyles = StyleSheet.create({
+const drawerFooterStylesDefault = StyleSheet.create({
     root: {},
 });
 
-export const drawerItemStyles = StyleSheet.create(theme => ({
+const drawerItemStylesDefault = StyleSheet.create(theme => ({
     root: {
         minHeight: 56,
         flexDirection: 'row',
@@ -87,7 +88,7 @@ export const drawerItemStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const drawerItemGroupStyles = StyleSheet.create(theme => ({
+const drawerItemGroupStylesDefault = StyleSheet.create(theme => ({
     root: {
         marginBottom: theme.spacings['1'],
     },
@@ -104,3 +105,19 @@ export const drawerItemGroupStyles = StyleSheet.create(theme => ({
         marginTop: theme.spacings['1'],
     },
 }));
+
+registerComponentsStyles({
+    drawerStyles: drawerStylesDefault,
+    drawerContentStyles: drawerContentStylesDefault,
+    drawerHeaderStyles: drawerHeaderStylesDefault,
+    drawerFooterStyles: drawerFooterStylesDefault,
+    drawerItemStyles: drawerItemStylesDefault,
+    drawerItemGroupStyles: drawerItemGroupStylesDefault,
+});
+
+export const drawerStyles = getRegisteredMoleculesComponentStyles('drawerStyles');
+export const drawerContentStyles = getRegisteredMoleculesComponentStyles('drawerContentStyles');
+export const drawerHeaderStyles = getRegisteredMoleculesComponentStyles('drawerHeaderStyles');
+export const drawerFooterStyles = getRegisteredMoleculesComponentStyles('drawerFooterStyles');
+export const drawerItemStyles = getRegisteredMoleculesComponentStyles('drawerItemStyles');
+export const drawerItemGroupStyles = getRegisteredMoleculesComponentStyles('drawerItemGroupStyles');

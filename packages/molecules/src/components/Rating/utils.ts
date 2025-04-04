@@ -1,14 +1,15 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
 export type States = 'activeAndDisabled' | 'active' | 'disabled' | 'readonly' | 'activeAndReadonly';
 
-export const ratingStyles = StyleSheet.create({
+const ratingStylesDefault = StyleSheet.create({
     root: {
         flexDirection: 'row',
     },
 });
 
-export const ratingItemStyles = StyleSheet.create(theme => ({
+const ratingItemStylesDefault = StyleSheet.create(theme => ({
     root: {
         color: theme.colors.onSurfaceVariant,
 
@@ -26,3 +27,11 @@ export const ratingItemStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    ratingStyles: ratingStylesDefault,
+    ratingItemStyles: ratingItemStylesDefault,
+});
+
+export const ratingStyles = getRegisteredMoleculesComponentStyles('ratingStyles');
+export const ratingItemStyles = getRegisteredMoleculesComponentStyles('ratingItemStyles');

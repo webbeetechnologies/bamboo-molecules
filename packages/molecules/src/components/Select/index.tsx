@@ -1,5 +1,13 @@
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import SelectDefault from './Select';
+
+registerMoleculesComponents({
+    Select: SelectDefault,
+});
+
+export const Select = getRegisteredMoleculesComponent('Select');
+
 export {
-    default as Select,
     Props as SelectProps,
     ISelect,
     SelectHandles,

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
+import { registerComponentsStyles } from '../../core';
 
 export const actionSheetStyles = StyleSheet.create(theme => ({
     root: {
@@ -14,3 +15,7 @@ export const actionSheetStyles = StyleSheet.create(theme => ({
         opacity: 0.4,
     },
 }));
+
+registerComponentsStyles({
+    ActionSheet: actionSheetStyles,
+});

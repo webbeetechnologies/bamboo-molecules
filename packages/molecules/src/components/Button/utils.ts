@@ -1,12 +1,12 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
-
 export const sizeToIconSizeMap = {
     sm: 22,
     md: 24,
     lg: 26,
 };
 
-export const defaultStyles = StyleSheet.create(theme => {
+const defaultStylesDefault = StyleSheet.create(theme => {
     return {
         root: {
             flexGrow: 1,
@@ -215,3 +215,9 @@ export const defaultStyles = StyleSheet.create(theme => {
         },
     };
 });
+
+registerComponentsStyles({
+    buttonStyles: defaultStylesDefault,
+});
+
+export const defaultStyles = getRegisteredMoleculesComponentStyles('buttonStyles');

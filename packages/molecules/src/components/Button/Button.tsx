@@ -210,10 +210,6 @@ const Button = (
     } = useMemo(() => {
         const { button, content, icon, iconTextMode, label, labelText, labelTextAddons } =
             defaultStyles;
-        // const compoundVariantStyles = componentStyles.compoundVariantStyles(
-        //     variant,
-        //     disabled ? 'disabled' : hovered ? 'hovered' : undefined,
-        // );
 
         const {
             backgroundColor: _backgroundColor,

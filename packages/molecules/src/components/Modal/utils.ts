@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const modalStyles = StyleSheet.create(theme => ({
+const modalStylesDefault = StyleSheet.create(theme => ({
     root: {},
 
     backdrop: {
@@ -32,3 +33,9 @@ export const modalStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    modalStyles: modalStylesDefault,
+});
+
+export const modalStyles = getRegisteredMoleculesComponentStyles('modalStyles');

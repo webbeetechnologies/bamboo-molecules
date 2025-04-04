@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react';
-import type { IExtractStylesFuncArgs, ITheme as AtomsTheme } from '@bambooapp/bamboo-atoms';
 import type { StyleProp } from 'react-native';
 
 export type Breakpoints = {
@@ -10,7 +8,7 @@ export type Breakpoints = {
     xl: number;
 };
 
-export type ITheme = AtomsTheme & {
+export type ITheme = {
     light: MD3Theme;
     dark: MD3Theme;
     grid: {
@@ -45,14 +43,6 @@ export type ResolveComponentStylesArgs = {
     states?: { [key: string]: boolean };
     size?: string;
 };
-
-export interface ProvideThemeArgs {
-    theme: ITheme;
-    resolveComponentStyles?: (args: ResolveComponentStylesArgs) => StyleProp<any>;
-    extractStyles?: (args: IExtractStylesFuncArgs) => StyleProp<any>;
-    children: ReactNode;
-    overwritableProperties?: (keyof ITheme)[];
-}
 
 export type Font = {
     fontFamily: string;

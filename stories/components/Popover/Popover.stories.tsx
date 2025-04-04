@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { within, userEvent, waitFor } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { within, userEvent, waitFor } from '@storybook/test';
+import { expect } from '@storybook/test';
 
 import { delay } from '../../common';
 import { Example, PopoverContent } from './Popover';

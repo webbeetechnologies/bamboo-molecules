@@ -1,13 +1,18 @@
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
 import MenuComponent from './Menu';
 import MenuItem from './MenuItem';
 import MenuDivider from './MenuDivider';
 
-export const Menu = Object.assign(MenuComponent, {
+export const MenuDefault = Object.assign(MenuComponent, {
     Item: MenuItem,
     Divider: MenuDivider,
 });
 
-Menu.displayName = 'Menu';
+registerMoleculesComponents({
+    Menu: MenuDefault,
+});
+
+export const Menu = getRegisteredMoleculesComponent('Menu');
 
 export { Props as MenuProps } from './Menu';
 export { Props as MenuItemProps } from './MenuItem';

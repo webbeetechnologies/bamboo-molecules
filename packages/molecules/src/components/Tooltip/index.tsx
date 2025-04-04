@@ -1,11 +1,18 @@
-import { default as TooltipComponent } from './Tooltip';
-import { default as TooltipTrigger } from './TooltipTrigger';
-import { default as TooltipContent } from './TooltipContent';
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import TooltipComponent from './Tooltip';
+import TooltipTrigger from './TooltipTrigger';
+import TooltipContent from './TooltipContent';
 
-export const Tooltip = Object.assign(TooltipComponent, {
+export const TooltipDefault = Object.assign(TooltipComponent, {
     Trigger: TooltipTrigger,
     Content: TooltipContent,
 });
+
+registerMoleculesComponents({
+    Tooltip: TooltipDefault,
+});
+
+export const Tooltip = getRegisteredMoleculesComponent('Tooltip');
 
 export { Props as TooltipProps } from './Tooltip';
 export { Props as TooltipTriggerProps } from './TooltipTrigger';

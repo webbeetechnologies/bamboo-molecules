@@ -1,3 +1,11 @@
-export { default as IconButton, Props as IconButtonProps } from './IconButton';
-export { defaultStyles as iconButtonStyles } from './utils';
-export * from './types';
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import IconButtonDefault from './IconButton';
+
+registerMoleculesComponents({
+    IconButton: IconButtonDefault,
+});
+
+export const IconButton = (getRegisteredMoleculesComponent('IconButton') ??
+    IconButtonDefault) as typeof IconButtonDefault;
+
+export { defaultStyles } from './utils';

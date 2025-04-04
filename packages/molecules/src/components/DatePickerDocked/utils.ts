@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const datePickerDockedStyles = StyleSheet.create(theme => ({
+const datePickerDockedStylesDefault = StyleSheet.create(theme => ({
     root: {
         roundness: theme.shapes.corner.extraSmall,
         headerBackgroundColor: theme.colors.surface,
@@ -12,7 +13,7 @@ export const datePickerDockedStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const datePickerDockedHeaderStyles = StyleSheet.create(theme => ({
+const datePickerDockedHeaderStylesDefault = StyleSheet.create(theme => ({
     datePickerHeader: {
         position: 'relative',
         flexDirection: 'row',
@@ -24,7 +25,7 @@ export const datePickerDockedHeaderStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const datePickerHeaderItemStyles = StyleSheet.create(theme => ({
+const datePickerHeaderItemStylesDefault = StyleSheet.create(theme => ({
     buttonContainer: {
         height: 46,
         width: '50%',
@@ -52,7 +53,7 @@ export const datePickerHeaderItemStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const datePickerMonthPickerStyles = StyleSheet.create(theme => ({
+const datePickerMonthPickerStylesDefault = StyleSheet.create(theme => ({
     root: {
         backgroundColor: theme.colors.surface,
     },
@@ -78,7 +79,7 @@ export const datePickerMonthPickerStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const datePickerDockedMonthItemStyles = StyleSheet.create(theme => ({
+const datePickerDockedMonthItemStylesDefault = StyleSheet.create(theme => ({
     root: {
         backgroundColor: theme.colors.surface,
     },
@@ -116,7 +117,7 @@ export const datePickerDockedMonthItemStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const datePickerDockedMonthStyles = StyleSheet.create(theme => ({
+const datePickerDockedMonthStylesDefault = StyleSheet.create(theme => ({
     dockedHeaderStyle: {
         alignItems: 'flex-start',
         marginLeft: theme.spacings['4'],
@@ -128,3 +129,30 @@ export const datePickerDockedMonthStyles = StyleSheet.create(theme => ({
         backgroundColor: 'transparent',
     },
 }));
+
+registerComponentsStyles({
+    datePickerDockedStyles: datePickerDockedStylesDefault,
+    datePickerDockedHeaderStyles: datePickerDockedHeaderStylesDefault,
+    datePickerHeaderItemStyles: datePickerHeaderItemStylesDefault,
+    datePickerMonthPickerStyles: datePickerMonthPickerStylesDefault,
+    datePickerDockedMonthItemStyles: datePickerDockedMonthItemStylesDefault,
+    datePickerDockedMonthStyles: datePickerDockedMonthStylesDefault,
+});
+
+export const datePickerDockedStyles =
+    getRegisteredMoleculesComponentStyles('datePickerDockedStyles');
+export const datePickerDockedHeaderStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerDockedHeaderStyles',
+);
+export const datePickerHeaderItemStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerHeaderItemStyles',
+);
+export const datePickerMonthPickerStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerMonthPickerStyles',
+);
+export const datePickerDockedMonthItemStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerDockedMonthItemStyles',
+);
+export const datePickerDockedMonthStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerDockedMonthStyles',
+);

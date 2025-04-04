@@ -1,6 +1,12 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Example, ExampleCenterAligned, ExampleSmall, ExampleMedium, ExampleLarge } from './Appbar';
+import {
+    Example,
+    ExampleCenterAligned,
+    ExampleSmall,
+    ExampleMedium,
+    ExampleLarge,
+} from '../../../examples/common/components/Appbar';
 
 export default {
     title: 'components/Appbar',

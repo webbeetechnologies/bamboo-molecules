@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const menuStyles = StyleSheet.create(theme => ({
+const menuStylesDefault = StyleSheet.create(theme => ({
     root: {
         paddingVertical: theme.spacings['2'],
         backgroundColor: theme.colors.surface,
@@ -19,7 +20,7 @@ export const menuStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const menuItemStyles = StyleSheet.create(theme => ({
+const menuItemStylesDefault = StyleSheet.create(theme => ({
     root: {
         paddingVertical: theme.spacings['2'],
         flexDirection: 'row',
@@ -84,3 +85,11 @@ export const menuItemStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    menuStyles: menuStylesDefault,
+    menuItemStyles: menuItemStylesDefault,
+});
+
+export const menuStyles = getRegisteredMoleculesComponentStyles('menuStyles');
+export const menuItemStyles = getRegisteredMoleculesComponentStyles('menuItemStyles');

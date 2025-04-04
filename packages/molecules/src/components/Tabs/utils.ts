@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const tabsStyles = StyleSheet.create(theme => ({
+const tabsStylesDefault = StyleSheet.create(theme => ({
     root: {
         activeColor: theme.colors.primary,
     } as any,
@@ -32,9 +33,7 @@ export const tabsStyles = StyleSheet.create(theme => ({
     divider: {},
 }));
 
-export type States = 'hovered' | 'active' | 'activeAndHovered' | 'disabled';
-
-export const tabsItemStyles = StyleSheet.create(theme => ({
+const tabsItemStylesDefault = StyleSheet.create(theme => ({
     root: {
         ...({ activeColor: theme.colors.primary } as any),
 
@@ -91,7 +90,7 @@ export const tabsItemStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const tabsLabelStyles = StyleSheet.create(theme => ({
+const tabsLabelStylesDefault = StyleSheet.create(theme => ({
     label: {
         ...theme.typescale.titleSmall,
         color: theme.colors.onSurface,
@@ -101,3 +100,15 @@ export const tabsLabelStyles = StyleSheet.create(theme => ({
         color: theme.colors.onSurfaceVariant,
     },
 }));
+
+registerComponentsStyles({
+    tabsStyles: tabsStylesDefault,
+    tabsItemStyles: tabsItemStylesDefault,
+    tabsLabelStyles: tabsLabelStylesDefault,
+});
+
+export const tabsStyles = getRegisteredMoleculesComponentStyles('tabsStyles');
+export const tabsItemStyles = getRegisteredMoleculesComponentStyles('tabsItemStyles');
+export const tabsLabelStyles = getRegisteredMoleculesComponentStyles('tabsLabelStyles');
+
+export type States = 'hovered' | 'active' | 'activeAndHovered' | 'disabled';

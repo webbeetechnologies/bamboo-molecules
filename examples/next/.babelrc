@@ -1,0 +1,9 @@
+{
+    "presets": ["next/babel"],
+    "plugins": [
+        [
+            "react-native-unistyles/plugin",
+            { "autoProcessRoot": "src", "autoProcessImports": ["@bambooapp/bamboo-molecules"] }
+        ]
+    ]
+}

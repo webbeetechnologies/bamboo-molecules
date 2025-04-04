@@ -1,7 +1,8 @@
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
 import { default as ChipComponent, Props as ChipProps } from './Chip';
 import type { ComponentType } from 'react';
 
-export const Chip = Object.assign(
+export const ChipDefault = Object.assign(
     // @component ./Chip.tsx
     ChipComponent,
     {
@@ -38,5 +39,13 @@ export const Chip = Object.assign(
     },
 );
 
+registerMoleculesComponents({
+    Chip: ChipDefault,
+});
+
+export const Chip = (getRegisteredMoleculesComponent('Chip') ?? ChipDefault) as typeof ChipDefault;
+
 export { Props as ChipProps } from './Chip';
 export { styles as chipStyles } from './utils';
+export { styles } from './utils';
+export { States } from './utils';

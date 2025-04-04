@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const dropdownListStyles = StyleSheet.create(theme => ({
+const dropdownListStylesDefault = StyleSheet.create(theme => ({
     popoverContainer: {
         minWidth: 112,
         backgroundColor: theme.colors.surface,
@@ -8,3 +9,9 @@ export const dropdownListStyles = StyleSheet.create(theme => ({
         paddingVertical: theme.spacings['2'],
     },
 }));
+
+registerComponentsStyles({
+    dropdownListStyles: dropdownListStylesDefault,
+});
+
+export const dropdownListStyles = getRegisteredMoleculesComponentStyles('dropdownListStyles');

@@ -1,8 +1,15 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const datePickerInputStyles = StyleSheet.create({
+const datePickerInputStylesDefault = StyleSheet.create({
     root: {
         minWidth: 150,
         justifyContent: 'center',
     },
 });
+
+registerComponentsStyles({
+    datePickerInputStyles: datePickerInputStylesDefault,
+});
+
+export const datePickerInputStyles = getRegisteredMoleculesComponentStyles('datePickerInputStyles');

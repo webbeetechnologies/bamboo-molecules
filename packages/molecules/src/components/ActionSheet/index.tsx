@@ -1,3 +1,12 @@
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import ActionSheetDefault from './ActionSheet';
+
+registerMoleculesComponents({
+    ActionSheet: ActionSheetDefault,
+});
+
+export const ActionSheet = getRegisteredMoleculesComponent('ActionSheet');
+
 export {
     useScrollHandlers as useActionSheetScrollHandlers,
     SheetProvider as ActionSheetProvider,
@@ -6,5 +15,5 @@ export {
     SheetManager as ActionSheetManager,
     ActionSheetRef,
 } from 'react-native-actions-sheet';
-export { default as ActionSheet, Props as ActionSheetProps, IActionSheet } from './ActionSheet';
+export type { Props as ActionSheetProps, IActionSheet } from './ActionSheet';
 export { actionSheetStyles } from './utils';

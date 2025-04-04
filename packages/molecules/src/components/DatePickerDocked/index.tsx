@@ -1,4 +1,12 @@
-export { default as DatePickerDocked } from './DatePickerDocked';
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import DatePickerDockedDefault from './DatePickerDocked';
+
+registerMoleculesComponents({
+    DatePickerDocked: DatePickerDockedDefault,
+});
+
+export const DatePickerDocked = getRegisteredMoleculesComponent('DatePickerDocked');
+
 export {
     datePickerDockedStyles,
     datePickerMonthPickerStyles,

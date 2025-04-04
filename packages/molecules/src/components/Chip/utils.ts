@@ -1,8 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export type States = 'hovered' | 'selectedAndHovered' | 'selected' | 'disabled';
-
-export const styles = StyleSheet.create(theme => ({
+const chipStylesDefault = StyleSheet.create(theme => ({
     container: {
         borderRadius: theme.shapes.corner.small,
         backgroundColor: theme.colors.surface,
@@ -90,3 +89,11 @@ export const styles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentsStyles({
+    chipStyles: chipStylesDefault,
+});
+
+export const styles = getRegisteredMoleculesComponentStyles('chipStyles');
+
+export type States = 'hovered' | 'selectedAndHovered' | 'selected' | 'disabled';

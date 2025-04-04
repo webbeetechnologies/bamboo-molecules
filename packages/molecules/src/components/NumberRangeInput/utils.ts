@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const numberRangeInputStyles = StyleSheet.create(theme => ({
+const numberRangeInputStylesDefault = StyleSheet.create(theme => ({
     root: {},
     minInput: {
         flex: 1,
@@ -12,3 +13,10 @@ export const numberRangeInputStyles = StyleSheet.create(theme => ({
         color: theme.colors.error,
     },
 }));
+
+registerComponentsStyles({
+    numberRangeInputStyles: numberRangeInputStylesDefault,
+});
+
+export const numberRangeInputStyles =
+    getRegisteredMoleculesComponentStyles('numberRangeInputStyles');

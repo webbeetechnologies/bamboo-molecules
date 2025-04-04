@@ -1,3 +1,4 @@
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
 import AppbarSmall from './AppbarSmall';
 import AppbarCenterAligned from './AppbarCenterAligned';
 import AppbarMedium from './AppbarMedium';
@@ -11,7 +12,7 @@ import AppbarBase from './AppbarBase';
 import type { ComponentType } from 'react';
 import type { AppbarProps } from './types';
 
-export const Appbar = Object.assign(AppbarBase as ComponentType<AppbarProps>, {
+export const AppbarDefault = Object.assign(AppbarBase as ComponentType<AppbarProps>, {
     Small: AppbarSmall,
     CenterAligned: AppbarCenterAligned,
     Medium: AppbarMedium,
@@ -22,6 +23,11 @@ export const Appbar = Object.assign(AppbarBase as ComponentType<AppbarProps>, {
     Title: AppbarTitle,
     Actions: AppbarActions,
 });
+registerMoleculesComponents({
+    Appbar: AppbarDefault,
+});
+
+export const Appbar = getRegisteredMoleculesComponent('Appbar');
 
 export {
     appbarBaseStyles,

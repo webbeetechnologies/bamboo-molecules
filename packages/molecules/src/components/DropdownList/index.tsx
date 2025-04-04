@@ -1,2 +1,10 @@
-export { default as DropdownList, Props as DropdownListProps, IDropdownList } from './DropdownList';
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import DropdownListDefault from './DropdownList';
+
+registerMoleculesComponents({
+    DropdownList: DropdownListDefault,
+});
+
+export const DropdownList = getRegisteredMoleculesComponent('DropdownList');
+
 export { dropdownListStyles } from './utils';

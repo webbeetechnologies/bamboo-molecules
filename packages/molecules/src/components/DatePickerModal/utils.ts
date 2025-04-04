@@ -1,12 +1,13 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const datePickerModalStyles = StyleSheet.create(theme => ({
+const datePickerModalStylesDefault = StyleSheet.create(theme => ({
     header: {
         backgroundColor: theme.colors.primary,
     },
 }));
 
-export const datePickerModalHeaderStyles = StyleSheet.create(theme => ({
+const datePickerModalHeaderStylesDefault = StyleSheet.create(theme => ({
     root: {
         color: theme.colors.onPrimary,
     },
@@ -39,7 +40,7 @@ export const datePickerModalHeaderStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const datePickerModalContentHeaderStyles = StyleSheet.create(theme => ({
+const datePickerModalContentHeaderStylesDefault = StyleSheet.create(theme => ({
     root: {
         color: theme.colors.onPrimary,
     },
@@ -79,7 +80,7 @@ export const datePickerModalContentHeaderStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const datePickerModalHeaderBackgroundStyles = StyleSheet.create(theme => ({
+const datePickerModalHeaderBackgroundStylesDefault = StyleSheet.create(theme => ({
     header: {
         backgroundColor: theme.colors.primary,
         paddingBottom: theme.spacings['0'],
@@ -90,10 +91,32 @@ export const datePickerModalHeaderBackgroundStyles = StyleSheet.create(theme => 
     },
 }));
 
-export const datePickerModalEditStyles = StyleSheet.create(theme => ({
+const datePickerModalEditStylesDefault = StyleSheet.create(theme => ({
     container: { padding: theme.spacings['3'] },
     inner: { flexDirection: 'row' },
     inputContainer: { flex: 1 },
     input: { flex: 1 },
     separator: { width: 12 },
 }));
+
+registerComponentsStyles({
+    datePickerModalStyles: datePickerModalStylesDefault,
+    datePickerModalHeaderStyles: datePickerModalHeaderStylesDefault,
+    datePickerModalContentHeaderStyles: datePickerModalContentHeaderStylesDefault,
+    datePickerModalHeaderBackgroundStyles: datePickerModalHeaderBackgroundStylesDefault,
+    datePickerModalEditStyles: datePickerModalEditStylesDefault,
+});
+
+export const datePickerModalStyles = getRegisteredMoleculesComponentStyles('datePickerModalStyles');
+export const datePickerModalHeaderStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerModalHeaderStyles',
+);
+export const datePickerModalContentHeaderStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerModalContentHeaderStyles',
+);
+export const datePickerModalHeaderBackgroundStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerModalHeaderBackgroundStyles',
+);
+export const datePickerModalEditStyles = getRegisteredMoleculesComponentStyles(
+    'datePickerModalEditStyles',
+);

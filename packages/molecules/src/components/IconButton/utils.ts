@@ -1,9 +1,10 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 import { IconButtonVariant } from './types';
 
 type States = 'selectedAndDisabled' | 'disabled' | 'selected' | 'hovered' | 'selectedAndHovered';
 
-export const defaultStyles = StyleSheet.create(theme => ({
+const iconButtonStylesDefault = StyleSheet.create(theme => ({
     root: {
         borderColor: theme.colors.outline,
         color: theme.colors.onSurfaceVariant,
@@ -234,3 +235,9 @@ export const defaultStyles = StyleSheet.create(theme => ({
         return {};
     },
 }));
+
+registerComponentsStyles({
+    iconButtonStyles: iconButtonStylesDefault,
+});
+
+export const defaultStyles = getRegisteredMoleculesComponentStyles('iconButtonStyles');

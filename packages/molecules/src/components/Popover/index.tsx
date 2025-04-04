@@ -1,3 +1,11 @@
-export { default as Popover, popoverFactory } from './Popover'; // to import in ComponentsProvider
-export { defaultStyles as popoverStyles } from './utils'; // to import in ThemeProvider
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import PopoverDefault from './Popover';
+
+registerMoleculesComponents({
+    Popover: PopoverDefault,
+});
+
+export const Popover = getRegisteredMoleculesComponent('Popover');
+
 export { PopoverProps } from './types';
+export { defaultStyles } from './utils';

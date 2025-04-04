@@ -1,7 +1,8 @@
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
 import CheckboxComponent from './Checkbox';
 import CheckboxItem from './CheckboxItem';
 
-const Checkbox = Object.assign(
+const CheckboxDefault = Object.assign(
     // @component ./Checkbox.tsx
     CheckboxComponent,
     {
@@ -10,7 +11,11 @@ const Checkbox = Object.assign(
     },
 );
 
-export default Checkbox;
+registerMoleculesComponents({
+    Checkbox: CheckboxDefault,
+});
+
+export const Checkbox = getRegisteredMoleculesComponent('Checkbox');
 
 export { Props as CheckboxProps } from './Checkbox';
 export { Props as CheckboxItemProps } from './CheckboxItem';

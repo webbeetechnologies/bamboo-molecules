@@ -1,8 +1,8 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Example } from './Tooltip';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { userEvent, waitFor, within } from '@storybook/test';
+import { expect } from '@storybook/test';
 import { delay } from '../../common';
 
 export default {

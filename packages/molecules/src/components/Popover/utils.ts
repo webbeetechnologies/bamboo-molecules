@@ -1,6 +1,7 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const defaultStyles = StyleSheet.create(theme => ({
+const popoverStylesDefault = StyleSheet.create(theme => ({
     initialTransition: { opacity: 0 },
     animateTransition: { opacity: 1, transition: { duration: 150 } },
     exitTransition: { opacity: 0, scale: 0.95, transition: { duration: 100 } },
@@ -18,3 +19,9 @@ export const defaultStyles = StyleSheet.create(theme => ({
         elevation: 1,
     },
 }));
+
+registerComponentsStyles({
+    popoverStyles: popoverStylesDefault,
+});
+
+export const defaultStyles = getRegisteredMoleculesComponentStyles('popoverStyles');

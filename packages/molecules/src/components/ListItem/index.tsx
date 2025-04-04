@@ -1,13 +1,17 @@
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
 import ListItemComponent from './ListItem';
 import ListItemTitle from './ListItemTitle';
 import ListItemDescription from './ListItemDescription';
-
-const ListItem = Object.assign(ListItemComponent, {
+const ListItemDefault = Object.assign(ListItemComponent, {
     Title: ListItemTitle,
     Description: ListItemDescription,
 });
 
-export default ListItem;
+registerMoleculesComponents({
+    ListItem: ListItemDefault,
+});
 
-export { listItemStyles, listItemTitleStyles, listItemDescriptionStyles } from './utils';
+export const ListItem = getRegisteredMoleculesComponent('ListItem');
+
 export { Props as ListItemProps } from './ListItem';
+export { listItemStyles, listItemTitleStyles, listItemDescriptionStyles } from './utils';

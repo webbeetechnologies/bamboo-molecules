@@ -1,5 +1,5 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
-
 export type States =
     | 'disabled'
     | 'focused'
@@ -11,7 +11,7 @@ export type States =
     | 'errorHovered'
     | 'errorDisabled';
 
-export const styles = StyleSheet.create(theme => ({
+const textInputStylesDefault = StyleSheet.create(theme => ({
     root: {
         variants: {
             variant: {
@@ -538,3 +538,9 @@ export const styles = StyleSheet.create(theme => ({
         zIndex: 2,
     },
 }));
+
+registerComponentsStyles({
+    textInputStyles: textInputStylesDefault,
+});
+
+export const styles = getRegisteredMoleculesComponentStyles('textInputStyles');

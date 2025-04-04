@@ -1,5 +1,13 @@
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import OptionFlatListDefault from './OptionFlatList';
+
+registerMoleculesComponents({
+    OptionFlatList: OptionFlatListDefault,
+});
+
+export const OptionFlatList = getRegisteredMoleculesComponent('OptionFlatList');
+
 export {
-    default as OptionFlatList,
     Props as OptionFlatListProps,
     IOptionFlatList,
     OptionFlatListRenderItemInfo,

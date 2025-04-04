@@ -1,2 +1,10 @@
-export { default as NumberRangeInput, Props as NumberRangeInputProps } from './NumberRangeInput';
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import NumberRangeInputDefault from './NumberRangeInput';
+
+registerMoleculesComponents({
+    NumberRangeInput: NumberRangeInputDefault,
+});
+
+export const NumberRangeInput = getRegisteredMoleculesComponent('NumberRangeInput');
+
 export { numberRangeInputStyles } from './utils';

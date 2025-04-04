@@ -1,11 +1,12 @@
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
 import { CardVariant } from './types';
 
-type States = 'hovered' | 'focused' | 'pressed' | 'disabled';
+export type States = 'hovered' | 'focused' | 'pressed' | 'disabled';
 export type CardTypographyVariant = 'headline' | 'subhead' | 'text';
 export type CardTypographySize = 'sm' | 'md' | 'lg';
 
-export const cardStyles = StyleSheet.create(theme => ({
+const cardStylesDefault = StyleSheet.create(theme => ({
     root: {
         animationDuration: `${theme.animation.durations['1']}`,
 
@@ -153,7 +154,8 @@ export const cardStyles = StyleSheet.create(theme => ({
         borderRadius: theme.shapes.corner.medium,
     },
 }));
-export const cardTypograhyStyles = StyleSheet.create(theme => ({
+
+const cardTypograhyStylesDefault = StyleSheet.create(theme => ({
     root: {
         color: theme.colors.onSurface,
 
@@ -238,7 +240,7 @@ export const cardTypograhyStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const cardMediaStyles = StyleSheet.create(theme => ({
+const cardMediaStylesDefault = StyleSheet.create(theme => ({
     root: {
         height: 195,
         borderRadius: theme.shapes.corner.medium,
@@ -247,13 +249,13 @@ export const cardMediaStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const cardContentStyles = StyleSheet.create(theme => ({
+const cardContentStylesDefault = StyleSheet.create(theme => ({
     root: {
         padding: theme.spacings['4'],
     },
 }));
 
-export const cardActionsStyles = StyleSheet.create(theme => ({
+const cardActionsStylesDefault = StyleSheet.create(theme => ({
     root: {
         paddingHorizontal: theme.spacings['4'],
         paddingBottom: theme.spacings['4'],
@@ -262,7 +264,7 @@ export const cardActionsStyles = StyleSheet.create(theme => ({
     },
 }));
 
-export const cardHeaderStyles = StyleSheet.create(theme => ({
+const cardHeaderStylesDefault = StyleSheet.create(theme => ({
     root: {
         paddingHorizontal: theme.spacings['4'],
         paddingTop: theme.spacings['4'],
@@ -271,3 +273,19 @@ export const cardHeaderStyles = StyleSheet.create(theme => ({
         justifyContent: 'space-between',
     },
 }));
+
+registerComponentsStyles({
+    cardStyles: cardStylesDefault,
+    cardTypograhyStyles: cardTypograhyStylesDefault,
+    cardMediaStyles: cardMediaStylesDefault,
+    cardContentStyles: cardContentStylesDefault,
+    cardActionsStyles: cardActionsStylesDefault,
+    cardHeaderStyles: cardHeaderStylesDefault,
+});
+
+export const cardStyles = getRegisteredMoleculesComponentStyles('cardStyles');
+export const cardTypograhyStyles = getRegisteredMoleculesComponentStyles('cardTypograhyStyles');
+export const cardMediaStyles = getRegisteredMoleculesComponentStyles('cardMediaStyles');
+export const cardContentStyles = getRegisteredMoleculesComponentStyles('cardContentStyles');
+export const cardActionsStyles = getRegisteredMoleculesComponentStyles('cardActionsStyles');
+export const cardHeaderStyles = getRegisteredMoleculesComponentStyles('cardHeaderStyles');

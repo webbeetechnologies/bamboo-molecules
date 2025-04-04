@@ -1,10 +1,13 @@
-export {
-    default as DatePickerInline,
-    DatePickerInlineProps,
-    getStateValue,
-} from './DatePickerInline';
-export { default as DatePickerInlineBase } from './DatePickerInlineBase';
+import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import DatePickerInlineDefault from './DatePickerInline';
 
+registerMoleculesComponents({
+    DatePickerInline: DatePickerInlineDefault,
+});
+
+export const DatePickerInline = getRegisteredMoleculesComponent('DatePickerInline');
+
+export { DatePickerInlineProps, getStateValue } from './DatePickerInline';
 export {
     DatePickerInlineBaseProps,
     ValidRangeType,
@@ -20,7 +23,6 @@ export {
     DatePickerMultiProps,
     DatePickerRangeProps,
 } from './types';
-
 export {
     datePickerStyles,
     datePickerMonthStyles,

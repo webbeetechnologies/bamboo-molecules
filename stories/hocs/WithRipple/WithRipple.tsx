@@ -1,6 +1,5 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, type PressableProps } from 'react-native';
 import { ProvideMolecules, useMolecules, withRipple, TouchableRippleProps } from '../../../src';
-import type { PressableProps } from '@bambooapp/bamboo-atoms';
 
 export type Props = PressableProps & TouchableRippleProps;
 
