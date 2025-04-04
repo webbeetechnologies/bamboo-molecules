@@ -1,4 +1,4 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import DialogComponent from './Dialog';
 import DialogActions from './DialogActions';
 import DialogContent from './DialogContent';
@@ -21,7 +21,7 @@ registerMoleculesComponents({
     Dialog: DialogDefault,
 });
 
-export const Dialog = getRegisteredMoleculesComponent('Dialog');
+export const Dialog = getRegisteredComponentWithFallback('Dialog', DialogDefault);
 
 export { Props as DialogProps } from './Dialog';
 export { Props as DialogActionsProps } from './DialogActions';

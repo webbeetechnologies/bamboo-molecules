@@ -1,4 +1,4 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import CheckboxComponent from './Checkbox';
 import CheckboxItem from './CheckboxItem';
 
@@ -15,7 +15,7 @@ registerMoleculesComponents({
     Checkbox: CheckboxDefault,
 });
 
-export const Checkbox = getRegisteredMoleculesComponent('Checkbox');
+export const Checkbox = getRegisteredComponentWithFallback('Checkbox', CheckboxDefault);
 
 export { Props as CheckboxProps } from './Checkbox';
 export { Props as CheckboxItemProps } from './CheckboxItem';

@@ -1,11 +1,11 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import DatePickerInputDefault from './DatePickerInput';
 
 registerMoleculesComponents({
     DatePickerInput: DatePickerInputDefault,
 });
 
-export const DatePickerInput = getRegisteredMoleculesComponent('DatePickerInput');
+export const DatePickerInput = getRegisteredComponentWithFallback('DatePickerInput');
 
 export { DatePickerInputProps } from './types';
 export { datePickerInputStyles } from './utils';

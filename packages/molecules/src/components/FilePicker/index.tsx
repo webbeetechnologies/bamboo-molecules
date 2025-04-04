@@ -1,10 +1,10 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import FilePickerDefault from './FilePicker';
 
 registerMoleculesComponents({
     FilePicker: FilePickerDefault,
 });
 
-export const FilePicker = getRegisteredMoleculesComponent('FilePicker');
+export const FilePicker = getRegisteredComponentWithFallback('FilePicker', FilePickerDefault);
 
 export { defaultStyles } from './utils';

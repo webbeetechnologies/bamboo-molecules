@@ -1,12 +1,14 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import ActivityIndicatorDefault from './ActivityIndicator';
 
 registerMoleculesComponents({
     ActivityIndicator: ActivityIndicatorDefault,
 });
 
-export const ActivityIndicator = (getRegisteredMoleculesComponent('ActivityIndicator') ??
-    ActivityIndicatorDefault) as typeof ActivityIndicatorDefault;
+export const ActivityIndicator = getRegisteredComponentWithFallback(
+    'ActivityIndicator',
+    ActivityIndicatorDefault,
+);
 
 export {
     Props as ActivityIndicatorProps,

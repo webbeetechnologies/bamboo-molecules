@@ -1,4 +1,4 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import NavigationRailComponent from './NavigationRail';
 import NavigationRailHeader from './NavigationRailHeader';
 import NavigationRailContent from './NavigationRailContent';
@@ -16,7 +16,10 @@ registerMoleculesComponents({
     NavigationRail: NavigationRailDefault,
 });
 
-export const NavigationRail = getRegisteredMoleculesComponent('NavigationRail');
+export const NavigationRail = getRegisteredComponentWithFallback(
+    'NavigationRail',
+    NavigationRailDefault,
+);
 
 export { Props as NavigationRailProps } from './NavigationRail';
 export { Props as NavigationRailHeaderProps } from './NavigationRailHeader';

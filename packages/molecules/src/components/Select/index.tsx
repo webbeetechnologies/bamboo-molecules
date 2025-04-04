@@ -1,11 +1,11 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import SelectDefault from './Select';
 
 registerMoleculesComponents({
     Select: SelectDefault,
 });
 
-export const Select = getRegisteredMoleculesComponent('Select');
+export const Select = getRegisteredComponentWithFallback('Select', SelectDefault);
 
 export {
     Props as SelectProps,

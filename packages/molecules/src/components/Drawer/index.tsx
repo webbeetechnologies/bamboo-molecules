@@ -1,4 +1,4 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import DrawerComponent from './Drawer';
 import DrawerItem from './DrawerItem';
 import DrawerItemGroup from './DrawerItemGroup';
@@ -21,7 +21,7 @@ registerMoleculesComponents({
     Drawer: DrawerDefault,
 });
 
-export const Drawer = getRegisteredMoleculesComponent('Drawer') ?? DrawerDefault;
+export const Drawer = getRegisteredComponentWithFallback('Drawer', DrawerDefault);
 
 export { Props as DrawerProps } from './Drawer';
 export { Props as DrawerItemProps, DrawerItemElement, DrawerItemElementProps } from './DrawerItem';

@@ -1,12 +1,14 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import TouchableRippleDefault from './TouchableRipple';
 
 registerMoleculesComponents({
     TouchableRipple: TouchableRippleDefault,
 });
 
-export const TouchableRipple = (getRegisteredMoleculesComponent('TouchableRipple') ??
-    TouchableRippleDefault) as typeof TouchableRippleDefault;
+export const TouchableRipple = getRegisteredComponentWithFallback(
+    'TouchableRipple',
+    TouchableRippleDefault,
+);
 
 export { Props as TouchableRippleProps } from './TouchableRipple';
 

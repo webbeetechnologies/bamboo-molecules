@@ -1,4 +1,4 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 
 import { TabBase } from './Tabs';
 import type { TabsProps } from './Tabs';
@@ -18,7 +18,7 @@ registerMoleculesComponents({
     Tabs: TabsDefault,
 });
 
-export const Tabs = getRegisteredMoleculesComponent('Tabs');
+export const Tabs = getRegisteredComponentWithFallback('Tabs', TabsDefault);
 
 export type { TabsProps, TabItemProps, TabLabelProps };
 export { tabsStyles, tabsItemStyles, tabsLabelStyles } from './utils';

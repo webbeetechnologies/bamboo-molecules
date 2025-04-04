@@ -1,4 +1,4 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import { default as CardComponent } from './Card';
 import { default as CardHeader } from './CardHeader';
 import { default as CardContent } from './CardContent';
@@ -25,7 +25,7 @@ registerMoleculesComponents({
     Card: CardDefault,
 });
 
-export const Card = (getRegisteredMoleculesComponent('Card') ?? CardDefault) as typeof CardDefault;
+export const Card = getRegisteredComponentWithFallback('Card', CardDefault);
 
 export { Props as CardProps } from './Card';
 export { Props as CardHeaderProps } from './CardHeader';

@@ -1,4 +1,4 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import NavigationStackComponent from './NavigationStack';
 import NavigationStackItem from './NavigationStackItem';
 
@@ -10,7 +10,10 @@ registerMoleculesComponents({
     NavigationStack: NavigationStackDefault,
 });
 
-export const NavigationStack = getRegisteredMoleculesComponent('NavigationStack');
+export const NavigationStack = getRegisteredComponentWithFallback(
+    'NavigationStack',
+    NavigationStackDefault,
+);
 
 export { Props as NavigationStackProps, NavigationStackHandle } from './NavigationStack';
 export { Props as NavigationStackItemProps } from './NavigationStackItem';

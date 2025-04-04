@@ -1,11 +1,11 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import BackdropDefault from './Backdrop';
 
 registerMoleculesComponents({
     Backdrop: BackdropDefault,
 });
 
-export const Backdrop = getRegisteredMoleculesComponent('Backdrop');
+export const Backdrop = getRegisteredComponentWithFallback('Backdrop');
 
 export type { BackdropProps } from './types';
 

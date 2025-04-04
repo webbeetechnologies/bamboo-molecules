@@ -1,4 +1,4 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import AppbarSmall from './AppbarSmall';
 import AppbarCenterAligned from './AppbarCenterAligned';
 import AppbarMedium from './AppbarMedium';
@@ -27,7 +27,7 @@ registerMoleculesComponents({
     Appbar: AppbarDefault,
 });
 
-export const Appbar = getRegisteredMoleculesComponent('Appbar');
+export const Appbar = getRegisteredComponentWithFallback('Appbar', AppbarDefault);
 
 export {
     appbarBaseStyles,

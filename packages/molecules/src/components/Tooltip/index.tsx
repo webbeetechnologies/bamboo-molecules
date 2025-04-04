@@ -1,4 +1,4 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import TooltipComponent from './Tooltip';
 import TooltipTrigger from './TooltipTrigger';
 import TooltipContent from './TooltipContent';
@@ -12,7 +12,7 @@ registerMoleculesComponents({
     Tooltip: TooltipDefault,
 });
 
-export const Tooltip = getRegisteredMoleculesComponent('Tooltip');
+export const Tooltip = getRegisteredComponentWithFallback('Tooltip', TooltipDefault);
 
 export { Props as TooltipProps } from './Tooltip';
 export { Props as TooltipTriggerProps } from './TooltipTrigger';

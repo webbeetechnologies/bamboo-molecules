@@ -4,7 +4,7 @@ import { StyleSheet, View, ViewStyle, type ViewProps } from 'react-native';
 import { isNil } from '../../utils';
 import { elementGroupStyles } from './utils';
 
-enum Orientation {
+export enum Orientation {
     Horizontal = 'horizontal',
     Vertical = 'vertical',
 }

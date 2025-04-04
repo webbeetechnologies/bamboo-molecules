@@ -1,11 +1,14 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import OptionFlatListDefault from './OptionFlatList';
 
 registerMoleculesComponents({
     OptionFlatList: OptionFlatListDefault,
 });
 
-export const OptionFlatList = getRegisteredMoleculesComponent('OptionFlatList');
+export const OptionFlatList = getRegisteredComponentWithFallback(
+    'OptionFlatList',
+    OptionFlatListDefault,
+);
 
 export {
     Props as OptionFlatListProps,

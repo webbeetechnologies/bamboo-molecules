@@ -2,7 +2,7 @@ import AccordionItemComponent from './AccordionItem';
 import AccordionItemHeader from './AccordionItemHeader';
 import AccordionItemContent from './AccordionItemContent';
 import AccordionDefault from './Accordion';
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 
 const AccordionItemDefault = Object.assign(AccordionItemComponent, {
     Header: AccordionItemHeader,
@@ -14,10 +14,11 @@ registerMoleculesComponents({
     AccordionItem: AccordionItemDefault,
 });
 
-export const Accordion = (getRegisteredMoleculesComponent('Accordion') ??
-    AccordionDefault) as typeof AccordionDefault;
-export const AccordionItem = (getRegisteredMoleculesComponent('AccordionItem') ??
-    AccordionItemDefault) as typeof AccordionItemDefault;
+export const Accordion = getRegisteredComponentWithFallback('Accordion', AccordionDefault);
+export const AccordionItem = getRegisteredComponentWithFallback(
+    'AccordionItem',
+    AccordionItemDefault,
+);
 
 export type { Props as AccordionProps } from './Accordion';
 export type { Props as AccordionItemProps } from './AccordionItem';

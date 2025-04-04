@@ -1,10 +1,10 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import AvatarDefault from './Avatar';
 
 registerMoleculesComponents({
     Avatar: AvatarDefault,
 });
 
-export const Avatar = getRegisteredMoleculesComponent('Avatar');
+export const Avatar = getRegisteredComponentWithFallback('Avatar');
 
 export { avatarStyles } from './utils';

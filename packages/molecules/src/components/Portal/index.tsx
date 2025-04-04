@@ -1,4 +1,4 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import { createContextBridge } from '../../context-bridge';
 import { Portal as GorhomPortal } from '@gorhom/portal';
 import type { PortalProps } from '@gorhom/portal/lib/typescript/components/portal/types';
@@ -8,7 +8,7 @@ registerMoleculesComponents({
     Portal: GorhomPortal,
 });
 
-export const PortalWithoutBridge = getRegisteredMoleculesComponent('Portal') ?? GorhomPortal;
+export const PortalWithoutBridge = getRegisteredComponentWithFallback('Portal', GorhomPortal);
 
 export { PortalHost, PortalProvider } from '@gorhom/portal';
 

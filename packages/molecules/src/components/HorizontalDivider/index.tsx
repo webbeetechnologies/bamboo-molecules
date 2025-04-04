@@ -1,11 +1,13 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import HorizontalDividerDefault from './HorizontalDivider';
 
 registerMoleculesComponents({
     HorizontalDivider: HorizontalDividerDefault,
 });
 
-export const HorizontalDivider = (getRegisteredMoleculesComponent('HorizontalDivider') ??
-    HorizontalDividerDefault) as typeof HorizontalDividerDefault;
+export const HorizontalDivider = getRegisteredComponentWithFallback(
+    'HorizontalDivider',
+    HorizontalDividerDefault,
+);
 
 export { Props as HorizontalDividerProps, horizontalDividerStyles } from './HorizontalDivider';

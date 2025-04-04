@@ -1,11 +1,11 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import ActionSheetDefault from './ActionSheet';
 
 registerMoleculesComponents({
     ActionSheet: ActionSheetDefault,
 });
 
-export const ActionSheet = getRegisteredMoleculesComponent('ActionSheet');
+export const ActionSheet = getRegisteredComponentWithFallback('ActionSheet', ActionSheetDefault);
 
 export {
     useScrollHandlers as useActionSheetScrollHandlers,

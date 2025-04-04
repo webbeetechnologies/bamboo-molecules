@@ -1,11 +1,11 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import TextInputDefault from './TextInput';
 
 registerMoleculesComponents({
     TextInput: TextInputDefault,
 });
 
-export const TextInput = getRegisteredMoleculesComponent('TextInput');
+export const TextInput = getRegisteredComponentWithFallback('TextInput', TextInputDefault);
 
 export { Props as TextInputProps, ElementProps as TextInputElementProps } from './TextInput';
 export { styles as textInputStyles } from './utils';

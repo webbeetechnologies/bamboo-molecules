@@ -1,10 +1,13 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import DateTimePickerDefault from './DateTimePicker';
 
 registerMoleculesComponents({
     DateTimePicker: DateTimePickerDefault,
 });
 
-export const DateTimePicker = getRegisteredMoleculesComponent('DateTimePicker');
+export const DateTimePicker = getRegisteredComponentWithFallback(
+    'DateTimePicker',
+    DateTimePickerDefault,
+);
 
 export { dateTimePickerStyles } from './utils';

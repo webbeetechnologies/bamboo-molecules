@@ -1,8 +1,9 @@
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import RadioButtonComponent from './RadioButton';
 import RadioButtonGroup from './RadioButtonGroup';
 import RadioButtonItem from './RadioButtonItem';
 
-export const RadioButton = Object.assign(
+const RadioButtonDefault = Object.assign(
     // @component ./RadioButton.tsx
     RadioButtonComponent,
     {
@@ -12,6 +13,12 @@ export const RadioButton = Object.assign(
         Item: RadioButtonItem,
     },
 );
+
+registerMoleculesComponents({
+    RadioButton: RadioButtonDefault,
+});
+
+export const RadioButton = getRegisteredComponentWithFallback('RadioButton', RadioButtonDefault);
 
 export { Props as RadioButtonProps } from './RadioButton';
 export { Props as RadioButtonGroupProps } from './RadioButtonGroup';

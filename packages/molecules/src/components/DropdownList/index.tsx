@@ -1,10 +1,10 @@
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import DropdownListDefault from './DropdownList';
 
 registerMoleculesComponents({
     DropdownList: DropdownListDefault,
 });
 
-export const DropdownList = getRegisteredMoleculesComponent('DropdownList');
+export const DropdownList = getRegisteredComponentWithFallback('DropdownList', DropdownListDefault);
 
 export { dropdownListStyles } from './utils';

@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
-import { getRegisteredMoleculesComponent, registerMoleculesComponents } from '../../core';
+import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 
-export const IfDefault = (props: PropsWithChildren<{ shouldRender?: boolean }>) => {
+const IfDefault = (props: PropsWithChildren<{ shouldRender?: boolean }>) => {
     return <>{!!props.shouldRender && props.children}</>;
 };
 
@@ -9,4 +9,4 @@ registerMoleculesComponents({
     If: IfDefault,
 });
 
-export const If = getRegisteredMoleculesComponent('If');
+export const If = getRegisteredComponentWithFallback('If', IfDefault);
