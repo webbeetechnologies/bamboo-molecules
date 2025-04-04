@@ -20,7 +20,7 @@ export const ExampleNestedElementGroup = (props: Props) => {
     const onPressDrag = useCallback(() => {}, []);
 
     const inputProps = useMemo(
-        () => ({ variant: 'outlined', label: 'Select operator' }) as TextInputProps,
+        () => ({ variant: 'outlined', label: 'Select operator' } as TextInputProps),
         [],
     );
 

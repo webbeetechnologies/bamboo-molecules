@@ -2,7 +2,6 @@ import type { ComponentType, ReactNode } from 'react';
 import {
     ProvideMolecules as DefaultProvideMolecules,
     TextProps,
-    ToastContainer,
     useComponentStyles,
     useMolecules as useMoleculesDefault,
 } from '../src';
@@ -96,7 +95,6 @@ export const useMolecules = () => useMoleculesDefault<InjectedComponentTypes>();
 // }) as typeof withPerformance);
 
 const Code = ({ style, ...rest }: TextProps) => {
-    const { Text } = useMolecules();
     const codeStyles = useComponentStyles('Code', style);
 
     return <Button style={codeStyles} {...rest} />;

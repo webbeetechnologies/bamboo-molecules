@@ -26,6 +26,9 @@
     "!**/__mocks__"
   ],
   "scripts": {
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit",
+    "prepare:husky": "husky install",
     "example:app": "pnpm --filter=expo-example-molecules run",
     "example:web": "pnpm --filter=next-example-molecules run"
   },
