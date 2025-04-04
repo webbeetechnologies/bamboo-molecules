@@ -2,8 +2,9 @@ import { ComponentPropsWithRef, ReactNode, memo, useMemo } from 'react';
 import { Animated, View, StyleProp, ViewStyle } from 'react-native';
 
 import type { MD3Elevation } from '../../types/theme';
-import { defaultStyles, getStyleForShadowLayer } from './utils';
-import { StyleSheet, useUnistyles } from 'react-native-unistyles';
+import { defaultStyles, getStyleForShadowLayer, extractProperties } from './utils';
+import { useUnistyles } from 'react-native-unistyles';
+import { BackgroundContextWrapper } from './BackgroundContextWrapper';
 
 export type Props = ComponentPropsWithRef<typeof View> & {
     /**
@@ -75,28 +76,47 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
         return theme.colors.elevation?.[`level${elevation}`];
     })();
 
-    const { sharedStyle, layer0Style, layer1Style } = useMemo(() => {
-        const surfaceStyles = StyleSheet.flatten([defaultStyles as ViewStyle, style]);
-
-        const { position, alignSelf, top, left, right, bottom, borderRadius, ...restStyle } =
-            (surfaceStyles || {}) as any;
+    const { surfaceBackground, sharedStyle, layer0Style, layer1Style } = useMemo(() => {
+        const { position, alignSelf, top, left, right, bottom, borderRadius } = extractProperties(
+            [defaultStyles.root as ViewStyle, style],
+            ['position', 'alignSelf', 'top', 'left', 'right', 'bottom', 'borderRadius'],
+        );
         const absoluteStyle = { position, alignSelf, top, right, bottom, left };
 
         return {
-            sharedStyle: [{ backgroundColor, borderRadius }, restStyle],
+            surfaceBackground: extractProperties(
+                [defaultStyles.root as ViewStyle, style],
+                ['backgroundColor'],
+            ).backgroundColor,
+            sharedStyle: [
+                { backgroundColor, borderRadius },
+                defaultStyles.root,
+                style,
+                {
+                    position: undefined,
+                    alignSelf: undefined,
+                    top: undefined,
+                    left: undefined,
+                    right: undefined,
+                    bottom: undefined,
+                    borderRadius: undefined,
+                },
+            ],
             layer0Style: [getStyleForShadowLayer(0, elevation), absoluteStyle, { borderRadius }],
             layer1Style: [getStyleForShadowLayer(1, elevation), { borderRadius }],
         };
     }, [backgroundColor, elevation, style]);
 
     return (
-        <View style={layer0Style}>
-            <View style={layer1Style}>
-                <View {...props} testID={testID} style={sharedStyle}>
-                    {children}
+        <BackgroundContextWrapper backgroundColor={surfaceBackground}>
+            <View style={layer0Style}>
+                <View style={layer1Style}>
+                    <View {...props} testID={testID} style={sharedStyle}>
+                        {children}
+                    </View>
                 </View>
             </View>
-        </View>
+        </BackgroundContextWrapper>
     );
 };
 

@@ -1,11 +1,11 @@
-import { ReactNode, memo, useMemo, forwardRef, useContext } from 'react';
-import { Animated, StyleProp, ViewStyle, ViewProps, View } from 'react-native';
+import { ReactNode, memo, useMemo, forwardRef } from 'react';
+import { Animated, StyleProp, ViewStyle, ViewProps } from 'react-native';
 
 import type { MD3Elevation } from '../../types/theme';
 // import { useComponentStyles, useContrastColor } from '../../hooks';
 import shadow from '../../styles/shadow';
-import { BackgroundContext } from '../../utils/backgroundContext';
-import { defaultStyles } from './utils';
+import { defaultStyles, extractProperties } from './utils';
+import { BackgroundContextWrapper } from './BackgroundContextWrapper';
 
 export type Props = ViewProps & {
     /**
@@ -73,16 +73,10 @@ export type Props = ViewProps & {
 
 // for Web
 const Surface = ({ elevation = 1, style, children, testID, ...props }: Props, ref: any) => {
-    const parentContext = useContext(BackgroundContext);
-    const isTransparent = (defaultStyles.root as any)?.backgroundColor === 'transparent';
-
-    const { surfaceStyle, surfaceContextValue } = useMemo(() => {
+    const { surfaceStyle, backgroundColor } = useMemo(() => {
         return {
-            surfaceContextValue: {
-                backgroundColor: (defaultStyles.root as any)?.backgroundColor,
-                // color: contrastColor,
-                color: '#000',
-            },
+            backgroundColor: extractProperties([defaultStyles.root, style], ['backgroundColor'])
+                .backgroundColor,
             surfaceStyle: [
                 elevation ? shadow(elevation) : null,
                 defaultStyles.root,
@@ -92,11 +86,11 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props, re
     }, [elevation, style]);
 
     return (
-        <BackgroundContext.Provider value={isTransparent ? parentContext : surfaceContextValue}>
-            <View ref={ref} {...props} testID={testID} style={surfaceStyle}>
+        <BackgroundContextWrapper backgroundColor={backgroundColor}>
+            <Animated.View ref={ref} {...props} testID={testID} style={surfaceStyle}>
                 {children}
-            </View>
-        </BackgroundContext.Provider>
+            </Animated.View>
+        </BackgroundContextWrapper>
     );
 };
 

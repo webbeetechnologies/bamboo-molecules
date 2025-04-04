@@ -1,6 +1,6 @@
 {
   "name": "molecules-monorepo",
-  "version": "0.3.74",
+  "version": "0.4.8",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/webbeetechnologies/bamboo-molecules.git"

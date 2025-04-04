@@ -8,5 +8,5 @@ registerMoleculesComponents({
 export const Surface = getRegisteredComponentWithFallback('Surface', SurfaceDefault);
 
 export { Props as SurfaceProps } from './Surface';
-
+export * from './BackgroundContextWrapper';
 export { defaultStyles as surfaceStyles } from './utils';

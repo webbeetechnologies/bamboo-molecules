@@ -93,6 +93,9 @@ const TouchableRipple = (
         underlayColor: _underlayColor,
         onPress,
         children,
+        onPressIn: onPressInProp,
+        onPressOut: onPressOutProp,
+        centered,
         ...rest
     }: Props,
     ref: any,
@@ -126,9 +129,9 @@ const TouchableRipple = (
 
     const handlePressIn = useCallback(
         (e: any) => {
-            const { centered, onPressIn } = rest;
+            onPressInProp?.(e);
 
-            onPressIn?.(e);
+            if (disabled) return;
 
             const button = e.currentTarget;
             const computedStyle = window.getComputedStyle(button);
@@ -217,12 +220,14 @@ const TouchableRipple = (
                 });
             });
         },
-        [rest, rippleColor],
+        [onPressInProp, disabled, centered, rippleColor],
     );
 
     const handlePressOut = useCallback(
         (e: any) => {
-            rest.onPressOut?.(e);
+            onPressOutProp?.(e);
+
+            if (disabled) return;
 
             const containers = e.currentTarget.querySelectorAll(
                 '[data-paper-ripple]',
@@ -250,7 +255,7 @@ const TouchableRipple = (
                 });
             });
         },
-        [rest],
+        [onPressOutProp, disabled],
     );
 
     return (

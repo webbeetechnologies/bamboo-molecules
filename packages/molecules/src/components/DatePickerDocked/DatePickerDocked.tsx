@@ -8,7 +8,7 @@ import { datePickerDockedMonthStyles } from './utils';
 import { Popover } from '../Popover';
 
 const DatePickerDocked = (props: DatePickerDockedProps) => {
-    const { triggerRef, isOpen, onToggle } = props;
+    const { triggerRef, isOpen, onToggle, onClose } = props;
 
     const { backDropStyle } = useMemo(() => {
         const { backDropStyle: _backDropStyle } = datePickerDockedMonthStyles;
@@ -25,7 +25,7 @@ const DatePickerDocked = (props: DatePickerDockedProps) => {
             contentStyles={styles.popoverContainer}
             triggerRef={triggerRef}
             isOpen={isOpen}
-            onClose={onToggle}
+            onClose={onClose}
             popoverContentProps={props.popoverContentProps}>
             <DatePickerInlineBase
                 {...props}

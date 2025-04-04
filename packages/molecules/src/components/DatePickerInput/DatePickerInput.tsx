@@ -74,6 +74,7 @@ function DatePickerInput(
                     endYear={endYear}
                     onChange={onInnerConfirm}
                     isOpen={isOpen}
+                    onClose={onDismiss}
                     onToggle={onToggle}
                     triggerRef={triggerRef}
                     popoverContentProps={dockedPopoverContentProps}

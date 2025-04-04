@@ -1,11 +1,12 @@
 import { ComponentPropsWithRef, ReactNode, memo, useMemo } from 'react';
-import { Animated, View, StyleProp, ViewStyle, StyleSheet } from 'react-native';
+import { Animated, View, StyleProp, ViewStyle } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 
 // import { useComponentStyles, useCurrentTheme } from '../../hooks';
 import { inputRange } from '../../styles/shadow';
 import type { MD3Elevation } from '../../types/theme';
-import { defaultStyles, getElevationAndroid } from './utils';
+import { defaultStyles, extractProperties, getElevationAndroid } from './utils';
+import { BackgroundContextWrapper } from './BackgroundContextWrapper';
 
 export type Props = ComponentPropsWithRef<typeof View> & {
     /**
@@ -74,37 +75,37 @@ const elevationLevel = [0, 1, 2, 6, 8, 12];
 
 const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) => {
     const { theme } = useUnistyles();
-    // const surfaceStyles = useComponentStyles('Surface', style);
 
     const backgroundColor = (() => {
         // @ts-ignore
         return theme.colors.elevation?.[`level${elevation}`];
     })();
 
-    const memoizedStyles = useMemo(() => {
-        const surfaceStyles = StyleSheet.flatten([(defaultStyles || {}) as ViewStyle, style]);
-
-        const { margin, padding, transform, borderRadius } = surfaceStyles as any;
-        const outerLayerStyles = { margin, padding, transform, borderRadius };
-        const sharedStyle = [{ backgroundColor }, surfaceStyles];
-
-        return [
-            {
-                backgroundColor,
-                transform,
-            },
-            outerLayerStyles,
-            sharedStyle,
-            {
-                elevation: getElevationAndroid(elevation, inputRange, elevationLevel),
-            },
-        ] as StyleProp<ViewStyle>;
+    const { memoizedStyles, surfaceBackground } = useMemo(() => {
+        return {
+            memoizedStyles: [
+                {
+                    backgroundColor,
+                },
+                defaultStyles.root,
+                style,
+                {
+                    elevation: getElevationAndroid(elevation, inputRange, elevationLevel),
+                },
+            ] as StyleProp<ViewStyle>,
+            surfaceBackground: extractProperties(
+                [defaultStyles.root as ViewStyle, style],
+                ['backgroundColor'],
+            ).backgroundColor,
+        };
     }, [backgroundColor, elevation, style]);
 
     return (
-        <View {...props} testID={testID} style={memoizedStyles}>
-            {children}
-        </View>
+        <BackgroundContextWrapper backgroundColor={surfaceBackground}>
+            <View {...props} testID={testID} style={memoizedStyles}>
+                {children}
+            </View>
+        </BackgroundContextWrapper>
     );
 };
 
