@@ -5,7 +5,7 @@ import { useDatePickerStore } from './DatePickerInlineBase';
 import { setYear } from 'date-fns';
 import { HorizontalDivider } from '../HorizontalDivider';
 import { datePickerYearItemStyles, datePickerYearPickerStyles } from './utils';
-import ListItem from '../ListItem';
+import { ListItem } from '../ListItem';
 
 const ITEM_HEIGHT = 62;
 

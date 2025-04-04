@@ -5,6 +5,6 @@ registerMoleculesComponents({
     Avatar: AvatarDefault,
 });
 
-export const Avatar = getRegisteredComponentWithFallback('Avatar');
+export const Avatar = getRegisteredComponentWithFallback('Avatar', AvatarDefault);
 
 export { avatarStyles } from './utils';

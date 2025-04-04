@@ -7,4 +7,5 @@ registerMoleculesComponents({
 
 export const StateLayer = getRegisteredComponentWithFallback('StateLayer', StateLayerDefault);
 
+export { Props as StateLayerProps } from './StateLayer';
 export { stateLayerStyles } from './utils';

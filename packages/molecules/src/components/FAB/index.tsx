@@ -7,5 +7,6 @@ registerMoleculesComponents({
 
 export const FAB = getRegisteredComponentWithFallback('FAB', FABDefault);
 
+export { Props as FABProps } from './FAB';
 export { fabStyles } from './utils';
 export { States } from './utils';

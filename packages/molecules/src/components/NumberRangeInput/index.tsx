@@ -10,4 +10,5 @@ export const NumberRangeInput = getRegisteredComponentWithFallback(
     NumberRangeInputDefault,
 );
 
+export { Props as NumberRangeInputProps } from './NumberRangeInput';
 export { numberRangeInputStyles } from './utils';

@@ -5,4 +5,6 @@ registerMoleculesComponents({
     NumberInput: NumberInputDefault,
 });
 
+export { Props as NumberInputProps } from './NumberInput';
+
 export const NumberInput = getRegisteredComponentWithFallback('NumberInput', NumberInputDefault);

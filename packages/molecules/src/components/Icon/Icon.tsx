@@ -27,6 +27,6 @@ export const iconStylesDefault = StyleSheet.create(theme => ({
 
 registerComponentStyles('Icon', iconStylesDefault);
 
-const styles = getRegisteredMoleculesComponentStyles('Icon');
+export const styles = getRegisteredMoleculesComponentStyles('Icon');
 
 export default memo(forwardRef(Icon));

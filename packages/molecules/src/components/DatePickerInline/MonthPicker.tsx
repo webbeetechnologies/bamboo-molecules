@@ -6,7 +6,7 @@ import { format, setMonth } from 'date-fns';
 import { resolveStateVariant } from '../../utils';
 import { HorizontalDivider } from '../HorizontalDivider';
 import { datePickerDockedMonthItemStyles, datePickerMonthPickerStyles } from '../DatePickerDocked';
-import ListItem from '../ListItem';
+import { ListItem } from '../ListItem/';
 import { Icon } from '../Icon';
 import { StyleSheet } from 'react-native-unistyles';
 

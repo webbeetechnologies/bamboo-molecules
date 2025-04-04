@@ -7,4 +7,5 @@ registerMoleculesComponents({
 
 export const Button = getRegisteredComponentWithFallback('Button', ButtonDefault);
 
+export { Props as ButtonProps } from './Button';
 export { defaultStyles } from './utils';

@@ -7,5 +7,6 @@ registerMoleculesComponents({
 
 export const Popover = getRegisteredComponentWithFallback('Popover', PopoverDefault);
 
+export { popoverFactory } from './Popover';
 export { PopoverProps } from './types';
 export { defaultStyles } from './utils';

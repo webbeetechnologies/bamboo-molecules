@@ -38,3 +38,5 @@ export {
     datePickerWeekStyles,
     datePickerYearItemStyles,
 } from './utils';
+
+export { default as DatePickerInlineBase } from './DatePickerInlineBase';

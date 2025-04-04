@@ -23,7 +23,7 @@ import { useControlledValue, useToggle } from '../../hooks';
 import { TextInput, type TextInputProps } from '../TextInput';
 import { DropdownList, type DropdownListProps } from '../DropdownList';
 import type { OptionListRenderItemInfo } from '../OptionList';
-import ListItem from '../ListItem';
+import { ListItem } from '../ListItem';
 import { IconButton } from '../IconButton';
 import { selectStyles } from './utils';
 

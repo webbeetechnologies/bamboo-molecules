@@ -346,7 +346,8 @@ export const datePickerMonthStyles = getRegisteredMoleculesComponentStyles('Date
 export const datePickerYearPickerStyles =
     getRegisteredMoleculesComponentStyles('DatePicker_YearPicker');
 export const datePickerDayStyles = getRegisteredMoleculesComponentStyles('DatePicker_Day');
-export const DatePicker_DayEmpty = getRegisteredMoleculesComponentStyles('DatePicker_DayEmpty');
+export const datePickerDayEmptyStyles =
+    getRegisteredMoleculesComponentStyles('DatePicker_DayEmpty');
 export const datePickerWeekStyles = getRegisteredMoleculesComponentStyles('DatePicker_Week');
 export const datePickerHeaderStyles = getRegisteredMoleculesComponentStyles('DatePicker_Header');
 export const dateDayNameStyles = getRegisteredMoleculesComponentStyles('DatePicker_DayName');

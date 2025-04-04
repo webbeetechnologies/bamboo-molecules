@@ -5,7 +5,7 @@ registerMoleculesComponents({
     Backdrop: BackdropDefault,
 });
 
-export const Backdrop = getRegisteredComponentWithFallback('Backdrop');
+export const Backdrop = getRegisteredComponentWithFallback('Backdrop', BackdropDefault);
 
 export type { BackdropProps } from './types';
 

@@ -7,4 +7,5 @@ registerMoleculesComponents({
 
 export const Modal = getRegisteredComponentWithFallback('Modal', ModalDefault);
 
+export { Props as ModalProps } from './Modal';
 export { modalStyles } from './utils';
