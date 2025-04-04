@@ -173,6 +173,8 @@ const Button = (
         size,
     });
 
+    console.log({ defaultStyles });
+
     // const componentStyles = useComponentStyles(
     //     'Button',
     //     [styleProp, { customButtonColor, customTextColor }],

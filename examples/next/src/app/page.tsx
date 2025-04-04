@@ -1,7 +1,15 @@
 'use client';
 
 import { StyleSheet } from 'react-native-unistyles';
-import { Button } from '@bambooapp/bamboo-molecules/src/components/Button';
+// import { Button } from '@bambooapp/bamboo-molecules/src/components/Button';
+import dynamic from 'next/dynamic';
+
+const ButtonComponent = dynamic(
+    () => import('@bambooapp/bamboo-molecules/src/components/Button/Button'),
+    {
+        ssr: false,
+    },
+);
 // import { TextInput } from '@bambooapp/bamboo-molecules/src/components/TextInput';
 // import { ActivityIndicator } from '@bambooapp/bamboo-molecules/src/components/ActivityIndicator';
 // import Checkbox from '@bambooapp/bamboo-molecules/src/components/Checkbox/Checkbox';
@@ -21,9 +29,9 @@ export default function Home() {
             <View style={stylesC.container}>
                 {/* <ActivityIndicator /> */}
                 {/* <Checkbox /> */}
-                <Button variant="contained" onPress={() => {}}>
+                <ButtonComponent variant="contained" onPress={() => {}}>
                     Hello
-                </Button>
+                </ButtonComponent>
                 {/* <TextInput label="Input" variant="outlined" /> */}
             </View>
             {/* <TestComponent /> */}
