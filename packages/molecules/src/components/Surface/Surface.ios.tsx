@@ -1,10 +1,9 @@
 import { ComponentPropsWithRef, ReactNode, memo, useMemo } from 'react';
 import { Animated, View, StyleProp, ViewStyle } from 'react-native';
 
-import { useCurrentTheme } from '../../hooks';
 import type { MD3Elevation } from '../../types/theme';
 import { defaultStyles, getStyleForShadowLayer } from './utils';
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 export type Props = ComponentPropsWithRef<typeof View> & {
     /**
@@ -70,7 +69,7 @@ export type Props = ComponentPropsWithRef<typeof View> & {
  * ```
  */
 const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) => {
-    const theme = useCurrentTheme();
+    const { theme } = useUnistyles();
     const backgroundColor = (() => {
         // @ts-ignore
         return theme.colors.elevation?.[`level${elevation}`];

@@ -543,4 +543,4 @@ registerComponentsStyles({
     TextInput: textInputStylesDefault,
 });
 
-export const styles = getRegisteredMoleculesComponentStyles('textInputStyles');
+export const styles = getRegisteredMoleculesComponentStyles('TextInput');
