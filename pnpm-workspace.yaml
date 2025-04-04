@@ -1,0 +1,5 @@
+packages:
+    - 'examples/expo'
+    - 'examples/next'
+    - 'examples/common'
+    - 'packages/molecules'

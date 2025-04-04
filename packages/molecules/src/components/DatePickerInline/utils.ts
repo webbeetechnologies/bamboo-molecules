@@ -1,0 +1,330 @@
+import { daySize } from './dateUtils';
+import { dayNamesHeight } from './DayNames';
+import { montHeaderHeight } from './Month';
+import { StyleSheet } from 'react-native-unistyles';
+
+export const datePickerStyles = StyleSheet.create(theme => ({
+    root: {
+        ...({
+            roundness: theme.shapes.corner.extraSmall,
+            headerBackgroundColor: theme.colors.surface,
+        } as any),
+    },
+
+    container: {
+        minHeight: 360,
+        minWidth: 360,
+    },
+}));
+
+export const datePickerMonthStyles = StyleSheet.create(theme => ({
+    root: {
+        backgroundColor: theme.colors.surface,
+    },
+    monthLabel: {
+        ...theme.typescale.bodyMedium,
+        opacity: 0.7,
+    },
+    yearButton: {
+        alignSelf: 'flex-start',
+        marginLeft: 6,
+        borderRadius: theme.shapes.corner.extraSmall,
+    },
+    yearButtonInner: {
+        paddingLeft: theme.spacings['4'],
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: theme.shapes.corner.extraSmall,
+    },
+    month: {},
+    monthHeader: {
+        height: montHeaderHeight,
+        justifyContent: 'center',
+        overflow: 'hidden',
+    },
+
+    monthButton: {
+        borderRadius: theme.shapes.corner.extraLarge,
+        overflow: 'hidden',
+    },
+    buttonContainerStyle: { flexDirection: 'row', alignItems: 'center' },
+    dockedHeaderStyle: {},
+    weekContainerStyle: {},
+}));
+
+export const datePickerYearPickerStyles = StyleSheet.create(theme => ({
+    root: {
+        backgroundColor: theme.colors.surface,
+    },
+    yearContainer: {
+        alignItems: 'center',
+    },
+    yearButton: {
+        borderRadius: theme.shapes.corner.extraLarge,
+        overflow: 'hidden',
+        height: 46,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: theme.spacings['4'],
+        marginRight: theme.spacings['4'],
+    },
+    yearInner: {
+        borderRadius: theme.shapes.corner.extraLarge,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    yearLabel: {
+        fontSize: 16,
+    },
+}));
+
+// type DatePickerDayState = 'disabled' | 'selected' | 'inRange';
+
+export const datePickerDayStyles = StyleSheet.create(theme => ({
+    containerStyle: {
+        flex: 1,
+        flexBasis: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
+
+        variants: {
+            state: {
+                disabled: {
+                    opacity: 0.3,
+                },
+            },
+        },
+    },
+    disabled: {
+        opacity: 0.3,
+    },
+    button: {
+        width: daySize,
+        height: daySize,
+        overflow: 'hidden',
+        borderRadius: daySize / 2,
+
+        variants: {
+            state: {
+                inRange: {
+                    backgroundColor: theme.colors.primary,
+                },
+            },
+        },
+    },
+    day: {
+        flexBasis: 0,
+        flex: 1,
+        borderRadius: daySize / 2,
+        width: daySize,
+        height: daySize,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'transparent',
+
+        variants: {
+            state: {
+                selected: {
+                    backgroundColor: theme.colors.primary,
+                },
+
+                inRange: {
+                    borderColor: theme.colors.primary,
+                    button: {
+                        backgroundColor: theme.colors.primary,
+                    },
+                    today: {
+                        borderColor: theme.colors.primary,
+                    },
+                },
+            },
+        },
+    },
+    today: {
+        borderColor: theme.colors.primary,
+        variants: {
+            state: {
+                inRange: {
+                    borderColor: theme.colors.primary,
+                    button: {
+                        backgroundColor: theme.colors.primary,
+                    },
+                },
+            },
+        },
+    },
+    text: {
+        variants: {
+            state: {
+                selected: {
+                    color: theme.colors.onPrimary,
+                    day: {
+                        backgroundColor: theme.colors.primary,
+                    },
+                },
+
+                inRange: {
+                    color: theme.colors.onPrimary,
+
+                    day: {
+                        borderColor: theme.colors.primary,
+                    },
+                    button: {
+                        backgroundColor: theme.colors.primary,
+                    },
+                    today: {
+                        borderColor: theme.colors.primary,
+                    },
+                },
+            },
+        },
+    },
+    flex1: {
+        flex: 1,
+    },
+}));
+
+export const datePickerDayEmptyStyles = StyleSheet.create({
+    root: {
+        flex: 1,
+        flexBasis: 0,
+    },
+});
+
+export const datePickerWeekStyles = StyleSheet.create({
+    root: {
+        flexDirection: 'row',
+        height: daySize,
+    },
+});
+
+export const datePickerHeaderStyles = StyleSheet.create(theme => ({
+    datePickerHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginHorizontal: theme.spacings['5'],
+    },
+    buttonContainer: {
+        height: 56,
+        marginTop: theme.spacings['1'],
+        marginBottom: theme.spacings['2'],
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    buttonWrapper: {},
+    spacer: { flex: 1 },
+    yearLabelStyle: {
+        ...theme.typescale.bodyMedium,
+        opacity: 0.7,
+    },
+    yearButtonStyle: {
+        alignSelf: 'flex-start',
+        marginLeft: 6,
+        borderRadius: theme.shapes.corner.extraSmall,
+    },
+    yearInnerStyle: {
+        paddingLeft: theme.spacings['4'],
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: theme.shapes.corner.extraSmall,
+    },
+}));
+
+export const dateDayNameStyles = StyleSheet.create(theme => ({
+    container: {
+        height: dayNamesHeight,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: theme.colors.surface,
+    },
+    dayName: { flex: 1, alignItems: 'center' },
+    dayNameLabel: {
+        opacity: 0.7,
+        ...theme.typescale.bodyMedium,
+    },
+}));
+
+export const datePickerDayRangeStyles = StyleSheet.create(theme => ({
+    container: {
+        flexDirection: 'row',
+
+        variants: {
+            state: {
+                bothWays: {
+                    borderRadius: daySize / 2,
+                },
+                inRange: {
+                    backgroundColor: theme.colors.primary,
+                },
+                isCrop: {
+                    backgroundColor: undefined,
+                },
+            },
+        },
+    },
+    rightCrop: {
+        flex: 1,
+
+        variants: {
+            state: {
+                isRightCrop: {
+                    backgroundColor: theme.colors.primary,
+                },
+            },
+        },
+    },
+    leftCrop: {
+        flex: 1,
+
+        variants: {
+            state: {
+                isLeftCrop: {
+                    backgroundColor: theme.colors.primary,
+                },
+            },
+        },
+    },
+    centerCrop: {
+        backgroundColor: theme.colors.primary,
+        minWidth: daySize,
+        minHeight: daySize,
+
+        variants: {
+            state: {
+                isLeftCrop: {
+                    borderTopLeftRadius: daySize / 2,
+                    borderBottomLeftRadius: daySize / 2,
+                },
+                isRightCrop: {
+                    borderTopRightRadius: daySize / 2,
+                    borderBottomRightRadius: daySize / 2,
+                },
+            },
+        },
+    },
+}));
+
+export const datePickerYearItemStyles = StyleSheet.create(theme => ({
+    yearButton: {
+        variants: {
+            state: {
+                selected: {
+                    backgroundColor: theme.colors.primary,
+                },
+            },
+        },
+    },
+
+    yearLabel: {
+        variants: {
+            state: {
+                selected: {
+                    color: theme.colors.onPrimary,
+                },
+            },
+        },
+    },
+}));

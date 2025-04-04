@@ -26,8 +26,6 @@ const storybookPlugins = [
     '@babel/plugin-proposal-export-namespace-from',
 ];
 
-const bundlePlugins = ['@babel/plugin-proposal-export-namespace-from'];
-
 module.exports = api => {
     api.cache(true);
     const presets = [['babel-preset-expo', { jsxRuntime: 'automatic' }]];
@@ -43,10 +41,8 @@ module.exports = api => {
     //     '@babel/preset-typescript',
     // ];
 
-    const plugins = process.env.MOLECULES_ENV === 'storybook' ? storybookPlugins : bundlePlugins;
-
     return {
         presets,
-        plugins,
+        plugins: storybookPlugins,
     };
 };

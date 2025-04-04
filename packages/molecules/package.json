@@ -1,0 +1,127 @@
+{
+    "name": "@bambooapp/bamboo-molecules",
+    "version": "1.0.12",
+    "author": "Thet Aung <thetaung.dev@gmail.com>",
+    "license": "MIT",
+    "main": "lib/commonjs/index.js",
+    "module": "lib/module/index.js",
+    "types": "lib/typescript/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./lib/typescript/index.d.ts",
+            "import": "./lib/module/index.js",
+            "require": "./lib/commonjs/index.js"
+        },
+        "./components/*": {
+            "types": "./components/*.d.ts",
+            "import": "./components/*.js",
+            "require": "./components/*.js"
+        }
+    },
+    "files": [
+      "lib",
+      "src",
+      "components",
+      "datagrid",
+      "fast-context",
+      "shortcuts-manager",
+      "context-bridge",
+      "!**/__tests__",
+      "!**/__fixtures__",
+      "!**/__mocks__"
+    ],
+    "scripts": {
+      "lint": "eslint .",
+      "type-check": "tsc --noEmit",
+      "prepare:husky": "husky install",
+      "prepare": "bob build && node scripts/generate-component-packages.js",
+      "example:expo": "pnpm --filter=expo-example run",
+      "start": "MOLECULES_ENV=storybook pnpm storybook",
+      "run:testcases": "pnpm workspace test-cases start",
+      "test": "MOLECULES_ENV=storybook jest && pnpm test-storybook",
+      "test-jest": "jest",
+      "bundle": "MOLECULES_ENV=release rm -rf lib && pnpm prepare && mkdir -p dist && npm pack --pack-destination=dist",
+      "do-release": "npm publish ./dist/bambooapp-bamboo-molecules-$npm_package_version.tgz --access=public",
+      "release": "pnpm bundle && pnpm do-release",
+      "release:dev": "npm version prerelease --preid=dev && pnpm release --tag=dev",
+      "storybook": "MOLECULES_ENV=storybook storybook dev -p 6006",
+      "test-storybook": "test-storybook",
+      "coverage": "cp coverage/storybook/coverage-storybook.json coverage/coverage-storybook.json && npx nyc report --reporter=html -t coverage --report-dir coverage/lcov-report",
+      "test:coverage": "pnpm test-jest --coverage && pnpm test-storybook --coverage && pnpm coverage",
+      "build-storybook": "storybook build",
+      "chromatic:all": "MOLECULES_ENV=storybook npx chromatic --project-token=934368a7f6c9",
+      "chromatic": "MOLECULES_ENV=storybook pnpm chromatic:all --only-changed",
+      "perf": "npx reassure"
+    },
+    "dependencies": {
+        "@bambooapp/bamboo-atoms": "^0.0.35",
+        "@bambooapp/virtualized-list": "^0.0.7",
+        "@gorhom/portal": "^1.0.14",
+        "@react-native-aria/overlays": "^0.3.2",
+        "@sharcoux/slider": "^6.1.2",
+        "color": "^4.2.3",
+        "date-fns": "^2.29.3",
+        "eventemitter3": "^5.0.1",
+        "lodash.get": "^4.4.2",
+        "lodash.groupby": "^4.6.0",
+        "lodash.isnil": "^4.0.0",
+        "lodash.keyby": "^4.6.0",
+        "lodash.memoize": "^4.1.2",
+        "lodash.noop": "^3.0.1",
+        "lodash.omit": "^4.5.0",
+        "lodash.omitby": "^4.6.0",
+        "react-native-actions-sheet": "^0.8.10",
+        "react-native-mask-input": "^1.2.2",
+        "react-native-super-grid": "^5.0.0",
+        "react-native-toast-message": "^2.1.6",
+        "react-native-web-hooks": "^3.0.2",
+        "ts-deepmerge": "^4.0.0",
+        "use-sync-external-store": "^1.2.0"
+    },
+    "devDependencies": {
+        "react": "^18.2.0",
+        "react-native-unistyles": "3.0.0-rc.1",
+        "@types/color": "^3.0.3",
+        "@types/jest": "^29.1.2",
+        "@types/lodash": "^4.17.13",
+        "@types/lodash.get": "^4.4.7",
+        "@types/lodash.groupby": "^4.6.7",
+        "@types/lodash.isnil": "^4.0.7",
+        "@types/lodash.keyby": "^4.6.7",
+        "@types/lodash.memoize": "^4.1.7",
+        "@types/lodash.noop": "^3.0.7",
+        "@types/lodash.omit": "^4.5.7",
+        "@types/lodash.omitby": "^4.6.7"
+    },
+    "eslintIgnore": [
+      "node_modules/",
+      "lib/",
+      "test-cases/node_modules",
+      "dist",
+      "cache"
+    ],
+    "react-native-builder-bob": {
+      "source": "src",
+      "output": "lib",
+      "targets": [
+          [
+              "commonjs",
+              {
+                  "configFile": true
+              }
+          ],
+          [
+              "module",
+              {
+                  "configFile": true
+              }
+          ],
+          [
+              "typescript",
+              {
+                  "project": "tsconfig.build.json"
+              }
+          ]
+      ]
+    } 
+  }

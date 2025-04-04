@@ -7,6 +7,9 @@ cache
 # XDE
 .expo/
 
+.idea
+.vscode
+
 # Xcode
 #
 build/
