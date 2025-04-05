@@ -27,6 +27,7 @@ import { StateLayer } from '../StateLayer';
 import { defaultStyles, sizeToIconSizeMap } from './utils';
 import { useActionState } from '../../hooks';
 import { MD3Elevation } from '../../types/theme';
+import { resolveStateVariant } from '../../utils';
 
 export type Props = Omit<SurfaceProps, 'style'> & {
     /**
@@ -169,11 +170,12 @@ const Button = (
 
     defaultStyles.useVariants({
         variant,
-        state: (disabled ? 'disabled' : hovered ? 'hovered' : undefined) as any,
+        state: resolveStateVariant({
+            disabled,
+            hovered,
+        }),
         size,
     });
-
-    console.log({ defaultStyles });
 
     // const componentStyles = useComponentStyles(
     //     'Button',
@@ -274,6 +276,8 @@ const Button = (
         stateLayerProps?.style,
         styleProp,
     ]);
+
+    console.log({ defaultStyles, textStyle, surfaceStyle });
 
     const elevation = useMemo(
         () => (elevationProp === undefined ? elevationLevel ?? 0 : elevationProp),

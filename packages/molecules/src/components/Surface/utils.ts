@@ -26,6 +26,7 @@ export function extractProperties(
         const obj = objectsArray[i];
 
         for (const prop of propertiesToExtract) {
+            if (!obj) continue;
             if (prop in obj) {
                 // @ts-ignore
                 extracted[prop] = obj[prop];

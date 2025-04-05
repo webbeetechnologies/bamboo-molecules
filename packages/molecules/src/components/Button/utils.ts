@@ -208,9 +208,11 @@ const defaultStylesDefault = StyleSheet.create(theme => {
             marginHorizontal: theme.spacings['6'],
         },
         labelText: {
+            marginVertical: theme.spacings['2l'],
             marginHorizontal: theme.spacings['3'],
         },
         labelTextAddons: {
+            marginVertical: theme.spacings['2l'],
             marginHorizontal: theme.spacings['4'],
         },
     };

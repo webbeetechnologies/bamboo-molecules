@@ -99,7 +99,6 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
                     left: undefined,
                     right: undefined,
                     bottom: undefined,
-                    borderRadius: undefined,
                 },
             ],
             layer0Style: [getStyleForShadowLayer(0, elevation), absoluteStyle, { borderRadius }],
