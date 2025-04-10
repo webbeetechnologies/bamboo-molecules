@@ -14,24 +14,8 @@ import type {
     MultiChange,
     CalendarDates,
 } from './types';
-import { createFastContext } from '../../fast-context';
 import MonthPicker from './MonthPicker';
-
-export type Store = {
-    localDate: Date;
-    startDateYear: number;
-    endDateYear: number;
-    pickerType: 'month' | 'year' | undefined;
-};
-
-const defaultValue = {
-    localDate: new Date(),
-    startDateYear: 1800,
-    endDateYear: 2200,
-    pickerType: undefined,
-};
-
-const { Provider, useContext: useFastContext, useContextValue } = createFastContext<Store>();
+import { Provider, defaultValue, useDatePickerStore } from './DatePickerContext';
 
 function DatePickerInlineBase(props: DatePickerInlineBaseProps) {
     return (
@@ -60,7 +44,7 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
         onToggle,
         monthStyle,
     } = props;
-    const [pickerType, setStore] = useFastContext(state => state.pickerType);
+    const [pickerType, setStore] = useDatePickerStore(state => state.pickerType);
 
     const scrollMode = mode === 'range' || mode === 'multiple' ? 'vertical' : 'horizontal';
     const isHorizontal = scrollMode === 'horizontal';
@@ -191,9 +175,6 @@ function DatePickerInlineBaseChild(props: DatePickerInlineBaseProps) {
 const styles = StyleSheet.create({
     root: { flex: 1 },
 });
-
-export const useDatePickerStore = useFastContext;
-export const useDatePickerStoreValue = useContextValue;
 
 const DatePickerInlineComponent = memo(DatePickerInlineBaseChild);
 

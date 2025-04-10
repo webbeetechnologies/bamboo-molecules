@@ -1,5 +1,6 @@
 import { ComponentType, useCallback, useMemo } from 'react';
-import { type ViewStyle, type TextProps, type ViewProps, View, Text } from 'react-native';
+import { type ViewStyle, type TextProps, type ViewProps, View } from 'react-native';
+import { Text } from '../Text';
 
 // import { ProvideTheme } from '../../core/theme/ProvideTheme';
 // import { extendTheme } from '../../core/theme/extendTheme';

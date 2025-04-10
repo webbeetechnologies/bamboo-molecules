@@ -6,9 +6,6 @@ import DayName from './DayName';
 import { View } from 'react-native';
 import { dateDayNameStyles } from './utils';
 
-// TODO make it flexible
-export const dayNamesHeight = 44;
-
 const shortDayNames = (() => {
     const firstDOW = startOfWeek(new Date());
     return Array.from(Array(7)).map((_, i) => format(addDays(firstDOW, i), 'EEEEE'));

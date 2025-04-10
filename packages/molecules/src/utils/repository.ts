@@ -1,5 +1,5 @@
 import EventEmitter, { ConstructorOptions, event as Event, eventNS } from 'eventemitter2';
-// import debounce from 'lodash.debounce';
+import debounce from 'lodash.debounce';
 
 interface RepositoryConstructor<T> extends ConstructorOptions {
     onRegister?: (arg: T, name: string, registery: Record<string, T>) => T;
@@ -44,11 +44,9 @@ export class Repository<T> extends EventEmitter {
     /**
      * Register a item with the src.
      */
-    registerOne = <X extends T = T, ItemName extends string = ''>(itemName: ItemName, item: X) => {
+    register = <X extends T = T, ItemName extends string = ''>(itemName: ItemName, item: X) => {
         let updatedItem = this.#onRegister?.(item, itemName, { ...this.registry });
         if (!updatedItem) updatedItem = item;
-
-        if (this.registry[itemName]) return;
 
         this.registry = {
             ...this.registry,
@@ -59,62 +57,42 @@ export class Repository<T> extends EventEmitter {
     };
 
     /**
-     * Register a item with the src.
-     */
-    register = (items: Record<string, any>) => {
-        // let updatedItem = this.#onRegister?.(item, itemName, { ...this.registry });
-        // if (!updatedItem) updatedItem = item;
-
-        Object.keys(items).forEach(itemName => {
-            if (this.registry[itemName]) return;
-            this.registry = {
-                ...this.registry,
-                [itemName]: items[itemName],
-            };
-        });
-    };
-
-    /**
      * Get all registered module from the registry.
      */
     getAll = () => {
         return this.registry;
     };
 
-    get = (name: string) => {
-        return this.registry[name];
-    };
-
     /**
      * Register a listener to the module registry.
      * Return value returns a function that removes the listener.
      */
-    // listen = (
-    //     callback: (events: string[]) => void,
-    //     { throttle = 100 }: { throttle?: number } = {},
-    // ) => {
-    //     let cached: string[] = [];
+    listen = (
+        callback: (events: string[]) => void,
+        { throttle = 100 }: { throttle?: number } = {},
+    ) => {
+        let cached: string[] = [];
 
-    //     const wrappedCallback = () => {
-    //         callback(cached);
-    //         cached = [];
-    //     };
+        const wrappedCallback = () => {
+            callback(cached);
+            cached = [];
+        };
 
-    //     const debouncedCallback = !throttle
-    //         ? wrappedCallback
-    //         : debounce(wrappedCallback, Math.abs(throttle), {
-    //               trailing: true,
-    //               leading: false,
-    //           });
+        const debouncedCallback = !throttle
+            ? wrappedCallback
+            : debounce(wrappedCallback, Math.abs(throttle), {
+                  trailing: true,
+                  leading: false,
+              });
 
-    //     const handledCallback = (itemName: string) => {
-    //         cached.push(itemName);
-    //         debouncedCallback();
-    //     };
+        const handledCallback = (itemName: string) => {
+            cached.push(itemName);
+            debouncedCallback();
+        };
 
-    //     this.on('item_registered', handledCallback);
-    //     return () => {
-    //         this.off('item_registered', handledCallback);
-    //     };
-    // };
+        this.on('item_registered', handledCallback);
+        return () => {
+            this.off('item_registered', handledCallback);
+        };
+    };
 }

@@ -11,12 +11,8 @@ import {
 } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import {
-    getIndexFromVerticalOffset,
-    getMonthHeight,
-    getVerticalMonthsOffset,
-    montHeaderHeight,
-} from './Month';
+import { getIndexFromVerticalOffset, getMonthHeight, getVerticalMonthsOffset } from './Month';
+import { montHeaderHeight } from './utils';
 
 import { beginOffset, estimatedMonthHeight, totalMonths } from './dateUtils';
 import { useLatest } from '../../hooks';

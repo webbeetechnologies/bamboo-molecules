@@ -1,8 +1,16 @@
 import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { daySize } from './dateUtils';
-import { dayNamesHeight } from './DayNames';
-import { montHeaderHeight } from './Month';
 import { StyleSheet } from 'react-native-unistyles';
+
+export const dayNamesHeight = 44;
+
+// TODO make it flexible
+export const weekMargin = 6;
+export const weekSize = daySize + weekMargin;
+export const montHeaderHeight = 56;
+export const monthHeaderSingleMarginTop = 4;
+export const monthHeaderSingleMarginBottom = 8 + 22 + 12;
+export const monthHeaderSingleHeight = monthHeaderSingleMarginTop + monthHeaderSingleMarginBottom;
 
 const datePickerStylesDefault = StyleSheet.create(theme => ({
     root: {

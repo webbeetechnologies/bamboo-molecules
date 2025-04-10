@@ -1,7 +1,8 @@
 import type { ComponentType, Context as ContextType, PropsWithChildren } from 'react';
 import { Fragment, useContext, useId, useMemo, useRef, useState } from 'react';
+
 import typedMemo from '../hocs/typedMemo';
-import { Repository } from '@bambooapp/bamboo-atoms/repository';
+import { Repository } from '../utils/repository';
 
 // https://github.com/pmndrs/its-fine/blob/main/src/index.tsx
 // In development, React will warn about using contexts between renderers.

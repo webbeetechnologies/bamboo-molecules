@@ -35,6 +35,8 @@ const defaultStylesDefault = StyleSheet.create(theme => {
                     disabled: {
                         color: theme.colors.onSurfaceDisabled,
                     },
+                    hovered: {},
+                    default: {},
                 },
                 variant: {
                     outlined: {
@@ -144,6 +146,11 @@ const defaultStylesDefault = StyleSheet.create(theme => {
                 },
                 size: {
                     lg: {},
+                },
+                state: {
+                    hovered: {},
+                    disabled: {},
+                    default: {},
                 },
             },
             compoundVariants: [

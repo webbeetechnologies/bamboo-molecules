@@ -1,9 +1,11 @@
 import { memo, useCallback, useMemo } from 'react';
-import { useDatePickerStoreValue } from './DatePickerInlineBase';
-import { StyleProp, Text, View, ViewStyle } from 'react-native';
+import { useDatePickerStoreValue } from './DatePickerContext';
+import { StyleProp, View, ViewStyle } from 'react-native';
+import { Text } from '../Text';
+
 import { IconButton } from '../IconButton';
 import { TouchableRipple } from '../TouchableRipple';
-import { datePickerHeaderItemStyles } from '../DatePickerDocked';
+import { datePickerHeaderItemStyles } from '../DatePickerDocked/utils';
 
 function HeaderItem({
     value,

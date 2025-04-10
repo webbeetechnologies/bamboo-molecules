@@ -11,7 +11,7 @@ import {
     ReactElement,
 } from 'react';
 import type { StyleProp, ViewStyle, ViewProps } from 'react-native';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { dialogActionsStyles } from './utils';
 
 export type Props = ViewProps &
@@ -64,12 +64,12 @@ const DialogActions = ({ children, style, ...rest }: Props, ref: any) => {
             spacing: dialogActionsStyles.root.spacing,
             containerStyle: [dialogActionsStyles.container, style],
             childrenProps: (i: number, child: ReactElement) => ({
-                style: StyleSheet.flatten([
+                style: [
                     {
                         marginLeft: i === 0 ? 0 : spacing,
                     },
                     child.props?.style,
-                ]),
+                ],
             }),
         };
     }, [style]);

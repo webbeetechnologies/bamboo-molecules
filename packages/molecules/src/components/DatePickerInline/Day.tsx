@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo } from 'react';
-import { StyleProp, Text, View, type ViewStyle } from 'react-native';
+import { StyleProp, View, type ViewStyle } from 'react-native';
+import { Text } from '../Text';
 
 import DayRange from './DayRange';
 import { resolveStateVariant } from '../../utils';

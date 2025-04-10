@@ -3,13 +3,13 @@ import { StyleSheet } from 'react-native-unistyles';
 
 // type States = 'disabled' | 'checked' | 'hovered' | 'checkedAndHovered';
 
+export const DEFAULT_ICON_SIZE = 24;
+export const ANIMATION_DURATION = 100;
+
 const radioButtonStylesDefault = StyleSheet.create(theme => ({
     root: {
         color: theme.colors.onSurfaceVariant,
         uncheckedColor: theme.colors.onSurfaceVariant,
-        animationScale: theme.animation.scale,
-        animationDuration: `${theme.animation.durations['1']}`,
-        iconSize: 24,
 
         variants: {
             state: {

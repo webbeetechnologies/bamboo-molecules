@@ -11,8 +11,9 @@ import {
     useMemo,
     useRef,
 } from 'react';
-import { StyleProp, StyleSheet, Text, TextStyle, View, ViewProps, ViewStyle } from 'react-native';
+import { StyleProp, TextStyle, View, ViewProps, ViewStyle } from 'react-native';
 import { useOverlayPosition } from '@react-native-aria/overlays';
+import { Text } from '../Text';
 
 import { Surface, type SurfaceProps } from '../Surface';
 import PopperArrow from './PopperArrow';
@@ -136,17 +137,16 @@ const PopperContent = (
     );
 
     const overlayStyle = useMemo(
-        () =>
-            StyleSheet.flatten([
-                overlayProps.style,
-                {
-                    // To handle translucent android StatusBar
-                    // marginTop: Platform.select({ android: top, default: 0 }),
-                    opacity: rendered ? 1 : 0,
-                    position: 'absolute' as 'absolute',
-                },
-                overlayStyles,
-            ]),
+        () => [
+            overlayProps.style,
+            {
+                // To handle translucent android StatusBar
+                // marginTop: Platform.select({ android: top, default: 0 }),
+                opacity: rendered ? 1 : 0,
+                position: 'absolute' as 'absolute',
+            },
+            overlayStyles,
+        ],
         [overlayProps.style, overlayStyles, rendered],
     );
 

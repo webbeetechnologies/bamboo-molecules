@@ -1,5 +1,6 @@
 import { forwardRef, memo, ReactNode, useMemo } from 'react';
-import { type TextStyle, type ViewStyle, type TextProps, View, Text } from 'react-native';
+import { type TextStyle, type ViewStyle, type TextProps, View } from 'react-native';
+import { Text } from '../Text';
 
 import type { WithElements } from '../../types';
 import { TouchableRipple, type TouchableRippleProps } from '../TouchableRipple';

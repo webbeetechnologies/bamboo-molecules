@@ -5,7 +5,7 @@ import setColor from 'color';
 import { TouchableRipple, type TouchableRippleProps } from '../TouchableRipple';
 import { resolveStateVariant } from '../../utils';
 import { Icon } from '../Icon';
-import { radioButtonStyles } from './utils';
+import { DEFAULT_ICON_SIZE, radioButtonStyles } from './utils';
 
 export type Props = Omit<TouchableRippleProps, 'children'> & {
     /**
@@ -31,31 +31,10 @@ export type Props = Omit<TouchableRippleProps, 'children'> & {
     onPress: (() => void) | undefined;
 };
 
-/**
- * Radio buttons allow the selection a single option from a set.
- * This component follows platform guidelines for iOS, but can be used
- * on any platform.
- *
- * <div class="screenshots">
- *   <figure>
- *     <img src="screenshots/radio-enabled.ios.png" />
- *     <figcaption>Enabled</figcaption>
- *   </figure>
- *   <figure>
- *     <img src="screenshots/radio-disabled.ios.png" />
- *     <figcaption>Disabled</figcaption>
- *   </figure>
- * </div>
- */
 const RadioButtonIOS = (
     { disabled, style, color: colorProp, checked, onPress, ...rest }: Props,
     ref: any,
 ) => {
-    // const componentStyles = useComponentStyles(
-    //     'RadioButton',
-    //     [style, colorProp ? { color: colorProp } : {}],
-    // );
-
     radioButtonStyles.useVariants({
         state: resolveStateVariant({
             disabled: !!disabled,
@@ -63,30 +42,25 @@ const RadioButtonIOS = (
         }) as any,
     });
 
-    const { containerStyle, iconContainerStyle, checkedColor, iconSize, rippleColor } =
-        useMemo(() => {
-            const {
-                color,
-                iconSize: _iconSize,
-                // removing unwanted styles
-                uncheckedColor: _uncheckedColor,
-                animationScale: _animationScale,
-                animationDuration: _animationDuration,
-                ...checkboxStyles
-            } = StyleSheet.flatten([
-                radioButtonStyles.root,
-                style,
-                colorProp ? { color: colorProp } : {},
-            ]) as any;
+    const { containerStyle, iconContainerStyle, checkedColor, rippleColor } = useMemo(() => {
+        const {
+            color,
+            // removing unwanted styles
+            uncheckedColor: _uncheckedColor,
+            ...checkboxStyles
+        } = StyleSheet.flatten([
+            radioButtonStyles.root,
+            style,
+            colorProp ? { color: colorProp } : {},
+        ]) as any;
 
-            return {
-                containerStyle: [styles.container, checkboxStyles],
-                iconContainerStyle: { opacity: checked ? 1 : 0 },
-                checkedColor: color,
-                iconSize: _iconSize,
-                rippleColor: setColor(color).fade(0.32).rgb().string(),
-            };
-        }, [checked, colorProp, style]);
+        return {
+            containerStyle: [styles.container, checkboxStyles],
+            iconContainerStyle: { opacity: checked ? 1 : 0 },
+            checkedColor: color,
+            rippleColor: setColor(color).fade(0.32).rgb().string(),
+        };
+    }, [checked, colorProp, style]);
 
     return (
         <TouchableRipple
@@ -96,7 +70,12 @@ const RadioButtonIOS = (
             onPress={onPress}
             style={containerStyle}>
             <View style={iconContainerStyle}>
-                <Icon allowFontScaling={false} name="check" size={iconSize} color={checkedColor} />
+                <Icon
+                    allowFontScaling={false}
+                    name="check"
+                    size={DEFAULT_ICON_SIZE}
+                    color={checkedColor}
+                />
             </View>
         </TouchableRipple>
     );

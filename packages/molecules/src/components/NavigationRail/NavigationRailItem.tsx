@@ -81,6 +81,7 @@ export type Props = Omit<PressableProps, 'children' | 'disabled' | 'onPress'> &
         stateLayerProps?: ViewProps;
     };
 
+const defaultIconSize = 24;
 const emptyObj = {};
 
 const NavigationRailItem = memo(
@@ -118,25 +119,6 @@ const NavigationRailItem = memo(
                     }) as any,
                     size,
                 });
-                // const componentStyles = useComponentStyles(
-                //     'NavigationRail_Item',
-                //     [
-                //         style,
-                //         {
-                //             iconContainer: iconContainerProps.style || {},
-                //             icon: iconProps.style || {},
-                //             badge: StyleSheet.flatten([
-                //                 badgeLabel && badgeProps.size !== 'sm' && styles.badgeWithLabel,
-                //                 badgeProps.style || {},
-                //             ]),
-                //             label: labelProps.style || {},
-                //             stateLayer: stateLayerProps.style || {},
-                //         },
-                //     ],
-                //     {
-
-                //     },
-                // );
 
                 const {
                     containerStyle,
@@ -154,10 +136,12 @@ const NavigationRailItem = memo(
                         badge,
                         stateLayer,
                     } = navigationRailItemStyles;
-                    const { iconSize: _iconSize, ...restStyle } = navigationRailItemStyles.root;
 
                     return {
-                        containerStyle: [restStyle, style] as StyleProp<ViewStyle>,
+                        containerStyle: [
+                            navigationRailItemStyles.root,
+                            style,
+                        ] as StyleProp<ViewStyle>,
                         iconContainerStyle: [
                             iconContainer,
                             !label && {
@@ -173,7 +157,7 @@ const NavigationRailItem = memo(
                         ] as StyleProp<ViewStyle>,
                         labelStyle: _label,
                         stateLayerStyle: [stateLayer, stateLayerProps.style],
-                        iconSize: navigationRailItemStyles.root.iconSize,
+                        iconSize: defaultIconSize,
                     };
                 }, [
                     badgeLabel,

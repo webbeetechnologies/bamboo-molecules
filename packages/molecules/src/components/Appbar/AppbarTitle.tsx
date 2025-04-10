@@ -18,10 +18,7 @@ const AppbarTitle = memo(({ style, children, Wrapper: WrapperProp, ...rest }: Pr
         size: type === 'large' ? 'lg' : type === 'medium' ? 'md' : 'sm',
     });
 
-    const titleStyles = useMemo(
-        () => StyleSheet.flatten([styles[type], appbarTitle.root, style]),
-        [style, type],
-    );
+    const titleStyles = useMemo(() => [styles[type], appbarTitle.root, style], [style, type]);
 
     return (
         <Wrapper style={titleStyles} accessibilityRole="header" {...rest}>

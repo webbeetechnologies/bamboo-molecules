@@ -1,7 +1,8 @@
 import { useMemo, useContext, useCallback } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Text } from '../Text';
 
-import { DisplayModeContext } from './TimePicker';
+import { DisplayModeContext } from './DisplayModeContext';
 import { resolveStateVariant } from '../../utils';
 import { TouchableRipple } from '../TouchableRipple';
 import { timePickerAmPmSwitcherStyles } from './utils';

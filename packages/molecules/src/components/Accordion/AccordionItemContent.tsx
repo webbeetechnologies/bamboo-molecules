@@ -1,17 +1,12 @@
-import { memo, useMemo } from 'react';
-import { StyleSheet, View, type ViewProps } from 'react-native';
+import { memo } from 'react';
+import { View, type ViewProps } from 'react-native';
 import { accordionItemContentStyles } from './utils';
 
 export type Props = ViewProps & {};
 
 const AccordionItemContent = memo(({ style, children, ...rest }: Props) => {
-    const componentStyles = useMemo(
-        () => StyleSheet.flatten([accordionItemContentStyles.root, style]),
-        [style],
-    );
-
     return (
-        <View style={componentStyles} {...rest}>
+        <View style={[accordionItemContentStyles.root, style]} {...rest}>
             {children}
         </View>
     );

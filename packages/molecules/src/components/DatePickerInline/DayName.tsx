@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Text } from '../Text';
 import { dateDayNameStyles } from './utils';
 
 function DayName({ label }: { label: string }) {

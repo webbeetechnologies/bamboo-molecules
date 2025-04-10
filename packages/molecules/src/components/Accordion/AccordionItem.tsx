@@ -8,7 +8,7 @@ import {
     useEffect,
     useMemo,
 } from 'react';
-import { StyleSheet, View, type ViewProps } from 'react-native';
+import { View, type ViewProps } from 'react-native';
 import { useControlledValue, useSubcomponents } from '../../hooks';
 import type { WithElements } from '../../types';
 import { AccordionContext } from './Accordion';
@@ -35,10 +35,6 @@ const AccordionItem = memo(
             }: Props,
             ref: any,
         ) => {
-            const componentStyles = useMemo(
-                () => StyleSheet.flatten([accordionItemStyles.root, style]),
-                [style],
-            );
             const [expanded, onExpandedChange] = useControlledValue({
                 value: expandedProp,
                 onChange: setExpandedProp,
@@ -77,7 +73,7 @@ const AccordionItem = memo(
             }, [groupContext, id, expandedInternal, onExpandedChange]);
 
             return (
-                <View style={componentStyles} {...rest} ref={ref}>
+                <View style={[accordionItemStyles.root, style]} {...rest} ref={ref}>
                     <AccordionItemContext.Provider value={contextValue}>
                         {AccordionItem_Header[0]}
                         {contextValue.expanded ? AccordionItem_Content[0] : null}

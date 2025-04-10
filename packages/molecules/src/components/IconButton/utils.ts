@@ -1,8 +1,12 @@
 import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
-import { IconButtonVariant } from './types';
 
-type States = 'selectedAndDisabled' | 'disabled' | 'selected' | 'hovered' | 'selectedAndHovered';
+export type States =
+    | 'selectedAndDisabled'
+    | 'disabled'
+    | 'selected'
+    | 'hovered'
+    | 'selectedAndHovered';
 
 const iconButtonStylesDefault = StyleSheet.create(theme => ({
     root: {
@@ -44,6 +48,9 @@ const iconButtonStylesDefault = StyleSheet.create(theme => ({
             selectedAndDisabled: {
                 opacity: 0.38,
             },
+            selected: {},
+            selectedAndHovered: {},
+            hovered: {},
         },
 
         variant: {
@@ -64,175 +71,224 @@ const iconButtonStylesDefault = StyleSheet.create(theme => ({
                 borderWidth: 1,
             },
         },
+
+        compoundVariants: [
+            {
+                variant: 'default',
+                state: 'selectedAndDisabled',
+                styles: {
+                    color: theme.colors.primary,
+                },
+            },
+            {
+                variant: 'default',
+                state: 'selected',
+                styles: {
+                    color: theme.colors.primary,
+                },
+            },
+            {
+                variant: 'default',
+                state: 'selectedAndHovered',
+                styles: {
+                    color: theme.colors.primary,
+                },
+            },
+            {
+                variant: 'contained',
+                state: 'selectedAndDisabled',
+                styles: {
+                    backgroundColor: theme.colors.primary,
+                    color: theme.colors.onPrimary,
+                },
+            },
+            {
+                variant: 'contained',
+                state: 'disabled',
+                styles: {
+                    backgroundColor: theme.colors.stateLayer.disabled.onSurface,
+                },
+            },
+            {
+                variant: 'contained',
+                state: 'selected',
+                styles: {
+                    backgroundColor: theme.colors.primary,
+                    color: theme.colors.onPrimary,
+                },
+            },
+            {
+                variant: 'contained',
+                state: 'selectedAndHovered',
+                styles: {
+                    color: theme.colors.primary,
+                },
+            },
+            {
+                variant: 'contained',
+                state: 'hovered',
+                styles: {
+                    backgroundColor: theme.colors.primary,
+                    color: theme.colors.onPrimary,
+                },
+            },
+            {
+                variant: 'contained-tonal',
+                state: 'selectedAndDisabled',
+                styles: {
+                    backgroundColor: theme.colors.secondaryContainer,
+                    color: theme.colors.onSecondaryContainer,
+                },
+            },
+            {
+                variant: 'contained-tonal',
+                state: 'disabled',
+                styles: {
+                    backgroundColor: theme.colors.stateLayer.disabled.onSurface,
+                },
+            },
+            {
+                variant: 'contained-tonal',
+                state: 'selected',
+                styles: {
+                    backgroundColor: theme.colors.secondaryContainer,
+                    color: theme.colors.onSecondaryContainer,
+                },
+            },
+            {
+                variant: 'contained-tonal',
+                state: 'selectedAndHovered',
+                styles: {
+                    backgroundColor: theme.colors.secondaryContainer,
+                    color: theme.colors.onSecondaryContainer,
+                },
+            },
+            {
+                variant: 'outlined',
+                state: 'selectedAndDisabled',
+                styles: {
+                    backgroundColor: theme.colors.inverseSurface,
+                    color: theme.colors.inverseOnSurface,
+                    borderWidth: 0,
+                },
+            },
+            {
+                variant: 'outlined',
+                state: 'disabled',
+                styles: {
+                    borderColor: theme.colors.onSurface,
+                },
+            },
+            {
+                variant: 'outlined',
+                state: 'selected',
+                styles: {
+                    backgroundColor: theme.colors.inverseSurface,
+                    color: theme.colors.inverseOnSurface,
+                    borderWidth: 0,
+                },
+            },
+            {
+                variant: 'outlined',
+                state: 'selectedAndHovered',
+                styles: {
+                    backgroundColor: theme.colors.secondaryContainer,
+                    color: theme.colors.onSecondaryContainer,
+                },
+            },
+            {
+                variant: 'outlined',
+                state: 'hovered',
+                styles: {
+                    backgroundColor: theme.colors.inverseSurface,
+                    color: theme.colors.inverseOnSurface,
+                    borderWidth: 0,
+                },
+            },
+        ],
     },
     stateLayer: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'transparent',
         zIndex: -1,
+        state: {
+            disabled: {},
+            selectedAndDisabled: {},
+            selected: {},
+            selectedAndHovered: {},
+            hovered: {},
+        },
+
+        variant: {
+            default: {},
+            contained: {},
+            'contained-tonal': {},
+            outlined: {},
+        },
+        compoundVariants: [
+            {
+                variant: 'default',
+                state: 'selectedAndHovered',
+                styles: {
+                    backgroundColor: theme.colors.stateLayer.hover.primary,
+                },
+            },
+            {
+                variant: 'default',
+                state: 'hovered',
+                styles: {
+                    backgroundColor: theme.colors.stateLayer.hover.onSurfaceVariant,
+                },
+            },
+            {
+                variant: 'contained',
+                state: 'selectedAndHovered',
+                styles: {
+                    backgroundColor: theme.colors.stateLayer.hover.primary,
+                },
+            },
+            {
+                variant: 'contained',
+                state: 'hovered',
+                styles: {
+                    backgroundColor: theme.colors.stateLayer.hover.onPrimary,
+                },
+            },
+            {
+                variant: 'contained-tonal',
+                state: 'selectedAndHovered',
+                styles: {
+                    backgroundColor: theme.colors.stateLayer.hover.onSecondaryContainer,
+                },
+            },
+            {
+                variant: 'contained-tonal',
+                state: 'hovered',
+                styles: {
+                    backgroundColor: theme.colors.stateLayer.hover.onSurfaceVariant,
+                },
+            },
+            {
+                variant: 'outlined',
+                state: 'selectedAndHovered',
+                styles: {
+                    backgroundColor: theme.colors.stateLayer.hover.onSecondaryContainer,
+                },
+            },
+            {
+                variant: 'outlined',
+                state: 'hovered',
+                styles: {
+                    backgroundColor: theme.colors.stateLayer.hover.inverseOnSurface,
+                },
+            },
+        ],
     },
 
     innerContainer: {
         flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-
-    compoundVariantStyles: (variant: IconButtonVariant, state: States) => {
-        if (variant === 'default') {
-            return {
-                ...(state === 'selectedAndDisabled' && {
-                    root: {
-                        color: theme.colors.primary,
-                    },
-                }),
-                ...(state === 'selected' && {
-                    root: {
-                        color: theme.colors.primary,
-                    },
-                }),
-                ...(state === 'selectedAndHovered' && {
-                    root: {
-                        color: theme.colors.primary,
-                        stateLayer: {
-                            backgroundColor: theme.colors.stateLayer.hover.primary,
-                        },
-                    },
-                }),
-                ...(state === 'hovered' && {
-                    root: {
-                        stateLayer: {
-                            backgroundColor: theme.colors.stateLayer.hover.onSurfaceVariant,
-                        },
-                    },
-                }),
-            } as any;
-        }
-
-        if (variant === 'contained') {
-            return {
-                ...(state === 'selectedAndDisabled' && {
-                    root: {
-                        backgroundColor: theme.colors.primary,
-                        color: theme.colors.onPrimary,
-                    },
-                }),
-                ...(state === 'disabled' && {
-                    root: {
-                        backgroundColor: theme.colors.stateLayer.disabled.onSurface,
-                    },
-                }),
-                ...(state === 'selected' && {
-                    root: {
-                        backgroundColor: theme.colors.primary,
-                        color: theme.colors.onPrimary,
-                    },
-                }),
-                ...(state === 'selectedAndHovered' && {
-                    root: {
-                        color: theme.colors.primary,
-                        stateLayer: {
-                            backgroundColor: theme.colors.stateLayer.hover.primary,
-                        },
-                    },
-                }),
-                ...(state === 'hovered' && {
-                    root: {
-                        backgroundColor: theme.colors.primary,
-                        color: theme.colors.onPrimary,
-
-                        stateLayer: {
-                            backgroundColor: theme.colors.stateLayer.hover.onPrimary,
-                        },
-                    },
-                }),
-            } as any;
-        }
-
-        if (variant === 'contained-tonal') {
-            return {
-                ...(state === 'selectedAndDisabled' && {
-                    root: {
-                        backgroundColor: theme.colors.secondaryContainer,
-                        color: theme.colors.onSecondaryContainer,
-                    },
-                }),
-                ...(state === 'disabled' && {
-                    root: {
-                        backgroundColor: theme.colors.stateLayer.disabled.onSurface,
-                    },
-                }),
-                ...(state === 'selected' && {
-                    root: {
-                        backgroundColor: theme.colors.secondaryContainer,
-                        color: theme.colors.onSecondaryContainer,
-                    },
-                }),
-                ...(state === 'selectedAndHovered' && {
-                    root: {
-                        backgroundColor: theme.colors.secondaryContainer,
-                        color: theme.colors.onSecondaryContainer,
-
-                        stateLayer: {
-                            backgroundColor: theme.colors.stateLayer.hover.onSecondaryContainer,
-                        },
-                    },
-                }),
-                ...(state === 'hovered' && {
-                    root: {
-                        stateLayer: {
-                            backgroundColor: theme.colors.stateLayer.hover.onSurfaceVariant,
-                        },
-                    },
-                }),
-            } as any;
-        }
-
-        if (variant === 'outlined') {
-            return {
-                ...(state === 'selectedAndDisabled' && {
-                    root: {
-                        backgroundColor: theme.colors.inverseSurface,
-                        color: theme.colors.inverseOnSurface,
-                        borderWidth: 0,
-                    },
-                }),
-                ...(state === 'disabled' && {
-                    root: {
-                        borderColor: theme.colors.onSurface,
-                    },
-                }),
-                ...(state === 'selected' && {
-                    root: {
-                        backgroundColor: theme.colors.inverseSurface,
-                        color: theme.colors.inverseOnSurface,
-                        borderWidth: 0,
-                    },
-                }),
-                ...(state === 'selectedAndHovered' && {
-                    root: {
-                        backgroundColor: theme.colors.secondaryContainer,
-                        color: theme.colors.onSecondaryContainer,
-
-                        stateLayer: {
-                            backgroundColor: theme.colors.stateLayer.hover.onSecondaryContainer,
-                        },
-                    },
-                }),
-                ...(state === 'hovered' && {
-                    root: {
-                        backgroundColor: theme.colors.inverseSurface,
-                        color: theme.colors.inverseOnSurface,
-                        borderWidth: 0,
-
-                        stateLayer: {
-                            backgroundColor: theme.colors.stateLayer.hover.inverseOnSurface,
-                        },
-                    },
-                }),
-            } as any;
-        }
-
-        return {};
     },
 }));
 

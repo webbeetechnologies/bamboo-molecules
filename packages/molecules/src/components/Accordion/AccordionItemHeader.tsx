@@ -2,14 +2,9 @@ import { forwardRef, memo, ReactNode, useCallback, useContext, useMemo } from 'r
 import type { WithElements } from '../../types';
 import { TouchableRipple, type TouchableRippleProps } from '../TouchableRipple';
 import { AccordionItemContext } from './AccordionItem';
-import { CallbackActionState, withActionState } from '../../hocs';
-import {
-    Text,
-    View,
-    type GestureResponderEvent,
-    type TextStyle,
-    type ViewStyle,
-} from 'react-native';
+import { CallbackActionState, withActionState } from '../../hocs/withActionState';
+import { View, type GestureResponderEvent, type TextStyle, type ViewStyle } from 'react-native';
+import { Text } from '../Text';
 import { accordionItemHeaderStyles } from './utils';
 import { resolveStateVariant } from '../../utils';
 

@@ -17,7 +17,6 @@ import { TouchableRipple, type TouchableRippleProps } from '../TouchableRipple';
 import { resolveStateVariant } from '../../utils';
 import { StateLayer } from '../StateLayer';
 import { tabsItemStyles } from './utils';
-import { StyleSheet } from 'react-native-unistyles';
 
 export type TabItemProps = Omit<TouchableRippleProps, 'children' | 'ref'> &
     CallbackActionState & {
@@ -78,14 +77,14 @@ const TabItemWithActionState = withActionState(
         });
 
         const { contentsContainerStyle, stateLayerStyle, containerStyle } = useMemo(() => {
-            const { minHeight, ...restStyle } = StyleSheet.flatten([tabsItemStyles.root, style]);
-
+            const minHeight = 48;
             return {
                 containerStyle: [
+                    tabsItemStyles.root,
                     {
-                        minHeight: Math.max(itemHeight, minHeight),
+                        minHeight: Math.max(minHeight, itemHeight),
                     },
-                    restStyle,
+                    style,
                 ],
                 contentsContainerStyle: [
                     tabsItemStyles.contentsContainer,

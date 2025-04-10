@@ -7,7 +7,7 @@ import {
     useCallback,
     useMemo,
 } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useControlledValue, useSubcomponents } from '../../hooks';
 import { accordionStyles } from './utils';
 
@@ -31,10 +31,6 @@ const Accordion = (
     }: Props,
     ref: any,
 ) => {
-    const componentStyles = useMemo(
-        () => StyleSheet.flatten([accordionStyles.root, style]),
-        [style],
-    );
     const [expandedItemIds, onChange] = useControlledValue({
         value: expandedItemIdsProp,
         defaultValue: defaultExpandedItemIds,
@@ -72,7 +68,7 @@ const Accordion = (
     }, [expandedItemIds, multiple, onChange, onPressItem]);
 
     return (
-        <View style={componentStyles} {...rest} ref={ref}>
+        <View style={[accordionStyles.root, style]} {...rest} ref={ref}>
             <AccordionContext.Provider value={contextValue}>
                 {AccordionItem}
             </AccordionContext.Provider>

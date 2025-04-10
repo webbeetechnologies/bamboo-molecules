@@ -7,7 +7,7 @@ import { TouchableRipple, type TouchableRippleProps } from '../TouchableRipple';
 import { CallbackActionState, withActionState } from '../../hocs';
 import { resolveStateVariant } from '../../utils';
 import { StateLayer } from '../StateLayer';
-import { radioButtonStyles } from './utils';
+import { ANIMATION_DURATION, radioButtonStyles } from './utils';
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
     CallbackActionState & {
@@ -44,22 +44,6 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
 
 const BORDER_WIDTH = 2;
 
-/**
- * Radio buttons allow the selection a single option from a set.
- * This component follows platform guidelines for Android, but can be used
- * on any platform.
- *
- * <div class="screenshots">
- *   <figure>
- *     <img src="screenshots/radio-enabled.android.png" />
- *     <figcaption>Enabled</figcaption>
- *   </figure>
- *   <figure>
- *     <img src="screenshots/radio-disabled.android.png" />
- *     <figcaption>Disabled</figcaption>
- *   </figure>
- * </div>
- */
 const RadioButtonAndroid = (
     {
         disabled = false,
@@ -94,8 +78,6 @@ const RadioButtonAndroid = (
     const {
         containerStyles,
         rippleColor,
-        scale,
-        animationDuration,
         radioStyles,
         dotStyles,
         dotContainerStyles,
@@ -104,8 +86,6 @@ const RadioButtonAndroid = (
         const {
             color: checkedColor,
             uncheckedColor,
-            animationScale: _scale,
-            animationDuration: _animationDuration,
             ..._radioButtonStyles
         } = StyleSheet.flatten([radioButtonStyles.root, style]) as any;
 
@@ -115,8 +95,6 @@ const RadioButtonAndroid = (
             containerStyles: [radioButtonStyles.container, _radioButtonStyles],
             color: _color,
             rippleColor: setColor(_color).fade(0.32).rgb().string(),
-            scale: _scale,
-            animationDuration: _animationDuration,
             radioStyles: [
                 radioButtonStyles.radio,
                 {
@@ -156,7 +134,7 @@ const RadioButtonAndroid = (
 
             Animated.timing(radioAnim, {
                 toValue: 1,
-                duration: animationDuration * scale,
+                duration: ANIMATION_DURATION,
                 useNativeDriver: true,
             }).start();
         } else {
@@ -164,11 +142,11 @@ const RadioButtonAndroid = (
 
             Animated.timing(borderAnim, {
                 toValue: BORDER_WIDTH,
-                duration: animationDuration * scale,
+                duration: ANIMATION_DURATION,
                 useNativeDriver: false,
             }).start();
         }
-    }, [status, borderAnim, radioAnim, scale, animationDuration]);
+    }, [status, borderAnim, radioAnim]);
 
     return (
         <TouchableRipple

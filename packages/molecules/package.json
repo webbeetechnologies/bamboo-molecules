@@ -1,6 +1,6 @@
 {
     "name": "@bambooapp/bamboo-molecules",
-    "version": "0.5.0-alpha.0",
+    "version": "0.5.0-alpha.1",
     "author": "Thet Aung <thetaung.dev@gmail.com>",
     "license": "MIT",
     "main": "lib/commonjs/index.js",
@@ -14,12 +14,14 @@
         "fast-context",
         "shortcuts-manager",
         "context-bridge",
+        "styles",
         "!**/__tests__",
         "!**/__fixtures__",
         "!**/__mocks__"
     ],
     "scripts": {
-        "prepare": "node ./scripts/generate-component-packages.js && bob build && node scripts/generate-component-packages.js",
+        "prepare": "node ./scripts/generate-component-packages.js && bob build && node scripts/generate-component-packages.js && pnpm fix-typescript-output",
+        "fix-typescript-output": "cd lib/typescript && mv src/* . && rm -rf src",
         "example:expo": "pnpm --filter=expo-example run",
         "start": "MOLECULES_ENV=storybook pnpm storybook",
         "run:testcases": "pnpm workspace test-cases start",
@@ -39,7 +41,7 @@
         "perf": "npx reassure"
     },
     "dependencies": {
-        "@bambooapp/bamboo-atoms": "^0.0.35",
+        "eventemitter2": "^6.4.9",
         "@bambooapp/virtualized-list": "^0.0.7",
         "@gorhom/portal": "^1.0.14",
         "@react-native-aria/overlays": "^0.3.2",
@@ -47,6 +49,7 @@
         "color": "^4.2.3",
         "date-fns": "^2.29.3",
         "eventemitter3": "^5.0.1",
+        "lodash.debounce": "^4.0.8",
         "lodash.get": "^4.4.2",
         "lodash.groupby": "^4.6.0",
         "lodash.isnil": "^4.0.0",
@@ -64,6 +67,7 @@
         "use-sync-external-store": "^1.2.0"
     },
     "devDependencies": {
+        "@types/lodash.debounce": "^4.0.7",
         "react": "^18.2.0",
         "react-native-unistyles": "3.0.0-rc.1",
         "@types/color": "^3.0.3",
@@ -104,7 +108,8 @@
             [
                 "typescript",
                 {
-                    "project": "tsconfig.build.json"
+                    "project": "tsconfig.build.json",
+                    "rootDir": "src"
                 }
             ]
         ]

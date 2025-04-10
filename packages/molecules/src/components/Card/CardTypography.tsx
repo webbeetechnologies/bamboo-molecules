@@ -1,5 +1,6 @@
 import { forwardRef, memo, useMemo } from 'react';
-import { Text, type TextProps } from 'react-native';
+import { type TextProps } from 'react-native';
+import { Text } from '../Text';
 import { cardTypograhyStyles } from './utils';
 
 export type Props = TextProps & {

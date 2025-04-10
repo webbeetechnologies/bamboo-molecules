@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react';
 
 import DatePickerModal from '../DatePickerModal/DatePickerModal';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Text } from '../Text';
 import { IconButton } from '../IconButton';
 
 // WORK IN PROGRESS

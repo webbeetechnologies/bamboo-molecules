@@ -3,7 +3,7 @@ import { memo, useCallback, useEffect } from 'react';
 import {
     useShortcutsManagerContextValueSelector,
     useShortcutsManagerStoreRef,
-} from './ShortcutsManager';
+} from './ShortcutsManager/utils';
 import { calculateShortcutEventName, getPressedModifierKeys, normalizeKeys } from './utils';
 import type { ShortcutEventDetail } from './types';
 

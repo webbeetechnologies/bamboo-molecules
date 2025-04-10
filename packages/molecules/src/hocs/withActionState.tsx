@@ -8,7 +8,7 @@ export type CallbackActionState = UseActionStateProps & {
 
 // P is for type-assertion of the wrapped component props
 // only works for Web
-const withActionState = <P extends CallbackActionState>(Component: ComponentType<P>) => {
+export const withActionState = <P extends CallbackActionState>(Component: ComponentType<P>) => {
     // @ts-expect-error // TODO - fix ts issues
     const ComponentWithActionState = forwardRef((props: P, ref: any) => {
         const {

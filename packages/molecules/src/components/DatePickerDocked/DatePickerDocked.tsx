@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { DatePickerDockedProps } from './types';
-import { DatePickerInlineBase } from '../DatePickerInline';
+import DatePickerInlineBase from '../DatePickerInline/DatePickerInlineBase';
 import DatePickerDockedHeader from './DatePickerDockedHeader';
 import { datePickerDockedMonthStyles } from './utils';
 import { Popover } from '../Popover';

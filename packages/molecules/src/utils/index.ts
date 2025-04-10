@@ -32,3 +32,5 @@ export * from './createSyntheticEvent';
 export * from './getCursorStyle';
 
 export * from './resolveStateVariant';
+
+export { Repository } from './repository';

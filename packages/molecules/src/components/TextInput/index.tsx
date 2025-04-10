@@ -7,5 +7,10 @@ registerMoleculesComponents({
 
 export const TextInput = getRegisteredComponentWithFallback('TextInput', TextInputDefault);
 
-export { Props as TextInputProps, ElementProps as TextInputElementProps } from './TextInput';
+export {
+    Props as TextInputProps,
+    ElementProps as TextInputElementProps,
+    TextInputHandles,
+} from './TextInput';
+export type * from './types';
 export { styles as textInputStyles } from './utils';

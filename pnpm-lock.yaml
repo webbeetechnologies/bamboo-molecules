@@ -340,9 +340,6 @@ importers:
 
   packages/molecules:
     dependencies:
-      '@bambooapp/bamboo-atoms':
-        specifier: ^0.0.35
-        version: 0.0.35
       '@bambooapp/virtualized-list':
         specifier: ^0.0.7
         version: 0.0.7
@@ -361,9 +358,15 @@ importers:
       date-fns:
         specifier: ^2.29.3
         version: 2.30.0
+      eventemitter2:
+        specifier: ^6.4.9
+        version: 6.4.9
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
+      lodash.debounce:
+        specifier: ^4.0.8
+        version: 4.0.8
       lodash.get:
         specifier: ^4.4.2
         version: 4.4.2
@@ -419,6 +422,9 @@ importers:
       '@types/lodash':
         specifier: ^4.17.13
         version: 4.17.13
+      '@types/lodash.debounce':
+        specifier: ^4.0.7
+        version: 4.0.9
       '@types/lodash.get':
         specifier: ^4.4.7
         version: 4.4.9
@@ -1222,9 +1228,6 @@ packages:
     resolution: {integrity: sha512-vN5p+1kl59GVKMvTHt55NzzmYVxprfJD+ql7U9NFIfKCBkYE55LYtS+WtPlaYOyzydrKI8Nezd+aZextrd+FMA==}
     engines: {node: '>=6.9.0'}
 
-  '@bambooapp/bamboo-atoms@0.0.35':
-    resolution: {integrity: sha512-i8hGtpejE0nk8eEuQGvUjlKES/kytlZ+Ei8Rm3E89/GVV2L6dcuZeS3FjEu7aQ8tilL7OhwIv2Omo9RWeSdwuQ==}
-
   '@bambooapp/virtualized-list@0.0.7':
     resolution: {integrity: sha512-KFEvwh4BXQutqw6jzhg1v6krcvN+lHUY6AZ9nXOrbuL5mTSnSNRmogm8VQswmTQXbpFY96eIPhJDS0kACUPl2Q==}
 
@@ -1532,8 +1535,8 @@ packages:
   '@gorhom/portal@1.0.14':
     resolution: {integrity: sha512-MXyL4xvCjmgaORr/rtryDNFy3kU4qUbKlwtQqqsygd0xX3mhKjOLn6mQK8wfu0RkoE0pBE0nAasRoHua+/QZ7A==}
     peerDependencies:
-      react: '*'
-      react-native: '*'
+      react: ^18.3.1
+      react-native: 0.77.1
 
   '@hapi/hoek@9.3.0':
     resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
@@ -1812,19 +1815,19 @@ packages:
   '@react-aria/overlays@3.24.0':
     resolution: {integrity: sha512-0kAXBsMNTc/a3M07tK9Cdt/ea8CxTAEJ223g8YgqImlmoBBYAL7dl5G01IOj67TM64uWPTmZrOklBchHWgEm3A==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react: ^18.3.1
       react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
   '@react-aria/ssr@3.9.7':
     resolution: {integrity: sha512-GQygZaGlmYjmYM+tiNBA5C6acmiDWF52Nqd40bBp0Znk4M4hP+LTmI0lpI1BuKMw45T8RIhrAsICIfKwZvi2Gg==}
     engines: {node: '>= 12'}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react: ^18.3.1
 
   '@react-aria/utils@3.26.0':
     resolution: {integrity: sha512-LkZouGSjjQ0rEqo4XJosS4L3YC/zzQkfRM3KoqK6fUOmUJ9t0jQ09WjiF+uOoG9u+p30AVg3TrZRUWmoTS+koQ==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react: ^18.3.1
 
   '@react-aria/visually-hidden@3.8.18':
     resolution: {integrity: sha512-l/0igp+uub/salP35SsNWq5mGmg3G5F5QMS1gDZ8p28n7CgjvzyiGhJbbca7Oxvaw1HRFzVl9ev+89I7moNnFQ==}
@@ -1834,9 +1837,9 @@ packages:
   '@react-native-aria/overlays@0.3.14':
     resolution: {integrity: sha512-a8MIB2aBw5yitNB0szNqKQlm4ngOozHGVmXTbslejGIX2+3YQUg8e7J4ouT7ZgK2iIr2gIB3YrstHDM6mvKVmw==}
     peerDependencies:
-      react: '*'
+      react: ^18.3.1
       react-dom: '*'
-      react-native: '*'
+      react-native: 0.77.1
 
   '@react-native-aria/utils@0.2.11':
     resolution: {integrity: sha512-8MzE25pYDo1ZQtu7N9grx2Q+2uK58Tvvg4iJ7Nvx3PXTEz2XKU8G//yX9un97f7zCM6ptL8viRdKbSYDBmQvsA==}
@@ -2004,7 +2007,7 @@ packages:
   '@react-stately/overlays@3.6.12':
     resolution: {integrity: sha512-QinvZhwZgj8obUyPIcyURSCjTZlqZYRRCS60TF8jH8ZpT0tEAuDb3wvhhSXuYA3Xo9EHLwvLjEf3tQKKdAQArw==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react: ^18.3.1
 
   '@react-stately/utils@3.10.5':
     resolution: {integrity: sha512-iMQSGcpaecghDIh3mZEpZfoFH3ExBwTtuBEcvZ2XnGzCgQjeYXcMdIUwAfVQLXFTdHUHGF6Gu6/dFrYsCzySBQ==}
@@ -2019,12 +2022,12 @@ packages:
   '@react-types/overlays@3.8.11':
     resolution: {integrity: sha512-aw7T0rwVI3EuyG5AOaEIk8j7dZJQ9m34XAztXJVZ/W2+4pDDkLDbJ/EAPnuo2xGYRGhowuNDn4tDju01eHYi+w==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react: ^18.3.1
 
   '@react-types/shared@3.26.0':
     resolution: {integrity: sha512-6FuPqvhmjjlpEDLTiYx29IJCbCNWPlsyO+ZUmCUXzhUv2ttShOXfw8CmeHWHftT/b2KweAWuzqSlfeXPR76jpw==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react: ^18.3.1
 
   '@segment/loosely-validate-event@2.0.0':
     resolution: {integrity: sha512-ZMCSfztDBqwotkl848ODgVcAmN4OItEWDCkshcKz0/W6gGSQayuuCtWV/MlodFivAZD793d6UgANd6wCXUfrIw==}
@@ -2033,9 +2036,9 @@ packages:
     resolution: {integrity: sha512-uro+a+np3+5Jf0vZy/y5F3Iu2jpiMz/XY2n2UcGH+eNPnV+uJD44MXw9sviCRSH1PlfdCT/C7HGDdxnMJuhc/Q==}
     deprecated: This package (@sharcoux/slider) has been moved to @react-native-assets/slider. Please change your package.json accordingly to receive the future versions.
     peerDependencies:
-      react: '>=16.13.1'
+      react: ^18.3.1
       react-dom: '>=16.13.1'
-      react-native: '>=0.61.4'
+      react-native: 0.77.1
       react-native-web: '>=0.13.4'
 
   '@sideway/address@4.1.5':
@@ -2578,6 +2581,9 @@ packages:
 
   '@types/keyv@3.1.4':
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
+
+  '@types/lodash.debounce@4.0.9':
+    resolution: {integrity: sha512-Ma5JcgTREwpLRwMM+XwBR7DaWe96nC38uCBDFKZWbNKD+osjVzdpnUSwBcqCptrp16sSOLBAUb50Car5I0TCsQ==}
 
   '@types/lodash.get@4.4.9':
     resolution: {integrity: sha512-J5dvW98sxmGnamqf+/aLP87PYXyrha9xIgc2ZlHl6OHMFR2Ejdxep50QfU0abO1+CH6+ugx+8wEUN1toImAinA==}
@@ -6544,8 +6550,8 @@ packages:
   react-native-gesture-handler@2.20.2:
     resolution: {integrity: sha512-HqzFpFczV4qCnwKlvSAvpzEXisL+Z9fsR08YV5LfJDkzuArMhBu2sOoSPUF/K62PCoAb+ObGlTC83TKHfUd0vg==}
     peerDependencies:
-      react: '*'
-      react-native: '*'
+      react: ^18.3.1
+      react-native: 0.76.9
 
   react-native-gesture-handler@2.22.1:
     resolution: {integrity: sha512-E0C9D+Ia2UZYevoSV9rTKjhFWEVdR/3l4Z3TUoQrI/wewgzDlmJOrYvGW5aMlPUuQF2vHQOdFfAWhVEqFu4tWw==}
@@ -7428,10 +7434,6 @@ packages:
   ts-dedent@2.2.0:
     resolution: {integrity: sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==}
     engines: {node: '>=6.10'}
-
-  ts-deepmerge@3.0.0:
-    resolution: {integrity: sha512-gpjFrde/nE3jp7l5cJTDpyhdbGdAIO/AkNjaz4V9odnopdLd9NVrQcBDEBiE/ucMV9dmNOcdgzOVwS7U6SsBhA==}
-    engines: {node: '>=14'}
 
   ts-deepmerge@4.0.0:
     resolution: {integrity: sha512-IrjjAwfM/J6ajWv5wDRZBdpVaTmuONJN1vC85mXlWVPXKelouLFiqsjR7m0h245qY6zZEtcDtcOTc4Rozgg1TQ==}
@@ -8941,13 +8943,6 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
-
-  '@bambooapp/bamboo-atoms@0.0.35':
-    dependencies:
-      eventemitter2: 6.4.9
-      lodash.debounce: 4.0.8
-      lodash.isnil: 4.0.0
-      ts-deepmerge: 3.0.0
 
   '@bambooapp/virtualized-list@0.0.7': {}
 
@@ -11039,6 +11034,10 @@ snapshots:
   '@types/keyv@3.1.4':
     dependencies:
       '@types/node': 20.17.28
+
+  '@types/lodash.debounce@4.0.9':
+    dependencies:
+      '@types/lodash': 4.17.13
 
   '@types/lodash.get@4.4.9':
     dependencies:
@@ -16942,8 +16941,6 @@ snapshots:
   tree-kill@1.2.2: {}
 
   ts-dedent@2.2.0: {}
-
-  ts-deepmerge@3.0.0: {}
 
   ts-deepmerge@4.0.0: {}
 

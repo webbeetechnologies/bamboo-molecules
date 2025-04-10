@@ -33,7 +33,6 @@ const navigationRailItemStylesDefault = StyleSheet.create(theme => ({
         ...(Platform.OS === 'web' ? { cursor: 'pointer' } : {}),
         alignItems: 'center',
         marginBottom: theme.spacings['3'],
-        iconSize: 24,
     },
 
     iconContainer: {

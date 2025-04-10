@@ -1,21 +1,21 @@
+import color from 'color';
 import { forwardRef, memo, useImperativeHandle, useMemo } from 'react';
 import {
-    type StyleProp,
     type GestureResponderEvent,
+    type StyleProp,
     type TextStyle,
-    type ViewStyle,
     type ViewProps,
+    type ViewStyle,
 } from 'react-native';
-import color from 'color';
 
 import { useActionState } from '../../hooks/useActionState';
-import CrossFadeIcon from '../Icon/CrossFadeIcon';
-import { Icon, type IconType } from '../Icon';
-import { TouchableRipple, type TouchableRippleProps } from '../TouchableRipple';
-import { IconButtonVariant } from './types';
 import { resolveStateVariant } from '../../utils';
-import { Surface } from '../Surface';
+import { type IconType, Icon } from '../Icon';
+import CrossFadeIcon from '../Icon/CrossFadeIcon';
 import { StateLayer } from '../StateLayer';
+import { Surface } from '../Surface';
+import { type TouchableRippleProps, TouchableRipple } from '../TouchableRipple';
+import { IconButtonVariant } from './types';
 import { defaultStyles } from './utils';
 
 const whiteSpace = 12;
@@ -109,7 +109,7 @@ const IconButton = (
             hovered,
             selected,
         }),
-        size: `${size}`,
+        size: typeof size === 'string' && size ? size : undefined,
     });
 
     const {
@@ -124,10 +124,18 @@ const IconButton = (
     } = useMemo(() => {
         const iconSizeInNum = typeof size === 'number' && size ? size : undefined;
 
+        let _rippleColor: string | undefined;
+
+        try {
+            _rippleColor = color(_iconColor).alpha(0.12).rgb().string();
+        } catch (e) {
+            _rippleColor = undefined;
+        }
+
         return {
             iconColor: _iconColor,
             iconSize: iconSizeInNum,
-            rippleColor: color(_iconColor).alpha(0.12).rgb().string(),
+            rippleColor: _rippleColor,
             innerContainerStyle: [defaultStyles.innerContainer, innerContainerStyleProp],
             containerStyle: [
                 iconSizeInNum

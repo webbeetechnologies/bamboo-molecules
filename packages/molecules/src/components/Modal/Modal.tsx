@@ -56,6 +56,7 @@ export type Props = ViewProps & {
      * Use this prop to change the default wrapper style or to override safe area insets with marginTop and marginBottom.
      */
     style?: StyleProp<ViewStyle>;
+    backdropStyle?: StyleProp<ViewStyle>;
     // /**
     //  * Duration of the animations in the modal
     //  * @default 220
@@ -82,6 +83,7 @@ function Modal(
         style,
         // animationDuration = DEFAULT_DURATION,
         testID = 'modal',
+        backdropStyle: backdropStyleProp,
         ...rest
     }: Props,
     ref: any,
@@ -109,6 +111,7 @@ function Modal(
                     // TODO - find out why this is happening(it isn't happening on contentStyle)
                     opacity: 1,
                 },
+                backdropStyleProp,
             ],
             contentContainerStyle: [
                 StyleSheet.absoluteFill,
@@ -118,7 +121,7 @@ function Modal(
             contentStyle: [modalContent, { width: dimensions.width, opacity: 1 }],
             style: [modalStyles.root, style],
         };
-    }, [contentContainerStyleProp, dimensions.width, style]);
+    }, [backdropStyleProp, contentContainerStyleProp, dimensions.width, style]);
 
     const handleBack = useCallback(() => {
         if (dismissible) {

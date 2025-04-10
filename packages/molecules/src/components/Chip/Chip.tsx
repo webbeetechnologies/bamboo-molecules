@@ -15,9 +15,9 @@ import {
     type TextProps,
     type ViewProps,
     View,
-    Text,
     StyleProp,
 } from 'react-native';
+import { Text } from '../Text';
 
 import type { MD3Elevation } from '../../types/theme';
 import { useActionState } from '../../hooks';

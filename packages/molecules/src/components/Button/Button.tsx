@@ -7,16 +7,9 @@ import {
     PropsWithoutRef,
     useImperativeHandle,
 } from 'react';
-import {
-    View,
-    Text,
-    type ViewStyle,
-    type StyleProp,
-    type TextStyle,
-    type ViewProps,
-} from 'react-native';
+import { View, type ViewStyle, type StyleProp, type TextStyle, type ViewProps } from 'react-native';
 import setColor from 'color';
-import 'react-native-unistyles';
+import { Text } from '../Text';
 
 import { Icon, type IconType } from '../Icon';
 import { Surface, type SurfaceProps } from '../Surface';
@@ -241,11 +234,20 @@ const Button = (
 
         const { color: labelColor, fontSize: labelFontSize } = labelStyle ?? {};
 
+        // TODO - remove this workaround
+        let _rippleColor: string | undefined;
+
+        try {
+            _rippleColor = setColor(_textColor).alpha(0.12).rgb().string();
+        } catch (e) {
+            _rippleColor = undefined;
+        }
+
         return {
             customLabelColor: labelColor,
             customLabelSize: labelFontSize,
             textColor: _textColor,
-            rippleColor: setColor(_textColor).alpha(0.12).rgb().string(),
+            rippleColor: _rippleColor,
             surfaceStyle: [button, { backgroundColor, borderRadius }, _buttonStyles, styleProp],
 
             iconStyle: _iconStyle as unknown as ViewStyle,
@@ -276,8 +278,6 @@ const Button = (
         stateLayerProps?.style,
         styleProp,
     ]);
-
-    console.log({ defaultStyles, textStyle, surfaceStyle });
 
     const elevation = useMemo(
         () => (elevationProp === undefined ? elevationLevel ?? 0 : elevationProp),

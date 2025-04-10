@@ -1,4 +1,4 @@
-import { useTheme } from './index';
+import { useTheme } from './useTheme';
 import { useMemo } from 'react';
 
 const useBreakpoints = () => {

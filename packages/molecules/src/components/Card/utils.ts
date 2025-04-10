@@ -1,6 +1,5 @@
 import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
-import { CardVariant } from './types';
 
 export type States = 'hovered' | 'focused' | 'pressed' | 'disabled';
 export type CardTypographyVariant = 'headline' | 'subhead' | 'text';
@@ -12,106 +11,21 @@ const cardStylesDefault = StyleSheet.create(theme => ({
 
         variants: {
             variant: {
-                elevated: {
-                    ...({ elevationLevel: theme.elevations.level1 } as any),
-                },
+                elevated: {},
                 filled: {},
                 outlined: {},
+                undefined: {},
             },
         },
         compoundVariants: [
             {
-                variant: 'elevated',
-                state: 'disabled',
-                styles: {},
-            },
-            {
-                variant: 'elevated',
-                state: 'hovered',
-                styles: {
-                    ...({ elevationLevel: theme.elevations.level2 } as any),
-                },
-            },
-            {
-                variant: 'filled',
-                state: 'disabled',
-                styles: {},
-            },
-            {
-                variant: 'filled',
-                state: 'hovered',
-                styles: {
-                    ...({ elevationLevel: theme.elevations.level1 } as any),
-                },
-            },
-            {
                 variant: 'outlined',
                 state: 'disabled',
                 styles: {
                     opacity: 0.12,
-                },
-            },
-            {
-                variant: 'outlined',
-                state: 'hovered',
-                styles: {
-                    ...({ elevationLevel: theme.elevations.level1 } as any),
                 },
             },
         ],
-    },
-    compoundVariantStyles: (variant: CardVariant, state: States) => {
-        if (variant === 'elevated' && state === 'disabled') {
-            return {
-                root: {},
-                container: {
-                    backgroundColor: theme.colors.surfaceVariant,
-                    opacity: 0.38,
-                },
-            } as any;
-        }
-        if (variant === 'elevated' && state === 'hovered') {
-            return {
-                root: {
-                    ...({ elevationLevel: theme.elevations.level2 } as any),
-                },
-            };
-        }
-
-        if (variant === 'filled' && state === 'disabled') {
-            return {
-                root: {},
-                container: {
-                    backgroundColor: theme.colors.surface,
-                    opacity: 0.38,
-                },
-            } as any;
-        }
-        if (variant === 'filled' && state === 'hovered') {
-            return {
-                root: {
-                    ...({ elevationLevel: theme.elevations.level1 } as any),
-                },
-            };
-        }
-
-        if (variant === 'outlined' && state === 'disabled') {
-            return {
-                root: {
-                    opacity: 0.12,
-                },
-            } as any;
-        }
-        if (variant === 'outlined' && state === 'hovered') {
-            return {
-                root: {
-                    ...({ elevationLevel: theme.elevations.level1 } as any),
-                },
-            };
-        }
-        return {
-            root: {},
-        };
     },
     container: {
         borderRadius: theme.shapes.corner.medium,

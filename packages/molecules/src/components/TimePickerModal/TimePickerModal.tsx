@@ -1,5 +1,6 @@
 import { memo, useState, useCallback, useEffect, useMemo } from 'react';
-import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, View } from 'react-native';
+import { Text } from '../Text';
 
 import {
     clockTypes,

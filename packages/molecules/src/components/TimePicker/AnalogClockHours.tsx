@@ -1,8 +1,9 @@
 import { memo, useContext, useMemo } from 'react';
-import { Text, View, type TextProps, type ViewProps } from 'react-native';
+import { View, type TextProps, type ViewProps } from 'react-native';
+import { Text } from '../Text';
 
 import { circleSize } from './timeUtils';
-import { DisplayModeContext } from './TimePicker';
+import { DisplayModeContext } from './DisplayModeContext';
 import { timePickerClockHoursStyles } from './utils';
 
 const outerRange = getHourNumbers(false, circleSize, 12, 12, 1);

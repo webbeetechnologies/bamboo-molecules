@@ -1,5 +1,5 @@
 import { memo, forwardRef, cloneElement, Children, useMemo } from 'react';
-import { StyleSheet, View, ViewStyle, type ViewProps } from 'react-native';
+import { View, ViewStyle, type ViewProps } from 'react-native';
 
 import { isNil } from '../../utils';
 import { elementGroupStyles } from './utils';
@@ -122,7 +122,7 @@ export const ElementGroup = (
 
             return cloneElement(child, {
                 ...child.props,
-                style: [StyleSheet.flatten(child.props.style || []), borderRadiusStyles[prop]],
+                style: [child.props.style, borderRadiusStyles[prop]].flat(),
             });
         });
     }, [borderRadius, borderRadiuses, children, orientation]);

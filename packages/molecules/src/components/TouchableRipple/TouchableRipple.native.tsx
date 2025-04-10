@@ -11,6 +11,7 @@ import {
     View,
 } from 'react-native';
 import { touchableRippleStyles } from './utils';
+import { withUnistyles } from 'react-native-unistyles';
 
 const ANDROID_VERSION_LOLLIPOP = 21;
 const ANDROID_VERSION_PIE = 28;
@@ -44,17 +45,10 @@ const TouchableRipple = (
     const componentStyles = touchableRippleStyles;
 
     const { rippleColor, underlayColor, containerStyle } = useMemo(() => {
-        const { rippleColor: defaultRippleColor, ...touchableRippleStyles } = StyleSheet.flatten([
-            componentStyles.root,
-            style,
-        ]);
-
-        const calculatedRippleColor = rippleColorProp || defaultRippleColor;
-
         return {
-            rippleColor: calculatedRippleColor,
-            underlayColor: underlayColorProp || calculatedRippleColor,
-            containerStyle: [borderless && styles.borderless, touchableRippleStyles],
+            rippleColor: rippleColorProp,
+            underlayColor: underlayColorProp || rippleColorProp,
+            containerStyle: [borderless && styles.borderless, componentStyles.root, style],
         };
     }, [borderless, componentStyles.root, rippleColorProp, style, underlayColorProp]);
 
@@ -73,7 +67,7 @@ const TouchableRipple = (
                 background={
                     background != null
                         ? background
-                        : TouchableNativeFeedback.Ripple(rippleColor, borderless)
+                        : TouchableNativeFeedback.Ripple(rippleColor!, borderless)
                 }>
                 <View style={containerStyle}>{React.Children.only(children)}</View>
             </TouchableNativeFeedback>
@@ -101,4 +95,8 @@ const styles = StyleSheet.create({
 TouchableRipple.supported =
     Platform.OS === 'android' && Platform.Version >= ANDROID_VERSION_LOLLIPOP;
 
-export default memo(forwardRef(TouchableRipple));
+export default memo(
+    withUnistyles(forwardRef(TouchableRipple), theme => ({
+        rippleColor: theme.colors.onSurfaceRipple,
+    })),
+);

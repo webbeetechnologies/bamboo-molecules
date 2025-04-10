@@ -13,11 +13,11 @@ import {
     getIndexFromVerticalOffset,
     getMonthHeight,
     getVerticalMonthsOffset,
-    montHeaderHeight,
 } from './Month';
 import { beginOffset, estimatedMonthHeight, totalMonths } from './dateUtils';
 import AutoSizer from './AutoSizer';
 import type { SwiperProps } from './SwiperUtils';
+import { montHeaderHeight } from './utils';
 
 function getVisibleArray(
     i: number,

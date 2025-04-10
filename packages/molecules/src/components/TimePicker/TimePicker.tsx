@@ -1,12 +1,4 @@
-import {
-    memo,
-    Dispatch,
-    SetStateAction,
-    createContext,
-    useState,
-    useCallback,
-    useMemo,
-} from 'react';
+import { memo, useState, useCallback, useMemo } from 'react';
 
 import { useControlledValue } from '../../hooks';
 import { format, parse } from '../../utils';
@@ -15,11 +7,7 @@ import AnalogClock from './AnalogClock';
 import TimeInputs from './TimeInputs';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { timePickerStyles } from './utils';
-
-export const DisplayModeContext = createContext<{
-    mode: 'AM' | 'PM' | undefined;
-    setMode: Dispatch<SetStateAction<'AM' | 'PM' | undefined>>;
-}>({ mode: 'AM', setMode: () => {} });
+import { DisplayModeContext } from './DisplayModeContext';
 
 type onChangeFunc = ({
     hours,

@@ -1,0 +1,12 @@
+{
+    "name": "@bambooapp/bamboo-molecules/hooks",
+    "version": "1.0.0",
+    "description": "",
+    "main": "../lib/commonjs/hooks/index.js",
+    "module": "../lib/module/hooks/index.js",
+    "types": "../lib/typescript/hooks/index.d.ts",
+    "author": "Thet Aung <thetaung.dev@gmail.com>",
+    "license": "MIT",
+    "sideEffects": false
+  }
+  

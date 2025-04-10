@@ -1,5 +1,7 @@
 import { memo, useContext } from 'react';
-import { Text, type TextProps } from 'react-native';
+import { type TextProps } from 'react-native';
+import { Text } from '../Text';
+
 import { ListItemContext } from './ListItem';
 import { resolveStateVariant } from '../../utils';
 import { listItemDescriptionStyles } from './utils';

@@ -1,7 +1,6 @@
 import { forwardRef, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import {
     Image,
-    Text,
     View,
     type ImageErrorEventData,
     type ImageProps,
@@ -9,6 +8,7 @@ import {
     type TextProps,
     type ViewProps,
 } from 'react-native';
+import { Text } from '../Text';
 
 import { Icon, type IconProps } from '../Icon';
 import { avatarStyles } from './utils';
@@ -56,22 +56,24 @@ const Avatar = (
     }: Props,
     ref: any,
 ) => {
-    const componentStyles = useMemo(
-        () => [avatarStyles.root, color ? { backgroundColor: color } : {}, style],
-        [color, style],
-    );
-
-    const { containerStyle, iconStyle, imageStyle, labelStyle } = useMemo(() => {
+    const { iconStyle, imageStyle, labelStyle } = useMemo(() => {
         return {
-            containerStyle: [componentStyles, { width: +size, height: +size }],
             imageStyle: [avatarStyles.image, imageProps?.style],
             iconStyle: [avatarStyles.icon, iconProps?.style],
             labelStyle: [avatarStyles.label, { fontSize: +size * 0.5 }, labelProps?.style],
         };
-    }, [componentStyles, iconProps?.style, imageProps?.style, labelProps?.style, size]);
+    }, [iconProps?.style, imageProps?.style, labelProps?.style, size]);
 
     return (
-        <View ref={ref} {...rest} style={containerStyle}>
+        <View
+            ref={ref}
+            {...rest}
+            style={[
+                avatarStyles.root,
+                color ? { backgroundColor: color } : {},
+                style,
+                { width: +size, height: +size },
+            ]}>
             <AvatarInner
                 source={source}
                 imageProps={imageProps}

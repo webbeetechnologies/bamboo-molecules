@@ -1,7 +1,7 @@
 import { useRef, useEffect, memo, useMemo, useCallback } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { getYearRange, resolveStateVariant } from '../../utils';
-import { useDatePickerStore } from './DatePickerInlineBase';
+import { useDatePickerStore } from './DatePickerContext';
 import { setYear } from 'date-fns';
 import { HorizontalDivider } from '../HorizontalDivider';
 import { datePickerYearItemStyles, datePickerYearPickerStyles } from './utils';

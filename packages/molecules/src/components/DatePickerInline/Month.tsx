@@ -2,7 +2,6 @@ import { useMemo, memo, useCallback } from 'react';
 
 import { format } from '../../utils';
 import {
-    daySize,
     getGridCount,
     gridCounts,
     startAtIndex,
@@ -14,12 +13,21 @@ import {
     addMonths,
 } from './dateUtils';
 import { getCalendarHeaderHeight } from './DatePickerInlineHeader';
-import { dayNamesHeight } from './DayNames';
 import type { MonthMultiProps, MonthRangeProps, MonthSingleProps } from './types';
 import Week from './Week';
-import { useDatePickerStoreValue } from './DatePickerInlineBase';
-import { Text, View } from 'react-native';
-import { datePickerMonthStyles } from './utils';
+import { useDatePickerStoreValue } from './DatePickerContext';
+import { View } from 'react-native';
+import { Text } from '../Text';
+
+import {
+    datePickerMonthStyles,
+    monthHeaderSingleMarginTop,
+    weekSize,
+    montHeaderHeight,
+    monthHeaderSingleMarginBottom,
+    monthHeaderSingleHeight,
+    dayNamesHeight,
+} from './utils';
 
 export type Props = MonthSingleProps | MonthRangeProps | MonthMultiProps;
 
@@ -145,14 +153,6 @@ function Month(props: MonthSingleProps | MonthRangeProps | MonthMultiProps) {
         </View>
     );
 }
-
-// TODO make it flexible
-export const weekMargin = 6;
-export const weekSize = daySize + weekMargin;
-export const montHeaderHeight = 56;
-export const monthHeaderSingleMarginTop = 4;
-export const monthHeaderSingleMarginBottom = 8 + 22 + 12;
-export const monthHeaderSingleHeight = monthHeaderSingleMarginTop + monthHeaderSingleMarginBottom;
 
 const monthGrid = (index: number) => {
     return Array(getGridCount(index))

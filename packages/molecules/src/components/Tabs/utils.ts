@@ -42,7 +42,6 @@ const tabsItemStylesDefault = StyleSheet.create(theme => ({
         paddingHorizontal: theme.spacings['4'],
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: 48,
     },
 
     contentsContainer: {

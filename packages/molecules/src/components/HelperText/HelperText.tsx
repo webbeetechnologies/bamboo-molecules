@@ -1,4 +1,4 @@
-import { useRef, useEffect, ReactNode, useMemo, useState, useCallback } from 'react';
+import { useRef, useEffect, ReactNode, useMemo, useState, useCallback, memo } from 'react';
 import { Animated } from 'react-native';
 import type { LayoutChangeEvent, StyleProp, TextStyle, TextProps } from 'react-native';
 import { styles } from './utils';
@@ -69,19 +69,16 @@ const HelperText = ({
     styles.useVariants({
         variant,
     });
-    const componentStyles = useMemo(() => [styles.root, styleProp], [styleProp]);
-
     const { current: shown } = useRef<Animated.Value>(new Animated.Value(visible ? 1 : 0));
 
     const [textHeight, setTextHeight] = useState(0);
 
-    const { scale, textStyle } = useMemo(() => {
+    const { textStyle } = useMemo(() => {
         // @ts-ignore
-        const { animationScale, ...style } = componentStyles;
 
         return {
-            scale: animationScale,
             textStyle: [
+                styles.root,
                 {
                     opacity: shown,
                     transform:
@@ -96,28 +93,28 @@ const HelperText = ({
                               ]
                             : [],
                 },
-                style,
+                styleProp,
             ],
         };
-    }, [componentStyles, shown, textHeight, variant, visible]);
+    }, [shown, styleProp, textHeight, variant, visible]);
 
     useEffect(() => {
         if (visible) {
             // show text
             Animated.timing(shown, {
                 toValue: 1,
-                duration: 150 * scale,
+                duration: 150,
                 useNativeDriver: true,
             }).start();
         } else {
             // hide text
             Animated.timing(shown, {
                 toValue: 0,
-                duration: 180 * scale,
+                duration: 180,
                 useNativeDriver: true,
             }).start();
         }
-    }, [visible, scale, shown]);
+    }, [visible, shown]);
 
     const handleTextLayout = useCallback(
         (e: LayoutChangeEvent) => {
@@ -138,4 +135,4 @@ const HelperText = ({
     );
 };
 
-export default HelperText;
+export default memo(HelperText);

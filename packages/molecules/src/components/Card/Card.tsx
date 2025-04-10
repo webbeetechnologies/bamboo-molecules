@@ -1,6 +1,6 @@
 import { forwardRef, memo, useMemo } from 'react';
-import { ViewStyle, StyleSheet } from 'react-native';
-import { CallbackActionState, withActionState } from '../../hocs';
+import { ViewStyle } from 'react-native';
+import { CallbackActionState, withActionState } from '../../hocs/withActionState';
 import type { MD3Elevation } from '../../types/theme';
 import { TouchableRipple, type TouchableRippleProps } from '../TouchableRipple';
 import { CardVariant } from './types';
@@ -44,32 +44,24 @@ const Card = (
         state,
     });
 
-    const styles = useMemo(() => {
-        const { elevationLevel, ...restStles } = StyleSheet.flatten([
-            // @ts-ignore
-            cardStyles.root,
-            style,
-        ]);
+    const elevationLevel = variant === 'elevated' ? (hovered ? 2 : 1) : hovered ? 1 : 0;
 
+    const styles = useMemo(() => {
         return {
-            container: [cardStyles.container, restStles],
+            container: [cardStyles.container, cardStyles.root, style],
             innerContainer: [cardStyles.innerContainer, touchableContainerStyle],
-            elevationLevel,
         };
     }, [style, touchableContainerStyle]);
 
-    const elevation = useMemo(
-        () => (elevationProp === undefined ? styles.elevationLevel ?? 0 : elevationProp),
-        [elevationProp, styles.elevationLevel],
-    );
+    const elevation = elevationProp === undefined ? elevationLevel ?? 0 : elevationProp;
 
     return (
         <Surface
             style={styles.container}
             elevation={
-                !(disableOnHoverElevation && hovered)
-                    ? (elevationProp || 0) + styles.elevationLevel
-                    : elevation
+                (!(disableOnHoverElevation && hovered)
+                    ? (elevationProp || 0) + elevationLevel
+                    : elevation) as MD3Elevation
             }>
             <TouchableRipple style={styles.innerContainer} {...rest} disabled={disabled} ref={ref}>
                 <>{children}</>

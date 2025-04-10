@@ -1,9 +1,9 @@
-import { ComponentPropsWithRef, ReactNode, memo, useMemo } from 'react';
+import { ComponentPropsWithRef, ReactNode, forwardRef, memo, useMemo } from 'react';
 import { Animated, View, StyleProp, ViewStyle } from 'react-native';
 
 import type { MD3Elevation } from '../../types/theme';
 import { defaultStyles, getStyleForShadowLayer, extractProperties } from './utils';
-import { useUnistyles } from 'react-native-unistyles';
+import { useUnistyles, withUnistyles } from 'react-native-unistyles';
 import { BackgroundContextWrapper } from './BackgroundContextWrapper';
 
 export type Props = ComponentPropsWithRef<typeof View> & {
@@ -11,6 +11,7 @@ export type Props = ComponentPropsWithRef<typeof View> & {
      * Content of the `Surface`.
      */
     children: ReactNode;
+    backgroundColor?: string;
     style?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>;
     /**
      * @supported Available in v5.x with theme version 3
@@ -69,7 +70,7 @@ export type Props = ComponentPropsWithRef<typeof View> & {
  * });
  * ```
  */
-const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) => {
+const Surface = ({ elevation = 1, style, children, testID, ...props }: Props, ref: any) => {
     const { theme } = useUnistyles();
     const backgroundColor = (() => {
         // @ts-ignore
@@ -108,7 +109,7 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
 
     return (
         <BackgroundContextWrapper backgroundColor={surfaceBackground}>
-            <View style={layer0Style}>
+            <View ref={ref} style={layer0Style}>
                 <View style={layer1Style}>
                     <View {...props} testID={testID} style={sharedStyle}>
                         {children}
@@ -119,4 +120,8 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props) =>
     );
 };
 
-export default memo(Surface);
+export default memo(
+    withUnistyles(forwardRef(Surface), theme => ({
+        backgroundColor: theme.colors.surface,
+    })),
+);

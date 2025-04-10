@@ -1,5 +1,7 @@
 import { FC, memo, useMemo } from 'react';
-import { type TextStyle, type TextProps, Text } from 'react-native';
+import { type TextStyle, type TextProps } from 'react-native';
+import { Text } from '../Text';
+
 import { type IconType, type IconProps, Icon } from '../Icon';
 import { tabsLabelStyles } from './utils';
 

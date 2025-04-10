@@ -1,11 +1,16 @@
 import { useRef, memo, useMemo, useCallback } from 'react';
-import { FlatList, Text, View, ViewStyle } from 'react-native';
+import { FlatList, View, ViewStyle } from 'react-native';
+import { Text } from '../Text';
+
 import { range } from '../../utils/dateTimePicker';
-import { useDatePickerStore, useDatePickerStoreValue } from './DatePickerInlineBase';
+import { useDatePickerStore, useDatePickerStoreValue } from './DatePickerContext';
 import { format, setMonth } from 'date-fns';
 import { resolveStateVariant } from '../../utils';
 import { HorizontalDivider } from '../HorizontalDivider';
-import { datePickerDockedMonthItemStyles, datePickerMonthPickerStyles } from '../DatePickerDocked';
+import {
+    datePickerDockedMonthItemStyles,
+    datePickerMonthPickerStyles,
+} from '../DatePickerDocked/utils';
 import { ListItem } from '../ListItem/';
 import { Icon } from '../Icon';
 import { StyleSheet } from 'react-native-unistyles';

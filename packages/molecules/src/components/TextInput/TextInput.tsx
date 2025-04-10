@@ -1,46 +1,45 @@
 import React, {
-    useRef,
     forwardRef,
-    useState,
-    useEffect,
+    memo,
+    MutableRefObject,
+    PropsWithoutRef,
     ReactNode,
     useCallback,
-    useMemo,
-    memo,
-    PropsWithoutRef,
-    useImperativeHandle,
-    MutableRefObject,
     useContext,
+    useEffect,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
 } from 'react';
+import type {
+    LayoutChangeEvent,
+    StyleProp,
+    TextInputProps,
+    TextStyle,
+    ViewProps,
+    ViewStyle,
+} from 'react-native';
 import {
     Animated,
-    Platform,
-    View,
     I18nManager,
+    Platform,
     StyleSheet,
     TextInput as NativeTextInput,
-} from 'react-native';
-import type {
-    TextInputProps,
-    ViewProps,
-    StyleProp,
-    TextStyle,
-    ViewStyle,
-    LayoutChangeEvent,
+    View,
 } from 'react-native';
 
-import { normalizeBorderRadiuses, normalizeSpacings, BackgroundContext } from '../../utils';
-import InputLabel from './InputLabel';
-import { styles } from './utils';
-import { StateLayer } from '../StateLayer';
-
-import { withActionState, CallbackActionState } from '../../hocs';
+import { CallbackActionState, default as withActionState } from '../../hocs/withActionState';
 import useControlledValue from '../../hooks/useControlledValue';
 import useLatest from '../../hooks/useLatest';
 import type { WithElements } from '../../types';
-import type { RenderProps, TextInputLabelProp, TextInputSize, TextInputVariant } from './types';
+import { BackgroundContext } from '../../utils';
 import { createSyntheticEvent, resolveStateVariant } from '../../utils';
 import { HelperText } from '../HelperText';
+import { StateLayer } from '../StateLayer';
+import InputLabel from './InputLabel';
+import type { RenderProps, TextInputLabelProp, TextInputSize, TextInputVariant } from './types';
+import { styles } from './utils';
 
 const BLUR_ANIMATION_DURATION = 180;
 const FOCUS_ANIMATION_DURATION = 150;
@@ -220,7 +219,6 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             activeOutlineColor: activeOutlineColorProp,
             placeholderTextColor: placeholderTextColorProp,
             style,
-            containerStyle,
             inputContainerStyle,
             inputStyle,
             stateLayerProps = {},
@@ -462,19 +460,17 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             (I18nManager.isRTL ? 1 : -1) *
             (labelScale - 1 + labelHalfWidth - (labelScale * labelWidth) / 2);
 
-        const normalizedLeftElementMarginRight = normalizeSpacings(
-            styles.leftElement,
-            'marginRight',
-        );
+        // const normalizedLeftElementMarginRight = normalizeSpacings(
+        //     styles.leftElement,
+        //     'marginRight',
+        // );
 
         const baseLabelTranslateXOutline =
-            baseLabelTranslateX -
-            leftElementLayout.width -
-            (left ? normalizedLeftElementMarginRight : 0);
+            baseLabelTranslateX - leftElementLayout.width - (left ? 0 : 0);
 
         const backgroundColor =
             styles.container?.backgroundColor || componentStyles.backgroundColor;
-        const viableRadiuses = normalizeBorderRadiuses(componentStyles);
+        // const viableRadiuses = normalizeBorderRadiuses(componentStyles);
         const finalHeight =
             (+(componentStyles.height ?? 0) > 0 ? componentStyles.height : +labelHeight) ?? 0;
         const inputHeight =
@@ -484,7 +480,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
         const computedStyles = useMemo(
             () => ({
-                container: [styles.container, viableRadiuses],
+                container: [styles.container, {}],
                 leftElement: styles.leftElement,
                 rightElement: styles.rightElement,
                 activeIndicator: styles.activeIndicator,
@@ -557,7 +553,8 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                             styles.outline?.borderColor,
                     },
                     backgroundColor ? { backgroundColor } : {},
-                    viableRadiuses,
+                    // viableRadiuses,
+                    {},
                 ],
                 patchContainer: [
                     StyleSheet.absoluteFill,
@@ -569,7 +566,6 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                 stateLayerStyle: [styles.stateLayer, stateLayerProps?.style],
             }),
             [
-                viableRadiuses,
                 componentStyles,
                 backgroundColor,
                 variant,
@@ -595,8 +591,8 @@ const TextInput = forwardRef<TextInputHandles, Props>(
         );
 
         return (
-            <View style={containerStyle}>
-                <View style={computedStyles.container}>
+            <>
+                <View style={[computedStyles.container, style]}>
                     {variant === 'flat' && (
                         <>
                             <Animated.View
@@ -699,14 +695,14 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                     )}
                 </View>
 
-                {(supportingText || required) && (
+                {supportingText && (
                     <HelperText
                         variant={errorProp ? 'error' : 'info'}
                         style={computedStyles.supportingText}>
-                        {supportingText || '*required'}
+                        {supportingText}
                     </HelperText>
                 )}
-            </View>
+            </>
         );
     },
 );

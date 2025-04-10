@@ -1,12 +1,6 @@
 import { forwardRef, memo, useCallback, useMemo } from 'react';
-import {
-    type StyleProp,
-    StyleSheet,
-    Text,
-    type TextProps,
-    type TextStyle,
-    type ViewStyle,
-} from 'react-native';
+import { type StyleProp, type TextProps, type TextStyle, type ViewStyle } from 'react-native';
+import { Text } from '../Text';
 
 import { useControlledValue } from '../../hooks';
 import type { CheckBoxBaseProps, States } from './types';
@@ -75,24 +69,14 @@ const CheckboxItem = (
     });
 
     const { containerStyles, labelStyles, style } = useMemo(() => {
-        const { paddingVertical, paddingHorizontal, ..._style } = StyleSheet.flatten([
-            // @ts-ignore
-            styles.root,
-            styleProp,
-        ]);
-
         return {
-            containerStyles: [
-                styles.itemContainer,
-                { paddingVertical, paddingHorizontal },
-                containerStyle,
-            ],
+            containerStyles: [styles.itemContainer, containerStyle],
             labelStyles: [
                 // @ts-ignore
                 styles.label,
                 labelStyle,
             ],
-            style: _style,
+            style: [styles.root, styleProp],
         };
     }, [containerStyle, labelStyle, styleProp]);
 

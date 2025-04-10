@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { Text, View, type TextStyle } from 'react-native';
+import { View, type TextStyle } from 'react-native';
+import { Text } from '../Text';
 
 import { format } from '../../utils';
 import type { ModeType } from '../DatePickerInline';
