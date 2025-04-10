@@ -1,0 +1,12 @@
+{
+    "name": "@bambooapp/bamboo-molecules/core",
+    "version": "1.0.0",
+    "description": "",
+    "main": "../lib/commonjs/core/index.js",
+    "module": "../lib/module/core/index.js",
+    "types": "../lib/typescript/core/index.d.ts",
+    "author": "Thet Aung <thetaung.dev@gmail.com>",
+    "license": "MIT",
+    "sideEffects": false
+  }
+  
