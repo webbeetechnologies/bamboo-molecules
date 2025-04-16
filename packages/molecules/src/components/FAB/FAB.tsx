@@ -1,7 +1,6 @@
 import { forwardRef, memo, useMemo } from 'react';
 import { Text } from 'react-native';
 import type { ViewProps, TextProps, ViewStyle } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
 
 import type { MD3Elevation } from '../../types/theme';
 import { CallbackActionState, withActionState } from '../../hocs';
@@ -109,10 +108,7 @@ const FAB = (
         iconSize,
         stateLayerStyle,
     } = useMemo(() => {
-        const { iconSize: _iconSize, ...restStyle } = StyleSheet.flatten([
-            fabStyles.root,
-            style,
-        ]) as any;
+        const { iconSize: _iconSize, ...restStyle } = fabStyles.root;
 
         return {
             containerStyle: [restStyle, style],

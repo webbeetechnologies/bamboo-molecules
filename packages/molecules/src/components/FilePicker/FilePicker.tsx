@@ -52,7 +52,6 @@ const FilePicker = (
         multiple,
         transitionStyle,
         mode,
-        copyTo,
         presentationStyle,
         value,
         onChange = () => {},
@@ -66,7 +65,6 @@ const FilePicker = (
 
     const { openFilePicker } = useFilePicker({
         type,
-        copyTo,
         mode,
         multiple,
         transitionStyle,

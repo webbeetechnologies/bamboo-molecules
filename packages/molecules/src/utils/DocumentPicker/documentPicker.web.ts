@@ -39,6 +39,7 @@ const getDocumentAsyncWeb = async ({
     const input = document.createElement('input');
     input.style.display = 'none';
     input.setAttribute('type', 'file');
+    // @ts-expect-error
     input.setAttribute('accept', Array.isArray(type) ? type.join(',') : type);
 
     if (multiple) {

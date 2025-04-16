@@ -26,7 +26,7 @@ const nextConfig = withExpo({
         '@react-native/assets-registry',
         'react-native-actions-sheet',
         'react-native-reanimated',
-        'react-native-document-picker',
+        '@react-native-documents/picker',
         'react-native-gesture-handler',
         'react-native-mmkv',
         'react-native-svg',

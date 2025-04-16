@@ -87,12 +87,12 @@ const RadioButtonAndroid = (
             color: checkedColor,
             uncheckedColor,
             ..._radioButtonStyles
-        } = StyleSheet.flatten([radioButtonStyles.root, style]) as any;
+        } = radioButtonStyles.root;
 
         const _color = checked ? colorProp || checkedColor : uncheckedColorProp || uncheckedColor;
 
         return {
-            containerStyles: [radioButtonStyles.container, _radioButtonStyles],
+            containerStyles: [radioButtonStyles.container, _radioButtonStyles, style],
             color: _color,
             rippleColor: setColor(_color).fade(0.32).rgb().string(),
             radioStyles: [

@@ -4,7 +4,7 @@ import setColor from 'color';
 import type { CheckBoxBaseProps, States } from './types';
 import { resolveStateVariant } from '../../utils';
 import { TouchableRipple } from '../TouchableRipple';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Icon } from '../Icon';
 import { styles } from './utils';
 
@@ -44,7 +44,7 @@ const CheckboxIOS = (
                 padding,
                 ...checkboxStyles
                 // @ts-ignore
-            } = StyleSheet.flatten([styles.root, style]);
+            } = styles.root;
 
             const _checkedColor = colorProp || color;
 
@@ -58,6 +58,7 @@ const CheckboxIOS = (
                         padding,
                     },
                     checkboxStyles,
+                    style,
                 ],
                 iconContainerStyles: { opacity: indeterminate || checked ? 1 : 0 },
             };

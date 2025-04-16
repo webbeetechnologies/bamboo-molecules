@@ -7,7 +7,7 @@ export {
     useREM,
     useScaledSize,
 } from 'react-native-web-hooks';
-export { usePortal } from '@gorhom/portal';
+// export { usePortal } from '@gorhom/portal';
 
 export { default as useColorMode } from './useColorMode';
 export { useMediaQuery } from './useMediaQuery';

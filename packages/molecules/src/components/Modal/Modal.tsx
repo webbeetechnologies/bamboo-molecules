@@ -197,6 +197,7 @@ function Modal(
             ref={ref}
             {...rest}>
             <Pressable
+                style={StyleSheet.absoluteFill}
                 accessibilityLabel={overlayAccessibilityLabel}
                 accessibilityRole="button"
                 disabled={!dismissible}

@@ -48,16 +48,12 @@ const RadioButtonIOS = (
             // removing unwanted styles
             uncheckedColor: _uncheckedColor,
             ...checkboxStyles
-        } = StyleSheet.flatten([
-            radioButtonStyles.root,
-            style,
-            colorProp ? { color: colorProp } : {},
-        ]) as any;
+        } = radioButtonStyles.root;
 
         return {
-            containerStyle: [styles.container, checkboxStyles],
+            containerStyle: [styles.container, checkboxStyles, style],
             iconContainerStyle: { opacity: checked ? 1 : 0 },
-            checkedColor: color,
+            checkedColor: colorProp || color,
             rippleColor: setColor(color).fade(0.32).rgb().string(),
         };
     }, [checked, colorProp, style]);

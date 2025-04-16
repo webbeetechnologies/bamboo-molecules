@@ -289,7 +289,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             height: 0,
         });
 
-        const timer = useRef<NodeJS.Timeout | undefined>();
+        const timer = useRef<NodeJS.Timeout | undefined>(undefined);
         const inputRefLocal = useRef<NativeTextInput>(null);
 
         useImperativeHandle(ref, () => inputRefLocal.current!);
@@ -445,11 +445,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             };
         }, [onBlurRef]);
 
-        const componentStyles = useMemo(
-            // @ts-ignore
-            () => StyleSheet.flatten([styles.root, style]) as TextStyle,
-            [style],
-        );
+        const componentStyles = styles.root;
 
         const labelWidth = parentState.labelLayout.width;
         const labelHeight = parentState.labelLayout.height;
@@ -480,7 +476,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
         const computedStyles = useMemo(
             () => ({
-                container: [styles.container, {}],
+                container: styles.container,
                 leftElement: styles.leftElement,
                 rightElement: styles.rightElement,
                 activeIndicator: styles.activeIndicator,

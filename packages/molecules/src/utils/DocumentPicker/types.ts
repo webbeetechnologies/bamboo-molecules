@@ -1,14 +1,9 @@
 import type {
     DocumentPickerOptions as RNDocumentPickerOptions,
     DocumentPickerResponse,
-} from 'react-native-document-picker';
+} from '@react-native-documents/picker';
 
-type MobilePlatform = 'android' | 'ios';
-
-export type DocumentPickerOptions = Omit<
-    RNDocumentPickerOptions<MobilePlatform>,
-    'allowMultiSelection'
-> & {
+export type DocumentPickerOptions = Omit<RNDocumentPickerOptions, 'allowMultiSelection'> & {
     /**
      * Allows multiple files to be selected from the system UI.
      * @default false

@@ -1,6 +1,8 @@
 import { getRegisteredComponentWithFallback, registerMoleculesComponents } from '../../core';
 import DropdownListDefault from './DropdownList';
 
+export { default as DropdownListDefault } from './DropdownList';
+
 registerMoleculesComponents({
     DropdownList: DropdownListDefault,
 });

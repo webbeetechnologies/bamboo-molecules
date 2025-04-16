@@ -1,17 +1,18 @@
 import React, { forwardRef, memo, useMemo } from 'react';
 import {
     BackgroundPropType,
-    StyleProp,
     Platform,
-    TouchableHighlight,
+    Pressable,
+    StyleProp,
+    StyleSheet,
     TouchableNativeFeedback,
     TouchableWithoutFeedback,
-    ViewStyle,
-    StyleSheet,
     View,
+    ViewStyle,
 } from 'react-native';
-import { touchableRippleStyles } from './utils';
 import { withUnistyles } from 'react-native-unistyles';
+
+import { touchableRippleStyles } from './utils';
 
 const ANDROID_VERSION_LOLLIPOP = 21;
 const ANDROID_VERSION_PIE = 28;
@@ -75,14 +76,16 @@ const TouchableRipple = (
     }
 
     return (
-        <TouchableHighlight
+        <Pressable
             {...rest}
             ref={ref}
             disabled={disabled}
-            style={containerStyle}
-            underlayColor={underlayColor}>
+            style={({ pressed }) => [
+                containerStyle,
+                pressed && { backgroundColor: underlayColor },
+            ]}>
             {React.Children.only(children)}
-        </TouchableHighlight>
+        </Pressable>
     );
 };
 
