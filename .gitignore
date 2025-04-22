@@ -64,7 +64,6 @@ node_modules
 
 # personal
 .env
-.npmrc
 
 #storybook
 build-storybook.log
