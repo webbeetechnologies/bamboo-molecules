@@ -1,40 +1,32 @@
 'use client';
 
 import { StyleSheet } from 'react-native-unistyles';
-// import { Button } from '@bambooapp/bamboo-molecules/src/components/Button';
-import dynamic from 'next/dynamic';
 
-const ButtonComponent = dynamic(
-    () => import('@bambooapp/bamboo-molecules/src/components/Button/Button'),
-    {
-        ssr: false,
-    },
-);
-// import { TextInput } from '@bambooapp/bamboo-molecules/src/components/TextInput';
-// import { ActivityIndicator } from '@bambooapp/bamboo-molecules/src/components/ActivityIndicator';
-// import Checkbox from '@bambooapp/bamboo-molecules/src/components/Checkbox/Checkbox';
 import { View } from 'react-native';
-// import { TestComponent } from './TestComponent';
+
+import dynamic from 'next/dynamic';
+import { PortalProvider } from '@bambooapp/bamboo-molecules/core';
+
+const TestComponent = dynamic(() => import('./TestComponent'), {
+    ssr: false,
+});
 
 const stylesC = StyleSheet.create(() => ({
     container: {
         // backgroundColor: theme.colors.surfaceVariant,
         alignItems: 'flex-start',
+        paddingTop: 20,
     },
 }));
 
 export default function Home() {
     return (
         <div>
-            <View style={stylesC.container}>
-                {/* <ActivityIndicator /> */}
-                {/* <Checkbox /> */}
-                <ButtonComponent variant="contained" onPress={() => {}}>
-                    Hello
-                </ButtonComponent>
-                {/* <TextInput label="Input" variant="outlined" /> */}
-            </View>
-            {/* <TestComponent /> */}
+            <PortalProvider>
+                <View style={stylesC.container}>
+                    <TestComponent />
+                </View>
+            </PortalProvider>
         </div>
     );
 }

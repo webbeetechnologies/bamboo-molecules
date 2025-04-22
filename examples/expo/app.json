@@ -34,7 +34,10 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-font",
+      "react-native-edge-to-edge",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

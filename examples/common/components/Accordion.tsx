@@ -3,8 +3,8 @@ import {
     AccordionItem,
     AccordionProps,
     AccordionHeaderElementProps,
-} from '@bambooapp/bamboo-molecules/src/components/Accordion';
-import { Icon } from '@bambooapp/bamboo-molecules/src/components/Icon';
+} from '@bambooapp/bamboo-molecules/components/Accordion';
+import { Icon } from '@bambooapp/bamboo-molecules/components/Icon';
 import { useCallback, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 

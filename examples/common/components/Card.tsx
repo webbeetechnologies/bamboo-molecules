@@ -1,6 +1,6 @@
-import { type CardProps, Card } from '@bambooapp/bamboo-molecules/src/components/Card';
-import { IconButton } from '@bambooapp/bamboo-molecules/src/components/IconButton';
-import { Button } from '@bambooapp/bamboo-molecules/src/components/Button';
+import { type CardProps, Card } from '@bambooapp/bamboo-molecules/components/Card';
+import { IconButton } from '@bambooapp/bamboo-molecules/components/IconButton';
+import { Button } from '@bambooapp/bamboo-molecules/components/Button';
 import { useCallback } from 'react';
 import { Image, ListRenderItemInfo, StyleSheet, View } from 'react-native';
 

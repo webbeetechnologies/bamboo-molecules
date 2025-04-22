@@ -9,8 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@bambooapp-workspace/examples-common": "workspace:*",
     "@bambooapp/bamboo-molecules": "workspace:*",
-    "react-native-unistyles": "3.0.0-rc.1",
+    "react-native-unistyles": "3.0.0-nightly-20250422",
     "next": "14.2.26",
     "react": "^18",
     "react-dom": "^18"

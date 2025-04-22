@@ -3,7 +3,7 @@
     "plugins": [
         [
             "react-native-unistyles/plugin",
-            { "autoProcessRoot": "src", "autoProcessPaths": "packages/molecules/src" }
+            { "autoProcessRoot": "src", "autoProcessPaths": "packages/molecules" }
         ]
     ]
 }

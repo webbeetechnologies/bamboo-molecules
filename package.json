@@ -10,21 +10,6 @@
   },
   "license": "MIT",
   "packageManager": "pnpm@9.3.0",
-  "main": "lib/commonjs/index.js",
-  "module": "lib/module/index.js",
-  "types": "lib/typescript/index.d.ts",
-  "files": [
-    "lib",
-    "src",
-    "datagrid",
-    "fast-context",
-    "shortcuts-manager",
-    "components",
-    "context-bridge",
-    "!**/__tests__",
-    "!**/__fixtures__",
-    "!**/__mocks__"
-  ],
   "scripts": {
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
@@ -33,38 +18,11 @@
     "example:web": "pnpm --filter=next-example-molecules run"
   },
   "devDependencies": {
-    "react-native-unistyles": "3.0.0-rc.1",
-    "expo": "^52.0.40",
-    "babel-preset-expo": "^12.0.9",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@chromatic-com/storybook": "^3",
     "@react-native-community/eslint-config": "^3.1.0",
-    "@storybook/addon-coverage": "^1.0.4",
-    "@storybook/addon-essentials": "^8.4.7",
-    "@storybook/addon-interactions": "^8.4.7",
-    "@storybook/addon-links": "^8.4.7",
-    "@storybook/addon-react-native-web": "^0.0.26",
-    "@storybook/addon-webpack5-compiler-babel": "^3.0.3",
-    "@storybook/react": "^8.4.7",
-    "@storybook/react-webpack5": "^8.4.7",
-    "@storybook/test": "^8.4.7",
-    "@storybook/test-runner": "^0.20.1",
     "@testing-library/jest-native": "^5.1.2",
     "@testing-library/react-native": "^11.2.0",
-    "@types/color": "^3.0.3",
-    "@types/jest": "^29.1.2",
-    "@types/lodash": "^4.17.13",
-    "@types/lodash.get": "^4.4.7",
-    "@types/lodash.groupby": "^4.6.7",
-    "@types/lodash.isnil": "^4.0.7",
-    "@types/lodash.keyby": "^4.6.7",
-    "@types/lodash.memoize": "^4.1.7",
-    "@types/lodash.noop": "^3.0.7",
-    "@types/lodash.omit": "^4.5.7",
-    "@types/lodash.omitby": "^4.6.7",
-    "@types/react": "^18.0.20",
-    "@types/react-native-vector-icons": "^6.4.12",
-    "@types/use-sync-external-store": "^0.0.3",
     "@types/uuid": "^8.3.4",
     "babel-plugin-module-resolver": "^5.0.2",
     "chromatic": "^6.15.0",
@@ -76,50 +34,18 @@
     "jest-environment-node": "27",
     "jest-transform-stub": "^2.0.0",
     "prettier": "^2.7.1",
-    "react": "^18.2.0",
     "react-docgen-typescript-plugin": "^1.0.8",
-    "react-dom": "^18.2.0",
-    "react-native": "0.77.1",
-    "react-native-builder-bob": "^0.17.1",
-    "@react-native-documents/picker": "^10.1.2",
-    "react-native-gesture-handler": "~2.25.0",
-    "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "~0.19.13",
     "react-test-renderer": "^18.2.0",
     "reassure": "^0.7.1",
-    "storybook-addon-performance": "^0.17.3",
-    "storybook-mock-date-decorator": "^2.0.6",
     "ts-jest": "^29.0.3",
     "typescript": "^5.3.3"
   },
-  "peerDependencies": {
-    "@react-native-documents/picker": ">=10.1.0",
-    "react-native-gesture-handler": ">=2.9.0",
-    "react-native-vector-icons": ">=9.2.0"
-  },
-  "react-native-builder-bob": {
-    "source": "src",
-    "output": "lib",
-    "targets": [
-      [
-        "commonjs",
-        {
-          "configFile": true
-        }
-      ],
-      [
-        "module",
-        {
-          "configFile": true
-        }
-      ],
-      [
-        "typescript",
-        {
-          "project": "tsconfig.build.json"
-        }
-      ]
-    ]
+  "resolutions": {
+    "react-native-unistyles": "3.0.0-nightly-20250422",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-native": "0.79.0",
+    "react-native-web": "~0.20.0"
   },
   "eslintIgnore": [
     "node_modules/",
@@ -127,39 +53,5 @@
     "test-cases/node_modules",
     "dist",
     "cache"
-  ],
-  "jest": {
-    "coverageReporters": [
-      "json"
-    ],
-    "preset": "react-native",
-    "setupFiles": [
-      "./node_modules/react-native-gesture-handler/jestSetup.js"
-    ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/example",
-      "/test-cases",
-      "/lib"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/testSetup.js",
-      "@testing-library/jest-native/extend-expect"
-    ],
-    "cacheDirectory": "./cache/jest",
-    "modulePathIgnorePatterns": [
-      "<rootDir>/node_modules",
-      "<rootDir>/lib/",
-      "<rootDir>/dist/"
-    ],
-    "watchPathIgnorePatterns": [
-      "__fixtures__\\/[^/]+\\/(output|error)\\.js"
-    ],
-    "transform": {
-      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!(@react-native|react-native|react-native-super-grid|react-native-vector-icons|react-native-web-hooks|react-native-actions-sheet|@expo/vector-icons|expo-font|react-native-iphone-x-helper)/)"
-    ]
-  }
+  ]
 }

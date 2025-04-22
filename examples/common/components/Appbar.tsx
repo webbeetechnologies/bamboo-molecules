@@ -1,5 +1,5 @@
 import { StyleSheet, useWindowDimensions, ViewStyle } from 'react-native';
-import { Appbar, AppbarProps } from '@bambooapp/bamboo-molecules/src/components/Appbar';
+import { Appbar, AppbarProps } from '@bambooapp/bamboo-molecules/components/Appbar';
 
 export type Props = Omit<AppbarProps, 'children'>;
 
