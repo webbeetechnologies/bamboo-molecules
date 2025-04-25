@@ -1,7 +1,33 @@
 import { useRef, useEffect, ReactNode, useMemo, useState, useCallback, memo } from 'react';
 import { Animated } from 'react-native';
 import type { LayoutChangeEvent, StyleProp, TextStyle, TextProps } from 'react-native';
-import { styles } from './utils';
+import { StyleSheet } from 'react-native-unistyles';
+import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
+
+const helperTextStylesDefault = StyleSheet.create(theme => ({
+    root: {
+        fontSize: theme.typescale.bodySmall.fontSize,
+        paddingVertical: theme.spacings['1'],
+        paddingHorizontal: theme.spacings['4'],
+
+        variants: {
+            variant: {
+                error: {
+                    color: theme.colors.error,
+                },
+                info: {
+                    color: theme.colors.onSurfaceVariant,
+                },
+            },
+        },
+    },
+}));
+
+registerComponentsStyles({
+    HelperText: helperTextStylesDefault,
+});
+
+export const styles = getRegisteredMoleculesComponentStyles('HelperText');
 
 export type Props = TextProps & {
     /**

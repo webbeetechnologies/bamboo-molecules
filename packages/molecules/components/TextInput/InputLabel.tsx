@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Animated, LayoutChangeEvent } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { Animated, LayoutChangeEvent, StyleSheet } from 'react-native';
+import { inputLabelStyles } from './utils';
 
 import type { InputLabelProps } from './types';
 
@@ -9,7 +9,6 @@ const InputLabel = (props: InputLabelProps) => {
         parentState,
         style,
         label,
-        labelBackground,
         floatingLabelVerticalOffset,
         error,
         onLayoutAnimatedText,
@@ -21,6 +20,7 @@ const InputLabel = (props: InputLabelProps) => {
         maxFontSizeMultiplier,
         required,
         testID,
+        floatingSyle,
     } = props;
 
     const [containerLayout, setContainerLayout] = useState<{
@@ -87,7 +87,7 @@ const InputLabel = (props: InputLabelProps) => {
         return {
             containerStyle: [
                 StyleSheet.absoluteFill,
-                styles.labelContainer,
+                inputLabelStyles.labelContainer,
                 {
                     opacity:
                         // Hide the label in minimized state until we measure it's width
@@ -108,7 +108,7 @@ const InputLabel = (props: InputLabelProps) => {
                     }),
                 },
                 style,
-                isLabelFloating ? { backgroundColor: labelBackground } : {},
+                isLabelFloating ? floatingSyle : {},
             ],
             normalLabelStyle: [
                 // {
@@ -138,7 +138,7 @@ const InputLabel = (props: InputLabelProps) => {
         // theme.colors.onSurface,
         paddingOffset,
         style,
-        labelBackground,
+        floatingSyle,
     ]);
 
     // Position colored placeholder and gray placeholder on top of each other and crossfade them
@@ -171,12 +171,5 @@ const InputLabel = (props: InputLabelProps) => {
         </>
     );
 };
-
-const styles = StyleSheet.create({
-    labelContainer: {
-        zIndex: 3,
-        justifyContent: 'center',
-    },
-});
 
 export default memo(InputLabel);

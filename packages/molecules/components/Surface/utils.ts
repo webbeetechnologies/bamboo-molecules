@@ -3,9 +3,11 @@ import type { Animated } from 'react-native';
 import { inputRange } from '../../styles/shadow';
 import { StyleSheet } from 'react-native-unistyles';
 
-const defaultStylesDefault = StyleSheet.create({
-    root: {},
-});
+const defaultStylesDefault = StyleSheet.create(theme => ({
+    root: {
+        backgroundColor: theme.colors.surface,
+    },
+}));
 
 registerComponentsStyles({
     Surface: defaultStylesDefault,

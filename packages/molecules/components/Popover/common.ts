@@ -8,9 +8,17 @@ export type Align = 'start' | 'center' | 'end';
 
 export const DEFAULT_ARROW_SIZE = 10;
 
+export const popoverDefaultStyles = {
+    position: 'absolute' as const,
+    top: -9999,
+    left: -9999,
+    opacity: 0,
+};
+
 export type PopoverProps = {
+    inverted?: boolean;
     /** Reference to the element the popover should anchor to */
-    targetRef: RefObject<View | any>; // Allow different ref types
+    triggerRef: RefObject<View | any>; // Allow different ref types
     /** Content to display inside the popover */
     children: ReactNode;
     /** Whether the popover is visible */

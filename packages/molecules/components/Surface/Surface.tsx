@@ -46,8 +46,4 @@ const Surface = (
     );
 };
 
-export default memo(
-    withUnistyles(forwardRef(Surface), theme => ({
-        backgroundColor: theme.colors.surface,
-    })),
-);
+export default memo(withUnistyles(forwardRef(Surface)));

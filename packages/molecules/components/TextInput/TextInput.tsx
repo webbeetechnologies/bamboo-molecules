@@ -247,19 +247,21 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
         const onBlurRef = useLatest(onBlur);
 
+        const state = resolveStateVariant({
+            errorDisabled: errorProp && disabled,
+            disabled,
+            errorFocusedAndHovered: errorProp && hovered && focused,
+            errorFocused: errorProp && focused,
+            errorHovered: errorProp && hovered,
+            hoveredAndFocused: hovered && focused,
+            hovered,
+            focused: focused,
+            error: !!errorProp,
+        }) as any;
+
         styles.useVariants({
             variant: variant as any,
-            state: resolveStateVariant({
-                errorDisabled: errorProp && disabled,
-                disabled,
-                errorFocusedAndHovered: errorProp && hovered && focused,
-                errorFocused: errorProp && focused,
-                errorHovered: errorProp && hovered,
-                hoveredAndFocused: hovered && focused,
-                hovered,
-                focused: focused,
-                error: !!errorProp,
-            }) as any,
+            state,
             size,
         });
 
@@ -549,7 +551,11 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                 ],
                 stateLayerStyle: [styles.stateLayer, stateLayerProps?.style],
             }),
+            // forcing useMemo to recompute when state, size or variant change
+            // eslint-disable-next-line
             [
+                state,
+                size,
                 componentStyles,
                 backgroundColor,
                 variant,
@@ -630,7 +636,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
                             <InputLabel
                                 parentState={parentState}
                                 label={rest.label}
-                                labelBackground={computedStyles.labelBackground}
+                                floatingSyle={styles.floatingLabel}
                                 floatingLabelVerticalOffset={
                                     computedStyles.floatingLabelVerticalOffset
                                 }
@@ -695,11 +701,7 @@ const textInputStylesDefault = StyleSheet.create(theme => ({
     root: {
         variants: {
             variant: {
-                outlined: {
-                    ...({
-                        defaultLabelBackground: theme.colors.surface,
-                    } as Record<string, any>),
-                },
+                outlined: {},
             },
             state: {
                 focused: {
@@ -831,6 +833,9 @@ const textInputStylesDefault = StyleSheet.create(theme => ({
                 },
             },
         },
+    },
+    floatingLabel: {
+        backgroundColor: theme.colors.surface,
     },
     labelText: {
         position: 'absolute',

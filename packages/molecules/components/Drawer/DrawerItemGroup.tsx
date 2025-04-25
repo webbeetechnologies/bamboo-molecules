@@ -2,8 +2,9 @@ import { memo, ReactNode, useMemo } from 'react';
 import { TextProps, View, type ViewProps } from 'react-native';
 import { Text } from '../Text';
 
+import { StyleSheet } from 'react-native-unistyles';
 import { HorizontalDivider, type HorizontalDividerProps } from '../HorizontalDivider';
-import { drawerItemGroupStyles } from './utils';
+import { getRegisteredMoleculesComponentStyles, registerComponentStyles } from '../../core';
 
 export type Props = ViewProps & {
     title?: ReactNode;
@@ -53,6 +54,28 @@ const DrawerItemGroup = memo(
         );
     },
 );
+
+const drawerItemGroupStylesDefault = StyleSheet.create(theme => ({
+    root: {
+        marginBottom: theme.spacings['1'],
+    },
+    title: {
+        color: theme.colors.onSurfaceVariant,
+        lineHeight: theme.typescale.titleSmall.lineHeight,
+        fontSize: theme.typescale.titleSmall.fontSize,
+        fontWeight: theme.typescale.titleSmall.fontWeight,
+        marginVertical: theme.spacings['4'],
+        marginHorizontal: theme.spacings['3'],
+    },
+
+    divider: {
+        marginTop: theme.spacings['1'],
+    },
+}));
+
+registerComponentStyles('Drawer_ItemGroup', drawerItemGroupStylesDefault);
+
+export const drawerItemGroupStyles = getRegisteredMoleculesComponentStyles('Drawer_ItemGroup');
 
 DrawerItemGroup.displayName = 'Drawer_ItemGroup';
 

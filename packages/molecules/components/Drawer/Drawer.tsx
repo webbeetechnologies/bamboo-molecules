@@ -1,7 +1,9 @@
 import { memo, ReactElement } from 'react';
 import { View, type ViewProps } from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
+
+import { getRegisteredMoleculesComponentStyles, registerComponentStyles } from '../../core';
 import { useSubcomponents } from '../../hooks';
-import { drawerStyles } from './utils';
 
 export type Props = Omit<ViewProps, 'children'> & {
     children: ReactElement | ReactElement[];
@@ -23,5 +25,19 @@ const Drawer = ({ style, children, ...rest }: Props) => {
         </View>
     );
 };
+
+const drawerStylesDefault = StyleSheet.create(theme => ({
+    root: {
+        borderTopRightRadius: theme.shapes.corner.large,
+        borderBottomRightRadius: theme.shapes.corner.large,
+        overflow: 'hidden',
+        backgroundColor: theme.colors.surface,
+        minWidth: 360,
+        flexGrow: 1,
+    },
+}));
+
+registerComponentStyles('Drawer', drawerStylesDefault);
+export const drawerStyles = getRegisteredMoleculesComponentStyles('Drawer');
 
 export default memo(Drawer);

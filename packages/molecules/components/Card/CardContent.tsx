@@ -1,6 +1,7 @@
-import { forwardRef, memo, ReactNode, useMemo } from 'react';
+import { forwardRef, memo, ReactNode } from 'react';
 import { View, type ViewProps } from 'react-native';
-import { cardContentStyles } from './utils';
+import { StyleSheet } from 'react-native-unistyles';
+import { registerComponentStyles, getRegisteredMoleculesComponentStyles } from '../../core';
 
 export type Props = ViewProps & {
     children: ReactNode | ReactNode[];
@@ -8,12 +9,20 @@ export type Props = ViewProps & {
 
 const CardContent = memo(
     forwardRef(({ style, ...rest }: Props, ref: any) => {
-        const componentStyles = useMemo(() => [cardContentStyles.root, style], [style]);
-
-        return <View style={componentStyles} {...rest} ref={ref} />;
+        return <View style={[cardContentStyles.root, style]} {...rest} ref={ref} />;
     }),
 );
 
 CardContent.displayName = 'Card_Content';
+
+const cardContentStylesDefault = StyleSheet.create(theme => ({
+    root: {
+        padding: theme.spacings['4'],
+    },
+}));
+
+registerComponentStyles('Card_Content', cardContentStylesDefault);
+
+export const cardContentStyles = getRegisteredMoleculesComponentStyles('Card_Content');
 
 export default CardContent;

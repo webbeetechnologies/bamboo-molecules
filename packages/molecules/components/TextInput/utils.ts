@@ -1,3 +1,5 @@
+import { StyleSheet } from 'react-native-unistyles';
+
 export type States =
     | 'disabled'
     | 'focused'
@@ -27,3 +29,10 @@ export const getInputMinHeight = (variant: string, size: string) => {
             return 0;
     }
 };
+
+export const inputLabelStyles = StyleSheet.create({
+    labelContainer: {
+        zIndex: 3,
+        justifyContent: 'center',
+    },
+});

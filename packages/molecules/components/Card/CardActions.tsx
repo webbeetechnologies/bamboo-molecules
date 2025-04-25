@@ -1,4 +1,4 @@
-import { forwardRef, memo, ReactNode, useMemo } from 'react';
+import { forwardRef, memo, ReactNode } from 'react';
 import { View, type ViewProps } from 'react-native';
 import { cardActionsStyles } from './utils';
 
@@ -8,9 +8,7 @@ export type Props = ViewProps & {
 
 const CardActions = memo(
     forwardRef(({ style, ...rest }: Props, ref: any) => {
-        const componentStyles = useMemo(() => [cardActionsStyles.root, style], [style]);
-
-        return <View style={componentStyles} {...rest} ref={ref} />;
+        return <View style={[cardActionsStyles.root, style]} {...rest} ref={ref} />;
     }),
 );
 

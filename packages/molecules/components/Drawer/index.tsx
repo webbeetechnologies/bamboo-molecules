@@ -23,20 +23,17 @@ registerMoleculesComponents({
 
 export const Drawer = getRegisteredComponentWithFallback('Drawer', DrawerDefault);
 
-export { Props as DrawerProps } from './Drawer';
-export { Props as DrawerItemProps, DrawerItemElement, DrawerItemElementProps } from './DrawerItem';
-export { Props as DrawerItemGroupProps } from './DrawerItemGroup';
-export { Props as DrawerContentProps } from './DrawerContent';
-export { Props as DrawerHeaderProps } from './DrawerHeader';
-export { Props as DrawerFooterProps } from './DrawerFooter';
+export { Props as DrawerProps, drawerStyles } from './Drawer';
 export {
-    drawerStyles,
+    Props as DrawerItemProps,
+    DrawerItemElement,
+    DrawerItemElementProps,
     drawerItemStyles,
-    drawerContentStyles,
-    drawerHeaderStyles,
-    drawerFooterStyles,
-    drawerItemGroupStyles,
-} from './utils';
+} from './DrawerItem';
+export { Props as DrawerItemGroupProps, drawerItemGroupStyles } from './DrawerItemGroup';
+export { Props as DrawerContentProps, drawerContentStyles } from './DrawerContent';
+export { Props as DrawerHeaderProps, drawerHeaderStyles } from './DrawerHeader';
+export { Props as DrawerFooterProps, drawerFooterStyles } from './DrawerFooter';
 export {
     drawerCollapsibleStyles,
     drawerCollapsibleItemStyles,

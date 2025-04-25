@@ -14,7 +14,7 @@ module.exports = function (api) {
                 'react-native-unistyles/plugin',
                 {
                     autoProcessRoot: 'src',
-                    autoProcessPaths: ['@bambooapp/bamboo-molecules'],
+                    autoProcessPaths: ['pacakges/molecules'],
                 },
             ],
         ],

@@ -1,5 +1,3 @@
-import { memo } from 'react';
-import { popoverFactory } from '../Popover';
-import { defaultStyles } from './utils';
+import { Popover } from '../Popover';
 
-export default memo(popoverFactory(defaultStyles));
+export default Popover;

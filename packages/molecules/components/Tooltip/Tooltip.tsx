@@ -3,7 +3,7 @@ import { ViewStyle, TextStyle, StyleSheet, ViewProps } from 'react-native';
 
 import { useSubcomponents, useToggle } from '../../hooks';
 import type { IPlacement } from '../Popper/types';
-import { Popover } from '../PopoverNext';
+import { Popover } from '../Popover';
 import { tooltipStyles } from './utils';
 
 export type Props = Pick<PopoverProps, 'offset' | 'crossOffset'> & {
@@ -101,12 +101,14 @@ const Tooltip = ({
             {isOpen && (
                 <Popover
                     isOpen={isOpen}
+                    inverted
                     // placement={placement}
                     showArrow={showArrow}
                     // backdropStyles={styles.backdrop}
-                    targetRef={triggerRef}
+                    triggerRef={triggerRef}
                     // setIsOpen={setPopoverOpen}
-                    // contentStyles={style}
+                    style={[tooltipStyles.content, style]}
+                    {...popoverContentProps}
                     // contentTextStyles={contentTextStyles}
                     // popoverContentProps={popoverContentProps}
                     onClose={onClose}>

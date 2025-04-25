@@ -1,163 +1,183 @@
-import { forwardRef, memo, useId, useImperativeHandle, useMemo } from 'react';
+import { useRef, useLayoutEffect, useCallback, useEffect, memo, Fragment } from 'react';
+import { View, StyleSheet, Dimensions, Pressable, AppState, Platform } from 'react-native';
 
-import { useKeyboardDismissable } from '../../hooks';
-
-import type { PopoverProps } from './types';
-import { Popper } from '../Popper';
-import { PopoverContext } from './PopoverContext';
-import PopperContent from '../Popper/PopperContent';
-import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { Portal } from '../Portal';
-import { Transition } from '../Animations';
-import { Backdrop } from '../Backdrop';
-import { defaultStyles } from './utils';
+import {
+    PopoverProps,
+    DEFAULT_ARROW_SIZE,
+    useArrowStyles,
+    usePopover,
+    popoverDefaultStyles,
+} from './common';
+import { ScopedTheme, UnistylesRuntime } from 'react-native-unistyles';
 
-const emptyObj = {} as ViewStyle;
+const Popover = ({
+    triggerRef,
+    children,
+    isOpen,
+    onClose,
+    position = 'bottom',
+    align = 'center',
+    style,
+    showArrow = true,
+    arrowSize = DEFAULT_ARROW_SIZE,
+    inverted = false,
+    ...rest
+}: PopoverProps) => {
+    const {
+        popoverLayoutRef,
+        targetLayoutRef,
+        actualPositionRef,
+        calculatedPosition,
+        calculateAndSetPosition,
+        handlePopoverLayout,
+    } = usePopover({
+        isOpen,
+        position,
+        align,
+        showArrow,
+        arrowSize,
+    });
 
-export const popoverFactory = (_styles: Record<string, any>) =>
-    forwardRef(
-        (
-            {
-                onClose = () => {},
-                isOpen,
-                children,
-                initialFocusRef,
-                finalFocusRef,
+    const popoverRef = useRef<View>(null);
 
-                // TODO: Implement trap focus functionality
-                trapFocus: _trapFocus = true,
-                showArrow = false,
-                overlayStyles = emptyObj,
-                contentStyles = emptyObj,
-                contentTextStyles = emptyObj,
-                backdropStyles = emptyObj,
-                arrowProps = emptyObj,
-                initialTransition = emptyObj,
-                animateTransition = emptyObj,
-                exitTransition = emptyObj,
-                triggerRef,
-                isKeyboardDismissable = true,
-                popoverContentProps,
-                backdropProps,
-                name,
-                ...props
-            }: PopoverProps,
-            ref: any,
-        ) => {
-            // const styles = useComponentStyles(componentName, {
-            //     arrow: arrowProps?.style,
-            //     overlayStyles,
-            //     content: contentStyles,
-            //     contentText: contentTextStyles,
-            //     backdrop: backdropStyles,
-            //     initialTransition,
-            //     animateTransition,
-            //     exitTransition,
-            // });
+    const measureTarget = useCallback(() => {
+        if (triggerRef.current) {
+            triggerRef.current.measure(
+                (
+                    _fx: number,
+                    _fy: number,
+                    width: number,
+                    height: number,
+                    px: number,
+                    py: number,
+                ) => {
+                    if (width !== 0 || height !== 0) {
+                        const newLayout = { x: px, y: py, width, height };
+                        const changed =
+                            !targetLayoutRef.current ||
+                            targetLayoutRef.current.x !== newLayout.x ||
+                            targetLayoutRef.current.y !== newLayout.y ||
+                            targetLayoutRef.current.width !== newLayout.width ||
+                            targetLayoutRef.current.height !== newLayout.height;
 
-            const styles = useMemo(
-                () => ({
-                    arrow: [_styles.arrow, arrowProps?.style],
-                    overlayStyles: [_styles.overlayStyles, overlayStyles] as StyleProp<ViewStyle>,
-                    content: [_styles.content, contentStyles],
-                    contentText: [_styles.contentText, contentTextStyles],
-                    backdrop: [_styles.backdrop, backdropStyles],
-                    initialTransition: {
-                        ..._styles.initialTransition,
-                        ...initialTransition,
-                    },
-                    animateTransition: {
-                        ..._styles.animateTransition,
-                        ...animateTransition,
-                    },
-                    exitTransition: { ..._styles.exitTransition, ...exitTransition },
-                }),
-                [
-                    animateTransition,
-                    arrowProps?.style,
-                    backdropStyles,
-                    contentStyles,
-                    contentTextStyles,
-                    exitTransition,
-                    initialTransition,
-                    overlayStyles,
-                ],
+                        if (changed) {
+                            targetLayoutRef.current = newLayout;
+                            calculateAndSetPosition();
+                        }
+                    } else {
+                        targetLayoutRef.current = null;
+                        calculateAndSetPosition();
+                    }
+                },
+                () => {
+                    console.error('Failed to measure target element for Popover.');
+                    targetLayoutRef.current = null;
+                    calculateAndSetPosition();
+                },
             );
+        } else {
+            targetLayoutRef.current = null;
+            calculateAndSetPosition();
+        }
+    }, [triggerRef, calculateAndSetPosition, targetLayoutRef]);
 
-            const { arrowPropsWithStyle, popoverStyles } = useMemo(() => {
-                const { arrow, ...rest } = styles;
+    useLayoutEffect(() => {
+        if (isOpen) {
+            measureTarget();
+        }
+    }, [isOpen, measureTarget]);
 
-                return {
-                    popoverStyles: rest,
-                    arrowPropsWithStyle: {
-                        ...arrowProps,
-                        style: arrow,
-                    },
-                };
-            }, [arrowProps, styles]);
+    useEffect(() => {
+        if (!isOpen) return;
+        const subscription = Dimensions.addEventListener('change', measureTarget);
+        return () => {
+            if (typeof subscription?.remove === 'function') {
+                subscription.remove();
+            }
+        };
+    }, [isOpen, measureTarget]);
 
-            const popoverId = useId();
+    useEffect(() => {
+        if (!isOpen || Platform.OS === 'web') return;
+        const handleAppStateChange = (nextAppState: string) => {
+            if (nextAppState === 'active') {
+                setTimeout(measureTarget, 50);
+            }
+        };
+        const subscription = AppState.addEventListener('change', handleAppStateChange);
+        return () => {
+            if (typeof subscription?.remove === 'function') {
+                subscription.remove();
+            }
+        };
+    }, [isOpen, measureTarget]);
 
-            const popoverContextValue = useMemo(() => {
-                const popoverContentId = `${popoverId}-content`;
+    const arrowStyles = useArrowStyles({
+        showArrow,
+        arrowSize,
+        style,
+        calculatedPosition,
+        targetLayoutRef,
+        popoverLayoutRef,
+        actualPositionRef,
+    });
 
-                return {
-                    onClose: onClose,
-                    initialFocusRef,
-                    finalFocusRef,
-                    popoverContentId,
-                    bodyId: `${popoverContentId}-body`,
-                    headerId: `${popoverContentId}-header`,
-                };
-            }, [onClose, initialFocusRef, finalFocusRef, popoverId]);
+    const popoverStyle = calculatedPosition ?? popoverDefaultStyles;
+    const Wrapper = inverted ? ScopedTheme : Fragment;
 
-            useImperativeHandle(ref, () => popoverContextValue);
+    if (!isOpen && popoverStyle.opacity === 0) {
+        return null;
+    }
 
-            useKeyboardDismissable({
-                enabled: isOpen && isKeyboardDismissable,
-                callback: onClose,
-            });
+    const handleOutsidePress = () => {
+        if (isOpen && onClose) {
+            onClose();
+        }
+    };
 
-            if (!isOpen) return null;
+    return (
+        <Portal>
+            <Wrapper
+                {...(inverted
+                    ? { name: UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark' }
+                    : ({} as { name: 'light' }))}>
+                <Pressable onPress={handleOutsidePress} style={styles.overlay} />
 
-            const key = name ? `${name}:${popoverId}` : popoverId;
-            return (
-                <Portal name={key}>
-                    <Transition
-                        initial={popoverStyles.initialTransition}
-                        animate={popoverStyles.animateTransition}
-                        exit={popoverStyles.exitTransition}
-                        visible={isOpen}
-                        style={StyleSheet.absoluteFill}
-                        {...popoverContentProps}>
-                        <Backdrop
-                            onPress={onClose}
-                            style={popoverStyles.backdrop}
-                            {...backdropProps}
-                        />
-
-                        <Popper
-                            isOpen={isOpen}
-                            triggerRef={triggerRef}
-                            {...props}
-                            arrowProps={arrowPropsWithStyle}>
-                            <PopoverContext.Provider value={popoverContextValue}>
-                                <PopperContent
-                                    overlayStyles={styles.overlayStyles}
-                                    style={popoverStyles.content}
-                                    contentTextStyles={popoverStyles.contentText}
-                                    arrowProps={arrowProps}
-                                    showArrow={showArrow}>
-                                    {/* <FocusScope contain={trapFocus} restoreFocus> */}
-                                    {children}
-                                    {/* </FocusScope> */}
-                                </PopperContent>
-                            </PopoverContext.Provider>
-                        </Popper>
-                    </Transition>
-                </Portal>
-            );
-        },
+                <View
+                    ref={popoverRef}
+                    onLayout={handlePopoverLayout}
+                    style={[styles.popoverContainer, style, popoverStyle]}
+                    {...rest}>
+                    {children}
+                    {showArrow && popoverStyle.opacity === 1 && <View style={arrowStyles} />}
+                </View>
+            </Wrapper>
+        </Portal>
     );
+};
 
-export default memo(popoverFactory(defaultStyles));
+const styles = StyleSheet.create({
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'transparent',
+    },
+    popoverContainer: {
+        ...popoverDefaultStyles,
+        backgroundColor: 'white',
+        borderRadius: 8,
+        padding: 12,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        zIndex: 100,
+    },
+});
+
+export default memo(Popover);

@@ -1,18 +1,26 @@
-import { useRef, useLayoutEffect, useCallback, useEffect, memo } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { PopoverProps, DEFAULT_ARROW_SIZE, useArrowStyles, usePopover } from './common';
+import { useRef, useLayoutEffect, useCallback, useEffect, memo, Fragment } from 'react';
+import { View } from 'react-native';
+import { ScopedTheme, StyleSheet, UnistylesRuntime } from 'react-native-unistyles';
+import {
+    PopoverProps,
+    DEFAULT_ARROW_SIZE,
+    useArrowStyles,
+    usePopover,
+    popoverDefaultStyles,
+} from './common';
 import { Portal } from '../Portal';
 
 const Popover = ({
-    targetRef,
+    triggerRef,
     children,
     isOpen,
     onClose,
     position = 'bottom',
     align = 'center',
     style,
-    showArrow = true,
+    showArrow = false,
     arrowSize = DEFAULT_ARROW_SIZE,
+    inverted = false,
 }: PopoverProps) => {
     const {
         popoverLayoutRef,
@@ -32,8 +40,8 @@ const Popover = ({
     const popoverRef = useRef<View>(null);
 
     const measureTarget = useCallback(() => {
-        if (targetRef.current) {
-            targetRef.current.measureInWindow(
+        if (triggerRef.current) {
+            triggerRef.current.measureInWindow(
                 (x: number, y: number, width: number, height: number) => {
                     if (width !== 0 || height !== 0) {
                         const newLayout = { x, y, width, height };
@@ -58,7 +66,7 @@ const Popover = ({
             targetLayoutRef.current = null;
             calculateAndSetPosition();
         }
-    }, [targetRef, calculateAndSetPosition, targetLayoutRef]);
+    }, [triggerRef, calculateAndSetPosition, targetLayoutRef]);
 
     useLayoutEffect(() => {
         if (isOpen) {
@@ -70,7 +78,7 @@ const Popover = ({
     useLayoutEffect(() => {
         if (!isOpen) return;
         const handleResize = () => {
-            if (targetRef.current && isOpen) {
+            if (triggerRef.current && isOpen) {
                 window.requestAnimationFrame(measureTarget);
             }
         };
@@ -80,13 +88,13 @@ const Popover = ({
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('scroll', handleResize, true);
         };
-    }, [isOpen, measureTarget, targetRef]);
+    }, [isOpen, measureTarget, triggerRef]);
 
     useEffect(() => {
         if (!isOpen || !onClose) return;
         const handleClickOutside = (event: MouseEvent) => {
             const popoverElement = popoverRef.current as any as HTMLElement;
-            const targetElement = targetRef.current as any as HTMLElement;
+            const targetElement = triggerRef.current as any as HTMLElement;
             if (
                 popoverElement &&
                 !popoverElement.contains(event.target as Node) &&
@@ -100,7 +108,7 @@ const Popover = ({
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [isOpen, onClose, popoverRef, targetRef]);
+    }, [isOpen, onClose, popoverRef, triggerRef]);
 
     const arrowStyles = useArrowStyles({
         showArrow,
@@ -112,12 +120,9 @@ const Popover = ({
         actualPositionRef,
     });
 
-    const popoverStyle = calculatedPosition ?? {
-        position: 'absolute',
-        top: -9999,
-        left: -9999,
-        opacity: 0,
-    };
+    const popoverStyle = calculatedPosition ?? popoverDefaultStyles;
+
+    const Wrapper = inverted ? ScopedTheme : Fragment;
 
     if (!isOpen && popoverStyle.opacity === 0) {
         return null;
@@ -125,32 +130,33 @@ const Popover = ({
 
     return (
         <Portal>
-            <View
-                ref={popoverRef}
-                onLayout={handlePopoverLayout}
-                style={[styles.popoverContainer, style, popoverStyle]}>
-                {children}
-                {showArrow && popoverStyle.opacity === 1 && <View style={arrowStyles} />}
-            </View>
+            <Wrapper
+                {...(inverted
+                    ? { name: UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark' }
+                    : ({} as { name: 'light' }))}>
+                <View
+                    ref={popoverRef}
+                    onLayout={handlePopoverLayout}
+                    style={[styles.popoverContainer, style, popoverStyle]}>
+                    {children}
+                    {showArrow && popoverStyle.opacity === 1 && <View style={arrowStyles} />}
+                </View>
+            </Wrapper>
         </Portal>
     );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create(theme => ({
     popoverContainer: {
-        position: 'absolute',
-        backgroundColor: 'white',
+        ...popoverDefaultStyles,
+        backgroundColor: theme.colors.surface,
         borderRadius: 8,
-        padding: 12,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         zIndex: 100,
-        opacity: 0,
-        top: -9999,
-        left: -9999,
     },
-});
+}));
 
 export default memo(Popover);

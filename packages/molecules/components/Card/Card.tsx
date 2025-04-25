@@ -1,12 +1,14 @@
 import { forwardRef, memo, useMemo } from 'react';
 import { ViewStyle } from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
+
 import type { MD3Elevation } from '../../types/theme';
 import { TouchableRipple, type TouchableRippleProps } from '../TouchableRipple';
 import { CardVariant } from './types';
 import { resolveStateVariant } from '../../utils';
 import { Surface } from '../Surface';
-import { cardStyles } from './utils';
 import { useActionState } from '../../hooks';
+import { getRegisteredMoleculesComponentStyles, registerComponentStyles } from '../../core';
 
 export type Props = TouchableRippleProps & {
     variant?: CardVariant;
@@ -49,7 +51,8 @@ const Card = (
             container: [cardStyles.container, cardStyles.root, style],
             innerContainer: [cardStyles.innerContainer, touchableContainerStyle],
         };
-    }, [style, touchableContainerStyle]);
+        // eslint-disable-next-line
+    }, [variant, state, style, touchableContainerStyle]);
 
     const elevation = elevationProp === undefined ? elevationLevel ?? 0 : elevationProp;
 
@@ -67,5 +70,72 @@ const Card = (
         </Surface>
     );
 };
+
+const cardStylesDefault = StyleSheet.create(theme => ({
+    root: {
+        animationDuration: `${theme.animation.durations['1']}`,
+
+        variants: {
+            variant: {
+                elevated: {},
+                filled: {},
+                outlined: {},
+                undefined: {},
+            },
+        },
+        compoundVariants: [
+            {
+                variant: 'outlined',
+                state: 'disabled',
+                styles: {
+                    opacity: 0.12,
+                },
+            },
+        ],
+    },
+    container: {
+        borderRadius: theme.shapes.corner.medium,
+
+        variants: {
+            variant: {
+                elevated: {
+                    backgroundColor: theme.colors.surface,
+                },
+
+                filled: {
+                    backgroundColor: theme.colors.surfaceVariant,
+                },
+
+                outlined: {},
+            },
+        },
+
+        compoundVariants: [
+            {
+                variant: 'elevated',
+                state: 'disabled',
+                styles: {
+                    backgroundColor: theme.colors.surfaceVariant,
+                    opacity: 0.38,
+                },
+            },
+
+            {
+                variant: 'filled',
+                state: 'disabled',
+                styles: {
+                    backgroundColor: theme.colors.surface,
+                    opacity: 0.38,
+                },
+            },
+        ],
+    },
+    innerContainer: {
+        borderRadius: theme.shapes.corner.medium,
+    },
+}));
+
+registerComponentStyles('Card', cardStylesDefault);
+export const cardStyles = getRegisteredMoleculesComponentStyles('Card');
 
 export default memo(forwardRef(Card));

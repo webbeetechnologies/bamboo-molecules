@@ -27,19 +27,12 @@ registerMoleculesComponents({
 
 export const Card = getRegisteredComponentWithFallback('Card', CardDefault);
 
-export { Props as CardProps } from './Card';
-export { Props as CardHeaderProps } from './CardHeader';
-export { Props as CardContentProps } from './CardContent';
-export { Props as CardMediaProps } from './CardMedia';
-export { Props as CardTextProps } from './CardTypography';
+export { Props as CardProps, cardStyles } from './Card';
+export { Props as CardHeaderProps, cardHeaderStyles } from './CardHeader';
+export { Props as CardContentProps, cardContentStyles } from './CardContent';
+export { Props as CardMediaProps, cardMediaStyles } from './CardMedia';
+export { Props as CardTextProps, cardTypograhyStyles } from './CardTypography';
 export { Props as CardActionsProps } from './CardActions';
-export {
-    cardStyles,
-    cardHeaderStyles,
-    cardContentStyles,
-    cardMediaStyles,
-    cardTypograhyStyles,
-    cardActionsStyles,
-} from './utils';
+export { cardActionsStyles } from './utils';
 export { CardTypographyVariant } from './utils';
 export { CardTypographySize } from './utils';

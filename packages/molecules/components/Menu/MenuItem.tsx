@@ -1,5 +1,12 @@
 import { forwardRef, memo, ReactNode, useCallback, useContext, useMemo } from 'react';
-import { Text, View, type GestureResponderEvent, type TextProps } from 'react-native';
+import {
+    StyleProp,
+    Text,
+    View,
+    ViewStyle,
+    type GestureResponderEvent,
+    type TextProps,
+} from 'react-native';
 
 import type { WithElements } from '../../types';
 import { TouchableRipple, type TouchableRippleProps } from '../TouchableRipple';
@@ -15,7 +22,11 @@ export type Props = TouchableRippleProps &
         size?: 'default' | 'dense';
         stateLayerProps?: StateLayerProps;
         textProps?: Omit<TextProps, 'children'>;
+        leftElementStyle?: StyleProp<ViewStyle>;
+        rightElementStyle?: StyleProp<ViewStyle>;
     };
+
+const emptyObj = {};
 
 const _MenuItem = (
     {
@@ -28,7 +39,9 @@ const _MenuItem = (
         style,
         testID,
         stateLayerProps,
-        textProps = {},
+        textProps = emptyObj,
+        leftElementStyle: _leftElementStyle,
+        rightElementStyle: _rightElementStyle,
         ...rest
     }: Props,
     ref: any,
@@ -61,11 +74,11 @@ const _MenuItem = (
             return {
                 containerStyle: [menuItemStyles.root, style],
                 textStyle: [text, textProps?.style],
-                leftElementStyle: leftElement,
-                rightElementStyle: rightElement,
+                leftElementStyle: [leftElement, _leftElementStyle],
+                rightElementStyle: [rightElement, _rightElementStyle],
                 stateLayerStyle: stateLayer,
             };
-        }, [style, textProps?.style]);
+        }, [_leftElementStyle, _rightElementStyle, style, textProps?.style]);
 
     return (
         <TouchableRipple

@@ -2,6 +2,8 @@ import { memo, useMemo } from 'react';
 import { type ViewStyle, type StyleProp, type ViewProps, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
+import { registerComponentStyles, getRegisteredMoleculesComponentStyles } from '../../core';
+
 export type Props = Omit<ViewProps, 'children'> & {
     /**
      * left inset of the divider.
@@ -75,7 +77,7 @@ const HorizontalDivider = ({
     return <View {...rest} style={memoizedStyles as StyleProp<ViewStyle>} />;
 };
 
-export const horizontalDividerStyles = StyleSheet.create(theme => ({
+export const horizontalDividerStylesDefault = StyleSheet.create(theme => ({
     root: {
         height: StyleSheet.hairlineWidth,
         background: theme.colors.outlineVariant,
@@ -89,5 +91,8 @@ export const horizontalDividerStyles = StyleSheet.create(theme => ({
         },
     },
 }));
+
+registerComponentStyles('HorizontalDivider', horizontalDividerStylesDefault);
+export const horizontalDividerStyles = getRegisteredMoleculesComponentStyles('HorizontalDivider');
 
 export default memo(HorizontalDivider);

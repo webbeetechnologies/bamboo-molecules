@@ -1,17 +1,17 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 // import { Button } from '@bambooapp/bamboo-molecules/components/Button';
-import { Tooltip } from '@bambooapp/bamboo-molecules/components/Tooltip';
-import { IconButton } from '@bambooapp/bamboo-molecules/components/IconButton';
+// import { Tooltip } from '@bambooapp/bamboo-molecules/components/Tooltip';
+// import { IconButton } from '@bambooapp/bamboo-molecules/components/IconButton';
 import { TextInput } from '@bambooapp/bamboo-molecules/components/TextInput';
-import { Switch } from '@bambooapp/bamboo-molecules/components/Switch';
-import { ActivityIndicator } from '@bambooapp/bamboo-molecules/components/ActivityIndicator';
-import { Checkbox } from '@bambooapp/bamboo-molecules/components/Checkbox';
-import { RadioButton } from '@bambooapp/bamboo-molecules/components/RadioButton';
-import { Chip } from '@bambooapp/bamboo-molecules/components/Chip';
-import { FAB } from '@bambooapp/bamboo-molecules/components/FAB';
-import { Link } from '@bambooapp/bamboo-molecules/components/Link';
-import { Popover } from '@bambooapp/bamboo-molecules/components/PopoverNext';
+// import { Switch } from '@bambooapp/bamboo-molecules/components/Switch';
+// import { ActivityIndicator } from '@bambooapp/bamboo-molecules/components/ActivityIndicator';
+// import { Checkbox } from '@bambooapp/bamboo-molecules/components/Checkbox';
+// import { RadioButton } from '@bambooapp/bamboo-molecules/components/RadioButton';
+// import { Chip } from '@bambooapp/bamboo-molecules/components/Chip';
+// import { FAB } from '@bambooapp/bamboo-molecules/components/FAB';
+// import { Link } from '@bambooapp/bamboo-molecules/components/Link';
+// import { Popover } from '@bambooapp/bamboo-molecules/components/Popover';
 
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 // import Popover from '@/components/Popover/Popover';
@@ -28,6 +28,9 @@ const styles = StyleSheet.create(theme => ({
     text: {
         color: theme.colors.primary,
     },
+    scrollViewContent: {
+        backgroundColor: 'red',
+    },
 }));
 
 export default () => {
@@ -37,9 +40,15 @@ export default () => {
     return (
         <View style={styles.container}>
             <Sidebar />
-            <View style={{ alignItems: 'flex-start' }}>
-                <View style={{ gap: 20, marginTop: 100, alignItems: 'center' }}>
-                    {/* <Button variant="contained" onPress={() => {}}>
+            <View style={{ alignItems: 'flex-start', marginTop: 100 }}>
+                <TextInput variant="outlined" label={'Label'} />
+
+                {/* <ScrollView style={{ gap: 20, marginTop: 100 }}>
+
+                    <Link style={styles.link} href="/home">
+                        Link
+                    </Link>
+                    <Button style={styles.button} variant="contained" onPress={() => {}}>
                         Hello
                     </Button>
                     <Button variant="contained-tonal" onPress={() => {}}>
@@ -50,7 +59,7 @@ export default () => {
                     </Button>
                     <Button variant="text" onPress={() => {}}>
                         Hello
-                    </Button> */}
+                    </Button>
                     <TextInput variant="flat" label={'text'} />
                     <TextInput variant="outlined" label={'Label'} />
                     <Switch />
@@ -59,14 +68,13 @@ export default () => {
                     <Chip.Input label="chip" selected onPress={() => {}} />
                     <RadioButton value={'tet'} />
                     <RadioButton.Item label="hello" value={'tet'} />
-                    <Link href="/home">Link</Link>
 
                     <FAB ref={targetRef} iconName="home" label="Press" onPress={handleOpen} />
                     <Popover
                         isOpen={visible}
                         onClose={handleClose}
                         showArrow
-                        targetRef={targetRef}
+                        triggerRef={targetRef}
                         position="right">
                         <Text>Hello from popover</Text>
                     </Popover>
@@ -83,7 +91,7 @@ export default () => {
                         </Tooltip.Trigger>
                         <Tooltip.Content>mark as favorite2</Tooltip.Content>
                     </Tooltip>
-                </View>
+                </ScrollView> */}
             </View>
         </View>
     );
