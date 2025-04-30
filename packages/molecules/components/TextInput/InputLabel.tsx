@@ -1,6 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react';
 import { Animated, LayoutChangeEvent, StyleSheet } from 'react-native';
-import { inputLabelStyles } from './utils';
 
 import type { InputLabelProps } from './types';
 
@@ -171,5 +170,12 @@ const InputLabel = (props: InputLabelProps) => {
         </>
     );
 };
+
+export const inputLabelStyles = StyleSheet.create({
+    labelContainer: {
+        zIndex: 3,
+        justifyContent: 'center',
+    },
+});
 
 export default memo(InputLabel);

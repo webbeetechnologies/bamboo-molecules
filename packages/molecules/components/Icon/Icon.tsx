@@ -11,7 +11,7 @@ import { getRegisteredMoleculesComponentStyles, registerComponentStyles } from '
 const Icon = ({ type = 'material-community', style, color, ...rest }: IconProps, ref: any) => {
     const IconComponent = iconFactory(type);
     const componentStyles = useMemo(
-        () => [style, styles.root, color ? { color } : {}],
+        () => [styles.root, style, color ? { color } : {}],
         [style, color],
     );
 
@@ -20,7 +20,6 @@ const Icon = ({ type = 'material-community', style, color, ...rest }: IconProps,
 
 export const iconStylesDefault = StyleSheet.create(theme => ({
     root: {
-        animationScale: theme.animation.scale,
         color: theme.colors.onSurface,
     },
 }));

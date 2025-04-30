@@ -138,7 +138,10 @@ const NavigationRailItem = memo(
                     ] as StyleProp<ViewStyle>,
                     stateLayerStyle: [navigationRailItemStyles.stateLayer, stateLayerProps.style],
                 };
+                // eslint-disable-next-line
             }, [
+                active,
+                hovered,
                 badgeLabel,
                 badgeProps.size,
                 badgeProps.style,

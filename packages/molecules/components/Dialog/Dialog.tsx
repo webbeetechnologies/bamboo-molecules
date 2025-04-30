@@ -23,7 +23,9 @@ export type Props = ModalProps & {
     style?: StyleProp<ViewStyle>;
 };
 
-const Dialog = ({ children, onClose, iconProps, style = {}, ...rest }: Props) => {
+const emptyObj = {};
+
+const Dialog = ({ children, onClose, iconProps, style = emptyObj, ...rest }: Props) => {
     const { containerStyle, childStyle } = useMemo(() => {
         const { spacing, ...restStyle } = dialogStyles.root;
 

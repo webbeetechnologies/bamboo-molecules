@@ -148,12 +148,14 @@ const Button = (
 ) => {
     const { hovered, actionsRef } = useActionState({ ref, actionsToListen: ['hover'] });
 
+    const state = resolveStateVariant({
+        disabled,
+        hovered,
+    });
+
     defaultStyles.useVariants({
         variant,
-        state: resolveStateVariant({
-            disabled,
-            hovered,
-        }),
+        state,
         size,
     });
 
@@ -233,7 +235,7 @@ const Button = (
                 borderRadius ? { borderRadius } : {},
                 contentStyle,
             ],
-            iconContainerStyle: [_iconStyle, iconContainerStyleProp],
+            iconContainerStyle: [iconContainerStyleProp],
             textStyle: [
                 isVariant('text') ? (iconName || loading ? labelTextAddons : labelText) : label,
                 labelStyle,
@@ -241,7 +243,11 @@ const Button = (
             accessibilityState: { disabled },
             stateLayerStyle: [defaultStyles.stateLayer, stateLayerProps?.style],
         };
+        // eslint-disable-next-line
     }, [
+        state,
+        variant,
+        size,
         contentStyle,
         customButtonColor,
         disabled,
@@ -298,6 +304,7 @@ const Button = (
                                         ? customLabelColor
                                         : undefined
                                 }
+                                style={iconStyle}
                             />
                         </View>
                     ) : null}

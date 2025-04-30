@@ -5,7 +5,6 @@ import type { MD3Elevation } from '../../types/theme';
 import shadow from '../../styles/shadow';
 import { defaultStyles } from './utils';
 import { BackgroundContextWrapper } from './BackgroundContextWrapper';
-import { withUnistyles } from 'react-native-unistyles';
 
 export type Props = ViewProps & {
     /**
@@ -32,7 +31,7 @@ const Surface = (
                 elevation ? shadow(elevation) : null,
                 defaultStyles.root,
                 style,
-                backgroundColor ? {} : {},
+                backgroundColor ? { backgroundColor } : {},
             ] as StyleProp<ViewStyle>,
         };
     }, [backgroundColor, elevation, style]);
@@ -46,4 +45,4 @@ const Surface = (
     );
 };
 
-export default memo(withUnistyles(forwardRef(Surface)));
+export default memo(forwardRef(Surface));

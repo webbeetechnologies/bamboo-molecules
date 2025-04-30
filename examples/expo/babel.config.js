@@ -14,7 +14,7 @@ module.exports = function (api) {
                 'react-native-unistyles/plugin',
                 {
                     autoProcessRoot: 'src',
-                    autoProcessPaths: ['pacakges/molecules'],
+                    autoProcessPaths: ['packages/molecules'],
                 },
             ],
         ],

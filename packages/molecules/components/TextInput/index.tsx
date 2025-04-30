@@ -11,6 +11,6 @@ export {
     Props as TextInputProps,
     ElementProps as TextInputElementProps,
     TextInputHandles,
-    styles as textInputStyles,
 } from './TextInput';
+export { styles as textInputStyles } from './utils';
 export type * from './types';

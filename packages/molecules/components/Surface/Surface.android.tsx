@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef, ReactNode, forwardRef, memo, useMemo } from 'react';
 import { Animated, View, StyleProp, ViewStyle } from 'react-native';
-import { useUnistyles, withUnistyles } from 'react-native-unistyles';
+import { useUnistyles } from 'react-native-unistyles';
 
 import { inputRange } from '../../styles/shadow';
 import type { MD3Elevation } from '../../types/theme';
@@ -59,8 +59,4 @@ const Surface = ({ elevation = 1, style, children, testID, ...props }: Props, re
     );
 };
 
-export default memo(
-    withUnistyles(forwardRef(Surface), theme => ({
-        backgroundColor: theme.colors.surface,
-    })),
-);
+export default memo(forwardRef(Surface));

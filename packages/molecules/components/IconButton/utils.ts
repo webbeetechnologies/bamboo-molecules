@@ -15,6 +15,7 @@ const iconButtonStylesDefault = StyleSheet.create(theme => ({
         borderRadius: theme.shapes.corner.full,
         overflow: 'hidden',
         borderWidth: 0,
+        backgroundColor: 'transparent',
 
         variants: {
             size: {

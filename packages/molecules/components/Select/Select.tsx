@@ -190,10 +190,10 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
 
     const popoverProps = useMemo(
         () => ({
-            contentStyles: { width: inputLayout.width },
             showArrow: false,
             offset: searchable && onQueryChange ? -inputLayout.height : 0,
             ..._popoverProps,
+            style: [{ width: inputLayout.width }, _popoverProps?.style],
         }),
         [inputLayout.width, inputLayout.height, searchable, onQueryChange, _popoverProps],
     );
@@ -209,6 +209,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
             return (
                 <ListItem
                     variant="menuItem"
+                    onPress={info.onPress}
                     hoverable
                     testID={testID && `${testID}-${info.item[labelKey]}`}
                     hovered={info.focused}
@@ -274,6 +275,7 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
                 <DropdownList
                     popoverProps={popoverProps}
                     {...rest}
+                    selectable={false}
                     style={dropdownListStyle}
                     // TODO - fix ts issues
                     // @ts-expect-error
@@ -285,7 +287,6 @@ const Select = <TItem extends DefaultItemT = DefaultItemT>(
                     // TODO - fix ts issues
                     // @ts-expect-error
                     onSelectionChange={onSelectItemChange}
-                    selectable
                     searchable={searchable}
                     onQueryChange={onQueryChange}
                     testID={dropdownTestID}

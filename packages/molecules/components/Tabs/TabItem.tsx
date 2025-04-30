@@ -138,6 +138,8 @@ const TabItem = (
     );
 };
 
-TabItem.displayName = 'Tabs_Item';
+const _TabItem = memo(forwardRef(TabItem));
 
-export default memo(forwardRef(TabItem));
+_TabItem.displayName = 'Tabs_Item';
+
+export default _TabItem;

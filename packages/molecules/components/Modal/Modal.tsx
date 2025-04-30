@@ -118,8 +118,7 @@ function Modal(
                 contentContainer,
                 contentContainerStyleProp,
             ],
-            contentStyle: [modalContent, { width: dimensions.width, opacity: 1 }],
-            style: [modalStyles.root, style],
+            contentStyle: [modalContent, { width: dimensions.width, opacity: 1 }, style],
         };
     }, [backdropStyleProp, contentContainerStyleProp, dimensions.width, style]);
 

@@ -1,6 +1,8 @@
 import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
 import { StyleSheet } from 'react-native-unistyles';
+
 export const sizeToIconSizeMap = {
+    xs: 20,
     sm: 22,
     md: 24,
     lg: 26,
@@ -199,6 +201,33 @@ const defaultStylesDefault = StyleSheet.create(theme => {
         icon: {
             marginLeft: theme.spacings['4'],
             marginRight: theme.spacings._4,
+
+            variants: {
+                state: {
+                    disabled: {
+                        color: theme.colors.onSurfaceDisabled,
+                    },
+                    hovered: {},
+                    default: {},
+                },
+                variant: {
+                    outlined: {
+                        color: theme.colors.primary,
+                    },
+                    text: {
+                        color: theme.colors.primary,
+                    },
+                    contained: {
+                        color: theme.colors.onPrimary,
+                    },
+                    elevated: {
+                        color: theme.colors.primary,
+                    },
+                    'contained-tonal': {
+                        color: theme.colors.onSecondaryContainer,
+                    },
+                },
+            },
         },
         iconTextMode: {
             marginLeft: theme.spacings['3'],
