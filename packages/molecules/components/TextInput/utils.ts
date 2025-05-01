@@ -297,6 +297,9 @@ const textInputStylesDefault = StyleSheet.create(theme => ({
         right: 0,
         top: 0,
         bottom: 0,
+        _web: {
+            borderRadius: 'inherit',
+        },
         variants: {
             variant: {
                 outlined: {

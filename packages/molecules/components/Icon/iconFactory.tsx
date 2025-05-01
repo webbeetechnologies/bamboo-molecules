@@ -10,7 +10,7 @@ export const registerCustomIconType = (id: string, customIcon: any) => {
     customIcons[id] = customIcon;
 };
 
-export default memoize((type: IconType): any => {
+export default memoize((type: IconType) => {
     switch (type) {
         case IconPacks.Zocial:
             return withUnistyles(require('react-native-vector-icons/Zocial').default);

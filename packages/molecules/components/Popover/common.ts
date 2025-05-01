@@ -1,5 +1,5 @@
 import type { ReactNode, RefObject } from 'react';
-import type { View, ViewStyle, LayoutRectangle } from 'react-native';
+import type { View, ViewStyle, LayoutRectangle, StyleProp } from 'react-native';
 import { useMemo, useState, useRef, useCallback, useEffect } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 
@@ -30,7 +30,7 @@ export type PopoverProps = {
     /** Alignment of the popover relative to the target */
     align?: Align;
     /** Optional style for the popover container */
-    style?: ViewStyle;
+    style?: StyleProp<ViewStyle>;
     /** Show arrow pointing to the target */
     showArrow?: boolean;
     /** Size of the arrow */

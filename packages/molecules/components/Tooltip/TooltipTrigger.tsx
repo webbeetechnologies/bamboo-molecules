@@ -31,10 +31,12 @@ const TooltipTrigger = memo(({ children }: { children: ReactElement }) => {
     );
 
     const onPress = useCallback(() => {
+        // @ts-ignore
         children?.props?.onPress?.();
     }, [children?.props]);
 
     const onLongPress = useCallback(() => {
+        // @ts-ignore
         children?.props?.onLongPress?.();
 
         if (isWeb) return;
@@ -42,6 +44,8 @@ const TooltipTrigger = memo(({ children }: { children: ReactElement }) => {
     }, [children?.props, isWeb, onOpen]);
 
     const onPressOut = useCallback(() => {
+        // @ts-ignore
+
         children?.props?.onPressOut?.();
 
         if (isWeb) return;
@@ -49,12 +53,14 @@ const TooltipTrigger = memo(({ children }: { children: ReactElement }) => {
     }, [children?.props, isWeb, onClose]);
 
     const onHoverIn = useCallback(() => {
+        // @ts-ignore
         children?.props?.onHoverIn?.();
 
         onOpen();
     }, [children?.props, onOpen]);
 
     const onHoverOut = useCallback(() => {
+        // @ts-ignore
         children?.props?.onHoverOut?.();
 
         onClose();
@@ -74,6 +80,7 @@ const TooltipTrigger = memo(({ children }: { children: ReactElement }) => {
     return useMemo(
         () =>
             cloneElement(children, {
+                // @ts-ignore
                 ref: actionsRef,
                 onLongPress,
                 onPressOut,

@@ -10,9 +10,7 @@ const listItemStylesDefault = StyleSheet.create(theme => ({
                 disabled: {
                     opacity: 0.38,
                 },
-                hovered: {
-                    backgroundColor: theme.colors.stateLayer.hover.primary,
-                },
+                hovered: {},
 
                 selected: {
                     backgroundColor: theme.colors.surfaceVariant,
@@ -52,6 +50,15 @@ const listItemStylesDefault = StyleSheet.create(theme => ({
     rightElement: {
         marginRight: theme.spacings._1,
         marginLeft: theme.spacings['3'],
+    },
+    stateLayer: {
+        variants: {
+            state: {
+                hovered: {
+                    backgroundColor: theme.colors.stateLayer.hover.primary,
+                },
+            },
+        },
     },
 }));
 

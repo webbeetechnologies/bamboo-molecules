@@ -172,6 +172,14 @@ export type Props = Omit<TextInputProps, 'ref'> &
          */
         inputStyle?: StyleProp<TextStyle>;
         /**
+         * Style of the rightElement
+         */
+        rightElementStyle?: StyleProp<TextStyle>;
+        /**
+         * Style of the leftElement
+         */
+        leftElementStyle?: StyleProp<TextStyle>;
+        /**
          * props for the stateLayer
          */
         stateLayerProps?: PropsWithoutRef<ViewProps>;
@@ -219,6 +227,8 @@ const TextInput = forwardRef<TextInputHandles, Props>(
             right,
             render = DefaultComponent,
             onBlur,
+            leftElementStyle,
+            rightElementStyle,
             ...rest
         }: Props,
         ref,
@@ -606,7 +616,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
                     {left && (
                         <View
-                            style={styles.leftElement}
+                            style={[styles.leftElement, leftElementStyle]}
                             onLayout={handleLayoutLeftElement}
                             testID={rest.testID && `${rest.testID}--text-input-left-element`}>
                             {typeof left === 'function'
@@ -671,7 +681,7 @@ const TextInput = forwardRef<TextInputHandles, Props>(
 
                     {right && (
                         <View
-                            style={styles.rightElement}
+                            style={[styles.rightElement, rightElementStyle]}
                             testID={rest.testID && `${rest.testID}--text-input-right-element`}>
                             {typeof right === 'function'
                                 ? right?.({

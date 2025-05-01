@@ -7,6 +7,7 @@ import { resolveStateVariant } from '../../utils';
 import { HorizontalDivider } from '../HorizontalDivider';
 import { listItemStyles } from './utils';
 import { useActionState } from '../../hooks';
+import { StateLayer } from '../StateLayer';
 
 export type Props = Omit<TouchableRippleProps, 'children'> &
     WithElements<ReactNode | ((renderArgs: { hovered: boolean }) => ReactNode)> & {
@@ -113,6 +114,7 @@ const ListItem = (
                     ) : null}
                 </View>
                 {divider && <HorizontalDivider />}
+                <StateLayer style={listItemStyles.stateLayer} />
             </>
         </TouchableRipple>
     );
