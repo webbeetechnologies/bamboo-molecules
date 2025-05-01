@@ -78,7 +78,7 @@ const TabItem = (
         }),
     });
 
-    const { contentsContainerStyle, stateLayerStyle, containerStyle } = useMemo(() => {
+    const { containerStyle } = useMemo(() => {
         const minHeight = 48;
         return {
             containerStyle: [
@@ -88,10 +88,8 @@ const TabItem = (
                 },
                 style,
             ],
-            contentsContainerStyle: [tabsItemStyles.contentsContainer, contentsContainerStyleProp],
-            stateLayerStyle: tabsItemStyles.stateLayer,
         };
-    }, [contentsContainerStyleProp, itemHeight, style]);
+    }, [itemHeight, style]);
 
     const useLayoutContentRef = useRef(onLayoutContent);
     const onLayoutHandled = useCallback((e: LayoutChangeEvent) => {
@@ -119,7 +117,7 @@ const TabItem = (
             onLayout={onLayout}>
             <>
                 <View
-                    style={contentsContainerStyle}
+                    style={[tabsItemStyles.contentsContainer, contentsContainerStyleProp]}
                     {...contentsContainerProps}
                     onLayout={onLayoutHandled}>
                     {Children.map(children, child => {
@@ -132,7 +130,7 @@ const TabItem = (
                     })}
                 </View>
 
-                <StateLayer style={stateLayerStyle} />
+                <StateLayer style={tabsItemStyles.stateLayer} />
             </>
         </TouchableRipple>
     );

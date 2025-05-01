@@ -63,16 +63,16 @@ const VerticalDivider = ({
     verticalDividerStyles.useVariants({
         isBold: bold,
     });
-    const componentStyles = useMemo(() => [verticalDividerStyles.root, style], [style]);
 
     const memoizedStyles = useMemo(() => {
         return [
-            componentStyles,
+            verticalDividerStyles.root,
+            style,
             topInset && { marginTop: topInset },
             bottomInset && { marginBottom: bottomInset },
             spacing && { marginHorizontal: spacing },
         ] as StyleProp<ViewStyle>;
-    }, [bottomInset, componentStyles, spacing, topInset]);
+    }, [bottomInset, style, spacing, topInset]);
 
     return <View {...rest} style={memoizedStyles} />;
 };

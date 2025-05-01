@@ -49,6 +49,18 @@ const tabsItemStylesDefault = StyleSheet.create(theme => ({
         justifyContent: 'center',
     },
     stateLayer: {
+        variants: {
+            variant: {
+                primary: {},
+                secondary: {},
+            },
+            state: {
+                hovered: {},
+                active: {},
+                activeAndHovered: {},
+                default: {},
+            },
+        },
         compoundVariants: [
             {
                 variant: 'primary',

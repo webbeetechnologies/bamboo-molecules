@@ -21,6 +21,9 @@ const Popover = ({
     showArrow = false,
     arrowSize = DEFAULT_ARROW_SIZE,
     inverted = false,
+    // @ts-ignore
+    dataSet,
+    ...rest
 }: PopoverProps) => {
     const {
         popoverLayoutRef,
@@ -133,11 +136,14 @@ const Popover = ({
             <Wrapper
                 {...(inverted
                     ? { name: UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark' }
-                    : ({} as { name: 'light' }))}>
+                    : ({} as { name: 'light' }))}
+                {...{ dataSet }}>
                 <View
                     ref={popoverRef}
                     onLayout={handlePopoverLayout}
-                    style={[styles.popoverContainer, style, popoverStyle]}>
+                    style={[styles.popoverContainer, style, popoverStyle]}
+                    {...{ dataSet }}
+                    {...rest}>
                     {children}
                     {showArrow && popoverStyle.opacity === 1 && <View style={arrowStyles} />}
                 </View>

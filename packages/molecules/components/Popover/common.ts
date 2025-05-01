@@ -162,7 +162,7 @@ export const adjustPositionForBoundaries = (
 interface UseArrowStylesProps {
     showArrow?: boolean;
     arrowSize: number;
-    style?: ViewStyle;
+    style?: StyleProp<ViewStyle>;
     calculatedPosition: ViewStyle | null;
     targetLayoutRef: RefObject<LayoutRectangle | null>;
     popoverLayoutRef: RefObject<LayoutRectangle | null>;

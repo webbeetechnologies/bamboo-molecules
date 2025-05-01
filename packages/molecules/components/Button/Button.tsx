@@ -104,6 +104,7 @@ export type Props = Omit<SurfaceProps, 'style'> & {
      * props for the stateLayer
      */
     stateLayerProps?: PropsWithoutRef<ViewProps>;
+    textRelatedStyle?: StyleProp<TextStyle>;
 };
 
 const elevationMap: Record<string, Record<string, number>> = {
@@ -142,6 +143,7 @@ const Button = (
         stateLayerProps = {},
         elevation: elevationProp,
         iconSize: _iconSizeProp,
+        textRelatedStyle,
         ...rest
     }: Props,
     ref: any,
@@ -228,7 +230,7 @@ const Button = (
                 styleProp,
             ],
 
-            iconStyle: _iconStyle as unknown as ViewStyle,
+            iconStyle: [_iconStyle, textRelatedStyle] as unknown as ViewStyle,
             viewStyle: [
                 content,
                 { flexGrow: 1 },
@@ -238,6 +240,7 @@ const Button = (
             iconContainerStyle: [iconContainerStyleProp],
             textStyle: [
                 isVariant('text') ? (iconName || loading ? labelTextAddons : labelText) : label,
+                textRelatedStyle,
                 labelStyle,
             ],
             accessibilityState: { disabled },

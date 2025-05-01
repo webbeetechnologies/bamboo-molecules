@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
-// import { Button } from '@bambooapp/bamboo-molecules/components/Button';
+import { Button } from '@bambooapp/bamboo-molecules/components/Button';
 // import { Tooltip } from '@bambooapp/bamboo-molecules/components/Tooltip';
 // import { IconButton } from '@bambooapp/bamboo-molecules/components/IconButton';
 import { TextInput } from '@bambooapp/bamboo-molecules/components/TextInput';
@@ -42,6 +42,9 @@ export default () => {
             <Sidebar />
             <View style={{ alignItems: 'flex-start', marginTop: 100 }}>
                 <TextInput variant="outlined" label={'Label'} />
+                <Button disabled variant="contained" onPress={() => {}}>
+                    Hello
+                </Button>
 
                 {/* <ScrollView style={{ gap: 20, marginTop: 100 }}>
 
