@@ -3,7 +3,7 @@ import { ColorMode, resolveColorMode } from '../utils/resolveColorMode';
 import { UnistylesRuntime, useUnistyles } from 'react-native-unistyles';
 
 const useColorMode = () => {
-    const themeName = useUnistyles().theme.themeName;
+    const themeName = useUnistyles().theme.dark ? 'dark' : 'light';
     return useMemo(
         () => ({
             colorMode: resolveColorMode(themeName as ColorMode),
