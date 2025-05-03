@@ -160,10 +160,6 @@ export type Props = Omit<TextInputProps, 'ref'> &
          */
         style?: StyleProp<TextStyle>;
         /**
-         * Style of the entire Container
-         */
-        containerStyle?: StyleProp<ViewStyle>;
-        /**
          * Style of the Input Container
          */
         inputContainerStyle?: StyleProp<ViewStyle>;

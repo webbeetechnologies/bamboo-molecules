@@ -11,7 +11,7 @@ import {
 import { useActionState, useControlledValue, useLatest } from '../../hooks';
 import { Icon, type IconType } from '../Icon';
 import { resolveStateVariant } from '../../utils';
-import { switchStyles } from './utils';
+import { switchStyles, useSwitchColors } from './utils';
 
 export type Props = SwitchProps & {
     checkedIcon?: string;
@@ -80,21 +80,22 @@ const Switch = (
 
     const switchValueRef = useLatest(value);
 
+    const state = resolveStateVariant({
+        selected_hovered_pressed: !!value && !!hovered && !!pressed,
+        selected_focused_pressed: !!value && !!focused && !!pressed,
+        selected_hovered: !!value && !!hovered,
+        selected_disabled: !!value && !!disabled,
+        selected_pressed: !!value && !!pressed,
+        selected_focused: !!value && !!focused && !!hovered,
+        selected: !!value,
+        hovered_pressed: !!hovered && !!pressed,
+        disabled: !!disabled,
+        hovered: !!hovered,
+        focused: !!focused && !!hovered,
+        pressed: !!pressed,
+    });
     switchStyles.useVariants({
-        state: resolveStateVariant({
-            selected_hovered_pressed: !!value && !!hovered && !!pressed,
-            selected_focused_pressed: !!value && !!focused && !!pressed,
-            selected_hovered: !!value && !!hovered,
-            selected_disabled: !!value && !!disabled,
-            selected_pressed: !!value && !!pressed,
-            selected_focused: !!value && !!focused && !!hovered,
-            selected: !!value,
-            hovered_pressed: !!hovered && !!pressed,
-            disabled: !!disabled,
-            hovered: !!hovered,
-            focused: !!focused && !!hovered,
-            pressed: !!pressed,
-        }),
+        state,
     });
 
     const toggleMarginAnimation = useRef(new Animated.Value(value ? 0 : 1)).current;
@@ -162,15 +163,15 @@ const Switch = (
         };
     }, [pressed, size, unCheckedIcon, value]);
 
+    const {
+        uncheckedColor: _uncheckedColor,
+        checkedColor: _checkedColor,
+        thumbColor: _thumbColor,
+    } = useSwitchColors(state as any);
+
     const { switchStyle, thumbContainerStyle, thumbStyle, thumbOverlayStyle, iconStyle } =
         useMemo(() => {
             const { switchContainer, thumbContainer, thumb, icon, overlay } = switchStyles;
-
-            const {
-                uncheckedColor: _uncheckedColor,
-                checkedColor: _checkedColor,
-                thumbColor: _thumbColor,
-            } = switchStyles.root;
 
             const borderWidth = Math.floor(size * SWITCH_BORDER_OFFSET);
 
@@ -228,16 +229,21 @@ const Switch = (
                 ],
                 iconStyle: [icon, _iconStyle],
             };
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [
+            state,
             size,
             value,
             trackColor?.true,
             trackColor?.false,
+            _checkedColor,
+            _uncheckedColor,
             style,
             _thumbContainerStyle,
             thumbPosition,
             thumbSize,
             thumbColor,
+            _thumbColor,
             unCheckedIcon,
             pressed,
             _thumbStyle,

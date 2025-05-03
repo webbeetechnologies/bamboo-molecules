@@ -10,10 +10,8 @@ import {
 } from 'react-native';
 import { Text } from '../Text';
 
-import { StyleSheet } from 'react-native-unistyles';
 import { Icon, type IconProps } from '../Icon';
-import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
-
+import { avatarStyles } from './utils';
 export type Props = Omit<ViewProps, 'children'> & {
     source?: ImageProps['source'];
     /**
@@ -185,36 +183,5 @@ const extractFirstAndSecondWordArrays = (text: string) => {
         secondWord,
     };
 };
-
-const avatarStylesDefault = StyleSheet.create(theme => ({
-    root: {
-        backgroundColor: theme.colors.primary,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 10,
-        overflow: 'hidden',
-    },
-
-    image: {
-        width: '100%',
-        height: '100%',
-    },
-    icon: {
-        color: theme.colors.onPrimary,
-    },
-    label: {
-        fontSize: theme.typescale.titleMedium.fontSize,
-        fontWeight: theme.typescale.titleMedium.fontWeight,
-        lineHeight: theme.typescale.titleMedium.lineHeight,
-        textTransform: 'capitalize',
-        color: '#ffffff',
-    },
-}));
-
-registerComponentsStyles({
-    Avatar: avatarStylesDefault,
-});
-
-export const avatarStyles = getRegisteredMoleculesComponentStyles('Avatar');
 
 export default memo(forwardRef(Avatar));

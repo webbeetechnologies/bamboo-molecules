@@ -124,6 +124,7 @@ export type Props = Omit<TouchableRippleProps, 'children'> &
         containerProps?: Omit<PropsWithoutRef<ViewProps>, 'style'>;
         leftElementIconProps?: IconProps;
         rightElementIconProps?: IconProps;
+        backgroundColor?: string;
 
         invertLabelColor?: boolean;
     };
@@ -156,6 +157,7 @@ const Chip = (
         containerProps,
         leftElementIconProps,
         invertLabelColor,
+        backgroundColor,
         ...rest
     }: Props,
     ref: any,
@@ -238,7 +240,11 @@ const Chip = (
     );
 
     return (
-        <Surface {...containerProps} elevation={elevation} style={containerStyle}>
+        <Surface
+            {...containerProps}
+            elevation={elevation}
+            style={containerStyle}
+            backgroundColor={backgroundColor}>
             <TouchableRipple
                 borderless
                 {...rest}

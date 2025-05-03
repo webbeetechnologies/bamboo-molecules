@@ -1,19 +1,75 @@
 import { getRegisteredMoleculesComponentStyles, registerComponentsStyles } from '../../core';
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
-// type States =
-//     | 'selected'
-//     | 'selected_disabled'
-//     | 'selected_pressed'
-//     | 'disabled'
-//     | 'hovered'
-//     | 'focused'
-//     | 'pressed'
-//     | 'hovered_pressed'
-//     | 'selected_hovered'
-//     | 'selected_focused'
-//     | 'selected_hovered_pressed'
-//     | 'selected_focused_pressed';
+type States =
+    | 'selected'
+    | 'selected_disabled'
+    | 'selected_pressed'
+    | 'disabled'
+    | 'hovered'
+    | 'focused'
+    | 'pressed'
+    | 'hovered_pressed'
+    | 'selected_hovered'
+    | 'selected_focused'
+    | 'selected_hovered_pressed'
+    | 'selected_focused_pressed';
+
+export const useSwitchColors = (state: States) => {
+    const theme = useUnistyles().theme;
+
+    return (
+        {
+            selected: {
+                thumbColor: theme.colors.onPrimary,
+                checkedColor: theme.colors.primary,
+            },
+            selected_hovered: {
+                thumbColor: theme.colors.primaryContainer,
+                checkedColor: theme.colors.primary,
+            },
+            selected_focused: {
+                thumbColor: theme.colors.primaryContainer,
+                checkedColor: theme.colors.primary,
+            },
+            disabled: {
+                uncheckedColor: theme.colors.surfaceContainerHighest,
+            },
+            selected_disabled: {
+                checkedColor: theme.colors.onSurface,
+            },
+            selected_pressed: {
+                thumbColor: theme.colors.primaryContainer,
+                checkedColor: theme.colors.primary,
+            },
+            selected_hovered_pressed: {
+                thumbColor: theme.colors.primaryContainer,
+                checkedColor: theme.colors.primary,
+            },
+            selected_focused_pressed: {
+                thumbColor: theme.colors.primaryContainer,
+                checkedColor: theme.colors.primary,
+            },
+            hovered_pressed: {
+                thumbColor: theme.colors.onSurfaceVariant,
+            },
+            pressed: {
+                thumbColor: theme.colors.onSurfaceVariant,
+            },
+            hovered: {
+                thumbColor: theme.colors.onSurfaceVariant,
+            },
+            focused: {
+                thumbColor: theme.colors.onSurfaceVariant,
+            },
+        }[state] ?? {
+            uncheckedColor: theme.colors.surfaceContainerHighest,
+            checkedColor: theme.colors.primary,
+            thumbColor: theme.colors.outline,
+        }
+    );
+};
+
 const switchStylesDefault = StyleSheet.create(theme => ({
     root: {
         ...({

@@ -107,9 +107,9 @@ const Popover = ({
                 onClose();
             }
         };
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('mousedown', handleClickOutside, { capture: true });
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mousedown', handleClickOutside, { capture: true });
         };
     }, [isOpen, onClose, popoverRef, triggerRef]);
 
@@ -139,11 +139,11 @@ const Popover = ({
                     : ({} as { name: 'light' }))}
                 {...{ dataSet }}>
                 <View
-                    ref={popoverRef}
                     onLayout={handlePopoverLayout}
                     style={[styles.popoverContainer, style, popoverStyle]}
                     {...{ dataSet }}
-                    {...rest}>
+                    {...rest}
+                    ref={popoverRef}>
                     {children}
                     {showArrow && popoverStyle.opacity === 1 && <View style={arrowStyles} />}
                 </View>
