@@ -2,13 +2,12 @@ import { getRegisteredComponentWithFallback } from '../../core';
 import NavigationStackComponent from './NavigationStack';
 import NavigationStackItem from './NavigationStackItem';
 
-export const NavigationStackDefault = Object.assign(NavigationStackComponent, {
-    Item: NavigationStackItem,
-});
-
-export const NavigationStack = getRegisteredComponentWithFallback(
-    'NavigationStack',
-    NavigationStackDefault,
+// Statics go on the wrapper, not the default component — see getRegisteredComponentWithFallback.
+export const NavigationStack = Object.assign(
+    getRegisteredComponentWithFallback('NavigationStack', NavigationStackComponent),
+    {
+        Item: NavigationStackItem,
+    },
 );
 
 export type { NavigationStackHandle, Props as NavigationStackProps } from './NavigationStack';

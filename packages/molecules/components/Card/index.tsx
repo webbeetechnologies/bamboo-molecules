@@ -7,21 +7,16 @@ import { default as CardHeadline } from './CardHeadline';
 import { default as CardMedia } from './CardMedia';
 import { default as CardSubhead } from './CardSubhead';
 import { default as CardText } from './CardText';
-export const CardDefault = Object.assign(
-    // @component ./Checkbox.tsx
-    CardComponent,
-    {
-        Header: CardHeader,
-        Content: CardContent,
-        Media: CardMedia,
-        Headline: CardHeadline,
-        Subhead: CardSubhead,
-        Text: CardText,
-        Actions: CardActions,
-    },
-);
-
-export const Card = getRegisteredComponentWithFallback('Card', CardDefault);
+// Statics go on the wrapper, not the default component — see getRegisteredComponentWithFallback.
+export const Card = Object.assign(getRegisteredComponentWithFallback('Card', CardComponent), {
+    Header: CardHeader,
+    Content: CardContent,
+    Media: CardMedia,
+    Headline: CardHeadline,
+    Subhead: CardSubhead,
+    Text: CardText,
+    Actions: CardActions,
+});
 
 export { type Props as CardProps, cardStyles } from './Card';
 export { type Props as CardActionsProps } from './CardActions';

@@ -3,7 +3,8 @@ import { List } from '../List';
 import MenuComponent, { MenuItem, MenuPopover, MenuRoot, MenuTrigger } from './Menu';
 import { MenuRootContext } from './utils';
 
-export const MenuDefault = Object.assign(MenuComponent, {
+// Statics go on the wrapper, not the default component — see getRegisteredComponentWithFallback.
+export const Menu = Object.assign(getRegisteredComponentWithFallback('Menu', MenuComponent), {
     Root: MenuRoot,
     Trigger: MenuTrigger,
     Item: MenuItem,
@@ -11,8 +12,6 @@ export const MenuDefault = Object.assign(MenuComponent, {
     RootContext: MenuRootContext,
     Popover: MenuPopover,
 });
-
-export const Menu = getRegisteredComponentWithFallback('Menu', MenuDefault);
 
 export type { MenuItemProps, Props as MenuProps, MenuRootProps, MenuTriggerProps } from './Menu';
 export { MenuRootContext, menuStyles } from './utils';

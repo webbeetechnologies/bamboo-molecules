@@ -5,16 +5,15 @@ import NavigationRailFooter from './NavigationRailFooter';
 import NavigationRailHeader from './NavigationRailHeader';
 import NavigationRailItem from './NavigationRailItem';
 
-export const NavigationRailDefault = Object.assign(NavigationRailComponent, {
-    Item: NavigationRailItem,
-    Header: NavigationRailHeader,
-    Content: NavigationRailContent,
-    Footer: NavigationRailFooter,
-});
-
-export const NavigationRail = getRegisteredComponentWithFallback(
-    'NavigationRail',
-    NavigationRailDefault,
+// Statics go on the wrapper, not the default component — see getRegisteredComponentWithFallback.
+export const NavigationRail = Object.assign(
+    getRegisteredComponentWithFallback('NavigationRail', NavigationRailComponent),
+    {
+        Item: NavigationRailItem,
+        Header: NavigationRailHeader,
+        Content: NavigationRailContent,
+        Footer: NavigationRailFooter,
+    },
 );
 
 export type { Props as NavigationRailProps } from './NavigationRail';

@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from 'react';
+import type { ComponentType, ReactNode, RefObject } from 'react';
 import type { GestureResponderEvent, TextInputProps, ViewProps } from 'react-native';
 
 import type { ListContentProps, ListItemId, ListValue } from '../List';
@@ -51,7 +51,9 @@ type SelectPropsBase<Option extends DefaultItemT = DefaultItemT> = {
     getItemId?: (item: Option) => ListItemId;
 };
 
-export type SelectSearchInputProps = Omit<TextInputProps, 'value' | 'onChangeText'>;
+export type SelectSearchInputProps = Omit<TextInputProps, 'value' | 'onChangeText'> & {
+    ref?: RefObject<any>;
+};
 
 type SingleSelectProps<Option extends DefaultItemT = DefaultItemT> = {
     multiple?: false | undefined;

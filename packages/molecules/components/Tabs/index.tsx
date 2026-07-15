@@ -6,12 +6,11 @@ import { default as TabLabel } from './TabLabel';
 import type { TabsProps } from './Tabs';
 import { TabBase } from './Tabs';
 
-export const TabsDefault = Object.assign(TabBase, {
+// Statics go on the wrapper, not the default component — see getRegisteredComponentWithFallback.
+export const Tabs = Object.assign(getRegisteredComponentWithFallback('Tabs', TabBase), {
     Item: TabItem,
     Label: TabLabel,
 });
-
-export const Tabs = getRegisteredComponentWithFallback('Tabs', TabsDefault);
 
 export type { TabItemProps, TabLabelProps, TabsProps };
 export { tabsItemStyles, tabsLabelStyles, tabsStyles } from './utils';

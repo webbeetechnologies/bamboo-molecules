@@ -12,19 +12,21 @@ import AppbarSmall from './AppbarSmall';
 import AppbarTitle from './AppbarTitle';
 import type { AppbarProps } from './types';
 
-export const AppbarDefault = Object.assign(AppbarBase as ComponentType<AppbarProps>, {
-    Small: AppbarSmall,
-    CenterAligned: AppbarCenterAligned,
-    Medium: AppbarMedium,
-    Large: AppbarLarge,
+// Statics go on the wrapper, not the default component — see getRegisteredComponentWithFallback.
+export const Appbar = Object.assign(
+    getRegisteredComponentWithFallback('Appbar', AppbarBase as ComponentType<AppbarProps>),
+    {
+        Small: AppbarSmall,
+        CenterAligned: AppbarCenterAligned,
+        Medium: AppbarMedium,
+        Large: AppbarLarge,
 
-    Left: AppbarLeft,
-    Right: AppbarRight,
-    Title: AppbarTitle,
-    Actions: AppbarActions,
-});
-
-export const Appbar = getRegisteredComponentWithFallback('Appbar', AppbarDefault);
+        Left: AppbarLeft,
+        Right: AppbarRight,
+        Title: AppbarTitle,
+        Actions: AppbarActions,
+    },
+);
 
 export type { Props as AppbarActionsProps } from './AppbarActions';
 export type { Props as AppbarLeftProps } from './AppbarLeft';

@@ -4,15 +4,14 @@ import AccordionItemComponent from './AccordionItem';
 import AccordionItemContent from './AccordionItemContent';
 import AccordionItemHeader from './AccordionItemHeader';
 
-const AccordionItemDefault = Object.assign(AccordionItemComponent, {
-    Header: AccordionItemHeader,
-    Content: AccordionItemContent,
-});
-
 export const Accordion = getRegisteredComponentWithFallback('Accordion', AccordionDefault);
-export const AccordionItem = getRegisteredComponentWithFallback(
-    'AccordionItem',
-    AccordionItemDefault,
+// Statics go on the wrapper, not the default component — see getRegisteredComponentWithFallback.
+export const AccordionItem = Object.assign(
+    getRegisteredComponentWithFallback('AccordionItem', AccordionItemComponent),
+    {
+        Header: AccordionItemHeader,
+        Content: AccordionItemContent,
+    },
 );
 
 export type { Props as AccordionProps } from './Accordion';

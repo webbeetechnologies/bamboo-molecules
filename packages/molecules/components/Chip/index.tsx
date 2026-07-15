@@ -3,9 +3,10 @@ import type { ComponentType } from 'react';
 import { getRegisteredComponentWithFallback } from '../../core';
 import { default as ChipComponent, type Props as ChipProps } from './Chip';
 
-export const ChipDefault = Object.assign(
+// Statics go on the wrapper, not the default component — see getRegisteredComponentWithFallback.
+export const Chip = Object.assign(
     // @component ./Chip.tsx
-    ChipComponent,
+    getRegisteredComponentWithFallback('Chip', ChipComponent),
     {
         Assist: ChipComponent as ComponentType<
             Omit<
@@ -39,8 +40,6 @@ export const ChipDefault = Object.assign(
         >,
     },
 );
-
-export const Chip = getRegisteredComponentWithFallback('Chip', ChipDefault);
 
 export type { Props as ChipProps } from './Chip';
 export type { States } from './utils';

@@ -6,13 +6,12 @@ import RadioControl, {
     RadioRow as RadioRowComponent,
 } from './Radio';
 
-const RadioDefault = Object.assign(RadioControl, {
+// Statics go on the wrapper, not the default component — see getRegisteredComponentWithFallback.
+export const Radio = Object.assign(getRegisteredComponentWithFallback('Radio', RadioControl), {
     Label: RadioLabel,
     Group: RadioGroupComponent,
     Row: RadioRowComponent,
 });
-
-export const Radio = getRegisteredComponentWithFallback('Radio', RadioDefault);
 export const RadioGroup = RadioGroupComponent;
 export const RadioRow = RadioRowComponent;
 

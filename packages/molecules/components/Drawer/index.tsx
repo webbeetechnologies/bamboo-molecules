@@ -7,7 +7,8 @@ import DrawerHeader from './DrawerHeader';
 import DrawerItem from './DrawerItem';
 import DrawerItemGroup from './DrawerItemGroup';
 
-const DrawerDefault = Object.assign(DrawerComponent, {
+// Statics go on the wrapper, not the default component — see getRegisteredComponentWithFallback.
+export const Drawer = Object.assign(getRegisteredComponentWithFallback('Drawer', DrawerComponent), {
     Item: DrawerItem,
     ItemGroup: DrawerItemGroup,
     Header: DrawerHeader,
@@ -16,8 +17,6 @@ const DrawerDefault = Object.assign(DrawerComponent, {
     Collapsible: DrawerCollapsible,
     CollapsibleItem: DrawerCollapsibleItem,
 });
-
-export const Drawer = getRegisteredComponentWithFallback('Drawer', DrawerDefault);
 
 export {
     type DrawerCollapsibleItemContentProps,

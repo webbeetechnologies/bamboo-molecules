@@ -9,7 +9,8 @@ import SelectRoot, {
     SelectValue,
 } from './Select';
 
-const SelectWithSubcomponents = Object.assign(SelectRoot, {
+// Statics go on the wrapper, not the default component — see getRegisteredComponentWithFallback.
+export const Select = Object.assign(getRegisteredComponentWithFallback('Select', SelectRoot), {
     Trigger: SelectTrigger,
     TriggerOutline: SelectTriggerOutline,
     Value: SelectValue,
@@ -18,8 +19,6 @@ const SelectWithSubcomponents = Object.assign(SelectRoot, {
     Option: SelectOption,
     SearchInput: SelectSearchInput,
 });
-
-export const Select = getRegisteredComponentWithFallback('Select', SelectWithSubcomponents);
 
 export * from './context';
 export type * from './types';

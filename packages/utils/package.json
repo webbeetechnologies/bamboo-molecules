@@ -12,6 +12,7 @@
         "helpers"
     ],
     "scripts": {
+        "test": "pnpm jest **/__tests__/**",
         "bundle": "rm -rf dist && mkdir -p dist && npm pack --pack-destination=dist",
         "do-release": "npm publish ./dist/react-native-molecules-utils-$npm_package_version.tgz --access=public",
         "release": "pnpm bundle && pnpm do-release",

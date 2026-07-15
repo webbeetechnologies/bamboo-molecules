@@ -1,4 +1,4 @@
-import { useControlledValue, useToggle } from '@react-native-molecules/utils/hooks';
+import { useControlledValue, useMergedRefs, useToggle } from '@react-native-molecules/utils/hooks';
 import {
     Fragment,
     memo,
@@ -718,56 +718,59 @@ export const SelectOption = memo(
 
 SelectOption.displayName = 'Select_Option';
 
-export const SelectSearchInput = memo(({ children, ...textInputProps }: SelectSearchInputProps) => {
-    const { searchQuery, setSearchQuery } = useSelectSearchContextValue(state => ({
-        searchQuery: state.searchQuery,
-        setSearchQuery: state.setSearchQuery,
-    }));
+export const SelectSearchInput = memo(
+    ({ ref, children, ...textInputProps }: SelectSearchInputProps) => {
+        const { searchQuery, setSearchQuery } = useSelectSearchContextValue(state => ({
+            searchQuery: state.searchQuery,
+            setSearchQuery: state.setSearchQuery,
+        }));
 
-    const textInputRef = useRef<TextInputHandles>(null);
+        const textInputRef = useRef<TextInputHandles>(null);
+        const mergedRef = useMergedRefs([textInputRef, ref]);
 
-    const handleChangeText = useCallback(
-        (text: string) => {
-            setSearchQuery(text);
-        },
-        [setSearchQuery],
-    );
+        const handleChangeText = useCallback(
+            (text: string) => {
+                setSearchQuery(text);
+            },
+            [setSearchQuery],
+        );
 
-    const inputProps = {
-        ...textInputProps,
-        value: searchQuery,
-        onChangeText: handleChangeText,
-        placeholder: textInputProps.placeholder || 'Search...',
-        inputStyle: styles.searchInputInput,
-    } as TextInputProps;
+        const inputProps = {
+            ...textInputProps,
+            value: searchQuery,
+            onChangeText: handleChangeText,
+            placeholder: textInputProps.placeholder || 'Search...',
+            inputStyle: styles.searchInputInput,
+        } as TextInputProps;
 
-    const onPressLeftIcon = useCallback(() => {
-        textInputRef.current?.focus();
-    }, []);
+        const onPressLeftIcon = useCallback(() => {
+            textInputRef.current?.focus();
+        }, []);
 
-    const onClearSearchQuery = useCallback(() => {
-        handleChangeText('');
-    }, [handleChangeText]);
+        const onClearSearchQuery = useCallback(() => {
+            handleChangeText('');
+        }, [handleChangeText]);
 
-    return (
-        <TextInput
-            ref={textInputRef}
-            style={styles.searchInput}
-            size="sm"
-            variant="outlined"
-            {...inputProps}>
-            <TextInput.Left>
-                <Icon onPress={onPressLeftIcon} name="magnify" size={20} />
-            </TextInput.Left>
-            {searchQuery ? (
-                <TextInput.Right>
-                    <IconButton name="close" size={20} onPress={onClearSearchQuery} />
-                </TextInput.Right>
-            ) : null}
-            {children}
-        </TextInput>
-    );
-});
+        return (
+            <TextInput
+                ref={mergedRef}
+                style={styles.searchInput}
+                size="sm"
+                variant="outlined"
+                {...inputProps}>
+                <TextInput.Left>
+                    <Icon onPress={onPressLeftIcon} name="magnify" size={20} />
+                </TextInput.Left>
+                {searchQuery ? (
+                    <TextInput.Right>
+                        <IconButton name="close" size={20} onPress={onClearSearchQuery} />
+                    </TextInput.Right>
+                ) : null}
+                {children}
+            </TextInput>
+        );
+    },
+);
 
 SelectSearchInput.displayName = 'Select_SearchInput';
 

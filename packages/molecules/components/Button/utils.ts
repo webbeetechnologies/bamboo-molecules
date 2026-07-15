@@ -1,8 +1,21 @@
 import { createContext } from 'react';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { getRegisteredComponentStylesWithFallback } from '../../core';
+import {
+    getRegisteredComponentStylesWithFallback,
+    getRegisteredComponentUtilsMergedWithFallback,
+} from '../../core';
 import type { ButtonContextType } from './types';
+
+const buttonConstantsDefault = {
+    disabledColor: 'onSurfaceDisabled',
+};
+
+export const buttonConstants = getRegisteredComponentUtilsMergedWithFallback(
+    'Button',
+    buttonConstantsDefault,
+    'buttonConstants',
+);
 
 export const sizeToIconSizeMap = {
     xs: 20,

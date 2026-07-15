@@ -19,6 +19,7 @@ import { TouchableRipple, type TouchableRippleProps } from '../TouchableRipple';
 import type { ButtonContextType, ButtonShape, ButtonSize, ButtonVariant } from './types';
 import {
     buttonActivityIndicatorStyles,
+    buttonConstants,
     ButtonContext,
     buttonIconStyles,
     buttonStyles,
@@ -220,7 +221,7 @@ export const ButtonIcon = memo(
                 type={type}
                 name={name}
                 size={iconSizeResolved}
-                color={disabled ? 'onSurfaceDisabled' : colorResolved}
+                color={disabled ? buttonConstants.disabledColor : colorResolved}
                 style={[buttonIconStyles.root, textRelatedStyle, style]}
                 {...rest}
             />
@@ -287,7 +288,7 @@ export const ButtonActivityIndicator = memo(
         return (
             <ActivityIndicator
                 size={sizeResolved}
-                color={disabled ? 'onSurfaceDisabled' : colorResolved}
+                color={disabled ? buttonConstants.disabledColor : colorResolved}
                 style={activityIndicatorStyle}
                 {...rest}
             />

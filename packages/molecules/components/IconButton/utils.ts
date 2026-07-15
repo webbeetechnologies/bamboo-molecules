@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native-unistyles';
 
 import {
     getRegisteredComponentStylesWithFallback,
-    getRegisteredComponentUtilsWithFallback,
+    getRegisteredComponentUtilsMergedWithFallback,
 } from './../../core/componentsRegistry';
 import type { IconButtonDefaultProps } from './types';
 
@@ -439,16 +439,19 @@ export const defaultStyles = getRegisteredComponentStylesWithFallback(
     'IconButton',
     iconButtonStylesDefault,
 );
-export const iconButtonSizeToIconSizeMap = getRegisteredComponentUtilsWithFallback(
+export const iconButtonSizeToIconSizeMap = getRegisteredComponentUtilsMergedWithFallback(
     'IconButton',
     iconButtonSizeToIconSizeMapDefault,
     'iconButtonSizeToIconSizeMap',
 );
-export const iconButtonConstants = {
-    ...iconButtonConstantsDefault,
-    ...getRegisteredComponentUtilsWithFallback('IconButton', {}, 'iconButtonConstants'),
-};
-export const iconButtonDefaultProps: IconButtonDefaultProps = {
-    ...iconButtonDefaultPropsDefault,
-    ...getRegisteredComponentUtilsWithFallback('IconButton', {}, 'iconButtonDefaultProps'),
-};
+export const iconButtonConstants = getRegisteredComponentUtilsMergedWithFallback(
+    'IconButton',
+    iconButtonConstantsDefault,
+    'iconButtonConstants',
+);
+export const iconButtonDefaultProps: IconButtonDefaultProps =
+    getRegisteredComponentUtilsMergedWithFallback(
+        'IconButton',
+        iconButtonDefaultPropsDefault,
+        'iconButtonDefaultProps',
+    );
