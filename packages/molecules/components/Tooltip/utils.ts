@@ -1,6 +1,17 @@
 import { StyleSheet } from 'react-native-unistyles';
 
-import { getRegisteredComponentStylesWithFallback } from '../../core';
+import {
+    getRegisteredComponentStylesWithFallback,
+    getRegisteredComponentUtilsMergedWithFallback,
+} from '../../core';
+
+export type TooltipDefaultProps = {
+    inverted: boolean;
+};
+
+const tooltipDefaultPropsDefault: TooltipDefaultProps = {
+    inverted: true,
+};
 
 const tooltipStylesDefault = StyleSheet.create(theme => ({
     content: {
@@ -18,3 +29,10 @@ export const tooltipStyles = getRegisteredComponentStylesWithFallback(
     'Tooltip',
     tooltipStylesDefault,
 );
+
+export const tooltipDefaultProps: TooltipDefaultProps =
+    getRegisteredComponentUtilsMergedWithFallback(
+        'Tooltip',
+        tooltipDefaultPropsDefault,
+        'tooltipDefaultProps',
+    );

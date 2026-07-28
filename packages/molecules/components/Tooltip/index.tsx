@@ -15,4 +15,5 @@ export const Tooltip = Object.assign(
 export type { TooltipContextValue, Props as TooltipProps } from './Tooltip';
 export type { Props as TooltipContentProps } from './TooltipContent';
 export type { Props as TooltipTriggerProps } from './TooltipTrigger';
+export type { TooltipDefaultProps } from './utils';
 export { tooltipStyles } from './utils';
